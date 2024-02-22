@@ -148,7 +148,7 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
             if (Session["usertype"].ToString() != "1")
                 objCommon.FillDropDownList(ddlCollege, "ACD_SESSION_MASTER A INNER JOIN ACD_COLLEGE_MASTER CM ON(A.COLLEGE_ID = CM.COLLEGE_ID)",
                     "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME",
-                    "AND A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])
+                    " A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])
                     + " AND A.SESSIONID= " + Convert.ToInt32(ddlSession.SelectedValue)
                     + " ", "CM.COLLEGE_ID");
             else

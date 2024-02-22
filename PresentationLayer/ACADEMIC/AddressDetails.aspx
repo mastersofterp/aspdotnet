@@ -730,6 +730,15 @@
                                                             <ajaxToolKit:FilteredTextBoxExtender ID="fteGDesignation" runat="server" TargetControlID="txtGDesignation"
                                                                 FilterType="Custom" FilterMode="InvalidChars" InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                         </div>
+
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divOtherInfo" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup id="supOtherInfo" runat="server">* </sup>
+                                                                <label>Other Information</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtOtherInfo" CssClass="form-control" runat="server" TabIndex="1" TextMode="MultiLine"></asp:TextBox>
+                                                            
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </ContentTemplate>

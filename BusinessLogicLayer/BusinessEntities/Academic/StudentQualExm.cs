@@ -99,6 +99,16 @@ namespace IITMS
                     private string _boardDiploma = string.Empty;
                     private string _schoolCollegeNameDiploma = string.Empty;
 
+
+                    // Added By Shrikant W. on 31-01-2024
+                    private int _divisionssc = 0;
+                    private int _divisionhsc = 0;
+                    private int _divisiondiploma = 0;
+                    private string _marksheetnossc = string.Empty;
+                    private string _marksheetnohsc = string.Empty;
+                    private string _marksheetnodiploma = string.Empty;
+
+
                     #endregion
                    
 
@@ -575,6 +585,42 @@ namespace IITMS
                     {
                         get { return _schoolCollegeNameDiploma; }
                         set { _schoolCollegeNameDiploma = value; }
+                    }
+
+                    public int DivisionSsc
+                    {
+                        get { return _divisionssc; }
+                        set { _divisionssc = value; }
+                    }
+
+                    public int DivisionHsc
+                    {
+                        get { return _divisionhsc; }
+                        set { _divisionhsc = value; }
+                    }
+
+                    public int DivisionDiploma
+                    {
+                        get { return _divisiondiploma; }
+                        set { _divisiondiploma = value; }
+                    }
+
+                    public string MarksheetNoSsc
+                    {
+                        get { return _marksheetnossc; }
+                        set { _marksheetnossc = value; }
+                    }
+
+                    public string MarksheetNoHsc
+                    {
+                        get { return _marksheetnohsc; }
+                        set { _marksheetnohsc = value; }
+                    }
+
+                    public string MarksheetNoDiploma
+                    {
+                        get { return _marksheetnodiploma; }
+                        set { _marksheetnodiploma = value; }
                     }
 
                     #endregion

@@ -70,47 +70,20 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
 
-                //if (chkLateFee.Checked)
-                //{
-                //    txtLateFee.Visible = true;
-                //}
-                //else
-                //{
-                //    txtLateFee.Visible = false;
-                //}
-
-                // Page.ClientScript.RegisterStartupScript(this.GetType(), "Reg", "clickLateFee();", true);
-                //ddlLateFee.SelectedIndex = 0;
-
-                //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "clickLateFee();", false);
-                //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "clickLateFee();", false);
+                
             }
 
-            //Page.ClientScript.RegisterStartupScript(this.GetType(), "Reg", "clickLateFee();", true);
             ViewState["uano"] = Convert.ToInt32(Session["userno"]);
-            //txtLateFee.Visible = false;
-
-            //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.COLLEGE_ID=C.COLLEGE_ID)", "DISTINCT (C.COLLEGE_ID)", "C.COLLEGE_NAME", "C.COLLEGE_ID > 0", "C.COLLEGE_NAME");
-            objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND DB.DEPTNO IN(" + Session["userdeptno"].ToString() + ")", "");
-
-            //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENAME");
-            //objCommon.FillListBox(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENAME");
-
+           
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "SESSIONID", "SESSION_NAME", "isnull(IS_ACTIVE,0)=1", "SESSIONID");
+     
             objCommon.FillListBox(lstSemester, "ACd_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_TYPE", "EXAM_TYPENO", "EXAM_TYPE", "EXAM_TYPENO>=0", "EXAM_TYPENO");
             ddlExamType.SelectedItem.Value = "-1";
-
-            //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO desc");
-            //objCommon.FillDropDownList(ddlCsession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO desc");
-
             Load();
 
             ddlCollege.Focus();
         }
-
-        //ScriptManager.RegisterStartupScript(this, GetType(), "Reg", "clickLateFee();", true);
-        //Page.ClientScript.RegisterStartupScript(this.GetType(), "Reg", "clickLateFee();", true);
-        //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "clickLateFee();", false);
 
         ViewState["IPADDRESS"] = Request.ServerVariables["REMOTE_ADDR"];
     }
@@ -207,9 +180,13 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
+
+
         lstSemester.SelectedValue = null;
         ImageButton btnEdit = sender as ImageButton;
         int FID = int.Parse(btnEdit.CommandArgument);
+        ViewState["FID"] = FID;
+      
 
         SqlDataReader dr = Exm.GetFeeDetails(FID);
 
@@ -217,11 +194,11 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         {
             if (dr.Read())
             {
-                ddlCollege.SelectedValue = dr["college_id"].ToString();
-                ddlCollege_SelectedIndexChanged(new object(), new EventArgs());
-                ddlSession.SelectedValue = dr["sessionno"].ToString();
+                ddlCollege.SelectedValue = dr["COLLEGE_ID"].ToString();
+                //ddlCollege_SelectedIndexChanged(new object(), new EventArgs());
+                ddlSession.SelectedValue = dr["SESSIONNO"].ToString();
                 ddlExamType.SelectedValue = dr["FEETYPE"].ToString();
-                ddlDegree.SelectedValue = dr["degreeno"].ToString();
+                ddlDegree.SelectedValue = dr["DEGREENO"].ToString();
                 txtYes.Text = dr["ApplicableFee"].ToString();
                 ddlFeesStructure.SelectedValue = dr["FEESTRUCTURE_TYPE"].ToString();
 
@@ -284,7 +261,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
                     if ((Chk1 != null || Chk1 != string.Empty) && Chk1 != "0")
                     {
-                        DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "CREDITFEE", "ApplicableFee", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CREDITFEE>0 and isnull(CANCEL,0) = 0", "");
+                        DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "CREDITFEE", "ApplicableFee", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND AND FEESTRUCTURE_TYPE="+ddlFeesStructure.SelectedValue+" and isnull(CANCEL,0) = 0", "");
 
                         if (ds.Tables[0].Rows.Count > 0)
                         {
@@ -310,7 +287,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
                     if ((Chk != null || Chk != string.Empty) && Chk != "0")
                     {
-                        DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "COURSEFEE", "ApplicableFee", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND COURSEFEE>0 and isnull(CANCEL,0) = 0", "");
+                        DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "COURSEFEE", "ApplicableFee", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND AND FEESTRUCTURE_TYPE="+ddlFeesStructure.SelectedValue+" and isnull(CANCEL,0) = 0", "");
 
                         if (ds.Tables[0].Rows.Count > 0)
                         {
@@ -380,11 +357,16 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
             BindListView();
 
-            string Chk2 = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND SUBID>0 and isnull(CANCEL,0) = 0");
+            //string Chk2 = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND SUBID>0 and isnull(CANCEL,0) = 0");
+
+            String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
+            //string Chk2 = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + sessionno + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND COURSEFEE>0 and isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "
+            string Chk2 = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "
+
 
             if ((Chk2 != null || Chk2 != string.Empty) && Chk2 != "0")
             {
-                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "FID,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND SUBID>0 and isnull(CANCEL,0) = 0", "");
+                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "FID,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE,SUBNAME,FEE,SUBID", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND SUBID>0 and isnull(CANCEL,0) = 0", "");
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -402,9 +384,12 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     txtValuationFee.Text = ds.Tables[0].Rows[0]["ValuationFee"].ToString();
                     txtValuationMaxFee.Text = ds.Tables[0].Rows[0]["ValuationMaxFee"].ToString();
                     ddlPaymentMode.SelectedValue = ds.Tables[0].Rows[0]["PAYMENT_MODE"].ToString();
-
+                    ddlPaymentMode.Visible = true;
                     pnlCopySession.Visible = true;
                     btnCopyData.Visible = true;
+                    lvFee.DataSource = ds;
+                    lvFee.DataBind();
+
                 }
                 else
                 {
@@ -412,6 +397,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     txtYes.Text = "0";
                     txtCerFee.Text = "0";
                 }
+               // clear();
             }
             else
             {
@@ -432,11 +418,13 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         {
             #region Cedit Wise
 
-            string Chk1 = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CREDITFEE>0 and isnull(CANCEL,0) = 0");
-
+            //string Chk1 = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CREDITFEE>0 and isnull(CANCEL,0) = 0");
+            String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
+            //String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
+            string Chk1 = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + sessionno + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND  isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "
             if ((Chk1 != null || Chk1 != string.Empty) && Chk1 != "0")
             {
-                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "CREDITFEE,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CREDITFEE>0 and isnull(CANCEL,0) = 0 ", "");
+                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "CREDITFEE,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND FEESTRUCTURE_TYPE=" + ddlFeesStructure.SelectedValue + " AND  isnull(CANCEL,0) = 0 ", "");
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -454,10 +442,13 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     txtValuationFee.Text = ds.Tables[0].Rows[0]["ValuationFee"].ToString();
                     txtValuationMaxFee.Text = ds.Tables[0].Rows[0]["ValuationMaxFee"].ToString();
                     ddlPaymentMode.SelectedValue = ds.Tables[0].Rows[0]["PAYMENT_MODE"].ToString();
+                    ddlPaymentMode.Visible = true;
+                    //txtCredit.Text = ds.Tables[0].Rows[0]["PAYMENT_MODE"].ToString();
 
                     pnlCopySession.Visible = true;
                     btnCopyData.Visible = true;
                 }
+                //clear();
             }
             else
             {
@@ -481,12 +472,12 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         else if (Convert.ToInt32(ddlFeesStructure.SelectedValue) == 3)
         {
             #region Course Wise
-
-            string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND COURSEFEE>0 and isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "
+            String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
+            string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + sessionno    + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND   isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "
 
             if ((Chk != null || Chk != string.Empty) && Chk != "0")
             {
-                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "COURSEFEE,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND COURSEFEE>0 and isnull(CANCEL,0) = 0", "");
+                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "COURSEFEE,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND COURSEFEE>0 and isnull(CANCEL,0) = 0", "");
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -532,14 +523,21 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         else if (Convert.ToInt32(ddlFeesStructure.SelectedValue) == 4)
         {
             #region Fix
-
+            int Fid = 0;
             BindListView();
-
-            string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND FEE>0 and FEESTRUCTURE_TYPE=4 and isnull(CANCEL,0) = 0");
-
+            if (btnSubmit.Text == "UPDATE")
+            {
+                
+                Fid = Convert.ToInt32(ViewState["FID"].ToString());
+            }
+           
+           // string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND FEE>0 and FEESTRUCTURE_TYPE=4 and isnull(CANCEL,0) = 0");
+            String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
+            string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "FID="+Fid+" AND College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + sessionno    + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " and isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "       
+            
             if ((Chk != null || Chk != string.Empty) && Chk != "0")
             {
-                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "FID,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND FEE>0 and FEESTRUCTURE_TYPE=4 and isnull(CANCEL,0) = 0 ", "");
+                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "FID,IsFeesApplicable,FEE,SEMESTERNO,SEMESTERNAME,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "FID=" + Fid + " AND College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND FEE>0 and FEESTRUCTURE_TYPE=4 and isnull(CANCEL,0) = 0 ", "");
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -556,7 +554,9 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     txtValuationFee.Text = ds.Tables[0].Rows[0]["ValuationFee"].ToString();
                     txtValuationMaxFee.Text = ds.Tables[0].Rows[0]["ValuationMaxFee"].ToString();
                     ddlPaymentMode.SelectedValue = ds.Tables[0].Rows[0]["PAYMENT_MODE"].ToString();
-
+                    //lvSem.DataBind;
+                    lvSem.DataSource = ds;
+                    lvSem.DataBind();
                     pnlCopySession.Visible = true;
                     btnCopyData.Visible = true;
                 }
@@ -581,9 +581,10 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         else
         {
             #region Credit Range Wise
+            String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
 
             int College = Convert.ToInt32(ddlCollege.SelectedValue);
-            int Session = Convert.ToInt32(ddlSession.SelectedValue);
+            int Session = Convert.ToInt32(sessionno);
             int ExamType = Convert.ToInt32(ddlExamType.SelectedValue);
             int Structure = Convert.ToInt32(ddlFeesStructure.SelectedValue);
             int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
@@ -591,11 +592,13 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
             //********************Display Cert fee and Processing fee added on 15122022**************************
 
-            string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " and FEESTRUCTURE_TYPE=5 and isnull(CANCEL,0) = 0");
+            //string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " and FEESTRUCTURE_TYPE=5 and isnull(CANCEL,0) = 0");
+            string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + sessionno    + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + "  and isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "string Chk = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(1)", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + sessionno + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND COURSEFEE>0 and isnull(CANCEL,0) = 0"); //College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + "
+
 
             if ((Chk != null || Chk != string.Empty) && Chk != "0")
             {
-                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "FID,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE", "College_id =" + Convert.ToInt32(ViewState["college_id"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND  FEESTRUCTURE_TYPE=5 and isnull(CANCEL,0) = 0 ", "");
+                DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "FID,IsFeesApplicable,IsProFeesApplicable,IsCertiFeesApplicable", "ApplicableFee,CertificateFee,IsLateFeesApplicable,LateFeeMode,LateFeeDate,LateFeeAmount,ValuationFee,ValuationMaxFee,PAYMENT_MODE,MINRANGE,MAXRANGE,CREDIT_RANGE_AMOUNT", "College_id =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND FEETYPE = " + Convert.ToInt32(ddlExamType.SelectedValue) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + " AND  FEESTRUCTURE_TYPE=5 and isnull(CANCEL,0) = 0 ", "");
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -612,6 +615,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     txtValuationFee.Text = ds.Tables[0].Rows[0]["ValuationFee"].ToString();
                     txtValuationMaxFee.Text = ds.Tables[0].Rows[0]["ValuationMaxFee"].ToString();
                     ddlPaymentMode.SelectedValue = ds.Tables[0].Rows[0]["PAYMENT_MODE"].ToString();
+                    txtMinRange.Text = Convert.ToString(ds.Tables[0].Rows[0]["MINRANGE"]);
 
                     pnlCopySession.Visible = true;
                     btnCopyData.Visible = true;
@@ -674,7 +678,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                 btnadd.Visible = true;
                 SetInitialRow();
             }
-
+            //clear();
             #endregion
 
             #region Comment
@@ -750,11 +754,13 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
             if (ddlFeesStructure.SelectedIndex == 1)
             {
                 //int College = Convert.ToInt32(ddlCollege.SelectedValue); // Commented By Sagar M on Date 18052023 for college_id
-                int College = Convert.ToInt32(ViewState["college_id"]);
-                int Session = Convert.ToInt32(ddlSession.SelectedValue);
+
+                int College = Convert.ToInt32(ddlCollege.SelectedValue);
+                int Session = Convert.ToInt32(ViewState["SessionNo"]);
                 int ExamType = Convert.ToInt32(ddlExamType.SelectedValue);
                 int Structure = Convert.ToInt32(ddlFeesStructure.SelectedValue);
                 int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+
 
                 string Fee = txtYes.Text.Trim();
 
@@ -780,12 +786,13 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
             else
             {
                 //int College = Convert.ToInt32(ddlCollege.SelectedValue); // Commented By Sagar M on Date 18052023 for college_id
-                int College = Convert.ToInt32(ViewState["college_id"]);
-                int Session = Convert.ToInt32(ddlSession.SelectedValue);
+                int College = Convert.ToInt32(ddlCollege.SelectedValue);
+                int Session = Convert.ToInt32(ViewState["SessionNo"]);
                 int ExamType = Convert.ToInt32(ddlExamType.SelectedValue);
                 int Structure = Convert.ToInt32(ddlFeesStructure.SelectedValue);
                 int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
 
+                //String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Session + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
                 string Fee = txtYes.Text.Trim();
 
                 DataSet ds = Exm.GetSemFeeConfig(College, degreeno, ExamType, Session);
@@ -846,23 +853,28 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         {
             if (ddlCollege.SelectedIndex > 0)
             {
-                DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlCollege.SelectedValue));
-
-                if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
-                {
-                    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-                    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                    ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
-                    // FILL DROPDOWN  ddlSession_SelectedIndexChanged
-                }
+                //DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlCollege.SelectedValue));
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + "AND IS_ACTIVE=1", "");
+                //objCommon.FillDropDownList("ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + "AND IS_ACTIVE=1", "");
+                //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+                //{
+                //    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                //    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                //    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                //    ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+                //    // FILL DROPDOWN  ddlSession_SelectedIndexChanged
+                //}
             }
 
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", " DISTINCT SESSIONNO ", "SESSION_NAME", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ISNULL (IS_ACTIVE,0)= 1", "SESSIONNO DESC");
 
             //objCommon.FillListBox(ddlDegree, "ACd_SCHEME AM inner join ACD_DEGREE AD on (AM.DEGREENO=AD.DEGREENO)", "AD.DEGREENO", "AD.DEGREENAME", "AD.DEGREENO>0 and SCHEMENO=" + ViewState["schemeno"] + "", "DEGREENAME"); // Commented by Sagar M on date 17052023 as per RCPIPER || Reval & Photocopy Fee define one time for multiple Degree & Branches
 
-            objCommon.FillListBox(ddlDegree, "ACD_COLLEGE_SCHEME_MAPPING AM INNER JOIN ACD_DEGREE AD ON (AM.DEGREENO=AD.DEGREENO)", "DISTINCT AD.DEGREENO", "AD.DEGREENAME", "AD.DEGREENO > 0 and AM.COLLEGE_ID =" + ViewState["college_id"] + " AND ISNULL(ACTIVESTATUS,0)=1", "AD.DEGREENAME"); // Added by Sagar M on date 17052023 as per RCPIPER || Reval & Photocopy Fee define one time for multiple Degree & Branches
+            objCommon.FillListBox(ddlDegree, "ACD_COLLEGE_SCHEME_MAPPING AM INNER JOIN ACD_DEGREE AD ON (AM.DEGREENO=AD.DEGREENO)", "DISTINCT AD.DEGREENO", "AD.DEGREENAME", "AD.DEGREENO > 0 and AM.COLLEGE_ID =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND ISNULL(ACTIVESTATUS,0)=1", "AD.DEGREENAME"); // Added by Sagar M on date 17052023 as per RCPIPER || Reval & Photocopy Fee define one time for multiple Degree & Branches
+
+            String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID="+Convert.ToInt32(ddlSession.SelectedValue)+" AND  COLLEGE_ID="+Convert.ToInt32(ddlCollege.SelectedValue));
+            ViewState["SessionNo"] =sessionno;
+            ViewState["college_id"] =Convert.ToInt32(ddlCollege.SelectedValue);
         }
         catch (Exception ex)
         {
@@ -874,74 +886,42 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
         //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "SESSIONNO desc");
         //objCommon.FillDropDownList(ddlCsession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "SESSIONNO desc");
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
+        //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
 
-        ddlSession.SelectedIndex = 0;
-        ddlDegree.SelectedIndex = -1;
-        ddlExamType.SelectedIndex = -1;
-        ddlFeesStructure.SelectedIndex = 0;
-        lstSemester.SelectedIndex = -1;
+        //ddlSession.SelectedIndex = 0;
+        //ddlDegree.SelectedIndex = -1;
+        //ddlExamType.SelectedIndex = -1;
+        //ddlFeesStructure.SelectedIndex = 0;
+        //lstSemester.SelectedIndex = -1;
 
-        ddlLateFee.SelectedIndex = 0;
-        txtLateFeeDate.Text = "";
-        txtValuationFee.Text = "0";
-        txtValuationMaxFee.Text = "0";
+        //ddlLateFee.SelectedIndex = 0;
+        //txtLateFeeDate.Text = "";
+        //txtValuationFee.Text = "0";
+        //txtValuationMaxFee.Text = "0";
 
-        pnlCopySession.Visible = false;
-        btnCopyData.Visible = false;
+        //pnlCopySession.Visible = false;
+        //btnCopyData.Visible = false;
 
-        ddlCsession.SelectedIndex = 0;
+        //ddlCsession.SelectedIndex = 0;
 
         //ScriptManager.RegisterClientScriptBlock(UpdatePanel2, UpdatePanel2.GetType(), "Src", "Setdate('" + hdnDate.Value + "');", true);
         //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "clickLateFee();", false);
         //Loop = 1;
 
         ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowDropDown();", true);
-        //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowProcessingFeeDropDown();", true);
-
-        //txtLateFee.Visible = false;
-
-        //if (hidLatefeeChecked.Value == "1")
-        //{
-        //    txtLateFee.Visible = true;
-        //}
-        //else
-        //{
-        //    txtLateFee.Visible = false; hidLatefeeChecked
-        //}
-
-        //if (hidLatefeeChecked.Value == "True")
-        //{
-        //    //txtLateFee.Visible = true;
-        //    Page.ClientScript.RegisterStartupScript(this.GetType(), "Reg", "clickLateFee();", true);
-        //}
-        //else
-        //{
-        //txtLateFee.Visible = false;
-        //Page.ClientScript.RegisterStartupScript(this.GetType(), "Reg", "clickLateFee();", true);
-        //}
-
-        //Page.ClientScript.RegisterStartupScript(this.GetType(), "src", "clickLateFee();", false);
-
-        lvFee.Visible = false;
-        divCredit.Visible = false;
-        divCourse.Visible = false;
-        divFix.Visible = false;
-        txtYes.Text = string.Empty;
-        txtCerFee.Text = string.Empty;
-        btnSubmit.Visible = false;
-        lvSem.Visible = false;
-        divRenge.Visible = false;
-
-        ddlSession.Focus();
+       
+        ddlExamType.Focus();
+        
         txtLateFeeAmount.Text = string.Empty;
     }
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        objCommon.FillDropDownList(ddlCsession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString() + " and SESSIONNO not in (" + Convert.ToInt32(ddlSession.SelectedValue) + ")", "SESSIONNO desc");
+        //objCommon.FillDropDownList(ddlCsession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString() + " and SESSIONNO not in (" + Convert.ToInt32(ddlSession.SelectedValue) + ")", "SESSIONNO desc");
         //objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
         //objCommon.FillListBox(lstSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+
+        objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER CM inner join ACD_SESSION_MASTER SM on(SM.COLLEGE_ID=cm.COLLEGE_ID)", "CM.COLLEGE_ID", "CM.COLLEGE_NAME", "SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.IS_ACTIVE=1", "");
 
         ddlDegree.SelectedIndex = -1;
         ddlExamType.SelectedIndex = -1;
@@ -1179,8 +1159,8 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
             IsCheckLateFee = false;
         }
 
-        int College = Convert.ToInt32(ViewState["college_id"]);  //ddlCollege.SelectedValue
-        int Session = Convert.ToInt32(ddlSession.SelectedValue);
+        int College = Convert.ToInt32(ddlCollege.SelectedValue);  //ddlCollege.SelectedValue
+        int Session = Convert.ToInt32(ViewState["SessionNo"]);
         int ExamType = Convert.ToInt32(ddlExamType.SelectedValue);
         int FeesStructure = Convert.ToInt32(ddlFeesStructure.SelectedValue);
 
@@ -1250,28 +1230,38 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
                     if (decimal.Parse(txtCredit.Text) > 0)
                     {
-                        CustomStatus cs = (CustomStatus)Exm.FeeCredit(College, Session, ExamType, degreeno, Sem, ActiveStatus, FeeProcAppli, ApplicableFee, Creditfee, FeesStructure, Semname, userno, IsFeeCertificate, CertificateFee, IsCheckLateFee, LateFeesMode, LateFeeDate, LateFeeAmount, valuationFee, valuationMaxFee, PaymentMode);
-
-                        if (cs.Equals(CustomStatus.RecordSaved))
+                        int chksession = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(FID)", "SESSIONNO="+Session));
+                        if (chksession == 0 || btnSubmit.Text!="UPDATE")
                         {
-                            objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
-                            Load();
+                            CustomStatus cs = (CustomStatus)Exm.FeeCredit(College, Session, ExamType, degreeno, Sem, ActiveStatus, FeeProcAppli, ApplicableFee, Creditfee, FeesStructure, Semname, userno, IsFeeCertificate, CertificateFee, IsCheckLateFee, LateFeesMode, LateFeeDate, LateFeeAmount, valuationFee, valuationMaxFee, PaymentMode);
 
-                            lvFee.Visible = false;
-                            divCredit.Visible = true;
+                            if (cs.Equals(CustomStatus.RecordSaved))
+                            {
+                                //string script = "alert('Server-side code completed!');";
+                                //Page.ClientScript.RegisterStartupScript(this.GetType(), "ServerScript", script, true);
 
-                            //return;
+                                objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
+                                Load();
+                                clear();
+
+                                //lvFee.Visible = false;
+                                //divCredit.Visible = true;
+
+                                //return;
+                            }
+                            else
+                            {
+
+                                objCommon.DisplayMessage(this.updFee, "Record Successfully Update.", this.Page);
+                                Load();
+                                clear();
+                            }
                         }
-                        else
+                        else 
                         {
-                            objCommon.DisplayMessage(this, "Record Successfully Saved.", this.Page);
-                            Load();
-
-                            lvFee.Visible = false;
-                            divCredit.Visible = true;
-
-                            //return;
+                            objCommon.DisplayMessage(this.updFee, "Exam Fees Alerady Define for this session.., Please Cancel Previous Fees assign to this session First. ", this.Page);
                         }
+
                     }
                     else
                     {
@@ -1280,12 +1270,15 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
                         //return;
                     }
+                    
+
+                    //Response.Redirect(Request.Url.ToString());
                 }
             }
 
             //Sem = Sem.Remove(Sem.Length - 1);
             //Semname = Semname.Remove(Semname.Length - 1);
-
+            
             #endregion
         }
         else if (ddlFeesStructure.SelectedIndex == 3)
@@ -1313,32 +1306,76 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
                     if (decimal.Parse(txtCourse.Text) > 0)
                     {
+                       
                         string CourseFee = txtCourse.Text.Trim();
-
-                        CustomStatus cs = (CustomStatus)Exm.FeeCourse(College, Session, ExamType, degreeno, Sem, ActiveStatus, FeeProcAppli, ApplicableFee, CourseFee, FeesStructure, Semname, userno, IsFeeCertificate, CertificateFee, IsCheckLateFee, LateFeesMode, LateFeeDate, LateFeeAmount, valuationFee, valuationMaxFee, PaymentMode);
-
-                        if (cs.Equals(CustomStatus.RecordSaved))
+                        if(btnSubmit.Text=="UPDATE")
                         {
-                            objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
-                            Load();
+                            string semnos = Sem.Replace(",", "$");
+                            string Semnames = Semname.Replace(",", "$");
 
-                            divCourse.Visible = true;
-                            lvFee.Visible = false;
-                            divCredit.Visible = false;
-
-                            //return;
+                            int Fid = 0;
+                            Fid = Convert.ToInt32(ViewState["FID"].ToString());
+                            string SP_Name = "PKG_UPDATE_FEE_DEFINATION_COURSE";
+                            string SP_Parameters = "@P_FID,@P_COLLEGE_ID,@P_SESSIONNO, @P_FEETYPE,@P_DEGREENO, @P_SEM,@P_ActiveStatus,@P_FeeProcAppli, @P_APPLICABLEFEE, @P_CourseFee, @P_FEESTRUCTURE ,@P_SEMNAME, @P_UANO,@P_CertiFeesApplicable,@P_CertificateFee,@P_CheckLateFeesApplicable,@P_FeeMode, @P_LateFeeDate, @P_LateFeeAmount, @P_ValuationFee, @P_ValuationMaxFee, @P_PaymentMode ,@P_OUT";
+                            string Call_Values = Fid+","+College+","+ Session+","+ ExamType+","+ degreeno+","+ semnos+","+ ActiveStatus+","+ FeeProcAppli+","+ ApplicableFee +","+CourseFee+","+ FeesStructure+","+ Semnames+","+userno+","+ IsFeeCertificate+","+CertificateFee+","+ IsCheckLateFee+","+ LateFeesMode+","+ LateFeeDate+","+ LateFeeAmount+","+ valuationFee+","+ valuationMaxFee+","+ PaymentMode+","+0;
+                            string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+                            if (que_out == "1")
+                            {
+                                objCommon.DisplayMessage(this, "Record Update Successfully.", this.Page);
+                                Load();
+                                clear();
+                                 //objCommon.DisplayMessage("Course Registration done Sucessfully, Wait for the final approval from the Head of Department", this.Page);
+                            }
+                            else
+                            {
+                                objCommon.DisplayMessage(this, "Record Not Found.", this.Page);
+                                Load();
+                                clear();
+                                //objCommon.DisplayMessage("Course Registration Update Sucessfully, Wait for the final approval from the Head of Department", this.Page);
+                            }
+                            //clear();
+                            //Response.Redirect(Request.Url.ToString());
                         }
                         else
                         {
-                            objCommon.DisplayMessage(this, "Record Successfully Saved.", this.Page);
-                            Load();
+                          int chksession = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(FID)", "SESSIONNO="+Session));
+                          if (chksession == 0 || btnSubmit.Text != "UPDATE")
+                          {
+                              CustomStatus cs = (CustomStatus)Exm.FeeCourse(College, Session, ExamType, degreeno, Sem, ActiveStatus, FeeProcAppli, ApplicableFee, CourseFee, FeesStructure, Semname, userno, IsFeeCertificate, CertificateFee, IsCheckLateFee, LateFeesMode, LateFeeDate, LateFeeAmount, valuationFee, valuationMaxFee, PaymentMode);
+                              if (cs.Equals(CustomStatus.RecordSaved))
+                              {
+                                  objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
+                                  Load();
+                                  clear();
 
-                            divCourse.Visible = true;
-                            lvFee.Visible = false;
-                            divCredit.Visible = false;
+                                  //divCourse.Visible = true;
+                                  //lvFee.Visible = false;
+                                  //divCredit.Visible = false;
 
-                            //return;
+                                  //return;
+                              }
+                              else
+                              {
+
+                                  objCommon.DisplayMessage(this.updFee, "Record Successfully Update.", this.Page);
+                                  Load();
+                                  clear();
+
+                                  //divCourse.Visible = true;
+                                  //lvFee.Visible = false;
+                                  //divCredit.Visible = false;
+
+                                  //return;
+                              }
+                          }
+                          else
+                          {
+                              objCommon.DisplayMessage(this.updFee, "Exam Fees Alerady Define for this session.., Please Cancel Previous Fees assign to this session First. ", this.Page);
+
+                          }
+
                         }
+                       
                     }
                     else
                     {
@@ -1349,7 +1386,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     }
                 }
             }
-
+            
             #endregion
         }
         else if (ddlFeesStructure.SelectedIndex == 1)
@@ -1387,25 +1424,32 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                             if (cs.Equals(CustomStatus.RecordSaved))
                             {
                                 objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
-                                BindListView();
                                 Load();
-
-                                lvFee.Visible = true;
-                                divCredit.Visible = false;
-                                divCourse.Visible = false;
+                                clear();
+                                //return;
                                 //return;
                             }
                             else
                             {
-                                objCommon.DisplayMessage(this, "Record Successfully Saved.", this.Page);
-                                BindListView();
-                                Load();
 
-                                lvFee.Visible = true;
-                                divCredit.Visible = false;
-                                divCourse.Visible = false;
+                                objCommon.DisplayMessage(this.updFee, "Record Successfully Update.", this.Page);
+                                Load();
+                                clear();
                                 //return;
                             }
+                             //int chksession = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(FID)", "SESSIONNO="+Session));
+                             //if (chksession == 0 || btnSubmit.Text == "UPDATE")
+                             //{
+                               
+                             //}
+                             //else
+                             //{
+                             //    objCommon.DisplayMessage(this.updFee, "Exam Fees Alerady Define for this session.., Please Cancel Previous Fees assign to this session First. ", this.Page);
+
+                             //}
+                           
+                            
+                            //Response.Redirect(Request.Url.ToString());
                         }
                         //else
                         //{
@@ -1421,7 +1465,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
                 }
             }
-
+          
             #endregion
         }
         else if (ddlFeesStructure.SelectedIndex == 4)
@@ -1438,43 +1482,84 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                         Label Semester = item.FindControl("lblSem") as Label;
                         TextBox Fees = item.FindControl("txtFee") as TextBox;
                         String FeeAmt = Fees.Text.Trim();
-
+                    
                         string TempSem = Semester.Text;
                         string Semestername = Convert.ToString(Semester.ToolTip);
 
                         if (decimal.Parse(Fees.Text) > 0)
                         {
-                            CustomStatus cs = (CustomStatus)Exm.SemFeeConfig(College, Session, ExamType, TempSem, Semestername, FeeAmt, degreeno, ActiveStatus, FeeProcAppli, ApplicableFee, FeesStructure, userno, IsFeeCertificate, CertificateFee, IsCheckLateFee, LateFeesMode, LateFeeDate, LateFeeAmount, valuationFee, valuationMaxFee, PaymentMode);
 
-                            if (cs.Equals(CustomStatus.RecordSaved))
+                            string CourseFee = txtCourse.Text.Trim();
+                            if (btnSubmit.Text == "UPDATE")
                             {
-                                objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
-                                BindListView();
-                                Load();
 
-                                lvSem.Visible = true;
-                                lvFee.Visible = false;
-                                divCredit.Visible = false;
-                                divCourse.Visible = false;
-                                //return;
+                                int Fid = 0;
+                                Fid = Convert.ToInt32(ViewState["FID"].ToString());
+                                string SP_Name = "PKG_UPDATE_FIXED_FEE";
+                                string SP_Parameters = "@P_FID,@P_COLLEGE_ID,@P_SESSIONNO,@P_FEETYPE,@P_FeeAmt,@P_DEGREENO,@P_TEMPSEM, @P_SEMNAME,@P_ActiveStatus,@P_FeeProcAppli,@P_APPLICABLEFEE,@P_FEESTRUCTURE,@P_UANO,@P_CertiFeesApplicable,@P_CertificateFee,@P_CheckLateFeesApplicable,@P_FeeMode,@P_LateFeeDate,@P_LateFeeAmount,@P_ValuationFee,@P_ValuationMaxFee,@P_PaymentMode,@P_OUT";
+                                string Call_Values = Fid + "," + College + "," + Session + "," + ExamType + "," + FeeAmt + "," + degreeno + "," + TempSem + "," + Semestername + "," + ActiveStatus + "," + FeeProcAppli + "," + ApplicableFee + "," + FeesStructure + "," + userno + "," + IsFeeCertificate + "," + CertificateFee + "," + IsCheckLateFee + "," + LateFeesMode + "," + LateFeeDate + "," + LateFeeAmount + "," + valuationFee + "," + valuationMaxFee + "," + PaymentMode + "," + 0;
+                                string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);                                                                                                                                                                                                                           
+                                if (que_out == "1")
+                                {
+                                    objCommon.DisplayMessage(this, "Record Update Successfully.", this.Page);
+
+                                    //objCommon.DisplayMessage(this.updFee, "Record Successfully Update.", this.Page);
+                                    Load();
+                                    clear();
+                                }
+                                else
+                                {
+                                    objCommon.DisplayMessage(this, "Record Not Found.", this.Page);
+
+                                    //objCommon.DisplayMessage(this.updFee, "Record Successfully Update.", this.Page);
+                                    Load();
+                                    clear();
+                                }
+                                
+                                //Response.Redirect(Request.Url.ToString());
                             }
                             else
                             {
-                                objCommon.DisplayMessage(this, "Record Successfully Saved.", this.Page);
-                                BindListView();
-                                Load();
 
-                                lvSem.Visible = true;
-                                lvFee.Visible = false;
-                                divCredit.Visible = false;
-                                divCourse.Visible = false;
-                                //return;
+                                CustomStatus cs = (CustomStatus)Exm.SemFeeConfig(College, Session, ExamType, TempSem, Semestername, FeeAmt, degreeno, ActiveStatus, FeeProcAppli, ApplicableFee, FeesStructure, userno, IsFeeCertificate, CertificateFee, IsCheckLateFee, LateFeesMode, LateFeeDate, LateFeeAmount, valuationFee, valuationMaxFee, PaymentMode);
+
+                                if (cs.Equals(CustomStatus.RecordSaved))
+                                {
+                                    objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
+                                    BindListView();
+                                                                     
+                                    Load();
+                                    clear();
+
+                                    //lvSem.Visible = true;
+                                    //lvFee.Visible = false;
+                                    //divCredit.Visible = false;
+                                    //divCourse.Visible = false;
+                                    //return;
+                                }
+                                else
+                                {
+                                    //objCommon.DisplayMessage(this, "Record Successfully Saved.", this.Page);
+                                    BindListView();
+
+                                    objCommon.DisplayMessage(this.updFee, "Record Successfully Update.", this.Page);
+                                    Load();
+                                    clear();
+
+                                    //lvSem.Visible = true;
+                                    //lvFee.Visible = false;
+                                    //divCredit.Visible = false;
+                                    //divCourse.Visible = false;
+                                    //return;
+                                }
                             }
+
+
                         }
                     }
                 }
             }
-
+           
             #endregion
         }
         else
@@ -1586,24 +1671,28 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                         {
                             objCommon.DisplayMessage(this, "Record Saved Successfully.", this.Page);
                             Load();
+                            clear();
 
-                            divRenge.Visible = true;
-                            lvSem.Visible = false;
-                            lvFee.Visible = false;
-                            divCredit.Visible = false;
-                            divCourse.Visible = false;
+                            //divRenge.Visible = true;
+                            //lvSem.Visible = false;
+                            //lvFee.Visible = false;
+                            //divCredit.Visible = false;
+                            //divCourse.Visible = false;
                             //return;
                         }
                         else
                         {
-                            objCommon.DisplayMessage(this, "Record Successfully Saved.", this.Page);
-                            Load();
+                            //objCommon.DisplayMessage(this, "Record Successfully Update.", this.Page);
+                            //objCommon.DisplayMessage(updFee, "Record Successfully Saved.", this.Page);
 
-                            divRenge.Visible = true;
-                            lvSem.Visible = false;
-                            lvFee.Visible = false;
-                            divCredit.Visible = false;
-                            divCourse.Visible = false;
+                            objCommon.DisplayMessage(this.updFee, "Record Successfully Update.", this.Page);
+                            Load();
+                            clear();
+                            //divRenge.Visible = true;
+                            //lvSem.Visible = false;
+                            //lvFee.Visible = false;
+                            //divCredit.Visible = false;
+                            //divCourse.Visible = false;
                             //return;
                         }
                         //}
@@ -1630,11 +1719,11 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                     }
                 }
             }
-
+   
             #endregion
         }
 
-        ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowDropDown();", true);
+        //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowDropDown();", true);
     }
 
     protected void ddlFeesStructure_SelectedIndexChanged(object sender, EventArgs e)
@@ -2115,76 +2204,6 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowDropDown();", true);
     }
 
-    //protected void del_Click(object sender, ImageClickEventArgs e)
-    //{
-    //    //lstSemester.SelectedValue = null;
-    //    ImageButton btnDelete = sender as ImageButton;
-    //    int FID = int.Parse(btnDelete.CommandArgument);
-    //    SqlDataReader dr = Exm.GetFeeDetails(FID);
-
-    //    if (dr != null)
-    //    {
-    //        if (dr.Read())
-    //        {
-    //            //int ClgId = Convert.ToInt32(dr["college_id"]);
-    //            //int ClgId = (dr["college_id"] != null && Convert.ToInt32(dr["college_id"]) > 0) ? Convert.ToInt32(dr["college_id"]) : 0;
-    //            //int ClgId = (dr["college_id"] != null && Convert.ToInt32(dr["college_id"]) > 0) ? 0 : Convert.ToInt32(dr["college_id"]);
-    //            int ClgId = Convert.ToInt32(dr["college_id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["college_id"]));
-
-    //            //ddlCollege_SelectedIndexChanged(new object(), new EventArgs());
-
-    //            //int Sessionno = Convert.ToInt32(dr["sessionno"]);
-    //            int Sessionno = Convert.ToInt32(dr["sessionno"] == DBNull.Value ? 0 : Convert.ToInt32(dr["sessionno"]));
-
-    //            int FeeType = Convert.ToInt32(dr["FEETYPE"]);
-    //            int Degreeno = Convert.ToInt32(dr["degreeno"]);
-    //            string txt = dr["ApplicableFee"].ToString();
-
-    //            //int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]);
-    //            int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]));
-
-    //            if (txtconformmessageValue.Value == "Yes")
-    //            {
-    //                CustomStatus cs = (CustomStatus)Exm.FeeDelete(ClgId, Sessionno, FeeType, Degreeno, FeeStru);
-
-    //                if (cs.Equals(CustomStatus.RecordSaved))
-    //                {
-    //                    objCommon.DisplayMessage(this, "Record Cancel Successfully...!!!", this.Page);
-    //                    Load();
-    //                    lvFee.Visible = false;
-    //                    divCredit.Visible = false;
-    //                    divCourse.Visible = false;
-    //                    lvSem.Visible = false;
-    //                    divRenge.Visible = false;
-    //                    return;
-    //                }
-    //                else
-    //                {
-    //                    objCommon.DisplayMessage(this, "Something Went Wrong...!!!", this.Page);
-    //                    Load();
-    //                    lvFee.Visible = false;
-    //                    divCredit.Visible = false;
-    //                    divCourse.Visible = false;
-    //                    lvSem.Visible = false;
-    //                    divRenge.Visible = false;
-    //                    return;
-    //                }
-    //            }
-    //            else
-    //            {
-    //                //objCommon.DisplayMessage(this, "Something went Wrong..", this.Page);
-    //                Load();
-    //                lvFee.Visible = false;
-    //                divCredit.Visible = false;
-    //                divCourse.Visible = false;
-    //                lvSem.Visible = false;
-    //                divRenge.Visible = false;
-    //                return;
-    //            }
-    //        }
-    //    }
-    //}
-
     protected void del_Click(object sender, ImageClickEventArgs e)
     {
         //lstSemester.SelectedValue = null;
@@ -2210,38 +2229,14 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                 int Degreeno = Convert.ToInt32(dr["degreeno"]);
                 string txt = dr["ApplicableFee"].ToString();
 
-                //int hdfExamRegistered =
                 //int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]);
                 int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]));
 
                 if (txtconformmessageValue.Value == "Yes")
                 {
+                    CustomStatus cs = (CustomStatus)Exm.FeeDelete(ClgId, Sessionno, FeeType, Degreeno, FeeStru);
 
-
-                    // DataSet dsStudent;
-
-                    string SP_Name = "PKG_CANCEL_FEE_DEFINATION_CC";
-                    string SP_Parameters = "@P_FID,@P_OUT";
-                    string Call_Values = "" + FID + "," + 0 + "";// +"," + Convert.ToInt16(ViewState["sem"]) + "," +
-                    string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
-                    // dsStudent = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values,true);
-
-                    // string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
-
-
-                    // return;
-                    // CustomStatus cs = string.Empty;// (CustomStatus)Exm.FeeDelete(ClgId, Sessionno, FeeType, Degreeno, FeeStru);//commented by gaurav
-
-
-
-                    // string SP_Name = "PKG_CANCEL_FEE_DEFINATION_CC";
-                    // string SP_Parameters = "@P_FID";
-                    // string Call_Values = "" + + "";// +"," + Convert.ToInt16(ViewState["sem"]) + "," +
-                    // dsStudent = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
-
-
-                    //if (que_out.Equals(1))
-                    if (que_out == "1")
+                    if (cs.Equals(CustomStatus.RecordSaved))
                     {
                         objCommon.DisplayMessage(this, "Record Cancel Successfully...!!!", this.Page);
                         Load();
@@ -2450,7 +2445,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
         try
         {
-            int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+            //int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
             //int branchno = Convert.ToInt32(ViewState["branchno"]);
             //int CollegeId = Convert.ToInt32(ViewState["college_id"]);
             int CollegeId = Convert.ToInt32(ddlCollege.SelectedValue);
@@ -2458,7 +2453,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
 
             string SP_Name = "PKG_Exam_Show_ExamFeeConfig";
             string SP_Parameters = "@P_SESSIONNO,@P_COLLEGE_ID";
-            string Call_Values = "" + Sessionno + "," + CollegeId + "";
+            string Call_Values = "" + Convert.ToInt32(ViewState["SessionNo"]) + "," + CollegeId + "";
 
             DataSet ds = null;
             ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
@@ -2489,4 +2484,276 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+    protected void btnEdit_Click1(object sender, ImageClickEventArgs e)
+    {
+        ImageButton btnEdit = sender as ImageButton;
+        int FID = int.Parse(btnEdit.CommandArgument);
+        ViewState["FID"] = FID;
+        //string checkdrc = objCommon.LookUp("ACD_DCR", "count(DCR_NO)", "SESSIONNO = " + Convert.ToInt32(ViewState["SessionNo"]) + " AND DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + "AND RECIEPT_CODE=(SELECT RECIEPT_CODE from ACD_EXAM_TYPE where EXAM_TYPENO=" + Convert.ToInt32(ddlExamType.SelectedValue) + ")");
+       
+        
+        DataSet ds = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "SESSIONNO,DEGREENO,FEETYPE", "SEMESTERNO", "FID="+FID, "");
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            string checkdrc = objCommon.LookUp("ACD_DCR", "COUNT(DCR_NO)", "SESSIONNO = " + Convert.ToInt32(ds.Tables[0].Rows[0]["SESSIONNO"]) + " AND DEGREENO = " + Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]) + " AND RECIEPT_CODE = CAST((SELECT RECIEPT_CODE FROM ACD_EXAM_TYPE WHERE EXAM_TYPENO = " + Convert.ToInt32(ds.Tables[0].Rows[0]["FEETYPE"]) + ") AS NVARCHAR(MAX))"); //AND SEMESTERNO in ("+ds.Tables[0].Rows[0]["SEMESTERNO"]+"
+            
+            if (Convert.ToInt32(checkdrc) > 0)
+            {
+                objCommon.DisplayMessage(this, "Payment Already Done...!!!  ", this.Page);
+                return;
+            }
+        }
+
+        
+        
+        
+        btnSubmit.Text = "UPDATE";
+
+        SqlDataReader dr = Exm.GetFeeDetails(FID);
+
+        //string SP_Name = "PKG_ACD_FEE_DETAILS";
+        //string SP_Parameters = "@F_ID";
+        //string Call_Values = FID.ToString();
+
+        //DataSet ds = null;
+        //ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+        if (dr != null)
+        {
+            if (dr.Read())
+            {
+                 ViewState["SessionNo"] = "";
+
+                 String SessionId = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONID", "SESSIONNO=" + Convert.ToInt32(dr["SESSIONNO"].ToString()) + "AND ISNULL(IS_ACTIVE,0)=1");   
+                 ddlSession.SelectedValue = SessionId;
+                 ddlSession.Enabled = false;
+
+                  objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER CM inner join ACD_SESSION_MASTER SM on(SM.COLLEGE_ID=cm.COLLEGE_ID)", "CM.COLLEGE_ID", "CM.COLLEGE_NAME", "SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.IS_ACTIVE=1", "");
+                  ddlCollege.SelectedValue = dr["College_id"].ToString();
+                  ddlCollege.Enabled = false;
+
+                  ddlFeesStructure.SelectedValue = dr["FEESTRUCTURE_TYPE"].ToString();
+                  ddlFeesStructure.Enabled = false;
+
+                  ddlExamType.SelectedValue = dr["FEETYPE"].ToString();
+                  ddlExamType.Enabled = false;
+
+                  objCommon.FillListBox(ddlDegree, "ACD_COLLEGE_SCHEME_MAPPING AM INNER JOIN ACD_DEGREE AD ON (AM.DEGREENO=AD.DEGREENO)", "DISTINCT AD.DEGREENO", "AD.DEGREENAME", "AD.DEGREENO > 0 and AM.COLLEGE_ID =" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND ISNULL(ACTIVESTATUS,0)=1", "AD.DEGREENAME"); // Added by Sagar M on date 17052023 as per RCPIPER || Reval & Photocopy Fee define one time for multiple Degree & Branches
+                  ddlDegree.Enabled = false;               
+                  ddlDegree.SelectedValue = dr["DEGREENO"].ToString();
+                  //ListItem foundItem = null;
+
+                  foreach (ListItem item in ddlDegree.Items)
+                  {
+                      if (!item.Selected)
+                      {
+                          
+                          item.Enabled = false;
+                          //// The item is unchecked
+                          //string degreeName = item.Text; // Access the degree name
+                          //// Your logic here
+                      }
+                  }
+
+
+                  //foreach (ListItem item in ddlDegree.Items)
+                  //{
+
+                  //    ListItem checkbox = ddlDegree.Items.FindByValue("ItemValue");
+                  //    if (item.chec)
+                  //    {
+                  //        foundItem = item;
+                  //        break;
+                  //    }
+                  //}
+
+
+                 
+
+                  String sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND  COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue));
+                  ViewState["SessionNo"] = sessionno;
+
+
+
+
+
+                  if (Convert.ToInt32(ddlFeesStructure.SelectedValue) != 4)
+                  {
+                      
+                      string sem = dr["SEMESTERNO"] == null ? string.Empty : dr["SEMESTERNO"].ToString();
+                      string[] semno = sem.Split(',');
+                      for (int i = 0; i < semno.Length; i++)
+                      {
+                          for (int j = 0; j < lstSemester.Items.Count; j++)
+                          {
+                              if (semno[i] == lstSemester.Items[j].Value)
+                              {
+                                  lstSemester.Items[j].Selected = true;
+                              }
+                          }
+                      }
+                  }
+                  else
+                  {
+                      semstar.Visible = false;
+                      ddlDegree.Enabled = false;
+                      lblDYddlSemester.Visible = false;
+                      lstSemester.Visible = false;
+                  }
+
+                  
+                  if (Convert.ToBoolean(dr["IsFeesApplicable"]) == true)
+                  {
+                      rdActive.Checked = true;
+                      //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "onoff(true);", true);
+                  }
+                  else
+                  {
+                      rdActive.Checked = false;
+                      //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "onoff(false);", true);
+                  }
+
+                  if (Convert.ToBoolean(dr["IsProFeesApplicable"]) == true)
+                  {
+                      
+                      test.Checked = true;
+                      //txtProcess.Visible = true;
+                      ScriptManager.RegisterStartupScript(this, GetType(), "Src", "document.getElementById('ctl00_ContentPlaceHolder1_txtProcess').style.display = 'block'", true);
+
+                  }
+                  else
+                  {
+                      test.Checked = false;
+                      // txtProcess.Visible = false; 
+                      ScriptManager.RegisterStartupScript(this, GetType(), "Src", "document.getElementById('ctl00_ContentPlaceHolder1_txtProcess').style.display = 'none'", true);
+                  }
+                  if (Convert.ToBoolean(dr["IsCertiFeesApplicable"]) == true)
+                  {
+                      chkFeeCer.Checked = true;
+                      //txtProcess.Visible = true;
+                      ScriptManager.RegisterStartupScript(this, GetType(), "Src", "document.getElementById('ctl00_ContentPlaceHolder1_txtProcess').style.display = 'block'", true);
+
+                  }
+                  else
+                  {
+                      chkFeeCer.Checked = false;
+                      // txtProcess.Visible = false; 
+                      ScriptManager.RegisterStartupScript(this, GetType(), "Src", "document.getElementById('ctl00_ContentPlaceHolder1_txtProcess').style.display = 'none'", true);
+                  }
+                  btnShow_Click(sender, e);
+                  
+                  divnote.Visible = true;
+                  
+            }
+
+
+        }
+    }
+
+    protected void clear()
+    {
+        //Response.Redirect(Request.Url.ToString());
+
+        
+        //ViewState["SessionNo"] = 0;
+        //ddlSession.SelectedIndex = -1;
+        //ddlSession.Enabled = true;
+
+        //ddlDegree.SelectedIndex = 0;
+        //ddlDegree.Enabled = true;
+
+        //ddlExamType.SelectedIndex = 0;
+        //ddlExamType.Enabled = true;
+
+        //ddlFeesStructure.SelectedIndex = 0;
+        //ddlFeesStructure.Enabled = true;
+
+        //lvSem.Items.Clear();
+
+        //ddlCollege.SelectedIndex = -1;
+        //ddlCollege.Enabled = true;
+
+        //txtValuationFee.Text = "0";
+        //txtValuationMaxFee.Text = "0";
+
+        //pnlCopySession.Visible = false;
+
+        //btnCopyData.Visible = false;   
+
+
+        btnSubmit.Text = "Submit";
+        ViewState["SessionNo"] = 0;
+        ddlSession.SelectedIndex = -1;
+        ddlSession.Enabled = true;
+
+        ddlDegree.SelectedIndex = -1;
+        ddlDegree.Enabled = true;
+        ddlExamType.SelectedIndex = -1;
+        ddlExamType.Enabled = true;
+
+        ddlFeesStructure.SelectedIndex = 0;
+        ddlFeesStructure.Enabled = true;
+
+        lstSemester.SelectedIndex = -1;
+
+        ddlLateFee.SelectedIndex = 0;
+        txtLateFeeDate.Text = "";
+        txtValuationFee.Text = "0";
+        txtValuationMaxFee.Text = "0";
+
+        ddlCollege.SelectedIndex = -1;
+        ddlCollege.Enabled = true;
+
+        pnlCopySession.Visible = false;
+        btnCopyData.Visible = false;
+
+        ddlCsession.SelectedIndex = 0;
+
+        //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "clickLateFee();", false);
+
+        ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowDropDown();", true);
+        //ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowProcessingFeeDropDown();", true);
+
+        lvFee.Visible = false;
+        divCredit.Visible = false;
+        divCourse.Visible = false;
+        //divFix.Visible = false;
+        txtYes.Text = string.Empty;
+        txtCerFee.Text = string.Empty;
+        btnSubmit.Visible = false;
+
+
+        lvSem.Visible = false;
+        lvFee.Visible = false;
+        Div2.Visible = false;
+        divCredit.Visible = false;
+        divRenge.Visible = false;
+        divCourse.Visible = false;
+        divFix.Visible = false;
+        divRenge_bk.Visible = false;
+        divRenge.Visible = false;
+
+        ddlExamType.Focus();
+        txtLateFeeAmount.Text = string.Empty;
+        rdActive.Checked = false;
+        test.Checked = false;     
+        chkFeeCer.Checked=false;
+        ddlPaymentMode.SelectedIndex = -1;
+        divnote.Visible = false;
+
+        
+        //DataSet ds = Exm.GetFeeConfig();
+
+        //if (ds.Tables[0] != null || ds.Tables[0].Rows.Count > 0)
+        //{
+        //    lvLoad.DataSource = ds;
+        //    lvLoad.DataBind();
+        //}
+
+       
+
+    
+    }
+   
 }

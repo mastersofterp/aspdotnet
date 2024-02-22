@@ -79,6 +79,13 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                         fuSignUpload.Enabled = false;
                         btnSignUpload.Visible = false;
                     }
+                    else if (orgID == 3)
+                    {
+                        fuPhotoUpload.Enabled = false;
+                        btnPhotoUpload.Visible = false;
+                        fuSignUpload.Enabled = false;
+                        btnSignUpload.Visible = false;
+                    }
 
                     //divPrintReport.Visible = true;
                     // btnGohome.Visible = false;
@@ -329,10 +336,10 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             idno = (Session["stuinfoidno"]).ToString();
         }
 
-        DataSet dsConfig = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(idno), "");
+        //DataSet dsConfig = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(idno), "");
 
-        string photo = dsConfig.Tables[0].Rows[0]["PHOTO"].ToString();
-        string sign = dsConfig.Tables[0].Rows[0]["STUD_SIGN"].ToString();
+        //string photo = dsConfig.Tables[0].Rows[0]["PHOTO"].ToString();
+        //string sign = dsConfig.Tables[0].Rows[0]["STUD_SIGN"].ToString();
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -369,18 +376,26 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     }
                 }
 
-                if (control is FileUpload)
+                if (ViewState["usertype"].ToString() == "2" && control is FileUpload)
                 {
                     FileUpload fileUploadControl = (FileUpload)control;
 
-                    if (captionName == "Photo" && string.IsNullOrEmpty(photo))
-                    {
-                        validationErrors.Add("Please Upload a File for " + captionName);
-                    }
+                    DataSet dsConfig = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(idno), "");
 
-                    if (captionName == "Signature" && string.IsNullOrEmpty(sign))
+                    if (dsConfig != null && dsConfig.Tables[0].Rows.Count > 0)
                     {
-                        validationErrors.Add("Please Upload a File for " + captionName);
+                        string photo = dsConfig.Tables[0].Rows[0]["PHOTO"].ToString();
+                        string sign = dsConfig.Tables[0].Rows[0]["STUD_SIGN"].ToString();
+
+                        if (captionName == "Photo" && string.IsNullOrEmpty(photo))
+                        {
+                            validationErrors.Add("Please Upload a File for " + captionName);
+                        }
+
+                        if (captionName == "Signature" && string.IsNullOrEmpty(sign))
+                        {
+                            validationErrors.Add("Please Upload a File for " + captionName);
+                        }
                     }
                 }
             }
@@ -394,6 +409,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         }
         return string.Empty;
     }
+
     #endregion Student Related Configuration     // Added By Shrikant W. on 05-09-2023
 
     private void CheckPageAuthorization()
@@ -683,6 +699,26 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 txtDTEAppId.Text = dtr["DTE_APPLICATION_ID"] == null ? string.Empty : dtr["DTE_APPLICATION_ID"].ToString();
                 txtUEN.Text = dtr["ELIGIBILITY_NO"] == null ? string.Empty : dtr["ELIGIBILITY_NO"].ToString();
 
+                if (dtr["ENROLLED_IN_ELECTION"] != DBNull.Value)
+                {
+                    if (Convert.ToInt32(dtr["ENROLLED_IN_ELECTION"]) == 0)
+                    {
+                        rdoElection.SelectedValue = "N";
+                    }
+                    else if (Convert.ToInt32(dtr["ENROLLED_IN_ELECTION"]) == 1)
+                    {
+                        rdoElection.SelectedValue = "Y";
+                    }
+                }
+                else
+                {
+                    rdoElection.SelectedValue = "N";
+                }
+
+                    txtDrivingLicenseNo.Text = dtr["DRIVING_LICENSE_NO"] == null ? string.Empty : dtr["DRIVING_LICENSE_NO"].ToString();
+                txtStudPanNo.Text = dtr["STUDENT_PANCARD_NO"] == null ? string.Empty : dtr["STUDENT_PANCARD_NO"].ToString();
+                txtFatherPanNo.Text = dtr["FATHER_PANCARD_NO"] == null ? string.Empty : dtr["FATHER_PANCARD_NO"].ToString();
+                txtMotherPanNo.Text = dtr["MOTHER_PANCARD_NO"] == null ? string.Empty : dtr["MOTHER_PANCARD_NO"].ToString();
 
                 string idno = objCommon.LookUp("ACD_STUD_PHOTO", "IDNO", "IDNO=" + Convert.ToInt32(txtIDNo.Text.Trim()));
                 if (idno != "")
@@ -745,7 +781,8 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             int mother_alive = 0;
             int parent_alive = 0;
             try
-            {
+            {               
+
                 if (Convert.ToDateTime(txtDateOfBirth.Text) > DateTime.Now.Date)
                 {
                     objCommon.DisplayMessage(this.Page, "Date of Birth Should not be greater than Current Date !", this.Page);
@@ -1026,7 +1063,21 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     objS.AbccId = txtABCCId.Text;
                     objS.DteAppId = txtDTEAppId.Text;
                     objS.EligibilityNo = txtUEN.Text;
-                   
+
+                    if (rdoElection.SelectedValue == "Y")
+                    {
+                        objS.ElectionEnrolled = 1;
+                    }
+                    else if (rdoElection.SelectedValue == "N")
+                    {
+                        objS.ElectionEnrolled = 0;
+                    }
+
+                    objS.DrivingLicenseNo = txtDrivingLicenseNo.Text;
+                    objS.StudentPanNo = txtStudPanNo.Text;
+                    objS.FatherPanNo = txtFatherPanNo.Text;
+                    objS.MotherPanNo = txtMotherPanNo.Text;
+
                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentPersonalInformation(objS, objSAddress, objSPhoto, objSQualExam, MotherMobile, MotherOfficeNo, IndusEmail, Convert.ToInt32(Session["usertype"]), father_alive, mother_alive, parent_alive);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {

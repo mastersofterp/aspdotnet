@@ -67,10 +67,14 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
             // FILL DROPDOWN Receipt Type
             objCommon.FillDropDownList(ddlPayType, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO > 0", "PAYTYPENO");
             objCommon.FillDropDownList(ddlRecType, "ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE", string.Empty, "RECIEPT_TITLE");
+            objCommon.FillDropDownList(ddlCurrency, "ACD_CURRENCY", "CUR_NO", "CUR_SHORT", "", "");
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTERS_CurrencyHeads.PopulateDropDownList-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -94,12 +98,26 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        lblerror.Text = string.Empty;
-        lblmsg.Text = string.Empty;
-        lvFeesHead.DataSource = null;
-        lvFeesHead.DataBind();
-        ddlPayType.SelectedIndex = 0;
-        this.btnReport.Enabled = false;
+        try
+        {
+            lblerror.Text = string.Empty;
+            lblmsg.Text = string.Empty;
+            lvFeesHead.DataSource = null;
+            lvFeesHead.DataBind();
+            ddlRecType.SelectedIndex = 0;
+            ddlPayType.SelectedIndex = 0;
+            ddlCurrency.SelectedIndex = 0;
+            divCurencyType.Visible = false;
+            this.btnReport.Enabled = false;
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTERS_CurrencyHeads.btnCancel_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        
     }
 
     protected void btnSave_Click(object sender, EventArgs e)
@@ -114,10 +132,10 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
                 Label txtHead = lvHead.FindControl("txtHead") as Label;
                 TextBox txtLName = lvHead.FindControl("txtLName") as TextBox;
                 TextBox txtSName = lvHead.FindControl("txtSName") as TextBox;
-                DropDownList ddlCurren = lvHead.FindControl("ddlCurrency") as DropDownList;
+                //DropDownList ddlCurren = lvHead.FindControl("ddlCurrency") as DropDownList;
                 string RecCode = objCommon.LookUp("ACD_FEE_TITLE", "RECIEPT_CODE", "FEE_TITLE_NO = " + Convert.ToInt32((txtHead.ToolTip)));
 
-                CustomStatus cs = (CustomStatus)objFHC.UpdateCurrencyHead(Convert.ToInt32((txtHead.ToolTip)), RecCode, Convert.ToInt32(ddlPayType.SelectedValue), Convert.ToInt32(ddlCurren.SelectedValue));
+                CustomStatus cs = (CustomStatus)objFHC.UpdateCurrencyHead(Convert.ToInt32((txtHead.ToolTip)), RecCode, Convert.ToInt32(ddlPayType.SelectedValue), Convert.ToInt32(ddlCurrency.SelectedValue));
                 //CustomStatus cs = (CustomStatus)objFHC.UpdateFeeHead(objFeesHead);
 
                 if (cs.Equals(CustomStatus.RecordUpdated))
@@ -128,6 +146,11 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
             {
                 //lblmsg.Text = "Record Saved Successfully";
                 objCommon.DisplayMessage("Record Saved Successfully", this.Page);
+
+                FeesHeadController objFC = new FeesHeadController();
+                DataSet ds = objFC.GetCurrencyHeads(ddlRecType.SelectedValue, Convert.ToInt32(ddlPayType.SelectedValue));
+                lvFeesHead.DataSource = ds;
+                lvFeesHead.DataBind();
                 //ShowReport("FeesHead", "rptFeesHeadCurrencyReport.rpt"); Commented by Rishabh -01082022- DISCUSSED with Umesh Sir and Manoj Sir.
             }
             else
@@ -139,7 +162,10 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTERS_CurrencyHeads.btnSave_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -194,53 +220,109 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTERS_CurrencyHeads.BindListViewCurrencyHead-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
     protected void ddlRecType_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lblerror.Text = string.Empty;
-        lblmsg.Text = string.Empty;
-        lvFeesHead.DataSource = null;
-        lvFeesHead.DataBind();
-        ddlPayType.SelectedIndex = 0;
-        this.btnReport.Enabled = false;
-        //this.btnReport.Enabled = true;
-        //BindListViewCurrencyHead();
+        try
+        {
+            lblerror.Text = string.Empty;
+            lblmsg.Text = string.Empty;
+            lvFeesHead.DataSource = null;
+            lvFeesHead.DataBind();
+            ddlPayType.SelectedIndex = 0;
+            this.btnReport.Enabled = false;
+            divCurencyType.Visible = false;
+            //this.btnReport.Enabled = true;
+            //BindListViewCurrencyHead();
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTERS_CurrencyHeads.ddlRecType_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+       
     }
 
-    protected void lvFeesHead_ItemDataBound(object sender, ListViewItemEventArgs data)
-    {
-        int i;
-        FeesHeadController objFHC = new FeesHeadController();
-        DataSet ds = objFHC.GetCurrencyHeads(ddlRecType.SelectedValue, Convert.ToInt32(ddlPayType.SelectedValue));
-        if (ds.Tables[0].Columns[6] == null || ds.Tables[0].Columns[6].Equals(0))
-        {
-            DropDownList ddlCurr = data.Item.FindControl("ddlCurrency") as DropDownList;
-            objCommon.FillDropDownList(ddlCurr, "ACD_CURRENCY", "CUR_NO", "CUR_SHORT", string.Empty, "");
-            //ddlCurr.SelectedValue = ds.Tables[0].Rows[0]["CUR_NO"].ToString();
-        }
-        else
-        {
-            i = Convert.ToInt32(hfdcount.Value);
-            //int CountList = 0;
-            DropDownList ddlCurr = data.Item.FindControl("ddlCurrency") as DropDownList;
-            //foreach (ListViewDataItem lvHeads in lvFeesHead.Items)
-            {
-                //DropDownList ddlCurr = lvHeads.FindControl("ddlCurrency") as DropDownList;
-                string recCode = objCommon.LookUp("ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE = '" + ddlRecType.SelectedItem.Text.Trim().ToString() + "'");
-                objCommon.FillDropDownList(ddlCurr, "ACD_CURRENCY", "CUR_NO", "CUR_SHORT", "", "");
-                ddlCurr.SelectedValue = ds.Tables[0].Rows[i]["CUR_NO"].ToString();
-                hfdcount.Value = (i + 1).ToString();
-                //CountList++;
-            }
-        }
+    //protected void lvFeesHead_ItemDataBound(object sender, ListViewItemEventArgs data)
+    //{
+    //    int i;
+    //    FeesHeadController objFHC = new FeesHeadController();
+    //    DataSet ds = objFHC.GetCurrencyHeads(ddlRecType.SelectedValue, Convert.ToInt32(ddlPayType.SelectedValue));
+    //    if (ds.Tables[0].Columns[6] == null || ds.Tables[0].Columns[6].Equals(0))
+    //    {
+    //        DropDownList ddlCurr = data.Item.FindControl("ddlCurrency") as DropDownList;
+    //        objCommon.FillDropDownList(ddlCurr, "ACD_CURRENCY", "CUR_NO", "CUR_SHORT", string.Empty, "");
+    //        //ddlCurr.SelectedValue = ds.Tables[0].Rows[0]["CUR_NO"].ToString();
+    //    }
+    //    else
+    //    {
+    //        i = Convert.ToInt32(hfdcount.Value);
+    //        //int CountList = 0;
+    //        DropDownList ddlCurr = data.Item.FindControl("ddlCurrency") as DropDownList;
 
-    }
+    //        //foreach (ListViewDataItem lvHeads in lvFeesHead.Items)
+    //        {
+    //            //DropDownList ddlCurr = lvHeads.FindControl("ddlCurrency") as DropDownList;
+    //            string recCode = objCommon.LookUp("ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE = '" + ddlRecType.SelectedItem.Text.Trim().ToString() + "'");
+    //            objCommon.FillDropDownList(ddlCurr, "ACD_CURRENCY", "CUR_NO", "CUR_SHORT", "", "");
+    //            ddlCurr.SelectedValue = ds.Tables[0].Rows[i]["CUR_NO"].ToString();
+    //            hfdcount.Value = (i + 1).ToString();
+    //            //CountList++;
+    //        }
+    //    }
+    //}
     protected void ddlPayType_SelectedIndexChanged(object sender, EventArgs e)
     {
-        this.btnReport.Enabled = true;
-        BindListViewCurrencyHead();
+        try
+        {
+            if (ddlRecType.SelectedIndex == 0)
+            {
+                objCommon.DisplayMessage("Please Select Receipt Type...", this.Page);
+                lvFeesHead.DataSource = null;
+                lvFeesHead.DataBind();
+                return;
+            }
+
+            string CountFeeHead = objCommon.LookUp("ACD_FEE_TITLE", "COUNT(FEE_LONGNAME)", "RECIEPT_CODE= '" + ddlRecType.SelectedValue + "' AND ( FEE_LONGNAME IS  NULL OR FEE_LONGNAME ='')");
+
+            if (CountFeeHead == "40")
+            {
+                objCommon.DisplayMessage(this.Page,"Please Define Fee Heads.", this.Page);
+                return;
+            }
+            this.btnReport.Enabled = true;
+            if (ddlPayType.SelectedIndex > 0)
+            {
+                divCurencyType.Visible = true;
+                FeesHeadController ob = new FeesHeadController();
+                DataSet ds = ob.GetCurrencyHeads(ddlRecType.SelectedValue, Convert.ToInt32(ddlPayType.SelectedValue));
+                //DataSet ds = objCommon.FillDropDown("ACD_FEE_TITLE A, ACD_CURRENCY C", "A.FEE_TITLE_NO,A.FEE_HEAD", "C.CUR_SHORT", string.Empty, "A.SRNO");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["CUR_NO"].ToString();
+                }
+            }
+            else
+            {
+                divCurencyType.Visible = false;
+            }
+            BindListViewCurrencyHead();
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTERS_CurrencyHeads.ddlPayType_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+
     }
 }

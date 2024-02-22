@@ -800,7 +800,7 @@
                                             <asp:TextBox ID="txtSpecification" TextMode="MultiLine" runat="server" CssClass="form-control" TabIndex="14"></asp:TextBox><asp:FileUpload
                                                 ID="FileUpload3" runat="server" Visible="false" TabIndex="14" />
                                         </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divAuthority"> 
                                             <div class="label-dynamic">
                                                 <label>Authority </label>
                                             </div>

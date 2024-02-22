@@ -394,7 +394,8 @@
         }
 
     </script>
-
+    
+    <asp:HiddenField ID="hdnMarksheetNo" runat="server" />
     <asp:HiddenField ID="hdnOrgId" runat="server" />
     <asp:HiddenField ID="hdnDegree" runat="server" />
     <div class="row">
@@ -591,6 +592,23 @@
                                             Display="None" ErrorMessage="Please Enter SSC Medium" SetFocusOnError="True"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
+
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divDivisionSsc" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup id="supDivisionSsc" runat="server">* </sup>
+                                                                <label>Division</label>
+                                                            </div>
+                                                             <asp:DropDownList ID="ddlDivisionSsc" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Distinction</asp:ListItem>
+                                                                <asp:ListItem Value="2">First Class</asp:ListItem>
+                                                                 <asp:ListItem Value="3">Second Class</asp:ListItem>
+                                                                 <asp:ListItem Value="4">Third Class</asp:ListItem>
+                                                                  <asp:ListItem Value="5">NA</asp:ListItem>
+                                                                </asp:DropDownList>  
+                                                            </div>
+
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divSscMarksObtained" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup id="supSscMarksObtained" runat="server">* </sup>
@@ -683,6 +701,18 @@
                                                             <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender46" runat="server"
                                                                 TargetControlID="txtAttemptSsc" FilterType="Numbers" />
                                                         </div>
+
+
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divMarksheetNoSsc" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup id="supMarksheetNoSsc" runat="server">* </sup>
+                                                                <label>Marksheet Number</label>
+                                                                </div>
+                                                                    <asp:TextBox ID="txtMarksheetNoSsc" runat="server" CssClass="form-control"
+                                                                Rows="1" ToolTip="Marksheet Number" placeholder=" Enter Marksheet Number"
+                                                                MaxLength="20" TabIndex="1" onkeypress="allowAlphaNumericSpaceHyphen(event)"></asp:TextBox>
+                                                            </div>
+
                                                         <div class="form-group col-lg-6 col-md-6 col-12" id="divSscSchoolAddress" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup id="supSscSchoolAddress" runat="server">* </sup>
@@ -774,6 +804,23 @@
                                             Display="None" ErrorMessage="Please Enter HSSC Medium" SetFocusOnError="True"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
+
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDivisionHsc" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup id="supDivisionHsc" runat="server">* </sup>
+                                                                <label>Division</label>
+                                                            </div>
+                                                             <asp:DropDownList ID="ddlDivisionHsc" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Distinction</asp:ListItem>
+                                                                <asp:ListItem Value="2">First Class</asp:ListItem>
+                                                                 <asp:ListItem Value="3">Second Class</asp:ListItem>
+                                                                 <asp:ListItem Value="4">Third Class</asp:ListItem>
+                                                                  <asp:ListItem Value="5">NA</asp:ListItem>
+                                                                </asp:DropDownList>  
+                                                            </div>
+
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divHscSeatNo" runat="server">
                                                                 <div class="label-dynamic">
                                                                     <sup id="supHscSeatNo" runat="server">* </sup>
@@ -785,6 +832,16 @@
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender43" runat="server"
                                                                     TargetControlID="txtExamRollNoHssc" FilterType="Custom" FilterMode="InvalidChars"
                                                                     InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
+                                                            </div>
+
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divMarksheetNoHsc" runat="server">
+                                                                <div class="label-dynamic">
+                                                                    <sup id="supMarksheetNoHsc" runat="server">* </sup>
+                                                                    <label>Marksheet Number</label>
+                                                                </div>
+                                                                <asp:TextBox ID="txtMarksheetNoHsc" runat="server" CssClass="form-control"
+                                                                    Rows="1" ToolTip="Marksheet Number" placeholder=" Enter Marksheet Number"
+                                                                    MaxLength="20" TabIndex="1" onkeypress="allowAlphaNumericSpaceHyphen(event)"></asp:TextBox>
                                                             </div>
 
                                                             <div class="col-md-12 col-12">
@@ -1185,6 +1242,23 @@
                                             Display="None" ErrorMessage="Please Enter HSSC Medium" SetFocusOnError="True"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
+
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDivisionDiploma" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup id="supDivisionDiploma" runat="server">* </sup>
+                                                                <label>Division</label>
+                                                            </div>
+                                                             <asp:DropDownList ID="ddlDivisionDiploma" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Distinction</asp:ListItem>
+                                                                <asp:ListItem Value="2">First Class</asp:ListItem>
+                                                                 <asp:ListItem Value="3">Second Class</asp:ListItem>
+                                                                 <asp:ListItem Value="4">Third Class</asp:ListItem>
+                                                                  <asp:ListItem Value="5">NA</asp:ListItem>
+                                                                </asp:DropDownList>  
+                                                            </div>
+
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaMarksObtained" runat="server">
                                                                 <div class="label-dynamic">
                                                                     <sup id="supDiplomaMarksObtained" runat="server">* </sup>
@@ -1239,6 +1313,17 @@
                                                                     TargetControlID="txtExamRollNoDiploma" FilterType="Custom" FilterMode="InvalidChars"
                                                                     InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                             </div>
+
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divMarksheetNoDiploma" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup id="supMarksheetNoDiploma" runat="server">* </sup>
+                                                                <label>Marksheet Number</label>
+                                                                </div>
+                                                                    <asp:TextBox ID="txtMarksheetNoDiploma" runat="server" CssClass="form-control"
+                                                                Rows="1" ToolTip="Marksheet Number" placeholder=" Enter Marksheet Number"
+                                                                MaxLength="20" TabIndex="1" onkeypress="allowAlphaNumericSpaceHyphen(event)"></asp:TextBox>
+                                                            </div>
+
                                                             <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                                 <div class="label-dynamic">
                                                                     <label>DGPA/CGPA</label>
@@ -1373,6 +1458,20 @@
                                                             TargetControlID="txtAllIndiaRank" FilterType="Custom" FilterMode="InvalidChars"
                                                             InvalidChars=".~`!@#$%^*()_+=,/:;<>?'{}[]\|-&&quot;'" />
                                                     </div>
+
+                                                    <div class="form-group col-lg-4 col-md-8 col-12" id="divLastSchoolName" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supLastSchoolName" runat="server">* </sup>
+                                                            <label>Last School/College Name as per TC/Leaving Certificate</label>
+                                                        </div>
+
+                                                        <asp:TextBox ID="txtLastSchoolName" runat="server" placeholder="Enter Last School/College Name as per TC/Leaving Certificate" CssClass="form-control" MaxLength="8"
+                                                            ToolTip="Please Enter Last School/College Name as per TC/Leaving Certificate" TabIndex="1"></asp:TextBox>
+
+                                                    </div>
+
+                                                   
+
                                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                         <div class="label-dynamic">
                                                             <label>Quota</label>
@@ -1421,7 +1520,7 @@
 
                                             <div class="col-md-12">
                                                 <asp:Panel ID="divEntrancequal" runat="server" ScrollBars="Auto">
-                                                    <asp:ListView ID="lvEntranceExm" runat="server">
+                                                    <asp:ListView ID="lvEntranceExm" runat="server" >
                                                         <LayoutTemplate>
                                                             <%-- <div class="vista-grid">--%>
                                                             <div id="demo-grid">
@@ -1442,6 +1541,9 @@
                                                                                 <asp:Label ID="lblDYtxtPercentile" runat="server" Font-Bold="true"></asp:Label>
                                                                             </th>
                                                                             <th>Rank
+                                                                            </th>
+                                                                            <th>
+                                                                                Last School/College Name as per TC/Leaving Certificate
                                                                             </th>
                                                                             <th style="display: none;">DGPA/CGPA
                                                                             </th>
@@ -1478,6 +1580,9 @@
                                                                 </td>
                                                                 <td>
                                                                     <%# Eval("ALL_INDIA_RANK")%>
+                                                                </td>
+                                                                <td>
+                                                                    <%# Eval("LAST_SCHOOL_NAME") %>
                                                                 </td>
                                                                 <td style="display: none;">
                                                                     <%# Eval("CGPA") %>
@@ -2241,6 +2346,22 @@
          }
     </script>
 
+    <script>
+        function allowAlphaNumericSpaceHyphen(e) {
+            var code = ('charCode' in e) ? e.charCode : e.keyCode;
+            if (!(code == 32) && // space
+              !(code == 45) && // hyphen
+              !(code > 47 && code < 58) && // numeric (0-9)
+              !(code > 64 && code < 91) && // upper alpha (A-Z)
+              !(code > 96 && code < 123)) { // lower alpha (a-z)
+                e.preventDefault();
+                // alert("Not Allowed Special Character..!");
+                return true;
+            } else {
+                return false;
+            }
+        }
+</script>
 
     <%--  <script>
         function validateSubjectTextBoxes() {
@@ -2328,6 +2449,7 @@
         }
     }
     </script>--%>
+
     <div id="divMsg" runat="server">
     </div>
 </asp:Content>

@@ -558,7 +558,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
                 idoutof.Visible = true;
                 txtAttemptMinimum.Visible = true;
                 txtOutOfQuestion.Visible = true;
-                txtQuestionMarks.Enabled = true;
+                //txtQuestionMarks.Enabled = true;comment on 12022024
                 ddlParentQuestion.Enabled = true;
                 txtAttemptMinimum.Text = QuestionData.Tables[0].Rows[0]["Solve_no_of_question"].ToString();
                 txtOutOfQuestion.Text = QuestionData.Tables[0].Rows[0]["No_of_question"].ToString();
@@ -570,7 +570,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
                 idoutof.Visible = false;
                 txtAttemptMinimum.Visible = false;
                 txtOutOfQuestion.Visible = false;
-                txtQuestionMarks.Enabled = false;
+                // txtQuestionMarks.Enabled = false;comment on 12022024
                 ddlParentQuestion.Enabled = false;
                 txtAttemptMinimum.Text = QuestionData.Tables[0].Rows[0]["Solve_no_of_question"].ToString();
                 txtOutOfQuestion.Text = QuestionData.Tables[0].Rows[0]["No_of_question"].ToString();
@@ -734,7 +734,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
             txtAttemptMinimum.Visible = true;
             txtOutOfQuestion.Visible = true;
             ddlParentQuestion.Enabled = false;
-            txtQuestionMarks.Enabled = true;
+            //txtQuestionMarks.Enabled = true;comment on 12022024
 
         }
         else
@@ -744,7 +744,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
             txtAttemptMinimum.Visible = false;
             txtOutOfQuestion.Visible = false;
             ddlParentQuestion.Enabled = true;
-            txtQuestionMarks.Enabled = false;
+            //txtQuestionMarks.Enabled = false;comment on 12022024
         }
 
 
@@ -779,21 +779,52 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
     {
         if (Convert.ToInt32(ddlParentQuestion.SelectedValue) > 0)
         {
+         //   string parent = Convert.ToString(ddlParentQuestion.SelectedItem);
+         ////   decimal QMarks = Convert.ToDecimal(txtQuestionMarks.Text);
+         //   int Solve_NO_of_question = Convert.ToInt32(objCommon.LookUp("tblQuestionPatternDetails", "Solve_no_of_question", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
+         //   int QuestionPatternSubID = Convert.ToInt32(objCommon.LookUp("tblQuestionPatternDetails", "QuestionPatternSubID", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
+         //   int Count = Convert.ToInt32(objCommon.LookUp("tblQuestionPatternDetails", "count(*)", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and Parent_Question=" + QuestionPatternSubID));
+         //   Decimal PARENT_QUESTION_MARKS = Convert.ToDecimal(objCommon.LookUp("tblQuestionPatternDetails", "QUESTION_MARKS", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
+
             string parent = Convert.ToString(ddlParentQuestion.SelectedItem);
-         //   decimal QMarks = Convert.ToDecimal(txtQuestionMarks.Text);
-            int Solve_NO_of_question = Convert.ToInt32(objCommon.LookUp("tblQuestionPatternDetails", "Solve_no_of_question", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
-            int QuestionPatternSubID = Convert.ToInt32(objCommon.LookUp("tblQuestionPatternDetails", "QuestionPatternSubID", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
-            int Count = Convert.ToInt32(objCommon.LookUp("tblQuestionPatternDetails", "count(*)", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and Parent_Question=" + QuestionPatternSubID));
-            Decimal PARENT_QUESTION_MARKS = Convert.ToDecimal(objCommon.LookUp("tblQuestionPatternDetails", "QUESTION_MARKS", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
+            //   decimal QMarks = Convert.ToDecimal(txtQuestionMarks.Text);
+            String Solve_NO_of_question = Convert.ToString(objCommon.LookUp("tblQuestionPatternDetails", "Solve_no_of_question", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
+
+            int Solve_NO_of_questions = Solve_NO_of_question == string.Empty ? 0 : Convert.ToInt32(Solve_NO_of_question);
+
+            String QuestionPatternSubID = Convert.ToString(objCommon.LookUp("tblQuestionPatternDetails", "QuestionPatternSubID", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
+            int QuestionPatternSubIDs = QuestionPatternSubID == string.Empty ? 0 : Convert.ToInt32(QuestionPatternSubID);
+
+            int Count = Convert.ToInt32(objCommon.LookUp("tblQuestionPatternDetails", "count(*)", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and Parent_Question=" + QuestionPatternSubIDs));
+
+            String PARENT_QUESTION_MARKS = Convert.ToString(objCommon.LookUp("tblQuestionPatternDetails", "QUESTION_MARKS", "Question_Pattern_Id=" + Session["QuestionPatternId"] + "and QuestionNumber='" + parent + "'"));
+            Decimal PARENT_QUESTION_MARK = PARENT_QUESTION_MARKS == string.Empty ? 0 : Convert.ToDecimal(PARENT_QUESTION_MARKS);
+
+
             if (ddlQueLevel.SelectedValue == "2")
             {
+
                 idQmark.Disabled = false;
-                decimal A = PARENT_QUESTION_MARKS / Convert.ToDecimal(Solve_NO_of_question);
-               // Convert.ToDecimal(txtQuestionMarks.Text)= A;
+                try
+                {
+                    
+                    decimal A = PARENT_QUESTION_MARK / Convert.ToDecimal(Solve_NO_of_questions);
+
+                    txtQuestionMarks.Text = A.ToString();
+                    //txtQuestionMarks.Enabled = false; comment on 12022024
+                }
+                catch (DivideByZeroException h)
+                {
+                    Console.WriteLine(h.Message);
+                }
+
+               // idQmark.Disabled = false;
+               // decimal A = PARENT_QUESTION_MARKS / Convert.ToDecimal(Solve_NO_of_question);
+               //// Convert.ToDecimal(txtQuestionMarks.Text)= A;
 
 
-                txtQuestionMarks.Text = A.ToString();
-                txtQuestionMarks.Enabled = false;
+               // txtQuestionMarks.Text = A.ToString();
+               // txtQuestionMarks.Enabled = false;
 
             }
             else

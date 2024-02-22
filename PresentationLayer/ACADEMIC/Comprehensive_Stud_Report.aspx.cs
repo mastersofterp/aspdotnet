@@ -1711,6 +1711,79 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
 
             }
+            else if (orgid == 19)
+            {
+                DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+
+                    pnlCollege.Visible = true;
+                    lvSession.DataSource = ds;
+                    lvSession.DataBind();
+                    // ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                    pnlCollege.Visible = false;
+                    lvSession.DataSource = null;
+                    lvSession.DataBind();
+
+                }
+                if (dsreval.Tables[0].Rows.Count > 0)
+                {
+                    pnlrevalresult.Visible = true;
+                    lvRevalDetails.DataSource = dsreval;
+                    lvRevalDetails.DataBind();
+                }
+                else
+                {
+                    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                    pnlrevalresult.Visible = false;
+                    lvRevalDetails.DataSource = null;
+                    lvRevalDetails.DataBind();
+                }
+
+            }
+            else if (orgid == 20)
+            {
+                DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+
+                    pnlCollege.Visible = true;
+                    lvSession.DataSource = ds;
+                    lvSession.DataBind();
+                    // ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                    pnlCollege.Visible = false;
+                    lvSession.DataSource = null;
+                    lvSession.DataBind();
+
+                }
+                if (dsreval.Tables[0].Rows.Count > 0)
+                {
+                    pnlrevalresult.Visible = true;
+                    lvRevalDetails.DataSource = dsreval;
+                    lvRevalDetails.DataBind();
+                }
+                else
+                {
+                    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                    pnlrevalresult.Visible = false;
+                    lvRevalDetails.DataSource = null;
+                    lvRevalDetails.DataBind();
+                }
+            }
             else
             {
                 DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
@@ -2570,6 +2643,42 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 // url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_SCHEMENO=" + scheme + ",@P_SEMESTERNO=" + sem + ",@P_YEAR=" + 0 + ",@P_STUDTYPE=" + studtype + ",@P_DATEOFISSUE=" + DateTime.Today.Date + ",@P_IDNO=" + idno;
 
                 url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_DEGREENO=" + degree + ",@P_BRANCHNO=" + branch + ",@P_SEMESTERNO=" + sem + ",@P_IDNO=" + idno; //Added by lalit regarding dt15/12/20236
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updStudentInfo, this.updStudentInfo.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            else if (OrgId == 19)
+            {
+                string reportTitle = "Gradesheet Report";
+                string rptFileName = "rptGradeCardReport_PCEN_Student.rpt";
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                // url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_SCHEMENO=" + scheme + ",@P_SEMESTERNO=" + sem + ",@P_YEAR=" + 0 + ",@P_STUDTYPE=" + studtype + ",@P_DATEOFISSUE=" + DateTime.Today.Date + ",@P_IDNO=" + idno;
+
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_DEGREENO=" + degree + ",@P_BRANCHNO=" + branch + ",@P_SEMESTERNO=" + sem + ",@P_SCHEMENO=" + scheme + ",@P_IDNO=" + idno + ",@P_COLLEGE_CODE=" + cid; //Added by lalit regarding dt15/12/20236
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updStudentInfo, this.updStudentInfo.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            else if (OrgId == 20)
+            {
+                string reportTitle = "Gradesheet Report";
+                string rptFileName = "rptGradeCardReport_PJOLCE_Student.rpt";
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                // url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_SCHEMENO=" + scheme + ",@P_SEMESTERNO=" + sem + ",@P_YEAR=" + 0 + ",@P_STUDTYPE=" + studtype + ",@P_DATEOFISSUE=" + DateTime.Today.Date + ",@P_IDNO=" + idno;
+
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_DEGREENO=" + degree + ",@P_BRANCHNO=" + branch + ",@P_SEMESTERNO=" + sem + ",@P_SCHEMENO=" + scheme + ",@P_IDNO=" + idno + ",@P_COLLEGE_CODE=" + cid; //Added by lalit regarding dt15/12/20236
 
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";

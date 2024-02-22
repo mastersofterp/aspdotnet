@@ -98,6 +98,27 @@ namespace IITMS
                 }
                 return retStatus;
             }
+         //Added by lalit 
+            public DataSet Get_BLOCK_ARRANGEMENT_REPORT_BACKDATE(string examdate, int slot, int previousStatus)
+            {
+                DataSet ds = null;
+                try
+                {
+                    SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                    SqlParameter[] objParams = new SqlParameter[3];
+                    objParams[0] = new SqlParameter("@EXAM_DATE", examdate);
+                    objParams[1] = new SqlParameter("@SLOTNO", slot);
+                    objParams[2] = new SqlParameter("@PREV_STATUS", previousStatus);
+                    ds = objSQLHelper.ExecuteDataSetSP("PKG_EXAM_BLOCK_ARRANGMENT_REPORT_FOR_EXAM_DATE_BACKDATE", objParams);
+                }
+                catch (Exception ex)
+                {
+                    return ds;
+                    throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.SessionController.GetAllSession->" + ex.ToString());
+                }
+                return ds;
+            }
             public int DeallocateSeatingArrangment(int sessionno, string examdate, int slot, int uano,int seatstatus, int orgno, int collegeid)
             {
                 int retStatus = Convert.ToInt32(CustomStatus.Others);

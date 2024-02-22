@@ -2817,6 +2817,82 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
+                /// <summary>
+                /// Added by Vipul Tichakule on 16-11-2023
+                /// </summary>
+                /// <returns></returns>
+                public DataSet GetDataValidation() //string queryname
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+                        //objParams[0] = new SqlParameter("@P_DATE",);
+                       // objParams[0] = new SqlParameter("@P_QUERYNAME", queryname);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_DATA_VALIDATION_CHECK", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.User_AccController.GetDataValidation -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                /// <summary>
+                /// Added by Vipul Tichakule on 16-11-2023
+                /// </summary>
+                /// <returns></returns>
+                public int UpdateDataValidation(string value)
+                {
+                    //DataSet ds = null;
+                    int retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_NEWDATE", DateTime.Now.ToString("yyyy-MM-dd"));
+                        objParams[1] = new SqlParameter("@P_ID", value);
+
+                        if (objSQLHelper.ExecuteNonQuerySP("ACD_PGK_UPDATE_DATA_VALIDATEE", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        //ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_DATA_VALIDATION_CHECK", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return retStatus;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.User_AccController.UpdateDataValidation -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                /// <summary>
+                /// Added by Vipul Tichakule on 16-11-2023
+                /// </summary>
+                /// <returns></returns>
+                public DataSet Downloaddatavalidate(int ID) // int sessionno
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        //objParams[0] = new SqlParameter("@P_DATE",);
+                        objParams[0] = new SqlParameter("@P_ID", ID);
+                        //objParams[1] = new SqlParameter("@P_SESSIONNO", sessionno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("ACD_PKG_QUERY_TO_DOWNLOAD_DATAVALIDATION", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.User_AccController.GetDataValidation -> " + ex.ToString());
+                    }
+                    return ds;
+                }
             }
         }//END: BusinessLayer.BusinessLogic
 

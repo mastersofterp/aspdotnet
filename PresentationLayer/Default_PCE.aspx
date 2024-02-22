@@ -240,6 +240,20 @@
                                     </div>
                                 </div>
 
+                                <div class="d-flex justify-content-between align-items-center mt-0">
+                                    <div class="play-store">
+                                        <a href="https://play.google.com/store/apps/details?id=com.iitms.pcen" target="_blank" style="cursor: pointer;">
+                                            <span><asp:Image ID="imgApp" runat="server" ImageUrl="~/Images/GPlayImg.png" AlternateText="App" /></span>
+                                        </a>
+                                    </div>
+                                   
+                                    <div class="Qr-code">
+                                        <a href="#" target="_blank" style="cursor: pointer;">
+                                            <asp:Image ID="imgqr" runat="server" ImageUrl="~/Images/QR_Code/PCEN.png" AlternateText="AppCode" width="50px" />
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
 
 

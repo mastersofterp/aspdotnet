@@ -27,7 +27,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;                       
-                        objParams = new SqlParameter[19];
+                        objParams = new SqlParameter[20];
                         objParams[0] = new SqlParameter("@P_MDNO", ObjEnt.MDNO);
                         objParams[1] = new SqlParameter("@P_DEPTUSER", ObjEnt.DEPTUSER);
                         objParams[2] = new SqlParameter("@P_SANCTION_AUTH", ObjEnt.SANCTION_AUTH);
@@ -48,8 +48,9 @@ namespace IITMS
                         objParams[15] = new SqlParameter("@P_IS_SECGP", ObjEnt.IS_SECGP);
                         objParams[16] = new SqlParameter("@P_IS_BUDGET_HEAD", ObjEnt.IS_BUDGET_HEAD);             //----Added by shabina for making budget head optional
                         objParams[17] = new SqlParameter("@P_IsAvailableQty", ObjEnt.IsAvailableQty);             //----Added by shabina for making budget head optional
-                        objParams[18] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[18].Direction = ParameterDirection.Output;
+                        objParams[18] = new SqlParameter("@P_IsAuthorityShowOnQuot", ObjEnt.IsAuthorityShowOnQuot);             //----Added by shabina for making Authority sign on quotation entry , optional
+                        objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[19].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STR_CONFIG_DETAILS_INS_UPD", objParams, true);
                         if (ret != null)
                         {

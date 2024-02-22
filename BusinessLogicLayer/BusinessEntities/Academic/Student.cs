@@ -430,6 +430,13 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         // Added by Shrikant Waghmare on 16-12-2023
         private string _eligibiltyno = string.Empty;
 
+        // Added by Shrikant Waghmare on 30-01-2023
+        private string _licenseno = string.Empty;
+        private int _electionenrolled = 0;
+        private string _studentpanno = string.Empty;
+        private string _motherpanno = string.Empty;
+        private string _fatherpanno = string.Empty;
+
         //methods
 
         #region Public Property Fields
@@ -2474,6 +2481,37 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
          {
              get { return _eligibiltyno; }
              set { _eligibiltyno = value; }
+         }
+
+        // Added By Shrikant W. on 30-01-2024
+         public int ElectionEnrolled
+         {
+             get { return _electionenrolled; }
+             set { _electionenrolled = value; }
+         }
+
+         public string DrivingLicenseNo
+         {
+             get { return _licenseno; }
+             set { _licenseno = value; }
+         }
+
+         public string StudentPanNo
+         {
+             get { return _studentpanno; }
+             set { _studentpanno = value; }
+         }
+
+         public string FatherPanNo
+         {
+             get { return _fatherpanno; }
+             set { _fatherpanno = value; }
+         }
+
+         public string MotherPanNo
+         {
+             get { return _motherpanno; }
+             set { _motherpanno = value; }
          }
 
 

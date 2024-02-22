@@ -195,8 +195,11 @@ public partial class create_user : System.Web.UI.Page
                 User_AccController objUC = new User_AccController();
                 UserAcc objUA = new UserAcc();
                 if (Convert.ToBoolean(ViewState["ExistUser"]) == true)
-                {
-                    objUA.UA_Acc = objCommon.LookUp("USER_ACC", "UA_ACC", "UA_NO=" + Convert.ToInt16(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString()));
+                {                    
+                    //objUA.UA_Acc = objCommon.LookUp("USER_ACC", "UA_ACC", "UA_NO=" + Convert.ToInt32(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString()));
+                    int uaNo = Convert.ToInt32(string.IsNullOrEmpty(txtUsername.ToolTip) ? "0" : txtUsername.ToolTip);
+                    objUA.UA_Acc = objCommon.LookUp("USER_ACC", "UA_ACC", "UA_NO=" + uaNo);
+
                     if (objUA.UA_Acc == "")
                     {
                         objUA.UA_Acc = "0,500";
@@ -265,7 +268,10 @@ public partial class create_user : System.Web.UI.Page
                     }
                 //}
 
-                objUA.UA_No = Convert.ToInt16(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString());
+                //objUA.UA_No = Convert.ToInt32(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString());
+                int ua_No = Convert.ToInt32(string.IsNullOrEmpty(txtUsername.ToolTip) ? "0" : txtUsername.ToolTip);
+                objUA.UA_No = ua_No;
+
                 objUA.UA_Name = txtUsername.Text.Replace("'", "`").Trim();
                
                 //if (txtPassword.Text.Replace("'", "`").Trim() == string.Empty)

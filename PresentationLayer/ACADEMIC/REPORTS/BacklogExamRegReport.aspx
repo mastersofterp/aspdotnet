@@ -87,7 +87,7 @@
                                             Display="None" ErrorMessage="Please Select Degree" InitialValue="0" ValidationGroup="Summary"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
-                                        >
+                                        
                                         <div class="label-dynamic">
                                             <sup>*</sup>
                                             <%--<label>Branch</label>--%>
@@ -102,7 +102,7 @@
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Branch" ValidationGroup="Summary"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
-                                        >
+                                        
                                         <div class="label-dynamic">
                                             <sup>*</sup>
                                             <%--<label>Scheme</label>--%>

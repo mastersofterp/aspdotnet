@@ -2431,6 +2431,11 @@ public partial class ACCOUNT_DirectBillRaising : System.Web.UI.Page
                 XmlElement PAGENO = objXMLDoc.CreateElement("PAGENO");
                 PAGENO.InnerText = "0";
                 XmlElement PARTICULARS = objXMLDoc.CreateElement("PARTICULARS");
+                XmlElement INVOICENO = objXMLDoc.CreateElement("INVOICE_NO");
+                INVOICENO.InnerText = txtInvoiceNo.Text.Trim().ToString();
+                XmlElement INVOICEDATE = objXMLDoc.CreateElement("INVOICE_DATE");
+                INVOICEDATE.InnerText = txtInvoiceDate.Text.Trim().ToString();
+
 
                 string narration = txtNarration.Text.Replace("'", "''");
                 //PARTICULARS.InnerText = "JV Against Transaction_No<" + lblSerialNo.Text + "> Party <" + txtServiceName.Text + ">";    //THIS LINE COMMENT BY TANU
@@ -2592,6 +2597,9 @@ public partial class ACCOUNT_DirectBillRaising : System.Web.UI.Page
                 objElement.AppendChild(ADVANCE_REFUND_NONE);
                 objElement.AppendChild(PAGENO);
                 objElement.AppendChild(PARTICULARS);
+
+                
+
                 objElement.AppendChild(COLLEGE_CODE);
                 objElement.AppendChild(USER);
                 objElement.AppendChild(CREATED_MODIFIED_DATE);
@@ -2635,6 +2643,8 @@ public partial class ACCOUNT_DirectBillRaising : System.Web.UI.Page
                 objElement.AppendChild(SGSTApplicable);
                 objElement.AppendChild(GSTIN_NO);
 
+                objElement.AppendChild(INVOICENO);
+                objElement.AppendChild(INVOICEDATE);
 
                 objXMLDoc.DocumentElement.AppendChild(objElement);
             }
@@ -2789,6 +2799,10 @@ public partial class ACCOUNT_DirectBillRaising : System.Web.UI.Page
         XmlElement TDSonSGSTPercentage = objXMLDoc.CreateElement("TDSonSGSTPercentage");
 
         XmlElement SecurityAmt = objXMLDoc.CreateElement("SecurityAmt");
+        XmlElement INVOICENO = objXMLDoc.CreateElement("INVOICE_NO");
+        INVOICENO.InnerText = txtInvoiceNo.Text.Trim().ToString();
+        XmlElement INVOICEDATE = objXMLDoc.CreateElement("INVOICE_DATE");
+        INVOICEDATE.InnerText = txtInvoiceDate.Text.Trim().ToString();
 
         IsTDSonCGSTSGSTApplicable.InnerText = "0";
         IsSecurityApplicable.InnerText = "0";
@@ -3058,6 +3072,8 @@ public partial class ACCOUNT_DirectBillRaising : System.Web.UI.Page
         objElement.AppendChild(SGSTonamount);
         objElement.AppendChild(SGSTApplicable);
         objElement.AppendChild(GSTIN_NO);
+        objElement.AppendChild(INVOICENO);
+        objElement.AppendChild(INVOICEDATE);
 
         objXMLDoc.DocumentElement.AppendChild(objElement);
         return objXMLDoc;

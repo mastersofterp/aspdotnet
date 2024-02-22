@@ -284,8 +284,6 @@ namespace IITMS
                     public string ActiveStatus_Str { get; set; }
 
                 }
-                #endregion
-
 
                 /// <summary>
                 /// Added By Rishabh on 16012024
@@ -301,6 +299,10 @@ namespace IITMS
                     public string FromDate { get; set; }
                     public string ToDate { get; set; }
                 }
+                #endregion
+
+
+            
             }
         }
     }

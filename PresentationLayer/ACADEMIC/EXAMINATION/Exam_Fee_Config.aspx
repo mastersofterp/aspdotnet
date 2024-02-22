@@ -81,19 +81,39 @@
         });
     </script>--%>
 
-    <asp:UpdatePanel ID="updFee" runat="server">
+    <asp:UpdatePanel ID="updFee" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
-                            <h3 class="box-title">Exam Fee Configuration</h3>
+                           <h3 class="box-title">
+                         <asp:Label ID="lblDynamicPageTitle" runat="server" style="text-transform: uppercase;"></asp:Label>
+
+                    </h3>
                         </div>
 
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+
+                                        <div class="label-dynamic">
+
+                                            <sup>*</sup>
+                                            <%--<label>Session</label>--%>
+                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
+
+                                        </div>
+
+                                        <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="True" CssClass="form-control" AutoPostBack="true" data-select2-enable="true" TabIndex="2" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="rfsession" runat="server" ControlToValidate="ddlSession"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                    </div>
+
                                     <div class="form-group col-lg-3 col-md-6 col-12">
 
                                         <div class="label-dynamic">
@@ -112,22 +132,7 @@
 
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
 
-                                        <div class="label-dynamic">
-
-                                            <sup>*</sup>
-                                            <%--<label>Session</label>--%>
-                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
-
-                                        </div>
-
-                                        <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="True" CssClass="form-control" AutoPostBack="true" data-select2-enable="true" TabIndex="2" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfsession" runat="server" ControlToValidate="ddlSession"
-                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                    </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
 
                                         <div class="label-dynamic">
@@ -141,9 +146,9 @@
                                         <asp:DropDownList ID="ddlExamType" runat="server" AppendDataBoundItems="True" AutoPostBack="true" CssClass="form-control" data-select2-enable="true" TabIndex="3" OnSelectedIndexChanged="ddlExamType_SelectedIndexChanged">
                                             <%--<asp:ListItem Value="-1">Please Select</asp:ListItem>--%>
                                             <%--     <asp:ListItem Value="0">Regular</asp:ListItem>
-                                    <asp:ListItem Value="1">BackLog</asp:ListItem>
-                                    <asp:ListItem Value="2">Re-Do</asp:ListItem>
-                                    <asp:ListItem Value="3">Re-Evaluation</asp:ListItem>
+                                            <asp:ListItem Value="1">BackLog</asp:ListItem>
+                                            <asp:ListItem Value="2">Re-Do</asp:ListItem>
+                                            <asp:ListItem Value="3">Re-Evaluation</asp:ListItem>
                                             --%>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfExamDate" runat="server" ControlToValidate="ddlExamType"
@@ -200,7 +205,7 @@
 
                                                 <div class="label-dynamic">
 
-                                                    <sup>*</sup>
+                                                    <sup id="semstar" runat="server">*</sup>
                                                     <%--<label>Semester</label>--%>
                                                     <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
 
@@ -287,7 +292,7 @@
 
                                 <div class="row">
                                     <div class="col-12 col-md-8">
-                                        <div class="row">
+                                        <div class="row d-none" >
                                             <div class="form-group col-lg-4 col-md-7 col-6">
                                                 <div class="row">
                                                     <div class="form-group col-lg-7 col-md-7 col-6">
@@ -733,9 +738,9 @@
 
                                 <%-- Copy Session --%>
 
-                                <asp:Panel ID="pnlCopySession" runat="server" Height="80px" Visible="false">
+                                <asp:Panel ID="pnlCopySession" runat="server" Height="80px" Visible="false" >
 
-                                    <div class="row">
+                                    <div class="row d-none">
                                         <div class="form-group col-lg-3 col-md-6 col-12">
 
                                             <div class="label-dynamic">
@@ -774,7 +779,7 @@
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true" ShowSummary="false" DisplayMode="List" ValidationGroup="Show" />
 
                             </div>
-
+                            <div id="divnote" runat="server" visible="false"><p style="color: red;" > NOTE : Session ,College,Exam,Fees and Degree can not Modify...! <br /> </p></div>
                             <div class="col-12 mt-3">
                                 <asp:ListView ID="lvLoad" runat="server">
                                     <LayoutTemplate>
@@ -786,16 +791,13 @@
                                             <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
                                                 <thead class="bg-light-blue">
                                                     <tr>
-                                                        <%--<th>Edit</th>--%>
+                                                        <th>Edit</th>
                                                         <th>Cancel</th>
                                                         <%--Delete--%>
                                                         <th>Exam Type</th>
                                                         <th>Session</th>
                                                         <th>Fees Structure</th>
-
                                                         <th>Degree</th>
-                                                        <th>College</th>
-
                                                         <th>Semester</th>
                                                         <th>Fees Applicable</th>
                                                         <th>Fees</th>
@@ -820,9 +822,11 @@
                                         <tr>
 
 
-                                            <%--   <td>  <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("FID") %>'
+<%--                                               <td>  <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("FID") %>'
                                                         AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click"  /></td>--%>
-
+                                            <td>
+                                               <asp:ImageButton ID="btnEdit" runat="server" AlternateText="Edit Record" CausesValidation="false" CommandArgument='<%# Eval("FID") %>' ImageUrl="~/Images/edit.png" OnClick="btnEdit_Click1" TabIndex="1" ToolTip="Edit Record" />
+                                            </td>
 
                                             <td>
                                                 <%--<asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/Images/Delete.png" CommandArgument='<%# Eval("FID") %>'
@@ -845,9 +849,6 @@
                                             </td>
                                             <td>
                                                 <asp:Label ID="deg" runat="server" Text='<%# Eval("DEGREE")%>'></asp:Label>
-                                            </td>
-                                             <td>
-                                                <asp:Label ID="Label7" runat="server" Text='<%# Eval("COLLEGE_NAME")%>'></asp:Label>
                                             </td>
                                             <td>
                                                 <asp:Label ID="seme" runat="server" Text='<%# Eval("SEMESTERNAME")%>'></asp:Label>
@@ -1068,6 +1069,7 @@
                 enableFiltering: true,
                 filterPlaceholder: 'Search',
                 enableCaseInsensitiveFiltering: true,
+
             });
         });
         var parameter = Sys.WebForms.PageRequestManager.getInstance();

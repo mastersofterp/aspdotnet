@@ -1737,7 +1737,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[4] = new SqlParameter("@P_END_DATE", objeE.EndDate); //Session["TimeTable_College_id"]
                 objParams[5] = new SqlParameter("@P_COLLEGE_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["TimeTable_College_id"].ToString()));
                 objParams[6] = new SqlParameter("@P_ORGANIZATIONID", objeE.OrgId);//ADDED BY Dileep Kare
-                objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int); 
+                objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
                 objParams[7].Direction = ParameterDirection.Output;
                 object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_TIMETABLE_INSERT", objParams, true);
                 if (obj != null)
@@ -4449,7 +4449,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         #endregion
 
-        #region remain method 
+        #region remain method
 
         public DataSet GetCourseTeacherExcelReport(int sessionno, int schemeno, int semesterno)
         {
@@ -5818,7 +5818,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="teacherflag"></param>
         /// <returns></returns>
         /// Done
-        public int GlobalElective_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag,int sectionno)
+        public int GlobalElective_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag, int sectionno)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -6673,7 +6673,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
         //load time table for single dates(Cancel_TimeTable.aspx)
-        public DataSet LoadTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate,int sectionno)
+        public DataSet LoadTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate, int sectionno)
         {
             DataSet ds = null;
             try
@@ -6739,7 +6739,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="teacherflag"></param>
         /// <returns></returns>
         /// Done
-        public int GlobalElective_RevisedTimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag, string remark,int sectionno)
+        public int GlobalElective_RevisedTimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag, string remark, int sectionno)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -7123,7 +7123,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="teacherflag"></param>
         /// <returns></returns>
         /// Done
-        public int ValueAdded_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag,int sectionno)
+        public int ValueAdded_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag, int sectionno)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -7264,7 +7264,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
         //load time table for single dates(Cancel_TimeTable.aspx)
-        public DataSet LoadValueAddedTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate,int sectionno)
+        public DataSet LoadValueAddedTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate, int sectionno)
         {
             DataSet ds = null;
             try
@@ -7604,10 +7604,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //Updated by Sakshi Makwana Date :01112023
         public int CalculateAttendance(Attendance Attentdobj)
-            {
+        {
             int retstatus = 0;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objparams = null;
                 objparams = new SqlParameter[4];
@@ -7618,50 +7618,50 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objparams[3].Direction = ParameterDirection.Output;
                 object obj = objSQLHelper.ExecuteNonQuerySP("ACD_ATTENDANCE_CALCULATE_UPD", objparams, true);
                 if (Convert.ToInt32(obj) == 12)
-                    {
-                    retstatus = 12;
-                    }
-                else if (Convert.ToInt32(obj) == 1)
-                    {
-                    retstatus = 1;
-                    }
-                else
-                    {
-                    retstatus = 0;
-                    }
-
-                }
-            catch (Exception ex)
                 {
+                    retstatus = 12;
+                }
+                else if (Convert.ToInt32(obj) == 1)
+                {
+                    retstatus = 1;
+                }
+                else
+                {
+                    retstatus = 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
                 retstatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AttendanceCalculation.UpdateStatus->" + ex.ToString());
-                }
-            return retstatus;
             }
+            return retstatus;
+        }
 
         //Added By Sakshi M on 25-10-2023
         public DataSet ShowAtendanceStatus()
-            {
+        {
             DataSet dr = null;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 dr = objSQLHelper.ExecuteDataSet("SP_GET_STUDENT_ATTENDANCE_STATUS");
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 return dr;
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.ShowAtendanceStatus-> " + ex.ToString());
-                }
-            return dr;
             }
+            return dr;
+        }
         //Added By Sakshi M on 25-10-2023
         public SqlDataReader GetStatusDetail(Attendance objAttendanceEntity)
-            {
+        {
 
             SqlDataReader dr;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objparams = null;
                 objparams = new SqlParameter[1];
@@ -7669,12 +7669,12 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 dr = objSQLHelper.ExecuteReaderSP("SP_GET_STATUS_DETAIL", objparams);
                 return dr;
 
-                }
-            catch (Exception ex)
-                {
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController. GetStatusDetail-> " + ex.ToString());
-                }
             }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController. GetStatusDetail-> " + ex.ToString());
+            }
+        }
 
         //Updated by Sakshi Makwana Date :01112023
         public int CalculateAttendanceSubmit(Attendance objAttendanceEntity)
@@ -7779,5 +7779,26 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return retStatus;
         }
+
+        public DataSet Get_FacultyDiary_Data(int ua_no)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[1];
+                objParams[0] = new SqlParameter("@P_UANO", ua_no);
+
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_DATA_FACULTY_DIARY", objParams);
+            }
+            catch (Exception ex)
+            {
+
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.Get_FacultyDiary_Data->" + ex.ToString());
+            }
+            return ds;
+        }
+
     }
 }

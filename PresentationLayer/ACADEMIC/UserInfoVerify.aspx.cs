@@ -2057,7 +2057,9 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
 
             //string file = dt.Rows[0]["DOCUMENTS"].ToString();
             string username = dt.Rows[0]["USERNAME"].ToString();
-            string ext = file.Split('.').Last();
+            string ext = string.Empty;
+                //file.Split('.').Last();
+            ext = Path.GetExtension(new Uri(file).AbsolutePath);
             byte[] data;
             using (WebClient webClient = new WebClient())
             {
@@ -2101,7 +2103,9 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
 
             //string file = dt.Rows[0]["DOCUMENTS"].ToString();
             string username = dt.Rows[0]["USERNAME"].ToString();
-            string ext = file.Split('.').Last();
+            string ext = string.Empty;
+            ext = Path.GetExtension(new Uri(file).AbsolutePath);
+                //file.Split('.').Last();
             byte[] data;
             using (WebClient webClient = new WebClient())
             {

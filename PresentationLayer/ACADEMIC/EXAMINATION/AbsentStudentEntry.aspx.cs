@@ -74,10 +74,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
 
                     if (Convert.ToInt32(Session["OrgId"]) == 1)
                     {
-                        DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND      SESSIONNO IN                               (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID=1                        AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS')", "SESSIONNO DESC");
-
-
-
+                        //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND      SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID=1 AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS')", "SESSIONNO DESC");
+                        DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND      SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID=1 AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS')", "SESSIONNO DESC");
                         if (ds_CheckActivity.Tables[0].Rows.Count == 0)
                         {
                           
@@ -106,9 +104,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
                     else
                     {
 
-                        DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_IDs IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS')", "SESSIONNO DESC");
-
-
+                        //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_IDs IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS')", "SESSIONNO DESC");
+                        DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_IDs IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS')", "SESSIONNO DESC");
 
                         if (ds_CheckActivity.Tables[0].Rows.Count == 0)
                         {
@@ -818,9 +815,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
         if (Convert.ToInt32(Session["OrgId"]) == 1)
         {
 
-            DataSet ds = objCommon.FillDropDown(" SESSION_ACTIVITY SA INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO) INNER JOIN  ACTIVITY_MASTER AM ON                         (AM.ACTIVITY_NO=SA.ACTIVITY_NO)", "DISTINCT SA.ACTIVITY_NO", "SESSION_NAME", "SA.STARTED=1 AND SA.SESSION_NO=  (" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + ") AND ACTIVITY_CODE='ABS' AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + " AND UA_TYPE LIKE '%" + Session["usertype"] + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "ACTIVITY_NO DESC");
-
-
+            //DataSet ds = objCommon.FillDropDown(" SESSION_ACTIVITY SA INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO) INNER JOIN  ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO=SA.ACTIVITY_NO)", "DISTINCT SA.ACTIVITY_NO", "SESSION_NAME", "SA.STARTED=1 AND SA.SESSION_NO=  (" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + ") AND ACTIVITY_CODE='ABS' AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + " AND UA_TYPE LIKE '%" + Session["usertype"] + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "ACTIVITY_NO DESC");
+            DataSet ds = objCommon.FillDropDown(" SESSION_ACTIVITY SA INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO) INNER JOIN  ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO=SA.ACTIVITY_NO)", "DISTINCT SA.ACTIVITY_NO", "SESSION_PNAME", "SA.STARTED=1 AND SA.SESSION_NO=  (" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + ") AND ACTIVITY_CODE='ABS' AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + " AND UA_TYPE LIKE '%" + Session["usertype"] + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "ACTIVITY_NO DESC");
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
             {
                 ViewState["ACTIVITY_NO"] = Convert.ToInt32(ds.Tables[0].Rows[0]["ACTIVITY_NO"]).ToString();
@@ -943,7 +939,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
             else
             {
 
-                DataSet ds = objCommon.FillDropDown(" SESSION_ACTIVITY SA INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO) INNER JOIN  ACTIVITY_MASTER AM ON(AM.ACTIVITY_NO=SA.ACTIVITY_NO)", "DISTINCT SA.ACTIVITY_NO", "SESSION_NAME", "SA.STARTED=1 AND SA.SESSION_NO=  (" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + ") AND ACTIVITY_CODE='ABS' AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + " AND UA_TYPE LIKE '%" + Session["usertype"] + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "ACTIVITY_NO DESC");
+                //DataSet ds = objCommon.FillDropDown(" SESSION_ACTIVITY SA INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO) INNER JOIN  ACTIVITY_MASTER AM ON(AM.ACTIVITY_NO=SA.ACTIVITY_NO)", "DISTINCT SA.ACTIVITY_NO", "SESSION_NAME", "SA.STARTED=1 AND SA.SESSION_NO=  (" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + ") AND ACTIVITY_CODE='ABS' AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + " AND UA_TYPE LIKE '%" + Session["usertype"] + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "ACTIVITY_NO DESC");
+                DataSet ds = objCommon.FillDropDown(" SESSION_ACTIVITY SA INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO) INNER JOIN  ACTIVITY_MASTER AM ON(AM.ACTIVITY_NO=SA.ACTIVITY_NO)", "DISTINCT SA.ACTIVITY_NO", "SESSION_PNAME", "SA.STARTED=1 AND SA.SESSION_NO=  (" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + ") AND ACTIVITY_CODE='ABS' AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + " AND UA_TYPE LIKE '%" + Session["usertype"] + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "ACTIVITY_NO DESC");
 
                 if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
                 {
@@ -1088,7 +1085,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
             string SUBID = objCommon.LookUp("ACD_COURSE", "DISTINCT SUBID", "COURSENO=" + ddlcourseforabset.SelectedValue.Split('-')[0]);
             if (ddlexamnameabsentstudent.SelectedIndex > 0)
             {
-               DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT                             DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID=1 AND                         SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString                               ["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
+                //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID=1 AND                         SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
+                DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID=1 AND                         SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
 
 
             if (ds_CheckActivity.Tables[0].Rows.Count == 0)
@@ -1120,8 +1118,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
             string SUBID = objCommon.LookUp("ACD_COURSE", "DISTINCT SUBID", "COURSENO=" + ddlcourseforabset.SelectedValue.Split('-')[0]);
             if (ddlexamnameabsentstudent.SelectedIndex > 0)
             {
-
-                DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
+                //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
+                DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
                 if (ds_CheckActivity.Tables[0].Rows.Count == 0)
                 {
                     //btnShow.Enabled = false;
@@ -1195,7 +1193,7 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
         {
             if (ddlcollege.SelectedIndex > 0)
             {
-                objCommon.FillDropDownList(ddlsessionforabsent, "ACD_SESSION_MASTER", "TOP 4 SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + "", "SESSIONNO DESC"); //--AND FLOCK = 1
+                objCommon.FillDropDownList(ddlsessionforabsent, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME ", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + "", "SESSIONNO DESC"); //--AND FLOCK = 1
                 ddlsessionforabsent.Focus();
 
             }
@@ -1216,7 +1214,7 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry : System.Web.UI.Pag
 
             if (ddlcollege.SelectedIndex > 0)
             {
-                objCommon.FillDropDownList(ddlsessionforabsent, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + "", "SESSIONNO DESC"); //--AND FLOCK = 1
+                objCommon.FillDropDownList(ddlsessionforabsent, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME ", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + "", "SESSIONNO DESC"); //--AND FLOCK = 1
                 ddlsessionforabsent.Focus();
             }
             else

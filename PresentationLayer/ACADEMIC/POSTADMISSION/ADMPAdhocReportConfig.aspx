@@ -66,6 +66,7 @@
                                 <span style="font-size: small; color: red;">(Note :Please Enter Excel Report Multiple Tab Name Comma Separated)</span>
                             </div>
                             <asp:HiddenField ID="hfdActiveStatus" runat="server" ClientIDMode="Static" />
+                            <asp:HiddenField ID="hfdDisplayStatus" runat="server" ClientIDMode="Static" />
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="row">
                                                                 <div class="form-group col-6">
@@ -76,6 +77,18 @@
                                                                     <div class="switch form-inline">
                                                                         <input type="checkbox" id="chkActiveStatus" name="switch" checked />
                                                                         <label data-on="Active" data-off="Inactive" for="chkActiveStatus"></label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group col-6">     <%--Added By Shrikant W. on 11022024--%>
+                                                                    <div class="label-dynamic">
+                                                                        <sup>* </sup>
+                                                                        <label>Display Status</label>
+                                                                    </div>
+                                                                    <div class="switch form-inline">
+                                                                        <input type="checkbox" id="chkDisplayStatus" name="switch" checked />
+
+                                                                        <label data-on="Active" data-off="Inactive" for="chkDisplayStatus"></label>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -144,6 +157,7 @@
                                                 <th>Report Name</th>
                                                 <th>Proc Name</th>
                                                 <th>Active Status</th>
+                                                <th>Display Status</th>      <%--Added By Shrikant W. on 11022024--%>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -164,8 +178,15 @@
                                         <td>
                                             <%# Eval("PROCEDURENAME")%>
                                         </td>
-                                        <td>
-                                            <asp:Label ID="lblActiveStatus" runat="server" CssClass="badge" Text='<%# Eval("ACTIVE_STATUS") %>'></asp:Label>
+                                        <td>  <%--Modified By Shrikant W. on 11022024--%>
+                                            <asp:Label ID="lblActiveStatus" runat="server" CssClass='<%# Eval("ACTIVE_STATUS", "{0}") == "True" ? "badge badge-success" : "badge badge-danger" %>'>
+        <%# Eval("ACTIVE_STATUS", "{0}") == "True" ? "Active" : "Inactive" %>
+                                            </asp:Label>
+                                        </td>
+                                        <td>   <%--Added By Shrikant W. on 11022024--%>
+                                            <asp:Label ID="lblDisplayStatus" runat="server" CssClass='<%# Eval("DISPLAY_STATUS", "{0}") == "True" ? "badge badge-success" : "badge badge-danger" %>'>
+        <%# Eval("DISPLAY_STATUS", "{0}") == "True" ? "Active" : "Inactive" %>
+                                            </asp:Label>
                                         </td>
                                     </tr>
                                 </ItemTemplate>
@@ -229,10 +250,15 @@
             $('#chkActiveStatus').prop('checked', val);
         }
 
+        function Set_DisplayStatus(val) {
+            $('#chkDisplayStatus').prop('checked', val);
+        } 
+
         function validateTST_Active() {
             $('#hfdActiveStatus').val($('#chkActiveStatus').prop('checked'));
-            $('#hfdTST_Active').val($('#chkTST_Status').prop('checked'));
+            $('#hfdDisplayStatus').val($('#chkDisplayStatus').prop('checked'));
         }
+
 
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
@@ -243,6 +269,39 @@
             });
         });
     </script>
+
+    <script>    <%--Added By Shrikant W. on 11022024--%>
+        document.addEventListener('DOMContentLoaded', function () {
+           
+            var chkDisplayStatus = document.getElementById('chkDisplayStatus');
+            var hfdDisplayStatus = document.getElementById('hfdDisplayStatus');
+            hfdDisplayStatus.value = chkDisplayStatus.checked;
+
+           
+            chkDisplayStatus.addEventListener('change', function () {
+                hfdDisplayStatus.value = chkDisplayStatus.checked;
+            });
+        });
+</script>
+
+    <script>   <%--Added By Shrikant W. on 11022024--%>
+    document.addEventListener('DOMContentLoaded', function () {
+   
+    var chkActiveStatus = document.getElementById('chkActiveStatus');
+
+   
+    var hfdActiveStatus = document.getElementById('hfdActiveStatus');
+    hfdActiveStatus.value = chkActiveStatus.checked;
+
+    
+    chkActiveStatus.addEventListener('change', function () {
+        hfdActiveStatus.value = chkActiveStatus.checked;
+    });
+
+});
+        </script>
+
+
     <script type="text/javascript">
         $(window).on('load', function () {
             $('#myModalPopUp').modal('show');

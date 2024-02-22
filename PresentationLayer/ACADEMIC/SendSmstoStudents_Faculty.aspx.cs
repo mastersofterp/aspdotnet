@@ -6,6 +6,7 @@
 // Modified BY   : Jay Takalkhede
 // Modified Date : 25-08-2023
 // Version :- 1) RFC.Enhancement.Major.1 (25-08-2023 [Maher])
+            //2) RFC.Enhancement.Major.2 Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
 //===============================================//
 
 
@@ -203,8 +204,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
     }
     public void HiddenItemForPm()
     {
-        //RFC.Enhancement.Major.1 (25-08-2023 [Maher]) Add Parents Teacher Meeting In Maher Client (Tktno. 47531)
-        if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 16)
+        //RFC.Enhancement.Major.1 (25-08-2023 [Maher]) Add Parents Teacher Meeting In Maher Client (Tktno. 47531) 
+        //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+        if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 16 || Convert.ToInt32(Session["OrgId"]) == 21)
         {
             foreach (ListItem item in this.rdbFormat.Items)
             {
@@ -2298,67 +2300,6 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
     #endregion
 
     #region SMS SERVICE METHOD
-    public int SendSMS_Admission(string Mobile, string text, string TemplateID)
-    {
-        string status = "";
-        int ret = 0;
-        try
-        {
-            string Message = string.Empty;
-            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
-                request.ContentType = "text/xml; charset=utf-8";
-                request.Method = "POST";
-
-                string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                postDate += "&";
-                postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                postDate += "&";
-                postDate += "PhNo=91" + Mobile;
-                postDate += "&";
-                postDate += "Text=" + text;
-                postDate += "&";
-                postDate += "TemplateID=" + TemplateID;
-
-                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                request.ContentLength = byteArray.Length;
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Close();
-                WebResponse _webresponse = request.GetResponse();
-                dataStream = _webresponse.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                status = reader.ReadToEnd();
-                if (status == "")
-                {
-                    ret = 0;
-                }
-                else
-                {
-                    ret = 1;
-                }
-
-            }
-            else
-            {
-                ret = 0;
-
-            }
-
-        }
-        catch
-        {
-            throw;
-        }
-        return ret;
-
-
-    }
-
     public int sendEmail(string Message, string mailId, string Subject)
     {
         int status = 1;
@@ -2425,46 +2366,97 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
         //return status;
     }
 
-
     public void SendSMS(string Mobile, string text, string TemplateID)
     {
-        string status = "";
         try
         {
-            string Message = string.Empty;
-            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-            if (ds.Tables[0].Rows.Count > 0)
+            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
-                request.ContentType = "text/xml; charset=utf-8";
-                request.Method = "POST";
+                string status = "";
+                int ret = 0;
 
-                string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                postDate += "&";
-                postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                postDate += "&";
-                postDate += "PhNo=91" + Mobile;
-                postDate += "&";
-                postDate += "Text=" + text;
-                postDate += "&";
-                postDate += "TemplateID=" + TemplateID;
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
 
-                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                request.ContentType = "application/x-www-form-urlencoded";
+                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + text;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + Mobile;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
 
-                request.ContentLength = byteArray.Length;
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Close();
-                WebResponse _webresponse = request.GetResponse();
-                dataStream = _webresponse.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                status = reader.ReadToEnd();
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                }
+                else
+                {
+                    status = "0";
+
+                }
             }
             else
             {
-                status = "0";
 
+                string status = "";
+                int ret = 0;
+
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "PhNo=91" + Mobile;
+                    postDate += "&";
+                    postDate += "Text=" + text;
+                    postDate += "&";
+                    postDate += "TemplateID=" + TemplateID;
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                }
+                else
+                {
+                    status = "0";
+
+                }
             }
 
         }
@@ -2473,36 +2465,194 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
             throw;
         }
 
+
+    }
+
+    public int SendSMS_Admission(string Mobile, string text, string TemplateID)
+    {
+        string status = "";
+        int ret = 0;
+        try
+        {
+            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
+            {
+
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + text;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + Mobile;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                }
+                else
+                {
+                    status = "0";
+
+                }
+            }
+            else
+            {
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "PhNo=91" + Mobile;
+                    postDate += "&";
+                    postDate += "Text=" + text;
+                    postDate += "&";
+                    postDate += "TemplateID=" + TemplateID;
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                    if (status == "")
+                    {
+                        ret = 0;
+                    }
+                    else
+                    {
+                        ret = 1;
+                    }
+
+                }
+                else
+                {
+                    ret = 0;
+
+                }
+            }
+
+        }
+        catch
+        {
+            throw;
+        }
+        return ret;
+
+
     }
 
     public void SendSMS_today(string mobno, string message, string TemplateID = "")
     {
         try
         {
-            string url = string.Empty;
-            string uid = string.Empty;
-            string pass = string.Empty;
-            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-            if (ds.Tables[0].Rows.Count > 0)
+            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
             {
-                url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
-                //url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
-                uid = ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                pass = ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
-                WebResponse response = request.GetResponse();
-                System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
-                string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
-                //return urlText;  
-                Session["result"] = 1;
+                string status = "";
+                int ret = 0;
+
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + message;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + mobno;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                }
+                else
+                {
+                    status = "0";
+
+                }
+            }
+            else
+            {
+                string url = string.Empty;
+                string uid = string.Empty;
+                string pass = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
+                    //url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
+                    uid = ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    pass = ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
+                    WebResponse response = request.GetResponse();
+                    System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
+                    //return urlText;  
+                    Session["result"] = 1;
 
 
-                //WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
-                //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                //System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
-                //string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
-                //return urlText;
-                //Session["result"] = 1;
+                    //WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
+                    //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    //System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
+                    //string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
+                    //return urlText;
+                    //Session["result"] = 1;
+                }
             }
         }
         catch (Exception)

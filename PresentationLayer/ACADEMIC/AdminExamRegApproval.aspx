@@ -27,7 +27,8 @@
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
                 <div class="box-header with-border">
-                    <h3 class="box-title">EXAM REGISTRATION APPROVAL</h3>
+                    <%--<h3 class="box-title">EXAM REGISTRATION APPROVAL</h3>--%>
+                    <h3 class="box-title"> <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3> 
                 </div>
 
                 <div class="box-body" id="divExamHalTckt" runat="server">
@@ -71,7 +72,22 @@
                                         <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester"
                                             Display="None" ErrorMessage="Please Select Semester"  InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                     <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Student Type</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlStudetType" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Semester" AutoPostBack="true"
+                                            OnSelectedIndexChanged="ddlStudetType_SelectedIndexChanged" TabIndex="4" CssClass="form-control" data-select2-enable="true">
+                                             <asp:ListItem Value="-1">Please Select</asp:ListItem>
+                                            <asp:ListItem Value="0">Regular</asp:ListItem>
+                                            <asp:ListItem Value="1">Backlog</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="rfvddlStudetType" runat="server" ControlToValidate="ddlStudetType"
+                                            Display="None" ErrorMessage="Please Select Student Type"  InitialValue="-1" ValidationGroup="show"></asp:RequiredFieldValidator>
+                                    </div>
+                                
+                                                    <div class="form-group col-lg-4 col-md-6 col-12">
                                                         <%--div class="label-dynamic">
                                                             <sup>* </sup>
                                                             <label>To receive the degree </label>
@@ -193,7 +209,7 @@
                                                          <th>Print
                                                         </th>
                                                         <th>Enrollment No.
-                                                        </th>
+                                                        
                                                         <th>Student Name
                                                         </th>
 
@@ -237,6 +253,7 @@
                                                   <%--<asp:LinkButton ID="lnkbtnPrint" runat="server" Text='<%# Eval("REGNO") %>' CommandArgument='<%# Eval("REGNO") %>' />--%> 
                                                         <asp:Label ID="lblregno" runat="server" Text='<%# Eval("REGNO")%>' ToolTip='<%# Eval("REGNO")%>' />
                                                   </td>
+                                         
                                             <td>
                                                 <asp:Label ID="lblstudname" runat="server" Text='<%# Eval("STUDNAME") %>' ToolTip='<%# Eval("IDNO")%>' />
                                                 <%--<%# Eval("STUDNAME")%>--%>

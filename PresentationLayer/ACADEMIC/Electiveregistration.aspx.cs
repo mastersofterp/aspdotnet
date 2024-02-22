@@ -641,12 +641,12 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) 
-                + ",@P_SESSIONNO=" + ddlSession.SelectedValue 
-                + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
-                + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue 
-                + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) 
-                + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue 
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"])
+                + ",@P_SESSIONNO=" + ddlSession.SelectedValue
+                + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])
+                + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue
+                + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"])
+                + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue
                 + ",@UserName=" + Session["username"]
                 + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
 
@@ -665,7 +665,7 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
         {
             throw;
         }
-      
+
 
 
         //try
@@ -681,8 +681,8 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
         //        + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) 
         //        + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue 
         //        + ",@UserName=" + Session["username"]
-    
-            
+
+
         //    //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
         //    //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
         //    //divMsg.InnerHtml += " </script>";
@@ -787,13 +787,26 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
+        StudentController objStud =  new StudentController();
+
         if (ddlCollege.SelectedValue != "0")
         {
             ViewState["college_id"] = Convert.ToInt32(ddlCollege.SelectedValue).ToString();
         }
+
         //Commented by vipul on dated 26.10.2023 as per T-49243
         //ShowReport("RegistrationSlip", "rptBulkCourseRegslipelective.rpt"); 
-        ShowReport("RegistrationSlip", "rptBulkCourseRegSlip_01.rpt");
+        // Added By Vipul Tichakule on date 16-02-2023
+        DataSet ds = objStud.GetBulkCourseRegSlipData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ViewState["college_id"]));
+        if (ds.Tables[0].Rows.Count > 0 && ds != null)
+        {
+            ShowReport("RegistrationSlip", "rptBulkCourseRegSlip_01.rpt");
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.updBulkReg,"Record not found", this.Page);
+            return;
+        }//end
     }
 
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
@@ -1038,7 +1051,7 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
                 }
             }
 
-            
+
 
             StudentController objSC = new StudentController();
             //DataSet ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_STUDENT S ON (S.IDNO=SR.IDNO)", "DISTINCT S.IDNO", "STUDNAME AS NAME,S.REGNO,REGISTERED", "SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + "AND ISNULL(CANCEL,0) =0 AND SR.SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + "AND SR.COURSENO=" + Convert.ToInt32(ddlcourselist.SelectedValue), "");
@@ -1048,6 +1061,7 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
             ds = objSC.GetStudentsBySchemeElectiveCourses(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ddlSchemeType.SelectedValue), Convert.ToInt16(ddlSemester.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlcourselist.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue));
             lvStudent.DataSource = ds;
             lvStudent.DataBind();
+            hftot.Value = ds.Tables[0].Rows.Count.ToString();
             int count = 0;
             //for getting student list semester wise
             foreach (ListViewDataItem item in lvStudent.Items)
@@ -1184,5 +1198,5 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
                 return;
             }
         }
-    }   
+    }
 }

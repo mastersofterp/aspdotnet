@@ -461,6 +461,18 @@
                                                             TabIndex="19" Enabled="false" ValidationGroup="Academic"></asp:TextBox>
                                                     </div>
 
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divPhysicalHandicap" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supPhysicalHandicap" runat="server">* </sup>
+                                                            <label>Physically Disabled</label>
+                                                            <asp:DropDownList ID="ddlPhysicalHandicap" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                                AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Physically Disabled"
+                                                                ValidationGroup="Academic" >
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                         <div class="label-dynamic">
                                                             <sup></sup>

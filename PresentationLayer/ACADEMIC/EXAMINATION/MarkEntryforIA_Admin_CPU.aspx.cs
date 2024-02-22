@@ -451,6 +451,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin_CPU : System.Web.
         GetStatus();
         pnlUP.Visible = false;                      //Added by Sachin A on 16082022
         ddlSort.SelectedIndex = 0;
+        ddlcourse.SelectedIndex = 0;
     }
 
     private void CheckPageAuthorization()

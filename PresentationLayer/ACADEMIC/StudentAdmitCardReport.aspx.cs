@@ -233,7 +233,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             ddlColg.Focus();
 
             Session["listIdCard"] = null;
-            //Response.Redirect(Request.Url.ToString());
+            Response.Redirect(Request.Url.ToString());
         }
         catch (Exception)
         {
@@ -284,7 +284,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 2)//Crescent   
             {
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAM_DATE=" + date1;
+               url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAM_DATE=" + date1;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 16) //Maher
             {
@@ -496,10 +496,10 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                         ids = "0";
                         int OrgID = Convert.ToInt32(Session["OrgId"]);
 
-                        if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by SHUBHAM ON 21/12/2023
+                        if (Convert.ToInt32(Session["OrgId"]) == 6 || Convert.ToInt32(Session["OrgId"]) == 1) //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         {
                             int id = Convert.ToInt32((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip));
-                            GenerateQrCode_RCPIPER(id);         //RCPIPER added by SHUBHAM ON 21/12/2023
+                            GenerateQrCode_RCPIPER(id);         //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         }
                         // int count=Convert.ToInt32( objCommon.LookUp("ACD_ADMITCARD_LOG", "couNt(1)","IDNO="+Convert.ToInt32(studentIds) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
                         //int chkg = studCont.InsAdmitCardLog(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), studentIds + '.', ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"]), txtRemark.Text, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToDateTime(txtDateofissue.Text), OrgID, Convert.ToInt32(ddlSection.SelectedValue));
@@ -522,10 +522,11 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                         // GenerateQrCode((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip), RegNo);
 
                         int OrgID = Convert.ToInt32(Session["OrgId"]);
-                        if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by SHUBHAM ON 21/12/2023
+
+                        if (Convert.ToInt32(Session["OrgId"]) == 6 || Convert.ToInt32(Session["OrgId"]) == 1) //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         {
                             int id = Convert.ToInt32((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip));
-                            GenerateQrCode_RCPIPER(id);       //RCPIPER added by SHUBHAM ON 21/12/2023
+                            GenerateQrCode_RCPIPER(id);         //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         }
 
                         // int count=Convert.ToInt32( objCommon.LookUp("ACD_ADMITCARD_LOG", "couNt(1)","IDNO="+Convert.ToInt32(studentIds) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
@@ -1017,14 +1018,12 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         try
         {
             string ids = GetStudentIDs();
-
             if (!string.IsNullOrEmpty(ids))
             {
                 string studentIds = string.Empty;
 
 
                 //   COMMENTED BY PRAFULL ON DT-26-06-2023 AS PER DISCUSSION 
-
                 foreach (ListViewDataItem lvItem in lvStudentRecords.Items)
                 {
                     CheckBox chkBox = lvItem.FindControl("chkReport") as CheckBox;
@@ -1071,8 +1070,6 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable");
         }
-
-
     }
 
     //This Method Generate QR-CODE FOR RCPIPER & also  save image in ACD_HALLTICKET_QRCODE Table & QR-Code Files Folder. Added by Shubham on 24/12/23
@@ -1088,7 +1085,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             {
                 DataRow row = ds1.Tables[0].Rows[0];
 
-                // Check if the required columns exist
+                // Check if the required columns exist in Data
                 if (row.Table.Columns.Contains("REGNO") && row.Table.Columns.Contains("STUDNAME") &&
                     row.Table.Columns.Contains("DEGREENAME") && row.Table.Columns.Contains("LONGNAME") &&
                     row.Table.Columns.Contains("YEARNAME") && row.Table.Columns.Contains("SEMESTERNAME") &&
@@ -1101,6 +1098,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                                     "; C_Year: " + ds1.Tables[0].Rows[0]["YEARNAME"] +
                                     "; Sem: " + ds1.Tables[0].Rows[0]["SEMESTERNAME"] +
                                     "; Scheme: " + ds1.Tables[0].Rows[0]["SCHEMENAME"] +
+                                    "; Exam Session: " + ds1.Tables[0].Rows[0]["SESSION_NAME"] +
                                      "";
 
                     Session["qr"] = Qrtext.ToString();
@@ -1133,7 +1131,6 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
 
             }
 
-
         }
         catch (Exception ex)
         {
@@ -1144,7 +1141,5 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         }
 
     }
-
-
 
 }

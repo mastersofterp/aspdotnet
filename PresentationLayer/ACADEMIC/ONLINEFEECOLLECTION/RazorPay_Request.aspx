@@ -6,11 +6,15 @@
 <head id="Head1" runat="server">
     <title></title>
 
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"
+ <%--   <script src="https://code.jquery.com/jquery-1.10.2.min.js"
         integrity="sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
         crossorigin="anonymous"  ></script>
+       <script src="https://checkout.razorpay.com/v1/checkout.js"></script>--%>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+     <script src="<%=Page.ResolveClientUrl("https://code.jquery.com/jquery-1.10.2.min.js")%>"></script>
+     <script src="<%=Page.ResolveClientUrl("https://checkout.razorpay.com/v1/checkout.js")%>"></script>
+  
+
 </head>
 <body>
     <form id="form1" runat="server" action="RazorPayOnlinePaymentResponse.aspx" method="post">
@@ -49,7 +53,7 @@
         "description": "Admission Fees",
         "order_id": "<%=orderId%>",
         //"image": "https://razorpay.com/favicon.png",
-        "image": "../../Images/Login/cpu_uni.png",
+        "image": "../../Images/Login/Atlas_Logo.png",
         "handler": function (response) {
 
             //alert(response.razorpay_payment_id);

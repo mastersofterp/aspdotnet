@@ -90,6 +90,8 @@ public partial class STORES_Transactions_Str_Configuration : System.Web.UI.Page
         ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["MDNO"].ToString();
        // ddlCollege.SelectedValue = ds.Tables[0].Rows[0]["CNAME"].ToString();
         rdbSactionAuth.SelectedValue = ds.Tables[0].Rows[0]["SANCTIONING_AUTHORITY"].ToString();
+        rdblAvailableQty.SelectedValue = ds.Tables[0].Rows[0]["IsAvailableQty"].ToString(); //08/02/2024
+        rdbAuthoritynQuotation.SelectedValue = ds.Tables[0].Rows[0]["IsAuthorityShowOnQuot"].ToString(); //08/02/2024
         ddlState.SelectedValue = ds.Tables[0].Rows[0]["STATENO"].ToString();
 
         if (Convert.ToInt32(ds.Tables[0].Rows[0]["IS_SEC_GP_ENTRY"].ToString()==""?"0":ds.Tables[0].Rows[0]["IS_SEC_GP_ENTRY"].ToString()) == 1)
@@ -156,6 +158,7 @@ public partial class STORES_Transactions_Str_Configuration : System.Web.UI.Page
         {
             chkCompSApproval.Checked = false;
         }
+       
     }
 
     private void FillDropDown()
@@ -217,7 +220,8 @@ public partial class STORES_Transactions_Str_Configuration : System.Web.UI.Page
         //ObjEnt.PRE_DSR_YEAR = txtPreDsrYear.Text.Trim().Equals(string.Empty) ? string.Empty : Convert.ToString(txtPreDsrYear.Text.Trim());
         //ObjEnt.CUR_DSR_YEAR = txtCurDsrYear.Text.Trim().Equals(string.Empty) ? string.Empty : Convert.ToString(txtCurDsrYear.Text.Trim());
         ObjEnt.COLCODE = Convert.ToInt32(Session["colcode"]);
-        ObjEnt.IsAvailableQty = Convert.ToChar(rdblAvailableQty.SelectedValue);  
+        ObjEnt.IsAvailableQty = Convert.ToChar(rdblAvailableQty.SelectedValue);
+        ObjEnt.IsAuthorityShowOnQuot = Convert.ToChar(rdbAuthoritynQuotation.SelectedValue);   //08/02/2024
 
             CustomStatus cs = (CustomStatus)ObjCon.InsUpdConfigurationDetails(ObjEnt);
             if (cs.Equals(CustomStatus.RecordSaved))

@@ -101,9 +101,9 @@ namespace IITMS
                     set { _CCVHDATE = value; }
                 }
 
-                private int _AMOUNT;
+                private double _AMOUNT;
 
-                public int AMOUNT
+                public double AMOUNT
                 {
                     get { return _AMOUNT; }
                     set { _AMOUNT = value; }

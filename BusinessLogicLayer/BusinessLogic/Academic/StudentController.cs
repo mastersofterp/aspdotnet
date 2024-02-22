@@ -12083,6 +12083,7 @@ namespace IITMS
                             new SqlParameter("@P_RANK", EntranceExam.Meritno),
                             new SqlParameter("@P_SCORE", EntranceExam.Score),
                             new SqlParameter("@P_EXMROLLNO",EntranceExam.Qexmrollno),
+                            new SqlParameter("@P_LAST_SCHOOL_NAME", EntranceExam.LastSchoolName),
                             new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])),
                             new SqlParameter("@P_STQEXNO", EntranceExam.Stqexno)
                            };
@@ -13063,7 +13064,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student
-                        objParams = new SqlParameter[62];
+                        objParams = new SqlParameter[67];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_REGNO", objStudent.RegNo);
                         objParams[2] = new SqlParameter("@P_ENROLLNO", objStudent.EnrollNo);
@@ -13136,8 +13137,13 @@ namespace IITMS
                         objParams[58] = new SqlParameter("@P_CASTENAME", objStudent.CasteName);
                         objParams[59] = new SqlParameter("@P_MOTHER_ANNUAL_INCOME", objStudent.MotherAnnualIncome);
                         objParams[60] = new SqlParameter("@P_ELIGIBILITY_NO", objStudent.EligibilityNo);
-                        objParams[61] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[61].Direction = ParameterDirection.Output;
+                        objParams[61] = new SqlParameter("@P_ELECTION_ENROLLED", objStudent.ElectionEnrolled);
+                        objParams[62] = new SqlParameter("@P_LICENSENO", objStudent.DrivingLicenseNo);
+                        objParams[63] = new SqlParameter("@P_STUDPAN_NO", objStudent.StudentPanNo);
+                        objParams[64] = new SqlParameter("@P_FATHERPAN_NO", objStudent.FatherPanNo);
+                        objParams[65] = new SqlParameter("@P_MOTHERPAN_NO", objStudent.MotherPanNo);
+                        objParams[66] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[66].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUDENT_PERSONAL_INFORMATION", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -13166,7 +13172,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[32];
+                        objParams = new SqlParameter[33];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_LADDRESS", objStudAddress.LADDRESS);
                         objParams[2] = new SqlParameter("@P_LCOUNTRY", objStudAddress.LCOUNTRY);
@@ -13201,8 +13207,9 @@ namespace IITMS
                         objParams[28] = new SqlParameter("@P_GUARDIANDESIG", objStudAddress.GUARDIANDESIGNATION);
                         objParams[29] = new SqlParameter("@P_USER_TYPE ", usertype);
                         objParams[30] = new SqlParameter("@P_LTEHSIL", objStudAddress.LTEHSIL);
-                        objParams[31] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[31].Direction = ParameterDirection.Output;
+                        objParams[31] = new SqlParameter("@P_GUARDIAN_OTHER_INFO", objStudAddress.GUARDIAN_OTHER_INFO);
+                        objParams[32] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[32].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_ADDRESS_DETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -13230,7 +13237,7 @@ namespace IITMS
                       SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                       SqlParameter[] objParams = null;
                       //Update Student Local Address
-                      objParams = new SqlParameter[68];
+                      objParams = new SqlParameter[74];
                       objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                       objParams[1] = new SqlParameter("@P_SCHOOL_COLLEGE_NAMESSC", objStudQExm.SchoolCollegeNameSsc);
                       objParams[2] = new SqlParameter("@P_BOARDSSC", objStudQExm.BoardSsc);
@@ -13303,8 +13310,15 @@ namespace IITMS
                       objParams[64] = new SqlParameter("@P_DIPLOMASTAUS", diplomastatus);
                       objParams[65] = new SqlParameter("@P_HSC_BIO", objStudQExm.HSCBIO);
                       objParams[66] = new SqlParameter("@P_HSC_BIO_MAX", objStudQExm.HSCBIOMAX);
-                      objParams[67] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                      objParams[67].Direction = ParameterDirection.Output;
+                      objParams[67] = new SqlParameter("@P_DIVISION_SSC", objStudQExm.DivisionSsc);
+                      objParams[68] = new SqlParameter("@P_DIVISION_HSC", objStudQExm.DivisionHsc);
+                      objParams[69] = new SqlParameter("@P_DIVISION_DIPLOMA", objStudQExm.DivisionDiploma);
+                      objParams[70] = new SqlParameter("@P_MARKSHEETNO_SSC", objStudQExm.MarksheetNoSsc);
+                      objParams[71] = new SqlParameter("@P_MARKSHEETNO_HSC", objStudQExm.MarksheetNoHsc);
+                      objParams[72] = new SqlParameter("@P_MARKSHEETNO_DIPLOMA", objStudQExm.MarksheetNoDiploma);
+
+                      objParams[73] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                      objParams[73].Direction = ParameterDirection.Output;
                       object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_QUALIFYING_EXAM_INFORMATION", objParams, true);
 
                       if (Convert.ToInt32(ret) == 1)
@@ -21098,6 +21112,144 @@ namespace IITMS
                     }
                     return dr;
                 }
+
+                public DataSet getStudentDeatilsForFacultyDiary(int acdyear, int degreeno, int branchno, int year, int college_id)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSH = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParam = new SqlParameter[5];
+                        objParam[0] = new SqlParameter("@P_ACD_YEAR", acdyear);
+                        objParam[1] = new SqlParameter("@P_DEGREE", degreeno);
+                        objParam[2] = new SqlParameter("@P_BRANCH", branchno);
+                        objParam[3] = new SqlParameter("@P_YEAR", year);
+                        objParam[4] = new SqlParameter("@P_COLLEGE_ID", college_id);
+                        ds = objSH.ExecuteDataSetSP("PKG_ACD_GET_STUDENT_FOR_FACULTY_DIARY", objParam);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.BindActivity-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+       
+                public int addfacultydiary_visit_detail(int collegeid, int acdyear, int degree, int branch, int year, string studname, int idno, int faculty_uano, string faculty_name, DateTime date, string detail, string Add, int OP)
+                {
+                    int status = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[14];
+                        objParams[0] = new SqlParameter("@P_COLLEGE", collegeid);
+                        objParams[1] = new SqlParameter("@P_ACDYEAR", acdyear);
+                        objParams[2] = new SqlParameter("@P_DEGREE", degree);
+                        objParams[3] = new SqlParameter("@P_BRANCH", branch);
+                        objParams[4] = new SqlParameter("@P_YEAR", year);
+                        objParams[5] = new SqlParameter("@P_STUD_NAME", studname);
+                        objParams[6] = new SqlParameter("@P_IDNO", idno);
+                        objParams[7] = new SqlParameter("@P_FACULTY_UA_NO", faculty_uano);
+                        objParams[8] = new SqlParameter("@P_FACULTY_NAME", faculty_name);
+                        objParams[9] = new SqlParameter("@P_DATE", date);
+                        objParams[10] = new SqlParameter("@P_DETAIL", detail);
+                        objParams[11] = new SqlParameter("@P_ADDRESS", Add);
+                        objParams[12] = new SqlParameter("@P_ORGANIZATION", OP);
+                        objParams[13] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INS_FACULTY_DDAIRY_VISIT", objParams, false) != null)
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.AddBlobConfig-> " + ex.ToString());
+                    }
+                    return status;
+                }
+
+                public int InsertUpdateAntiRaggingDeclaration(string FileName, int UaNo)
+                {
+                    int status = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_FILENAME", FileName);
+                        objParams[1] = new SqlParameter("@P_UANO", UaNo);
+                        objParams[2] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[2].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INS_UPD_ANTI_RAGGING_DECLARATION", objParams, true);
+
+                        if (ret.ToString() == "1")
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertUpdateAntiRaggingDeclaration-> " + ex.ToString());
+                    }
+                    return status;
+                }
+
+                #region Send Bulk email/SMS/Whatsaap  //Added by sakshi.M  on date 14122023
+                //Added by sakshi.M  on date 14122023
+                public DataSet GetSmsDeatil(int sms, int service)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_SMS", sms);
+                        objParams[1] = new SqlParameter("@P_SERVICENO", service);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_SERVICE_PROVIDER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetGlobalCourseTeacherAllotment-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                #endregion
+
+                //ADDED BY VIPUL TICHAKULE ON DATED 16-02-2024
+                public DataSet GetBulkCourseRegSlipData(int sessionno, int degreeno, int semesterno, int admbatch, int schemeno, int collegeid)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSH = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParam = new SqlParameter[6];
+                        objParam[0] = new SqlParameter("@P_ADMBATCH", admbatch);
+                        objParam[1] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParam[2] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParam[3] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParam[4] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objParam[5] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+                        ds = objSH.ExecuteDataSetSP("PKG_REGIST_SP_REPORT_REGISTSLIP_BULK", objParam);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.BindActivity-> " + ex.ToString());
+                    }
+                    return ds;
+                }//end
             }
 
 

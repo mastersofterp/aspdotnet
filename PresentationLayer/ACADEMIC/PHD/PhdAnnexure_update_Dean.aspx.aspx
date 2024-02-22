@@ -179,7 +179,7 @@
                                         <span class="title">General Information</span>
                                         <span class="accicon"><i class="fa fa-angle-down rotate-icon"></i></span>
                                     </div>
-                                     <div id="collapseOne" class="collapse show">
+                                    <div id="collapseOne" class="collapse show">
                                         <div class="card-body">
                                             <div class="col-12" id="DivGenInfo" runat="server" visible="true">
                                                 <div class="row">
@@ -245,9 +245,9 @@
 
                                                                 </a>
                                                             </li>
-                                                              <li class="list-group-item"><b>Branch Name :</b>
+                                                            <li class="list-group-item"><b>Branch Name :</b>
                                                                 <a class="sub-label">
-                                                                    <asp:Label ID="lblBranch" runat="server" Font-Bold="true"></asp:Label>                                                                   
+                                                                    <asp:Label ID="lblBranch" runat="server" Font-Bold="true"></asp:Label>
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item"><b>Mobile No :</b>
@@ -359,20 +359,21 @@
                                                         <div class="row">
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
+                                                                    <sup>* </sup>
                                                                     <label>Commitee Name</label>
-                                                                </div>                                                            
-                                                                        <asp:DropDownList ID="ddlCommittee" runat="server" TabIndex="15" ToolTip="Please Select Commitee Name" AutoPostBack="true"
-                                                                            CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlCommitee_SelectedIndexChanged">
-                                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                                        </asp:DropDownList>
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlCommittee"
-                                                                            Display="None" ErrorMessage="Please Select committee" InitialValue="0"
-                                                                            ValidationGroup="Academic" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                                </div>
+                                                                <asp:DropDownList ID="ddlCommittee" runat="server" TabIndex="15" ToolTip="Please Select Commitee Name" AutoPostBack="true"
+                                                                    CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlCommitee_SelectedIndexChanged">
+                                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlCommittee"
+                                                                    Display="None" ErrorMessage="Please Select committee" InitialValue="0"
+                                                                    ValidationGroup="Academic" SetFocusOnError="True"></asp:RequiredFieldValidator>
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
-                                                                   <%-- <sup>* </sup>--%>
+                                                                    <sup>* </sup>
                                                                     <label>Supervisor Role</label>
                                                                 </div>
                                                                 <%--patches updated--%>
@@ -395,6 +396,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                            <sup>* </sup>
                                                                             <label>Supervisor </label>
                                                                         </div>
 
@@ -406,6 +408,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                           <sup>* </sup>
                                                                             <label>Supervisor Designation </label>
                                                                         </div>
                                                                         <asp:DropDownList ID="ddlMember" runat="server" TabIndex="16" ToolTip="Please Select Member" AppendDataBoundItems="true"
@@ -425,6 +428,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor *(s)(if any) </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlJointSupervisor' runat="server" AppendDataBoundItems="True"
@@ -440,6 +444,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor Designation </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember1' runat="server" AutoPostBack="true" TabIndex="18" CssClass="form-control" data-select2-enable="true"
@@ -462,6 +467,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>One Institute faculty expert </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlInstFac' runat="server" AppendDataBoundItems="True" TabIndex="20" AutoPostBack="true"
@@ -475,6 +481,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Supervisor Designation </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember2' runat="server" TabIndex="15" ToolTip="Please Select Member" AutoPostBack="true" AppendDataBoundItems="true"
@@ -496,6 +503,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor *(s)(if any)</label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlJointSupervisorSecond' runat="server" AppendDataBoundItems="True"
@@ -510,6 +518,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor Designation</label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember5' runat="server" AutoPostBack="true" TabIndex="15" AppendDataBoundItems="true"
@@ -529,6 +538,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>A DRC nominee </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlDRC' runat="server" AppendDataBoundItems="True" TabIndex="22" AutoPostBack="true"
@@ -543,6 +553,7 @@
 
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>A DRC Nominee Designation</label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember3' runat="server" TabIndex="15" ToolTip="Please Select Member" AppendDataBoundItems="true"
@@ -587,6 +598,7 @@
                                                 <div class="row">
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
+                                                              <sup>* </sup>
                                                             <label>A DRC Chairman </label>
                                                         </div>
 

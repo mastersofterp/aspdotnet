@@ -14,6 +14,7 @@
     <script src="<%=Page.ResolveClientUrl("~/plugins/Chart.js/dist/Chart.min.js")%>" type="text/javascript"></script>
     <script src="<%=Page.ResolveClientUrl("~/plugins/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js")%>" type="text/javascript"></script>
 
+
     <style>
         .new-parent {
             height: 240px;
@@ -659,13 +660,17 @@
                                             <p class="day"><%#Eval("DD")%></p>
                                         </a>
                                         <div class="media-body">
+                                            <%--<p><%#Eval("NEWSDESC") %></p>
+                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>--%>
+
+                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
                                             <p><%#Eval("NEWSDESC") %></p>
-                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
                                         </div>
                                     </article>
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
+
                         <div class="x_title">
                             <h2>Expired Notice/News</h2>
                             <div class="clearfix"></div>
@@ -688,7 +693,10 @@
                                                 <p class="day"><%#Eval("DD")%></p>
                                             </a>
                                             <div class="media-body">
-                                                <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                <p><%#Eval("NEWSDESC") %></p>--%>
+
+                                                <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
                                                 <p><%#Eval("NEWSDESC") %></p>
                                             </div>
                                         </article>
@@ -696,6 +704,7 @@
 
                                 </ItemTemplate>
                             </asp:ListView>
+
                         </div>
                     </div>
 

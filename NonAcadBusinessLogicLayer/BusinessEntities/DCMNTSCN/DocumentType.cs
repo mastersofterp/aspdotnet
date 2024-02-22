@@ -39,12 +39,18 @@ namespace IITMS
                 private System.Nullable<System.DateTime> _FROM_DATE;
                 private System.Nullable<System.DateTime> _TO_DATE;
                 private DataTable _AttachTable;
-
+                private int _UA_NO;
 
                 public int DOCID
                 {
                     get { return _DOCID; }
                     set { _DOCID = value; }
+                }
+
+                public int UA_NO
+                {
+                    get { return _UA_NO; }
+                    set { _UA_NO = value; }
                 }
 
                 public string DOCUMENTTYPE

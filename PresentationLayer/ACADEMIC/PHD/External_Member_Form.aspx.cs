@@ -392,6 +392,7 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     }
 
     //RFC.PHD.ENHANCEMENT.MAJOR.2 (25-08-2023)(TKNO.46978)
+    //Added By Jay Takalkhede on dated (25-08-2023)(TKNO.46978)
     protected void ddlDepartment_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlDepartment.SelectedIndex > 0)
@@ -448,8 +449,9 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
                     objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 ", "CDB.COLLEGE_ID DESC");                   
                     ddlInsName.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();                  
                     objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "isnull(ActiveStatus,0)=1", "DEPTNO DESC");
-                    ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["DEPTNO"].ToString();//end                    
-                    objCommon.FillListBox(lboFacuilty, "user_acc", "ua_no", "UA_FULLNAME", "ua_type IN (3,5) and isnull(ua_status,0)=0 and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,','))", "ua_no");
+                    ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["DEPTNO"].ToString(); 
+                    objCommon.FillListBox(lboFacuilty, "USER_ACC UA  INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "distinct ua_no", "UA_FULLNAME + ' - '+EmployeeId", "UA.ua_type IN (3,5) and isnull(ua_status,0)=0  and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,',')) ", "ua_no");                
+                      //end
                     lboFacuilty.SelectedValue = ds.Tables[0].Rows[0]["UANO"].ToString();
                     ddlDesignation.SelectedValue = ds.Tables[0].Rows[0]["DESIGNATIONNO"].ToString();
                 

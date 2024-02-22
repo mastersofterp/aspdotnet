@@ -299,12 +299,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
                     {
                         reportTitle = "Fee_Collection_Report";
                         rptFileName = "FeeCollectionReport_Rcpit_And_Rcpiper";
-                    }
-                    else if (Convert.ToInt32(Session["OrgId"]) == 15)
-                    {
-                        reportTitle = "Fee_Collection_Report";
-                        rptFileName = "FeeCollectionReport_Daiict";
-                    }
+                    }                
                     else
                     {
                         reportTitle = "Fee_Collection_Report";
@@ -313,16 +308,10 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
                 }
                 else
                 {
-                    if (Convert.ToInt32(Session["OrgId"]) == 15)
-                    {
-                        reportTitle = "Fee_Collection_Report";
-                        rptFileName = "FeeCollectionReport_Daiict";
-                    }
-                    else
-                    {
+                  
                         reportTitle = "Fee_Collection_Report";
                         rptFileName = "FeeCollectionReport";
-                    }
+                    
                 }
             }
         }
@@ -650,18 +639,18 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
                     param.Append(",Branch=" + ((ddlBranch.SelectedIndex > 0) ? ddlBranch.SelectedItem.Text : "0"));
                     param.Append(",Year=" + ((ddlYear.SelectedIndex > 0) ? ddlYear.SelectedItem.Text : "0"));
                     param.Append(",Semester=" + ((ddlSemester.SelectedIndex > 0) ? ddlSemester.SelectedItem.Text : "0"));
-                    param.Append(",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]));
+                    param.Append(",@P_COLLEGE_CODE=0" );
                 }
-                if (Convert.ToInt32(Session["OrgId"]).ToString() == "2") // crescent
-                {
+                //if (Convert.ToInt32(Session["OrgId"]).ToString() == "2") // crescent
+                //{
                     param.Append(",@P_PayType=" + ((ddlPaytype.SelectedIndex > 0) ? ddlPaytype.SelectedValue : ""));
-                    param.Append(",@P_YEARNO=" + dcrRpt.YearNos.ToString());
-                }
+                    param.Append(",@P_YEARNOS=" + dcrRpt.YearNos.ToString());
+                //}
 
-                else
-                {
+                //else
+                //{
                     param.Append(",@P_YEARNO=" + dcrRpt.YearNo.ToString());
-                }
+                //}
             }
         }
         catch (Exception ex)
@@ -970,7 +959,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
             divrectypesingle.Visible = true;
             divrectype.Visible = false;
             rdoOutstandingReport.Checked = true;
-            btnExcel.Enabled = true;
+            btnExcel.Enabled = false;
             btnExcelFormat2.Enabled = false;
         }
         else
@@ -1079,13 +1068,13 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
         fromDSpan.Visible = false;
         txtFromDate.Text = string.Empty;
         MaskedEditValidator1.Enabled = false;
-        btnExcel.Enabled = true;
+        btnExcel.Enabled = false;
         idDataFilter.Visible = true;
         pnlOSReportFormat1.Visible = false;
         btnExcelFormat2.Enabled = false;
         if (rdoOutstandingReport.Checked == false)
         {
-            btnExcel.Enabled = true;
+            btnExcel.Enabled = false;
         }
     }
 
@@ -1198,7 +1187,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
             {
                 Gr.DataSource = ds;
                 Gr.DataBind();
-                string Attachment = "Attachment; FileName=OutstandingReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                string Attachment = "Attachment; FileName=OutstandingReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 StringWriter sw = new StringWriter();

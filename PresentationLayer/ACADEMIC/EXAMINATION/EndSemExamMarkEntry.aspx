@@ -44,14 +44,14 @@
                                                         <sup>* </sup>
                                                         <label>Institute Name</label>
                                                     </div>
-                                                    <asp:DropDownList ID="ddlcollege" TabIndex="2" runat="server" CssClass="form-control" AppendDataBoundItems="true" ToolTip="Please Select Institute" data-select2-enable="true"
-                                                        AutoPostBack="True" OnSelectedIndexChanged="ddlcollege_SelectedIndexChanged">
+                                                    <asp:DropDownList ID="ddlcollege" TabIndex="1" runat="server" CssClass="form-control" AppendDataBoundItems="true" ToolTip="Please Select Institute" data-select2-enable="true"
+                                                        AutoPostBack="True" OnSelectedIndexChanged="ddlcollege_SelectedIndexChanged" >
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="rfvcollege" runat="server" ControlToValidate="ddlcollege"
-                                                        Display="None" ErrorMessage="Please Select Institute." InitialValue="0" SetFocusOnError="True"
+                                                        Display="None" ErrorMessage="Please Select Institute Name." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="show"></asp:RequiredFieldValidator>
                                                      <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlcollege"
-                                                        Display="None" ErrorMessage="Please Select Institute." InitialValue="0" SetFocusOnError="True"
+                                                        Display="None" ErrorMessage="Please Select Institute Name." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="MarksModifyReport"></asp:RequiredFieldValidator>
                                                 </div>
 
@@ -60,7 +60,7 @@
                                                         <sup>* </sup>
                                                         <label>Session</label>
                                                     </div>
-                                                    <asp:DropDownList ID="ddlSession" TabIndex="1" runat="server" CssClass="form-control" AppendDataBoundItems="true"
+                                                    <asp:DropDownList ID="ddlSession" TabIndex="2" runat="server" CssClass="form-control" AppendDataBoundItems="true"
                                                         AutoPostBack="True" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" data-select2-enable="true">
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"

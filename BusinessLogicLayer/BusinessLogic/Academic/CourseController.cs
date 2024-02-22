@@ -3198,14 +3198,17 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet GetAllOfferedCourseList(int sessionno)
+                public DataSet GetAllOfferedCourseList(int sessionno, string semesterno, int coschno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
+                        SqlParameter[] objParams = new SqlParameter[3];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParams[2] = new SqlParameter("@P_COSCHNO", coschno);  //(semesterno,coschno) Added By Vipul Tichakulke on dated 05-02-2024 as per T-54216
+
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_SESSIOWISE_ALL_OFFERED_COURSES", objParams);
                     }
                     catch (Exception ex)

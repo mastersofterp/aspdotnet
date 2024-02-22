@@ -56,7 +56,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
 
                 Session["TimeSlotTbl"] = null;
                 ViewState["globaledit"] = "add";
-                
+
                 int globalElectiveCTAllotment = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "IS_GLOBAL_ELECTIVE_CT_ALLOTMENT_REQUIRED", "ConfigNo>0"));
                 ViewState["globalElectiveCTAllotment"] = globalElectiveCTAllotment;
                 if (globalElectiveCTAllotment == 1)
@@ -1661,6 +1661,9 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             DataSet ds = null;
             int schemeno = Convert.ToInt32(ViewState["schemeno"]);
             CourseController objCC = new CourseController();
+            DataSet dsTimeslot = GetTimeSlot(sessionno);
+            ViewState["dsTimeslot"] = dsTimeslot;
+
             ds = objCC.GetGlobalCoursesTimeTableModified(sessionno, courseno, ua_no, Convert.ToInt32(ddlTTSection.SelectedValue));
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -1679,6 +1682,8 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
                 lvGlobalTimeTable.Visible = false;
                 pnlGLobalOfferedCourses.Visible = false;
             }
+
+
         }
         catch (Exception ex)
         {
@@ -1687,6 +1692,18 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
+    }
+
+    private DataSet GetTimeSlot(int sessionno)
+    {
+        string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
+        DataSet ds = new DataSet();
+        SP_Name = "PKG_GET_GLOBAL_COURSE_TIME_TABLE_DETAILS_SECTION_MODIFIED_NEW";
+        SP_Parameters = "@P_FACULTYNO,@P_ALTERNATEFLAG,@P_SESSIONNO,@P_START_DATE,@P_END_DATE,@P_COURSENO";
+        Call_Values = "" + 0 + "," + 0 + "," + sessionno + "," + 0 + "," + 0 + "," + 0 + "," + 0 + "";
+        ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+        return ds;
     }
     protected void btnEditTimeTable_Click(object sender, ImageClickEventArgs e)
     {
@@ -1773,10 +1790,21 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         ListView lv = dataitem.FindControl("lvDetails") as ListView;
         try
         {
-
-            DataSet ds = objCC.GetGlobalCoursesTimeTableDetailsSectionModified(facultyno, alternate, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate, courseno);
-            lv.DataSource = ds;
-            lv.DataBind();
+            //Added By Rahul M. for lightweight performance.
+            if (ViewState["dsTimeslot"].ToString() != null)
+            {
+                DataSet dsFromViewState = ViewState["dsTimeslot"] as DataSet;
+                //DataSet ds = objCC.GetGlobalCoursesTimeTableDetailsSectionModified(facultyno, alternate, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate, courseno);
+                DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable()
+                                   where Convert.ToInt32(r["UA_NO"]) == facultyno &&
+                                       Convert.ToDateTime(r["START_DATE"]) == Convert.ToDateTime(startDate) &&
+                                       Convert.ToDateTime(r["END_DATE"]) == Convert.ToDateTime(endDate) &&
+                                       Convert.ToInt32(r["COURSENO"]) == courseno &&
+                                       Convert.ToInt32(r["ALTERNATE_FLAG"]) == alternate
+                                   select r).CopyToDataTable();
+                lv.DataSource = xdata;
+                lv.DataBind();
+            }
 
         }
         catch (Exception ex)

@@ -5,7 +5,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <div class="row">
+  <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
@@ -88,9 +88,9 @@
                                         ControlToValidate="txtdocnumber" Display="None"
                                         ErrorMessage="Please Enter Document Number" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>
-                                    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtdocnumber"
+                                  <%--  <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtdocnumber"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
-                                      </ajaxToolKit:FilteredTextBoxExtender>
+                                      </ajaxToolKit:FilteredTextBoxExtender>--%>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divAddress" runat="server" visible="false">
@@ -134,9 +134,9 @@
                                         ControlToValidate="txtsurveyNumber" Display="None"
                                         ErrorMessage="Please Enter Survey Number" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtsurveyNumber"
+                                      <%--  <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtsurveyNumber"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
-                                      </ajaxToolKit:FilteredTextBoxExtender>
+                                      </ajaxToolKit:FilteredTextBoxExtender>--%>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divDivisionNo" runat="server" visible="false">
@@ -149,9 +149,9 @@
                                         ControlToValidate="txtsubdivnum" Display="None"
                                         ErrorMessage="Please Enter sub Division Number" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>--%>
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtsubdivnum"
+                                       <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtsubdivnum"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
-                                      </ajaxToolKit:FilteredTextBoxExtender>
+                                      </ajaxToolKit:FilteredTextBoxExtender>--%>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divArea" runat="server" visible="false">
@@ -186,7 +186,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divsouth" runat="server" visible="false">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
-                                        <label>South-Sq. Ft.</label>
+                                        <label>South-Sq. Ft.</label>  
                                     </div>
                                     <asp:TextBox ID="txtSouth" runat="server" CssClass="form-control" ToolTip="Enter South-Sq. Ft." TabIndex="10" oninput="validateNumberInput(this)" MaxLength="15" ></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvsouth" runat="server"
@@ -293,7 +293,9 @@
                                 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divAttach" runat="server" visible="false">
                                         <div class="label-dynamic">
-                                            <sup>*</sup><label>Attachment</label><span style="color: red; margin-left: 10px;">(only .pdf, .jpg Formats)</span>      
+                                            <label><sup>*</sup>Attachment <small style="color: blue;">(Max.Size
+                                        <asp:Label ID="lblFileSize" runat="server" Font-Bold="true"> 10MB</asp:Label>)  (File Ext.
+                                          <asp:Label ID="lblExtension" runat="server" Font-Bold="true"></asp:Label>)</small></label>      
                                         </div>
                                         <asp:FileUpload ID="FileUpload1" runat="server" TabIndex="16" />
                                         <asp:Label ID="lblFileName" runat="server" Text="" Visible="false"></asp:Label>
@@ -337,7 +339,7 @@
                                             <ItemTemplate>
                                                 <tr>
                                                     <td>
-                                                        <asp:LinkButton ID="lnkRemoveAttach" runat="server" CommandArgument='<%# Eval("ATTACH_ID")%>'
+                                                        <asp:LinkButton ID="lnkRemoveAttach" runat="server" CommandArgument='<%# Eval("SR_NO")%>'
                                                             OnClick="lnkRemoveAttach_Click" CssClass="mail_pg">Remove</asp:LinkButton>
 
                                                         <ajaxToolKit:ConfirmButtonExtender ID="CnfDrop" runat="server"
@@ -437,11 +439,7 @@
                                                         <th id="thECNo" runat="server">
                                                       EC No.
                                                      </th>
-                                                  <th>
-                                                    Attachment
-                                                  </th>
-                                                    <th>Download
-                                                    </th>
+                                              
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -476,25 +474,6 @@
                                          <td id="tdECNo" runat="server"   >
                                          <%# Eval("ECNO") %>
                                        </td>
-                                        <td>
-                                            <%# Eval("FILE_PATH")%>
-                                        </td>
-                        
-                                             <td style="text-align: center" id="tdBlob1" runat="server" visible="false">
-                                                        <asp:UpdatePanel ID="updPreview" runat="server">
-                                                            <ContentTemplate>
-                                                                <asp:ImageButton ID="imgbtnPreview1" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
-                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
-
-                                                            </ContentTemplate>
-                                                            <Triggers>
-                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview1" EventName="Click" />
-                                                            </Triggers>
-                                                        </asp:UpdatePanel>
-
-                                                    </td>
-                                                   
-                  
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>

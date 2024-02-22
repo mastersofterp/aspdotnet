@@ -246,7 +246,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 
                 if (divSubExamName.Visible == true)
                 {
-                    if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")        //Added subid12 dt on 10022023 as per client req.
+                    if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")        //Added subid12 dt on 10022023 as per client req.//Added subid-13 dt on 01012024 as per client req:tkno-52786
                     {
                         Subexam = ddlSubExamName.SelectedValue;
                         SubExamComponentName = ddlSubExamName.SelectedItem.Text;
@@ -254,14 +254,21 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 }
                 else
                 {
-                    SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Exam[0]); ;
-                    Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);
+                    ////COMMENTED ON DT:05022024 AS PER TKNO:52722
+                    //SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Exam[0]); 
+                    //Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);
+
+                    //ADDED ON DT:05022024 AS PER TKNO:52722
+                    SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "SUBEXAMNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0]);
+                    Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0]);
+
+
                 }
 
                 //CustomStatus cs = (CustomStatus)objMarksEntry.UpdateMarkEntry(Convert.ToInt32(ddlSession.SelectedValue), ccode, studids, marks, lock_status, examname, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype); Comment by Mahesh C. Malve On Dated 24/06/2021  //
                 //CustomStatus cs = (CustomStatus)objMarksEntry.AdminUpdateMarkEntry(Convert.ToInt32(ddlSession.SelectedValue), ccode, studids, marks, lock_status, examname, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), SubExamName, Convert.ToInt32(Session["userno"]), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(Exam[0]), SubExamComponentName);
                 CustomStatus cs = 0;
-                if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")  //Added subid12 dt on 10022023 as per client req.
+                if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")        //Added subid12 dt on 10022023 as per client req.//Added subid-13 dt on 01012024 as per client req:tkno-52786)  
                 {
                   
                      cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, ddlExam.SelectedValue, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlscheme.SelectedValue), (ddlSubExamName.SelectedValue).Split('-')[1], Convert.ToInt32(Exam[0]), SubExamComponentName,ANS);
@@ -277,8 +284,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     {
                         
                             objCommon.DisplayMessage(updpnl, "Marks Locked Successfully!!!", this.Page);
-                            objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                       
+                            objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);                       
                     }
                     else if (lock_status == 2)
                     {
@@ -699,7 +705,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         }
                         else
                         {
-                            if (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1 || ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1 || ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1)
+                            if (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1 || ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1 || ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1 || ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1 || ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1 ||  ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1)
                             {
                                 this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN_RCPIT.rpt");//rptMarksList1.rpt
                             }
@@ -737,7 +743,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         string Subexam = string.Empty;
         int Is_Specialcase = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
         string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
-        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1))
+        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1))
         {
              Exam1 = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) SUBSTRING(FLDNAME,1,2) FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
              Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
@@ -745,7 +751,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         else
         {
             Exam = ddlExam.SelectedValue.Split('-');
-            if ((ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 0) || ddlSubjectType.SelectedValue == "11")
+            if ((ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 0) || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")
             {
                 Subexam = ddlSubExamName.SelectedValue;
             }
@@ -762,7 +768,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         url += "&path=~,Reports,Academic," + rptFileName;
         //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_IDNO=" + idno.ToString();
 
-        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1))
+        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1))
         {
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + ",@P_CCODE=" + ccode + ",@P_SECTIONNO=0,@P_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + ",@P_EXAM=" + Exam1 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ",@P_SUB_EXAM=" + Subexam + ",@p_username=" + Username + "";
         }
@@ -833,6 +839,18 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             DIVEXAM.Visible = false;
         }
         else if (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1)       //Added subid12 dt on 10022023 as per client req.
+        {
+            DIVEXAM.Visible = false;
+        }
+        else if (ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1)       //Added subid12 dt on 01012023 as per client req:52786.
+        {
+            DIVEXAM.Visible = false;
+        }
+        else if (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1)       //Added subid5 dt on 16012024 as per client req:53791.
+        {
+            DIVEXAM.Visible = false;
+        }
+        else if (ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1)       //Added subid14 dt on 16012024 as per client req:53791.
         {
             DIVEXAM.Visible = false;
         }
@@ -1000,16 +1018,34 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         {
             string[] Exam = ddlExam.SelectedValue.Split('-');
 
-            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")
+            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "5" || ddlSubjectType.SelectedValue == "14")
             {
-                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+                //objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND ISNULL(RULE1,0)>0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND SN.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+                
                 divSubExamName.Visible = true;
             }
 
             else
             {
-                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
-                ddlSubExamName.SelectedIndex = 1;
+                //objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+
+
+                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO="+ddlCourse.SelectedValue+"", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND ISNULL(RULE1,0)>0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND SN.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+                
+
+                DataSet dsexamruleExam = objCommon.FillDropDown("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND ISNULL(RULE1,0)>0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND SN.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+                if (dsexamruleExam != null && dsexamruleExam.Tables[0].Rows.Count > 0)
+                {
+                    ddlSubExamName.SelectedIndex = 1;
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this, "Please check subexam is Created or Not..or Please Check the Exam Rule is defined Properly or Not..Contact to Admin !!!", this.Page);
+                    return;
+                }
+
+
 
                 if (Exam[1].ToUpper() == "S1" || Exam[1].ToUpper().ToUpper() == "S3")
                 {
@@ -1111,6 +1147,25 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         int Is_Specialcase = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
 
+        int examrule_count = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "COUNT(DISTINCT SN.SUBEXAMNO)", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]));
+        if (examrule_count == 0 && Is_Specialcase != 1)
+        {
+            objCommon.DisplayMessage(this,"STOP !!! Exam Rule for End Sem Exam is not Defined ", this.Page);
+            return;
+        }
+        else if (examrule_count > 1 && ddlSubjectType.SelectedValue == "1" && Is_Specialcase != 1)
+        { 
+            objCommon.DisplayMessage(this,"Exam Rule for End Sem Exam is Defined For Multiple Subexam..Please Check The Examination Rule Or Contact to Admin!! ", this.Page);
+            return;
+        }
+        else if (examrule_count > 2 && ddlSubjectType.SelectedValue != "1" && Is_Specialcase != 1)
+        {
+            objCommon.DisplayMessage(this, "Exam Rule for End Sem Exam is Defined For Multiple Subexam..Please Check The Examination Rule Or Contact to Admin!! ", this.Page);
+            return;
+        }
+
+
+
         if (ddlSubjectType.SelectedValue != "10")
         {
             if (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1)
@@ -1122,6 +1177,18 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 ShowStudentsSpecialSubject();
             }
             else if (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1)   //Added subid12 dt on 10022023 as per client req.
+            {
+                ShowStudentsSpecialSubject();
+            }
+            else if (ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1)   //Added subid13 dt on 01012024 as per client req :tkno52786.
+            {
+                ShowStudentsSpecialSubject();
+            }
+            else if (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1)   //Added subid5 dt on 16012024 as per client req :tkno52786.
+            {
+                ShowStudentsSpecialSubject();
+            }
+            else if (ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1)   //Added subid14 dt on 16012024 as per client req :tkno52786.
             {
                 ShowStudentsSpecialSubject();
             }
@@ -1145,7 +1212,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         {
           //  btnfinalmarkentry.Visible = false;
             string[] course = ddlCourse.SelectedItem.Text.Split('-');
-            string Exam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) SUBSTRING(FLDNAME,1,2) FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));          
+            string Exam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) SUBSTRING(FLDNAME,1,2) FLDNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));          
 
             string SubExam = string.Empty;
             string SubExamName = string.Empty;
@@ -1359,7 +1426,10 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 }
                 else
                 {
-                    SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]);
+                    // SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]);           //COMMENTED ON DT:05022024 AS PER TKNO:52722
+
+                    //ADDED ON DT:05022024 AS PER TKNO:52722
+                    SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "SUBEXAMNO", " ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]);
                 }
                 //SubExamName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]);
             }
@@ -1369,10 +1439,14 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             }
             else
             {
-                 Subexamno = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]));
+                //Subexamno = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]));           //COMMENTED ON DT:05022024 AS PER TKNO:52722
+
+                //ADDED ON DT:05022024 AS PER TKNO:52722
+                Subexamno = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "SUBEXAMNO", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0]));
+                
             }
             //DataSet ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO="+Convert.ToInt32(ddlscheme.SelectedValue) +" AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
-            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11"  || ddlSubjectType.SelectedValue == "12")
+            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "5" || ddlSubjectType.SelectedValue == "14")
             {
                 //ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO IN(SELECT DISTINCT SUBEXAMNO FROM ACD_SUBEXAM_NAME WHERE ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + ") AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ddlscheme.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
                 ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + "AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ddlscheme.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", ""); 
@@ -1405,7 +1479,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
             //dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin(Convert.ToInt32(ddlSession.SelectedValue), 0, ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), ddlExam.SelectedValue.ToString(),Convert.ToInt32(ddlscheme.SelectedValue));
 
-            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")
+            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")
             {
                 dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin(Convert.ToInt32(ddlSession.SelectedValue), 0, ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[1], Convert.ToInt32(ddlscheme.SelectedValue),(ddlSubExamName.SelectedValue).Split('-')[1], SubExamName, Convert.ToInt32(ddlcollege.SelectedValue));
             }
@@ -1530,33 +1604,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                        
                     }
                     // end 
-                    #region Comment Code
-
-                    //for (int i = 0; i < gvStudent.Rows.Count; i++)
-                    //{
-                    //    TextBox txtMarks = gvStudent.Rows[i].FindControl("txtMarks") as TextBox;
-                    //    Label lblMarks = gvStudent.Rows[i].FindControl("lblMarks") as Label;
-                    //    if (lblMarks.ToolTip == "True")
-                    //    {
-                    //        txtMarks.Enabled = false;
-                    //    }
-                    //}
-
-                    //Check for All Exams On or Off
-                    //if (CheckExamON() == false)
-                    //{
-                    //    btnSave.Enabled = false;
-                    //    btnLock.Enabled = false;
-                    //    objCommon.DisplayMessage("Selected Exam Not Applicable for Course!!", this.Page);
-                    //}
-                    //else
-                    //{
-                    //btnSave.Enabled = true;
-                    //btnLock.Enabled = true;
-                    //btnUnlock.Enabled = false;
-                    //}
-
-                    #endregion Comment Code
+                    
 
                     if (ddlSubjectType.SelectedValue == "4" && (Convert.ToInt32(Session["usertype"].ToString()) == 1 || Convert.ToInt32(Session["usertype"].ToString()) == 7 ) )
                     {
@@ -1605,7 +1653,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True" || dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "1")
                         {
 
-                            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")        //Added subid12 dt on 10022023 as per client req.
+                            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")        //Added subid12 dt on 10022023 as per client req.
                             {
 
 
@@ -1850,7 +1898,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     {
                         if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True" || dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "1")
                         {
-                            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12") //Added subid12 dt on 10022023 as per client req.
+                            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5") //Added subid12 dt on 10022023 as per client req.
                             {
                                 LOCK1 = Convert.ToBoolean(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(INTER_LOCK,0)", "SUB_ID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
 
@@ -1961,85 +2009,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         }
 
                     }
-
-
-                    //if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                    //{
-                    //    if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11")
-                    //    {
-                    //        LOCK1 = Convert.ToBoolean(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(INTER_LOCK,0)", "SUB_ID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
-
-                    //        LOCK2 = Convert.ToBoolean(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(EXTER_LOCK,0)", "SUB_ID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
-
-
-
-                    //        if (LOCK1 == LOCK2)
-                    //        {
-                    //            gvStudent.Columns[5].Visible = true;
-                    //            btnSave.Enabled = false;
-                    //            btnLock.Enabled = false;
-                    //            btnUnlock.Enabled = true;
-                    //            btnSave.Visible = false;
-                    //            btnLock.Visible = false;
-                    //            btnGrade.Enabled = true;
-                    //            btnGrade.Visible = true;
-                    //            btnMarksModifyReport.Visible = true;
-                    //        }
-                    //        //else
-                    //        //{
-                    //        //    btnSave.Enabled = true;
-                    //        //    btnLock.Enabled = true;
-                    //        //    btnUnlock.Enabled = true;
-                    //        //    btnSave.Visible = true;
-                    //        //    btnLock.Visible = true;
-                    //        //    btnGrade.Enabled = false;
-                    //        //    btnGrade.Visible = false;
-                    //        //    btnMarksModifyReport.Visible = true;
-                    //        //}
-
-                    //        else if (LOCK1 == true)
-                    //        {
-                    //            btnSave.Enabled = false;
-                    //            btnLock.Enabled = false;
-                    //            btnUnlock.Enabled = true;
-                    //            btnSave.Visible = false;
-                    //            btnLock.Visible = false;
-                    //        }
-                    //        else if (LOCK2 == true)
-                    //        {
-                    //            btnSave.Enabled = false;
-                    //            btnLock.Enabled = false;
-                    //            btnUnlock.Enabled = true;
-                    //            btnSave.Visible = false;
-                    //            btnLock.Visible = false;
-                    //        }
-                    //        else
-                    //        {
-                    //            btnSave.Enabled = true;
-                    //            btnLock.Enabled = true;
-                    //            btnUnlock.Enabled = true;
-                    //            btnSave.Visible = true;
-                    //            btnLock.Visible = true;
-                    //            btnGrade.Enabled = false;
-                    //            btnGrade.Visible = false;
-                    //            btnMarksModifyReport.Visible = true;
-                    //        }
-
-                    //    }
-                    //    else
-                    //    {
-                    //        gvStudent.Columns[5].Visible = true;
-                    //        btnSave.Enabled = false;
-                    //        btnLock.Enabled = false;
-                    //        btnUnlock.Enabled = true;
-                    //        btnSave.Visible = false;
-                    //        btnLock.Visible = false;
-                    //        btnGrade.Enabled = true;
-                    //        btnGrade.Visible = true;
-                    //        btnMarksModifyReport.Visible = true;
-                    //    }
-                       
-                    //}
                     if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty)
                     {
 
@@ -2424,7 +2393,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         try
         {
-            string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SEMESTER", "STARTED = 1 and SHOW_STATUS =1 and DEGREENO LIKE '%" + ddldegree.SelectedValue + "%' and BRANCH LIKE '%" + ddlbranch.SelectedValue + "%' and UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and  PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
+            string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SEMESTER", "STARTED = 1 and SHOW_STATUS =1 and UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and  PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
             if (ddlscheme.SelectedIndex > 0)
             {
                 //objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT SR, ACD_SEMESTER S", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "  SR.COLLEGEID = " + ddlCollege.SelectedValue + " AND SR.SEMESTERNO=S.SEMESTERNO AND S.SEMESTERNO > 0", "S.SEMESTERNO");
@@ -2546,15 +2515,20 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         Username = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()));
         int Is_Specialcase = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
 
-        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1))
+        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1))
         {
             Exam1 = "EXTERMARK";
             //objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) SUBSTRING(FLDNAME,1,2) FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
-            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+            //Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+
+            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0] + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+
         }
         else
         {
-            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);
+            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0] + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+
+           // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);
 
         }
         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
@@ -2562,7 +2536,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
 
-        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1))
+        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1))
         {
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + ",@P_CCODE=" + ccode + ",@P_SECTIONNO=0,@P_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + ",@P_EXAM=" + Exam1 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ",@P_SUB_EXAM=" + Subexam + ",@p_username=" + Username + "";
         }
@@ -2690,7 +2664,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         SubExamComponentName = ddlSubExamName.SelectedItem.Text;
                     }
                      CustomStatus cs1=0;
-                     if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")  //Added subid12 dt on 10022023 as per client req.
+                     if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")  //Added subid12 dt on 10022023 as per client req.
                      {
 
                          cs1 = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, ddlExam.SelectedValue, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlscheme.SelectedValue), Subexam, Convert.ToInt32(Exam[0]), SubExamComponentName, string.Empty);
@@ -2740,7 +2714,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     protected void btnfinalmarkentry_Click(object sender, EventArgs e)
     {
-        if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")
+        if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")
         {
             this.ShowFinalTH_PR_MarkEntryReport("Final Mark Entry Report for Practical", "FinalMarksEntryReport_PR.rpt");
         }
@@ -2759,14 +2733,15 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
          string Exam1 = string.Empty;
          string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
          int Is_Specialcase = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1))
+         if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1)|| (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1))
         {
             Exam1 = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) SUBSTRING(FLDNAME,1,2) FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
-            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+           // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME ", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0]+" AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
         }
         else
         {
-             Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);
+            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0]);
         }
         string Username = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()));
 
@@ -2775,7 +2750,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
         //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_IDNO=" + idno.ToString();
-        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1))
+        if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "12" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "11" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "13" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "14" && Is_Specialcase == 1))
         {
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + ",@P_CCODE=" + ccode + ",@P_SECTIONNO=0,@P_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + ",@P_EXAM=" + Exam1 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ",@P_SUB_EXAM=" + Subexam + "";
         }
@@ -2793,7 +2768,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         try
         {
-            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11")
+            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "5" || ddlSubjectType.SelectedValue == "14")
             {
                 this.ShowReport("xls", "FinalMarksEntryReport_PR.rpt");
             }
@@ -2821,14 +2796,22 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             string Exam1 = string.Empty;
             string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
             int Is_Specialcase = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-            if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1))
+            if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1))
             {
                 Exam1 = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) SUBSTRING(FLDNAME,1,2) FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
-                Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+                //Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));           //ADDED ON DT:05022024 AS PER TKNO:52722
+
+                //ADDED ON DT:05022024 AS PER TKNO:52722
+                Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "TOP(1) CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0] + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+
             }
             else
             {
-                Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);
+                //Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);          //COMMENT ON DT:05022024 AS PER TKNO:52722
+                //ADDED ON DT:05022024 AS PER TKNO:52722
+                Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0]);
+                
+
             }
             string Username = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()));
 
@@ -2838,7 +2821,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             url += "&filename=" + ddlSubjectType.SelectedItem.Text + "_MarkEntryReport" + ".xls";
             url += "&path=~,Reports,Academic," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_IDNO=" + idno.ToString();
-            if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1))
+            if (ddlSubjectType.SelectedValue == "10" || (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1) || (ddlSubjectType.SelectedValue == "5" && Is_Specialcase == 1))
             {
                 url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + ",@P_CCODE=" + ccode + ",@P_SECTIONNO=0,@P_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + ",@P_EXAM=" + Exam1 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ",@P_SUB_EXAM=" + Subexam + "";
             }
@@ -2974,7 +2957,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         SubExamComponentName = ddlSubExamName.SelectedItem.Text;
                     }
                     CustomStatus cs1=0;
-                    if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12")  //Added subid12 dt on 10022023 as per client req.
+                    if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")  //Added subid12 dt on 10022023 as per client req.
                     {
                         cs1 = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, ddlExam.SelectedValue, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlscheme.SelectedValue), Subexam, Convert.ToInt32(Exam[0]), SubExamComponentName,string.Empty);
 

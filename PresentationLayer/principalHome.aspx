@@ -682,14 +682,17 @@
                                             <p class="day"><%#Eval("DD")%></p>
                                         </a>
                                         <div class="media-body">
-                                            <p><%#Eval("NEWSDESC") %></p>
-                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                            <%--<p><%#Eval("NEWSDESC") %></p>
+                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#GetFileName(Eval("FILENAME"))%></asp:HyperLink>--%>
 
+                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
+                                                    <p><%#Eval("NEWSDESC") %></p>
                                         </div>
                                     </article>
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
+                        
                     </div>
                     <div class="x_title d-none">
                         <h2>Expired Notice/News</h2>
@@ -712,18 +715,23 @@
                                             <p class="day"><%#Eval("DD")%></p>
                                         </a>
                                         <div class="media-body">
-                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                            <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                            <p><%#Eval("NEWSDESC") %></p>--%>
+
+                                            <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
                                             <p><%#Eval("NEWSDESC") %></p>
                                         </div>
                                     </article>
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
         var tableOffset = $("#table-1").offset().top;
         var $header = $("#table-1 > thead").clone();

@@ -67,6 +67,7 @@ public partial class Stores_Transactions_Quotation_Str_Quotation_Entry_Form : Sy
                 //this.bindbugethead();
                 this.bindquotation();
                 //Tabs.ActiveTabIndex = 0;
+                this.checkAuthorityVisiblity();
             }
         }
         //String hiddenFieldValue = hidLastTab.Value;
@@ -106,6 +107,23 @@ public partial class Stores_Transactions_Quotation_Str_Quotation_Entry_Form : Sy
         lstquot.DataValueField = "QUOTNO";
         lstquot.DataBind();
     }
+
+
+    private void checkAuthorityVisiblity()
+    {
+        DataSet ds = null;
+        ds = objCommon.FillDropDown("STORE_REFERENCE", "*", "", "", "");
+        if (ds.Tables[0].Rows[0]["IsAuthorityShowOnQuot"].ToString() ==  "N" || ds.Tables[0].Rows[0]["IsAuthorityShowOnQuot"].ToString() ==null)
+        {
+            divAuthority.Visible = false;
+        }
+        else
+        {
+            divAuthority.Visible = true;
+        }
+    
+    }
+
 
     private void bindbugethead()//string Indno
     {

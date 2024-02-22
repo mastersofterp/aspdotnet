@@ -188,9 +188,9 @@
                                     ToolTip="Shows Students under Selected Criteria." ValidationGroup="show" CssClass="btn btn-primary" />
 
                                 <asp:Button ID="btnPrintReport" runat="server" Text="Admit Card" TabIndex="1" CssClass="btn btn-info"
-                                    OnClick="btnPrintReport_Click" ToolTip="Print Card under Selected Criteria." Enabled="false" ValidationGroup="Report" />
+                                    OnClick="btnPrintReport_Click" ToolTip="Print Card under Selected Criteria." Enabled="false" ValidationGroup="Report"/>
                                 <asp:Button ID="btnAttendance" runat="server" Text="Attendance Report" TabIndex="5" CssClass="btn btn-info"
-                                     ToolTip="Print Card under Selected Criteria." Visible="true"  OnClick="btnAttendance_Click" ValidationGroup="Report" />
+                                    ToolTip="Print Card under Selected Criteria." Visible="true" OnClick="btnAttendance_Click" ValidationGroup="Report"/>
 
                                 <asp:Button ID="btnSendEmail" runat="server" Text="Send To Email" TabIndex="999" CssClass="btn btn-info"
                                     OnClick="btnSendEmail_Click1" ToolTip="Send Card By Email" ValidationGroup="show" Visible="false" />

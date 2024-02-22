@@ -485,6 +485,9 @@ public partial class LevelFeedback : System.Web.UI.Page
         objSEB.SubId = SubID;
         objSEB.SemesterNo = semesterno;
         objSEB.Idno = Convert.ToInt32(lblName.ToolTip);
+        pnlFinalSumbit.Visible = true;
+        btnSubmit.Visible = true;
+        btnCancel.Visible = true;
         if (ViewState["TeachNo"] != null)
         {
             objSEB.UA_NO = Convert.ToInt32(ViewState["TeachNo"]);
@@ -601,6 +604,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                 {
                     pnlFeedback.Visible = false;
                     pnlFinalSumbit.Visible = false;
+
                     lvCourse.Items.Clear();
                     lblcrse.Visible = false;
                     lvCourse.DataSource = null;
@@ -1031,9 +1035,9 @@ public partial class LevelFeedback : System.Web.UI.Page
                 lblMsg.Visible = false;
                 FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
                 //FillTeacherQuestion();
-                pnlFinalSumbit.Visible = true;
-                btnSubmit.Visible = true;
-                btnCancel.Visible = true;
+                //pnlFinalSumbit.Visible = true;
+                //btnSubmit.Visible = true;
+                //btnCancel.Visible = true;
                 btnFinalSubmit.Visible = false;
                 //btnPrevious.Visible = true;
 
@@ -1043,9 +1047,9 @@ public partial class LevelFeedback : System.Web.UI.Page
                 lblMsg.Text = "";
                 lblMsg.Visible = false;
                 FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
-                pnlFinalSumbit.Visible = true;
-                btnSubmit.Visible = true;
-                btnCancel.Visible = true;
+                //pnlFinalSumbit.Visible = true;
+                //btnSubmit.Visible = true;
+                //btnCancel.Visible = true;
                 btnFinalSubmit.Visible = true;
                 //btnPrevious.Visible = true;
             }
@@ -1054,9 +1058,9 @@ public partial class LevelFeedback : System.Web.UI.Page
                 lblMsg.Text = "";
                 lblMsg.Visible = false;
                 FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
-                pnlFinalSumbit.Visible = true;
-                btnSubmit.Visible = true;
-                btnCancel.Visible = true;
+                //pnlFinalSumbit.Visible = true;
+                //btnSubmit.Visible = true;
+                //btnCancel.Visible = true;
                 btnFinalSubmit.Visible = false;
                 //btnPrevious.Visible = true;
             }
@@ -1251,6 +1255,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             {
                 pnlSubmit.Visible = true;
                 pnlFinalSumbit.Visible = false;
+                
                 Panel1.Visible = false;
                 FillQuestion(1, Convert.ToInt32(lblSemester.ToolTip));
                 //if (Session["OrgId"].ToString() == "2")
@@ -1457,6 +1462,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                 {
                     pnlFeedback.Visible = false;
                     pnlFinalSumbit.Visible = false;
+                    pnlSubmit.Visible = false;
                     lvCourse.Items.Clear();
                     lblcrse.Visible = false;
                     lvCourse.DataSource = null;

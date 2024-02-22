@@ -564,7 +564,7 @@
                                                             Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
+                                                    <div id="Div2" class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
                                                         <div class="label-dynamic">
                                                             <label><span style="color: red;">*</span> Elective Courses</label>
                                                         </div>
@@ -583,7 +583,7 @@
                                                 <asp:Button ID="btnRemove" runat="server" CausesValidation="False" Text="Cancel" TabIndex="12"
                                                     CssClass="btn btn-warning" OnClick="btnRemove_Click" />
                                             </div>
-                                            <div class="col-md-12" id="div2" runat="server">
+                                            <div class="col-md-12" id="div5" runat="server">
                                                 <asp:Panel ID="PanelCancel" runat="server" Visible="false" ScrollBars="Auto" Height="400px">
                                                     <asp:ListView ID="lvCancelCourse" runat="server">
                                                         <%--OnLayoutCreated="lvStudent_LayoutCreated">--%>

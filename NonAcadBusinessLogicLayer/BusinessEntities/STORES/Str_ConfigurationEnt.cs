@@ -30,11 +30,24 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessEntities
         private int _IS_SECGP = 0;
         //---------------------27/01/2023-----Added by shabina For Making Budget Head optional--------//
         private char _IsAvailableQty;
+       
         public char IsAvailableQty
         {
             get { return _IsAvailableQty; }
             set { _IsAvailableQty = value; }      
         }
+
+
+        private char _IsAuthorityShowOnQuot;
+        public char IsAuthorityShowOnQuot
+        {
+            get { return _IsAuthorityShowOnQuot; }
+            set { _IsAuthorityShowOnQuot = value; }
+        }
+
+
+
+
 
         //---------------------27/01/2023-------------//
         //---26/09/2022 Added by shabina For Making Budget Head optional

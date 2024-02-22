@@ -9,6 +9,8 @@ using System.Web.UI.WebControls;
 using IITMS.UAIMS;
 using Razorpay.Api;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
+using IITMS.UAIMS.BusinessLayer.BusinessLogic;
+using System.Data.SqlClient;
 
 public partial class RazorPay_Request : System.Web.UI.Page
 {
@@ -16,6 +18,7 @@ public partial class RazorPay_Request : System.Web.UI.Page
     public string orderId;
     public string MerchantId = "0";
     public string ApplicationId = "0";
+    FeeCollectionController objFees = new FeeCollectionController();
     //RazorPayController ObjRPC = new RazorPayController();
 
 
@@ -23,7 +26,7 @@ public partial class RazorPay_Request : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
-           
+            
            SendRequest();
               
         }
@@ -31,7 +34,16 @@ public partial class RazorPay_Request : System.Web.UI.Page
 
     public void SendRequest()
     {
-        
+        var College_ShortName = string.Empty;
+        SqlDataReader dr = objCommon.GetCommonDetails();
+
+        if (dr != null)
+        {
+            if (dr.Read())
+            {
+                College_ShortName = dr["CODE_STANDARD"].ToString();
+            }
+        }  
 
         int userno = Convert.ToInt32(Session["userno"]);
         DataSet ds = new DataSet();
@@ -63,9 +75,9 @@ public partial class RazorPay_Request : System.Web.UI.Page
             Session["STUDENT_NAME"] = Convert.ToString(Session["payStudName"]);
             //Session["PGTranId"] = TransactionId.ToString();
             hdnAmount.Value = Session["studAmt"].ToString();
-            //MerchantId = Convert.ToString(TransactionId);
+            MerchantId = Session["regno"].ToString();
             ApplicationId = Convert.ToString("admin");
-            hdnMerchantName.Value = "ATLAS";  //
+            hdnMerchantName.Value = College_ShortName;
 
             Session["TranAmt"] = Convert.ToDecimal(Session["studAmt"]).ToString();
 
@@ -102,6 +114,22 @@ public partial class RazorPay_Request : System.Web.UI.Page
             //
 
             string s1 = order["id"].ToString();
+
+            int SessionNo; int UserNo; string RazorPayId; double dAmount; double Fee; double Tax; string OrderId; string RazorPayOrderId; string IP_Address; double RazorPay_Amount;
+            SessionNo = 0;
+            UserNo = Convert.ToInt32(Session["USERNO"].ToString());
+            RazorPayId = "";
+            dAmount = Convert.ToDouble(Session["studAmt"]);
+            RazorPay_Amount = Amount;
+            Fee = 0;
+            Tax = 0;
+            OrderId = Session["Order_ID"].ToString();
+            RazorPayOrderId = orderId;
+            IP_Address = Request.ServerVariables["REMOTE_HOST"].ToString();
+
+            int Result = 0;
+            Result = objFees.InsertRazorPayNotCaptureTransaction(SessionNo, UserNo, RazorPayId, dAmount, RazorPay_Amount, Fee, Tax, OrderId, RazorPayOrderId, IP_Address);
+             
 
         //}
     }

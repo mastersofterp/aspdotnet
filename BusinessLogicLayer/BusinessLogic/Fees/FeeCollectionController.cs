@@ -478,7 +478,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_OUT", status)
                 };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
-                 ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT", sqlParams);
+                ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT", sqlParams);
                 //ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT_SRK_29042023", sqlParams); // ADDED BY SHAILENDRA K. ON DATED 29.04.2023 AS PER DR. MANOJ SIR SUGGESTION CALCULATING LATE FINE ON TRANS DATE.
             }
             catch (Exception ex)
@@ -650,7 +650,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// </summary>
         /// <param name="dcr"></param>
         /// <returns></returns>
-        public bool SaveFeeCollection_Transaction(ref DailyCollectionRegister dcr, int checkAllow, string ipaddress, int OrgID,DateTime Transdate)
+        public bool SaveFeeCollection_Transaction(ref DailyCollectionRegister dcr, int checkAllow, string ipaddress, int OrgID, DateTime Transdate)
         {
             try
             {
@@ -3184,7 +3184,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
 
 
-       
+
 
         public int InsertAdmissionOnlinePayment_DCR(string UserNo, string recipt, string payId, string transid, string PaymentMode, string CashBook, string amount, string StatusF, string Regno)
         {
@@ -3213,7 +3213,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 object studid = objSqlhelper.ExecuteNonQuerySP("PKG_ACAD_ADMISSION_INSERT_ONLINE_PAYMENT_DCRTEMP_TO_DCR", sqlparam, true);
 
                 retStatus1 = Convert.ToInt32(studid);
-                return retStatus1;  
+                return retStatus1;
             }
             catch (Exception ex)
             {
@@ -3350,7 +3350,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-         //Added By Nikhil Lambe on 13082020 to get students paid list
+        //Added By Nikhil Lambe on 13082020 to get students paid list
         public DataSet Get_Paid_Students_List(string Receipt_Code)
         {
             DataSet ds = null;
@@ -3459,7 +3459,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-         /// <summary>
+        /// <summary>
         /// Added By Dileep
         /// 03032020
         /// </summary>
@@ -3484,7 +3484,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-/// <summary>
+        /// <summary>
         /// added by Dileep
         /// date 03032020
         /// </summary>
@@ -5365,10 +5365,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
 
         public DataSet GetOnlinePaymentConfigurationAllDetailsV2(int ConfigID)
-            {
+        {
             DataSet ds = null;
             try
-                {
+            {
                 SQLHelper objDataAccess = new SQLHelper(_connectionString);
                 SqlParameter[] sqlParams = new SqlParameter[] 
                 { 
@@ -5376,25 +5376,25 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                       
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_GET_PG_CONFIG_ALL_DETAILS_V2", sqlParams);
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetOnlinePaymentConfigurationDetails_WithDegree() --> " + ex.Message + " " + ex.StackTrace);
-                }
+            }
             return ds;
 
-            }
+        }
 
 
 
 
 
 
-        public DataSet GetOnlinePaymentConfigurationDetails_V2(int Organizationid, int Semesterno, string ReceiptType, int Collegeid, int Degreeno,int Branchno)
-            {
+        public DataSet GetOnlinePaymentConfigurationDetails_V2(int Organizationid, int Semesterno, string ReceiptType, int Collegeid, int Degreeno, int Branchno)
+        {
             DataSet ds = null;
             try
-                {
+            {
                 SQLHelper objDataAccess = new SQLHelper(_connectionString);
                 SqlParameter[] sqlParams = new SqlParameter[] 
                 { 
@@ -5406,14 +5406,14 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_BRANCHNO",Branchno), //Added by Swapnil P. on 14092022 to add college_id paramter.
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_GET_PG_CONFIG_DETAILS_V2", sqlParams);
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetOnlinePaymentConfigurationDetails_WithDegree() --> " + ex.Message + " " + ex.StackTrace);
-                }
+            }
             return ds;
 
-            }
+        }
 
         #region "Photo Reval Fee Collection"
         public int AddPhotoRevalFeeLog(StudentFees objSF, int PAYMENTTYPE, int GATEWAYID, string Recpt_Code, int revalapplytype)
@@ -6192,7 +6192,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
 
-          //Added by Tejaswini[29-11-22]
+        //Added by Tejaswini[29-11-22]
         public DataSet GetReceiptGenerationList()
         {
             DataSet ds = null;
@@ -6209,9 +6209,9 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
-      
- //Added by Tejaswini[29-11-22]
-        public int InsertReceiptGenerationData(int degreeno, string receiptCode,string paymentMode,string counter,string className)
+
+        //Added by Tejaswini[29-11-22]
+        public int InsertReceiptGenerationData(int degreeno, string receiptCode, string paymentMode, string counter, string className)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -6394,10 +6394,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //added by Saurabh S on 20_12_2022
         public DataSet GetBulkCancelRecieptExcelReport(string receiptCode, int semesterNo, DateTime from_dt, DateTime to_date, int degreeNo, int branchNo, int academicyearid)
-            {
+        {
             DataSet ds = null;
             try
-                {
+            {
                 SQLHelper objDataAccess = new SQLHelper(_connectionString);
                 SqlParameter[] sqlParams = new SqlParameter[] 
                 {                                        
@@ -6410,21 +6410,21 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_ACADEMIC_YEAR_ID",academicyearid),
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_GET_BULK_CANCEL_RECIEPT_EXCEL_REPORT", sqlParams);
-                }
-            catch (Exception ex)
-                {
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_STUDENT_FOR_FEE_PAYMENT_WITH_HEADS_DEMANDWISE() --> " + ex.Message + " " + ex.StackTrace);
-                }
-            return ds;
             }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_STUDENT_FOR_FEE_PAYMENT_WITH_HEADS_DEMANDWISE() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
 
         //added by Saurabh S on 20_12_2022
         public DataSet GetStudentListForBulkReciept(int degreeno, int branchno, int semesterno, int admbatch, int collegeid)
-            {
+        {
             DataSet ds = null;
 
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_connectionString);
                 SqlParameter[] objParams = null;
                 objParams = new SqlParameter[5];
@@ -6436,14 +6436,14 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_STUDENT_SEARCH_FOR_BULK_FEES_RECIEPT_CARD", objParams);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
 
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.EmpCreateController.GetStudentListForIdentityCard-> " + ex.ToString());
-                }
-            return ds;
             }
+            return ds;
+        }
         public DataSet GetOnlinePaymentConfigurationDetails_RCPIPER(int Organizationid, int payid, int activityno, string order_id)
         {
             DataSet ds = null;
@@ -6567,10 +6567,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //added by Rohit M on 07_02_2023
         public int UpdateUser(string UA_NAME, string UA_PWD, int IDNO, int FirstTimePay)
-            {
+        {
             int retStatus = 0;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_connectionString);
                 SqlParameter[] objParams = null;
                 objParams = new SqlParameter[5];
@@ -6585,25 +6585,25 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 if (Convert.ToInt32(ret) == 1)
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
                 else if (Convert.ToInt32(ret) == 1234)
-                    {
+                {
                     retStatus = Convert.ToInt32(CustomStatus.RecordExist);
-                    }
+                }
                 else
                     retStatus = Convert.ToInt32(CustomStatus.Error);
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TPController.AddJobLoc-> " + ex.ToString());
-                }
-            return retStatus;
             }
+            return retStatus;
+        }
         //added by Rohit M on 14_02_2023
         public int CreateUser_JECRC(string UA_NAME, string UA_PWD, string UA_FULLNAME, string UA_EMAIL, string UA_ACC, int IDNO)
-            {
+        {
             int retStatus = 0;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_connectionString);
                 SqlParameter[] objParams = null;
                 objParams = new SqlParameter[7];
@@ -6620,19 +6620,19 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 if (Convert.ToInt32(ret) == 1)
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
                 else if (Convert.ToInt32(ret) == 1234)
-                    {
+                {
                     retStatus = Convert.ToInt32(CustomStatus.RecordExist);
-                    }
+                }
                 else
                     retStatus = Convert.ToInt32(CustomStatus.Error);
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TPController.AddJobLoc-> " + ex.ToString());
-                }
-            return retStatus;
             }
+            return retStatus;
+        }
 
         public DataSet Get_Student_Admission_Register_Adademic_Report_Excel(int CollegeId, int degreeno, int branchno, int AcademicYear, int year, int semesterNo)
         {
@@ -6658,7 +6658,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-        public DataSet GetdataForConsolidatedOutstandingReport(int semesterNo, DateTime from_dt, DateTime to_date, int degreeNo, int branchNo,string rectype)
+        public DataSet GetdataForConsolidatedOutstandingReport(int semesterNo, DateTime from_dt, DateTime to_date, int degreeNo, int branchNo, string rectype)
         {
             DataSet ds = null;
             try
@@ -6687,33 +6687,33 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         //added by Rohit M on 08_02_2023
 
         public DataSet GetAllFeesDetailsStudIdOnline(int studentId)
-            {
+        {
             DataSet ds = null;
             try
-                {
+            {
                 SQLHelper objDataAccess = new SQLHelper(_connectionString);
                 SqlParameter[] sqlParams = new SqlParameter[] 
                 { 
                     new SqlParameter("@P_IDNO", studentId)
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_ALL_FEE_DATA_ONLINE", sqlParams);
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetPaidReceiptsInfoByStudId() --> " + ex.Message + " " + ex.StackTrace);
-                }
+            }
             return ds;
 
-            }
+        }
 
 
 
         //added by Nehal on 04/04/23
         public DataSet GetPaymentModificationReportExcel(int AdcYear)
-            {
+        {
             DataSet ds = null;
             try
-                {
+            {
                 SQLHelper objDataAccess = new SQLHelper(_connectionString);
                 SqlParameter[] sqlParams = new SqlParameter[] 
                 {                     
@@ -6721,33 +6721,33 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                                   
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_GET_PAYMENT_MODIFICATIONS_DETAILS", sqlParams);
-                }
-            catch (Exception ex)
-                {
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetPaymentModificationReportExcel() --> " + ex.Message + " " + ex.StackTrace);
-                }
-            return ds;
             }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetPaymentModificationReportExcel() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
 
 
         public DataSet GetReceiptTypeforFeeReport()
-            {
+        {
             DataSet ds = null;
             try
-                {
+            {
                 SQLHelper objDataAccess = new SQLHelper(_connectionString);
                 SqlParameter[] sqlParams = new SqlParameter[] 
                 { 
                     
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_GET_FEE_RECEIPT_TYPE_FOR_REPORT", sqlParams);
-                }
-            catch (Exception ex)
-                {
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetPaymentModificationReportExcel() --> " + ex.Message + " " + ex.StackTrace);
-                }
-            return ds;
             }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetPaymentModificationReportExcel() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
 
         public DataSet Get_Tally_Integration_Reports_Excel(DateTime from_dt, DateTime to_date, int degreeNo, int Branchno, int AcademicYear, int semesterNo, int Year)
         {
@@ -6820,7 +6820,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
         //New Method Added by -Gopal M 04-08-2023
-        public int InsertIOBPayOnlinePaymentlog(int idno, decimal amount, string order_id,string token_id, string semesterno, string ipaddress)
+        public int InsertIOBPayOnlinePaymentlog(int idno, decimal amount, string order_id, string token_id, string semesterno, string ipaddress)
         {
             int retStatus = 0;
             try
@@ -6841,12 +6841,12 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
                 };
                 object ret = objSqlhelper.ExecuteNonQuerySP("PKG_ACD_INSERT_IOBPAY_TRANSACTIONS_LOG", sqlparam, true);
-               
+
                 if (ret != null && ret.ToString() != "-99")
                     retStatus = Convert.ToInt32(ret);
                 else
                     retStatus = -99;
-              
+
             }
             catch (Exception ex)
             {
@@ -6856,7 +6856,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         }
 
-        public int UpdateIOBPayOnlinePaymentlog(int idno, string order_id, string token_id, string track_id, string fee_type,string status, string trxdate)
+        public int UpdateIOBPayOnlinePaymentlog(int idno, string order_id, string token_id, string track_id, string fee_type, string status, string trxdate)
         {
             int retStatus = 0;
             try
@@ -6874,7 +6874,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     sqlparam[6] = new SqlParameter("@P_TRANSACTION_TIMESTAMP", trxdate);
                     sqlparam[7] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
                     sqlparam[7].Direction = ParameterDirection.Output;
-                   
+
                 };
                 object ret = objSqlhelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_IOBPAY_TRANSACTIONS_LOG", sqlparam, true);
 
@@ -6975,7 +6975,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
 
         }
-       
+
         public int UpdateISGPayOnlinePaymentlog(int idno, string order_id, string token_id, string track_id, string fee_type, string status, string trxdate)
         {
             int retStatus = 0;
@@ -7011,5 +7011,250 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
 
         }
+
+        //Added RazorPay payment Integration by -Gopal M 31-01-2023 Ticket#53523
+        public int InsertInstallmentOnlinePayment_TempDCR_Razorpay(int IDNO, int Dmno, int SEMESTERNO, string ORDER_ID, double amount, string RECEIPTCODE, int uano, string data, int installmentno)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                                                     {
+                                                     new SqlParameter("@P_IDNO", IDNO),
+                                                     new SqlParameter("@P_DM_NO", Dmno),
+                                                     new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                                                     new SqlParameter("@P_ORDER_ID", ORDER_ID),
+                                                     new SqlParameter("@P_AMOUNT", amount),
+                                                     new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                                                     new SqlParameter("@P_UANO", uano),
+                                                     new SqlParameter("@P_MESSAGE", data),
+                                                     new SqlParameter("@P_INSTALLMENT_NO", installmentno),
+                                                     new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                                                     };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSTALLMENT_INSERT_ONLINE_PAYMENT_DCR_RAZORPAY_PG", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertInstallmentOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
+        public int InsertOnlinePayment_TempDCR_Razorpay(int IDNO, int SESSIONNO, int SEMESTERNO, string ORDER_ID, int PAYSERVICETYPE, string RECEIPTCODE, string msg)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                                                     {
+                                                     new SqlParameter("@P_IDNO", IDNO),
+                                                     new SqlParameter("@P_SESSIONNO", SESSIONNO),
+                                                     new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                                                     new SqlParameter("@P_ORDER_ID", ORDER_ID),
+                                                     new SqlParameter("@P_PAYSERVICETYPE", PAYSERVICETYPE),
+                                                     new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                                                     new SqlParameter("@P_MESSAGE",msg),
+                                                     new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                                                     };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ONLINE_PAYMENT_DCR_RAZORPAY_PG", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
+        public int InsertRazorPayNotCaptureTransaction(int SessionNo, int UserNo, string RazorPayId, double Amount, double RazorPay_Amount, double Fee, double Tax, string OrderId, string RazorPayOrderId, string IPAddress)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[11];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", SessionNo);
+                objParams[1] = new SqlParameter("@P_USERNO", UserNo);
+                objParams[2] = new SqlParameter("@P_RAZOR_PAYMENT_ID", RazorPayId);
+                objParams[3] = new SqlParameter("@P_AMOUNT", Amount);
+                objParams[4] = new SqlParameter("@P_RAZORPAY_AMOUNT", RazorPay_Amount);
+                objParams[5] = new SqlParameter("@P_FEE", Fee);
+                objParams[6] = new SqlParameter("@P_TAX", Tax);
+                objParams[7] = new SqlParameter("@P_ORDER_ID", OrderId);
+                objParams[8] = new SqlParameter("@P_RAZORPAY_ORDER_ID", RazorPayOrderId);
+                objParams[9] = new SqlParameter("@P_IPADDRESS", IPAddress);
+                objParams[10] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                objParams[10].Direction = ParameterDirection.Output;
+                object ret = objSQLHelper.ExecuteNonQuerySP("INS_RAZORPAY_NOT_CAPTURE_TRANS", objParams, false);
+                if ((int)ret != -99 && (int)ret != 0)
+                {
+                    retStatus = (int)ret;
+                }
+                else
+                {
+                    retStatus = -99;
+                }
+                return retStatus;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic-> " + ex.ToString());
+            }
+        }
+
+          //Added Paytm payment Integration by -Gopal M 29-12-2023 Ticket#51702
+        public int InsertPAYTMOnlinePaymentlog(int idno, decimal amount, string order_id, string token_id, string semesterno, string ipaddress)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlhelper = new SQLHelper(_connectionString);
+                SqlParameter[] sqlparam = null;
+                {
+                    sqlparam = new SqlParameter[7];
+                    sqlparam[0] = new SqlParameter("@P_IDNO", idno);
+                    sqlparam[1] = new SqlParameter("@P_AMOUNT", amount);
+                    sqlparam[2] = new SqlParameter("@P_ORDER_ID", order_id);
+                    sqlparam[3] = new SqlParameter("@P_TOKEN_ID", token_id);
+                    sqlparam[4] = new SqlParameter("@P_SEMESTER", semesterno);
+                    sqlparam[5] = new SqlParameter("@P_IPADDRESS", ipaddress);
+                    sqlparam[6] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                    sqlparam[6].Direction = ParameterDirection.Output;
+                    // string idcat = sqlparam[4].Direction.ToString();
+
+                };
+                object ret = objSqlhelper.ExecuteNonQuerySP("PKG_ACD_INSERT_PAYTM_TRANSACTIONS_LOG", sqlparam, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.InsertPAYTMOnlinePaymentlog() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return retStatus;
+
+        }
+
+        public int UpdatePAYTMOnlinePaymentlog(int idno, string order_id, string token_id, string track_id, string fee_type, string status, string trxdate)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlhelper = new SQLHelper(_connectionString);
+                SqlParameter[] sqlparam = null;
+                {
+                    sqlparam = new SqlParameter[8];
+                    sqlparam[0] = new SqlParameter("@P_IDNO", idno);
+                    sqlparam[1] = new SqlParameter("@P_ORDER_ID", order_id);
+                    sqlparam[2] = new SqlParameter("@P_TOKEN_ID", token_id);
+                    sqlparam[3] = new SqlParameter("@P_TRACK_ID", track_id);
+                    sqlparam[4] = new SqlParameter("@P_FEE_TYPE", fee_type);
+                    sqlparam[5] = new SqlParameter("@P_STATUS", status);
+                    sqlparam[6] = new SqlParameter("@P_TRANSACTION_TIMESTAMP", trxdate);
+                    sqlparam[7] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                    sqlparam[7].Direction = ParameterDirection.Output;
+
+                };
+                object ret = objSqlhelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_PAYTM_TRANSACTIONS_LOG", sqlparam, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.UpdatePAYTMOnlinePaymentlog() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return retStatus;
+
+        }
+
+        public int InsertInstallmentOnlinePayment_TempDCR_PAYTM(int IDNO, int Dmno, int SEMESTERNO, string ORDER_ID, double amount, string RECEIPTCODE, int uano, string data, string MID)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                        {                         
+                            new SqlParameter("@P_IDNO", IDNO),
+                            new SqlParameter("@P_DM_NO", Dmno),
+                            new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                            new SqlParameter("@P_ORDER_ID", ORDER_ID),                           
+                            new SqlParameter("@P_AMOUNT", amount),
+                            new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                            new SqlParameter("@P_UANO", uano),
+                            new SqlParameter("@P_MESSAGE", data),
+                            new SqlParameter("@P_MID", MID),
+                            new SqlParameter("@P_OUTPUT", SqlDbType.Int)          
+                        };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSTALLMENT_INSERT_ONLINE_PAYMENT_DCR_PAYTM", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertInstallmentOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+ 
+        public int InsertOnlinePayment_TempDCR_PAYTM(int IDNO, int SESSIONNO, int SEMESTERNO, string ORDER_ID, int PAYSERVICETYPE, string RECEIPTCODE, string msg, string MID)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                        {                         
+                            new SqlParameter("@P_IDNO", IDNO),
+                            new SqlParameter("@P_SESSIONNO", SESSIONNO),
+                            new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                            new SqlParameter("@P_ORDER_ID", ORDER_ID),                           
+                            new SqlParameter("@P_PAYSERVICETYPE", PAYSERVICETYPE),
+                            new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                            new SqlParameter("@P_MESSAGE",msg),
+                            new SqlParameter("@P_MID",MID),
+                            new SqlParameter("@P_OUTPUT", SqlDbType.Int)          
+                        };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ONLINE_PAYMENT_DCR_PAYTM", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
     }
 }

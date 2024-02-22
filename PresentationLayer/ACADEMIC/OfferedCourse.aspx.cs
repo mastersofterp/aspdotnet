@@ -569,7 +569,18 @@ public partial class ACADEMIC_OfferedCourse : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = objCC.GetAllOfferedCourseList(Convert.ToInt32(ddlSession.SelectedValue));
+            // Added By Vipul Tichakule on date 05-02-2024 as per Tno- 
+            string lstsem = string.Empty;
+            foreach (ListItem item in ddlSemester.Items)
+            {
+                if (item.Selected == true)
+                {
+                    lstsem += item.Value + ","; 
+                }
+            }
+            lstsem = lstsem.TrimEnd(',');
+            //end
+            DataSet ds = objCC.GetAllOfferedCourseList(Convert.ToInt32(ddlSession.SelectedValue), lstsem, Convert.ToInt32(ddlClgname.SelectedValue));
 
             GridView GV = new GridView();
             if (ds.Tables[0].Rows.Count > 0)

@@ -82,7 +82,15 @@ public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
                 lblamount.Text = Convert.ToString(Session["studAmt"]);
                 int payId = Convert.ToInt32(Session["paymentId"]);
                 lblYear.Text = Session["YEARNO"].ToString();
-                DataSet ds1 = objFees.GetOnlinePaymentConfigurationDetails_WithDegree(Convert.ToInt32(Session["OrgId"]), payId, Convert.ToInt32(Session["payactivityno"]), 0, college_id);
+                DataSet ds1 = new DataSet();
+                if (degreeno == 2)
+                {
+                     ds1 = objFees.GetOnlinePaymentConfigurationDetails_WithDegree(Convert.ToInt32(Session["OrgId"]), payId, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
+                }
+                else
+                {
+                     ds1 = objFees.GetOnlinePaymentConfigurationDetails_WithDegree(Convert.ToInt32(Session["OrgId"]), payId, Convert.ToInt32(Session["payactivityno"]), 0, college_id);
+                }
                 if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
                     {
                     string ResponseUrl = ds1.Tables[0].Rows[0]["RESPONSE_URL"].ToString();

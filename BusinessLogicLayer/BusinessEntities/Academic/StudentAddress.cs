@@ -71,7 +71,7 @@ namespace IITMS
                 private string _BUS_STATION = string.Empty;
                 private string _LOCALNAME_STATION = string.Empty;
                 private string _COLLEGE_CODE = string.Empty;
-                 
+                private string _GUARDIAN_OTHER_INFO = string.Empty; 
 
                 #endregion
 
@@ -342,6 +342,12 @@ namespace IITMS
                     set { _COLLEGE_CODE = value; }
                 }
 
+                public string GUARDIAN_OTHER_INFO
+                {
+                    get { return _GUARDIAN_OTHER_INFO; }
+                    set { _GUARDIAN_OTHER_INFO = value; }
+
+                }
                 #endregion
             }
         }

@@ -375,25 +375,28 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        //ddlSem.Items.Clear();
-        //ddlSem.Items.Add(new System.Web.UI.WebControls.ListItem("Please Select", "0"));
-        //ddlSection.SelectedIndex = 0;
-        //ddlExam.SelectedIndex = 0;
-        //ddlStudType.SelectedIndex = 0;
+        ddlSem.Items.Clear();
+        ddlSem.Items.Add("Please Select");
+        ddlSem.SelectedIndex = 0;
 
-        //ddlSection.Items.Clear();
-        //ddlSection.Items.Add("Please Select");
-        //ddlSection.SelectedItem.Value = "0";
-        //ddlExam.Items.Clear();
-        //ddlExam.Items.Add("Please Select");
-        //ddlExam.SelectedItem.Value = "0";
-        //ddlcourse.Items.Clear();
-        //ddlcourse.Items.Add("Please Select");
-        //ddlcourse.SelectedItem.Value = "0";
-        //ddlStudType.Items.Clear();
-        //ddlStudType.Items.Add("Please Select");
-        //ddlStudType.SelectedItem.Value = "0";
+        ddlSection.Items.Clear();
+        ddlSection.Items.Add("Please Select");
+        ddlSection.SelectedIndex = 0;
 
+        ddlcourse.Items.Clear();
+        ddlcourse.Items.Add("Please Select");
+        ddlcourse.SelectedIndex = 0;
+
+        ddlExam.Items.Clear();
+        ddlExam.Items.Add("Please Select");
+        ddlExam.SelectedIndex = 0;
+
+        ddlSubExam.Items.Clear();
+        ddlSubExam.Items.Add("Please Select");
+        ddlSubExam.SelectedIndex = 0;
+
+        ddlcourse.SelectedIndex = 0;
+        ddlStudType.SelectedIndex = 0;
         if (ddlSession.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlSem, "ACD_STUDENT_RESULT SR, ACD_SEMESTER S", "DISTINCT SR.SEMESTERNO", "S.SEMESTERNAME", "  SR.SESSIONNO = " + ddlSession.SelectedValue + " AND isnull(cancel,0)=0  and SR.SEMESTERNO=S.SEMESTERNO AND S.SEMESTERNO > 0", "SEMESTERNO");
@@ -405,28 +408,28 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         {
             ddlSession.Focus();
 
-            ddlSem.Items.Clear();
-            ddlSem.Items.Add("Please Select");
-            ddlSem.SelectedIndex = 0;
+            //ddlSem.Items.Clear();
+            //ddlSem.Items.Add("Please Select");
+            //ddlSem.SelectedIndex = 0;
 
-            ddlSection.Items.Clear();
-            ddlSection.Items.Add("Please Select");
-            ddlSection.SelectedIndex = 0;
+            //ddlSection.Items.Clear();
+            //ddlSection.Items.Add("Please Select");
+            //ddlSection.SelectedIndex = 0;
 
-            ddlcourse.Items.Clear();
-            ddlcourse.Items.Add("Please Select");
-            ddlcourse.SelectedIndex = 0;
+            //ddlcourse.Items.Clear();
+            //ddlcourse.Items.Add("Please Select");
+            //ddlcourse.SelectedIndex = 0;
 
-            ddlExam.Items.Clear();
-            ddlExam.Items.Add("Please Select");
-            ddlExam.SelectedIndex = 0;
+            //ddlExam.Items.Clear();
+            //ddlExam.Items.Add("Please Select");
+            //ddlExam.SelectedIndex = 0;
 
-            ddlSubExam.Items.Clear();
-            ddlSubExam.Items.Add("Please Select");
-            ddlSubExam.SelectedIndex = 0;
+            //ddlSubExam.Items.Clear();
+            //ddlSubExam.Items.Add("Please Select");
+            //ddlSubExam.SelectedIndex = 0;
 
-            ddlcourse.SelectedIndex = 0;
-            ddlStudType.SelectedIndex = 0;
+            //ddlcourse.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
 
@@ -609,37 +612,49 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             ddlSection.Focus();
             return;
         }
-        int StudType = Convert.ToInt32(ddlStudType.SelectedValue) == -1 ? 0 : Convert.ToInt32(ddlStudType.SelectedValue);
-        int subType = 0;
-        if (rbtnOpenEle.Checked)
-            subType = 1;
-        //if (ddlStudType.SelectedValue == "-1")
-        //int StudType = 0;
-
-        string reportTitle = "Internal_Mark_Register";
-        string rptFileName = "rptInternalMarkRegister.rpt";
-       // string rptFileName = "rptExternalMarkRegister.rpt";
-        try
+        string proc_ = "PKG_ACD_INTERNAL_MARK_STATIC_REGISTER";
+        string para_ = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO";
+        string value = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue);
+        DataSet ds = null;
+        ds = objCommon.DynamicSPCall_Select(proc_, para_, value);
+        if (ds.Tables[0].Rows.Count > 0)
         {
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+            int StudType = Convert.ToInt32(ddlStudType.SelectedValue) == -1 ? 0 : Convert.ToInt32(ddlStudType.SelectedValue);
+            int subType = 0;
+            if (rbtnOpenEle.Checked)
+                subType = 1;
+            //if (ddlStudType.SelectedValue == "-1")
+            //int StudType = 0;
 
-            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
-            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            string reportTitle = "Internal_Mark_Register";
+            string rptFileName = "rptInternalMarkRegister.rpt";
+            // string rptFileName = "rptExternalMarkRegister.rpt";
+            try
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
-            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
+                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+                ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+            }
+            catch (Exception ex)
+            {
+                if (Convert.ToBoolean(Session["error"]) == true)
+                    objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+                else
+                    objUCommon.ShowError(Page, "Server Unavailable.");
+            }
         }
-        catch (Exception ex)
+        else
         {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
+            objCommon.DisplayMessage(this.Page, "No Record Found", this.Page);
         }
     }
 
@@ -651,37 +666,49 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             ddlSem.Focus();
             return;
         }
-
-        try
+        string proc_ = "PKG_ACD_INTERNAL_MARK_STATIC_REGISTER";
+        string para_ = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO";
+        string value = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue);
+        DataSet ds = null;
+        ds = objCommon.DynamicSPCall_Select(proc_, para_, value);
+        if (ds.Tables[0].Rows.Count > 0)
         {
-            int StudType = Convert.ToInt32(ddlStudType.SelectedValue) == -1 ? 0 : Convert.ToInt32(ddlStudType.SelectedValue);
-            int subType = 0;
-            if (rbtnOpenEle.Checked)
-                subType = 1;
 
-            string exporttype = "xls";
-            string rptFileName = "rptInternalMarkRegister_Excel.rpt";
+            try
+            {
+                int StudType = Convert.ToInt32(ddlStudType.SelectedValue) == -1 ? 0 : Convert.ToInt32(ddlStudType.SelectedValue);
+                int subType = 0;
+                if (rbtnOpenEle.Checked)
+                    subType = 1;
 
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "exporttype=" + exporttype;
-            url += "&filename=InternalMarkRegister_Excel.xls";
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                string exporttype = "xls";
+                string rptFileName = "rptInternalMarkRegister_Excel.rpt";
 
-            //",@P_SUB_TYPE=" + subType +
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " window.close();";
-            divMsg.InnerHtml += " </script>";
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "exporttype=" + exporttype;
+                url += "&filename=InternalMarkRegister_Excel.xls";
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
+                //",@P_SUB_TYPE=" + subType +
+                divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                divMsg.InnerHtml += " window.close();";
+                divMsg.InnerHtml += " </script>";
+
+            }
+            catch (Exception ex)
+            {
+                if (Convert.ToBoolean(Session["error"]) == true)
+                    objUCommon.ShowError(Page, "Academic_Generate_Rollno.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+                else
+                    objUCommon.ShowError(Page, "Server Unavailable.");
+            }
         }
-        catch (Exception ex)
+        else
         {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "Academic_Generate_Rollno.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
+            objCommon.DisplayMessage(this.Page, "No Record Found", this.Page);
         }
     }
 
@@ -1523,26 +1550,33 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
     {
-        //ddlSem.Items.Clear();
-        //ddlSem.Items.Add("Please Select");
-        //ddlSem.SelectedItem.Value = "0";
-        //ddlSection.SelectedIndex = 0;
-        //ddlExam.SelectedIndex = 0;
-        //ddlStudType.SelectedIndex = 0;
-        //ddlSection.Items.Clear();
-        //ddlSection.Items.Add("Please Select");
-        //ddlSection.SelectedItem.Value = "0";
-        //ddlExam.Items.Clear();
-        //ddlExam.Items.Add("Please Select");
-        //ddlExam.SelectedItem.Value = "0";
-        //ddlcourse.Items.Clear();
-        //ddlcourse.Items.Add("Please Select");
-        //ddlcourse.SelectedItem.Value = "0";
-        //ddlStudType.Items.Clear();
-        //ddlStudType.Items.Add("Please Select");
-        //ddlStudType.SelectedItem.Value = "0";
 
+        ddlSession.Items.Clear();
+        ddlSession.Items.Add("Please Select");
+        ddlSession.SelectedIndex = 0;
 
+        ddlSem.Items.Clear();
+        ddlSem.Items.Add("Please Select");
+        ddlSem.SelectedIndex = 0;
+
+        ddlSection.Items.Clear();
+        ddlSection.Items.Add("Please Select");
+        ddlSection.SelectedIndex = 0;
+
+        ddlcourse.Items.Clear();
+        ddlcourse.Items.Add("Please Select");
+        ddlcourse.SelectedIndex = 0;
+
+        ddlExam.Items.Clear();
+        ddlExam.Items.Add("Please Select");
+        ddlExam.SelectedIndex = 0;
+
+        ddlSubExam.Items.Clear();
+        ddlSubExam.Items.Add("Please Select");
+        ddlSubExam.SelectedIndex = 0;
+
+        ddlcourse.SelectedIndex = 0;
+        ddlStudType.SelectedIndex = 0;
         if (ddlClgname.SelectedIndex > 0)
         {
             DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgname.SelectedValue));
@@ -1570,32 +1604,32 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
             ddlClgname.Focus();
 
-            ddlSession.Items.Clear();
-            ddlSession.Items.Add("Please Select");
-            ddlSession.SelectedIndex = 0;
+            //ddlSession.Items.Clear();
+            //ddlSession.Items.Add("Please Select");
+            //ddlSession.SelectedIndex = 0;
 
-            ddlSem.Items.Clear();
-            ddlSem.Items.Add("Please Select");
-            ddlSem.SelectedIndex = 0;
+            //ddlSem.Items.Clear();
+            //ddlSem.Items.Add("Please Select");
+            //ddlSem.SelectedIndex = 0;
 
-            ddlSection.Items.Clear();
-            ddlSection.Items.Add("Please Select");
-            ddlSection.SelectedIndex = 0;
+            //ddlSection.Items.Clear();
+            //ddlSection.Items.Add("Please Select");
+            //ddlSection.SelectedIndex = 0;
 
-            ddlcourse.Items.Clear();
-            ddlcourse.Items.Add("Please Select");
-            ddlcourse.SelectedIndex = 0;
+            //ddlcourse.Items.Clear();
+            //ddlcourse.Items.Add("Please Select");
+            //ddlcourse.SelectedIndex = 0;
 
-            ddlExam.Items.Clear();
-            ddlExam.Items.Add("Please Select");
-            ddlExam.SelectedIndex = 0;
+            //ddlExam.Items.Clear();
+            //ddlExam.Items.Add("Please Select");
+            //ddlExam.SelectedIndex = 0;
 
-            ddlSubExam.Items.Clear();
-            ddlSubExam.Items.Add("Please Select");
-            ddlSubExam.SelectedIndex = 0;
+            //ddlSubExam.Items.Clear();
+            //ddlSubExam.Items.Add("Please Select");
+            //ddlSubExam.SelectedIndex = 0;
 
-            ddlcourse.SelectedIndex = 0;
-            ddlStudType.SelectedIndex = 0;
+            //ddlcourse.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
 
@@ -1605,17 +1639,14 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         ddlExam.SelectedIndex = 0;
         ddlStudType.SelectedIndex = 0;
 
-        //ddlExam.Items.Clear();
-        //ddlExam.Items.Add("Please Select");
-        //ddlExam.SelectedItem.Value = "0";
-
-        //ddlcourse.Items.Clear();
-        //ddlcourse.Items.Add("Please Select");
-        //ddlcourse.SelectedItem.Value = "0";
-
-        //ddlStudType.Items.Clear();
-        //ddlStudType.Items.Add("Please Select");
-        //ddlStudType.SelectedItem.Value = "0";
+        ddlExam.Items.Clear();
+        ddlExam.Items.Add("Please Select");
+        ddlExam.SelectedIndex = 0;
+        ddlSubExam.Items.Clear();
+        ddlSubExam.Items.Add("Please Select");
+        ddlSubExam.SelectedIndex = 0;
+        ddlcourse.SelectedIndex = 0;
+        ddlStudType.SelectedIndex = 0;
 
         if (ddlSection.SelectedIndex > 0)
         {
@@ -1626,14 +1657,14 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         else
         {
             ddlSection.Focus();
-            ddlExam.Items.Clear();
-            ddlExam.Items.Add("Please Select");
-            ddlExam.SelectedIndex = 0;
-            ddlSubExam.Items.Clear();
-            ddlSubExam.Items.Add("Please Select");
-            ddlSubExam.SelectedIndex = 0;
-            ddlcourse.SelectedIndex = 0;
-            ddlStudType.SelectedIndex = 0;
+            //ddlExam.Items.Clear();
+            //ddlExam.Items.Add("Please Select");
+            //ddlExam.SelectedIndex = 0;
+            //ddlSubExam.Items.Clear();
+            //ddlSubExam.Items.Add("Please Select");
+            //ddlSubExam.SelectedIndex = 0;
+            //ddlcourse.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
 
@@ -2111,7 +2142,8 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 url += "&path=~,Reports,Academic," + "NHA_NSAResultAnalysis.rpt";
 
                 //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
+                //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue; //// Modify as per the ticket no 54538
 
                 //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
                 //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -2173,7 +2205,8 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
-                url += "&param=@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+                //url += "&param=@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+                url += "&param=@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ""; //// Modify as per the ticket no 54538
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -2235,7 +2268,8 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
-                url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+                //url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+                url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ""; //// Modify as per the ticket no 54538
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -2294,7 +2328,9 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
                 //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREETYPE=" + Convert.ToInt32(ddlDegreeType.SelectedValue);
                 //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_DEGREETYPE=" + Convert.ToInt32(ddlDegreeType.SelectedValue);
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"];
+                //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"];
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"];//// Modify as per the ticket no 54538
+
 
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
@@ -2368,7 +2404,8 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
                 if (reportno == 1)
                 {
-                    url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_DEGREENO=" + ViewState["degreeno"];
+                    //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_DEGREENO=" + ViewState["degreeno"];
+                    url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_DEGREENO=" + ViewState["degreeno"]; //// Modify as per the ticket no 54538
                 }
                 else if (reportno == 2)
                 {
@@ -2995,6 +3032,24 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void ddlSem_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlSection.Items.Clear();
+        ddlSection.Items.Add("Please Select");
+        ddlSection.SelectedIndex = 0;
+
+        ddlcourse.Items.Clear();
+        ddlcourse.Items.Add("Please Select");
+        ddlcourse.SelectedIndex = 0;
+
+        ddlExam.Items.Clear();
+        ddlExam.Items.Add("Please Select");
+        ddlExam.SelectedIndex = 0;
+
+        ddlSubExam.Items.Clear();
+        ddlSubExam.Items.Add("Please Select");
+        ddlSubExam.SelectedIndex = 0;
+
+        ddlcourse.SelectedIndex = 0;
+        ddlStudType.SelectedIndex = 0;
         if (ddlSem.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlSection, "ACD_STUDENT_RESULT SR INNER JOIN ACD_SECTION AC ON (SR.SECTIONNO=AC.SECTIONNO)", "DISTINCT AC.SECTIONNO", "AC.SECTIONNAME", "SR.SESSIONNO = " + ddlSession.SelectedValue + " AND ISNULL(CANCEL,0)=0 AND AC.SECTIONNO > 0 AND SR.SCHEMENO=" + ViewState["schemeno"], "AC.SECTIONNO"); // Added By Sagar Mankar 31082023
@@ -3006,24 +3061,24 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         {
             ddlSem.Focus();
 
-            ddlSection.Items.Clear();
-            ddlSection.Items.Add("Please Select");
-            ddlSection.SelectedIndex = 0;
+            //ddlSection.Items.Clear();
+            //ddlSection.Items.Add("Please Select");
+            //ddlSection.SelectedIndex = 0;
 
-            ddlcourse.Items.Clear();
-            ddlcourse.Items.Add("Please Select");
-            ddlcourse.SelectedIndex = 0;
+            //ddlcourse.Items.Clear();
+            //ddlcourse.Items.Add("Please Select");
+            //ddlcourse.SelectedIndex = 0;
 
-            ddlExam.Items.Clear();
-            ddlExam.Items.Add("Please Select");
-            ddlExam.SelectedIndex = 0;
+            //ddlExam.Items.Clear();
+            //ddlExam.Items.Add("Please Select");
+            //ddlExam.SelectedIndex = 0;
 
-            ddlSubExam.Items.Clear();
-            ddlSubExam.Items.Add("Please Select");
-            ddlSubExam.SelectedIndex = 0;
+            //ddlSubExam.Items.Clear();
+            //ddlSubExam.Items.Add("Please Select");
+            //ddlSubExam.SelectedIndex = 0;
 
-            ddlcourse.SelectedIndex = 0;
-            ddlStudType.SelectedIndex = 0;
+            //ddlcourse.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
 
@@ -3184,6 +3239,11 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void ddlExam_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlSubExam.Items.Clear();
+        ddlSubExam.Items.Add("Please Select");
+        ddlSubExam.SelectedIndex = 0;
+        ddlcourse.SelectedIndex = 0;
+        ddlStudType.SelectedIndex = 0;
         if (ddlExam.SelectedIndex > 0)
         {
             // objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME", "EXAMNO", "EXAMNAME", "EXAMNO > 0", "EXAMNO DESC");
@@ -3194,15 +3254,16 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         {
             ddlExam.Focus();
 
-            ddlSubExam.Items.Clear();
-            ddlSubExam.Items.Add("Please Select");
-            ddlSubExam.SelectedIndex = 0;
-            ddlcourse.SelectedIndex = 0;
-            ddlStudType.SelectedIndex = 0;
+            //ddlSubExam.Items.Clear();
+            //ddlSubExam.Items.Add("Please Select");
+            //ddlSubExam.SelectedIndex = 0;
+            //ddlcourse.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
     protected void ddlcourse_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlStudType.SelectedIndex = 0;
         if (ddlcourse.SelectedIndex > 0)
         {
             ddlStudType.Focus();
@@ -3210,11 +3271,12 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         else
         {
             ddlcourse.Focus();
-            ddlStudType.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
     protected void ddlStudType_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlStudType.SelectedIndex = 0;
         if (ddlStudType.SelectedIndex > 0)
         {
             btnInternalMarkReg.Focus();
@@ -3222,11 +3284,13 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         else
         {
             ddlStudType.Focus();
-            ddlStudType.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
     protected void ddlSubExam_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlcourse.SelectedIndex = 0;
+        ddlStudType.SelectedIndex = 0;
         if (ddlSubExam.SelectedIndex > 0)
         {
             ddlcourse.Focus();
@@ -3234,8 +3298,8 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         else
         {
             ddlSubExam.Focus();
-            ddlcourse.SelectedIndex = 0;
-            ddlStudType.SelectedIndex = 0;
+            //ddlcourse.SelectedIndex = 0;
+            //ddlStudType.SelectedIndex = 0;
         }
     }
     protected void btnExternalmarkreg_Click(object sender, EventArgs e)
@@ -3258,30 +3322,43 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         //    subType = 1;
         ////if (ddlStudType.SelectedValue == "-1")
         ////int StudType = 0;
-
-        string reportTitle = "External_Mark_Register";
-        string rptFileName = "rptExMarkRegister.rpt";//rptInternalMarkRegister rptExternalMarkRegister
-        try
+        string proc_ = "PKG_ACD_EXTERNAL_MARK_STATIC_REGISTER";
+        string para_ = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO";
+        string value = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue);
+        DataSet ds = null;
+        ds = objCommon.DynamicSPCall_Select(proc_, para_, value);
+        if (ds.Tables[0].Rows.Count > 0)
         {
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
-            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
-            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            string reportTitle = "External_Mark_Register";
+            string rptFileName = "rptExMarkRegister.rpt";//rptInternalMarkRegister rptExternalMarkRegister
+            try
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
-            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
+                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+                ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+            }
+            catch (Exception ex)
+            {
+                if (Convert.ToBoolean(Session["error"]) == true)
+                    objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+                else
+                    objUCommon.ShowError(Page, "Server Unavailable.");
+            }
         }
-        catch (Exception ex)
+        else
         {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
+
+            objCommon.DisplayMessage(this.Page, "No Record Found", this.Page);
         }
     }
 

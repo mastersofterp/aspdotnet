@@ -52,9 +52,13 @@ namespace BusinessLogicLayer.BusinessLogic
                 }
             }
         }
+
         //Added by Nikhil L. on 02/08/2023
+
         #region Send Dynamically
-        public int SendEmail_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails, DataSet ds, string attachmentfilename, byte[] bytefile,string type)
+
+        #region Email
+        public int SendEmail_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails, DataSet ds, string attachmentfilename, byte[] bytefile, string type)
         {
             try
             {
@@ -102,9 +106,13 @@ namespace BusinessLogicLayer.BusinessLogic
                         }
                         else if (providerName.ToUpper() == "OUTLOOK" && providerName != "")
                         {
+                            if (attachmentfilename != "")
+                            {
+                                status = OutLook(message, emailId, subject, ccMails, bccMails, attachmentfilename, bytefile, type, dr);
+                            }
                             if (ccMails != "" || bccMails != "")
                             {
-                                status = OutLook(message, emailId, subject, ccMails,bccMails,dr);
+                                status = OutLook(message, emailId, subject, ccMails, bccMails, dr);
                             }
                             else
                             {
@@ -119,7 +127,7 @@ namespace BusinessLogicLayer.BusinessLogic
                             }
                             else if (ccMails != "" || bccMails != "")
                             {
-                                status = Amazon(emailId, message, subject, ccMails, bccMails, dr); 
+                                status = Amazon(emailId, message, subject, ccMails, bccMails, dr);
                             }
                             else
                             {
@@ -185,7 +193,7 @@ namespace BusinessLogicLayer.BusinessLogic
                         {
                             //if (ccMails != "" || bccMails != "")
                             //{
-                                status = OutLook(message, emailId, subject, ccMails, bccMails, dr);
+                            status = OutLook(message, emailId, subject, ccMails, bccMails, dr);
                             //}
                             //else
                             //{
@@ -200,7 +208,7 @@ namespace BusinessLogicLayer.BusinessLogic
                             //}
                             //else if (ccMails != "" || bccMails != "")
                             //{
-                                status = Amazon(emailId, message, subject, ccMails, bccMails, dr);
+                            status = Amazon(emailId, message, subject, ccMails, bccMails, dr);
                             //}
                             //else
                             //{
@@ -259,7 +267,7 @@ namespace BusinessLogicLayer.BusinessLogic
                             //}
                             //else
                             //{
-                                ret = SendGrid(message, emailId, subject, dr);
+                            ret = SendGrid(message, emailId, subject, dr);
                             //}
                         }
                         else if (providerName.ToUpper() == "OUTLOOK" && providerName != "")
@@ -270,7 +278,7 @@ namespace BusinessLogicLayer.BusinessLogic
                             //}
                             //else
                             //{
-                                status = OutLook(message, emailId, subject, dr);
+                            status = OutLook(message, emailId, subject, dr);
                             //}
                         }
                         else if (providerName.ToUpper() == "AMAZON" && providerName != "")
@@ -285,7 +293,7 @@ namespace BusinessLogicLayer.BusinessLogic
                             //}
                             //else
                             //{
-                                status = Amazon(emailId, message, subject, dr);
+                            status = Amazon(emailId, message, subject, dr);
                             //}
                         }
                     }
@@ -339,8 +347,8 @@ namespace BusinessLogicLayer.BusinessLogic
             try
             {
                 Common objCommon = new Common();
-                string codeStandard = dsCred["CODE_STANDARD"].ToString();                
-                var apiKey=dsCred["CKEY_USERID"].ToString();
+                string codeStandard = dsCred["CODE_STANDARD"].ToString();
+                var apiKey = dsCred["CKEY_USERID"].ToString();
                 var client = new SendGridClient(apiKey);
                 var from = new SendGrid.Helpers.Mail.EmailAddress(dsCred["EMAILID"].ToString(),
                codeStandard.ToString());
@@ -354,7 +362,7 @@ namespace BusinessLogicLayer.BusinessLogic
                 }
                 var msg = new SendGrid.Helpers.Mail.SendGridMessage()
                 {
-                    From = new EmailAddress(dsCred["EMAILID"].ToString(),codeStandard.ToString()),
+                    From = new EmailAddress(dsCred["EMAILID"].ToString(), codeStandard.ToString()),
                     Subject = sub,
                     HtmlContent = Message
                 };
@@ -437,7 +445,7 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-        static async Task<int> SendGrid(string Message, string toEmailId, string sub, string ccemails, string bccemails,DataRow dsCred)
+        static async Task<int> SendGrid(string Message, string toEmailId, string sub, string ccemails, string bccemails, DataRow dsCred)
         {
             int ret = 0;
 
@@ -445,8 +453,8 @@ namespace BusinessLogicLayer.BusinessLogic
             {
 
                 Common objCommon = new Common();
-                 if (dsCred != null)
-                 {
+                if (dsCred != null)
+                {
                     string codeStandard = dsCred["CODE_STANDARD"].ToString();
 
                     var apiKey = dsCred["CKEY_USERID"].ToString();
@@ -516,7 +524,6 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-        
         private int GSuit(string useremail, string message, string subject, DataRow dsCred)
         {
             int ret = 0;
@@ -562,7 +569,7 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-        private int GSuit(string useremail, string message, string subject, string ccemails, string bccemails,DataRow dsCred)
+        private int GSuit(string useremail, string message, string subject, string ccemails, string bccemails, DataRow dsCred)
         {
             int ret = 0;
             try
@@ -646,13 +653,14 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-        private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails,DataRow dsCred)
+
+        private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails, DataRow dsCred)
         {
 
             int ret = 0;
             try
             {
-                  SmtpMail oMail = new SmtpMail("TryIt");
+                SmtpMail oMail = new SmtpMail("TryIt");
                 oMail.From = dsCred["EMAILID"].ToString().ToString();
 
                 oMail.To = toEmailId;
@@ -729,7 +737,7 @@ namespace BusinessLogicLayer.BusinessLogic
         }
         //added by Swapnil Amazon method with Attachment on 21-07-2023
         // modified by Nikhil L. on Amazon method with Attachment on 04/09/2023
-        private int Amazon(string useremail, string message, string subject, string ccemails, string bccemails, DataSet ds, string attachmentfilename, byte[] bytefile, string type,DataRow dsCred)
+        private int Amazon(string useremail, string message, string subject, string ccemails, string bccemails, DataSet ds, string attachmentfilename, byte[] bytefile, string type, DataRow dsCred)
         {
             int ret = 0;
             try
@@ -804,7 +812,7 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-        private int Amazon(string useremail, string message, string subject, string ccemails, string bccemails,DataRow dsCred)
+        private int Amazon(string useremail, string message, string subject, string ccemails, string bccemails, DataRow dsCred)
         {
 
             int ret = 0;
@@ -860,6 +868,70 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
+
+        #region  Outlook Email With Attachment
+        private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails, string attachmentfilename, byte[] bytefile, string type, DataRow dsCred)
+        {
+            int ret = 0;
+            try
+            {
+                DataSet dsconfig = null;
+                Common objCommon = new Common();
+                dsconfig = objCommon.FillDropDown("REFF", "EMAILSVCID,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
+                string ReffEmail = Convert.ToString(dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString());
+                string ReffPassword = Convert.ToString(dsconfig.Tables[0].Rows[0]["EMAILSVCPWD"].ToString());
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                MailMessage msg = new MailMessage();
+                msg.To.Add(new System.Net.Mail.MailAddress(toEmailId));
+                //Add CC and BCC Email Id 
+                if (ccemails != "")
+                {
+                    msg.CC.Add(ccemails);
+                    //oMail.Cc = ccemails;
+                }
+                if (bccemails != "")
+                {
+                    msg.Bcc.Add(bccemails);
+                }
+                msg.From = new System.Net.Mail.MailAddress(ReffEmail);
+                msg.Subject = sub;
+                StringBuilder sb = new StringBuilder();
+                msg.Body = Message;
+                System.Net.Mail.Attachment attachment;
+                attachment = new System.Net.Mail.Attachment(new MemoryStream(bytefile), "" + attachmentfilename + ".pdf");
+                msg.Attachments.Add(attachment);
+                msg.BodyEncoding = Encoding.UTF8;
+                msg.IsBodyHtml = true;
+                System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+                client.UseDefaultCredentials = false;
+                client.Credentials = new System.Net.NetworkCredential(ReffEmail, ReffPassword);
+                client.Port = 587; // You can use Port 25 if 587 is blocked (mine is)
+                client.Host = "smtp-mail.outlook.com"; // "smtp.live.com";
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.EnableSsl = true;
+                try
+                {
+                    client.Send(msg);
+                    //lblText.Text = "Message Sent Succesfully";
+                }
+                catch (Exception ex)
+                {
+
+                }
+                ret = 1;
+            }
+            catch (Exception ep)
+            {
+                Console.WriteLine("failed to send email with the following error:");
+                Console.WriteLine(ep.Message);
+                ret = 0;
+            }
+            return ret;
+        }
+        #endregion
+        #endregion
+
+        #region SMS
         public DataSet SendSMS_New(string pageNo, string mobileNo, string templateName, string templateId, string template)
         {
             try
@@ -887,6 +959,10 @@ namespace BusinessLogicLayer.BusinessLogic
                             {
                                 SendTextLocal(mobileNo, templateId, template, dr);
                             }
+                            if (providerName.ToString().Equals("SMSJUST"))
+                            {
+                                SendSMSJUST(mobileNo, templateId, template, dr);
+                            }
                         }
                     }
                 }
@@ -897,6 +973,53 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
+
+        //added by jay t. SMSJUST method with Attachment on 14-02-2024
+        private void SendSMSJUST(string mobileNo, string templateId, string template, DataRow drCred)
+        {
+            try
+            {
+                string result = "";
+                string Message = string.Empty;
+                if (drCred != null)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + drCred["SMSPROVIDER"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "username=" + drCred["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + drCred["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + template;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + mobileNo;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    result = reader.ReadToEnd();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         private void SendSMSNMMS(string mobileNo, string templateId, string template, DataRow drCred)
         {
             try
@@ -942,6 +1065,7 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
+
         private void SendTextLocal(string mobileNo, string templateId, string template, DataRow drCred)
         {
             ServicePointManager.Expect100Continue = true;
@@ -981,7 +1105,9 @@ namespace BusinessLogicLayer.BusinessLogic
                 sr.Close();
             }
         }
+        #endregion
 
+        #region WhatsApp
         public void SendWhatsApp_New(string mobileNo, string pageNo, string bodys, DataSet dsCheck)
         {
 
@@ -996,12 +1122,11 @@ namespace BusinessLogicLayer.BusinessLogic
                         if (providerName.Equals("Aisensy"))
                         {
                             SendAisensy_New(mobileNo, dsCheck, bodys);
-                            
                         }
                         if (providerName.Equals("Web WPSSMS"))
-                            {
+                        {
                             sendwpsms_New(mobileNo, dsCheck, bodys);
-                            }
+                        }
                     }
                 }
             }
@@ -1010,6 +1135,7 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
+
         private void SendAisensy_New(string mobileNo, DataSet drCred, string bodys)
         {
             try
@@ -1047,20 +1173,20 @@ namespace BusinessLogicLayer.BusinessLogic
         }
 
         private void sendwpsms_New(string mobileNo, DataSet drCred, string bodys)
-            {
+        {
             try
-                {
+            {
                 int Mobile_le = mobileNo.Length;
                 if (Mobile_le == 10)
-                    {
+                {
                     mobileNo = "91" + mobileNo.ToString();
-                    }
+                }
                 string API_URL = drCred.Tables[0].Rows[0]["WHATSAAP_API_URL"].ToString();
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(API_URL.ToString());
                 httpWebRequest.Method = "POST";                 //httpWebRequest.Headers.Add("aftership-api-key:********fdbfd93980b8c5***");
                 httpWebRequest.ContentType = "application/json";
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-                    {
+                {
                     var body = bodys;
                     //var bodys = @"{""apiKey"":" + '"' + API_KEY.ToString() + '"' + "," + "\n" +
                     //   @"""campaignName"":""erpattendance_rcpit""," + "\n" +
@@ -1072,16 +1198,20 @@ namespace BusinessLogicLayer.BusinessLogic
                     streamWriter.Close();
                     var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                        {
+                    {
                         var result = streamReader.ReadToEnd();
-                        }
                     }
                 }
-            catch (Exception)
-                {
-                throw;
-                }
             }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
+
+        #endregion
+
+
     }
 }

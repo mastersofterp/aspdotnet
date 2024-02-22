@@ -81,6 +81,7 @@
                                                             </th>
                                                             <th>Exam Name </th>
                                                             <th>SchemeMappingName</th>
+                                                            <th>Course Code</th>
                                                             <th>Total Marks </th>
                                                             <th>Created By</th>
                                                             <th>Status </th>
@@ -101,6 +102,9 @@
                                                 
                                                 <td>
                                                  <%# Eval("SchemeMappingName")%>
+                                                </td>
+                                                 <td>
+                                                 <%# Eval("CCODE")%>
                                                 </td>
                                                 <td><%# Eval("TotalMaxMarks")%></td>
                                                 <td><%# Eval("CreatedBy")%></td>

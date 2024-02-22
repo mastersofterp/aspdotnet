@@ -638,15 +638,15 @@ public partial class Academic_DCR_ReportUI_Crescent : System.Web.UI.Page
                     param.Append(",Year=" + ((ddlYear.SelectedIndex > 0) ? ddlYear.SelectedItem.Text : "0"));
                     param.Append(",Semester=" + ((ddlSemester.SelectedIndex > 0) ? ddlSemester.SelectedItem.Text : "0"));
                     param.Append(",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]));
-                }
-                if (Convert.ToInt32(Session["OrgId"]).ToString() == "2") // crescent
-                {
+                //}
+                //if (Convert.ToInt32(Session["OrgId"]).ToString() == "2") // crescent
+                //{
                     param.Append(",@P_PayType=" + ((ddlPaytype.SelectedIndex > 0) ? ddlPaytype.SelectedValue : ""));
-                    param.Append(",@P_YEARNO=" + dcrRpt.YearNos.ToString());
-                }
+                    param.Append(",@P_YEARNOS=" + dcrRpt.YearNos.ToString());
+                //}
 
-                else
-                {
+                //else
+                //{
                     param.Append(",@P_YEARNO=" + dcrRpt.YearNo.ToString());
                 }
             }
@@ -1196,7 +1196,7 @@ public partial class Academic_DCR_ReportUI_Crescent : System.Web.UI.Page
             {
                 Gr.DataSource = ds;
                 Gr.DataBind();
-                string Attachment = "Attachment; FileName=OutstandingReport.xls";
+                string Attachment = "Attachment; FileName=OutstandingReport.xlsx";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 StringWriter sw = new StringWriter();
