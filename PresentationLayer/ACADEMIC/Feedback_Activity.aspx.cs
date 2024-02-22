@@ -166,6 +166,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
         ViewState["sessionactivityno"] = "0";
         ViewState["Edit"] = null;
         populatedropdown();
+        btnSubmit.Text = "Submit";
         ddlBranch.Items.Clear();
         txtStartTime.Text = string.Empty;
         txtEndTime.Text = string.Empty;
@@ -320,6 +321,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
             int recordId = int.Parse(btnEditRecord.CommandArgument);
             SessionActivityController sa_controller = new SessionActivityController();
             DataSet ds = sa_controller.GetDefinedFeedbackActivities(recordId);
+            btnSubmit.Text = "Update";
             ViewState["Edit"] = ds;
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
