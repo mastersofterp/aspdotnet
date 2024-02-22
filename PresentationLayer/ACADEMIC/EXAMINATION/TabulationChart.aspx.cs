@@ -4123,7 +4123,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             {
                 ShowTR("ResultSheet", "rptTabulationPG_Atlas.rpt", 2);
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 8)
+            else if (Convert.ToInt32(Session["OrgId"]) == 8) //Added by Tejas Thakre
             {
                 ShowTR("ResultSheet", "rptTabulationPG_MIT.rpt", 2);
             }
@@ -6015,7 +6015,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         }
     }
 
-    // added by shubham on 04-01-2024
+    // added  by shubham on 04-01-2024
     protected void btnCIAExcel_Click(object sender, EventArgs e)
     {
         try
