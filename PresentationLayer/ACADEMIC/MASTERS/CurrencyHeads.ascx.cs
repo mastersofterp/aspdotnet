@@ -290,6 +290,14 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
                 lvFeesHead.DataBind();
                 return;
             }
+
+            string CountFeeHead = objCommon.LookUp("ACD_FEE_TITLE", "COUNT(FEE_LONGNAME)", "RECIEPT_CODE= '" + ddlRecType.SelectedValue + "' AND ( FEE_LONGNAME IS  NULL OR FEE_LONGNAME ='')");
+
+            if (CountFeeHead == "40")
+            {
+                objCommon.DisplayMessage(this.Page,"Please Define Fee Heads.", this.Page);
+                return;
+            }
             this.btnReport.Enabled = true;
             if (ddlPayType.SelectedIndex > 0)
             {
@@ -297,7 +305,7 @@ public partial class ACADEMIC_MASTERS_CurrencyHeads : System.Web.UI.UserControl
                 FeesHeadController ob = new FeesHeadController();
                 DataSet ds = ob.GetCurrencyHeads(ddlRecType.SelectedValue, Convert.ToInt32(ddlPayType.SelectedValue));
                 //DataSet ds = objCommon.FillDropDown("ACD_FEE_TITLE A, ACD_CURRENCY C", "A.FEE_TITLE_NO,A.FEE_HEAD", "C.CUR_SHORT", string.Empty, "A.SRNO");
-                if (ds != null && ds.Tables != null && ds.Tables[0].Rows.Count <= 0)
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["CUR_NO"].ToString();
                 }
