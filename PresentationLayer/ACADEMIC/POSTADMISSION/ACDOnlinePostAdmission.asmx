@@ -534,6 +534,7 @@ public class ACDOnlinePostAdmission  : System.Web.Services.WebService {
         
         
         System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
         DataSet ds = null;
 
 

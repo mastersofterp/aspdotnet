@@ -75,7 +75,7 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
             }
             return ds;
         }
-        public int InsertReportParamData(string ReportName, string ProcName, string DisplayControl, string FormTab, string xml,int UserNo, int isAvtive)
+        public int InsertReportParamData(string ReportName, string ProcName, string DisplayControl, string FormTab, string xml, int UserNo, int isAvtive, int displayStatus)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
 
@@ -84,7 +84,7 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
                 //Add
-                objParams = new SqlParameter[8];
+                objParams = new SqlParameter[9];
                 objParams[0] = new SqlParameter("@P_REPORTNAME", ReportName);
                 objParams[1] = new SqlParameter("@P_PROCEDURENAME", ProcName);
                 objParams[2] = new SqlParameter("@P_DISPLAYCONTROLS", DisplayControl);
@@ -92,8 +92,9 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
                 objParams[4] = new SqlParameter("@P_XMLDATA", xml);
                 objParams[5] = new SqlParameter("@P_CREATEDBY", UserNo);
                 objParams[6] = new SqlParameter("@P_ISACTIVE", isAvtive);
-                objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[7].Direction = ParameterDirection.Output;
+                objParams[7] = new SqlParameter("@P_ISDISPLAY", displayStatus);   // Added By Shrikant W. on 11022024
+                objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[8].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_SP_PARAMS_REPORT_GENERATION_CONFIG", objParams, true);
                 return Convert.ToInt32(ret);
@@ -109,7 +110,8 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
             }
             //return retStatus;
         }
-        public int UpdateReportParamData(string ReportName, string ProcName, string DisplayControl, string FormTab, string xml, int UserNo, int AdhocId, int isAvtive)
+
+        public int UpdateReportParamData(string ReportName, string ProcName, string DisplayControl, string FormTab, string xml, int UserNo, int AdhocId, int isAvtive, int displayStatus)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
 
@@ -118,7 +120,7 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
                 //Add
-                objParams = new SqlParameter[9];
+                objParams = new SqlParameter[10];
                 objParams[0] = new SqlParameter("@P_REPORTNAME", ReportName);
                 objParams[1] = new SqlParameter("@P_PROCEDURENAME", ProcName);
                 objParams[2] = new SqlParameter("@P_DISPLAYCONTROLS", DisplayControl);
@@ -127,8 +129,9 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
                 objParams[5] = new SqlParameter("@P_MODIFIEDBY", UserNo);
                 objParams[6] = new SqlParameter("@P_ADHOCID", AdhocId);
                 objParams[7] = new SqlParameter("@P_ISACTIVE", isAvtive);
-                objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[8].Direction = ParameterDirection.Output;
+                objParams[8] = new SqlParameter("@P_ISDISPLAY", displayStatus);  // // Added By Shrikant W. on 11022024
+                objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[9].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_UPD_SP_PARAMS_REPORT_GENERATION_CONFIG", objParams, true);
                 return Convert.ToInt32(ret);
@@ -144,5 +147,6 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
             }
             //return retStatus;
         }
+   
     }
 }
