@@ -302,20 +302,7 @@ namespace IITMS
                 #endregion
 
 
-                /// <summary>
-                /// Added By Rishabh on 16012024
-                /// </summary>
-                public class FacultyDiary
-                {
-                    public int CollegeId { get; set; }
-                    public int Schemeno { get; set; }
-                    public int Sessionno { get; set; }
-                    public int Semesterno { get; set; }
-                    public string Operator { get; set; }
-                    public int Percentage { get; set; }
-                    public string FromDate { get; set; }
-                    public string ToDate { get; set; }
-                }
+            
             }
         }
     }

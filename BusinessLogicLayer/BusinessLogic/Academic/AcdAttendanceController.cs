@@ -7779,5 +7779,26 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return retStatus;
         }
+
+        public DataSet Get_FacultyDiary_Data(int ua_no)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[1];
+                objParams[0] = new SqlParameter("@P_UANO", ua_no);
+
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_DATA_FACULTY_DIARY", objParams);
+            }
+            catch (Exception ex)
+            {
+
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.Get_FacultyDiary_Data->" + ex.ToString());
+            }
+            return ds;
+        }
+
     }
 }

@@ -330,21 +330,22 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = false;
 
-            if (Convert.ToInt32(Session["OrgId"]) == 18) // added by Shubham for HITS ExceCIA report
-            {
-                btnCIAExcel.Visible = true;
+                if (Convert.ToInt32(Session["OrgId"]) == 18) // added by Shubham for HITS ExceCIA report
+                {
+                    btnCIAExcel.Visible = true;
+                }
+                if (Convert.ToInt32(Session["OrgId"]) == 19) // added by Shubham for PCEN Gazette report
+                {
+                    BtnGazette.Visible = true;
+                }
+                if (Convert.ToInt32(Session["OrgId"]) == 4)
+                {
+                    btnCertificate.Visible = true; // Added for degree certificate by shubham
+                }
             }
-            if (Convert.ToInt32(Session["OrgId"]) == 19) // added by Shubham for PCEN Gazette report
-            {
-                BtnGazette.Visible = true;
-            }
-            if (Convert.ToInt32(Session["OrgId"]) == 4)
-            {
-                btnCertificate.Visible = true; // Added for degree certificate by shubham
-            }
-        }
 
-        //ddlYear.CssClass = "mytest";
+            //ddlYear.CssClass = "mytest";
+        }
     }
 
     #endregion

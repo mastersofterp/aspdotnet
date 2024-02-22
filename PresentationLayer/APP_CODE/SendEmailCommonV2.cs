@@ -106,6 +106,10 @@ namespace BusinessLogicLayer.BusinessLogic
                         }
                         else if (providerName.ToUpper() == "OUTLOOK" && providerName != "")
                         {
+                            if (attachmentfilename != "")
+                            {
+                                status = OutLook(message, emailId, subject, ccMails, bccMails, attachmentfilename, bytefile, type, dr);
+                            }
                             if (ccMails != "" || bccMails != "")
                             {
                                 status = OutLook(message, emailId, subject, ccMails, bccMails, dr);
@@ -520,7 +524,6 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-        
         private int GSuit(string useremail, string message, string subject, DataRow dsCred)
         {
             int ret = 0;
@@ -1102,7 +1105,7 @@ namespace BusinessLogicLayer.BusinessLogic
                 sr.Close();
             }
         }
-        #endregion 
+        #endregion
 
         #region WhatsApp
         public void SendWhatsApp_New(string mobileNo, string pageNo, string bodys, DataSet dsCheck)
@@ -1204,6 +1207,11 @@ namespace BusinessLogicLayer.BusinessLogic
             {
                 throw;
             }
+        }
         #endregion
+
+        #endregion
+
+
     }
 }

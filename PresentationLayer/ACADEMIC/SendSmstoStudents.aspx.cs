@@ -6,7 +6,6 @@
 // Modified BY   : Jay Takalkhede
 // Modified Date : 25-08-2023
 // Version :- 1) RFC.Enhancement.Major.1 (25-08-2023 [Maher])
-            //2) RFC.Enhancement.Major.2 Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
 //===============================================//
 
 
@@ -148,7 +147,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
     public void HiddenItem()
     {
 
-        if (Convert.ToInt32(Session["OrgId"]) == 1)
+        if (Convert.ToInt32(Session["OrgId"]) == 1 )
         {
             foreach (ListItem item in this.rdbFormat.Items)
             {
@@ -176,9 +175,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
     public void HiddenItemForPm()
     {
-        //RFC.Enhancement.Major.1 (25-08-2023 [Maher]) Add Parents Teacher Meeting In Maher Client (Tktno. 47531) 
-        //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
-        if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 16 || Convert.ToInt32(Session["OrgId"]) == 21)
+        //RFC.Enhancement.Major.1 (25-08-2023 [Maher]) Add Parents Teacher Meeting In Maher Client (Tktno. 47531)
+        if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 16)
         {
             foreach (ListItem item in this.rdbFormat.Items)
             {
@@ -482,44 +480,44 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemParents();
                         }
                     }
-                    #endregion Bind Listview- Student (Installment Wise dues not paid )
+                 #endregion Bind Listview- Student (Installment Wise dues not paid )
 
                     #region Bind Listview- Parents  (Installment Wise dues not paid )
 
-                    else if (rdbEmplyeStud.SelectedValue == "3")
-                    {
-                        ds = objAttC.GetInstallmentNotpaidStusent(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToDateTime(txtStartDate.Text), Convert.ToDateTime(txtEndDate.Text));
+            else if (rdbEmplyeStud.SelectedValue == "3")
+            {
+                ds = objAttC.GetInstallmentNotpaidStusent(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToDateTime(txtStartDate.Text), Convert.ToDateTime(txtEndDate.Text));
 
 
-                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
-                        {
-                            pnlStudentInstallment.Visible = true;
-                            lvPaidStudentInstallment.DataSource = ds.Tables[1];
-                            lvPaidStudentInstallment.DataBind();
-                            txtsub.Text = "";
-                            txtMessage.Text = "";
-                            HiddenItemSMS();
-                            HiddenItemForPm();
-                            HiddenItem();
-                            HiddenItemParents();
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
-                            pnlStudentInstallment.Visible = false;
-                            lvPaidStudentInstallment.DataSource = null;
-                            lvPaidStudentInstallment.DataBind();
-                            txtsub.Text = "";
-                            txtMessage.Text = "";
-                            HiddenItemSMS();
-                            HiddenItemForPm();
-                            HiddenItem();
-                            HiddenItemParents();
-                        }
-                    }
-                    #endregion Bind Listview- Parents  (Installment Wise dues not paid )
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+                {
+                    pnlStudentInstallment.Visible = true;
+                    lvPaidStudentInstallment.DataSource = ds.Tables[1];
+                    lvPaidStudentInstallment.DataBind();
+                    txtsub.Text = "";
+                    txtMessage.Text = "";
+                    HiddenItemSMS();
+                    HiddenItemForPm();
+                    HiddenItem();
+                    HiddenItemParents();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                    pnlStudentInstallment.Visible = false;
+                    lvPaidStudentInstallment.DataSource = null;
+                    lvPaidStudentInstallment.DataBind();
+                    txtsub.Text = "";
+                    txtMessage.Text = "";
+                    HiddenItemSMS();
+                    HiddenItemForPm();
+                    HiddenItem();
+                    HiddenItemParents();
                 }
             }
+            #endregion Bind Listview- Parents  (Installment Wise dues not paid )
+            }
+           }
         }
         #endregion Bind Listview- Student , Parents  (Installment Wise dues not paid )
 
@@ -712,7 +710,6 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
     protected void btnSndMessg_Click(object sender, EventArgs e)
     {
-        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
         string folderPath = Server.MapPath("~/TempDocument/");
         //Check whether Directory (Folder) exists.
         if (!Directory.Exists(folderPath))
@@ -932,7 +929,6 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         try
                         {
                             CheckBox chek3 = items.FindControl("chkSelect3") as CheckBox;
-                            int idno = Convert.ToInt32(chek3.ToolTip.ToString());
                             Label lblEmailid3 = items.FindControl("lblEmailid3") as Label;
                             Label lblPaid = items.FindControl("lblPaid") as Label;
                             Label lblNotpaid = items.FindControl("lblNotpaid") as Label;
@@ -953,19 +949,14 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
 
                                     string path = Server.MapPath("~/TempDocument/");
-                                    //string msg = "<h1>Greetings !!</h1>";
-                                    string msg = "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
+                                    string msg = "<h1>Greetings !!</h1>";
+                                    msg += "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
                                     msg += "<br />";
                                     msg += "<br />";
                                     msg += "<b>" + message + "</b>" + "<br/><br/>";
-                                    ////msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
-                                    //msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
-                                    //msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
-                                    //Email Template has been change as per ticket 52890 and discuss with Shubham M. 
-                                    // Changes done by jay takalkhede on dated 03012023
-                                    msg += "<b>Fees to be paid:" + Total + "</b>" + "<br/>";//b
-                                    msg += "<b>Paid fees:" + PAID + "</b>" + "<br/>";//b
-                                    msg += "<b>Outstanding fees:" + Outstanding + "</b>" + "<br/>";//b
+                                    msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
+                                    msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
+                                    msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
                                     msg += "This is an auto generated response to your email. Please do not reply to this mail.";
                                     msg += "<br /><br /><br /><br />Regards,<br />";   //bb
                                     msg += "" + CollegeName + "<br /><br />";   //bb
@@ -1338,19 +1329,14 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
 
                                     string path = Server.MapPath("~/TempDocument/");
-                                    //string msg = "<h1>Greetings !!</h1>";
-                                    string msg = "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
+                                    string msg = "<h1>Greetings !!</h1>";
+                                    msg += "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
                                     msg += "<br />";
                                     msg += "<br />";
                                     msg += "<b>" + message + "</b>" + "<br/><br/>";
-                                    ////msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
-                                    //msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
-                                    //msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
-                                    //Email Template has been change as per ticket 52890 and discuss with Shubham M. 
-                                    // Changes done by jay takalkhede on dated 03012023
-                                    msg += "<b>Fees to be paid:" + Total + "</b>" + "<br/>";//b
-                                    msg += "<b>Paid fees:" + PAID + "</b>" + "<br/>";//b
-                                    msg += "<b>Outstanding fees:" + Outstanding + "</b>" + "<br/>";//b
+                                    msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
+                                    msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
+                                    msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
                                     msg += "This is an auto generated response to your email. Please do not reply to this mail.";
                                     msg += "<br /><br /><br /><br />Regards,<br />";   //bb
                                     msg += "" + CollegeName + "<br /><br />";   //bb
@@ -1980,95 +1966,44 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
     public void SendSMS(string Mobile, string text, string TemplateID)
     {
+        string status = "";
+        int ret = 0;
         try
         {
-            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
-            if (Convert.ToInt32(Session["OrgId"]) == 21)
+            string Message = string.Empty;
+            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                string status = "";
-                int ret = 0;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
+                request.ContentType = "text/xml; charset=utf-8";
+                request.Method = "POST";
 
-                string Message = string.Empty;
-                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
-                    request.ContentType = "text/xml; charset=utf-8";
-                    request.Method = "POST";
+                string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                postDate += "&";
+                postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                postDate += "&";
+                postDate += "PhNo=91" + Mobile;
+                postDate += "&";
+                postDate += "Text=" + text;
+                postDate += "&";
+                postDate += "TemplateID=" + TemplateID;
 
-                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                    postDate += "&";
-                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                    postDate += "&";
-                    postDate += "senderid=GPGNGP";
-                    postDate += "&";
-                    postDate += "message=" + text;
-                    postDate += "&";
-                    postDate += "dest_mobileno=91" + Mobile;
-                    postDate += "&";
-                    postDate += "msgtype=TXT";
-                    postDate += "&";
-                    postDate += "response=Y";
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                request.ContentType = "application/x-www-form-urlencoded";
 
-                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                    request.ContentType = "application/x-www-form-urlencoded";
-
-                    request.ContentLength = byteArray.Length;
-                    Stream dataStream = request.GetRequestStream();
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    dataStream.Close();
-                    WebResponse _webresponse = request.GetResponse();
-                    dataStream = _webresponse.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    status = reader.ReadToEnd();
-                }
-                else
-                {
-                    status = "0";
-
-                }
+                request.ContentLength = byteArray.Length;
+                Stream dataStream = request.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+                WebResponse _webresponse = request.GetResponse();
+                dataStream = _webresponse.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                status = reader.ReadToEnd();
             }
             else
             {
+                status = "0";
 
-                string status = "";
-                int ret = 0;
-
-                string Message = string.Empty;
-                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
-                    request.ContentType = "text/xml; charset=utf-8";
-                    request.Method = "POST";
-
-                    string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                    postDate += "&";
-                    postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                    postDate += "&";
-                    postDate += "PhNo=91" + Mobile;
-                    postDate += "&";
-                    postDate += "Text=" + text;
-                    postDate += "&";
-                    postDate += "TemplateID=" + TemplateID;
-
-                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                    request.ContentType = "application/x-www-form-urlencoded";
-
-                    request.ContentLength = byteArray.Length;
-                    Stream dataStream = request.GetRequestStream();
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    dataStream.Close();
-                    WebResponse _webresponse = request.GetResponse();
-                    dataStream = _webresponse.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    status = reader.ReadToEnd();
-                }
-                else
-                {
-                    status = "0";
-
-                }
             }
 
         }
@@ -2086,96 +2021,49 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         int ret = 0;
         try
         {
-            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
-            if (Convert.ToInt32(Session["OrgId"]) == 21)
+            string Message = string.Empty;
+            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+            if (ds.Tables[0].Rows.Count > 0)
             {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
+                request.ContentType = "text/xml; charset=utf-8";
+                request.Method = "POST";
 
-                string Message = string.Empty;
-                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-                if (ds.Tables[0].Rows.Count > 0)
+                string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                postDate += "&";
+                postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                postDate += "&";
+                postDate += "PhNo=91" + Mobile;
+                postDate += "&";
+                postDate += "Text=" + text;
+                postDate += "&";
+                postDate += "TemplateID=" + TemplateID;
+
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                request.ContentLength = byteArray.Length;
+                Stream dataStream = request.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+                WebResponse _webresponse = request.GetResponse();
+                dataStream = _webresponse.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                status = reader.ReadToEnd();
+                if (status == "")
                 {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
-                    request.ContentType = "text/xml; charset=utf-8";
-                    request.Method = "POST";
-
-                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                    postDate += "&";
-                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                    postDate += "&";
-                    postDate += "senderid=GPGNGP";
-                    postDate += "&";
-                    postDate += "message=" + text;
-                    postDate += "&";
-                    postDate += "dest_mobileno=91" + Mobile;
-                    postDate += "&";
-                    postDate += "msgtype=TXT";
-                    postDate += "&";
-                    postDate += "response=Y";
-
-                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                    request.ContentType = "application/x-www-form-urlencoded";
-
-                    request.ContentLength = byteArray.Length;
-                    Stream dataStream = request.GetRequestStream();
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    dataStream.Close();
-                    WebResponse _webresponse = request.GetResponse();
-                    dataStream = _webresponse.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    status = reader.ReadToEnd();
+                    ret = 0;
                 }
                 else
                 {
-                    status = "0";
-
+                    ret = 1;
                 }
+
             }
             else
             {
-                string Message = string.Empty;
-                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
-                    request.ContentType = "text/xml; charset=utf-8";
-                    request.Method = "POST";
+                ret = 0;
 
-                    string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                    postDate += "&";
-                    postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                    postDate += "&";
-                    postDate += "PhNo=91" + Mobile;
-                    postDate += "&";
-                    postDate += "Text=" + text;
-                    postDate += "&";
-                    postDate += "TemplateID=" + TemplateID;
-
-                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                    request.ContentType = "application/x-www-form-urlencoded";
-
-                    request.ContentLength = byteArray.Length;
-                    Stream dataStream = request.GetRequestStream();
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    dataStream.Close();
-                    WebResponse _webresponse = request.GetResponse();
-                    dataStream = _webresponse.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    status = reader.ReadToEnd();
-                    if (status == "")
-                    {
-                        ret = 0;
-                    }
-                    else
-                    {
-                        ret = 1;
-                    }
-
-                }
-                else
-                {
-                    ret = 0;
-
-                }
             }
 
         }
@@ -2192,79 +2080,30 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
     {
         try
         {
-            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
-            if (Convert.ToInt32(Session["OrgId"]) == 21)
+            string url = string.Empty;
+            string uid = string.Empty;
+            string pass = string.Empty;
+            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                string status = "";
-                int ret = 0;
-
-                string Message = string.Empty;
-                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
-                    request.ContentType = "text/xml; charset=utf-8";
-                    request.Method = "POST";
-
-                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                    postDate += "&";
-                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                    postDate += "&";
-                    postDate += "senderid=GPGNGP";
-                    postDate += "&";
-                    postDate += "message=" + message;
-                    postDate += "&";
-                    postDate += "dest_mobileno=91" + mobno;
-                    postDate += "&";
-                    postDate += "msgtype=TXT";
-                    postDate += "&";
-                    postDate += "response=Y";
-
-                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                    request.ContentType = "application/x-www-form-urlencoded";
-
-                    request.ContentLength = byteArray.Length;
-                    Stream dataStream = request.GetRequestStream();
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    dataStream.Close();
-                    WebResponse _webresponse = request.GetResponse();
-                    dataStream = _webresponse.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    status = reader.ReadToEnd();
-                }
-                else
-                {
-                    status = "0";
-
-                }
-            }
-            else
-            {
-                string url = string.Empty;
-                string uid = string.Empty;
-                string pass = string.Empty;
-                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
-                    //url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
-                    uid = ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                    pass = ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                    WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
-                    WebResponse response = request.GetResponse();
-                    System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
-                    string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
-                    //return urlText;  
-                    Session["result"] = 1;
+                url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
+                //url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
+                uid = ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                pass = ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
+                WebResponse response = request.GetResponse();
+                System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
+                string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
+                //return urlText;  
+                Session["result"] = 1;
 
 
-                    //WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
-                    //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    //System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
-                    //string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
-                    //return urlText;
-                    //Session["result"] = 1;
-                }
+                //WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
+                //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                //System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
+                //string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
+                //return urlText;
+                //Session["result"] = 1;
             }
         }
         catch (Exception)
@@ -3007,6 +2846,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 Label lblPercentage = item.FindControl("lblPercentage") as Label;
                 Label lblRegno = item.FindControl("lblRegno") as Label;
 
+
                 if (chk.Checked == true)
                 {
 
@@ -3028,7 +2868,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
                     smsMessage = "Student Attendance Session: " + SessionName + "\n" + "Enroll No: " + Sregno + "\n" + "Total Class-" + TClass + "\n" + "Total Attendance-" + TAttendance + "\n" + "Percentage-" + TPercentage + "\n" + "Regards\n" + "Sarala Birla University, Ranchi";
 
-                    //this.SendSMSAtdEmail(mobile, smsMessage);//For sending SMS
+                    // this.SendSMSAtdEmail(mobile, smsMessage);//For sending SMS
                     objCommon.DisplayMessage(updReport, "SMS sent Succesfully!", this.Page);
 
 
@@ -3154,47 +2994,44 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     string mobile = "91" + ToMobileNo;
                     if (ToMobileNo != string.Empty)
                     {
-                        string templatename = "Bulk Email Attendance Sending";
-                        DataSet ds = objUC.GetSMSTemplate(0, templatename);
-                        if (ds.Tables[0].Rows.Count > 0)
-                        {
-                            TEMPLATE = ds.Tables[0].Rows[0]["TEMPLATE"].ToString();
-                            TemplateID = ds.Tables[0].Rows[0]["TEM_ID"].ToString();
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                            string templatename = "Bulk Email Attendance Sending";
+                            DataSet ds = objUC.GetSMSTemplate(0, templatename);
+                            if (ds.Tables[0].Rows.Count > 0)
+                            {
+                                TEMPLATE = ds.Tables[0].Rows[0]["TEMPLATE"].ToString();
+                                TemplateID = ds.Tables[0].Rows[0]["TEM_ID"].ToString();
+                            }
+                            else
+                            {
+                                objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                                HiddenItemForPm();
+                                HiddenItem();
+                                HiddenItemSMS();
+                                HiddenItemSMSmark();
+                                return;
+                            }
+                            message = TEMPLATE;
+                            message = message.Replace("{#var#}", SessionName);
+                            message = message.Replace("{#var1#}", Sregno);
+                            message = message.Replace("{#var2#}", TClass);
+                            message = message.Replace("{#var3#}", TAttendance);
+                            message = message.Replace("{#var4#}", TPercentage);
+
+                            // Create a StringBuilder and append the template
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.Append(message);
+                            // Get the final message string
+                            template = stringBuilder.ToString();
+                        
+                    }
+                    if (ToMobileNo != string.Empty)
+                    {
+                            this.SendSMS(ToMobileNo, template, TemplateID);
+                            objCommon.DisplayUserMessage(this.updDetained, "SMS Successfully Send To Parent(s)", this.Page);
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemSMS();
                             HiddenItemSMSmark();
-                            return;
-                        }
-                        message = TEMPLATE;
-                        message = message.Replace("{#var#}", SessionName);
-                        message = message.Replace("{#var1#}", Sregno);
-                        message = message.Replace("{#var2#}", TClass);
-                        message = message.Replace("{#var3#}", TAttendance);
-                        message = message.Replace("{#var4#}", TPercentage);
-
-                        // Create a StringBuilder and append the template
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.Append(message);
-                        // Get the final message string
-                        template = stringBuilder.ToString();
-
-                    }
-                    if (ToMobileNo != string.Empty)
-                    {
-                        this.SendSMS(ToMobileNo, template, TemplateID);
-                        objCommon.DisplayUserMessage(this.updDetained, "SMS Successfully Send To Parent(s)", this.Page);
-                        HiddenItemForPm();
-                        HiddenItem();
-                        HiddenItemSMS();
-                        HiddenItemSMSmark();
-                        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
-                        //Added By Sakshi M on 20012024 to maintain log 
-                        CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Send Attendance (Parent)", ToMobileNo, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                     }
                     else
                     {
@@ -3745,7 +3582,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divAttStatus.Visible = false;
             pnlfirst.Visible = false;
             divFirstsms.Visible = false;
-            objCommon.DisplayMessage(this.updDetained, "No Absentees Found For Your Selection!", this.Page);
+            objCommon.DisplayMessage(this.updDetained, "Attendance Not Mark For Your Selection!", this.Page);
         }
 
         foreach (ListViewDataItem dataitem in lvfirstsms.Items)
@@ -3915,7 +3752,6 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         }
 
     }
-
 
     private void GetParentsMeeting()
     {
@@ -4542,8 +4378,6 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItem();
                         HiddenItemSMS();
                         HiddenItemSMSmark();
-
-
                     }
                     else
                     {
@@ -5647,6 +5481,26 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string email_type = string.Empty;
                                     string Link = string.Empty;
                                     int sendmail = 0;
+                                    //  DataSet ds = getModuleConfig();
+                                    //if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                    //{
+                                    //    email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
+                                    //    Link = ds.Tables[0].Rows[0]["LINK"].ToString();
+                                    //}
+
+                                    //if (email_type == "1" && email_type != "")
+                                    //{
+                                    //    status = sendEmail(message, useremail, subject);
+                                    //}
+                                    //else if (email_type == "2" && email_type != "")
+                                    //{
+                                    //    Task<int> task = Execute(message, useremail, subject);
+                                    //    status = task.Result;
+                                    //}
+                                    //if (email_type == "3" && email_type != "")
+                                    //{
+                                    //    status = OutLook_Email(message, useremail, subject);
+                                    //}
                                     status1 = objSendEmail.SendEmail(useremail, message, subject); //Calling Method
                                     if (status1 == 1)
                                     {
@@ -5782,9 +5636,6 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             HiddenItemForPm();
                                             GetStudListAttPer();
                                             TODAYATT();
-                                            //Added By Sakshi M on 20012024 to maintain log 
-                                            // string IPaddress1 = Session["ipAddress"].ToString();
-                                            CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Attendance Percentage (Subject Wise)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress, Convert.ToInt32(Session["OrgId"]));
                                             // return;
                                         }
                                         else

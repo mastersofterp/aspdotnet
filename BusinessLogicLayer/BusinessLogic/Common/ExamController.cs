@@ -4897,45 +4897,7 @@ namespace IITMS
                 }
 
 
-                //added by prafull on dt:23112023 
-                public int UpdateStudentByGrade(int Schemeno, int Sessionno, int Semester, int Courseno, string Ccode, string Idno, string ABgrade, string Igrade, string UFMgrade, string OldGrade, int UA_NO)
-                {
-                    int status = 0;
-                    try
-                    {
-                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
-
-                        SqlParameter[] objParams = new SqlParameter[12];
-
-                        objParams[0] = new SqlParameter("@P_SCHEMENO", Schemeno);
-                        objParams[1] = new SqlParameter("@P_SESSIONNO", Sessionno);
-                        objParams[2] = new SqlParameter("@P_SEMESTERNO", Semester);
-                        objParams[3] = new SqlParameter("@P_COURSENO", Courseno);
-                        objParams[4] = new SqlParameter("@P_CCODE", Ccode);
-                        objParams[5] = new SqlParameter("@P_IDNO", Idno);
-                        objParams[6] = new SqlParameter("@P_ABGrade", ABgrade);
-                        objParams[7] = new SqlParameter("@P_IGrade", Igrade);
-                        objParams[8] = new SqlParameter("@P_UFMGrade", UFMgrade);
-                        objParams[9] = new SqlParameter("@P_OLD_GRADE", OldGrade);
-                        objParams[10] = new SqlParameter("@P_UA_NO", UA_NO);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
-
-                        object obj = objHelp.ExecuteNonQuerySP("PKG_ACD_UPDENT_STUDENT_BY_GRADE", objParams, true);
-
-                        if (obj != null)
-                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
-                        else
-                            status = Convert.ToInt32(CustomStatus.Error);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetCourseExamRuleSubjectwise-> " + ex.ToString());
-                    }
-                    return status;
-                }
+           
 
                 public int AddExamDay(Exam objExam, int OrgID, int Modeexam)
                 {

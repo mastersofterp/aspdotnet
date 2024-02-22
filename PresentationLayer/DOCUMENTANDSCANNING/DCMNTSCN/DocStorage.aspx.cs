@@ -30,7 +30,6 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
     public string path = string.Empty;
 
     protected void Page_Load(object sender, EventArgs e)
-    
     {
         if (!Page.IsPostBack)
         {
@@ -128,10 +127,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             else
             {
                 objCommon.DisplayMessage("Please select a file to attach.", this);
-               // Clear();
+                // Clear();
                 return;
             }
-           
+
 
             if (lblBlobConnectiontring.Text == "")
             {
@@ -316,7 +315,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                         objCommon.DisplayMessage("Record Save Successfully.", this.Page);
 
                         ViewState["action"] = "add";
-                         BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
+                        BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
                         Clear();
 
                     }
@@ -372,6 +371,8 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         lvDocStorage.DataSource = string.Empty;
         lvDocStorage.DataBind();
         Clear();
+        lvDocStorage.DataSource = string.Empty;
+        lvDocStorage.DataBind();
     }
 
     protected void Clear()
@@ -403,7 +404,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
 
     public void ClearData()
     {
-             txtDate.Text = null;
+        txtDate.Text = null;
         txtdistrict.Text = null;
         txtdocnumber.Text = null;
         txtpropAddress.Text = null;
@@ -731,12 +732,13 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
     //        ClearData();
     //        return;
     //    }
-        
+
     //}
 
 
     protected void ddldoctype_SelectedIndexChanged(object sender, EventArgs e)
     {
+
         BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
         string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
         if (string.Equals(selectedDocumentTypeName, "Sale Deed", StringComparison.OrdinalIgnoreCase) ||
@@ -809,12 +811,15 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             divWest.Visible = false;
             divsouth.Visible = false;
             divnorth.Visible = false;
+            divArea.Visible = false;
             ClearData();
+
             return;
+
         }
         else
         {
-          //  divDoctypedatas.Visible = true;
+            //  divDoctypedatas.Visible = true;
             Divdate.Visible = true;
             divDocNo.Visible = true;
             divDistrict.Visible = true;
@@ -830,6 +835,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             divWest.Visible = false;
             divsouth.Visible = false;
             divnorth.Visible = false;
+            divArea.Visible = false;
             ClearData();
             return;
         }
@@ -915,7 +921,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                                 return;
                             }
 
-                             objDocType.FILEPTH = FileUpload1.FileName;
+                            objDocType.FILEPTH = FileUpload1.FileName;
 
 
                         }
@@ -924,7 +930,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                             HttpPostedFile file = FileUpload1.PostedFile;
                             FileUpload1.SaveAs(filePath);
 
-                              objDocType.FILEPTH =  file_path + "DOCUMENTANDSCANNING" + fileName;
+                            objDocType.FILEPTH = file_path + "DOCUMENTANDSCANNING" + fileName;
 
                         }
 
@@ -936,15 +942,100 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                     }
 
                     DataTable dt;
-
+                    int maxVal = 0;
                     if (Session["Attachments"] != null && ((DataTable)Session["Attachments"]) != null)
                     {
                         dt = ((DataTable)Session["Attachments"]);
                         DataRow dr = dt.NewRow();
+                        //    if (dt != null && dt.Rows.Count > 0)
+                        //    {
+                        //        //dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                        //        if (result == true)
+                        //        {
+                        //            dr["FILE_NAME"] = filename + ext;
+                        //        }
+                        //        else
+                        //        {
+                        //            dr["FILE_NAME"] = FileUpload1.FileName;
+                        //        }
 
+                        //        dr["FILE_PATH"] = objDocType.FILEPTH;
+
+                        //        dr["SIZE"] = (FileUpload1.PostedFile.ContentLength);
+                        //        if (dt != null)
+                        //        {
+                        //            //maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                        //        }
+                        //        dr["SR_NO"] = maxVal + 1;
+                        //        dt.Rows.Add(dr);
+                        //        Session["Attachments"] = dt;
+                        //        this.BindListView_Attachments(dt);
+
+                        //    }
+                        //    else
+                        //    {
+                        //        dt = this.GetAttachmentDataTable();
+                        //        dr = dt.NewRow();
+                        //        // dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                        //        if (dt != null)
+                        //        {
+                        //            maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["SR_NO"]));
+                        //        }
+                        //        if (result == true)
+                        //        {
+                        //            dr["FILE_NAME"] = filename + ext;
+                        //        }
+                        //        else
+                        //        {
+                        //            dr["FILE_NAME"] = FileUpload1.FileName;
+                        //        }
+                        //        dr["FILE_PATH"] = objDocType.FILEPTH;
+                        //        dr["SIZE"] = (FileUpload1.PostedFile.ContentLength);
+                        //        dt.Rows.Add(dr);
+                        //        if (dt != null)
+                        //        {
+                        //            //maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                        //        }
+                        //        dr["SR_NO"] = maxVal + 1;
+                        //        Session.Add("Attachments", dt);
+                        //        this.BindListView_Attachments(dt);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    dt = this.GetAttachmentDataTable();
+                        //    DataRow dr = dt.NewRow();
+                        //    //  dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                        //    if (dt != null)
+                        //    {
+                        //        maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["SR_NO"]));
+                        //    }
+                        //    if (result == true)
+                        //    {
+                        //        dr["FILE_NAME"] = filename + ext;
+                        //    }
+                        //    else
+                        //    {
+                        //        dr["FILE_NAME"] = FileUpload1.FileName;
+                        //    }
+                        //    dr["FILE_PATH"] = objDocType.FILEPTH;
+                        //    dr["SIZE"] = (FileUpload1.PostedFile.ContentLength);
+                        //    dt.Rows.Add(dr);
+                        //    if (dt != null)
+                        //    {
+                        //        //maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                        //    }
+                        //    dr["SR_NO"] = maxVal + 1;
+                        //    Session.Add("Attachments", dt);
+                        //    this.BindListView_Attachments(dt);
+                        //}
                         if (dt != null && dt.Rows.Count > 0)
                         {
-                            dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                            if (dt != null)
+                            {
+                                maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["SR_NO"]));
+                            }
+                            dr["SR_NO"] = maxVal + 1;
                             if (result == true)
                             {
                                 dr["FILE_NAME"] = filename + ext;
@@ -954,7 +1045,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                                 dr["FILE_NAME"] = FileUpload1.FileName;
                             }
 
-                            dr["FILE_PATH"] =   objDocType.FILEPTH ;
+                            dr["FILE_PATH"] = objDocType.FILEPTH;
                             dr["SIZE"] = (FileUpload1.PostedFile.ContentLength);
                             dt.Rows.Add(dr);
                             Session["Attachments"] = dt;
@@ -965,7 +1056,11 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                         {
                             dt = this.GetAttachmentDataTable();
                             dr = dt.NewRow();
-                            dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                            if (dt != null)
+                            {
+                                maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["SR_NO"]));
+                            }
+                            dr["SR_NO"] = maxVal + 1;
                             if (result == true)
                             {
                                 dr["FILE_NAME"] = filename + ext;
@@ -985,7 +1080,11 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                     {
                         dt = this.GetAttachmentDataTable();
                         DataRow dr = dt.NewRow();
-                        dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                        if (dt != null)
+                        {
+                            maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["SR_NO"]));
+                        }
+                        dr["SR_NO"] = maxVal + 1;
                         if (result == true)
                         {
                             dr["FILE_NAME"] = filename + ext;
@@ -1000,8 +1099,6 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                         Session.Add("Attachments", dt);
                         this.BindListView_Attachments(dt);
                     }
-                    
-                }
 
                 }
                 else
@@ -1036,6 +1133,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         dt.Columns.Add(new DataColumn("FILE_NAME", typeof(string)));
         dt.Columns.Add(new DataColumn("FILE_PATH", typeof(string)));
         dt.Columns.Add(new DataColumn("SIZE", typeof(int)));
+        dt.Columns.Add(new DataColumn("SR_NO", typeof(int)));
         return dt;
     }
 
@@ -1209,7 +1307,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         {
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr["ATTACH_ID"].ToString() == value)
+                if (dr["SR_NO"].ToString() == value)
                 {
                     dataRow = dr;
                     break;
@@ -1251,15 +1349,15 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             if (d.Tables[0].Rows.Count > 0)
             {
                 dt = this.GetAttachmentDataTable();
-                for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
+                for (int j = 0; j < d.Tables[0].Rows.Count; j++)
                 {
 
                     DataRow dr = dt.NewRow();
-                    dr["ATTACH_ID"] = ds.Tables[0].Rows[j]["ATTACH_ID"];
-
-                    dr["FILE_NAME"] = ds.Tables[0].Rows[j]["FILE_NAME"].ToString();
-                    dr["FILE_PATH"] = ds.Tables[0].Rows[j]["FILE_PATH"].ToString();
-                    dr["SIZE"] = ds.Tables[0].Rows[j]["SIZE"];
+                    // dr["ATTACH_ID"] = d.Tables[0].Rows[j]["ATTACH_ID"];
+                    dr["SR_NO"] = d.Tables[0].Rows[j]["SR_NO"];
+                    dr["FILE_NAME"] = d.Tables[0].Rows[j]["FILE_NAME"].ToString();
+                    dr["FILE_PATH"] = d.Tables[0].Rows[j]["FILE_PATH"].ToString();
+                    dr["SIZE"] = d.Tables[0].Rows[j]["SIZE"];
                     dt.Rows.Add(dr);
                     Session["Attachments"] = dt;
                     this.BindListView_Attachments(dt);
@@ -1318,7 +1416,6 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         }
 
     }
-
     protected void lvDocStorage_ItemDataBound(object sender, ListViewItemEventArgs e)
     {
         if (e.Item.ItemType == ListViewItemType.DataItem)
@@ -1341,6 +1438,4 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
     }
 
 
-        }
-    }
 }

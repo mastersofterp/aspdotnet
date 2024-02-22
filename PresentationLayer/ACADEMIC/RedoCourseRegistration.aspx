@@ -563,7 +563,7 @@
         </div>
     </div>
     <script type="text/javascript">
-       
+
         function SelectAll(headchk) {
             var frm = document.forms[0]
             for (i = 0; i < document.forms[0].elements.length; i++) {
@@ -663,7 +663,7 @@
                     }
 
                     if (totfees > 0)
-                        document.getElementById('ctl00_ContentPlaceHolder1_lblDemandAmt').innerHTML = totfees;                  
+                        document.getElementById('ctl00_ContentPlaceHolder1_lblDemandAmt').innerHTML = totfees;
                 }
             }
         }

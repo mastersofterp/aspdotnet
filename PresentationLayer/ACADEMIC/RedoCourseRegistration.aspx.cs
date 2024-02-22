@@ -70,7 +70,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                         divCourses.Visible = true;
                         pnlSearch.Visible = false;
                         this.ShowDetails();
-                       // int b = 0;
+                        // int b = 0;
                         //foreach (ListViewDataItem dataitem in lvFailCourse.Items)
                         //{
                         //    CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
@@ -89,8 +89,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                     pnlSearch.Visible = true;
 
                 string IPADDRESS = string.Empty;
-                ViewState["ipAddress"] = GetUserIPAddress(); //Request.ServerVariables["REMOTE_ADDR"];
-
+                ViewState["ipAddress"] = GetUserIPAddress(); //Request.ServerVariables["REMOTE_ADDR"];               
             }
         }
 
@@ -247,14 +246,8 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
         DataSet ds = objCommon.FillDropDown("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "DEGREENO", "BRANCH,SEMESTER", "STARTED = 1 AND SHOW_STATUS =1  AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND AM.ACTIVITY_NO=" + ViewState["ACTIVITY_NO"], "");
         if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
         {
-            //ViewState["degreenos"] = ds.Tables[0].Rows[0]["DEGREENO"].ToString();
-            //ViewState["branchnos"] = ds.Tables[0].Rows[0]["BRANCH"].ToString();
             ViewState["semesternos"] = ds.Tables[0].Rows[0]["SEMESTER"].ToString();
         }
-        //commented on 21042022
-        //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND SHOW_STATUS =1  AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "SESSIONNO DESC");
-        //ddlSession.SelectedIndex = 1;
-        //mrqSession.InnerHtml = "Registration Started for Session : " + (Convert.ToInt32(ddlSession.SelectedValue) > 0 ? ddlSession.SelectedItem.Text : "---");
         ddlSession.Focus();
     }
     //get the new receipt No.
@@ -311,7 +304,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
     public string getIPAddress()
     {
         string direction;
-        WebRequest request = WebRequest.Create("http://checkip.dyndns.org/");
+        WebRequest request = WebRequest.Create("https://checkip.dyndns.org/");
         WebResponse response = request.GetResponse();
         StreamReader stream = new StreamReader(response.GetResponseStream());
         direction = stream.ReadToEnd();
@@ -326,7 +319,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
     {
         try
         {
-            HttpWebRequest request = WebRequest.Create("http://www.google.com/") as HttpWebRequest;
+            HttpWebRequest request = WebRequest.Create("https://www.google.com/") as HttpWebRequest;
             request.Timeout = 5000;
             request.Credentials = CredentialCache.DefaultNetworkCredentials;
             HttpWebResponse response = request.GetResponse() as HttpWebResponse;
@@ -361,7 +354,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
         btnPrintRegSlip.Visible = false;
         int idno = 0;
         //int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-       
+
         StudentController objSC = new StudentController();
 
         if (ViewState["usertype"].ToString() == "2")
@@ -381,9 +374,6 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                     lblName.Text = dsStudent.Tables[0].Rows[0]["STUDNAME"].ToString();
                     lblName.ToolTip = dsStudent.Tables[0].Rows[0]["IDNO"].ToString();
 
-                    //lblFatherName.Text = " (<b>Fathers Name : </b>" + dsStudent.Tables[0].Rows[0]["FATHERNAME"].ToString() + ")";
-                    //lblMotherName.Text = " (<b>Mothers Name : </b>" + dsStudent.Tables[0].Rows[0]["MOTHERNAME"].ToString() + ")";
-
                     lblEnrollNo.Text = dsStudent.Tables[0].Rows[0]["REGNO"].ToString();
                     lblBranch.Text = dsStudent.Tables[0].Rows[0]["DEGREENAME"].ToString() + " / " + dsStudent.Tables[0].Rows[0]["LONGNAME"].ToString();
                     lblBranch.ToolTip = dsStudent.Tables[0].Rows[0]["BRANCHNO"].ToString();
@@ -393,25 +383,23 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                     lblSemester.ToolTip = dsStudent.Tables[0].Rows[0]["SEMESTERNO"].ToString();
                     lblAdmBatch.Text = dsStudent.Tables[0].Rows[0]["BATCHNAME"].ToString();
                     lblAdmBatch.ToolTip = dsStudent.Tables[0].Rows[0]["ADMBATCH"].ToString();
-                   // hdfCategory.Value = dsStudent.Tables[0].Rows[0]["CATEGORYNO"].ToString();
                     hdfDegreeno.Value = dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString();
                     ViewState["StudentMobile"] = dsStudent.Tables[0].Rows[0]["STUDENTMOBILE"].ToString();
                     ViewState["StudentEmail"] = dsStudent.Tables[0].Rows[0]["EMAILID"].ToString();
                     ViewState["collegeId"] = dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
-
-                    //imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dsStudent.Tables[0].Rows[0]["IDNO"].ToString() + "&type=student";
-
-                    //lblBacklogFine.Text = "0";
-                    //lblTotalFee.Text = "0";
                     lblSession.Text = objCommon.LookUp("ACD_SESSION_MASTER", "SESSION_NAME", "SESSIONNO=" + Convert.ToInt32(ViewState["SessionNo"].ToString()));
 
                     bindcourses(idno);
+
+                    //SELECT TOP 100 ISNULL(HOD_APPROVAL_STATUS,0),* FROM ACD_STUDENT_RESULT WHERE RE_REGISTER=1 AND PREV_STATUS=1 AND IDNO=4218 AND SESSIONNO=214 
+                    //string hodApprovalFlag = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"]) + " and  UA_TYPE =" + Convert.ToInt32(Session["usertype"]) + "");
+                    //ViewState["hodApprovalFlag"] = hodApprovalFlag;
                 }
                 else
                 {
                     objCommon.DisplayMessage("No Records Found for this Student.!!", this.Page);
                     divCourses.Visible = false;
-                    txtEnrollno.Text = string.Empty;                    
+                    txtEnrollno.Text = string.Empty;
                     txtEnrollno.Enabled = true;
                     return;
                 }
@@ -419,8 +407,8 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
             else
             {
                 objCommon.DisplayMessage("No Records Found for this Student.!!", this.Page);
-                divCourses.Visible = false;               
-                txtEnrollno.Text = string.Empty;               
+                divCourses.Visible = false;
+                txtEnrollno.Text = string.Empty;
                 txtEnrollno.Enabled = true;
                 return;
             }
@@ -439,29 +427,15 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
         int idno = Convert.ToInt32(lblName.ToolTip);
         try
         {
-            //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            //url += "Reports/CommonReport.aspx?";
-            //url += "pagetitle=" + reportTitle;
-            //url += "&path=~,Reports,Academic," + rptFileName;
-            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + sessionno + ",@P_SEM=" + Convert.ToInt32(lblSemester.ToolTip);
-
-            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
-
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
             url += "&param=@P_COLLEGE_CODE=" + ViewState["collegeId"].ToString() + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + sessionno + ",@UserName=" + Session["username"].ToString();
-           
+
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
-            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            //sb.Append(@"window.open('" + url + "','','" + features + "');");
-            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "controlJSScript", sb.ToString(), true);
         }
         catch (Exception ex)
         {
@@ -526,7 +500,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
         lblDemandAmt.Text = string.Empty;
         ShowDetails();
-    }  
+    }
 
 
     //protected void btnShow_Click1(object sender, EventArgs e)
@@ -722,18 +696,16 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
             {
                 lvFailCourse.Enabled = false;
                 btnStudSubmit.Enabled = false;
-                btnPrintRegSlip.Enabled = false;
             }
             else
             {
                 lvFailCourse.Enabled = true;
                 btnStudSubmit.Enabled = true;
-                btnPrintRegSlip.Enabled = false;
             }
         }
 
         dsFailSubjects = objSC.GetStudentRedoRegisteredCourses_new(idno, sessionNo, Convert.ToInt32(lblScheme.ToolTip), Convert.ToInt16(hdfDegreeno.Value), Convert.ToInt16(lblBranch.ToolTip));
-        ViewState["FailSubjects"] = dsFailSubjects;       
+        ViewState["FailSubjects"] = dsFailSubjects;
         if (dsFailSubjects.Tables[0].Rows.Count > 0)
         {
             //ddlBackLogSem.Items.Clear();
@@ -755,7 +727,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
             btnStudSubmit.Visible = true;
             btnPrintRegSlip.Visible = true;
 
-            
+
         }
         else
         {
@@ -775,15 +747,15 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
             lvFailCourse.DataSource = dsFailSubjects.Tables[1];
             lvFailCourse.DataBind();
-            lvFailCourse.Visible = true;            
+            lvFailCourse.Visible = true;
             DataRow[] dr = null;
-            dr = dsFailSubjects.Tables[1].Select("REGISTERED = 1"); // OR 1 = 0
+            dr = dsFailSubjects.Tables[1].Select("RE_REGISTER = 1"); // OR 1 = 0
             btnStudSubmit.Visible = (dr.Length == lvFailCourse.Items.Count) ? false : true;
             btnPrintRegSlip.Visible = (dr.Length <= 0) ? false : true; // != lvFailCourse.Items.Count
 
             if (Session["usertype"].ToString() == "2")
             {
-                
+
 
                 int count = 0;
                 foreach (ListViewDataItem itm in lvFailCourse.Items)
@@ -851,265 +823,208 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
         }
     }
 
-    protected void btnSubmit_Click(object sender, EventArgs e)
-    {
-        SaveEntry();
-
-        #region Commented by Shailendra K. on dated 01.08.2023
-        //int count_Backlog_idno = 0;
-        //StudentRegistration objSRegist = new StudentRegistration();
-        //StudentRegist objSR = new StudentRegist();
-        //int idno = 0;
-        //string REGNO = string.Empty;
-        //if (ViewState["usertype"].ToString() == "2")
-        //{
-        //    idno = Convert.ToInt32(Session["idno"]);
-        //}
-        //else if (ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7")
-        //{
-        //    //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollno.Text);
-
-        //    REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "REGNO='" + txtEnrollno.Text.Trim() + "'");
-
-        //    if (REGNO != null && REGNO != string.Empty && REGNO != "")
-        //        idno = feeController.GetStudentIdByEnrollmentNo(REGNO);
-        //    else
-        //    {
-        //        objCommon.DisplayMessage("No Records Found for this Student.!!", this.Page);
-        //        return;
-        //    }
-        //}
-        ////string schemeno = objCommon.LookUp("ACD_STUDENT","SCHEMENO", "IDNO=" + idno);
-        ////string schemeno = objCommon.LookUp("(SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE  IDNO = " + idno + " AND SEMESTERNO = " + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND PASSFAIL = 'FAIL IN AGGREGATE' UNION ALL SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE IDNO =" + idno + " AND SEMESTERNO = " + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND RESULT = 'F')A", "SCHEMENO", "");
-
-
-        //string schemeno = objCommon.LookUp("(SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE  IDNO = " + idno + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND PASSFAIL = 'FAIL IN AGGREGATE' UNION ALL SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE IDNO =" + idno + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND RESULT = 'F')A", "SCHEMENO", "");
-
-
-
-        ////string Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + idno);
-
-        ////objSR.SESSIONNO = Convert.ToInt32(Session["currentsession"]);
-        ////objSR.SESSIONNO = Convert.ToInt32(ddlSession.SelectedValue);
-
-        //objSR.SESSIONNO = Convert.ToInt32(ViewState["sessionnonew"]);
-        //objSR.IDNO = idno;
-        ////Convert.ToInt32(((dataitem.FindControl("lblIDNo")) as Label).Text);
-        //objSR.REGNO = REGNO;
-        //objSR.ROLLNO = txtEnrollno.Text;
-        ////objSR.SCHEMENO = Convert.ToInt32(schemeno);
-        //objSR.SCHEMENO = Convert.ToInt32(lblScheme.ToolTip);
-        ////objSR.SEMESTERNO = Convert.ToInt32(lblSemester.ToolTip);
-        ////objSR.SEMESTERNO = Convert.ToInt32(ddlBackLogSem.SelectedValue);
-        //objSR.IPADDRESS = Session["ipAddress"].ToString(); ;// ----ViewState["ipAddress"].ToString();
-        //objSR.COLLEGE_CODE = Session["colcode"].ToString();
-        ////objSR.UA_NO = Convert.ToInt32(Session["userno"]);
-        //objSR.UA_NO = Convert.ToInt32(Session["userno"].ToString());
-        //objSR.COURSENOS = string.Empty;
-        //objSR.SEMESTERNOS = string.Empty;
-        //int degreenos = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO='" + idno + "'"));
-        //int branchnos = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO='" + idno + "'"));
-        //int status = 0;
-        //int dstatus = 0;
-        //int cntcourse = 0;
-        /////////////////
-        //objSA.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
-        //objSA.DegreeNo = degreenos;
-        //objSA.BranchNo = branchnos;
-        //objSA.SchemeNo = Convert.ToInt32(lblScheme.ToolTip);
-        ////objSA.SemesterNo = Convert.ToInt32(ddlBackLogSem.SelectedValue);
-        //objSA.IpAddress = ViewState["ipAddress"].ToString();
-
-        //objSR.EXAM_REGISTERED = 0;
-
-        //objSR.Backlogfees = Convert.ToDecimal(lblBacklogFine.Text);
-        //objSR.TotalFee = objSR.Backlogfees;
-        //////////////////
-
-        //int Count = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT_RESULT", "count(*)", "IDNO=" + idno + " AND SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"]) + " AND PREV_STATUS=1 AND ISNULL(CANCEL,0)=0"));
-
-        //int YearBack = Convert.ToInt16(0);
-        ////For Backlog Exam Registration Count
-        ////string BacklogExamCount = objCommon.LookUp("Reff", "BacklogExam_Count", "");
-        //string BacklogExamCount = "5";
-
-        //int A = lvFailCourse.Items.Count;
-        //if (lvFailCourse.Items.Count > 0)
-        //{
-        //    foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-        //    {
-        //        CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-        //        if (chk.Enabled == true)
-        //            cntcourse++;
-        //    }
-        //}
-        //if (cntcourse == 0)
-        //{
-        //    objCommon.DisplayMessage("Please Select Atleast one Course..!!", this.Page);
-        //    return;
-        //}
-        //else
-        //{
-        //    if (lvFailCourse.Items.Count > 0)
-        //    {
-        //        //int count = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1)", "IDNO=" + idno + " AND SEMESTERNO=" + Convert.ToInt32(ddlBackLogSem.SelectedValue) + "  AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(REGISTERED,0)=1 AND (ISNULL(STUD_EXAM_REGISTERED,0)=1 OR ISNULL(INCH_EXAM_REG,0)=1) AND PREV_STATUS=1"));
-        //        foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-        //        {
-        //            CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-        //            if (chk.Checked == true && chk.Enabled == true)
-        //                status++;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        status = -1;
-        //    }
-
-        //    if (status > 0)
-        //    {
-
-        //        foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-        //        {
-        //            //Get Student Details from lvStudent
-        //            CheckBox cbRow = dataitem.FindControl("chkAccept") as CheckBox;
-        //            if (cbRow.Checked == true && cbRow.Enabled == true)
-        //            {
-        //                objSR.COURSENOS += ((dataitem.FindControl("lblCCode")) as Label).ToolTip + ",";
-        //                objSR.SEMESTERNOS += ((dataitem.FindControl("lblsemester")) as Label).ToolTip + ",";
-        //            }
-        //        }
-        //        objSR.COURSENOS = objSR.COURSENOS.TrimEnd();
-        //        objSR.SEMESTERNOS = objSR.SEMESTERNOS.TrimEnd();
-
-        //        //objSR.SEMESTERNOS = "3";
-        //        //int count = 0;
-        //        int ret = 0;
-        //        foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-        //        {
-        //            if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true && (dataitem.FindControl("chkAccept") as CheckBox).Enabled == true)
-        //            {
-        //                objSR.Backlog_course = objSR.Backlog_course + (dataitem.FindControl("lblCCode") as Label).ToolTip + "$";
-        //                ret = objSReg.AddExamRegisteredBacklaogRedoCourseReg(objSR);
-        //            }
-
-        //            //int ret = objSReg.AddExamRegisteredBacklaog(objSR);                    
-        //        }
-        //        //   int paymenttypenoOld = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "PTYPE", "regno='" + lblEnrollNo.Text + "'"));
-        //        // if (count > 0)
-        //        // {
-
-        //        //}
-        //        if (ret == 1)
-        //        // if (cs == CustomStatus.RecordSaved) ///Commented by Rita M.
-        //        {
-        //            //  objCommon.DisplayMessage("Student Backlog Exam Registration Done Successfully!!", this.Page);
-
-        //            objCommon.DisplayMessage("Redo Course Registration Done Successfully!!!", this.Page);
-
-        //            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-        //            {
-        //                if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
-        //                {
-
-        //                    CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
-        //                    chkacc.Enabled = false;
-        //                    //objSR.Backlog_course = objSR.Backlog_course + (dataitem.FindControl("lblCCode") as Label).ToolTip + "$";
-
-        //                    //// objSR.SEMESTERNOS = objSR.SEMESTERNOS + (dataitem.FindControl("lblsemester") as Label).ToolTip + "$";
-        //                    ////string amt = (dataitem.FindControl("hdnBacklogCourse") as HiddenField).Value.Trim();
-        //                    //objSR.Backlogfees = Convert.ToDecimal(hdnBacklogFine.Value);
-        //                    //lblBacklogFine.Text = txtnew.Text.Trim() + objSR.CourseFee;
-        //                }
-        //            }
-
-        //            int a = lvFailCourse.Items.Count;
-        //            int b = 0;
-        //            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-        //            {
-
-        //                CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-        //                if (chk.Enabled == false)
-        //                    b++;
-
-        //            }
-
-        //            btnSubmit.Enabled = (a == b) ? false : true;
-        //        }
-
-        //    }
-        //    #region Backlog Exam Fees Related & Create Demand Not in Use
-
-
-        //    #endregion
-        //    else
-        //    {
-        //        objCommon.DisplayMessage("Please Select atleast one course", this.Page);
-        //        return;
-        //    }
-
-        //}
-
-        #endregion
-    }
-    #endregion
-   
-    //protected void ddlBackLogSem_SelectedIndexChanged(object sender, EventArgs e)
+    //protected void btnSubmit_Click(object sender, EventArgs e)
     //{
-    //    if (ddlBackLogSem.SelectedIndex == 0)
-    //    {
-    //        lvFailCourse.DataSource = null;
-    //        lvFailCourse.DataBind();
-    //        lvFailCourse.Visible = false;
-    //       // btnSubmit.Visible = false;
-    //        btnReport.Visible = false;
-    //        btnShow.Visible = false;
-    //        btnPrintRegSlip.Visible = false;
-    //    }
-    //    else
-    //    {
-    //        DataSet dsFailSubjects = (DataSet)ViewState["FailSubjects"];
+    //    SaveEntry();
 
-    //        if (dsFailSubjects.Tables[1].Rows.Count > 0)
-    //        {
-    //            DataTable dt = dsFailSubjects.Tables[1].Select("SEMESTERNO =" + Convert.ToInt32(ddlBackLogSem.SelectedValue)).CopyToDataTable();
-    //            lvFailCourse.DataSource = dt;
-    //            lvFailCourse.DataBind();
-    //            lvFailCourse.Visible = true;
-    //            divCourses.Visible = true;
-    //          //  btnSubmit.Visible = (Convert.ToInt16(Session["usertype"].ToString()) == 2) ? false : true;
-    //           // btnStudSubmit.Visible = (Convert.ToInt16(Session["usertype"].ToString()) != 2) ? false : true;
-    //            pnlFailCourse.Visible = true;
+    //    #region Commented by Shailendra K. on dated 01.08.2023
+    //    //int count_Backlog_idno = 0;
+    //    //StudentRegistration objSRegist = new StudentRegistration();
+    //    //StudentRegist objSR = new StudentRegist();
+    //    //int idno = 0;
+    //    //string REGNO = string.Empty;
+    //    //if (ViewState["usertype"].ToString() == "2")
+    //    //{
+    //    //    idno = Convert.ToInt32(Session["idno"]);
+    //    //}
+    //    //else if (ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7")
+    //    //{
+    //    //    //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollno.Text);
 
-    //            int a = lvFailCourse.Items.Count;
-    //            int b = 0;
-    //            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-    //            {
-    //                CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-    //                if (chk.Enabled == false)
-    //                    b++;
-    //            }
+    //    //    REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "REGNO='" + txtEnrollno.Text.Trim() + "'");
 
-    //            btnSubmit.Enabled = (a == b) ? false : true;
-    //           // btnStudSubmit.Enabled = (a == b) ? false : true;
+    //    //    if (REGNO != null && REGNO != string.Empty && REGNO != "")
+    //    //        idno = feeController.GetStudentIdByEnrollmentNo(REGNO);
+    //    //    else
+    //    //    {
+    //    //        objCommon.DisplayMessage("No Records Found for this Student.!!", this.Page);
+    //    //        return;
+    //    //    }
+    //    //}
+    //    ////string schemeno = objCommon.LookUp("ACD_STUDENT","SCHEMENO", "IDNO=" + idno);
+    //    ////string schemeno = objCommon.LookUp("(SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE  IDNO = " + idno + " AND SEMESTERNO = " + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND PASSFAIL = 'FAIL IN AGGREGATE' UNION ALL SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE IDNO =" + idno + " AND SEMESTERNO = " + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND RESULT = 'F')A", "SCHEMENO", "");
 
-    //            StudentController objSC = new StudentController();
-                
 
-    //        }
-    //        else
-    //        {                
-    //            lvFailCourse.DataSource = null;
-    //            lvFailCourse.DataBind();
-    //            lvFailCourse.Visible = false;
-    //            divCourses.Visible = true;
-    //            objCommon.DisplayMessage("No Courses found...!!!", this.Page);
-    //            //btnSubmit.Visible = false;
-    //            btnStudSubmit.Visible = false;
-    //            pnlFailCourse.Visible = true;
-    //        }      
-    //    }
+    //    //string schemeno = objCommon.LookUp("(SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE  IDNO = " + idno + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND PASSFAIL = 'FAIL IN AGGREGATE' UNION ALL SELECT TOP(1) SCHEMENO FROM ACD_TRRESULT T WHERE IDNO =" + idno + " AND SESSIONNO = (SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE SEMESTERNO = T.SEMESTERNO AND IDNO = T.IDNO) AND RESULT = 'F')A", "SCHEMENO", "");
+
+
+
+    //    ////string Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + idno);
+
+    //    ////objSR.SESSIONNO = Convert.ToInt32(Session["currentsession"]);
+    //    ////objSR.SESSIONNO = Convert.ToInt32(ddlSession.SelectedValue);
+
+    //    //objSR.SESSIONNO = Convert.ToInt32(ViewState["sessionnonew"]);
+    //    //objSR.IDNO = idno;
+    //    ////Convert.ToInt32(((dataitem.FindControl("lblIDNo")) as Label).Text);
+    //    //objSR.REGNO = REGNO;
+    //    //objSR.ROLLNO = txtEnrollno.Text;
+    //    ////objSR.SCHEMENO = Convert.ToInt32(schemeno);
+    //    //objSR.SCHEMENO = Convert.ToInt32(lblScheme.ToolTip);
+    //    ////objSR.SEMESTERNO = Convert.ToInt32(lblSemester.ToolTip);
+    //    ////objSR.SEMESTERNO = Convert.ToInt32(ddlBackLogSem.SelectedValue);
+    //    //objSR.IPADDRESS = Session["ipAddress"].ToString(); ;// ----ViewState["ipAddress"].ToString();
+    //    //objSR.COLLEGE_CODE = Session["colcode"].ToString();
+    //    ////objSR.UA_NO = Convert.ToInt32(Session["userno"]);
+    //    //objSR.UA_NO = Convert.ToInt32(Session["userno"].ToString());
+    //    //objSR.COURSENOS = string.Empty;
+    //    //objSR.SEMESTERNOS = string.Empty;
+    //    //int degreenos = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO='" + idno + "'"));
+    //    //int branchnos = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO='" + idno + "'"));
+    //    //int status = 0;
+    //    //int dstatus = 0;
+    //    //int cntcourse = 0;
+    //    /////////////////
+    //    //objSA.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
+    //    //objSA.DegreeNo = degreenos;
+    //    //objSA.BranchNo = branchnos;
+    //    //objSA.SchemeNo = Convert.ToInt32(lblScheme.ToolTip);
+    //    ////objSA.SemesterNo = Convert.ToInt32(ddlBackLogSem.SelectedValue);
+    //    //objSA.IpAddress = ViewState["ipAddress"].ToString();
+
+    //    //objSR.EXAM_REGISTERED = 0;
+
+    //    //objSR.Backlogfees = Convert.ToDecimal(lblBacklogFine.Text);
+    //    //objSR.TotalFee = objSR.Backlogfees;
+    //    //////////////////
+
+    //    //int Count = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT_RESULT", "count(*)", "IDNO=" + idno + " AND SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"]) + " AND PREV_STATUS=1 AND ISNULL(CANCEL,0)=0"));
+
+    //    //int YearBack = Convert.ToInt16(0);
+    //    ////For Backlog Exam Registration Count
+    //    ////string BacklogExamCount = objCommon.LookUp("Reff", "BacklogExam_Count", "");
+    //    //string BacklogExamCount = "5";
+
+    //    //int A = lvFailCourse.Items.Count;
+    //    //if (lvFailCourse.Items.Count > 0)
+    //    //{
+    //    //    foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+    //    //    {
+    //    //        CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+    //    //        if (chk.Enabled == true)
+    //    //            cntcourse++;
+    //    //    }
+    //    //}
+    //    //if (cntcourse == 0)
+    //    //{
+    //    //    objCommon.DisplayMessage("Please Select Atleast one Course..!!", this.Page);
+    //    //    return;
+    //    //}
+    //    //else
+    //    //{
+    //    //    if (lvFailCourse.Items.Count > 0)
+    //    //    {
+    //    //        //int count = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1)", "IDNO=" + idno + " AND SEMESTERNO=" + Convert.ToInt32(ddlBackLogSem.SelectedValue) + "  AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(REGISTERED,0)=1 AND (ISNULL(STUD_EXAM_REGISTERED,0)=1 OR ISNULL(INCH_EXAM_REG,0)=1) AND PREV_STATUS=1"));
+    //    //        foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+    //    //        {
+    //    //            CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+    //    //            if (chk.Checked == true && chk.Enabled == true)
+    //    //                status++;
+    //    //        }
+    //    //    }
+    //    //    else
+    //    //    {
+    //    //        status = -1;
+    //    //    }
+
+    //    //    if (status > 0)
+    //    //    {
+
+    //    //        foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+    //    //        {
+    //    //            //Get Student Details from lvStudent
+    //    //            CheckBox cbRow = dataitem.FindControl("chkAccept") as CheckBox;
+    //    //            if (cbRow.Checked == true && cbRow.Enabled == true)
+    //    //            {
+    //    //                objSR.COURSENOS += ((dataitem.FindControl("lblCCode")) as Label).ToolTip + ",";
+    //    //                objSR.SEMESTERNOS += ((dataitem.FindControl("lblsemester")) as Label).ToolTip + ",";
+    //    //            }
+    //    //        }
+    //    //        objSR.COURSENOS = objSR.COURSENOS.TrimEnd();
+    //    //        objSR.SEMESTERNOS = objSR.SEMESTERNOS.TrimEnd();
+
+    //    //        //objSR.SEMESTERNOS = "3";
+    //    //        //int count = 0;
+    //    //        int ret = 0;
+    //    //        foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+    //    //        {
+    //    //            if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true && (dataitem.FindControl("chkAccept") as CheckBox).Enabled == true)
+    //    //            {
+    //    //                objSR.Backlog_course = objSR.Backlog_course + (dataitem.FindControl("lblCCode") as Label).ToolTip + "$";
+    //    //                ret = objSReg.AddExamRegisteredBacklaogRedoCourseReg(objSR);
+    //    //            }
+
+    //    //            //int ret = objSReg.AddExamRegisteredBacklaog(objSR);                    
+    //    //        }
+    //    //        //   int paymenttypenoOld = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "PTYPE", "regno='" + lblEnrollNo.Text + "'"));
+    //    //        // if (count > 0)
+    //    //        // {
+
+    //    //        //}
+    //    //        if (ret == 1)
+    //    //        // if (cs == CustomStatus.RecordSaved) ///Commented by Rita M.
+    //    //        {
+    //    //            //  objCommon.DisplayMessage("Student Backlog Exam Registration Done Successfully!!", this.Page);
+
+    //    //            objCommon.DisplayMessage("Redo Course Registration Done Successfully!!!", this.Page);
+
+    //    //            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+    //    //            {
+    //    //                if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
+    //    //                {
+
+    //    //                    CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
+    //    //                    chkacc.Enabled = false;
+    //    //                    //objSR.Backlog_course = objSR.Backlog_course + (dataitem.FindControl("lblCCode") as Label).ToolTip + "$";
+
+    //    //                    //// objSR.SEMESTERNOS = objSR.SEMESTERNOS + (dataitem.FindControl("lblsemester") as Label).ToolTip + "$";
+    //    //                    ////string amt = (dataitem.FindControl("hdnBacklogCourse") as HiddenField).Value.Trim();
+    //    //                    //objSR.Backlogfees = Convert.ToDecimal(hdnBacklogFine.Value);
+    //    //                    //lblBacklogFine.Text = txtnew.Text.Trim() + objSR.CourseFee;
+    //    //                }
+    //    //            }
+
+    //    //            int a = lvFailCourse.Items.Count;
+    //    //            int b = 0;
+    //    //            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+    //    //            {
+
+    //    //                CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+    //    //                if (chk.Enabled == false)
+    //    //                    b++;
+
+    //    //            }
+
+    //    //            btnSubmit.Enabled = (a == b) ? false : true;
+    //    //        }
+
+    //    //    }
+    //    //    #region Backlog Exam Fees Related & Create Demand Not in Use
+
+
+    //    //    #endregion
+    //    //    else
+    //    //    {
+    //    //        objCommon.DisplayMessage("Please Select atleast one course", this.Page);
+    //    //        return;
+    //    //    }
+
+    //    //}
+
+    //    #endregion
     //}
-   
+    #endregion
+
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
@@ -1120,8 +1035,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
         FeeDemand demandCriteria = new FeeDemand();
         Student objS = new Student();
         int admbatch = Convert.ToInt32(objCommon.LookUp("acd_student", "ADMBATCH", "IDNO=" + Convert.ToInt32(lblName.ToolTip)));
-        int paymenttypeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "PTYPE", "IDNO=" + Convert.ToInt32(lblName.ToolTip)));        
-
+        int paymenttypeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "PTYPE", "IDNO=" + Convert.ToInt32(lblName.ToolTip)));
         try
         {
             demandCriteria.StudentId = Convert.ToInt32(lblName.ToolTip);
@@ -1129,7 +1043,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
             demandCriteria.SessionNo = Convert.ToInt32(ViewState["SessionNo"]);
             demandCriteria.ReceiptTypeCode = "RRF";
             demandCriteria.BranchNo = Convert.ToInt16(lblBranch.ToolTip);
-            demandCriteria.DegreeNo = Convert.ToInt16(hdfDegreeno.Value);;
+            demandCriteria.DegreeNo = Convert.ToInt16(hdfDegreeno.Value); ;
             demandCriteria.SemesterNo = Convert.ToInt16(lblSemester.ToolTip);
             demandCriteria.AdmBatchNo = admbatch;
             demandCriteria.PaymentTypeNo = Convert.ToInt16(Session["payactivityno"]); // paymenttypeno;
@@ -1169,82 +1083,84 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
         try
         {
+
             if (SaveEntry() > 0)
-            {               
-                btnPayment.Visible = false;
-                if (!string.IsNullOrEmpty(ViewState["IsPaymetApplicable"].ToString()) && ViewState["IsPaymetApplicable"].ToString().ToLower().Equals("true"))
-                {
-                    int payStatus = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(IDNO)", "IDNO = " + Convert.ToInt32(Session["idno"]) + " AND SEMESTERNO =" + lblSemester.ToolTip + " AND RECIEPT_CODE='RRF'"));
-                    if (payStatus > 0)
-                    {
-                        objCommon.DisplayMessage("Redo/Backlog Course Registration payment already done.", this.Page);
-                        btnPrintRegSlip.Visible = true;
-                        return;
-                    }
+            {
+                #region commented code by Shailendra K. on dated 23.10.2023 as per T-49599
+                //    btnPayment.Visible = false;
+                //    if (!string.IsNullOrEmpty(ViewState["IsPaymetApplicable"].ToString()) && ViewState["IsPaymetApplicable"].ToString().ToLower().Equals("true"))
+                //    {
+                //        int payStatus = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(IDNO)", "IDNO = " + Convert.ToInt32(Session["idno"]) + " AND SEMESTERNO =" + lblSemester.ToolTip + " AND RECIEPT_CODE='RRF'"));
+                //        if (payStatus > 0)
+                //        {
+                //            objCommon.DisplayMessage("Redo/Backlog Course Registration payment already done.", this.Page);
+                //            btnPrintRegSlip.Visible = true;
+                //            return;
+                //        }
 
-                    decimal fees = Convert.ToDecimal(objCommon.LookUp("ACD_REDO_REG_FEE_DEFINITION", "ISNULL(FEES,0)FEES", ""));
-                    decimal total = 0;
-                    int b = 0;
-                    int semNo = 0;
-                    string semNos = string.Empty;
-                    List<int> lstSem = new List<int>();
-                    CustomStatus cs = CustomStatus.Others;
-                    if (!string.IsNullOrEmpty(ViewState["redoImprovementCourseRegFlag"].ToString()) && ViewState["redoImprovementCourseRegFlag"].ToString() != "1")
-                    {
-                        foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-                        {
-                            CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                            if (chk.Checked == true)
-                            {
-                                b++;
-                                //semNos += ((dataitem.FindControl("lblsemester")) as Label).ToolTip + ",";
-                                semNo = Convert.ToInt16(((dataitem.FindControl("lblsemester")) as Label).ToolTip);
-                                if (!lstSem.Contains(semNo))
-                                    lstSem.Add(semNo);
-                            }
-                        }
+                //        decimal fees = Convert.ToDecimal(objCommon.LookUp("ACD_REDO_REG_FEE_DEFINITION", "ISNULL(FEES,0)FEES", ""));
+                //        decimal total = 0;
+                //        int b = 0;
+                //        int semNo = 0;
+                //        string semNos = string.Empty;
+                //        List<int> lstSem = new List<int>();
+                //        CustomStatus cs = CustomStatus.Others;
+                //        if (!string.IsNullOrEmpty(ViewState["redoImprovementCourseRegFlag"].ToString()) && ViewState["redoImprovementCourseRegFlag"].ToString() != "1")
+                //        {
+                //            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                //            {
+                //                CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+                //                if (chk.Checked == true)
+                //                {
+                //                    b++;
+                //                    //semNos += ((dataitem.FindControl("lblsemester")) as Label).ToolTip + ",";
+                //                    semNo = Convert.ToInt16(((dataitem.FindControl("lblsemester")) as Label).ToolTip);
+                //                    if (!lstSem.Contains(semNo))
+                //                        lstSem.Add(semNo);
+                //                }
+                //            }
 
 
-                        if (!string.IsNullOrEmpty(lstSem.ToString()))
-                        {
-                            //fees = Convert.ToDecimal(objCommon.LookUp("ACD_REDO_REG_FEE_DEFINITION", "ISNULL(FEES,0)FEES", ""));
-                            for (int i = 0; i < lstSem.Count; i++)
-                            {
-                                int k = Convert.ToInt16(lstSem[i]);
-                                int c = 0;
-                                foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-                                {
-                                    CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                                    if (chk.Checked == true)
-                                    {
-                                        int semsterNo = Convert.ToInt16(((dataitem.FindControl("lblsemester")) as Label).ToolTip);
-                                        if (semsterNo == k) c++;
-                                    }
-                                }
+                //            if (!string.IsNullOrEmpty(lstSem.ToString()))
+                //            {
+                //                //fees = Convert.ToDecimal(objCommon.LookUp("ACD_REDO_REG_FEE_DEFINITION", "ISNULL(FEES,0)FEES", ""));
+                //                for (int i = 0; i < lstSem.Count; i++)
+                //                {
+                //                    int k = Convert.ToInt16(lstSem[i]);
+                //                    int c = 0;
+                //                    foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                //                    {
+                //                        CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+                //                        if (chk.Checked == true)
+                //                        {
+                //                            int semsterNo = Convert.ToInt16(((dataitem.FindControl("lblsemester")) as Label).ToolTip);
+                //                            if (semsterNo == k) c++;
+                //                        }
+                //                    }
 
-                                if (c > 0)
-                                {
-                                    total = fees * c;
-                                    FeeDemand demandCriteria = this.GetDemandCriteria();
-                                    demandCriteria.SemesterNo = k;
-                                    //Create demand for Redo Course Registration
-                                    cs = (CustomStatus)feeController.CreateDemandForRedoCourseReg(demandCriteria, lblEnrollNo.Text.Trim(), total);
-                                }
+                //                    if (c > 0)
+                //                    {
+                //                        total = fees * c;
+                //                        FeeDemand demandCriteria = this.GetDemandCriteria();
+                //                        demandCriteria.SemesterNo = k;
+                //                        //Create demand for Redo Course Registration
+                //                        cs = (CustomStatus)feeController.CreateDemandForRedoCourseReg(demandCriteria, lblEnrollNo.Text.Trim(), total);
+                //                    }
 
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ViewState["TotalFees"] = total;
-                        FeeDemand demandCriteria = this.GetDemandCriteria();
-                        //Create demand for Redo Course Registration
-                        cs = (CustomStatus)feeController.CreateDemandForRedoCourseReg(demandCriteria, lblEnrollNo.Text.Trim(), total);
-                    }
+                //                }
+                //            }
+                //        }
+                //        else
+                //        {
+                //            ViewState["TotalFees"] = total;
+                //            FeeDemand demandCriteria = this.GetDemandCriteria();
+                //            //Create demand for Redo Course Registration
+                //            cs = (CustomStatus)feeController.CreateDemandForRedoCourseReg(demandCriteria, lblEnrollNo.Text.Trim(), total);
+                //        }
 
-                    if (cs.Equals(CustomStatus.RecordSaved))
-                        btnPayment.Visible = (Convert.ToInt16(Session["OrgId"]) == 2) ? true : false;
-                }
+                //        if (cs.Equals(CustomStatus.RecordSaved))
+                //            btnPayment.Visible = (Convert.ToInt16(Session["OrgId"]) == 2) ? true : false;
+                //    }
 
                 #endregion
 
@@ -1264,35 +1180,70 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
     {
         try
         {
+            //string subids = string.Empty;
+            //DataSet ds_FailSubjects = (DataSet)ViewState["FailSubjects"];
+            //if (ds_FailSubjects.Tables[1].Rows.Count > 0)
+            //{
+            //    foreach (DataRow rows in ds_FailSubjects.Tables[1].Rows)
+            //    {
+            //        if (Convert.ToInt16(rows["REGISTERED"]) == 0)
+            //        {
+            //            if (string.IsNullOrEmpty(subids))
+            //                subids += rows["SUBID"].ToString();
+
+            //            if (!string.IsNullOrEmpty(subids) && !subids.Contains(rows["SUBID"].ToString()))
+            //                subids += rows["SUBID"].ToString() + ",";                        
+            //        }
+            //    }
+            //} 
+
+            //double totalFees = 0;
+            //totalFees = Convert.ToDouble(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "ISNULL(SUM(FEE),0)",
+            //   "ISNULL(FEETYPE,0)=2 AND ISNULL(ISFEESAPPLICABLE,0)=1 AND ISNULL(CANCEL,0)=0 AND COLLEGE_ID=" + Convert.ToInt16(ViewState["collegeId"])
+            //   + " AND DEGREENO=" + Convert.ToInt16(hdfDegreeno.Value) + " AND SESSIONNO=" + Convert.ToInt16(ViewState["SessionNo"])
+            //   + " AND  " + Convert.ToInt16(lblSemester.ToolTip) + " IN (SELECT VALUE FROM DBO.SPLIT(SEMESTERNO,',')) AND SUBID IN (" + subids + ")"));
+
+            //if (totalFees <= 0)
+            //{
+            //    objCommon.DisplayMessage("Fees not defined or In-active, Kindly contact Admin.!!!", this.Page);
+            //    return;
+            //}
+
+            //select  from ACD_DEMAND where  RECIEPT_CODE='RRF' and idno=871 AND SESSIONNO=233  AND SEMESTERNO=8
+            double totalFees = 0;
+            totalFees = Convert.ToDouble(objCommon.LookUp("ACD_DEMAND", "ISNULL(SUM(TOTAL_AMT),0)", "RECIEPT_CODE='RRF' AND IDNO = " + Convert.ToInt32(lblName.ToolTip)
+                + " AND SEMESTERNO =" + Convert.ToInt32(lblSemester.ToolTip) + " AND SESSIONNO=" + Convert.ToInt16(ViewState["SessionNo"])));
+
+
             int OrganizationId = Convert.ToInt32(Session["OrgId"]);
             string PaymentMode = "REDO FEES COLLECTION";
             Session["PaymentMode"] = PaymentMode;
-            Session["studAmt"] = ViewState["TotalFees"];
+            Session["studAmt"] = totalFees;
             Session["studName"] = lblName.Text;
             Session["studPhone"] = ViewState["StudentMobile"];
             Session["studEmail"] = ViewState["StudentEmail"];
 
             Session["ReceiptType"] = "RRF";
-            Session["idno"] = Convert.ToInt32(Session["idno"]);
-
-            //Session["paysemester"] =
+            Session["idno"] = Convert.ToInt32(lblName.ToolTip);
             Session["homelink"] = "OnlinePayment.aspx";
             Session["regno"] = lblEnrollNo.Text;
             Session["payStudName"] = lblName.Text;
             Session["paymobileno"] = ViewState["StudentMobile"];
             Session["Installmentno"] = "0";
-            Session["paysemester"] = ViewState["semesterno"];
-            Session["paysession"] = ViewState["SessionNo"];
+            Session["paysemester"] = lblSemester.ToolTip;
+            Session["paysession"] = Convert.ToInt32(ViewState["SessionNo"]);
 
-            DataSet ds1 = feeController.GetOnlinePaymentConfigurationDetails(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]));
-            if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+            int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Redo Registration Fee'"));
+            //Session["payactivityno"] = activityno;
+
+            DataSet ds1 = feeController.GetOnlinePaymentConfigurationDetails(OrganizationId, 0, Convert.ToInt32(activityno));
+
+            if (ds1.Tables[0].Rows.Count > 0)
             {
-                if (ds1.Tables[0].Rows.Count > 0)
-                {
-                    Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
-                    string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                    Response.Redirect(RequestUrl);
-                }
+                Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
+                string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
+                Session["ReturnpageUrl"] = Request.Url.ToString();
+                Response.Redirect(RequestUrl);
             }
         }
         catch (Exception ex)
@@ -1374,14 +1325,14 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
         if (status > 0)
         {
-            int redoImprovementCourseRegFlag =  Convert.ToInt16(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(ALLOW_CURRENT_SEM_FOR_REDO_IMPROVEMENT_CRS_REG,0)ALLOW_CURRENT_SEM_FOR_REDO_IMPROVEMENT_CRS_REG", ""));
+            int redoImprovementCourseRegFlag = Convert.ToInt16(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(ALLOW_CURRENT_SEM_FOR_REDO_IMPROVEMENT_CRS_REG,0)ALLOW_CURRENT_SEM_FOR_REDO_IMPROVEMENT_CRS_REG", ""));
             ViewState["redoImprovementCourseRegFlag"] = redoImprovementCourseRegFlag;
             objSR.COURSENOS = objSR.COURSENOS.TrimEnd();
             objSR.SEMESTERNOS = redoImprovementCourseRegFlag == 1 ? lblSemester.ToolTip : objSR.SEMESTERNOS.TrimEnd(',');
 
             double totGrandCredit = 0;
             double studentGetCredit = 0;
-           
+
             try
             {
                 //totGrandCredit = Convert.ToDouble(objCommon.LookUp("ACD_DEFINE_TOTAL_CREDIT", "ISNULL(TO_CREDIT,0)+ISNULL(OVERLOAD_CREDIT,0)",
@@ -1414,20 +1365,10 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
             r = objSReg.AddExamRegisteredBacklaogRedoCourseReg(objSR);
             if (r == 1)
             {
-                objCommon.DisplayMessage("Redo Course Registration Done Successfully!!!", this.Page);
-                //int b = 0;
-                //foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-                //{
-                //    CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
-                //    if (chkacc.Checked)
-                //    {
-                //        chkacc.Enabled = (Session["usertype"].ToString() == "2") ? false : true;
-                //        b++;
-                //    }
-                //}
-
-                //btnStudSubmit.Visible = (lvFailCourse.Items.Count == b) ? false : true;
-
+                if (Convert.ToInt32(Session["OrgId"]) == 2)
+                    objCommon.DisplayMessage("Redo Course Registration Done Successfully, You can do payment after HOD Approved.!!!", this.Page);
+                else
+                    objCommon.DisplayMessage("Redo Course Registration Done Successfully!!!", this.Page);
                 bindcourses(idno);
             }
         }
@@ -1526,7 +1467,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                     }
                 }
             }
-            
+
             //totalFees = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "ISNULL(SUM(FEE),0)",
             //   "ISNULL(FEETYPE,0)=2 AND ISNULL(ISFEESAPPLICABLE,0)=1 AND ISNULL(CANCEL,0)=0 AND COLLEGE_ID=" + Convert.ToInt16(ViewState["collegeId"])
             //   + " AND DEGREENO=" + Convert.ToInt16(hdfDegreeno.Value) + " AND SESSIONNO=" + Convert.ToInt16(ViewState["SessionNo"])
@@ -1541,16 +1482,16 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
             lblDemandAmt.Text = totalFees.ToString();
             //CheckDemandStatus();
 
-            if (dt!=null && dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 0)
             {
                 lvFailCourse.DataSource = dt;
                 lvFailCourse.DataBind();
             }
 
 
-           // totalFees = 1; //TESTING PURPOSE
+            // totalFees = 1; //TESTING PURPOSE
             CustomStatus cs = CustomStatus.Others;
-            ViewState["TotalFees"] =  totalFees;
+            ViewState["TotalFees"] = totalFees;
             FeeDemand demandCriteria = this.GetDemandCriteria();
             //Create demand for Redo Course Registration
             cs = (CustomStatus)feeController.CreateDemandForRedoCourseReg(demandCriteria, lblEnrollNo.Text.Trim(), totalFees);
