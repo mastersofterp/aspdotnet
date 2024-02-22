@@ -21,6 +21,9 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 using System.IO;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+
 public partial class Academic_DCR_ReportUI_Crescent : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -1194,21 +1197,65 @@ public partial class Academic_DCR_ReportUI_Crescent : System.Web.UI.Page
         {
             if (ds.Tables[0].Rows.Count > 0)
             {
-                Gr.DataSource = ds;
-                Gr.DataBind();
-                string Attachment = "Attachment; FileName=OutstandingReport.xlsx";
-                Response.ClearContent();
-                Response.AddHeader("content-disposition", Attachment);
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                Gr.HeaderStyle.Font.Bold = true;
-                Gr.RenderControl(htw);
-                Response.Write(sw.ToString());
-                Response.End();
-            }
-            else
-            {
+                //Gr.DataSource = newDs;
+                //Gr.DataBind();
+                //string Attachment = "Attachment; FileName=OutstandingReport.xlsx";
+                //Response.ClearContent();
+                //Response.AddHeader("content-disposition", Attachment);
+                //StringWriter sw = new StringWriter();
+                //HtmlTextWriter htw = new HtmlTextWriter(sw);
+                //Gr.HeaderStyle.Font.Bold = true;
+                //Gr.RenderControl(htw);
+                //Response.Write(sw.ToString());
+                //Response.End(); 
 
+
+             // Below code added by Shailendra K. on dated 22.02.2024 as per greater than 50000 records
+                using (ExcelPackage excelPackage = new ExcelPackage())
+                {
+                    // Create a new worksheet
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("OutstandingReport");
+
+                    // Fill the Excel worksheet with dataset records
+                    DataTable dataTable = ds.Tables[0]; // Function to retrieve your dataset                   
+                    int colIndex = 1;
+                    foreach (DataColumn column in dataTable.Columns)
+                    {
+                        worksheet.Cells[1, colIndex].Value = column.ColumnName;
+
+                        // Apply style to the header cells
+                        worksheet.Cells[1, colIndex].Style.Font.Bold = true;
+                        worksheet.Cells[1, colIndex].Style.Fill.PatternType = ExcelFillStyle.Solid;                        
+                        worksheet.Cells[1, colIndex].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        worksheet.Cells[1, colIndex].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1d7df3"));
+                       
+                        colIndex++;
+                    }
+
+                    // Add data rows
+                    for (int rowIndex = 0; rowIndex < dataTable.Rows.Count; rowIndex++)
+                    {
+                        DataRow row = dataTable.Rows[rowIndex];
+                        for (colIndex = 0; colIndex < dataTable.Columns.Count; colIndex++)
+                            worksheet.Cells[rowIndex + 2, colIndex + 1].Value = row[colIndex];
+                    }
+                    
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=OutstandingReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        excelPackage.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                    }
+
+                }
+
+                // Above code added by Shailendra K. on dated 22.02.2024 as per greater than 50000 records
             }
         }
         else
