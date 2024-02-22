@@ -402,6 +402,7 @@
                                                                         <asp:HiddenField ID="hdfGreaterVal" runat="server" Value='<%# Bind("MAXMARKS_E") %>' />
                                                                         <asp:HiddenField ID="hdfConversion" runat="server" />
                                                                         <asp:HiddenField ID="hdfAbolish" runat="server" Value='<%# Bind("ABOLISH") %>' />
+                                                                        <asp:HiddenField ID="hdfredo" runat="server" Value='<%# Bind("RE_REGISTER") %>' />
                                                                     </ItemTemplate>
                                                                     <HeaderStyle HorizontalAlign="Center" />
                                                                     <ItemStyle />
@@ -705,6 +706,9 @@
                         var txtTot = $("input[id*=txtTotMarksAll]");
                         var txtinternal = $("input[id*=txtTAMarks]");
                         var hdfAbolish = $("input[id*=hdfAbolish]");
+
+                        var hdfredo = $("input[id*=hdfredo]");          // added by prafull on dt:19022024 as per tkno:55101
+
                         //var percnt = $("input[id*=txtTotPer]");
                         var per = Num[i];
                         var GradeAssign = MainGd[i];
@@ -713,6 +717,10 @@
                         var txtTotMark = txtTot[i];
                         var INT = txtinternal[i];
                         var Abolish = hdfAbolish[i];
+
+                        var Redo = hdfredo[i];               // added by prafull on dt:19022024 as per tkno:55101
+
+
 
                         var hdfCourseTotal = document.getElementById('ctl00_ContentPlaceHolder1_hdfCourseTotal').value;
                         var hdfMinPassMark = document.getElementById('ctl00_ContentPlaceHolder1_hdfMinPassMark').value; //40
@@ -735,6 +743,37 @@
                         per.value = (calPer);
 
                         if (Abolish == 0) {
+                            if (parseFloat(MaxMark) >= parseFloat(per.value) && parseFloat(MinMark) <= parseFloat(per.value)) {
+
+                                if (abs.value > 901 && abs.value < 906) {
+                                }
+                                else {
+                                    //    GradeAssign.value = AssGrade;
+                                    //    gpoint.value = GDpoint;
+                                    //}
+
+                                    if (parseFloat(obtper) < parseFloat(Extpassing) || parseFloat(InterMarkPer) < parseFloat(hdfMinPassMark_I)) {
+
+                                        if (GDpoint == 0) {
+                                            GradeAssign.value = AssGrade;
+                                            gpoint.value = GDpoint;
+                                        }
+                                    }
+                                    if (parseFloat(obtper) >= parseFloat(Extpassing) && parseFloat(InterMarkPer) >= parseFloat(hdfMinPassMark_I)) {
+                                        //   alert(percnt.val());
+                                        if (per.value <= MaxMark && per.value >= MinMark) {
+                                            GradeAssign.value = AssGrade;
+                                            gpoint.value = GDpoint;
+                                            //   alert(hidGradePoint.val());
+                                            //   studTotal();
+                                            // return
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (Redo == 1)   // added by prafull on dt:21022024  as per tkno:55105
+                        {
                             if (parseFloat(MaxMark) >= parseFloat(per.value) && parseFloat(MinMark) <= parseFloat(per.value)) {
 
                                 if (abs.value > 901 && abs.value < 906) {
@@ -848,6 +887,10 @@
                 var marks = $("input[id*=txtESMarks]");
                 var conversion = $("input[id*=hdfConversion]");
                 var hdfAbolish = $("input[id*=hdfAbolish]");
+
+                var hdfredo = $("input[id*=hdfredo]");          // added by prafull on dt:19022024 as per tkno:55101
+
+
                 var GradePoint = $("input[id*=hidGradePoint]");
                 var TotMark = $("input[id*=txtTotMarksAll]");
                 var TotPer = $("input[id*=txtTotPer]");
@@ -860,6 +903,10 @@
                 var percnt = TotPer[i];
                 var Grade = grd[i];
                 var Abolish = hdfAbolish[i];
+
+                var Redo = hdfredo[i];     // added by prafull on dt:19022024 as per tkno:55101
+
+
 
                 var Rule = document.getElementById('ctl00_ContentPlaceHolder1_hdfRule').value;
                 var hdfCourseTotal = document.getElementById('ctl00_ContentPlaceHolder1_hdfCourseTotal').value;
@@ -900,6 +947,21 @@
                         //  alert(sum);
                         sum.toFixed(2);
                     }
+                    else if (Redo.value == 1)              // added by prafull on dt:21022024  as per tkno:55105
+                    {
+                        var Conversion = ((Number(obt.value) * Rule) / 100).toFixed(2);
+                        //   alert(Conversion);
+                        if (subid != 4) {
+                            // alert('hi' + subid);
+                            Conversion = Math.ceil(Conversion);
+                        }
+
+                        //   var ans = ((obtMark / maxMark) * 100).toFixed(2);
+                        var sum = Number(Conversion) + Number(INT.value);
+                        //  alert(sum);
+                        sum.toFixed(2);
+                    }
+
                     else {
                         //var Conversion = obtper;
                         //var sum = obtper;
@@ -1192,6 +1254,9 @@
                     var INT = $("[id*=txtTAMarks]", row).val();
                     var hdfAbolish = $("[id*=hdfAbolish]", row).val();
 
+                    var hdfredo = $("[id*=hdfredo]", row).val();           // added by prafull on dt:19022024 as per tkno:55101
+
+
                     var Rule = document.getElementById('ctl00_ContentPlaceHolder1_hdfRule').value;
                     var hdfCourseTotal = document.getElementById('ctl00_ContentPlaceHolder1_hdfCourseTotal').value;
                     var hdfMinPassMark = document.getElementById('ctl00_ContentPlaceHolder1_hdfMinPassMark').value;
@@ -1232,6 +1297,22 @@
                         sum.toFixed(2);
 
                     }
+                    else if (hdfredo == 1)       // added by prafull on dt:21022024  as per tkno:55105
+                    {
+                        var Conversion = ((Number(obt.val()) * Rule) / 100).toFixed(2);
+                        //   alert(Conversion);
+                        if (subid != 4) {
+                            // alert('hi' + subid);
+                            Conversion = Math.ceil(Conversion);
+                        }
+
+                        //   var ans = ((obtMark / maxMark) * 100).toFixed(2);
+
+
+                        var sum = Number(Conversion) + Number(INT);
+                        //  alert(sum);
+                        sum.toFixed(2);
+                    }
                     else {
                         if (subid == 1) {
                             var Conversion = obtper;
@@ -1258,6 +1339,9 @@
                           var hidConversion = $("input[id*=hdfConversion]", row);
                           var hidGradePoint = $("input[id*=hidGradePoint]", row);
                           var hdfAbolish = $("input[id*=hdfAbolish]", row);
+
+                          var hdfRedo = $("input[id*=hdfredo]", row);             // added by prafull on dt:19022024 as per tkno:55101
+
                           hidConversion.val(Conversion);
                           // alert(Conversion);
                           //var calPer = ((txtTotMark.val() / 100) * 100).toFixed(2);
@@ -1335,7 +1419,23 @@
                                       //grade.val(AssGrade.select(MinMark=0));
                                       //return
                                   }
+                                  else if (hdfRedo == 1)       // added by prafull on dt:21022024  as per tkno:55105
+                                  {
+                                      if ((parseFloat(obtper) < parseFloat(Extpassing) || parseFloat(InterMarkPer) < parseFloat(hdfMinPassMark_I))) {
+                                          //25 < 40
+                                          //gdpoint = 0 value = grade ;
+                                          if (GDpoint == 0) {
+                                              Grade.val(AssGrade);
+                                              hidGradePoint.val(GDpoint);
+                                              //  alert(hidGradePoint.val());
+                                              //  studTotal();
+                                              return
+                                          }
 
+                                          //grade.val(AssGrade.select(MinMark=0));
+                                          //return
+                                      }
+                                  }
                                   if (((parseFloat(obtper) >= parseFloat(Extpassing)) && (parseFloat(InterMarkPer) >= parseFloat(hdfMinPassMark_I)))) {
                                       //   alert(percnt.val());
                                       if (percnt.val() <= MaxMark && percnt.val() >= MinMark) {
