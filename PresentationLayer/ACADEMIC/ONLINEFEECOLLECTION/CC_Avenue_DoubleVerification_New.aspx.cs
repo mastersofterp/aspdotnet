@@ -74,27 +74,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_CC_Avenue_DoubleVerification_N
 
             DataSet StudDetails = objCommon.FillDropDown("ACD_DCR_TEMP A INNER JOIN ACD_STUDENT S ON (A.IDNO=S.IDNO) INNER JOIN ACD_SESSION_MASTER SM ON(A.SESSIONNO = SM.SESSIONNO)", "A.IDNO, A.ENROLLNMENTNO, A.NAME, A.BRANCHNO, A.BRANCH, S.COLLEGE_ID", "A.YEAR, A.DEGREENO, A.SEMESTERNO, A.SESSIONNO, SM.SESSION_NAME, A.RECIEPT_CODE", "A.ORDER_ID = '" + orderNo + "' ", "A.TEMP_DCR_NO DESC");
             DataTable dt = StudDetails.Tables[0];
-            DataSet pg_ds = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "ACCESS_CODE", "CHECKSUM_KEY", "COLLEGE_ID= '" + dt.Rows[0]["COLLEGE_ID"].ToString() + "' ", "CONFIG_ID DESC");
-
-            if (dt.Rows[0]["RECIEPT_CODE"].ToString() == "TF")
-            {
-                if (pg_ds.Tables[0].Rows.Count == 0)
-                {
-                    pg_ds = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "ACCESS_CODE", "CHECKSUM_KEY", "ACTIVITY_NO= 1 AND COLLEGE_ID=0 ", "CONFIG_ID DESC");
-                }
-            }
-            else
-            {
-                pg_ds = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "ACCESS_CODE", "CHECKSUM_KEY", "ACTIVITY_NO= 2 AND COLLEGE_ID=0 ", "CONFIG_ID DESC");
-            }
-
-            if (pg_ds != null && pg_ds.Tables[0].Rows.Count > 0)
-            { 
-                accessCode = pg_ds.Tables[0].Rows[0]["ACCESS_CODE"].ToString();      //ADD ENCRYPTION KEY HERE
-                workingKey =pg_ds.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();     //ADD ENCRYPTION IV HERE
-            }
-
-            CCAvenueStatus(orderNo, CCAReferNo, accessCode, workingKey, StudDetails);
+            CCAvenueStatus(orderNo, CCAReferNo, "", "", StudDetails);
 
         }
         catch (Exception exp)
@@ -267,7 +247,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_CC_Avenue_DoubleVerification_N
             {
 
               
-                output = objFees.InsertOnlinePayment_DCR(idno, ViewState["RECIEPTCODE"].ToString(),Label_OrderInfo.Text,Label_MerchTxnRef.Text, "O", string.Empty, Label_Amount.Text, "Success", lblEnrollNo.Text.ToString(), "");           
+                output = objFees.InsertOnlinePayment_DCR(idno, ViewState["RECIEPTCODE"].ToString(), Label_OrderInfo.Text,Label_MerchTxnRef.Text, "O", string.Empty, Label_Amount.Text, "Success", lblEnrollNo.Text.ToString(), "");           
 
 
 
@@ -317,83 +297,172 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_CC_Avenue_DoubleVerification_N
             //var Key = "BC932E07F545163283B42DB94210C8D9";//"Keyxxxx xxxxx";
             //var Code = "AVZO18KJ08AJ36OZJA";//"Codexxxxxxxxx";
             var reqParam = new StatusEncRequest();
-            reqParam.order_no = OrderNo;
+            // reqParam.order_no = OrderNo;
             reqParam.reference_no = TrackingId;
 
             string ccaRequest = JsonConvert.SerializeObject(reqParam);
             CCACrypto ccaCrypto = new CCACrypto();
-            string strEncRequest = (ccaCrypto.Encrypt(ccaRequest, workingKey));
+            DataTable dt = new DataTable();
 
-            var curl = LiveUrl + accessCode + "&enc_request=" + strEncRequest;
-            var client = new RestClient(curl);
-            var request = new RestRequest(curl, Method.POST);
-            //RestResponse restResponse = null;  //client.Execute(request);
-            IRestResponse restResponse = client.Execute(request);
-            var response = restResponse.Content;
 
-            if (!string.IsNullOrEmpty(response))
+           DataSet pg_ds = objCommon.FillDropDown("ACD_PG_CONFIGURATION", " DISTINCT ACCESS_CODE", "CHECKSUM_KEY", "ISNULL(ACTIVE_STATUS,0)=1", "");
+            string strEncRequest = string.Empty;
+
+            foreach (DataRow r in pg_ds.Tables[0].Rows)
             {
-                NameValueCollection Params = new NameValueCollection();
-                string[] segments = response.Split('&');
-                foreach (string seg in segments)
-                {
-                    string[] parts = seg.Split('=');
-                    if (parts.Length > 0)
-                    {
-                        string KeyParam = parts[0].Trim();
-                        string Value = parts[1].Trim();
-                        Params.Add(KeyParam, Value);
-                    }
-                }
+                accessCode = r["ACCESS_CODE"].ToString();
+                workingKey = r["CHECKSUM_KEY"].ToString();
 
-                string status = string.IsNullOrEmpty(Params["status"]) ? "" : Params["status"];
-                string enc_response = string.IsNullOrEmpty(Params["enc_response"]) ? "" : Params["enc_response"];
-                string enc_error_code = string.IsNullOrEmpty(Params["enc_error_code"]) ? "" : Params["enc_error_code"];
-
-                if (!string.IsNullOrEmpty(status) && status == "0")
+                try
                 {
-                    pnlDetails.Visible = true;
-                    decResponse = ccaCrypto.Decrypt(enc_response, workingKey);
-                    if (status == "0")
+                    strEncRequest = (ccaCrypto.Encrypt(ccaRequest, workingKey));
+                    var curl = LiveUrl + accessCode + "&enc_request=" + strEncRequest;
+                    var client = new RestClient(curl);
+                    var request = new RestRequest(curl, Method.POST);
+                    //RestResponse restResponse = null;  //client.Execute(request);
+                    IRestResponse restResponse = client.Execute(request);
+                    var response = restResponse.Content;
+
+                    if (!string.IsNullOrEmpty(response))
                     {
-                        if (StudDetails.Tables[0].Rows.Count > 0)
+                        NameValueCollection Params = new NameValueCollection();
+                        string[] segments = response.Split('&');
+                        foreach (string seg in segments)
                         {
-                            DataTable dt = StudDetails.Tables[0];
-                            var JsonData = JObject.Parse(decResponse);
-                            lblEnrollNo.Text = dt.Rows[0]["ENROLLNMENTNO"].ToString();
-                            lblSem.Text = dt.Rows[0]["SEMESTERNO"].ToString();
-                            lblyear.Text = dt.Rows[0]["YEAR"].ToString();
-                            lblsessionName.Text = dt.Rows[0]["SESSION_NAME"].ToString();
-                            lblRecieptType.Text = dt.Rows[0]["RECIEPT_CODE"].ToString();
-                            ViewState["RECIEPTCODE"] = dt.Rows[0]["RECIEPT_CODE"].ToString();
-                            Label_MerchTxnRef.Text = JsonData["reference_no"].ToString();
-                            Label_OrderInfo.Text = JsonData["order_no"].ToString();
-                            lblname.Text = JsonData["order_bill_name"].ToString();
-                            Label_Amount.Text = JsonData["order_amt"].ToString();
-                            lblOrderSatus.Text = JsonData["order_status"].ToString();
-                            Label_Message.Text = JsonData["order_bank_response"].ToString();     //"SUCCESS" OR "Txn Success" OR  "Successfuly"
-                            if (Label_Message.Text == "SUCCESS" || Label_Message.Text == "Txn Success")
+                            string[] parts = seg.Split('=');
+                            if (parts.Length > 0)
                             {
-                                btnManage.Visible = true;
-                                ViewState["Status"] = JsonData["order_status"].ToString();      // "Shipped" OR "Initiated" OR  "Approved"                              
+                                string KeyParam = parts[0].Trim();
+                                string Value = parts[1].Trim();
+                                Params.Add(KeyParam, Value);
                             }
-                            else
-                            {
-                                Label_Message.Text = "NA";
-                            }
-
-                            lbldate.Text = JsonData["order_date_time"].ToString();
                         }
-                        
+
+                        string enc_response = string.IsNullOrEmpty(Params["enc_response"]) ? "" : Params["enc_response"];
+                        string enc_error_code = string.IsNullOrEmpty(Params["enc_error_code"]) ? "" : Params["enc_error_code"];
+                        dt = StudDetails.Tables[0];
+
+
+                        if (enc_response == "Access_code: Invalid Parameter")
+                        {
+                            continue;
+                        }
+                        else 
+                        {
+                            decResponse = ccaCrypto.Decrypt(enc_response, workingKey);
+                        }
+                       
+
+                        var JsonData1 = JObject.Parse(decResponse);
+                        string status1 = string.IsNullOrEmpty(JsonData1["status"].ToString()) ? "" : JsonData1["status"].ToString();
+                        if (!string.IsNullOrEmpty(status1) && status1 == "0")
+                        {
+                            break;
+
+                        }
+                        else 
+                        {
+                            continue;
+                        }
+
+                        //        var check_error = "";
+
+                        //        // break;
                     }
                 }
-                else 
+                catch (Exception Ex)
                 {
-                    decResponse = status + "|" + enc_response + "|" + enc_error_code;
-                    objCommon.DisplayMessage(this.updServertoServer, "failure response from ccAvenues: " + decResponse, this.Page);
+                    //continue;
+                    //lblResponse.Text = Request.Form["encResp"].ToString();
+                }
+
+            }
+
+
+
+            ////int Count = 0;
+            //for (int i = 0; i <= pg_ds.Tables[0].Rows.Count; i++)
+            //{
+            //    //  Count++;
+            //    accessCode = pg_ds.Tables[0].Rows[i]["ACCESS_CODE"].ToString();
+            //        //"AVAY80KF51BR28YARB";
+
+            //    workingKey = pg_ds.Tables[0].Rows[i]["CHECKSUM_KEY"].ToString();
+            //        //"ACC3927142E9155023F668031786175B";
+            //    // encResponse = ccaCrypto.Decrypt(Request.Form["encResp"], workingKey);
+            //}
+
+
+
+            var JsonData = JObject.Parse(decResponse);
+            string status = string.IsNullOrEmpty(JsonData["status"].ToString()) ? "" : JsonData["status"].ToString();
+            if (!string.IsNullOrEmpty(status) && status == "0")
+            {
+                pnlDetails.Visible = true;
+
+                if (status == "0")
+                {
+                    if (StudDetails.Tables[0].Rows.Count > 0)
+                    {
+
+                        lblEnrollNo.Text = dt.Rows[0]["ENROLLNMENTNO"].ToString();
+                        lblSem.Text = dt.Rows[0]["SEMESTERNO"].ToString();
+                        lblyear.Text = dt.Rows[0]["YEAR"].ToString();
+                        lblsessionName.Text = dt.Rows[0]["SESSION_NAME"].ToString();
+                        lblRecieptType.Text = dt.Rows[0]["RECIEPT_CODE"].ToString();
+                        ViewState["RECIEPTCODE"] = dt.Rows[0]["RECIEPT_CODE"].ToString();
+                        Label_MerchTxnRef.Text = JsonData["reference_no"].ToString();
+                        Label_OrderInfo.Text = JsonData["order_no"].ToString();
+                        lblname.Text = JsonData["order_bill_name"].ToString();
+                        Label_Amount.Text = JsonData["order_amt"].ToString();
+                        lblOrderSatus.Text = JsonData["order_status"].ToString();
+                        Label_Message.Text = JsonData["order_bank_response"].ToString();     //"SUCCESS" OR "Txn Success" OR  "Successfuly"
+                        string DCRCount = objCommon.LookUp("ACD_DCR", "COUNT (IDNO)", "TRANSACTIONID= " + JsonData["reference_no"].ToString());
+                        if ((Label_Message.Text == "SUCCESS" || lblOrderSatus.Text == "Shipped") && DCRCount == "0")
+                        {
+
+                            btnManage.Visible = true;
+                            ViewState["Status"] = JsonData["order_status"].ToString();      // "Shipped" OR "Initiated" OR  "Approved"                              
+                        }
+                        else
+                        {
+                            string Receiptno = objCommon.LookUp("ACD_DCR", "REC_NO", "TRANSACTIONID= " + JsonData["reference_no"].ToString());
+                            lblrecno.Text = Receiptno;
+                            Label_Message.Text = "Already Managed";
+                            btnManage.Visible = false;
+                        }
+
+                        lbldate.Text = JsonData["order_date_time"].ToString();
+                    }
+
                 }
             }
+            else
+            {
+                lblEnrollNo.Text = dt.Rows[0]["ENROLLNMENTNO"].ToString();
+                lblSem.Text = dt.Rows[0]["SEMESTERNO"].ToString();
+                lblyear.Text = dt.Rows[0]["YEAR"].ToString();
+                lblsessionName.Text = dt.Rows[0]["SESSION_NAME"].ToString();
+                lblRecieptType.Text = dt.Rows[0]["RECIEPT_CODE"].ToString();
+                ViewState["RECIEPTCODE"] = dt.Rows[0]["RECIEPT_CODE"].ToString();
+                Label_MerchTxnRef.Text = "NA"; //JsonData["reference_no"].ToString();
+                Label_OrderInfo.Text = "NA";//JsonData["order_no"].ToString();
+                lblname.Text = dt.Rows[0]["NAME"].ToString();
+                //JsonData["order_bill_name"].ToString();
+                Label_Amount.Text = "NA";
+                lblOrderSatus.Text = "NA";
+                Label_Message.Text = "NA";     //"SUCCESS" OR "Txn Success" OR  "Successfuly"
+                Label_Message.Text = "NA";
+                lbldate.Text = "NA";
+                lblrecno.Text = "NA";
+                pnlDetails.Visible = true;
+                btnManage.Visible = false;
+                //JsonData["order_date_time"].ToString();
+                //decResponse = status + "|" + enc_response + "|" + enc_error_code;
+                ////objCommon.DisplayMessage(this.updServertoServer, "failure response from ccAvenues: " + decResponse, this.Page);
+            }
         }
+
         catch (Exception ex)
         {
             throw ex;
