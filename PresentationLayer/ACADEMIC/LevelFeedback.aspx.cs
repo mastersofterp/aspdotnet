@@ -481,12 +481,13 @@ public partial class LevelFeedback : System.Web.UI.Page
 
 
 
-    private void FillCourseQuestion(int SubID, int semesterno)
+    private void FillCourseQuestion(int SubID, int semesterno,int courseno)
     {
         objSEB.CTID = Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
         objSEB.SubId = SubID;
         objSEB.SemesterNo = semesterno;
         objSEB.Idno = Convert.ToInt32(lblName.ToolTip);
+        objSEB.CourseNo = Convert.ToInt32(courseno);
         pnlFinalSumbit.Visible = true;
         btnSubmit.Visible = true;
         btnCancel.Visible = true;
@@ -903,7 +904,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     }
 
                     this.CheckSubjectAssign();
-                    FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]));
+                    FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]), Convert.ToInt32(ViewState["SelectedCourse"]));
                     //this.ClearControls();
                     //fillquestion();
                 }
@@ -1062,7 +1063,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             {
                 lblMsg.Text = "";
                 lblMsg.Visible = false;
-                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
+                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName), Convert.ToInt32(ViewState["COURSENO"]));
                 //FillTeacherQuestion();
                 //pnlFinalSumbit.Visible = true;
                 //btnSubmit.Visible = true;
@@ -1075,7 +1076,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             {
                 lblMsg.Text = "";
                 lblMsg.Visible = false;
-                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
+                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName), Convert.ToInt32(ViewState["COURSENO"]));
                 //pnlFinalSumbit.Visible = true;
                 //btnSubmit.Visible = true;
                 //btnCancel.Visible = true;
@@ -1086,7 +1087,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             {
                 lblMsg.Text = "";
                 lblMsg.Visible = false;
-                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
+                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName), Convert.ToInt32(ViewState["COURSENO"]));
                 //pnlFinalSumbit.Visible = true;
                 //btnSubmit.Visible = true;
                 //btnCancel.Visible = true;
@@ -1778,7 +1779,7 @@ public partial class LevelFeedback : System.Web.UI.Page
 
             //}
 
-            FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]));
+            FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]),Convert.ToInt32(ViewState["SelectedCourse"]));
         }
     }
     protected void btnSave_Click(object sender, EventArgs e)
