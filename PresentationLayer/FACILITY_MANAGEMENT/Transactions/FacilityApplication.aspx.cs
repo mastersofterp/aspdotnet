@@ -191,14 +191,12 @@ public partial class FacilityApplication : System.Web.UI.Page
             }
             else
             {
-
                 ConvertDateTime();
                 int iresult = 0;
                 objFM.CenFacilityNo = Convert.ToInt32(ddlFacilityName.SelectedValue);
                 objFM.ApplicationDate = Convert.ToDateTime(txtApplicationDate.Text);
                 objFM.FromDate = Convert.ToDateTime(Session["FromDate"]);
-                objFM.ToDate = Convert.ToDateTime(Session["ToDate"]);
-
+                objFM.ToDate = Convert.ToDateTime(Session["ToDate"]); 
                 objFM.PriorityLevel = Convert.ToChar(ddlLevel.SelectedValue);
                 objFM.IDNO = Convert.ToInt32(ViewState["idno"]);
                 //---------------------- Changed by Vijay Andoju on 07-02-20202----------------------
@@ -377,19 +375,19 @@ public partial class FacilityApplication : System.Web.UI.Page
             ViewState["Status"] = Status.ToString();
             if (Status.ToString() == "CANCEL")
             {
-                MessageBox("Application is canceled.So record could not be modify");
+                MessageBox("Cancelled Application Cannot Modify");
                 return;
             }
 
             if (Status.ToString() == "REJECTED")
             {
-                MessageBox("Application is rejected .So record could not be modify");
+                MessageBox("Rejected Application Cannot Modify");
                 return;
 
             }
             if (Status.ToString() == "APPROVED")
             {
-                MessageBox("Application is Approved .So record could not be modify");
+                MessageBox("Approved Application Cannot Modify");
                 return;
             }
 
@@ -404,7 +402,7 @@ public partial class FacilityApplication : System.Web.UI.Page
             Panel2.Visible = true;
 
 
-            divCancel1.Visible = divCancel2.Visible = true;
+            divCancel1.Visible = true;
         }
         catch (Exception ex)
         {
@@ -536,6 +534,7 @@ public partial class FacilityApplication : System.Web.UI.Page
         Clear();
         pnlAdd.Visible = false; pnlbutton.Visible = false;
         pnlList.Visible = true;
+        divCancel1.Visible = false;
         BindFacilityApplication();
     }
     protected void btnAdd_Click(object sender, EventArgs e)
@@ -543,6 +542,7 @@ public partial class FacilityApplication : System.Web.UI.Page
         Clear();
         pnlAdd.Visible = true;
         pnlList.Visible = false;
+        divCancel1.Visible = false;
         pnlbutton.Visible = true;
         ViewState["action"] = "add";
         lvApplication.Visible = false;
@@ -615,6 +615,8 @@ public partial class FacilityApplication : System.Web.UI.Page
     {
         if (ddlFacilityName.SelectedValue == "0")
         {
+            txtDetail.Text = string.Empty;
+            txtRemark.Text = string.Empty;
             Panel2.Visible = false;
             rptMinorFacilityList.Visible = false;
             Panel4.Visible = false;

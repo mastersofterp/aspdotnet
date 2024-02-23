@@ -9,7 +9,7 @@
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
                 <div class="box-header with-border">
-                    <h3 class="box-title">Facility Application Status Report</h3>
+                    <h3 class="box-title">Facility Status Report</h3>
                     <p class="text-center">
                     </p>
                     <div class="box-tools pull-right">
@@ -51,7 +51,7 @@
                                                                 DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
                                                                 MessageValidatorTip="true" TargetControlID="txtFromdt" />
                                                             <asp:RequiredFieldValidator ID="rfvfdate" runat="server" ControlToValidate="txtFromdt"
-                                                                Display="None" ErrorMessage="Please Enter From Date" SetFocusOnError="True"
+                                                                Display="None" ErrorMessage="Please Select / Enter From Date" SetFocusOnError="True"
                                                                 ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
                                                         </div>
                                                     </div>
@@ -68,7 +68,7 @@
                                                                 CssClass="form-control" Style="z-index: 0;" TabIndex="2" ToolTip="Enter To Date" />
 
                                                             <asp:RequiredFieldValidator ID="rfvTodt" runat="server" ControlToValidate="txtTodt"
-                                                                Display="None" ErrorMessage="Please Enter To Date" SetFocusOnError="true" ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
+                                                                Display="None" ErrorMessage="Please Select / Enter To Date" SetFocusOnError="true" ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
 
                                                             <ajaxToolKit:CalendarExtender ID="CeTodt" runat="server" Enabled="true" EnableViewState="true"
                                                                 Format="dd/MM/yyyy" PopupButtonID="imgCalTodt" TargetControlID="txtTodt">
@@ -484,7 +484,10 @@
         //       this._source = null;
         //       this._popup = null; 
         //    }
-        //    
+        //  
+
+        
+
     </script>
 
     <div id="divMsg" runat="server">

@@ -107,10 +107,12 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <asp:Panel ID="Panel2" runat="server" ScrollBars="Vertical" Height="300px">
+                                                                    <asp:Panel ID="Panel2" runat="server" ScrollBars="Vertical">
                                                                         <asp:Repeater ID="rptMinorFacilityList" runat="server" Visible="true">
                                                                             <HeaderTemplate>
-                                                                                <h4>Minor Facility List </h4>
+                                                                                <div class="sub-heading">
+                                                                                    <h5>Minor Facility List </h5>
+                                                                                </div>
                                                                                 <table class="table table-hover table-bordered" id="tbluser">
                                                                                     <thead>
                                                                                         <tr class="bg-light-blue">
@@ -143,7 +145,45 @@
                                                                         </asp:Repeater>
                                                                     </asp:Panel>
                                                                 </div>
+                                                                <div class="col-md-6">
+                                                                    <asp:Panel ID="Panel4" runat="server" ScrollBars="Vertical">
+                                                                        <asp:Repeater ID="rptExtraMinorList" runat="server" Visible="true">
+                                                                            <HeaderTemplate>
+                                                                                <div class="sub-heading">
+                                                                                    <h5>Extra Minor Facility List </h5>
+                                                                                </div>
+                                                                                <table class="table table-hover table-bordered" id="tbluser">
+                                                                                    <thead>
+                                                                                        <tr class="bg-light-blue">
+                                                                                            <th>Select
+                                                                                            </th>
+                                                                                            <th>Minor Facility Name
+                                                                                            </th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                            </HeaderTemplate>
+                                                                            <ItemTemplate>
+                                                                                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                                                                    <ContentTemplate>
+                                                                                        <tr>
+                                                                                            <td>
 
+                                                                                                <asp:CheckBox ID="chkSelectExtra" runat="server" ToolTip='<%# Eval("MinFacilityNo")%>'></asp:CheckBox>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <%# Eval("MinFacilityName")%>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </ContentTemplate>
+                                                                                </asp:UpdatePanel>
+                                                                            </ItemTemplate>
+                                                                            <FooterTemplate>
+                                                                                </tbody>  </table>
+                                                                            </FooterTemplate>
+                                                                        </asp:Repeater>
+                                                                    </asp:Panel>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </asp:Panel>
@@ -167,12 +207,12 @@
                                                                                 <label>Application Date <span style="color: #FF0000">*</span>:</label>
                                                                                 <div class="input-group">
                                                                                     <div class="input-group-addon">
-                                                                                       <%-- <asp:Image ID="imgCalJoindt" runat="server" ImageUrl="~/images/calendar.png"
-                                                                                            Style="cursor: pointer" />--%>
-                                                                                        <i id="imgCalJoindt" runat="server" class="fa fa-calendar text-blue" Style="cursor: pointer"></i>
+                                                                                        <%-- <asp:Image ID="imgCalJoindt" runat="server" ImageUrl="~/images/calendar.png"
+                                                                         Style="cursor: pointer" />--%>
+                                                                                        <i id="imgCalJoindt" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
                                                                                     </div>
                                                                                     <asp:TextBox ID="txtApplicationDate" runat="server" MaxLength="10" CssClass="form-control" />
-                                                                                    
+
 
                                                                                     <ajaxToolKit:CalendarExtender ID="CeJoindt" runat="server" Enabled="true"
                                                                                         EnableViewState="true" Format="dd/MM/yyyy" PopupButtonID="imgCalJoindt"
@@ -189,7 +229,7 @@
                                                                                         InvalidValueMessage="Joining Date is Invalid (Enter dd/MM/yyyy Format)"
                                                                                         SetFocusOnError="true" TooltipMessage="Please Enter Joining Date"
                                                                                         ValidationGroup="Leaveapp">
-                                                 
+                              
                                                                                     </ajaxToolKit:MaskedEditValidator>
                                                                                 </div>
                                                                             </div>
@@ -202,7 +242,7 @@
                                                                                 <label>From Date :<span style="color: #FF0000">*</span></label>
                                                                                 <div class="input-group">
                                                                                     <div class="input-group-addon">
-                                                                                        <i id="imgCalFacilityDt" runat="server" class="fa fa-calendar text-blue" Style="cursor: pointer"></i>
+                                                                                        <i id="imgCalFacilityDt" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
                                                                                         <%--<asp:Image ID="imgCalFacilityDt" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />--%>
                                                                                     </div>
                                                                                     <asp:TextBox ID="txtFromDt" runat="server" MaxLength="10" onchange="Cleardate()" class="form-control" Style="z-index: 0;" />
@@ -210,32 +250,35 @@
                                                                                         TargetControlID="txtFromDt" PopupButtonID="imgCalFacilityDt" Enabled="true"
                                                                                         EnableViewState="true">
                                                                                     </ajaxToolKit:CalendarExtender>
-                                                                                    <asp:RequiredFieldValidator ID="rfvFacilityDt" runat="server" ControlToValidate="txtFromDt"
+                                                                                    <%--<asp:RequiredFieldValidator ID="rfvFacilityDt" runat="server" ControlToValidate="txtFromDt"
                                                                                         Display="None" ErrorMessage="Please Enter From Date" ValidationGroup="Facility"
-                                                                                        SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                                                        SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                                                                     <%--<asp:CompareValidator ID="cvdate" runat="server" controltovalidate="txtToDt" controltocompare="txtFromDt" operator="GreaterThanEqual" type="Date" ErrorMessage="The From Date should be smaller than To Date !" ></asp:CompareValidator>--%>
                                                                                     <ajaxToolKit:MaskedEditExtender ID="meeFacilityDt" runat="server" TargetControlID="txtFromDt"
                                                                                         Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
                                                                                         AcceptNegative="Left" ErrorTooltipEnabled="true" />
                                                                                     <ajaxToolKit:MaskedEditValidator ID="mevFacilityDt" runat="server" ControlExtender="meeFacilityDt"
-                                                                                        ControlToValidate="txtFromDt" EmptyValueMessage="Please Enter  From Date" IsValidEmpty="false"
+                                                                                        ControlToValidate="txtFromDt" EmptyValueMessage="Please Enter From Date" IsValidEmpty="false"
                                                                                         InvalidValueMessage=" From Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
                                                                                         TooltipMessage="Please Enter From Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
-                                                                                        ValidationGroup="Leave" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
+                                                                                        ValidationGroup="Facility" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-3">
                                                                                 <label>From Time :<span style="color: #FF0000">*</span></label>
                                                                                 <asp:TextBox ID="txtFromTime" runat="server" CssClass="form-control "></asp:TextBox>
+                                                                                <%--<asp:RequiredFieldValidator ID="rfvFacilityTime1" runat="server" ControlToValidate="txtFromTime"
+                                                                                    Display="None" ErrorMessage="Please Enter From Time" ValidationGroup="Facility"
+                                                                                    SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                                                                 <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender2" runat="server" TargetControlID="txtFromTime"
                                                                                     Mask="99:99" MaskType="Time"
                                                                                     AcceptAMPM="true" ErrorTooltipEnabled="true" MessageValidatorTip="true" AcceptNegative="Left"
                                                                                     DisplayMoney="Left" OnInvalidCssClass="errordate" />
                                                                                 <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" ControlExtender="MaskedEditExtender2"
-                                                                                    ControlToValidate="txtFromTime" Display="None" EmptyValueBlurredText="Empty"
+                                                                                    ControlToValidate="txtFromTime" Display="None" EmptyValueBlurredText="Empty" EmptyValueMessage="Please Enter From Time"
                                                                                     InvalidValueMessage="From Time is Invalid (Enter 12 Hour Format)"
                                                                                     SetFocusOnError="true" TooltipMessage="Please Enter From Time"
-                                                                                    IsValidEmpty="false" />
+                                                                                    IsValidEmpty="false" ValidationGroup="Facility"/>
                                                                             </div>
                                                                             <%--</div>--%>
 
@@ -246,15 +289,15 @@
                                                                                         <div class="input-group date">
                                                                                             <div class="input-group-addon">
                                                                                                 <%--<asp:Image ID="imgCalToDt" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />--%>
-                                                                                                <i id="imgCalToDt" runat="server" class="fa fa-calendar text-blue" Style="cursor: pointer"></i>
+                                                                                                <i id="imgCalToDt" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
                                                                                             </div>
                                                                                             <asp:TextBox ID="txtToDt" runat="server" MaxLength="10" class="form-control" Style="z-index: 0;" />
                                                                                             <%-- <asp:TextBox ID="txtToDt" runat="server" MaxLength="10" class="form-control" Style="z-index: 0;" OnTextChanged="txtToDt_TextChanged" AutoPostBack="false" />--%>
 
                                                                                             <%-- <asp:TextBox ID="txtToDt" runat="server" MaxLength="10" class="form-control" Style="z-index: 0;" />--%>
-                                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtToDt"
+                                                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtToDt"
                                                                                                 Display="None" ErrorMessage="Please Enter  To Date" ValidationGroup="Facility"
-                                                                                                SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                                                                SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                                                                             <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd/MM/yyyy"
                                                                                                 TargetControlID="txtToDt" PopupButtonID="imgCalToDt" Enabled="true"
                                                                                                 EnableViewState="true">
@@ -263,17 +306,17 @@
                                                                                                 Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
                                                                                                 AcceptNegative="Left" ErrorTooltipEnabled="true" />
                                                                                             <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="MaskedEditExtender1"
-                                                                                                ControlToValidate="txtToDt" EmptyValueMessage="Please Enter  To Date"
-                                                                                                InvalidValueMessage=" To Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
-                                                                                                TooltipMessage="Please Enter  To Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
-                                                                                                ValidationGroup="Leave" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
+                                                                                                ControlToValidate="txtToDt" EmptyValueMessage="Please Enter To Date"
+                                                                                                InvalidValueMessage=" To Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" 
+                                                                                                TooltipMessage="Please Enter To Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                                                                ValidationGroup="Facility" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
                                                                                         </div>
 
 
                                                                                     </ContentTemplate>
                                                                                     <%-- <Triggers>
-                                                                                    <asp:AsyncPostBackTrigger ControlID="txtToDt" EventName="TextChanged"/>
-                                                                                </Triggers>--%>
+                                                                 <asp:AsyncPostBackTrigger ControlID="txtToDt" EventName="TextChanged"/>
+                                                             </Triggers>--%>
                                                                                 </asp:UpdatePanel>
 
                                                                             </div>
@@ -282,23 +325,27 @@
                                                                                 <label>To Time <span style="color: #FF0000">*</span>:</label>
 
                                                                                 <asp:TextBox ID="txtToTime" runat="server" CssClass="form-control"></asp:TextBox>
+                                                                                <%--<asp:RequiredFieldValidator ID="rfvFacilityTime2" runat="server" ControlToValidate="txtToTime"
+                                                                                    Display="None" ErrorMessage="Please Enter To Time" ValidationGroup="Facility"
+                                                                                    SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                                                                 <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" TargetControlID="txtToTime"
                                                                                     Mask="99:99" MaskType="Time"
                                                                                     AcceptAMPM="true" ErrorTooltipEnabled="true" MessageValidatorTip="true" AcceptNegative="Left"
                                                                                     DisplayMoney="Left" OnInvalidCssClass="errordate" />
                                                                                 <ajaxToolKit:MaskedEditValidator ID="mevEnterTimeTo" runat="server" ControlExtender="MaskedEditExtender3"
-                                                                                    ControlToValidate="txtToTime" Display="None" EmptyValueBlurredText="Empty"
+                                                                                    ControlToValidate="txtToTime" Display="None" EmptyValueBlurredText="Empty" EmptyValueMessage="Please Enter To Time"
                                                                                     InvalidValueMessage="To Time is Invalid (Enter 12 Hour Format)"
                                                                                     SetFocusOnError="true" TooltipMessage="Please Enter To Time"
-                                                                                    IsValidEmpty="false" />
+                                                                                    IsValidEmpty="false" ValidationGroup="Facility" />
 
 
                                                                             </div>
 
                                                                             <div class="form-group col-md-3">
                                                                                 <label>Priority Level <span style="color: #FF0000">*</span>:</label>
-                                                                                <asp:DropDownList ID="ddlLevel" runat="server"  data-select2-enable="true" CssClass="form-control">
-                                                                                    <asp:ListItem Selected="True" Text="High" Value="H"></asp:ListItem>
+                                                                                <asp:DropDownList ID="ddlLevel" runat="server" data-select2-enable="true" CssClass="form-control">
+                                                                                    <asp:ListItem Selected="True" Text="Please Select" Value="0"></asp:ListItem>
+                                                                                    <asp:ListItem Text="High" Value="H"></asp:ListItem>
                                                                                     <asp:ListItem Text="Low" Value="L"></asp:ListItem>
                                                                                     <asp:ListItem Text="Medium" Value="M"></asp:ListItem>
                                                                                 </asp:DropDownList>
@@ -311,54 +358,23 @@
                                                                             </div>
 
                                                                         </div>
-                                                                        <div class="form-group col-md-12" id="divCancel1" runat="server" visible="false">
-                                                                            <label>Cancel Status :</label>
-                                                                            <asp:CheckBox ID="chkIsCancel" runat="server" Text="Cancel" Checked="false" CssClass="form-control" />
-                                                                            <%--onchange="ViewReason()"--%>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="divCancel2" runat="server" visible="false">
-                                                                            <label>Cancel Reason/Remark :</label>
-                                                                            <asp:TextBox ID="txtReason" runat="server" MaxLength="100" CssClass="form-control" TextMode="MultiLine" />
 
+                                                                        <div class="panel panel-info" id="divCancel1" runat="server" visible="false">
+                                                                            <div class="panel-heading">
+                                                                                <div class="sub-heading">
+                                                                                    <h5>Cancel Status</h5>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="form-group col-2">
+                                                                                    <asp:CheckBox ID="chkIsCancel" runat="server" Text="Cancel" Checked="false" CssClass="" />
+                                                                                </div>
+                                                                                <div class="form-group col-6">
+                                                                                    <label>Cancel Reason/Remark :</label>
+                                                                                    <asp:TextBox ID="txtReason" runat="server" MaxLength="100" CssClass="form-control" TextMode="MultiLine" Width="300px" />
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <asp:Panel ID="Panel4" runat="server" ScrollBars="Vertical" Height="300px">
-                                                                                <asp:Repeater ID="rptExtraMinorList" runat="server" Visible="true">
-                                                                                    <HeaderTemplate>
-                                                                                        <h4>Extra Minor Facility List </h4>
-                                                                                        <table class="table table-hover table-bordered" id="tbluser">
-                                                                                            <thead>
-                                                                                                <tr class="bg-light-blue">
-                                                                                                    <th>Select
-                                                                                                    </th>
-                                                                                                    <th>Minor Facility Name
-                                                                                                    </th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-                                                                                    </HeaderTemplate>
-                                                                                    <ItemTemplate>
-                                                                                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                                                                                            <ContentTemplate>
-                                                                                                <tr>
-                                                                                                    <td>
-
-                                                                                                        <asp:CheckBox ID="chkSelectExtra" runat="server" ToolTip='<%# Eval("MinFacilityNo")%>'></asp:CheckBox>
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        <%# Eval("MinFacilityName")%>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </ContentTemplate>
-                                                                                        </asp:UpdatePanel>
-                                                                                    </ItemTemplate>
-                                                                                    <FooterTemplate>
-                                                                                        </tbody>  </table>
-                                                                                    </FooterTemplate>
-                                                                                </asp:Repeater>
-                                                                            </asp:Panel>
-                                                                        </div>
-
                                                                     </div>
                                                                 </div>
                                                             </ContentTemplate>
@@ -378,7 +394,7 @@
                                         <asp:Panel ID="pnlList" runat="server">
                                             <asp:LinkButton ID="btnAdd" runat="server" SkinID="LinkAddNew" OnClick="btnAdd_Click" ToolTip="Click Add New To Enter Centralize Facility" Text="Add New" CssClass="btn btn-primary"></asp:LinkButton>
                                             <%-- <asp:Button ID="btnShowReport"  Visible="false" runat="server" Text=" Report" CausesValidation="false" OnClick="btnShowReport_Click"
-                                                CssClass="btn btn-info" ToolTip="Click here to show the report" />--%>
+                                         CssClass="btn btn-info" ToolTip="Click here to show the report" />--%>
                                         </asp:Panel>
                                     </div>
                                 </div>
@@ -391,8 +407,8 @@
                                             CssClass="btn btn-primary" OnClick="btnSave_Click" ToolTip="Click here to Submit" />
                                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" Visible="false"
                                             OnClick="btnCancel_Click" CssClass="btn btn-warning" TabIndex="5" ToolTip="Click here to Reset" />&nbsp;
-                                        <asp:Button ID="btnBack" runat="server" Text="Back" CausesValidation="false" ToolTip="Click here to go back to previous" OnClick="btnBack_Click"
-                                            CssClass="btn btn-info" />
+                                 <asp:Button ID="btnBack" runat="server" Text="Back" CausesValidation="false" ToolTip="Click here to go back to previous" OnClick="btnBack_Click"
+                                     CssClass="btn btn-info" />
                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Facility"
                                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
 
@@ -401,7 +417,9 @@
                                 <div class="col-md-12 table-responsive">
                                     <asp:Repeater ID="lvApplication" runat="server">
                                         <HeaderTemplate>
-                                            <h4>Centralize Facility List </h4>
+                                            <div class="sub-heading">
+                                                <h5>Centralize Facility List </h5>
+                                            </div>
                                             <table class="table table-hover table-bordered" id="tbluser">
                                                 <thead>
                                                     <tr class="bg-light-blue">
@@ -901,5 +919,6 @@
         }
 
     </script>
+
 </asp:Content>
 

@@ -351,7 +351,8 @@ public partial class FacilityApproval : System.Web.UI.Page
     }
     private void Clear()
     {
-        txtFromDt.Text = txtToDt.Text=txtApplicationDate.Text=txtAppRemark.Text=txtDetail.Text = txtLevel.Text =txtDetail.Text=txtFacilityDetailName.Text= string.Empty;
+        txtFromDt.Text = txtToDt.Text=txtApplicationDate.Text=txtAppRemark.Text=txtDetail.Text = txtLevel.Text =txtDetail.Text=txtFacilityDetailName.Text=txtApprovalRemark.Text = string.Empty;
+        ddlStatus.SelectedValue = "0";
         pnlbutton.Visible = false;
         //pnlList.Visible = true;
       

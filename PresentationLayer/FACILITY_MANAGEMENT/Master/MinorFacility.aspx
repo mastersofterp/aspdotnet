@@ -43,7 +43,7 @@
                                                         </div>
                                                          <div class="form-group col-md-4">
                                                             <label>Facility Details :</label>
-                                                            <asp:TextBox ID="txtDetail" runat="server" MaxLength="500" TabIndex="2"
+                                                            <asp:TextBox ID="txtDetail" runat="server" MaxLength="250" TabIndex="2"
                                                                 TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Minor Facility Details" />
 
                                                         </div>

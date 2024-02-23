@@ -20,7 +20,7 @@
                     <div class="box box-primary">
                         <div id="div2" runat="server"></div>
                         <div class="box-header with-border">
-                            <h3 class="box-title">APPROVAL OF CENTRALIZE FACILITY APPLICATION</h3>
+                            <h3 class="box-title">APPROVAL OF CENTRALIZE FACILITY</h3>
                         </div>
                         <%-- <div class="box box-info">--%>
                         <form role="form">
@@ -113,7 +113,7 @@
                                                                         <asp:TextBox ID="txtToDt" runat="server" ReadOnly="true" CssClass="form-control" />
                                                                     </div>
                                                                     <div class="form-group col-md-3">
-                                                                        <label>Pririty Level:</label>
+                                                                        <label>Priority Level:</label>
                                                                         <asp:TextBox ID="txtLevel" runat="server" ReadOnly="true" CssClass="form-control" />
 
                                                                     </div>
@@ -125,6 +125,7 @@
                                                                     <div class="form-group col-md-3">
                                                                         <label>Status <span style="color: #FF0000">*</span>:</label>
                                                                         <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" data-select2-enable="true">
+                                                                            <asp:ListItem Text="Please Select" Value="0"></asp:ListItem>
                                                                             <asp:ListItem Selected="True" Text="Approved" Value="A"></asp:ListItem>
                                                                             <asp:ListItem Text="Reject" Value="R"></asp:ListItem>
                                                                             <asp:ListItem Text="Cancelled" Value="C"></asp:ListItem>

@@ -95,7 +95,7 @@
 
                                                             <div class="form-group col-md-4">
                                                                 <label>Remark :</label>
-                                                                <asp:TextBox ID="txtRemark" runat="server" MaxLength="500" TabIndex="4"
+                                                                <asp:TextBox ID="txtRemark" runat="server" MaxLength="250" TabIndex="4"
                                                                     TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Facility Remark" />
 
                                                             </div>
@@ -502,9 +502,11 @@
                                 </table>
                         </fieldset>                  
                 </asp:Panel>
-              </br>
-                               <center>
-                                            <%--<asp:Panel ID="pnlbutton" runat="server" Width="90%">
+                <br>
+                <br>
+                <br></br>
+                <center>
+                    <%--<asp:Panel ID="pnlbutton" runat="server" Width="90%">
                                         <asp:Button ID="btnSave" runat="server" Text="Submit" ValidationGroup="Facility"
                                             Width="80px" onclick="btnSave_Click" />
                                         &nbsp;
@@ -515,20 +517,15 @@
                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Facility"
                                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                             </asp:Panel>--%>
-                                   </center>
-                               <%-- <tr>
+                </center>
+                <%-- <tr>
                                     <td align="center" colspan="2" style="width: 599px">
                                         <asp:Label ID="lblerror" SkinID="Errorlbl" runat="server"></asp:Label>
                                         <asp:Label ID="lblmsg" runat="server" SkinID="lblmsg"></asp:Label>
                                     </td>
-                                </tr>--%>
-                            
-           
-        
-     
-               <%-- <asp:Panel ID="pnlList" runat="server">--%>
-                    <table cellpadding="0" cellspacing="0" style="width: 90%; text-align: center">
-                        <%--<tr>
+                                </tr>--%><%-- <asp:Panel ID="pnlList" runat="server">--%>
+                <table cellpadding="0" cellspacing="0" style="width: 90%; text-align: center">
+                    <%--<tr>
                             <td style="text-align: left; padding-left: 10px; padding-top: 10px;">
                               
                                <asp:LinkButton ID="btnAdd" runat="server" SkinID="LinkAddNew" OnClick="btnAdd_Click">Add New</asp:LinkButton>
@@ -541,19 +538,16 @@
                                               
                             </td>
                         </tr>--%>
-                        <tr>
-                            <td>
-                                &nbsp;
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center">
-                                <%--<asp:ListView ID="lvFacilityDetail" runat="server">--%>
-                                    <EmptyDataTemplate>
-                                        <br />
-                                        <%--<asp:Label ID="lblerr" SkinID="Errorlbl" runat="server" Text="Click Add New To Enter Leave Name" />--%>
-                                    </EmptyDataTemplate>
-                                   <%-- <LayoutTemplate>
+                    <tr>
+                        <td>&nbsp; </td>
+                    </tr>
+                    <tr>
+                        <td align="center"><%--<asp:ListView ID="lvFacilityDetail" runat="server">--%>
+                            <EmptyDataTemplate>
+                                <br />
+                                <%--<asp:Label ID="lblerr" SkinID="Errorlbl" runat="server" Text="Click Add New To Enter Leave Name" />--%>
+                            </EmptyDataTemplate>
+                            <%-- <LayoutTemplate>
                                         <div id="demp_grid" class="vista-grid">
                                             <div class="titlebar">
                                                Leave Types</div>
@@ -581,7 +575,7 @@
                                             </table>
                                         </div>
                                     </LayoutTemplate>--%>
-                                   <%-- <ItemTemplate>
+                            <%-- <ItemTemplate>
                                         <tr class="item" onmouseover="this.style.backgroundColor='#FFFFAA'" onmouseout="this.style.backgroundColor='#FFFFFF'">
                                             <td>
                                                 <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit.gif" CommandArgument='<%# Eval("LVNO") %>'
@@ -630,8 +624,7 @@
                                         </tr>
                                     </AlternatingItemTemplate>
                                 </asp:ListView>--%>
-                                       
-                               <%-- <div class="vista-grid_datapager">
+                            <%-- <div class="vista-grid_datapager">
                                 <asp:DataPager ID="dpPager" runat="server" PagedControlID="lvFacilityDetail" PageSize="10"
                                 OnPreRender="dpPager_PreRender">
                                 <Fields>
@@ -645,11 +638,13 @@
                                 
                                 </Fields>
                                 </asp:DataPager>
-                                </div>--%>
-                            </td>
-                        </tr>
-                        </table>
-                </asp:Panel>
+                                </div>--%></td>
+                    </tr>
+                </table>
+                </asp:panel>
+                <br></br>
+                </br>
+              </br>
    
       </center>
         </ContentTemplate>

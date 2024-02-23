@@ -151,6 +151,7 @@ public partial class FacilityDetails : System.Web.UI.Page
                         MessageBox("Record Alreasy Exists");
                         pnlAdd.Visible = false;
                         pnlList.Visible = true;
+                        pnlbutton.Visible = false;
                         ViewState["action"] = null;
                         Clear();
                         BindFacilityDetail();
@@ -160,6 +161,7 @@ public partial class FacilityDetails : System.Web.UI.Page
                         MessageBox("Record Saved Successfully");
                         pnlAdd.Visible = false;
                         pnlList.Visible = true;
+                        pnlbutton.Visible = false;
                         ViewState["action"] = null;
                         Clear();
                         BindFacilityDetail();
@@ -176,6 +178,7 @@ public partial class FacilityDetails : System.Web.UI.Page
                         MessageBox("Record Alreasy Exists");
                         pnlAdd.Visible = false;
                         pnlList.Visible = true;
+                        pnlbutton.Visible = false;
                         ViewState["action"] = null;
                         Clear();
                         BindFacilityDetail();
@@ -185,6 +188,7 @@ public partial class FacilityDetails : System.Web.UI.Page
                         MessageBox("Record Updated Successfully");
                         pnlAdd.Visible = false;
                         pnlList.Visible = true;
+                        pnlbutton.Visible = false;
                         ViewState["action"] = null;
                         Clear();
                         BindFacilityDetail();
@@ -307,8 +311,14 @@ public partial class FacilityDetails : System.Web.UI.Page
     private void Clear()
     {
         txtFacilityName.Text=txtDetail.Text=txtRemark.Text = string.Empty;
-        pnlbutton.Visible = false;
-        pnlList.Visible = true;
+
+        foreach (RepeaterItem item in rptMinorList.Items)
+        {
+            CheckBox chkSELECT = item.FindControl("chkSelect") as CheckBox;
+            chkSELECT.Checked = false;
+        }
+
+        
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
@@ -319,7 +329,8 @@ public partial class FacilityDetails : System.Web.UI.Page
     protected void btnBack_Click(object sender, EventArgs e)
     {
         Clear();
-        pnlAdd.Visible = false; pnlbutton.Visible = false;
+        pnlAdd.Visible = false;
+        pnlbutton.Visible = false;
         pnlList.Visible = true;
     }
     protected void btnAdd_Click(object sender, EventArgs e)

@@ -116,6 +116,7 @@ public partial class MinorFacility : System.Web.UI.Page
                     MessageBox("Record Already Exists");
                     pnlAdd.Visible = false;
                     pnlList.Visible = true;
+                    pnlbutton.Visible = false;
                     ViewState["action"] = null;
                     Clear();
                     BindMinFacility();
@@ -126,6 +127,7 @@ public partial class MinorFacility : System.Web.UI.Page
                     pnlAdd.Visible = false;
                     pnlList.Visible = true;
                     ViewState["action"] = null;
+                    pnlbutton.Visible = false;
                     Clear();
                     BindMinFacility();
                 }
@@ -141,6 +143,7 @@ public partial class MinorFacility : System.Web.UI.Page
                     MessageBox("Record Already Exists");
                     pnlAdd.Visible = false;
                     pnlList.Visible = true;
+                    pnlbutton.Visible = false;
                     ViewState["action"] = null;
                     Clear();
                     BindMinFacility();
@@ -150,6 +153,7 @@ public partial class MinorFacility : System.Web.UI.Page
                     MessageBox("Record Updated Successfully");
                     pnlAdd.Visible = false;
                     pnlList.Visible = true;
+                    pnlbutton.Visible = false;
                     ViewState["action"] = null;
                     Clear();
                     BindMinFacility();
@@ -241,8 +245,7 @@ public partial class MinorFacility : System.Web.UI.Page
     private void Clear()
     {
         txtFacilityName.Text=txtDetail.Text = string.Empty;
-        pnlbutton.Visible = false;
-        pnlList.Visible = true;
+       
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
@@ -253,7 +256,8 @@ public partial class MinorFacility : System.Web.UI.Page
     protected void btnBack_Click(object sender, EventArgs e)
     {
         Clear();
-        pnlAdd.Visible = false; pnlbutton.Visible = false;
+        pnlAdd.Visible = false;
+        pnlbutton.Visible = false;
         pnlList.Visible = true;
     }
     protected void btnAdd_Click(object sender, EventArgs e)
