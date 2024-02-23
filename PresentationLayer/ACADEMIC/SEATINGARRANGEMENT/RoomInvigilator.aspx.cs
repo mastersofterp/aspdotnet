@@ -132,15 +132,15 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
         try
         {
             //string sp_procedure = "PKG_GET_SP_ROOMS_INVIGILATOR";
-            //string sp_parameters = "@P_FLOOR_NO,@P_BLOCK_NO";
-            //string sp_callValues = "" + Convert.ToInt32(ddlFloorNo.SelectedValue) + "," + Convert.ToInt32(ddlBlockNo.SelectedValue) + "";
+            //string sp_parameters = "@P_COLLEGE_ID,@P_DEPT_NO,@P_FLOOR_NO,@P_BLOCK_NO";
+            //string sp_callValues = "" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + Convert.ToInt32(ddlDept.SelectedValue) + "," + Convert.ToInt32(ddlFloorNo.SelectedValue) + "," + Convert.ToInt32(ddlBlockNo.SelectedValue) + "";
             //DataSet ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
 
 
             SeatingArrangementController objSC = new SeatingArrangementController();
-            DataSet ds = objSC.GetAllRooms(Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlDept.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlDept.SelectedValue), Convert.ToInt32(ddlFloorNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlFloorNo.SelectedValue), Convert.ToInt32(ddlBlockNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlBlockNo.SelectedValue));
-            lvRoomMaster.DataSource = ds;
-            lvRoomMaster.DataBind();
+            DataSet ds = objSC.GetAllRooms(Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlDept.SelectedValue), Convert.ToInt32(ddlFloorNo.SelectedValue), Convert.ToInt32(ddlBlockNo.SelectedValue));
+            //lvRoomMaster.DataSource = ds;
+            //lvRoomMaster.DataBind();
 
             if (ds.Tables.Count > 0)
             {
