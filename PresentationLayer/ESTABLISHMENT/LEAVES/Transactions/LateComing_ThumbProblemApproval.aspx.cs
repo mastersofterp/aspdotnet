@@ -240,6 +240,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             divEmployee.Visible = false;
 
             ddlEmp.SelectedIndex = 0;
+            rbAllow.Checked = true;
+            rbNotAllow.Checked = false;
         }
         catch (Exception ex)
         {
@@ -811,6 +813,21 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                     lvEmpList.DataSource = ds;
                     lvEmpList.DataBind();
                     lvEmpList.Visible = true;
+                    /// Added On 23-02-2024 for default selection
+                    foreach (ListViewDataItem lvitem in lvEmpList.Items)
+                    {                       
+
+                        DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;                        
+                        if (rbAllow.Checked == true)
+                        {
+                            ddlAllow.SelectedValue = "A";
+                        }
+                        else
+                        {
+                            ddlAllow.SelectedValue = "N";
+                        }
+                    }
+                    //
                 }
                 else
                 {
@@ -856,6 +873,21 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                         lvEmpList.DataSource = ds;
                         lvEmpList.DataBind();
                         lvEmpList.Visible = true;
+                        /// Added On 23-02-2024 for default selection
+                        foreach (ListViewDataItem lvitem in lvEmpList.Items)
+                        {
+
+                            DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                            if (rbAllow.Checked == true)
+                            {
+                                ddlAllow.SelectedValue = "A";
+                            }
+                            else
+                            {
+                                ddlAllow.SelectedValue = "N";
+                            }
+                        }
+                        ///
                     }
                     else
                     {
@@ -957,6 +989,21 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                     //    objCommon.FillDropDownList(ddlWorkType, "PAYROLL_WORKTYPE", "WTNO", "WORKTYPE", "WTNO>0", "WORKTYPE");
                     //    ddlWorkType.SelectedValue = "4";
                     //}
+                    /// Added On 23-02-2024 for default selection
+                    foreach (ListViewDataItem lvitem in lvNREmpList.Items)
+                    {
+                        DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                        //ddlAllow.SelectedValue = "A";
+                        if (rbAllow.Checked == true)
+                        {
+                            ddlAllow.SelectedValue = "A";
+                        }
+                        else
+                        {
+                            ddlAllow.SelectedValue = "N";
+                        }                       
+                    }
+
                 }
                 else
                 {
@@ -992,6 +1039,20 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                         lvNREmpList.DataSource = ds;
                         lvNREmpList.DataBind();
                         lvNREmpList.Visible = true;
+                        /// Added On 23-02-2024 for default selection
+                        foreach (ListViewDataItem lvitem in lvNREmpList.Items)
+                        {
+                            DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                            //ddlAllow.SelectedValue = "A";
+                            if (rbAllow.Checked == true)
+                            {
+                                ddlAllow.SelectedValue = "A";
+                            }
+                            else
+                            {
+                                ddlAllow.SelectedValue = "N";
+                            }
+                        }
                         
                     }
                     else
@@ -1293,26 +1354,42 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
 
                         lvLateComers.Visible = true;
 
+                        //foreach (ListViewDataItem lvitem in lvLateComers.Items)
+                        //{
+                        //    DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                        //    //ddlAllow.SelectedValue = "A";
+                        //    //if (rbAllow.Checked == true)
+                        //    //{
+                        //    //    ddlAllow.SelectedValue = "A";
+                        //    //}
+                        //    //else
+                        //    //{
+                        //    //    ddlAllow.SelectedValue = "N";
+                        //    //}
+                        //    //DropDownList ddlWorkType = lvitem.FindControl("ddlWorkType") as DropDownList;
+                        //    //objCommon.FillDropDownList(ddlWorkType, "PAYROLL_WORKTYPE", "WTNO", "WORKTYPE", "WTNO>0", "WORKTYPE");
+                        //    //ddlWorkType.SelectedValue = "1";
+
+                        //    //DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                        //    //ddlAllow.SelectedValue = "N";
+                        //}
+                        //ValidAllowNotAllow();
+                        /// Added On 23-02-2024 for default selection
                         foreach (ListViewDataItem lvitem in lvLateComers.Items)
                         {
                             DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
                             //ddlAllow.SelectedValue = "A";
-                            //if (rbAllow.Checked == true)
-                            //{
-                            //    ddlAllow.SelectedValue = "A";
-                            //}
-                            //else
-                            //{
-                            //    ddlAllow.SelectedValue = "N";
-                            //}
-                            //DropDownList ddlWorkType = lvitem.FindControl("ddlWorkType") as DropDownList;
-                            //objCommon.FillDropDownList(ddlWorkType, "PAYROLL_WORKTYPE", "WTNO", "WORKTYPE", "WTNO>0", "WORKTYPE");
-                            //ddlWorkType.SelectedValue = "1";
-
-                            //DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
-                            //ddlAllow.SelectedValue = "N";
+                            if (rbAllow.Checked == true)
+                            {
+                                ddlAllow.SelectedValue = "A";
+                            }
+                            else
+                            {
+                                ddlAllow.SelectedValue = "N";
+                            }
+                           
                         }
-                        ValidAllowNotAllow();
+                        //
                     }
                     else
                     {
@@ -1356,12 +1433,28 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
 
                             lvLateComers.Visible = true;
 
+                            //foreach (ListViewDataItem lvitem in lvLateComers.Items)
+                            //{
+                            //    DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+
+                            //}
+                            //ValidAllowNotAllow();
+                            /// Added On 23-02-2024 for default selection
                             foreach (ListViewDataItem lvitem in lvLateComers.Items)
                             {
                                 DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                                //ddlAllow.SelectedValue = "A";
+                                if (rbAllow.Checked == true)
+                                {
+                                    ddlAllow.SelectedValue = "A";
+                                }
+                                else
+                                {
+                                    ddlAllow.SelectedValue = "N";
+                                }
 
                             }
-                            ValidAllowNotAllow();
+                            //
                         }
                         else
                         {
@@ -1454,11 +1547,24 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                     lvEmpEarly.Visible = true;
                     foreach (ListViewDataItem lvitem in lvEmpEarly.Items)
                     {
+
+                        DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                        //ddlAllow.SelectedValue = "A";
+                        if (rbAllow.Checked == true)
+                        {
+                            ddlAllow.SelectedValue = "A";
+                        }
+                        else
+                        {
+                            ddlAllow.SelectedValue = "N";
+                        }
+
                         DropDownList ddlWorkType = lvitem.FindControl("ddlWorkType") as DropDownList;
                         objCommon.FillDropDownList(ddlWorkType, "PAYROLL_WORKTYPE", "WTNO", "WORKTYPE", "WTNO>0", "WORKTYPE");
                         ddlWorkType.SelectedValue = "2";
                     }
-                    ValidAllowNotAllow();
+                    //ValidAllowNotAllow();
+
                 }
                 else
                 {
@@ -1495,6 +1601,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                         lvEmpEarly.Visible = true;
                         foreach (ListViewDataItem lvitem in lvEmpEarly.Items)
                         {
+                            DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
+                            //ddlAllow.SelectedValue = "A";
+                            if (rbAllow.Checked == true)
+                            {
+                                ddlAllow.SelectedValue = "A";
+                            }
+                            else
+                            {
+                                ddlAllow.SelectedValue = "N";
+                            }
+
                             DropDownList ddlWorkType = lvitem.FindControl("ddlWorkType") as DropDownList;
                             objCommon.FillDropDownList(ddlWorkType, "PAYROLL_WORKTYPE", "WTNO", "WORKTYPE", "WTNO>0", "WORKTYPE");
                             ddlWorkType.SelectedValue = "2";
