@@ -155,14 +155,6 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
         {
             ds = objAllot.GetCourseTeacherAllotmentDoneExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSemester.SelectedValue));
             ds.Tables[0].TableName = "Course Teacher Allot";
-            ds.Tables[1].TableName = "Summery Course Teacher Report";
-            filename = "Course Teacher Allot";
-        }
-        else if (ddlReport.SelectedValue == "4")
-        {
-            ds = objAllot.GetFacultyNotTagToCourse();
-            ds.Tables[0].TableName = "Teacher Not Tag";
-            filename = "Teacher Not Alloted to any Course";
         }
         if (ds.Tables[0].Rows.Count < 1)
         {
@@ -184,12 +176,12 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             //Response.Write(sw.ToString());
             //Response.Flush();
             //Response.End();
-            string attachment = "attachment ; filename=" + filename + ".xls";
+            string attachment = rblAllotment.SelectedValue != "3" ? "attachment ; filename=Teacher_Not_Allot_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls" : "attachment ; filename=Teacher_Alloted_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
-            //if (rblAllotment.SelectedValue == "3")
-            //{
-            //    ds.Tables[1].TableName = "Summery Course Teacher Report";
-            //}
+            if (rblAllotment.SelectedValue == "3")
+            {
+                ds.Tables[1].TableName = "Summery Course Teacher Report";
+            }
             using (XLWorkbook wb = new XLWorkbook())
             {
                 foreach (System.Data.DataTable dt in ds.Tables)
