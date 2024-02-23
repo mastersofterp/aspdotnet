@@ -31,7 +31,7 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="form-group col-lg-3 col-md-6 col-12">
-                                         <div class="label-dynamic">
+                                        <div class="label-dynamic">
                                             <sup>* </sup>
                                             <%--<label>College & Scheme</label>--%>
                                             <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
@@ -41,10 +41,10 @@
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="ddlclgScheme"
-                                            Display="None" ErrorMessage="Please Select College" InitialValue="0" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="Show"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlclgScheme"
-                                            Display="None" ErrorMessage="Please Select College" InitialValue="0" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="Report"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -60,7 +60,7 @@
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ValidationGroup="Show" InitialValue="0" ErrorMessage="Please Select Session">
                                         </asp:RequiredFieldValidator>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSession"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ValidationGroup="Report" InitialValue="0" ErrorMessage="Please Select Session">
                                         </asp:RequiredFieldValidator>
                                     </div>
@@ -106,12 +106,15 @@
                                                 Display="None" ErrorMessage="Please Select/Enter Date" ValidationGroup="show"></asp:RequiredFieldValidator>
                                         </div>--%>
                                         <asp:DropDownList ID="ddlDate" runat="server" AppendDataBoundItems="True" AutoPostBack="True"
-                                            CssClass="form-control" TabIndex="2" data-select2-enable="true" OnSelectedIndexChanged="ddlDate_SelectedIndexChanged" >
+                                            CssClass="form-control" TabIndex="2" data-select2-enable="true" OnSelectedIndexChanged="ddlDate_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="ddlDate"
                                             Display="None" ErrorMessage="Please Select Date" InitialValue="0" SetFocusOnError="true"
                                             ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlDate"
+                                            Display="None" ErrorMessage="Please Select Date" InitialValue="0" SetFocusOnError="true"
+                                            ValidationGroup="Report"></asp:RequiredFieldValidator>
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -180,26 +183,72 @@
                             <div class="col-12 btn-footer">
 
                                 <asp:Button ID="btnGenerate" runat="server" OnClick="btnGenerate_Click" Text="Generate Duty"
-                                    ValidationGroup="Show" class="btn btn-primary" />
+                                    ValidationGroup="Show" CssClass="btn btn-info"  />
                                 <%--OnClientClick="return ConfirmSubmit();"--%>
                                 <asp:Button ID="btnReport" runat="server" OnClick="btnReport_Click" Text="Report"
-                                    class="btn btn-info"  ValidationGroup="Report"/>
+                                    CssClass="btn btn-info" ValidationGroup="Report"  />
                                 <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel"
-                                    ValidationGroup="none" class="btn btn-warning" />
+                                    ValidationGroup="none" CssClass="btn btn-warning" />
                                 <asp:ValidationSummary ID="vsShow" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Show" />
-                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true"
-                                    ShowSummary="false"  ValidationGroup="Report" />
+                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true"
+                                    ShowSummary="false" ValidationGroup="Report" />
                                 <%--<asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true"
                                     ShowSummary="false" DisplayMode="List" ValidationGroup="submit" />--%>
                                 <%-- <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="report" />--%>
                             </div>
+                            <asp:Panel ID="Panel2" runat="server" ScrollBars="Auto">
+                                <asp:ListView ID="lvRoomDetails" runat="server">
+                                    <LayoutTemplate>
+                                        <div class="sub-heading">
+                                            <h5>Room Required Invigilator Entry</h5>
+                                        </div>
+                                        <div>
+                                            <%-- <table class="table table-striped table-bordered nowrap display" style="width: 100%">--%>
+                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="divsessionlist">
+                                                <thead class="bg-light-blue">
+                                                    <%--<table class="table table-striped table-bordered">--%>
+
+                                                    <%-- <thead>--%>
+                                                    <tr class="bg-light-blue">
+                                                        <th style="text-align: center">Sr No. </th>
+                                                        <th style="text-align: center">Room No</th>
+                                                        <th style="text-align: center">Room Name </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+
+                                        <tr class="item">
+                                            <td style="text-align: center">
+                                                <%# Container.DataItemIndex + 1 %>
+                                            </td>
+                                            <td style="text-align: center">
+                                                <asp:Label ID="lblRoomno" runat="server" Text='<%# Eval("ROOMNO")%>' ToolTip='<%# Eval("ROOMNO")%>' />
+                                            </td>
+                                            <td style="text-align: center">
+                                                <asp:Label ID="lblRoomname" runat="server" Text='<%# Eval("ROOMNAME")%>' ToolTip='<%# Eval("ROOMNAME")%>' />
+                                            </td>
+                                        </tr>
+
+                                    </ItemTemplate>
+                                </asp:ListView>
+                            </asp:Panel>
                         </div>
                     </div>
                 </div>
             </div>
+            <%-- Added by shubham on 23022024
+            start--%>
 
+            <%--end--%>
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnReport" />
