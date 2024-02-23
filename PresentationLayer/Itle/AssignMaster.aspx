@@ -40,6 +40,11 @@
             document.getElementById('txtDescription').focus();
         }
     </script>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             window.history.replaceState('', '', window.location.href) // it prevent page refresh to firing the event again
+         })
+</script>
     <style type="text/css">
         .hide_img {
             display: none;

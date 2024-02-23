@@ -11,6 +11,7 @@
     <script src="../plugins/ckeditor/ckeditor.js"></script>
     <script src="../plugins/ckeditor/ckeditor_basic.js"></script>
 
+
     <script type="text/javascript">
 
         window.onload = function () {
@@ -179,7 +180,7 @@
                                                                 <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
                                                                 --%>
 
-                                                                <img alt="Attachment" src="../IMAGES/attachment.png" />
+                                                                <img alt="Attachment" src="/../../../../../Images/attachment.png" />
                                                                 <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
                                                                     <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
                                                             </td>
@@ -187,7 +188,7 @@
                                                                 <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
                                                                 --%>
 
-                                                                <img alt="Attachment" src="../IMAGES/attachment.png" />
+                                                                <img alt="Attachment" src="/../../../../../Images/attachment.png" />
                                                                 <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
                                                                 --%>      <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
                                                             </td>
@@ -196,7 +197,7 @@
                                                             <td id="tdDownloadLink" runat="server" visible="false">
 
 
-                                                                <img alt="Attachment" src="../IMAGES/attachment.png" />
+                                                                <img alt="Attachment" src="/../../../../../Images/attachment.png" />
                                                                 <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
                                                                 --%>      <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
                                                             
