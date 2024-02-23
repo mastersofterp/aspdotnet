@@ -730,6 +730,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                         ds.Tables[3].TableName = "Elective Courses Details";
                         ds.Tables[4].TableName = "Global Elective Courses Summary";
                         ds.Tables[5].TableName = "Global Elective Courses Details";
+                        ds.Tables[6].TableName = "Course Wise Regsitration Count";
                         if (ds.Tables[0] != null && ds.Tables[0].Rows.Count <= 0)
                             ds.Tables[0].Rows.Add("No Record Found");
 
@@ -747,6 +748,9 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
                         if (ds.Tables[5] != null && ds.Tables[5].Rows.Count <= 0)
                             ds.Tables[5].Rows.Add("No Record Found");
+
+                        if (ds.Tables[6] != null && ds.Tables[6].Rows.Count <= 0)
+                            ds.Tables[6].Rows.Add("No Record Found");
                     }
 
                     using (XLWorkbook wb = new XLWorkbook())
