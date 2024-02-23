@@ -623,6 +623,12 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
 
             }
         }
+
+        //[Start Block][Parag.O][23-02-2024][Requirement No.:55456][Ensure Unique Project Heads and Proper Sub-Project Hierarchies.]
+        if (ddlProjectName.SelectedIndex != 0)
+            objCommon.FillDropDownList(ddlProjectSubHead, "Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ProjectSubId", " ProjectSubHeadName+'('+ProjectSubHeadShort+')' as ProjectSubHeadName", "ProjectId='" + ddlProjectName.SelectedIndex + "'", "");
+        //[End Block][Parag.O][23-02-2024][Requirement No.:55456][Ensure Unique Project Heads and Proper Sub-Project Hierarchies.]
+    
     }
 
     protected void ddlProjectSubHead_SelectedIndexChanged(object sender, EventArgs e)

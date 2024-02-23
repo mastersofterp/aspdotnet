@@ -473,7 +473,7 @@
                                                           <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic" id="Div32" runat="server">
                                                                  <sup>*</sup> 
-                                                                <label>Project Duration</label>
+                                                                <label>Project Duration (In Months)</label>
                                                             </div>
                                                             <asp:TextBox ID="txtProjectDuration" runat="server" ValidationGroup="submit"></asp:TextBox>
                                                                <ajaxToolKit:FilteredTextBoxExtender ID="ftbe" runat="server" TargetControlID="txtProjectDuration"
