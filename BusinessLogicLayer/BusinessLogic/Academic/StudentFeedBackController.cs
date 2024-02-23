@@ -486,12 +486,13 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[5];
+                        objParams = new SqlParameter[6];
                         objParams[0] = new SqlParameter("@P_CTID", SFB.CTID);
                         objParams[1] = new SqlParameter("@P_SUBID", SFB.SubId);
                         objParams[2] = new SqlParameter("@P_SEMESTERNO", SFB.SemesterNo);
                         objParams[3] = new SqlParameter("@P_IDNO", SFB.Idno);
                         objParams[4] = new SqlParameter("@P_UA_NO", SFB.UA_NO);
+                        objParams[5] = new SqlParameter("@P_COURSENO", SFB.CourseNo);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_GET_FEEDBACK_QUESTION_LIST", objParams);
                     }
                     catch (Exception ex)
