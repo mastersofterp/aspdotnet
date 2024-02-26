@@ -1226,7 +1226,14 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else if (DurationCheck == 2)
                 {
-                    this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_sec.rpt"); //added on 070922 for only show 4 semester
+                    if (College_id == 16)
+                    {
+                        this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_Education.rpt");//rptGradeCardReportPG_sec
+                    }
+                    else
+                    {
+                        this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_sec.rpt"); //added on 070922 for only show 4 semester
+                    }
                 }
                 else if (DurationCheck == 3)
                 {
