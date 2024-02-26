@@ -381,6 +381,54 @@ namespace IITMS
                     return ds;
                 }
 
+                  //[Start Block] [Parag.O][16-02-2024][53141] JECRC || RFC || Need Excel Report of Assignment Result
+                public DataSet GetCourseWiseAssignment(int COURSENO,int UANO)
+                {
+                    DataSet ds;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_COURSENO", COURSENO);
+                        objParams[1] = new SqlParameter("@P_UA_NO", UANO);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ITLE_GET_COURSEWISE_ASSIGN_REPORT", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAssignmentReportForAdmin(int COURSENO, int SESSIONNO,int UANO)
+                {
+                    DataSet ds;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_COURSE_NO", COURSENO);
+                        objParams[1] = new SqlParameter("@P_SESSION_NO", SESSIONNO);
+                        objParams[2] = new SqlParameter("@P_UANO", UANO);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ITLE_GET_ASSIGNMENT_RESULT_REPORT_ADMIN", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+
+                    return ds;
+                }
+
+                //[End Block] [Parag.O][16-02-2024][53141] JECRC || RFC || Need Excel Report of Assignment Result
+
             }
 
            
