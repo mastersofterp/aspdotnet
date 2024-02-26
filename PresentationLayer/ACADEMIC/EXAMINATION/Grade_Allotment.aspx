@@ -6,6 +6,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <style>
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
         .statistics .tile-box {
             background-color: rgb(255, 255, 255);
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -83,7 +86,7 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-8">
                                         <div class="row">
-                                          
+
                                             <div class="form-group col-lg-6 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <sup>*</sup>
@@ -102,7 +105,7 @@
 
                                             </div>
 
-                                              <div class="form-group col-lg-6 col-md-6 col-12">
+                                            <div class="form-group col-lg-6 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <%-- <sup>*</sup>--%>
                                                     <%-- <label>College/Scheme</label>--%>
@@ -151,7 +154,7 @@
                                                     ValidationGroup="search"></asp:RequiredFieldValidator>
                                             </div>
 
-                                                 <div class="form-group col-lg-6 col-md-6 col-12" id="divgradetype" runat="server" visible="false">
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="divgradetype" runat="server" visible="false">
                                                 <div class="label-dynamic">
                                                     <sup>*</sup>
                                                     <label>Grade Type</label>
@@ -334,13 +337,13 @@
                                     </div>
 
                                     <div class="col-lg-4 col-md-6 col-12 grade-range">
-                                        <asp:ListView ID="lvGradeRange" runat="server" GroupPlaceholderID="gpholder" ItemPlaceholderID="itemplacehold" Visible="false">
+                                        <asp:ListView ID="lvGradeRange" runat="server" Visible="false">
                                             <LayoutTemplate>
                                                 <div class="sub-heading">
                                                     <h5>Grade Range Details</h5>
                                                 </div>
                                                 <div style="width: 100%; overflow: auto">
-                                                    <table class="table table-striped table-bordered nowrap">
+                                                    <table class="table table-striped table-bordered nowrap" id="lvGradeRange">
                                                         <thead>
                                                             <tr>
                                                                 <th>Min.Marks</th>
@@ -361,12 +364,15 @@
 
                                                 <tr id="trCurRow" class="item">
                                                     <td>
-                                                        <asp:TextBox ID="txtmin" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MINMARK").ToString() %>' Enabled='<%# ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control"></asp:TextBox>
+                                                        <asp:TextBox ID="txtmin" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MINMARK").ToString() %>' Enabled='<%# ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control" onkeyUP="changeMinMarksRange(this);"></asp:TextBox>
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="fltminmark" runat="server" FilterType="Numbers,Custom" ValidChars="., " TargetControlID="txtmin" />
                                                     </td>
                                                     <td>
-                                                        <asp:TextBox ID="txtmax" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MAXMARK").ToString() %>' Enabled='<%#ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control"></asp:TextBox>
+                                                        <asp:TextBox ID="txtmax" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MAXMARK").ToString() %>' Enabled="false" CssClass="form-control"></asp:TextBox>
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="fltmax" runat="server" FilterType="Numbers,Custom" ValidChars="., " TargetControlID="txtmax" />
+
+                                                     <%--   <asp:TextBox ID="txtmax" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MAXMARK").ToString() %>' Enabled='<%#ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control"></asp:TextBox>
+                                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" FilterType="Numbers,Custom" ValidChars="., " TargetControlID="txtmax" />--%>
 
                                                     </td>
                                                     <td>
@@ -389,7 +395,7 @@
 
                                         </asp:ListView>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="col-12 btn-footer mt-4 mb-4">
@@ -397,14 +403,14 @@
                                 <asp:Button ID="btnRangeLock" runat="server" Text="Grade Range Generate" CssClass="btn btn-primary" ValidationGroup="search" OnClick="OnClick_Grade_RangeLock" />
                                 <asp:Button ID="btnmodifypowerfactor" runat="server" Text="Modify Power factor" CssClass="btn btn-primary" ValidationGroup="search" Visible="false" OnClick="btnmodifypowerfactor_Click" />
 
-                                <asp:Button ID="btnReRange" runat="server" Text="ReGenerate Grade Range " CssClass="btn btn-primary" ValidationGroup="search" OnClick="btnReRange_Click" Visible="false" />
+                                <asp:Button ID="btnReRange" runat="server" Text="Modify Grade Range " CssClass="btn btn-primary" ValidationGroup="search" OnClick="btnReRange_Click" Visible="false" />
                                 <asp:Button ID="btnRangrlock" runat="server" Text="Lock Grade Range " CssClass="btn btn-primary" ValidationGroup="search" OnClick="btnRangrlock_Click" Visible="false" />
                                 <asp:Button ID="btnRangrUnlock" runat="server" Text="UnLock Grade Range " CssClass="btn btn-primary" ValidationGroup="search" OnClick="btnRangrUnlock_Click" Visible="false" />
                                 <asp:Button ID="btnGradeAllotment" runat="server" Text="Grade Allotment" ValidationGroup="search" CssClass="btn btn-primary" Visible="false" OnClick="OnClick_Grade_Allotment" OnClientClick="showhidedivgraph();" /><%--OnClick="OnClick_Grade_Allotment"--%>
 
                                 <asp:Button ID="btnReport" runat="server" Text="Report" ValidationGroup="search" CssClass="btn btn-primary" Visible="false" OnClick="btnReport_Click" /><%--OnClick="OnClick_Grade_Allotment"--%>
 
-                                <span style="cursor: pointer;" runat="server" id="test" visible="false"  onclick="getallotment(); getGradeAolltement();showhidedivgraph()" class="btn btn-primary">Graph</span>
+                                <span style="cursor: pointer;" runat="server" id="test" visible="false" onclick="getallotment(); getGradeAolltement();showhidedivgraph()" class="btn btn-primary">Graph</span>
                                 <asp:Button ID="btnCancle" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="OnClick_Cancle" /><%--OnClick="OnClick_Cancle"--%>
 
                                 <%-- <asp:ValidationSummary runat="server" ID="ValidationSummary1" ValidationGroup="search" DisplayMode="List"
@@ -421,7 +427,7 @@
                                 </div>
                             </div>
 
-                         <%--   <div class="col-12 mt-6">
+                            <%--   <div class="col-12 mt-6">
 
                                 <asp:Label ID ="lblnote" runat="server" Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label>
                             </div>--%>
@@ -438,9 +444,9 @@
                                                     <%--<th>Select All</th>--%>
                                                     <th>SRNO</th>
                                                     <th>REGNO</th>
-                                                     <th>STUDENT NAME</th>
-                                                     <th>INTERNAL MARK</th>
-                                                     <th>EXTERNAL MARK</th>
+                                                    <th>STUDENT NAME</th>
+                                                    <th>INTERNAL MARK</th>
+                                                    <th>EXTERNAL MARK</th>
                                                     <th>MARKTOT</th>
                                                     <th>SCALEUP_PERCENT
                                                         <%--<asp:Label ID="lblscale" runat="server" Text='<%# Session["OrgId"].ToString()=="5"? "SCALEDN_PERCENT":"SCALEDN_PERCENT" %>'--%>
@@ -470,14 +476,14 @@
                                                 <asp:Label ID="lblRegno" runat="server" Text='<%# Eval("REGNO") %>' />
 
                                             </td>
-                                             <td>
+                                            <td>
                                                 <asp:Label ID="lblstudname" runat="server" Text='<%# Eval("STUDNAME") %>' />
                                             </td>
 
-                                             <td>
+                                            <td>
                                                 <asp:Label ID="lblintermark" runat="server" Text='<%# Eval("INTERMARK") %>' />
                                             </td>
-                                             <td>
+                                            <td>
                                                 <asp:Label ID="lblextermark" runat="server" Text='<%# Eval("EXTERMARK") %>' />
                                             </td>
                                             <td>
@@ -493,11 +499,11 @@
 
                                             </td>
                                             <td>
-                                                <asp:Label ID="lblfinalGrade" runat="server" Text='<%# Eval("GRADE") %>'/>
-                                               <%-- Text='<%# Session["OrgId"].ToString()=="8"? DataBinder.Eval(Container.DataItem,"DECODENO"):DataBinder.Eval(Container.DataItem,"REGNO") %>'--%>
+                                                <asp:Label ID="lblfinalGrade" runat="server" Text='<%# Eval("GRADE") %>' />
+                                                <%-- Text='<%# Session["OrgId"].ToString()=="8"? DataBinder.Eval(Container.DataItem,"DECODENO"):DataBinder.Eval(Container.DataItem,"REGNO") %>'--%>
                                             </td>
-                                             <td>
-                                                <asp:Label ID="lblremark" runat="server" Text='<%# Eval("REMARK") %>'/>
+                                            <td>
+                                                <asp:Label ID="lblremark" runat="server" Text='<%# Eval("REMARK") %>' />
                                             </td>
 
 
@@ -521,11 +527,54 @@
     <script src="../../plugins/Chart.js/dist/Chart.min.js"></script>
 
     <script src="../../plugins/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"></script>
+
+
+
     <script>
 
+        function changeMinMarksRange(txt) {
 
-        
+            debugger
 
+            X1 = Number(txt.value);
+            var dataRowsmark = null;
+            var percnt;
+            if (document.getElementById('lvGradeRange') != null)
+            {
+                dataRowsmark = document.getElementById('lvGradeRange').getElementsByTagName('tr');
+                for (j = 0; j < dataRowsmark.length - 1; j++) 
+                {
+                    debugger
+                    //var MaxMark = document.getElementById('ctl00_ContentPlaceHolder1_lvGrades_ctrl' + i + '_txtMax');
+                    //var MinMark = document.getElementById('ctl00_ContentPlaceHolder1_lvGrades_ctrl' + i + '_txtMin');
+
+                    var MaxMark1 = 0;
+                    var MinMark1 = 0;
+                    var AssGrade;
+                    var GDpoint;
+                    var AssValu = 0;
+
+
+                    MaxMark = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvGradeRange_ctrl' + j + '_txtmax').value.trim());
+                    MinMark = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvGradeRange_ctrl' + j + '_txtmin').value.trim());
+                   
+                    //if(MaxMark < MinMark)
+                    //{
+                    //    alert('Please check Max Marks Should Not Be Greater Than Min Marks..!!');
+                    //    return false;
+                    //}
+
+                    if (X1 == 0) {
+                    }
+                    else if (parseFloat(MinMark) == X1) {
+                        AssValu = Number(X1 - 0.01);
+                        document.getElementById('ctl00_ContentPlaceHolder1_lvGradeRange_ctrl' + (j + 1) + '_txtmax').value = parseFloat(AssValu);
+                    }
+                }
+
+
+            }
+        }
 
         function showhidediv(){
             // alert('h1')
@@ -558,7 +607,7 @@
             $(function () {
                 var obj = {};
 
-               // alert('new');
+                // alert('new');
                 //console.log($('#<%=ddlSession.ClientID%>').val(),'not data')
                 obj.session = $('#<%=ddlSession.ClientID%>').val();//$('#ddlSession').val();
                 obj.sem = $('#<%=ddlSemester.ClientID%>').val();//$('#ddlSemester').val();

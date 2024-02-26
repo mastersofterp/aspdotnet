@@ -5,6 +5,9 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
+    <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.js")%>"></script>
+
     <style>
         .switch {
             position: relative;
@@ -627,13 +630,38 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_remark" style="font-size: small;">Remark On Grade Allotment</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_remark">
+                                            <label class="custom-control-label" for="chk_remark"></label>
+                                            <asp:HiddenField ID="hdfremark" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lbluser" runat="server" Font-Bold="true">Select User to Regenerate Grade Range.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <%--<asp:ListBox ID="ddluser" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>--%>
+                                                              <asp:ListBox ID="ddluser" runat="server" SelectionMode="Multiple" 
+                                        CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
+                                                            
+                                                              </div>
+                                     </div>
 
-                                      <div class="form-group col-lg-6 col-md-6 col-12">
+
+                                      <div class="form-group col-lg-6 col-md-4 col-12">
                                                 <span class="pr-5">
                                                     <label for="chksubjecttype" style="font-size: small;">Subject For Marks By Faculty</label>
                                                 </span>
 
-                                                <div class="col-lg-6 col-md-6 col-12 h-20">
+                                                <div class="col-lg-6 col-md-6 col-12 h-10">
 
                                                     <div class="form-group col-md-12 checkbox-list-box">
                                                         <asp:CheckBoxList ID="chkListSubjectTypes" runat="server" RepeatColumns="4" TabIndex="5"
@@ -642,6 +670,10 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+
+                                   
+
                                 </div>
 
                             </div>
@@ -801,6 +833,8 @@
             var exceltimetable = document.getElementById("chk_timetableexcel");
             var intmarkpublish = document.getElementById("chk_intmarkpublish");
             var compwiseexcel = document.getElementById("chk_compwiseexcel");
+
+            var remark = document.getElementById("chk_remark");
 
             if (examreg.checked) {
                 $('#hdfexamregister').val(true);
@@ -1071,6 +1105,13 @@
                 $('#hdfcompwiseexcel').val(false)
             }
 
+            if (remark.checked) {
+                $('#hdfremark').val(true)
+            }
+            else {
+                $('#hdfremark').val(false)
+            }
+
         }
 
 
@@ -1089,6 +1130,27 @@
             window.history.replaceState('', '', window.location.href) // it prevent page refresh to firing the event again
         })
 
+    </script>
+
+
+
+      <script>
+          $(document).ready(function () {
+              $('.multi-select-demo').multiselect({
+                  includeSelectAllOption: true,
+                  maxHeight: 200
+              });
+          });
+
+          var parameter = Sys.WebForms.PageRequestManager.getInstance();
+          parameter.add_endRequest(function () {
+              $(document).ready(function () {
+                  $('.multi-select-demo').multiselect({
+                      includeSelectAllOption: true,
+                      maxHeight: 200
+                  });
+              });
+          });
     </script>
     <%-- <script type="text/javascript">
             $(document).ready(function () {
