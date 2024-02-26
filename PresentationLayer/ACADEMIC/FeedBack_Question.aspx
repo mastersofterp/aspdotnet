@@ -736,7 +736,12 @@
                                                                 </div>
                                                                 <asp:CheckBox ID="chkActiveStatus" runat="server" TextAlign="Left" Checked="true" />
                                                             </div>
-
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
+                                                                    <label>Check for Mandatory</label>
+                                                                </div>
+                                                                <asp:CheckBox ID="chkMandatory" runat="server" TextAlign="Left" Checked="true" />
+                                                            </div>
                                                             <div class="form-group col-lg-4 col-md-12 col-12">
                                                                 <div class=" note-div">
                                                                     <h5 class="heading">Note </h5>

@@ -346,6 +346,11 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
                         { calcstatus = 1; }
                         else { calcstatus = 0; }
 
+                        int ismandatory = 0;
+                        if (chkMandatory.Checked == true)
+                        { ismandatory = 1; }
+                        else { ismandatory = 0; }
+
                         int rowIndex = 0;
                         string ansOptions = string.Empty;
                         string ansValue = string.Empty;
@@ -485,13 +490,13 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
                                 if (QuestionNameCount > 0)
                                 {
                                     SFB.QuestionId = Convert.ToInt32(ViewState["QuestionId"]);
-                                    cs = (CustomStatus)objSBC.UpdateFeedbackQuestion(SFB, calcstatus, ansoptiontype, Convert.ToInt32(txtseqno.Text), Convert.ToInt32(ddlHeaderQue.SelectedValue), Coursetype, Choisefor);
+                                    cs = (CustomStatus)objSBC.UpdateFeedbackQuestion(SFB, calcstatus, ansoptiontype, Convert.ToInt32(txtseqno.Text), Convert.ToInt32(ddlHeaderQue.SelectedValue), Coursetype, Choisefor, ismandatory);
                                 }
                                 else
                                 {
                                     int SeqenceNo = Convert.ToInt32(objCommon.LookUp("ACD_FEEDBACK_QUESTION", "MAX(SEQ_NO) AS SEQ_NO ", ""));
                                     int maxSeqenceNo = SeqenceNo + 1;
-                                    cs = (CustomStatus)objSBC.AddFeedbackQuestion(SFB, calcstatus, ansoptiontype, maxSeqenceNo, Convert.ToInt32(ddlHeaderQue.SelectedValue), Coursetype, Choisefor);
+                                    cs = (CustomStatus)objSBC.AddFeedbackQuestion(SFB, calcstatus, ansoptiontype, maxSeqenceNo, Convert.ToInt32(ddlHeaderQue.SelectedValue), Coursetype, Choisefor, ismandatory);
                                 }
                             }
                             else
@@ -503,7 +508,7 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
                                     return;
                                 }
                                 //save
-                                cs = (CustomStatus)objSBC.AddFeedbackQuestion(SFB, calcstatus, ansoptiontype, Convert.ToInt32(txtseqno.Text), Convert.ToInt32(ddlHeaderQue.SelectedValue), Coursetype, Choisefor);
+                                cs = (CustomStatus)objSBC.AddFeedbackQuestion(SFB, calcstatus, ansoptiontype, Convert.ToInt32(txtseqno.Text), Convert.ToInt32(ddlHeaderQue.SelectedValue), Coursetype, Choisefor, ismandatory);
                             }
                         }
                     }
@@ -729,6 +734,14 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
                         rdoFaculty.Checked = false;
                         rdoNone2.Checked = true;
                     }
+                    if (Convert.ToInt32(ds.Tables[0].Rows[0]["IS_MANDATORY"]) == 1)
+                    {
+                        chkMandatory.Checked = true;
+                    }
+                    else
+                    {
+                        chkMandatory.Checked = false;
+                    }
 
                     ddlSemester.SelectedValue = ds.Tables[0].Rows[0]["SEMESTERNO"] == null ? "0" : ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
                     DataTable dtCurrentTable = new DataTable();
@@ -835,6 +848,7 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
         rdoTheory.Checked = false;
         rdoNone1.Checked = true;
         rdoNone2.Checked = true;
+        chkMandatory.Checked = true;
     }
 
     //to cancel the page and refresh all controls

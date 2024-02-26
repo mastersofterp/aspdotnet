@@ -241,7 +241,7 @@
                                 </LayoutTemplate>
                                 <ItemTemplate>
                                     <tr>
-                                        <td>Q&nbsp;<%# Container.DataItemIndex + 1%><asp:Label ID="lblCourse" runat="server" Text='  <%# Eval("QUESTIONID")%>' Visible="false"></asp:Label>.</td>
+                                        <td><asp:Label ID="lblmandatory" runat="server" Text='*' style ="color:red;" Visible='<%#(Convert.ToString(Eval("IS_MANDATORY"))=="1" ? true : false)%>'></asp:Label> Q&nbsp;<%# Container.DataItemIndex + 1%><asp:Label ID="lblCourse" runat="server" Text='  <%# Eval("QUESTIONID")%>' Visible="false"></asp:Label>.</td>
                                         <td><%# Eval("QUESTIONNAME")%></td>
                                     </tr>
                                     <tr>
@@ -255,6 +255,7 @@
                                                 ToolTip='<%# Eval("QUESTIONID") %>' MaxLength="200"></asp:TextBox>
                                             <asp:HiddenField ID="hdnCourse" runat="server" Value='<%# Eval("QUESTIONID") %>' />
                                             <asp:HiddenField ID="hfOPTION_TYPE" runat="server" Value='<%# Eval("OPTION_TYPE") %>' />
+                                            <asp:HiddenField ID="hdnIsMandatory" runat="server" Value='<%# Eval("IS_MANDATORY") %>' />
 
                                         </td>
                                     </tr>
