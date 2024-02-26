@@ -22,6 +22,8 @@ DESIGN AND DEVELOPED BY :  Gaurav Kalbande
 }
 
 
+
+
 .main-white-bg {
     background: var(--main-white);
 }
@@ -1089,20 +1091,22 @@ input[type="search"]::-moz-search-cancel-button {
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
 }
-.infoFix-menu .list-group .list-group-item {
-    color: white;
-    background: #6777ef;
-    border: 1px solid #6777ef;
-    border-radius: 10px 0 0 10px;
-    margin: 0px;
-}
-.infoFix-menu ul.list-group .list-group-item {
-    padding: 7px 10px;
-      cursor:pointer;
-}
+
+    .infoFix-menu .list-group .list-group-item {
+        color: white;
+        background: #6777ef;
+        border: 1px solid #6777ef;
+        border-radius: 10px 0 0 10px;
+        margin: 0px;
+    }
+
+    .infoFix-menu ul.list-group .list-group-item {
+        padding: 7px 10px;
+        cursor: pointer;
+    }
 
 /**======== Recent Links (Added By Anurag Baghele on 30-01-2023) ========*/
-.RecentPageFix-menu{
+.RecentPageFix-menu {
     position: fixed;
     right: 0;
     top: 54%;
@@ -1112,17 +1116,44 @@ input[type="search"]::-moz-search-cancel-button {
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
 }
-.RecentPageFix-menu .list-group .list-group-item {
-    color: white;
-    background: #6777ef;
-    border: 1px solid #6777ef;
-    border-radius: 10px 0 0 10px;
-    margin: 0px;
+
+    .RecentPageFix-menu .list-group .list-group-item {
+        color: white;
+        background: #6777ef;
+        border: 1px solid #6777ef;
+        border-radius: 10px 0 0 10px;
+        margin: 0px;
+    }
+
+    .RecentPageFix-menu ul.list-group .list-group-item {
+        padding: 7px 10px;
+        cursor: pointer;
+    }
+
+/**======== Recent Links (Added By Anurag Baghele on 16-02-2024) ========*/
+.FavoritePageFix-menu {
+    position: fixed;
+    right: 0;
+    top: 61%;
+    z-index: 999;
+    transition: .2s ease-in-out;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
 }
-.RecentPageFix-menu ul.list-group .list-group-item {
-    padding: 7px 10px;
-      cursor:pointer;
-}
+
+    .FavoritePageFix-menu .list-group .list-group-item {
+        color: white;
+        background: #6777ef;
+        border: 1px solid #6777ef;
+        border-radius: 10px 0 0 10px;
+        margin: 0px;
+    }
+
+    .FavoritePageFix-menu ul.list-group .list-group-item {
+        padding: 7px 10px;
+        cursor: pointer;
+    }
 
 /* Rating css added by gaurav */
 .emojis {
@@ -1277,17 +1308,19 @@ input[type="search"]::-moz-search-cancel-button {
     border-radius: 0px;
 }
 
-    .modal.right ul.list-group > li.list-group-item::before {
-        /*content: "\f007";*/
-        font-family: 'Font Awesome 5 Free';
-        font-weight: 900;
-        display: inline-block;
-        height: 20px;
-        width: 20px;
-        color: var(--sub-heading-color);
-        font-size: 14px;
-        vertical-align: middle;
-    }
+
+
+ .modal.right ul.list-group > li.list-group-item::before {
+    /*content: "\f007";*/
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    color: var(--sub-heading-color);
+    font-size: 14px;
+    vertical-align: middle;
+}
 
 .modal.right .modal-body {
     max-height: 535px;
@@ -2341,9 +2374,9 @@ input[type="search"]::-moz-search-cancel-button {
 }
 /*==== dynamic side tabs 23012021 END====*/
 /*============ Page Main Content END ============*/
-.fa-star.active {
+/*.fa-star.active {
     color: #FF4500 !important;
-}
+}*/
 
 /*===========20-05-2021 added by gaurav=============*/
 .well {
@@ -3512,7 +3545,7 @@ input[type=checkbox], input[type=radio] {
 
 .main-header .navbar-custom-menu > .navbar-nav > li > .dropdown-menu.options-menu-list {
     width: 375px;
-    height: 310px;
+    height: 370px;
     overflow-y: scroll;
     border-radius: 10px;
     box-shadow: rgb(0 0 0 / 25%) 0px 0.0625em 0.0625em, rgb(0 0 0 / 25%) 0px 0.125em 0.5em, rgb(255 255 255 / 10%) 0px 0px 0px 1px inset;
@@ -3724,7 +3757,7 @@ input[type=checkbox], input[type=radio] {
     }
 
     .sub-tabs .nav-tabs li:hover a, .sub-tabs .nav-tabs li:hover i {
-        color: var(--primary-color) !important;
+        /*color: var(--primary-color) !important;*/
     }
 
 .fa.fa-star-o {
@@ -4081,8 +4114,30 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     color: var(--sub-heading-color);
 }
 
+#myModal_1 ul.list-group > li.list-group-item::before {
+     content: '\f005';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    color: orange;
+    font-size: 14px;
+    vertical-align: middle;
+    margin-right: 5px;
+    /*position: absolute;
+    right: 5px;*/
+
+}
+
+#myModal_1  ul li:hover {
+    background-color: transparent !important;
+}
+
+
+
 .modal.right ul.list-group > li.list-group-item::after {
-    content: '\f005';
+    /*content: '\f005';*/
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     display: inline-block;
@@ -4093,6 +4148,11 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     vertical-align: middle;
     position: absolute;
     right: 5px;
+}
+
+#myModal_1 ul.list-group > li.list-group-item::after {
+    content: "";
+
 }
 
 @media (max-width: 991px) {

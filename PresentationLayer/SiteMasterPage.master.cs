@@ -16,8 +16,9 @@ using IITMS.SQLServer.SQLDAL;
 using System.Web.UI.HtmlControls;
 using Newtonsoft.Json;
 using System.IO;
-
-
+using System.Web.Services;
+using System.Collections;
+using System.Linq;
 
 public partial class SiteMasterPage : System.Web.UI.MasterPage
 {
@@ -566,7 +567,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                 }
             }
 
-            divFavorite.Controls.Add(new LiteralControl(yourHTMLstring));
+            //divFavorite.Controls.Add(new LiteralControl(yourHTMLstring));
         }
         catch (Exception ex)
         {
@@ -2969,6 +2970,8 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
+    
     private void BindDataSetLinks()
     {
         try
@@ -3060,7 +3063,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                         {
                             //iStar.Style.Add("color", "#fff !important");
                             lbLink.Attributes.Add("class", "link active");
-                            iStar.Style.Add("color", "#fff");
+                            //iStar.Style.Add("color", "#fff");
                             rptLi.Style.Add("background-color", "var(--primary-color)");
                             //lbLink.Style.Add("color", "#fff !important");
                             lbLink.Style.Add("font-weight", "bold");
@@ -3069,6 +3072,28 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                         {
                             lbLink.Attributes.Remove("active");
                         }
+
+                        //Added By Anurag Baghele 19-02-2024
+                        int UserTypeId = Convert.ToInt32(Session["userno"]);
+                        DataSet ds = new DataSet();
+                        StudentController objSC = new StudentController();
+                        ds = objSC.GetQuickAccessForStudentDashboard(UserTypeId);
+
+                        bool isFavorite = false;
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            string FavPageNO = ds.Tables[0].Rows[i]["AL_NO"].ToString();
+
+                            if (pageno1.ToString() == FavPageNO)
+                            {
+                                isFavorite = true;
+                                break; 
+                            }
+                        }
+
+                        iStar.Style.Add("color", isFavorite ? "#ffa500 !important" : "#255282 !important");
+                        //END by Anurag Baghele
                     }
                 }
                 else
@@ -3166,6 +3191,29 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                         {
                             lbLink.Attributes.Remove("active");
                         }
+
+                        //Added By Anurag Baghele 19-02-2024
+                        int UserTypeId = Convert.ToInt32(Session["userno"]);
+                        DataSet ds = new DataSet();
+                        StudentController objSC = new StudentController();
+                        ds = objSC.GetQuickAccessForStudentDashboard(UserTypeId);
+
+                        bool isFavorite = false;
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            string FavPageNO = ds.Tables[0].Rows[i]["AL_NO"].ToString();
+
+                            if (pageno1.ToString() == FavPageNO)
+                            {
+                                isFavorite = true;
+                                break; 
+                            }
+                        }
+
+                        iStar.Style.Add("color", isFavorite ? "#ffa500 !important" : "#255282 !important");
+                        //END by Anurag Baghele
+
                     }
                 }
                 else

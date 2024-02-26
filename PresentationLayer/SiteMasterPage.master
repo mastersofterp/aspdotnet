@@ -11,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="erp, admission, exam, academic, erp portal, hostel, erp software, training and placement, administration, payroll, finance, establishment, store, software">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> 
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <%--<title>MasterSoft ERP Sloution RPVT LTD</title>--%>
@@ -276,7 +276,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="optionalMenu">
                                     <i class="fa fa-th" aria-hidden="true"></i>
                                 </a>
-                                <div class="dropdown-menu options-menu-list pullDown" >
+                                <div class="dropdown-menu options-menu-list pullDown">
                                     <!-- The user image in the menu -->
                                     <ul class="option-grid" id="columns">
                                         <!--drag id added by Gaurav k -->
@@ -307,18 +307,18 @@
                                                         <span class="text">Dashboard</span>
                                                     </asp:LinkButton>
                                                 </div>
-                                                
+
                                             </div>
                                         </li>
-                                        <!-- item 3--> <!-- Commented by Anurag Baghele on 07-02-2024-->
-                                        <%--<li class="column" draggable="true">
-                                            <div class="option" id="Fav_Model" draggable="true">
+                                        <!-- item 3-->
+                                        <li class="column" draggable="true">
+                                            <div class="option" data-toggle="modal" id="Fav_Model" data-target="#myModal_1" draggable="true">
                                                 <div class="icon">
                                                     <asp:Image ID="imgFavouriteLink" runat="server" ImageUrl="~/Images/icons/star.png" />
-                                                     <span class="text">Favourite Links</span>
+                                                    <span class="text">Favourite Links</span>
                                                 </div>
                                             </div>
-                                        </li>--%>
+                                        </li>
                                         <!-- item 4-->
                                         <li class="column" draggable="true">
                                             <div class="option" data-toggle="modal" id="recent-link" data-target="#myModalz" draggable="true">
@@ -522,13 +522,24 @@
             <%--<asp:UpdatePanel ID="updatepanelid12" runat="server">
                 <ContentTemplate>--%>
 
-             <!--Recent Links-->
+            <!--Recent Links-->
             <%-- Added By Anurag Baghele on 30-01-2023--%>
             <div class="RecentPageFix-menu">
                 <ul class="list-group">
                     <li class="list-group-item" id="recLink" data-toggle="modal" data-target="#myModalz">
                         <div class="icon">
                             <i class="fa fa-link" aria-hidden="true" title="Recent Links"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <%-- Added By Anurag Baghele on 16-02-2024--%>
+            <div class="FavoritePageFix-menu">
+                <ul class="list-group">
+                    <li class="list-group-item" id="favLink" data-toggle="modal" data-target="#myModal_1">
+                        <div class="icon">
+                            <i class="fa fa-star" aria-hidden="true" title="Favorite Links"></i>
                         </div>
                     </li>
                 </ul>
@@ -555,7 +566,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <%--END--%>
 
             <div class="modal right fade" id="MyModalSetting" role="dialog">
@@ -804,6 +815,7 @@
                 </div>
             </div>
             <!-- Recent Link modal END -->
+
             <!-- Favorites Link modal Start-->
             <%--<button type="button" class="btn btn-info fav-sticker" data-toggle="modal" data-target="#myModal_1"><i class="fa fa-star" aria-hidden="true"></i>FAVORITES</button>--%>
             <div class="modal right fade" id="myModal_1" role="dialog">
@@ -813,13 +825,21 @@
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Favorites</h4>
+                                    <h4 class="modal-title">Favorite Links</h4>
                                     <button type="button" class="close" data-dismiss="modal">
                                         &times;</button>
                                 </div>
-                                <div class="modal-body with-fav-sticker-links" runat="server" id="divFavorite">
+
+                                <div class="x_content height-500 scrollbar small" style="padding: 0 20px 6px; height: 82vh !important; overflow-y: scroll;">
+                                    <ul class="list-group with-border-bottom fav-list" id="QuickAccess">
+                                    </ul>
                                 </div>
+
+                                <%--<div class="modal-body with-fav-sticker-links" runat="server" id="divFavorite">
+                                </div>--%>
+
                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger close-btn" data-dismiss="modal">Close</button>
                                     <%--  <button type="button" class="btn btn-success">Save</button>--%>
                                     <%--<asp:LinkButton ID="favLink" runat="server" CssClass="add-btn" OnClick="favLink_Click" title="Add Link"><i class="fa fa-plus-circle fa-3x"></i></asp:LinkButton>--%>
                                 </div>
@@ -940,10 +960,9 @@
                                 <ul class="nav-tabs">
                                     <asp:Repeater ID="repLinks" runat="server">
                                         <ItemTemplate>
-                                            <li runat="server" id="rptLi" class="dynamic" style="padding-top: 0px; padding-bottom: 0px;">
-
-                                                <i class="fa fa-star" id="iStar" runat="server"></i>
+                                            <li runat="server" id="rptLi" class="dynamic" style="padding-top: 0px; padding-bottom: 0px; justify-content: space-between">
                                                 <asp:LinkButton ID="lbLink" Class="link" runat="server" OnClick="lbLink_Click" CommandName='<%# Eval("AL_NO")%>' CommandArgument='<%# Eval("AL_URL")%>'><%# Eval("AL_LINK")%></asp:LinkButton>
+                                                <i class="fa fa-star" aria-hidden="true" id="iStar" runat="server" style="display: block; left: 0;"></i>
                                             </li>
                                         </ItemTemplate>
                                     </asp:Repeater>
@@ -1114,7 +1133,6 @@
                     {
                         window.setInterval(function () 
                         {
-                            debugger;
                             //showNotification(stime);
                             Swal.fire({
                                 icon: 'info',
@@ -1313,7 +1331,6 @@
                 });
 
                 $(document).on('click', '.select2', function () {
-                    //debugger
                     var key = $(this).parent().find('.select-clik').attr('id');
                     localStorage.setItem("sel2id", key);
                 });
@@ -2209,7 +2226,6 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 $('a:not(.popout).dynamic').parent('li').css({ 'display': '-webkit-box' });
-
             });
         </script>
         <%-- X --%>
@@ -2221,47 +2237,45 @@
                 $('a:not(.popout).dynamic').parent('li').prepend('<i class="fa fa-star"></i>');
                 var UA_No = '<%=Session["userno"] %>';
                 //-------------------------------------------------------------------
-                $.ajax({
-                    url: '<%=Page.ResolveUrl("~/WEB_API/Add_Fav_Links.asmx/Get_Active_FavLink")%>',
-                    data: { UA_NO: UA_No },
-                    type: 'POST',
-                    dataType: 'text',
-                    success: function (r) {
-                        var json = "{" + r.split("{")[1].split("}")[0] + "}";
-                        var obj = jQuery.parseJSON(json);
-                        var i, j;
-                        if (typeof data !== "undefined" && typeof data !== "null") {  //31082021 added this
-                            for (i = 0; i < obj.data.split(",").length; i++) {
+                //$.ajax({
+                // url: '<%=Page.ResolveUrl("~/WEB_API/Add_Fav_Links.asmx/Get_Active_FavLink")%>',
+                //    data: { UA_NO: UA_No },
+                //    type: 'POST',
+                //    dataType: 'text',
+                //    success: function (r) {
+                //        var json = "{" + r.split("{")[1].split("}")[0] + "}";
+                //        var obj = jQuery.parseJSON(json);
+                //        var i, j;
+                //        if (typeof data !== "undefined" && typeof data !== "null") {  //31082021 added this
+                //            for (i = 0; i < obj.data.split(",").length; i++) {
 
-                                $('li.dynamic').find('.fa').each(function (z, objz) {
-                                    var link = $(this).prev().attr('href');
+                //                $('li.dynamic').find('.fa').each(function (z, objz) {
+                //                    var link = $(this).prev().attr('href');
 
-                                    var LinkNo = link.match("pageno=(.*)&");
-                                    if (LinkNo == null) {
-                                        LinkNo = link.substring(link.lastIndexOf("=") + 1, link.length);
-                                    }
-                                    else {
-                                        LinkNo = LinkNo[1];
-                                    }
+                //                    var LinkNo = link.match("pageno=(.*)&");
+                //                    if (LinkNo == null) {
+                //                        LinkNo = link.substring(link.lastIndexOf("=") + 1, link.length);
+                //                    }
+                //                    else {
+                //                        LinkNo = LinkNo[1];
+                //                    }
 
-                                    if (obj.data.split(",")[i] == LinkNo) {
-                                        $(this).addClass('active');
-                                    }
-                                });
-                            }
-                        }     //31082021 added this
-                    },
-                    error: function (e) {
-                        alert('Something went Wrong !!!');
-                    }
-                });
+                //                    if (obj.data.split(",")[i] == LinkNo) {
+                //                        $(this).addClass('active');
+                //                    }
+                //                });
+                //            }
+                //        }     //31082021 added this
+                //    },
+                //    error: function (e) {
+                //        alert('Something went Wrong !!!');
+                //    }
+                //});
                 //----------------------------------------------------------------------
 
                 $('li.dynamic').find('.fa').click(function () {
-
                     $(this).toggleClass('active');
                     var link = $(this).prev().attr('href');
-
                     var LinkNo = link.match("pageno=(.*)&");
                     if (LinkNo == null) {
                         LinkNo = link.substring(link.lastIndexOf("=") + 1, link.length);
@@ -2274,7 +2288,10 @@
                     //Find Color of Active Element
                     hexc(col);
                     //Web Api Call
-                    if (color == '#e60000') {
+                    var iStarId = $(this).attr('id');
+                   
+                    if (color == '#255282')
+                    {
                         $.ajax({
                             url: '<%=Page.ResolveUrl("~/WEB_API/Add_Fav_Links.asmx/Add_FavLink")%>',
                             data: { UA_NO: UA_No, LINK_NO: LinkNo, OTYPE: 1 },
@@ -2283,28 +2300,33 @@
                             success: function (r) {
                                 var json = "{" + r.split("{")[1].split("}")[0] + "}";
                                 var obj = jQuery.parseJSON(json);
+                                $("#" + iStarId).css('color', '#ffa500');
+                                QuickAccessMaster();
                             },
                             error: function (err) {
                                 alert('Something went Wrong !!!');
                             }
                         });
                     }
-                    else if (color == '#a6a6a6') {
+                    else if (color == '#ffa500') 
+                    {
                         $.ajax({
                             url: '<%=Page.ResolveUrl("~/WEB_API/Add_Fav_Links.asmx/Add_FavLink")%>',
-                            data: { UA_NO: UA_No, LINK_NO: LinkNo, OTYPE: 2 },
+                            data: { UA_NO: UA_No, LINK_NO: LinkNo, OTYPE: 1 },
                             type: 'POST',
                             dataType: 'text',
                             success: function (r) {
                                 var json = "{" + r.split("{")[1].split("}")[0] + "}";
                                 var obj = jQuery.parseJSON(json);
+                                $("#" + iStarId).css('color', '#255282');
+                                QuickAccessMaster();
                             },
                             error: function (err) {
                                 alert('Something went Wrong !!!');
                             }
                         });
                         }
-                    // RGB to HEX Converter
+
                     function hexc(colorval) {
                         var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
                         delete (parts[0]);
@@ -2321,7 +2343,7 @@
         <%--End--%>
 
         <%--Add Favorite Links To Nav Right--%>
-        <script>
+        <%--<script>
             $(document).ready(function () {
                 $("#Fav_Model").click(function () {
 
@@ -2352,18 +2374,18 @@
                             }
                         },
                         error: function (e) {
-                            alert('No Favorite Link Added !!!');
+                            //alert('No Favorite Link Added !!!');
                         }
                     });
 
                     $('#myModal_1').modal('toggle');
                 });
             });
-        </script>
+        </script>--%>
         <%--End--%>
 
         <%--Delete Favorite Links From Nav Right--%>
-        <script>
+        <%--<script>
             function DeleteFavLinks(ele) {
 
                 var UA_No = '<%=Session["userno"] %>';
@@ -2424,7 +2446,7 @@
                 }
                 //End
             }
-        </script>
+        </script>--%>
         <%--End--%>
 
         <%-- Breadcrumbs --%>
@@ -2488,7 +2510,6 @@
                                 //-------------------------------------------------------------------
 
                                 $('.emojis').find(".emojiContainer").click(function () {
-                                    //debugger;
 
                                     var link = $(this).attr("value").split(',')[0];
                                     var fed = $(this).attr("value").split(',')[1];
@@ -2541,14 +2562,13 @@
             });
         </script>
 
-
         <%--<script type="text/javascript">
             SR(document).ready(function () {
 
                 updateNotificationCount();
 
                 var notificationHub = SR.connection.notificationHub;
-                SR.connection.hub.start().done(function () {
+                     SR.connection.hub.start().done(function () {
                     console.log('Notification hub started');
 
                 });
@@ -2720,7 +2740,6 @@
         <%-- notification script --%>
 
         <%--Insert Todolist Added By Deepali on 24082020--%>
-
         <script type="text/javascript">
             // Create a new list item when clicking on the "Add" button
             function newElement() {
@@ -2849,11 +2868,10 @@
                         alert('No ToDo Link Added !!!');
                     }
                 });
-
-
             }
         </script>
         <%--END Todolist Added By Deepali on 24082020--%>
+
         <%--START CHECKED Todolist Added By Deepali on 24082020--%>
         <script type="text/javascript">
             function ToDocheck(ele) {
@@ -2864,10 +2882,12 @@
                 if (ele.id == "ctl00_chk1") {
                     txt_inputValue = document.getElementById("ctl00_iql21").innerHTML;
                 }
-                else if (ele.id == "ctl00_chk2") {
+                else if (ele.id == "ctl00_chk2")
+                {
                     txt_inputValue = document.getElementById("ctl00_iql22").innerHTML;
                 }
-                else if (ele.id == "ctl00_chk3") {
+                else if(ele.id == "ctl00_chk3") 
+                {
                     txt_inputValue = document.getElementById("ctl00_iql23").innerHTML;
                 }
                 else if (ele.id == "ctl00_chk4") {
@@ -2912,7 +2932,6 @@
             // Load the SDK Asynchronously
 
             (function (d) {
-                // debugger;
                 var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
 
                 if (d.getElementById(id)) { return; }
@@ -2928,7 +2947,6 @@
             // Init the SDK upon load
 
             window.fbAsyncInit = function () {
-                //debugger;
                 FB.init({
 
                     appId: '384201936056906', // App ID
@@ -2946,14 +2964,11 @@
                 // listen for and handle auth.statusChange events
 
                 FB.Event.subscribe('auth.statusChange', function (response) {
-                    // debugger;
 
                     if (response.authResponse) {
-                        // debugger;
                         // user has auth'd your app and is logged into Facebook
 
                         FB.api('/me', function (me) {
-                            //debugger;
                             if (me.name) {
 
                                 document.getElementById('auth-displayname').innerHTML = me.name;
@@ -2964,7 +2979,6 @@
                             if (response.authResponse.accessToken) {
                                 document.getElementById('<%= accessT.ClientID %>').value = response.authResponse.accessToken;
                             }
-                            //debugger;
                             //location.reload(true);
                             //CheckToken(document.getElementById('<%= authName.ClientID %>').value, document.getElementById('<%= accessT.ClientID %>').value);
                             CallAjax(me.name);
@@ -3032,7 +3046,6 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (d) {
-                        //debugger
                         var data = JSON.parse(d.d);
                         var PageNo;
                         $.each(data, function (a, b) {
@@ -3076,12 +3089,10 @@
                 var prm = Sys.WebForms.PageRequestManager.getInstance();
                 prm.add_endRequest(function () {
                     $(document).on("keyup", function (e) {
-                        //debugger;
                         if (e.shiftKey) {
                             arrSC.push(String.fromCharCode(e.which));
                         }
                         else if (e.which == 16) {
-                            //debugger
                             if (arrSC[0] == "6") {
                                 shortcut = "";
                                 for (var i = 1; i < arrSC.length; i++) {
@@ -3256,7 +3267,6 @@
 
         <%--    <script type="text/javascript">                        
             $( document ).ready(function() {
-                //debugger;
                 var temp=<%=Session["usertype"] %>
                 //var data=JSON.parse(temp);
                   //alert(temp);
@@ -3376,12 +3386,60 @@
                     }
                 }
             });
-    
-
         </script>
 
-        <!-- ============ Drag script added by GAURAV SONPAROTE 17082023 END =================== -->
+         <!-- ============ Drag script added by GAURAV SONPAROTE 17082023 END =================== -->
 
+        <%--Added By Anurag Baghele on 19-02-2024 for show favorite links--%>
+        <script>
+            function QuickAccessMaster() {
+                var currentUrl = window.location.href;
+                $.ajax({
+                    type: "POST",
+                    url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowQuickAccessData")%>',
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        var data = response.d;
+                        var html = '';
+                        var LinkCount = 1;
+                        $('#QuickAccess').empty();
+                        if (data != null) {
+                            if (data.length > 0) {
+                                $.each(data, function (row, item) {
+                                    
+                                    if(currentUrl.indexOf('localhost'))
+                                    {
+                                        html += '<li class="list-group-item"><a href="/PresentationLayer/' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank">' + item.LinkName + '</a></li>';
+                                        LinkCount += 1;
+                                    }
+                                    else
+                                    {
+                                        html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank">' + item.LinkName + '</a></li>';
+                                        LinkCount += 1;
+                                    }
+                                });
+                            } else {
+                                html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display.</li>';
+                            }
+                        } else {
+                            html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display.</li>';
+                        }
+                        $('#QuickAccess').append(html);
+                    },
+                    failure: function (response) {
+                    }
+                });
+            }
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                QuickAccessMaster();
+            })
+        </script>
+        <%--End By Anurag Baghele--%>
 
     </form>
 </body>
