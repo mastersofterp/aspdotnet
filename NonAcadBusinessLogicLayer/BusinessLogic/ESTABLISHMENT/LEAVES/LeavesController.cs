@@ -10582,6 +10582,33 @@ namespace IITMS
                 }
 
                 #endregion
+
+                public DataSet GetBalanceforDirectLeaveApproval(int LETRNO, int IDNO, int LeaveNo)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_LETRNO", LETRNO);
+                        objParams[1] = new SqlParameter("@P_IDNO", IDNO);
+                        objParams[2] = new SqlParameter("@P_LEAVENO", LeaveNo);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_GET_BAL_DIRECT_LEAVE_APPROVAL", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetBalanceforDirectLeaveApproval->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
             }
         }
     }

@@ -232,6 +232,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
         pnlButton.Visible = false;
         divAuthorityList.Visible = false;
         lnkbut.Visible = true;
+        ViewState["LeaveBalance"] = null;
+        ViewState["No_of_days"] = null;
     }
     protected void rblleavetype_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -359,50 +361,85 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
             {
                 if (ViewState["action"].ToString().Equals("edit"))
                 {
-                    if (ViewState["ModifyLeave"] != null)
+                    if (Convert.ToDouble(ViewState["LeaveBalance"]) >= Convert.ToDouble(ViewState["No_of_days"]) || Status.Equals("R"))
                     {
-                        if (ViewState["ModifyLeave"].ToString().Equals("edit"))
+                        if (ViewState["ModifyLeave"] != null)
                         {
-                            Status = ddlSelectModify.SelectedValue.ToString();
-                            //if (Status == "Forward To Next Authority(Recommended)".ToString().Trim())
-                            if (Status == "Approve & Forward To Next Authority(Recommended)".ToString().Trim())
+                            if (ViewState["ModifyLeave"].ToString().Equals("edit"))
                             {
-                                Status = "F".ToString().Trim();
-                            }
-                            else if (Status == "Approve & Final Submit".ToString().Trim())
-                            {
-                                Status = "A".ToString().Trim();
-                            }
-                            else if (Status == "Reject".ToString().Trim())
-                            {
-                                Status = "R".ToString().Trim();
-                            }
-                            objLM.STATUS = Status;
-                            Remarks = txtRemarkModify.Text.ToString();
-                            objLM.APP_REMARKS = Remarks;
-                            objLM.LETRNO = Convert.ToInt32(Session["LETRNO"]);
-                            objLM.FROMDT = Convert.ToDateTime(txtfrmdt.Text);
-                            objLM.TODT = Convert.ToDateTime(txttodate.Text);
-                            objLM.NO_DAYS = Convert.ToDouble(txtNodays.Text);
-                            objLM.JOINDT = Convert.ToDateTime(txtJoindt.Text);
-                            if (rblleavetype.SelectedValue == "1")//half day
-                            {
-                                if (Convert.ToInt32(ddlLeaveFNAN.SelectedValue) == 1)
+                                Status = ddlSelectModify.SelectedValue.ToString();
+                                //if (Status == "Forward To Next Authority(Recommended)".ToString().Trim())
+                                if (Status == "Approve & Forward To Next Authority(Recommended)".ToString().Trim())
                                 {
-                                    objLM.LEAVEFNAN = true;
+                                    Status = "F".ToString().Trim();
+                                }
+                                else if (Status == "Approve & Final Submit".ToString().Trim())
+                                {
+                                    Status = "A".ToString().Trim();
+                                }
+                                else if (Status == "Reject".ToString().Trim())
+                                {
+                                    Status = "R".ToString().Trim();
+                                }
+                                objLM.STATUS = Status;
+                                Remarks = txtRemarkModify.Text.ToString();
+                                objLM.APP_REMARKS = Remarks;
+                                objLM.LETRNO = Convert.ToInt32(Session["LETRNO"]);
+                                objLM.FROMDT = Convert.ToDateTime(txtfrmdt.Text);
+                                objLM.TODT = Convert.ToDateTime(txttodate.Text);
+                                objLM.NO_DAYS = Convert.ToDouble(txtNodays.Text);
+                                objLM.JOINDT = Convert.ToDateTime(txtJoindt.Text);
+                                if (rblleavetype.SelectedValue == "1")//half day
+                                {
+                                    if (Convert.ToInt32(ddlLeaveFNAN.SelectedValue) == 1)
+                                    {
+                                        objLM.LEAVEFNAN = true;
+                                    }
+                                    else
+                                    {
+                                        objLM.LEAVEFNAN = false;
+                                    }
+                                    //
+                                    if (objLM.FROMDT != objLM.TODT)
+                                    {
+                                        MessageBox("Please select Single date for Half Day");
+                                        return;
+                                    }
+                                    else
+                                    {
+
+                                        CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
+                                        string statusnew = objCommon.LookUp("Payroll_leave_app_entry", "status", "LETRNO=" + LETRNO);
+                                        if (cs.Equals(CustomStatus.RecordUpdated))
+                                        {
+                                            MessageBox("Record Saved Successfully");
+                                            divAuthorityList.Visible = false;
+                                            pnlButton.Visible = false;
+                                            pnllist.Visible = true;
+                                            pnlAdd.Visible = false;
+                                            ViewState["action"] = null;
+                                            clear_lblvalue();
+                                            if (isSMS == true)
+                                            {
+                                                if (statusnew == "A" || statusnew == "R")
+                                                {
+                                                    //SendSMS(LETRNO);
+                                                }
+                                            }
+                                            if (isEmail == true)
+                                            {
+                                                if (statusnew == "A" || statusnew == "R")
+                                                {
+                                                    SendMail(LETRNO);
+                                                }
+                                            }
+                                            lnkbut.Visible = true;
+                                        }
+                                    }
                                 }
                                 else
                                 {
-                                    objLM.LEAVEFNAN = false;
-                                }
-                                //
-                                if (objLM.FROMDT != objLM.TODT)
-                                {
-                                    MessageBox("Please select Single date for Half Day");
-                                    return;
-                                }
-                                else
-                                {
+                                    objLM.LEAVEFNAN = null;
                                     CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
                                     string statusnew = objCommon.LookUp("Payroll_leave_app_entry", "status", "LETRNO=" + LETRNO);
                                     if (cs.Equals(CustomStatus.RecordUpdated))
@@ -414,27 +451,78 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                                         pnlAdd.Visible = false;
                                         ViewState["action"] = null;
                                         clear_lblvalue();
+
                                         if (isSMS == true)
                                         {
                                             if (statusnew == "A" || statusnew == "R")
                                             {
                                                 //SendSMS(LETRNO);
                                             }
+
                                         }
                                         if (isEmail == true)
                                         {
-                                            if (statusnew == "A" || statusnew == "R")
+                                            if (statusnew == "A" || statusnew == "R" || statusnew == "P")
                                             {
                                                 SendMail(LETRNO);
                                             }
                                         }
+                                        clear();
                                         lnkbut.Visible = true;
                                     }
+
                                 }
+                                if (divml.Visible == true && trType.Visible == false)
+                                {
+                                    if (Convert.ToInt32(rdbml.SelectedValue) == 0)
+                                    {
+                                        //full pay
+                                        objLM.MLHPL = 1;
+                                    }
+                                    else
+                                    {
+                                        //half pay
+                                        objLM.MLHPL = 2;
+                                    }
+                                }
+                                else
+                                {
+                                    objLM.MLHPL = 0;
+                                }
+
+
+                                //TO UPDATE LEAVE APPLICATION ENTRY
+
+                                //decimal balleave = Convert.ToDecimal(lblbal.Text);
+
+                                CustomStatus lcs = (CustomStatus)objApp.UpdateLeaveAppEntry(objLM);
+                                if (lcs.Equals(CustomStatus.RecordUpdated))
+                                {
+                                    MessageBox("Record Saved Successfully");
+                                    pnlAdd.Visible = false;
+                                    divAuthorityList.Visible = false;
+                                    pnlButton.Visible = false;
+                                    pnlvedit.Visible = false;
+                                    pnllist.Visible = true;
+                                    ViewState["action"] = null;
+                                    clear_lblvalue();
+                                    if (isSMS == true)
+                                    {
+                                        //SendSMS(LETRNO);
+                                    }
+                                    else if (isEmail == true)
+                                    {
+                                        SendMail(LETRNO);
+                                    }
+
+                                    clear();
+                                }
+                                ViewState["action"] = null;
+                                ViewState["ModifyLeave"] = null;
+                                lnkbut.Visible = true;
                             }
                             else
                             {
-                                objLM.LEAVEFNAN = null;
                                 CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
                                 string statusnew = objCommon.LookUp("Payroll_leave_app_entry", "status", "LETRNO=" + LETRNO);
                                 if (cs.Equals(CustomStatus.RecordUpdated))
@@ -446,14 +534,12 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                                     pnlAdd.Visible = false;
                                     ViewState["action"] = null;
                                     clear_lblvalue();
-
                                     if (isSMS == true)
                                     {
                                         if (statusnew == "A" || statusnew == "R")
                                         {
                                             //SendSMS(LETRNO);
                                         }
-
                                     }
                                     if (isEmail == true)
                                     {
@@ -462,59 +548,12 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                                             SendMail(LETRNO);
                                         }
                                     }
+                                    BindLVLeaveApplPendingList();
                                     clear();
                                     lnkbut.Visible = true;
                                 }
-
-                            }
-                            if (divml.Visible == true && trType.Visible == false)
-                            {
-                                if (Convert.ToInt32(rdbml.SelectedValue) == 0)
-                                {
-                                    //full pay
-                                    objLM.MLHPL = 1;
-                                }
-                                else
-                                {
-                                    //half pay
-                                    objLM.MLHPL = 2;
-                                }
-                            }
-                            else
-                            {
-                                objLM.MLHPL = 0;
                             }
 
-
-                            //TO UPDATE LEAVE APPLICATION ENTRY
-
-                            //decimal balleave = Convert.ToDecimal(lblbal.Text);
-
-                            CustomStatus lcs = (CustomStatus)objApp.UpdateLeaveAppEntry(objLM);
-                            if (lcs.Equals(CustomStatus.RecordUpdated))
-                            {
-                                MessageBox("Record Saved Successfully");
-                                pnlAdd.Visible = false;
-                                divAuthorityList.Visible = false;
-                                pnlButton.Visible = false;
-                                pnlvedit.Visible = false;
-                                pnllist.Visible = true;
-                                ViewState["action"] = null;
-                                clear_lblvalue();
-                                if (isSMS == true)
-                                {
-                                    //SendSMS(LETRNO);
-                                }
-                                else if (isEmail == true)
-                                {
-                                    SendMail(LETRNO);
-                                }
-
-                                clear();
-                            }
-                            ViewState["action"] = null;
-                            ViewState["ModifyLeave"] = null;
-                            lnkbut.Visible = true;
                         }
                         else
                         {
@@ -522,11 +561,10 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                             string statusnew = objCommon.LookUp("Payroll_leave_app_entry", "status", "LETRNO=" + LETRNO);
                             if (cs.Equals(CustomStatus.RecordUpdated))
                             {
-                                MessageBox("Record Saved Successfully");
-                                divAuthorityList.Visible = false;
-                                pnlButton.Visible = false;
                                 pnllist.Visible = true;
                                 pnlAdd.Visible = false;
+                                divAuthorityList.Visible = false;
+                                pnlButton.Visible = false;
                                 ViewState["action"] = null;
                                 clear_lblvalue();
                                 if (isSMS == true)
@@ -543,42 +581,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                                         SendMail(LETRNO);
                                     }
                                 }
-                                BindLVLeaveApplPendingList();
                                 clear();
                                 lnkbut.Visible = true;
                             }
                         }
-
+                        ViewState["LeaveBalance"] = null;
+                        ViewState["No_of_days"] = null;
                     }
                     else
                     {
-                        CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
-                        string statusnew = objCommon.LookUp("Payroll_leave_app_entry", "status", "LETRNO=" + LETRNO);
-                        if (cs.Equals(CustomStatus.RecordUpdated))
-                        {
-                            pnllist.Visible = true;
-                            pnlAdd.Visible = false;
-                            divAuthorityList.Visible = false;
-                            pnlButton.Visible = false;
-                            ViewState["action"] = null;
-                            clear_lblvalue();
-                            if (isSMS == true)
-                            {
-                                if (statusnew == "A" || statusnew == "R")
-                                {
-                                    //SendSMS(LETRNO);
-                                }
-                            }
-                            if (isEmail == true)
-                            {
-                                if (statusnew == "A" || statusnew == "R" || statusnew == "P")
-                                {
-                                    SendMail(LETRNO);
-                                }
-                            }
-                            clear();
-                            lnkbut.Visible = true;
-                        }
+                        objCommon.DisplayMessage("Leave can not Approved!! Applicant have Insufficient Leave Balance.", this);
+                        return;
                     }
                 }
                 BindLVLeaveApplPendingList();
@@ -878,6 +891,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                 lblFromdt.Text = ds.Tables[0].Rows[0]["From_date"].ToString();
                 lblTodt.Text = ds.Tables[0].Rows[0]["TO_DATE"].ToString();
                 lblNodays.Text = ds.Tables[0].Rows[0]["NO_OF_DAYS"].ToString();
+                ViewState["No_of_days"] = Convert.ToDouble(ds.Tables[0].Rows[0]["NO_OF_DAYS"].ToString());
                 double NO_OF_DAYS = Convert.ToDouble(ds.Tables[0].Rows[0]["NO_OF_DAYS"]);  // ds.Tables[0].Rows[0]["NO_OF_DAYS"];
                 if (NO_OF_DAYS == 0.5)
                 {
@@ -1013,6 +1027,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                 if (ds1.Tables[0].Rows.Count > 0)
                 {
                     double bal = Convert.ToDouble(ds1.Tables[0].Rows[0]["BAL"]);
+                    ViewState["LeaveBalance"] = bal;
                     txtLeavebal.Text = bal.ToString();
                     lblbal.Text = bal.ToString();
                     double total = Convert.ToDouble(ds1.Tables[0].Rows[0]["TOTAL"]);
