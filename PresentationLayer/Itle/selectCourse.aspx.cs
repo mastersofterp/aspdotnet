@@ -361,6 +361,7 @@ public partial class Itle_selectCourse : System.Web.UI.Page
             {
                 pnlNotifications.Visible = true;
                 imgNotify.ToolTip = "Close Notifications";
+                BindNewAssignment(); BindTestList();
             }
             else
             {
