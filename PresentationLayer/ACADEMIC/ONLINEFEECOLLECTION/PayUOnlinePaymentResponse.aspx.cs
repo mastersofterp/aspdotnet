@@ -210,31 +210,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                             output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
                             if (output != 1)
                             {
-                                if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")
-                                {
-                                    string pageNo = string.Empty;
-                                    string bccMails = string.Empty;
-                                    DataSet Ds_Email = null;
-                                    string email = objCommon.LookUp("ACD_STUDENT", "CASE WHEN FATHER_EMAIL='' THEN MOTHER_EMAIL ELSE FATHER_EMAIL END Email_Father", "IDNO='" + ViewState["IDNO"].ToString() + "'");
-                                    string ccMails = objCommon.LookUp("ACD_STUDENT", "EMAILID as Email", "IDNO='" + ViewState["IDNO"].ToString() + "'");
-                                    string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO='" + ViewState["IDNO"].ToString() + "'");
-                                    DataSet dsconfig = objCommon.FillDropDown("REFF", "USER_PROFILE_SENDERNAME,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
-                                    string CollegeName = dsconfig.Tables[0].Rows[0]["CollegeName"].ToString();
-                                    string College = dsconfig.Tables[0].Rows[0]["USER_PROFILE_SENDERNAME"].ToString();
-                                    int IDNO = Convert.ToInt32(ViewState["IDNO"]);
-                                    string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
-                                    MemoryStream oAttachment1 = ShowGeneralExportReportForMailForApplication("Reports,Academic,rptOnlineReceipt.rpt", "@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + DcrNo);
-                                    var bytesRpt = oAttachment1.ToArray();
-                                    var fileRpt = Convert.ToBase64String(bytesRpt);
-                                    byte[] test = (byte[])bytesRpt;
-                                    string type = string.Empty;
-                                    string attachmentfilename = " " + College + "Fees_Paid_Receipt";
-                                    string subject = " " + College + " || Fees Paid Receipt ";
-                                    string message = "<b>Dear Parent</b><br />";
-                                    message += "<br/>Greetings from " + CollegeName + " !<br/>";
-                                    message += "<br /><br /> Your Ward " + Name + " fees have been submitted successfully and Please Find latest Fees paid Receipt <br />";
-                                    var status = objSendEmailV2.SendEmail_New(pageNo, email, message, subject, ccMails, bccMails, Ds_Email, attachmentfilename, test, type);
-                                }
+                     
                                 if (ViewState["First_PaymentStatus"] == "5151")
                                 {
                                     string UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
@@ -249,6 +225,32 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
 
                                 }
                             }
+                            if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")
+                            {
+                                string pageNo = string.Empty;
+                                string bccMails = string.Empty;
+                                DataSet Ds_Email = null;
+                                string email = objCommon.LookUp("ACD_STUDENT", "CASE WHEN FATHER_EMAIL='' THEN MOTHER_EMAIL ELSE FATHER_EMAIL END Email_Father", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                string ccMails = objCommon.LookUp("ACD_STUDENT", "EMAILID as Email", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                DataSet dsconfig = objCommon.FillDropDown("REFF", "USER_PROFILE_SENDERNAME,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
+                                string CollegeName = dsconfig.Tables[0].Rows[0]["CollegeName"].ToString();
+                                string College = dsconfig.Tables[0].Rows[0]["USER_PROFILE_SENDERNAME"].ToString();
+                                int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+                                string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+                                MemoryStream oAttachment1 = ShowGeneralExportReportForMailForApplication("Reports,Academic,rptOnlineReceipt.rpt", "@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + DcrNo);
+                                var bytesRpt = oAttachment1.ToArray();
+                                var fileRpt = Convert.ToBase64String(bytesRpt);
+                                byte[] test = (byte[])bytesRpt;
+                                string type = string.Empty;
+                                 pageNo = "0";
+                                string attachmentfilename = " " + College + "Fees_Paid_Receipt";
+                                string subject = " " + College + " || Fees Paid Receipt ";
+                                string message = "<b>Dear Parent</b><br />";
+                                message += "<br/>Greetings from " + CollegeName + " !<br/>";
+                                message += "<br /><br /> Your Ward " + Name + " fees have been submitted successfully and Please Find latest Fees paid Receipt <br />";
+                                var status = SendEmail_New(pageNo, email, message, subject, ccMails, bccMails, Ds_Email, attachmentfilename, test, type);
+                            }
                         }
                         else
                         {
@@ -257,31 +259,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
 
                             if (output != 1)
                             {
-                                if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")
-                                {
-                                    string pageNo = string.Empty;
-                                    string bccMails = string.Empty;
-                                    DataSet Ds_Email = null;
-                                    string email = objCommon.LookUp("ACD_STUDENT", "CASE WHEN FATHER_EMAIL='' THEN MOTHER_EMAIL ELSE FATHER_EMAIL END Email_Father", "IDNO='" + ViewState["IDNO"].ToString() + "'");
-                                    string ccMails = objCommon.LookUp("ACD_STUDENT", "EMAILID as Email", "IDNO='" + ViewState["IDNO"].ToString() + "'");
-                                    string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO='" + ViewState["IDNO"].ToString() + "'");
-                                    DataSet dsconfig = objCommon.FillDropDown("REFF", "USER_PROFILE_SENDERNAME,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
-                                    string CollegeName = dsconfig.Tables[0].Rows[0]["CollegeName"].ToString();
-                                    string College = dsconfig.Tables[0].Rows[0]["USER_PROFILE_SENDERNAME"].ToString();
-                                    int IDNO = Convert.ToInt32(ViewState["IDNO"]);
-                                    string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
-                                    MemoryStream oAttachment1 = ShowGeneralExportReportForMailForApplication("Reports,Academic,rptOnlineReceipt.rpt", "@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + DcrNo);
-                                    var bytesRpt = oAttachment1.ToArray();
-                                    var fileRpt = Convert.ToBase64String(bytesRpt);
-                                    byte[] test = (byte[])bytesRpt;
-                                    string type = string.Empty;
-                                    string attachmentfilename = " " + College + "Fees_Paid_Receipt";
-                                    string subject = " " + College + " || Fees Paid Receipt ";
-                                    string message = "<b>Dear Parent</b><br />";
-                                    message += "<br/>Greetings from " + CollegeName + " !<br/>";
-                                    message += "<br /><br /> Your Ward " + Name + " fees have been submitted successfully and Please Find latest Fees paid Receipt <br />";
-                                    var status = objSendEmailV2.SendEmail_New(pageNo, email, message, subject, ccMails, bccMails, Ds_Email, attachmentfilename, test, type);
-                                }
+                               
                                 if (Session["OrgId"].ToString() == "5")
                                 {
                                     if (ViewState["First_PaymentStatus"].Equals("5151"))
@@ -297,6 +275,32 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
 
                                     }
                                 }
+                            }
+                            if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")
+                            {
+                                string pageNo = string.Empty;
+                                string bccMails = string.Empty;
+                                DataSet Ds_Email = null;
+                                string email = objCommon.LookUp("ACD_STUDENT", "CASE WHEN FATHER_EMAIL='' THEN MOTHER_EMAIL ELSE FATHER_EMAIL END Email_Father", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                string ccMails = objCommon.LookUp("ACD_STUDENT", "EMAILID as Email", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                DataSet dsconfig = objCommon.FillDropDown("REFF", "USER_PROFILE_SENDERNAME,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
+                                string CollegeName = dsconfig.Tables[0].Rows[0]["CollegeName"].ToString();
+                                string College = dsconfig.Tables[0].Rows[0]["USER_PROFILE_SENDERNAME"].ToString();
+                                int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+                                string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+                                MemoryStream oAttachment1 = ShowGeneralExportReportForMailForApplication("Reports,Academic,rptOnlineReceipt.rpt", "@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + DcrNo);
+                                var bytesRpt = oAttachment1.ToArray();
+                                pageNo = "0";
+                                var fileRpt = Convert.ToBase64String(bytesRpt);
+                                byte[] test = (byte[])bytesRpt;
+                                string type = string.Empty;
+                                string attachmentfilename = " " + College + "Fees_Paid_Receipt";
+                                string subject = " " + College + " || Fees Paid Receipt ";
+                                string message = "<b>Dear Parent</b><br />";
+                                message += "<br/>Greetings from " + CollegeName + " !<br/>";
+                                message += "<br /><br /> Your Ward " + Name + " fees have been submitted successfully and Please Find latest Fees paid Receipt <br />";
+                                var status = SendEmail_New(pageNo, email, message, subject, ccMails, bccMails, Ds_Email, attachmentfilename, test, type);
                             }
 
                             //AddSemesterRegistration_Online
@@ -418,6 +422,74 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
         }
         return hex;
 
+    }
+    #endregion
+
+    #region  Outlook Email With Attachment
+    public int SendEmail_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails, DataSet ds, string attachmentfilename, byte[] bytefile, string type)
+    {
+        int status = 0;
+        status = OutLook(message, emailId, subject, ccMails, bccMails, attachmentfilename, bytefile, type );
+        return status;
+    }
+   
+    private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails, string attachmentfilename, byte[] bytefile, string type )
+    {
+        int ret = 0;
+        try
+        {
+            DataSet dsconfig = null;
+            Common objCommon = new Common();
+            dsconfig = objCommon.FillDropDown("REFF", "EMAILSVCID,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
+            string ReffEmail = Convert.ToString(dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString());
+            string ReffPassword = Convert.ToString(dsconfig.Tables[0].Rows[0]["EMAILSVCPWD"].ToString());
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            MailMessage msg = new MailMessage();
+            msg.To.Add(new System.Net.Mail.MailAddress(toEmailId));
+            //Add CC and BCC Email Id 
+            if (ccemails != "")
+            {
+                msg.CC.Add(ccemails);
+                //oMail.Cc = ccemails;
+            }
+            if (bccemails != "")
+            {
+                msg.Bcc.Add(bccemails);
+            }
+            msg.From = new System.Net.Mail.MailAddress(ReffEmail);
+            msg.Subject = sub;
+            StringBuilder sb = new StringBuilder();
+            msg.Body = Message;
+            System.Net.Mail.Attachment attachment;
+            attachment = new System.Net.Mail.Attachment(new MemoryStream(bytefile), "" + attachmentfilename + ".pdf");
+            msg.Attachments.Add(attachment);
+            msg.BodyEncoding = Encoding.UTF8;
+            msg.IsBodyHtml = true;
+            System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential(ReffEmail, ReffPassword);
+            client.Port = 587; // You can use Port 25 if 587 is blocked (mine is)
+            client.Host = "smtp-mail.outlook.com"; // "smtp.live.com";
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            try
+            {
+                client.Send(msg);
+                //lblText.Text = "Message Sent Succesfully";
+            }
+            catch (Exception ex)
+            {
+
+            }
+            ret = 1;
+        }
+        catch (Exception ep)
+        {
+            Console.WriteLine("failed to send email with the following error:");
+            Console.WriteLine(ep.Message);
+            ret = 0;
+        }
+        return ret;
     }
     #endregion
 
