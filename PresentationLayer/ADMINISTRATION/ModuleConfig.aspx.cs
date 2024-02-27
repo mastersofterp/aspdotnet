@@ -890,36 +890,6 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 objMod.AllowEnrollno = true;
             }
 
-
-
-            //if (rdoRegSeperate.Checked == true)
-            //{
-            //    objMod.course_exam_reg_seperate = 1;
-            //    //rdoRegSame.Visible = false;
-            //}
-            //else
-            //{
-            //    objMod.course_exam_reg_seperate = 0;
-            //    //rdoRegSame.Visible = true;
-            //}
-
-            //if (rdoRegSame.Checked == true)
-            //{
-            //    objMod.course_exam_reg_both = 1;
-            //    //rdoRegSeperate.Visible = false;
-            //}
-            //else
-            //{
-            //    objMod.course_exam_reg_both = 0;
-            //    //rdoRegSeperate.Visible = true;
-            //}
-
-
-            //if (hfRegSame.Value == "true")
-            //{
-            //    objMod.CourseExmRegSame = true;
-            //}
-
             if (hfStudMandate.Value == "true")
             {
                 objMod.StudInfoMandate = true;
@@ -1249,6 +1219,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             }
 
             int studAttendance = Convert.ToInt32(ddlMarkingAttendance.SelectedValue); //Added By Vipul Tichakule on date 24-01-2024
+            int RecEmail = Convert.ToInt32(ddlSendParentsEmail.SelectedValue); //Added By Jay Takalkhede on date 17-02-2024
 
             //Check whether to add or update
             if (ViewState["action"] != null)
@@ -1263,8 +1234,9 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objMConfig.SaveModuleConfiguration(objMod, UANO, IP_ADDRESS, MAC_ID, Trisemstatus, chkoutstanding, sempromodemandcreation, semadmofflinebtn,
                         semadmbeforepromotion, semadmafterepromotion, studReactvationlarefine, IntakeCapacity, chktimeReport, chkGlobalCTAllotment,
                         BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow, TPSlot, UserLoginNos, usercourselocked,
-                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance); //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
-
+                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance, RecEmail); 
+                    //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
+                    //RecEmail Added By Jay Takalkhede on date 17-02-2024
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
                         //Clear();

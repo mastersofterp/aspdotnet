@@ -835,7 +835,27 @@
                                                             </asp:DropDownList>                                                          
                                                         </div>
                                                     </div>   <%-- end--%>
-
+                                                    <%-- Added By Jay Takalkhed on date 17-02-2024 --%>
+                                                     <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Receipt Send on Parent/Student Email</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblSendParentsEmail" runat="server" Font-Bold="true">Fees Receipt to be send on Parent/Student Email</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:DropDownList ID="ddlSendParentsEmail" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">                       
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">None </asp:ListItem>
+                                                                <asp:ListItem Value="2">Student</asp:ListItem>
+                                                                <asp:ListItem Value="3">Parent</asp:ListItem>
+                                                                <asp:ListItem Value="4">Both (Parent and Student)</asp:ListItem>
+                                                            </asp:DropDownList>                                                          
+                                                        </div>
+                                                    </div>   <%-- end--%>
 
                                                 </div>
                                                 <div class="col-12 btn-footer">

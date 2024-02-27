@@ -17,26 +17,27 @@ namespace IITMS
             {
                 string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
                 /// <summary>
-                /// Added by SP -- Modified by Shailendra K, Saurabh S.,Rohit M.
+                /// Added by SP -- Modified by Shailendra K, Saurabh S.,Rohit M.,Jay Takalkhede(27022024)
                 /// </summary>
                 /// <param name="objConfig"></param>
                 /// <returns></returns>
                 /// //
                 /// 
                 /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related) , Rishabh B. (Added student attendance dashboard flag)
+                /// Modified By Jay Takalkhede on date 17-02-2024 (Added parameter RecEmail)
                 public int SaveModuleConfiguration(ModuleConfig objConfig, int UANO, string IPAddress, string Mac_Address, bool trisem, bool chkoutsatnding,
                 bool sempromdemand, bool semadmissionoffbtn, bool semadmbeforesempromotion, bool semadmissionaftersempromotion, bool studReactvationlarefine,
                 bool IntakeCapacity, bool chktimeReport, bool chkGlobalCTAllotment, string BBCMailSENTRY, bool hosteltypeselection, bool chkElectChoiceFor,
                     bool Seatcapacitynewstud, string Usernos, bool Dashboardoutstanding, string AttendanceUser, string CourseShow, bool Timeslotmandatory,
                     string UserLoginNos, string CourseLocked, bool DisplayStudLoginDashboard, bool DisplayReceiptInHTMLFormat, bool chkValueAddedCTAllotment,
-                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos, string session_ids, string college_ids, int studAttendance)
+                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos, string session_ids, string college_ids, int studAttendance, int RecEmail)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-                        sqlParams = new SqlParameter[58];
+                        sqlParams = new SqlParameter[59];
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -98,8 +99,9 @@ namespace IITMS
                         sqlParams[54] = new SqlParameter("@P_SESSION_IDS", session_ids);
                         sqlParams[55] = new SqlParameter("@P_COLLEGE_IDS", college_ids);
                         sqlParams[56] = new SqlParameter("@P_ATTENDANCE_STUDDISPLAY", studAttendance);
-                        sqlParams[57] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[57].Direction = ParameterDirection.Output;
+                        sqlParams[57] = new SqlParameter("@P_RECEMAIL", RecEmail); //Added By Jay Takalkhede on date 17-02-2024
+                        sqlParams[58] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        sqlParams[58].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);
