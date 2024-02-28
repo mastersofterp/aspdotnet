@@ -787,6 +787,7 @@
                                                                             </th>
                                                                             <th>Course Type</th>
                                                                             <th>Choice For</th>
+                                                                            <th>Mandatory</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -837,6 +838,9 @@
                                                                     </td>
                                                                     <td>
                                                                         <%# Eval("CHOISE_FOR")%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%# Eval("IS_MANDATORY")%>
                                                                     </td>
                                                                 </tr>
                                                             </ItemTemplate>
