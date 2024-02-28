@@ -503,7 +503,7 @@
                         <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" Text="Submit" CausesValidation="false"
                             Font-Bold="true" CssClass="btn btn-primary" TabIndex="8" />
                         <asp:Button ID="btnPrintRegSlip" runat="server" Text="Report" OnClick="btnPrintRegSlip_Click" CausesValidation="false"
-                           Font-Bold="true" CssClass="btn btn-info" TabIndex="9" Visible="true" />
+                           Font-Bold="true" CssClass="btn btn-info" TabIndex="9" Visible="false" />
                     </div>
                     <asp:HiddenField ID="hdfTotNoCourses" runat="server" Value="0" />
                     <div id="divMsg" runat="server">
