@@ -616,58 +616,109 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
 
             dsFailSubjects = objSC.GetStudentFailExamSubjectSNew_sem(idno, sessionno, Convert.ToInt32(lblScheme.ToolTip), degreeno, branchno,Convert.ToInt32(ddlBackLogSem.SelectedValue));
 
-            if (dsFailSubjects.Tables[0].Rows.Count>0)
+
+        if (dsFailSubjects.Tables[0].Rows.Count > 0)
+        {
+            lvFailCourse.DataSource = dsFailSubjects;
+            lvFailCourse.DataBind();
+            lvFailCourse.Visible = true;
+            divCourses.Visible = true;
+            btnSubmit.Visible = true;
+            pnlFailCourse.Visible = true;
+            #region for chk and dissabled
+            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)  //20// add by Rohit.D for PJLC/PCEN
+            {
+                foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                {
+                    CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+                    chk.Checked = true;
+                }
+                lvFailCourse.Enabled = false;
+            }
+            else
+            {
+
+                lvFailCourse.Enabled = true;
+            }
+            #endregion
+        }
+        else
+        {
+
+            objCommon.DisplayMessage(updatepnl, "No Courses found...!! !!", this.Page);
+            lvFailCourse.DataSource = null;
+            lvFailCourse.DataBind();
+            lvFailCourse.Visible = false;
+            divCourses.Visible = true;
+            btnSubmit.Visible = false;
+            btnPrintRegSlip.Visible = false;
+            btnSubmit.Visible = false;
+            btnPrintRegSlip.Visible = false;
+            lblTotalExamFee.Text = string.Empty;
+            FinalTotal.Text = string.Empty;
+            PaidTotal.Text = string.Empty;
+            lblLateFee.Text = "";
+            lblfessapplicable.Text = "";
+            lblCertificateFee.Text = "";
+            lblTotalExamFee.Text = "";
+            FinalTotal.Text = " ";
+            PaidTotal.Text = " ";
+            return;
+           
+        }
+       
+
+        if (dsFailSubjects.Tables[0].Rows.Count > 0)
+        {
+            ViewState["oldsession"] = dsFailSubjects.Tables[0].Rows[0]["SESSIONNO"].ToString();
+        }
+        if (dsFailSubjects.Tables[0].Rows.Count > 0)
+        {
+
+            string CHECKFEESTYPE = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "FEESTRUCTURE_TYPE", "SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + ddlBackLogSem.SelectedValue + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%'  AND FEETYPE=1 AND COLLEGE_ID=" + clg_id + "  AND ISNULL(IsFeesApplicable,0)=1 and ISNULL(CANCEL,0)=0");
+
+            int checkpaymentmode = Convert.ToInt16(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "ISNULL(PAYMENT_MODE,0)", "SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + ddlBackLogSem.SelectedValue + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%'  AND FEETYPE=1 AND COLLEGE_ID=" + clg_id + "  AND ISNULL(IsFeesApplicable,0)=1 and ISNULL(CANCEL,0)=0  UNION ALL SELECT 0 AS PAYMENT_MODE"));
+            //  and ISNULL(IsFeesWithDemand)=0
+            #region ADDED FOR With fee but only demand create
+            //ADDED FOR With fee but only demand create
+            Session["PaymentMode"] = checkpaymentmode;
+            #endregion
+            ViewState["FEESTYPE"] = CHECKFEESTYPE;
+            if (CHECKFEESTYPE == string.Empty || CHECKFEESTYPE == null)
             {
                 ViewState["oldsession"] = dsFailSubjects.Tables[0].Rows[0]["SESSIONNO"].ToString();
              }
             if (dsFailSubjects.Tables[0].Rows.Count > 0)
             {
 
-                string CHECKFEESTYPE = objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "FEESTRUCTURE_TYPE", "SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + ddlBackLogSem.SelectedValue + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%'  AND FEETYPE=1 AND COLLEGE_ID=" + clg_id + "  AND ISNULL(IsFeesApplicable,0)=1 and ISNULL(CANCEL,0)=0");
-                
-                int checkpaymentmode = Convert.ToInt16(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "ISNULL(PAYMENT_MODE,0)", "SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + ddlBackLogSem.SelectedValue + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%'  AND FEETYPE=1 AND COLLEGE_ID=" + clg_id + "  AND ISNULL(IsFeesApplicable,0)=1 and ISNULL(CANCEL,0)=0  UNION ALL SELECT 0 AS PAYMENT_MODE"));
-                //  and ISNULL(IsFeesWithDemand)=0
-                #region ADDED FOR With fee but only demand create
-                //ADDED FOR With fee but only demand create
-                Session["PaymentMode"] = checkpaymentmode;
-                #endregion
-                    ViewState["FEESTYPE"] = CHECKFEESTYPE;
-                if (CHECKFEESTYPE == string.Empty || CHECKFEESTYPE == null)
-                {
-                    ViewState["FEESTYPE"] = 0;
-                  
-                }
-                #region NO FEE 
-                if (Convert.ToInt32(ViewState["FEESTYPE"]) == 0)//NO_ FEE
-                {
-                    HideClm();
-                    btnSubmit.Visible = false;
-                    btnSubmit.Enabled = false;
-                    btnSubmit_WithDemand.Visible = false;
-                    btnSubmit_WithDemand.Enabled = false;
-                    btnPay.Visible = true;
-                    btnPay.Enabled = true;
-                    btnPrintRegSlip.Visible = true;
-                    lblfessapplicable.Text="";
-                    lblCertificateFee.Text="";
-                    lblTotalExamFee.Text="";
-                    lblLateFee.Text="";
-                    FinalTotal.Text = "";
+                //lvFailCourse.DataSource = dsFailSubjects;
+                //lvFailCourse.DataBind();
+                lvFailCourse.Visible = true;
+                //if (Convert.ToInt32(Session["OrgId"]) == 3)
+                //{
+                //    foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                //    {
+                //        CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+                //        chk.Checked = true;
+                //    }
+                //    lvFailCourse.Enabled = true;
+                //}
+                //else
+                //{
 
-                }
-                #endregion
-                #region  COURSE WISE/TYPE FEE
-                else if (Convert.ToInt32(ViewState["FEESTYPE"]) == 3 || Convert.ToInt32(ViewState["FEESTYPE"]) == 1)
+                //    lvFailCourse.Enabled = true;
+                //}
+                CalculateTotalCredit();
+
+                int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND TRANSACTIONSTATUS='Success' AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+
+                //HideClmAdmin(); commented by rohit 03012024 
+
+                if (paysuccess > 0)
                 {
-
-                    lvFailCourse.DataSource = dsFailSubjects;
-                    lvFailCourse.DataBind();
-                    CalculateTotalCredit();                   
-                   
-                    int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND TRANSACTIONSTATUS='Success' AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
-
-                    //HideClmAdmin(); commented by rohit 03012024 
-                    if (paysuccess > 0)
+                    //decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "TOP 1 AD.TOTAL_AMT", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND TRANSACTIONSTATUS='Success' AND AD.RECIEPT_CODE='AEF' and  AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                    decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO = AD.IDNO AND D.SESSIONNO = AD.SESSIONNO  AND AD.RECIEPT_CODE=D.RECIEPT_CODE AND AD.SEMESTERNO=D.SEMESTERNO)", "SUM( AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                    if (ViewState["usertype"].ToString() == "2")
                     {
                         decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "TOP 1 AD.TOTAL_AMT", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND TRANSACTIONSTATUS='Success' AND AD.RECIEPT_CODE='AEF' and  AD.IDNO=" + Convert.ToInt32(Session["idno"])));
 
@@ -838,9 +889,32 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 {
                     CalculateTotal();
                 }
-             
-                lvFailCourse.DataSource = dsFailSubjects;
-                lvFailCourse.DataBind();
+
+                HideClm();
+            }
+            #endregion
+            #region FIXTYPE
+
+
+            else if (Convert.ToInt32(ViewState["FEESTYPE"]) == 4)//FIX  
+            {
+                //lvFailCourse.DataSource = dsFailSubjects;
+                //lvFailCourse.DataBind();
+
+                //if (Convert.ToInt32(Session["OrgId"]) == 3)
+                //{
+                //    foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                //    {
+                //        CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+                //        chk.Checked = true;
+                //    }
+                //    lvFailCourse.Enabled = true;
+                //}
+                //else
+                //{
+
+                //    lvFailCourse.Enabled = true;
+                //}
                 lvFailCourse.Visible = true;
                 divCourses.Visible = true;
                 pnlFailCourse.Visible = true;               
@@ -1246,7 +1320,16 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
         }
         else
         {
-           
+            lblfessapplicable.Text = "";
+            lblCertificateFee.Text = "";
+            lblTotalExamFee.Text = "";
+            lblLateFee.Text = "";
+            FinalTotal.Text = "";
+            PaidTotal.Text = string.Empty;
+           // ViewState["latefee"] = string.Empty;
+            ViewState["TotalSubFee"] = string.Empty;
+            ViewState["CrettificateFee"] = string.Empty;
+            ViewState["CheckProcFee"] = string.Empty;
             string semester = ddlBackLogSem.SelectedValue;
             string sem = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SEMESTER", "STARTED = 1 AND SHOW_STATUS =1  AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'  AND SEMESTER LIKE  '%"+semester+"%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");          
 
@@ -1755,6 +1838,7 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
 
                     }
                 }
+
 
                 string TotalAmt = Amt.ToString();
                 lblTotalExamFee.Text = TotalAmt.ToString();
@@ -2371,7 +2455,17 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                         chk.Checked = true;
                         chk.Enabled = false;
                         chkhead.Checked = false;
-                       chkhead.Enabled = false;
+                        chkhead.Enabled = false;
+                        chk.BackColor = System.Drawing.Color.Green;
+
+                    }
+                    else if (hdftxn.Value == "1")
+                    {
+                        //chk.Checked = true;
+                        chk.Checked = false;
+                         chk.Enabled = true;
+                        chkhead.Checked = false;
+                        chkhead.Enabled = false;
 
                     }
                     else
@@ -2818,8 +2912,8 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
             foreach (ListViewDataItem dataitem in lvFailCourse.Items)
             {
 
-                if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
-                {
+                 if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
+                {            
                     CheckBox cbRow = dataitem.FindControl("chkAccept") as CheckBox;
                     Label lblAmt = dataitem.FindControl("lblAmt") as Label;
 
@@ -3173,7 +3267,21 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
   }
   protected void btnhideshow()
   {
-      lvFailCourse.Enabled = true;
+      //if (Convert.ToInt32(Session["OrgId"]) == 3)
+      //{
+      //    foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+      //    {
+      //        CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+      //        chk.Checked = true;
+      //    }
+      //    lvFailCourse.Enabled = true;
+      //}
+      //else
+      //{
+
+      //    lvFailCourse.Enabled = true;
+      //}
+      
       if (Session["PaymentMode"].ToString() == "1")// online only 
       {
           if (Session["usertype"].ToString() == "2")
@@ -3238,6 +3346,14 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
   {
 
       try {
+          
+          lblfessapplicable.Text = "";
+          lblCertificateFee.Text = "";
+          lblTotalExamFee.Text = "";
+          lblLateFee.Text = "";
+          FinalTotal.Text = "";
+          PaidTotal.Text = "";
+
           int cid = 0;
           int idno = 0;
         
