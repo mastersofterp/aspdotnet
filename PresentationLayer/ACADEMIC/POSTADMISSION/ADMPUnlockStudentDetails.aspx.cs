@@ -73,6 +73,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
     {
         objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "ACTIVESTATUS=1", "BATCHNO DESC");
     }
+
     public class TabName
     {
         int tabid = 0;
@@ -95,6 +96,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
             set { tabtextname = value; }
         }
     }
+
     private void BindTabUG()
     {
         List<TabName> list = new List<TabName>();
@@ -113,6 +115,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         lstbxAllowProcess.DataValueField = "TabId";
         lstbxAllowProcess.DataBind();
     }
+
     private void BindTabPG()
     {
         List<TabName> list = new List<TabName>();
@@ -134,6 +137,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         lstbxAllowProcess.DataValueField = "TabId";
         lstbxAllowProcess.DataBind();
     }
+
     protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -158,6 +162,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void ddlApplicantType_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -186,6 +191,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         }
 
     }
+
     //protected void btnSearch_Click(object sender, EventArgs e)
     //{
     //    try
@@ -234,6 +240,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         degreenos = degreenos.Trim();
         branchnos = branchnos.Trim();
     }
+
     private void BindStudnetDetails()
     {
         try
@@ -271,6 +278,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void btnShow_Click(object sender, EventArgs e)
     {
         try
@@ -295,6 +303,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void btnsubmit_Click(object sender, EventArgs e)
     {
         try
@@ -438,6 +447,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     private void ClearAfterSubmit()
     {
         lstbxAllowProcess.ClearSelection();
@@ -447,6 +457,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         txtEndTime.Text = string.Empty;
         txtStartEndDateTime.Text = string.Empty;
     }
+
     private void cancel()
     {
         ddlAdmBatch.SelectedIndex = 0;
@@ -465,10 +476,12 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         txtEndTime.Text = string.Empty;
         txtStartEndDateTime.Text = string.Empty;
     }
+
     protected void btnClear_Click(object sender, EventArgs e)
     {
         cancel();
     }
+
     private void clear()
     {
         lstbxAllowProcess.ClearSelection();
@@ -489,6 +502,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         objCommon.FillDropDownList(ddlErpInstituteName, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID");
         BindErpAllowProcess();
     }
+
     private void BindErpAllowProcess()
     {
         List<TabName> list = new List<TabName>();
@@ -504,6 +518,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         lstbxErpAllowProcess.DataValueField = "TabId";
         lstbxErpAllowProcess.DataBind();
     }
+
     protected void btnErpShow_Click(object sender, EventArgs e)
     {
         try
@@ -519,6 +534,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     private void BindErpStudnetDetails()
     {
         try
@@ -556,6 +572,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void btnErpSubmit_Click(object sender, EventArgs e)
     {
         try
@@ -696,11 +713,13 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     private void ClearErpAfterSubmit()
     {
         lstbxErpAllowProcess.ClearSelection();
         txtErpSEDateTime.Text = string.Empty;
     }
+
     private void cancelErp()
     {
         ddlErpAdmBatch.SelectedIndex = 0;
@@ -718,15 +737,18 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         txtErpSEDateTime.Text = string.Empty;
 
     }
+
     private void Erpclear()
     {
         lstbxErpAllowProcess.ClearSelection();
         txtErpSEDateTime.Text = string.Empty;
     }  
+
     protected void btnErpClear_Click(object sender, EventArgs e)
     {
         cancelErp();
     }  
+
     protected void ddlErpInstituteName_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -751,6 +773,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUnlockStudentDetails : System.We
         }
     
     }
+
     protected void ddlErpDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
         try

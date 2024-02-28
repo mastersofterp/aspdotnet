@@ -33,6 +33,8 @@ public partial class ACADEMIC_POSTADMISSION_ADMPLockUnlockStudentPortalDetails :
     ADMPUnlockStudentDetails objSD = new ADMPUnlockStudentDetails();
     ADMPUnlockStudentDetailsController objUC = new ADMPUnlockStudentDetailsController();
 
+    string uaims_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+
     string degreenos = string.Empty;
     string branchnos = string.Empty;
 
@@ -123,6 +125,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPLockUnlockStudentPortalDetails :
         list.Add(new TabName(9, "Work Experience"));
         list.Add(new TabName(10, "Upload Documents"));
         list.Add(new TabName(11, "Reservation Details"));
+        list.Add(new TabName(12, "Test Details"));
 
         lstbxAllowProcess.Items.Clear();
         lstbxAllowProcess.DataSource = list;
@@ -142,9 +145,10 @@ public partial class ACADEMIC_POSTADMISSION_ADMPLockUnlockStudentPortalDetails :
         list.Add(new TabName(6, "Qualification Details - Graduation"));
         list.Add(new TabName(7, "Qualification Details - Post Graduation"));
         list.Add(new TabName(8, "Qualification Details - Other Qualification"));
-        list.Add(new TabName(9, "Work Experience"));
+        list.Add(new TabName(9, "Research and Professional Experience"));
         list.Add(new TabName(10, "Upload Documents"));
         list.Add(new TabName(11, "Reservation Details"));
+        list.Add(new TabName(12, "Test Details"));
 
         lstbxAllowProcess.Items.Clear();
         lstbxAllowProcess.DataSource = list;
@@ -267,7 +271,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPLockUnlockStudentPortalDetails :
             objSD.CollegeId = 0;
             objSD.DegreeNo = 0;  //Convert.ToInt32(degreenos.ToString());
             objSD.BranchNo = 0;  // Convert.ToInt32(branchnos.ToString());
-            DataSet dsDetails = objUC.GetUnlockStudentDetails(objSD);
+            DataSet dsDetails = objUC.GetUnlockStudentDetailsADMP(objSD);
             if (dsDetails != null && dsDetails.Tables[0].Rows.Count > 0)
             {
                 lvStudnetDetails.DataSource = dsDetails.Tables[0];

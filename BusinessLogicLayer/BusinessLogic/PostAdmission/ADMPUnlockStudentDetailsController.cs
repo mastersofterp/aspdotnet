@@ -37,6 +37,29 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         //    }
         //    return ds;
         //}
+        public DataSet GetUnlockStudentDetailsADMP(ADMPUnlockStudentDetails objUD)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(uaims_constr);
+                SqlParameter[] objParams = new SqlParameter[] 
+                      { 
+                         new SqlParameter("@P_BATCHNO",objUD.BatchNo),   
+                         new SqlParameter("@P_UGPGOT",objUD.UGPGOT),   
+                         new SqlParameter("@P_DEGREENO",objUD.DegreeNo),
+                         new SqlParameter("@P_BRANCHNO",objUD.BranchNo),
+                         new SqlParameter("@P_COLLEGE_ID",objUD.CollegeId)
+                      };
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_ADMP_GET_UNLOCK_STUDENT_DETAILS", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ADMPUnlockStudentDetailsController.GetUnlockStudentDetails() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
         public DataSet GetUnlockStudentDetails(ADMPUnlockStudentDetails objUD)
         {
             DataSet ds = null;
@@ -59,6 +82,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
         public int InsUpdUnlockStudentDetails(ADMPUnlockStudentDetails objUD)
         {
             int retstatus = 0;

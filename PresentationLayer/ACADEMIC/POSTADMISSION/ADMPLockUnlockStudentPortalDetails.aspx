@@ -51,7 +51,7 @@ Version   Modified On   Modified By    Purpose
                         <div class="box-header with-border">
                             <h3 class="box-title">
                                 <%--<asp:Label ID="lbllabel" runat="server" Text="Unlock Student Details"></asp:Label>--%>
-                                <asp:Label ID="lblDynamicPageTitle1" runat="server">Student Information Lock Unlock Portal</asp:Label>
+                                <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label>
                             </h3>
                         </div>
 
