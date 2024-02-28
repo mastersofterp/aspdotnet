@@ -541,12 +541,16 @@ public partial class _default : System.Web.UI.Page
         int TimeOut = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["DomainTimeOut"].ToString());
 
         HttpCookie ToA = new HttpCookie("ToA");
+        ToA.HttpOnly = false;
+        ToA.Secure = false;
         ToA.Value = acc_tok;
         ToA.Domain = Url;
         ToA.Expires = DateTime.Now.AddMinutes(TimeOut);
         Response.Cookies.Add(ToA);
 
         HttpCookie UA = new HttpCookie("UA");
+        ToA.HttpOnly = false;
+        ToA.Secure = false;
         UA.Value = ua_name;
         UA.Domain = Url;
         UA.Expires = DateTime.Now.AddMinutes(TimeOut);
