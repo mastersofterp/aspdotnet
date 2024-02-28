@@ -1,10 +1,11 @@
-﻿//=================================================================================
-// PROJECT NAME  : U-AIMS (GPPUNE)                                                          
-// MODULE NAME   : ACADEMIC - ATTENDANCE NOT FILLED BY FACULTY REPORT                                    
-// CREATION DATE : 12-APR-2012                                                     
-// CREATED BY    : UMESH K. GANORKAR                                                 
-// MODIFIED BY   :                           
-// MODIFIED DESC :                                         
+﻿//==============================================================================
+//PROJECT NAME  : RF-Common Code
+//MODULE NAME   : ACADEMIC (ACADEMIC REPORTS)
+//PAGE NAME     : ACADEMIC - ATTENDANCE NOT FILLED BY FACULTY REPORT
+//CREATION DATE : 12-APR-2012     
+//CREATED BY    :  UMESH K. GANORKAR 
+//MODIFIED DATE : 28-02-2024
+//MODIFIED DESC : Added Date Filter Class Attendance Entry Report Of Faculty (TkNo.51716)
 //=================================================================================
 using System;
 using System.Collections;
@@ -61,7 +62,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             {
                 //Page Authorization
                 this.CheckPageAuthorization();
-
+                //Added By Jay T. On dated 28022024 tkno.51716
+                DivLabel2.Visible = false;
+                DivLabel.Visible = true;
                 //Set the Page Title
                 this.Page.Title = Session["coll_name"].ToString();
 
@@ -300,17 +303,16 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
         ddlBranch.SelectedIndex = 0;
         ddlsemester.SelectedIndex = 0;
     }
-
     protected void btnAttReport_Click(object sender, EventArgs e)
     {
         try
         {
             if (txtStartDate.Text != string.Empty && txtEndDate.Text != string.Empty)
             {
-                DateTime startDate= Convert.ToDateTime(txtStartDate.Text);
-                DateTime EndDate= Convert.ToDateTime(txtEndDate.Text);
+                DateTime startDate = Convert.ToDateTime(txtStartDate.Text);
+                DateTime EndDate = Convert.ToDateTime(txtEndDate.Text);
                 TimeSpan dt = Convert.ToDateTime(txtEndDate.Text) - Convert.ToDateTime(txtStartDate.Text);
-                if (dt.TotalDays>31)
+                if (dt.TotalDays > 31)
                 {
                     objCommon.DisplayMessage(this, "You can only select dates within 31 days", this.Page);
                     return;
@@ -326,7 +328,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                     {
                         string AttendanceStartDate = txtStartDate.Text;
                         string AttendanceEndDate = txtEndDate.Text;
-                        int Sessionnos= Convert.ToInt32(ddlSession.SelectedValue);
+                        int Sessionnos = Convert.ToInt32(ddlSession.SelectedValue);
                         int College_code = Convert.ToInt32(ddlSchool.SelectedValue);
                         DataSet ds = acdatt.RetrieveStudentAttDetailsMarkedExcel(AttendanceStartDate, AttendanceEndDate, Sessionnos, College_code);
                         DataGrid dg = new DataGrid();
@@ -367,11 +369,10 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     {
         Response.Redirect(Request.Url.ToString());
     }
-
     protected void rdbReports_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (rdbReports.SelectedValue == "1")
-        {         
+        {
             divsession.Visible = false;
             divCollege.Visible = true;
             divDegree.Visible = true;
@@ -390,7 +391,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             btnAttRegister.Visible = false;
             btnConAtt.Visible = false;
             ddlSchool.SelectedIndex = 0;
-
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel2.Visible = false;
+            DivLabel.Visible = true;
             dvSession.Visible = false;
             btnExcel.Visible = false;
 
@@ -419,6 +422,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             divCollege.Visible = true;
             dvSession.Visible = false;
             btnExcel.Visible = false;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel2.Visible = false;
+            DivLabel.Visible = true;
         }
         else if (rdbReports.SelectedValue == "3")
         {
@@ -441,6 +447,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             dvSession.Visible = false;
             btnExcel.Visible = false;
             ddlSession.SelectedIndex = 0;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel2.Visible = false;
+            DivLabel.Visible = true;
         }
         else if (rdbReports.SelectedValue == "4")
         {
@@ -461,24 +470,27 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             btnAttReport.Visible = false;
             btnAttRegister.Visible = false;
             btnConAtt.Visible = false;
-            txtStartDate.Visible = false;
             txtEndDate.Visible = false;
-            calender.Visible = false;
             calender1.Visible = false;
             dvSession.Visible = true;
             btnExcel.Visible = true;
             ddlSession.SelectedIndex = 0;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel.Visible = false;
+            calender.Visible = true;
+            DivLabel2.Visible = true;
+            txtStartDate.Visible = true;
         }
 
     }
     protected void btnAttTracker_Click(object sender, EventArgs e)
-            {
+    {
         try
         {
             if (txtStartDate.Text != string.Empty && txtEndDate.Text != string.Empty)
             {
-                DateTime startDate= Convert.ToDateTime(txtStartDate.Text);
-                DateTime EndDate= Convert.ToDateTime(txtEndDate.Text);
+                DateTime startDate = Convert.ToDateTime(txtStartDate.Text);
+                DateTime EndDate = Convert.ToDateTime(txtEndDate.Text);
                 TimeSpan dt = Convert.ToDateTime(txtEndDate.Text) - Convert.ToDateTime(txtStartDate.Text);
                 if (dt.TotalDays > 62)
                 {
@@ -495,7 +507,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                     else
                     {
                         string AttendanceStartDate = txtStartDate.Text;
-                         string AttendanceEndDate = txtEndDate.Text;
+                        string AttendanceEndDate = txtEndDate.Text;
                         objAttModel.College_code = Session["colcode"].ToString();
                         DataSet dsStudList = acdatt.RetrieveStudentAttTracker(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(ddlSchool.SelectedValue.ToString()),
                                              Convert.ToInt32(ddlDegree.SelectedValue.ToString()), Convert.ToInt32(ddlBranch.SelectedValue.ToString()),
@@ -602,7 +614,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                     objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_COURSE_TEACHER SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME) COURSE_NAME", "SR.SESSIONNO=" + ddlSession.SelectedValue + "AND ISNULL(CANCEL,0)=0 AND SR.SCHEMENO=" + ViewState["schemeno"], "SR.COURSENO");
                 }
             }
-            else 
+            else
             {
             }
         }
@@ -750,39 +762,70 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             throw;
         }
     }
+
+    #region class Attendance Entry Report Of Faculty
+
     protected void btnExcel_Click(object sender, EventArgs e)
     {
-        if (ddlSessionn.SelectedIndex==0)
+        if (ddlSessionn.SelectedIndex == 0)
         {
             objCommon.DisplayMessage(this, "Please Select Session.", this.Page);
             return;
         }
         else
         {
-        DataSet DS = acdatt.GetFacultyLectureCount(Convert.ToInt32(ddlSessionn.SelectedValue));
-        DataGrid dg = new DataGrid();
+            DateTime AttendanceStartDate = Convert.ToDateTime(txtStartDate.Text);
+            DataSet DS = acdatt.GetFacultyLectureCount(Convert.ToInt32(ddlSessionn.SelectedValue), AttendanceStartDate);
+            DataGrid dg = new DataGrid();
+            // Added two tab excel report By Jay takalkhede On Dated 28022024 (TkNo.51716)
+            // Added Date Filter Class Attendance Entry Report Of Faculty 
+            if (DS.Tables[0].Rows.Count > 0 || DS.Tables[1].Rows.Count > 0)
+            {
+                DS.Tables[0].TableName = "Faculty wise Lecture Status";
+                DS.Tables[1].TableName = "Course wise Lecture  Status";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    foreach (System.Data.DataTable dt in DS.Tables)
+                    {
+                        //Add System.Data.DataTable as Worksheet.
+                        if (dt != null && dt.Rows.Count > 0)
+                            wb.Worksheets.Add(dt);
+                    }
+                    //string attachment = "attachment; filename= Faculty_Lecture_Count_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
-        if (DS.Tables[0].Rows.Count > 0)
-        {
-            string attachment = "attachment; filename= Faculty_Lecture_Count_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-
-            Response.ClearContent();
-            Response.AddHeader("content-disposition", attachment);
-            Response.ContentType = "application/" + "ms-excel";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            dg.DataSource = DS.Tables[0];
-            dg.DataBind();
-            dg.HeaderStyle.Font.Bold = true;
-            dg.RenderControl(htw);
-            Response.Write(sw.ToString());
-            Response.End();
-        }
-        else
-        {
-            objCommon.DisplayMessage(this, "Record Not Found!!", this.Page);
-            return;
-        }
+                    //Response.ClearContent();
+                    //Response.AddHeader("content-disposition", attachment);
+                    //Response.ContentType = "application/" + "ms-excel";
+                    //StringWriter sw = new StringWriter();
+                    //HtmlTextWriter htw = new HtmlTextWriter(sw);
+                    //dg.DataSource = DS.Tables[0];
+                    //dg.DataBind();
+                    //dg.HeaderStyle.Font.Bold = true;
+                    //dg.RenderControl(htw);
+                    //Response.Write(sw.ToString());
+                    //Response.End();
+                    //Export the Excel file.
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=Faculty_Lecture_Count_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        wb.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                    }
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this, "Record Not Found!!", this.Page);
+                return;
+            }
         }
     }
+
+    #endregion
 }

@@ -6584,14 +6584,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         #endregion
 
         // Added By Vipul Tichakule on Dated 22-12-2023
-        public DataSet GetFacultyLectureCount(int Session)
+        //Modify By Jay T. On Dated 28-02-2024
+        public DataSet GetFacultyLectureCount(int Session, DateTime Date)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                SqlParameter[] objParams = new SqlParameter[1];
+                SqlParameter[] objParams = new SqlParameter[2];
                 objParams[0] = new SqlParameter("@P_SESSIONNO", Session);
+                objParams[1] = new SqlParameter("@P_Date", Date);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_FACULTY_LECTURE_COUNT_REPORT", objParams);
             }
             catch (Exception ex)
@@ -6600,6 +6602,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
 
         //Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
         public DataSet GetAllLeaveForApproval_HOD(int uaType, int uano, int college_ID, int sessionno)

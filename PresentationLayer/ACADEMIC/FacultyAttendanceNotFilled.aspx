@@ -345,9 +345,13 @@
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="calender">
-                                        <div class="label-dynamic">
+                                        <div class="label-dynamic" runat="server" id="DivLabel" visible="false">
                                             <sup>*</sup>
                                             <label>Attendance Start Date</label>
+                                        </div>
+                                          <div class="label-dynamic" runat="server" id="DivLabel2"  visible="false">
+                                            <sup>*</sup>
+                                            <label>Attendance Date</label>
                                         </div>
                                         <div class="input-group">
                                             <div class="input-group-addon" id="txtStartDate1" runat="server">
