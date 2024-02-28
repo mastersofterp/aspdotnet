@@ -495,12 +495,33 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
 
                          //public int AddExamRegisteredBacklaog_CC_ADMIN(int SESSIONNO, int SCHEMENO, int SEMESTERNO, string COURSENOS, string IPADDRESS, int IDNO, string REGNO, string ROLLNO, int UA_NO, string COLLEGE_CODE)
 
-                        int ret = objExamController.AddExamRegisteredBacklaog_CC_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), lblCCode.ToolTip, "::1", Convert.ToInt32(idno.ToolTip), ROLLNO, "0", Convert.ToInt32(Session["userno"].ToString()), Session["colcode"].ToString());
-                        if (ret == 1)
-                        {
-                            objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
-                            BindListView();
-                        }
+                     //   int ret = objExamController.AddExamRegisteredBacklaog_CC_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), lblCCode.ToolTip, "::1", Convert.ToInt32(idno.ToolTip), ROLLNO, "0", Convert.ToInt32(Session["userno"].ToString()), Session["colcode"].ToString());
+                       // int Paymentdone = 0;
+                       // Paymentdone = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(DISTINCT 1) PAY_COUNT", "IDNO=" + Convert.ToInt32(idnos) + " AND SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND RECIEPT_CODE = 'AEF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0 and SEMESTERNO=" + Convert.ToInt32(sem)));
+                       // if (Paymentdone > 0)
+                       // {
+                            string SP_Name = "PKG_UPDATE_EXAM_REGISTRATION_STUDENT_BYADMIN_BACKLOG";
+                            string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_SCHEMENO,@P_UANO,@P_OUT";
+                            string Call_Values = "" + Convert.ToInt32(idnos) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(sem) + "," + courseno + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Session["userno"] + ",0";
+                            string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+                            if (que_out == "1")
+                            {
+                                objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
+                                BindListView();
+                            }
+
+                      //  }
+                        //else
+                        //{
+
+
+                        //    int ret = AddExamRegisteredBacklaog_CC_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), lblCCode.ToolTip, "::1", Convert.ToInt32(idno.ToolTip), ROLLNO, "0", Convert.ToInt32(Session["userno"].ToString()), Session["colcode"].ToString());
+                        //    if (ret == 1)
+                        //    {
+                        //        objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
+                        //        BindListView();
+                        //    }
+                        //}
                         #endregion
                     }
                     
