@@ -9,6 +9,7 @@
         .dataTables_scrollHeadInner {
             width: max-content !important;
         }
+
         .statistics .tile-box {
             background-color: rgb(255, 255, 255);
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -89,8 +90,7 @@
 
                                             <div class="form-group col-lg-6 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <sup>*</sup>
-                                                    <%-- <label>Session</label>--%>
+                                                    <sup>*</sup>                                                    
                                                     <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
                                                 </div>
                                                 <asp:DropDownList ID="ddlSession" runat="server" CssClass="form-control" AppendDataBoundItems="True" data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlsession_SelectedIndexChanged">
@@ -106,20 +106,15 @@
                                             </div>
 
                                             <div class="form-group col-lg-6 col-md-6 col-12">
-                                                <div class="label-dynamic">
-                                                    <%-- <sup>*</sup>--%>
-                                                    <%-- <label>College/Scheme</label>--%>
-                                                    <%--<label>College & Scheme</label>--%>
+                                                <div class="label-dynamic">                                                  
                                                     <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
                                                 </div>
                                                 <asp:DropDownList ID="ddlcolgname" runat="server" CssClass="form-control" AppendDataBoundItems="True" AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlcolgname_SelectedIndexChanged">
-                                                    <%--OnSelectedIndexChanged="ddlcolgname_SelectedIndexChanged"--%>
+                                                   
                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                 </asp:DropDownList>
                                                 <asp:HiddenField runat="server" ID="hdfnscheme" />
-                                                <%--                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlcolgname"
-                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="search"></asp:RequiredFieldValidator>--%>
+                                                
                                             </div>
 
                                             <div class="form-group col-lg-6 col-md-6 col-12">
@@ -371,7 +366,7 @@
                                                         <asp:TextBox ID="txtmax" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MAXMARK").ToString() %>' Enabled="false" CssClass="form-control"></asp:TextBox>
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="fltmax" runat="server" FilterType="Numbers,Custom" ValidChars="., " TargetControlID="txtmax" />
 
-                                                     <%--   <asp:TextBox ID="txtmax" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MAXMARK").ToString() %>' Enabled='<%#ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control"></asp:TextBox>
+                                                        <%--   <asp:TextBox ID="txtmax" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MAXMARK").ToString() %>' Enabled='<%#ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control"></asp:TextBox>
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" FilterType="Numbers,Custom" ValidChars="., " TargetControlID="txtmax" />--%>
 
                                                     </td>
@@ -427,11 +422,6 @@
                                 </div>
                             </div>
 
-                            <%--   <div class="col-12 mt-6">
-
-                                <asp:Label ID ="lblnote" runat="server" Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label>
-                            </div>--%>
-
                             <div class="col-12 mt-3" id="divgradedetails" runat="server">
                                 <asp:ListView ID="lvStudentDetails" runat="server">
                                     <LayoutTemplate>
@@ -464,10 +454,6 @@
                                     </LayoutTemplate>
                                     <ItemTemplate>
                                         <tr id="trCurRow">
-                                            <%--<td>
-                                        <asp:CheckBox ID="chkAccept" runat="server" />
-
-                                    </td>--%>
                                             <td>
                                                 <asp:Label ID="lblSrno" runat="server" Text='<%# Eval("SRNO") %>' />
 
@@ -495,12 +481,11 @@
 
                                             </td>
                                             <td>
-                                                <asp:Label ID="lblGradeName" runat="server" Text='<%# Eval("GRADE_NAME") %>' />
+                                                <asp:Label ID="lblGradeName" runat="server" Text='<%# Eval("GRADE_NAME") %>' ForeColor='<%# (Convert.ToString(Eval("GRADE_NAME") )== "F" ?  System.Drawing.Color.Red : System.Drawing.Color.Black )%>' />
 
                                             </td>
                                             <td>
-                                                <asp:Label ID="lblfinalGrade" runat="server" Text='<%# Eval("GRADE") %>' />
-                                                <%-- Text='<%# Session["OrgId"].ToString()=="8"? DataBinder.Eval(Container.DataItem,"DECODENO"):DataBinder.Eval(Container.DataItem,"REGNO") %>'--%>
+                                                <asp:Label ID="lblfinalGrade" runat="server" Text='<%# Eval("GRADE") %>' ForeColor='<%# (Convert.ToString(Eval("GRADE") )== "F" ?  System.Drawing.Color.Red : System.Drawing.Color.Black )%>' />
                                             </td>
                                             <td>
                                                 <asp:Label ID="lblremark" runat="server" Text='<%# Eval("REMARK") %>' />
@@ -545,9 +530,7 @@
                 for (j = 0; j < dataRowsmark.length - 1; j++) 
                 {
                     debugger
-                    //var MaxMark = document.getElementById('ctl00_ContentPlaceHolder1_lvGrades_ctrl' + i + '_txtMax');
-                    //var MinMark = document.getElementById('ctl00_ContentPlaceHolder1_lvGrades_ctrl' + i + '_txtMin');
-
+                    
                     var MaxMark1 = 0;
                     var MinMark1 = 0;
                     var AssGrade;

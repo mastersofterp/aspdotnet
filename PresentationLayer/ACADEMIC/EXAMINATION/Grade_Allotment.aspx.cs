@@ -43,6 +43,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     ExamController objExamController = new ExamController();
     ResultProcessing objResultProcessing = new ResultProcessing();
+    MarksEntryController objMarksEntry = new MarksEntryController();
     ExamController objexam = new ExamController();
 
     Exam objExam = new Exam();
@@ -69,58 +70,29 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 else
                 {
                     //Page Authorization
-                    // this.CheckPageAuthorization();
+                    this.CheckPageAuthorization();
 
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
-
-                    int OrgId = Convert.ToInt32(objCommon.LookUp("REFF", "OrganizationId", ""));
-                 
+                    int OrgId = Convert.ToInt32(objCommon.LookUp("REFF", "OrganizationId", ""));                 
                     test.Visible = false;
-
-
                     if (OrgId == 5)
                     {
                         divgradetype.Visible = true;
                         ddlgradetype.Visible = true;
-
                     }
                     else
                     {
-                        //if (ViewState["RangeChange"].ToString() == "1")
-                        //{
-                        //    divgradetype.Visible = true;
-                        //    ddlgradetype.Visible = true;
-                        //}
-                        //else
-                        //{
                         divgradetype.Visible = false;
-                        ddlgradetype.Visible = false;
-                        //}
+                        ddlgradetype.Visible = false;                        
                     }
-
-                    //Load Page Help
                     if (Request.QueryString["pageno"] != null)
-                        // lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
-
-                        // lvGradeRange.DataSource = null;
-                        //   lvGradeRange.DataSource = null;
-                        //  lvGradeRange.DataBind();
-
-                        //lvGradeRange.Visible = true;
+                      
                         ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     this.FillDropdown();
-                    // lvGrade.DataSource = null;
-                    // lvGrade.Visible = true;
-                    //   lvGradeAllotment.DataBind();
-                    //lvGradeAllotment.Visible = true;
-                    //listview();
-
                 }
             }
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -
-
-
         }
         catch (Exception ex)
         {
@@ -172,30 +144,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
         if (ddlcolgname.SelectedIndex > 0)
         {
 
-            lvGradeAllotment.DataSource = null;
-            lvGradeAllotment.DataBind();
-            lvGradeAllotment.Visible = false;
-
-
-            lvGradeRange.DataSource = null;
-            lvGradeRange.DataBind();
-            lvGradeRange.Visible = false;
-
-
-            lvStudentDetails.DataSource = null;
-            lvStudentDetails.DataBind();
-            lvStudentDetails.Visible = false;
-
-            btnReRange.Visible = false;
-            btnRangrlock.Visible = false;
-            btnRangrUnlock.Visible = false;
-            btnRangeLock.Visible = true;
-            btnRangeLock.Enabled = true;
-            btnGradeAllotment.Visible = false;
-            btnReport.Visible = false;
-            test.Visible = false;
-
-
+            Clear();
             Common objCommon = new Common();
 
             if (ddlcolgname.SelectedIndex > 0)
@@ -210,13 +159,8 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                     ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
                     ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                     ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
-
-                    hdfnscheme.Value = ViewState["schemeno"].ToString();
-                    // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
-
-
+                    hdfnscheme.Value = ViewState["schemeno"].ToString();                 
                 }
-
                 objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO) INNER JOIN ACD_SESSION_MASTER SM ON A.SESSIONNO=SM.SESSIONNO", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND ISNULL(CANCEL,0)=0 AND EXAM_REGISTERED=1 AND A.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue), "S.SEMESTERNO");
             }
             else
@@ -230,46 +174,16 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
 
             }
         }
-
         else
         {
-            lvGradeAllotment.DataSource = null;
-            lvGradeAllotment.DataBind();
-            lvGradeAllotment.Visible = false;
-
-
-            lvGradeRange.DataSource = null;
-            lvGradeRange.DataBind();
-            lvGradeRange.Visible = false;
-
-
-            lvStudentDetails.DataSource = null;
-            lvStudentDetails.DataBind();
-            lvStudentDetails.Visible = false;
-
-            btnReRange.Visible = false;
-            btnRangrlock.Visible = false;
-            btnRangrUnlock.Visible = false;
-            btnRangeLock.Visible = true;
-            btnRangeLock.Enabled = true;
-            btnGradeAllotment.Visible = false;
-            btnReport.Visible = false;
-            test.Visible = false;
-
+            Clear();
             ViewState["degreeno"] = string.Empty;
             ViewState["branchno"] = string.Empty;
             ViewState["college_id"] = string.Empty;
             ViewState["schemeno"] = string.Empty;
-
             objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO) INNER JOIN ACD_SESSION_MASTER SM ON A.SESSIONNO=SM.SESSIONNO", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND ISNULL(CANCEL,0)=0 AND EXAM_REGISTERED=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue), "S.SEMESTERNO");
 
-
         }
-
-
-
-
-
     }
     #endregion
     protected void ddlsession_SelectedIndexChanged(object sender, EventArgs e)
@@ -277,56 +191,21 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
         if (ddlSession.SelectedIndex > 0)
         {
             int session = Convert.ToInt32(ddlSession.SelectedValue);
-
-
             objCommon.FillDropDownList(ddlcolgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_STUDENT_RESULT SR ON SR.SCHEMENO=SM.SCHEMENO", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SR.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "");
 
             //objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND A.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
 
             objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO) INNER JOIN ACD_SESSION_MASTER SM ON A.SESSIONNO=SM.SESSIONNO", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND ISNULL(CANCEL,0)=0 AND EXAM_REGISTERED=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue), "S.SEMESTERNO");
 
-            //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "distinct COURSENO", "(CCODE +' - '+CourseName)As name", "EXAM_REGISTERED=1 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]), "COURSENO");
-
-            //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO=SR.SESSIONNO)", "DISTINCT CCODE", "(CCODE +' - '+CourseName)As name", "EXAM_REGISTERED=1 AND ISNULL(CANCEL,0)=0 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "", "CCODE");
-
-
-            lvGradeAllotment.DataSource = null;
-            lvGradeAllotment.DataBind();
-            lvGradeAllotment.Visible = false;
-
-
-            lvGradeRange.DataSource = null;
-            lvGradeRange.DataBind();
-            lvGradeRange.Visible = false;
-
-
-            lvStudentDetails.DataSource = null;
-            lvStudentDetails.DataBind();
-            lvStudentDetails.Visible = false;
-
-            btnReRange.Visible = false;
-            btnRangrlock.Visible = false;
-            btnRangrUnlock.Visible = false;
-            btnRangeLock.Visible = true;
-            btnRangeLock.Enabled = true;
-            btnGradeAllotment.Visible = false;
-            btnReport.Visible = false;
-            test.Visible = false;
-
-
+            Clear();
         }
         else
         {
-
             lvGradeAllotment.DataSource = null;
             lvGradeAllotment.DataBind();
             lvGradeAllotment.Visible = false;
             ddlCourse.SelectedIndex = 0;
             ddlSemester.SelectedIndex = 0;
-
-
-
-
 
         }
     }
@@ -349,30 +228,9 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
     {
         if (ddlSemester.SelectedIndex > 0)
         {
-            lvGradeAllotment.DataSource = null;
-            lvGradeAllotment.DataBind();
-            lvGradeAllotment.Visible = false;
-            ddlCourse.SelectedIndex = 0;
-
-            lvGradeRange.DataSource = null;
-            lvGradeRange.DataBind();
-            lvGradeRange.Visible = false;
 
 
-            lvStudentDetails.DataSource = null;
-            lvStudentDetails.DataBind();
-            lvStudentDetails.Visible = false;
-
-            btnReRange.Visible = false;
-            btnRangrlock.Visible = false;
-            btnRangrUnlock.Visible = false;
-            btnRangeLock.Visible = true;
-            btnRangeLock.Enabled = true;
-            btnGradeAllotment.Visible = false;
-            btnReport.Visible = false;
-            test.Visible = false;
-
-            //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "DISTINCT COURSENO", "(COURSENAME + ' - ('+CCODE+')') AS COURSENAME ", "EXAM_REGISTERED=1 AND ISNULL(CANCEL,0)=0 and  SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + ddlSemester.SelectedValue, "");
+            Clear();
 
             //added by prafull on dt 17032023
 
@@ -473,7 +331,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             if (retStatus == "1")
             {
                 // divgraph.Visible = false;
-                objCommon.DisplayMessage(updpnlExam, "Grade Allot Successfully", this.Page);
+                objCommon.DisplayMessage(updpnlExam, "Grade Alloted Successfully", this.Page);
                 BindGradeView();
                 BindStudentlist();
                 btnReRange.Visible = false;
@@ -521,32 +379,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
         lvGradeAllotment.Visible = false;
         if (ddlCourse.SelectedIndex > 0)
         {
-
-            lvGradeAllotment.DataSource = null;
-            lvGradeAllotment.DataBind();
-            lvGradeAllotment.Visible = false;
-            
-
-            lvGradeRange.DataSource = null;
-            lvGradeRange.DataBind();
-            lvGradeRange.Visible = false;
-
-
-            lvStudentDetails.DataSource = null;
-            lvStudentDetails.DataBind();
-            lvStudentDetails.Visible = false;
-
-            btnReRange.Visible = false;
-            btnRangrlock.Visible = false;
-            btnRangrUnlock.Visible = false;
-            btnRangeLock.Visible = true;
-            btnRangeLock.Enabled = true;
-            btnGradeAllotment.Visible = false;
-            btnReport.Visible = false;
-            test.Visible = false;
-
-
-
+            Clear();
             DataSet dsSubjects = null;
             DataSet dsGdpoints = null;
             DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlcolgname.SelectedValue));
@@ -570,14 +403,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             lblMaleCount.InnerText = GradAllotmentNotDone;
             StudentController objSC = new StudentController();
             dsGdpoints = objCommon.FillDropDown("ACD_GRADE_POINT GP INNER JOIN ACD_SESSION_MASTER SM ON SM.SESSIONNO=GP.SESSIONNO", "MINMARK,MAXMARK,POINT,GRADE_NAME", "", " SESSIONID=" + ddlSession.SelectedValue + "AND CCODE='" + ddlCourse.SelectedValue + "'", "");
-
-            //lvStudentDetails.DataSource = null;
-            //lvStudentDetails.DataBind();
-            //lvStudentDetails.Visible = false;
-            //lvGradeRange.DataSource = null;
-            //lvGradeRange.DataBind();
-            //lvGradeAllotment.Visible = false;
-
 
             if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
             {
@@ -611,14 +436,11 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             lvGradeRange.DataSource = null;
             lvGradeRange.DataBind();
             lvGradeAllotment.Visible = false;
-            //listview();OnClick_Grade_RangeLock
+            
         }
     }
     protected void listview()
     {
-        //DataSet ds = objCommon.FillDropDown("ACD_GRADE_POINT", "MINMARK,MAXMARK,GRADE_NAME,POINT", "", "","");
-        //   lvGradeRange.DataSource = ds;
-        //  lvGradeRange.DataBind();
         DataSet dsGdpoints = null;
         dsGdpoints = objCommon.FillDropDown("ACD_GRADE_POINT", "TOP 1  0 AS SESSIONNO, 0 AS CCODE,0 AS GRADE_NAME,0 AS GRADE_NAME1", "", "", "");
         lvGradeRange.DataSource = dsGdpoints;
@@ -649,10 +471,12 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             lvGradeAllotment.DataBind();
             lvGradeAllotment.Visible = true;
         }
-        #region
+        #region  Bind grade data & student data
+        
+         BindGradeView();
+         BindStudentlist();
+
         #endregion
-        BindGradeView();
-        BindStudentlist();
     }
     protected void OnClick_Grade_RangeLock(object sender, EventArgs e)
     {
@@ -663,9 +487,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             {
                 ViewState["schemeno"] = "0";
             }
-           
             int count = 0;
-
             string ccode = string.Empty;
             if (lvGradeAllotment.Items.Count > 0)
             {
@@ -685,12 +507,14 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                     lvGradeRange.DataSource = null;
                     lvGradeRange.DataBind();
                     lvGradeRange.Visible = false;
+
+                    lvStudentDetails.DataSource = null;
+                    lvStudentDetails.DataBind();
+                    lvStudentDetails.Visible = false;
                     return;
                 }
             }
-
             marktotnotcal = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND CCODE='" + ddlCourse.SelectedValue + "' AND SEMESTERNO=" + ddlSemester.SelectedValue + " AND (SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " OR " + Convert.ToInt32(ViewState["schemeno"]) + " =0) AND ISNULL(CANCEL,0)=0 AND EXAM_REGISTERED=1 AND MARKTOT IS NULL"));
-
             if (marktotnotcal > 0)
             {
                 objCommon.DisplayMessage(updpnlExam, "Please Check the Mark Entry is completed or not for selected Course", this.Page);
@@ -713,7 +537,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             string SP_Parameters = string.Empty;
             string Call_Values = string.Empty;
             string retStatus = string.Empty;
-
             if (ViewState["schemeno"] == string.Empty || ViewState["schemeno"] == "")
             {
                 ViewState["schemeno"] = "0";
@@ -744,18 +567,18 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             }
             if (retStatus == "1")
             {
-                objCommon.DisplayMessage(updpnlExam, "Grade Range Genearted Successfully", this.Page);
+                objCommon.DisplayMessage(updpnlExam, "Grade Range Generated Successfully", this.Page);
                 BindGradeView();
                 BindStudentlist();
             }
             else if (retStatus == "0")
             {
-                objCommon.DisplayMessage(updpnlExam, "Mark Entry is Not Completed or Grade is not defined...", this.Page);
+                objCommon.DisplayMessage(updpnlExam, "Mark Entry is Not Completed or Grade is Not Defined...", this.Page);
                 return;
             }
             else if (retStatus == "4")
             {
-                objCommon.DisplayMessage(updpnlExam, "Mark Entry is Not Completed or Grade is not defined...", this.Page);
+                objCommon.DisplayMessage(updpnlExam, "Mark Entry is Not Completed or Grade is Not Defined...", this.Page);
                 return;
             }
             else
@@ -811,13 +634,13 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             }
             else if (Convert.ToDecimal(txtmax.Text) > 100 || Convert.ToDecimal(txtmin.Text) > 100)
             {
-                objCommon.DisplayMessage(updpnlExam, "Grade Range Value Should Not Grater Than 100.", this.Page);
+                objCommon.DisplayMessage(updpnlExam, "Grade Range Value Should Not Greater Than 100.", this.Page);
                 txtmin.Focus();
                 return;
             }
             else if (Convert.ToDecimal(txtmax.Text) < Convert.ToDecimal(txtmin.Text))
             {
-                objCommon.DisplayMessage(updpnlExam, "Grade Range Value Should Not Proper Please Cheack Range Before modification.", this.Page);
+                objCommon.DisplayMessage(updpnlExam, "Grade Range Value Should Not Proper Please Check The Range Before Modification.", this.Page);
                 txtmin.Focus();
                 return;
             }
@@ -912,15 +735,21 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
     protected void BindGradeView()
     {
         DataSet dsGdpoints;
+
+
         if (ViewState["schemeno"] == string.Empty || ViewState["schemeno"] == "")
         {
             ViewState["schemeno"] = "0";
         }
+
+        //dsGdpoints = objMarksEntry.GetGradeRange(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), ddlCourse.SelectedValue,Convert.ToInt32(ddlSemester.SelectedValue));
+
         //PKG_GET_GRADE_RANGE_DETAILS
         string proc_name = "PKG_GET_GRADE_RANGE_DETAILS_CC";
         string pram_name = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_COURSENO";
         string call_values = "" + ddlSession.SelectedValue + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + ddlSemester.SelectedValue + "," + ddlCourse.SelectedValue;
         dsGdpoints = objCommon.DynamicSPCall_Select(proc_name, pram_name, call_values);
+
         if (dsGdpoints != null && dsGdpoints.Tables.Count > 0)
         {
             if (dsGdpoints.Tables[0].Rows.Count > 0)
@@ -946,19 +775,35 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 if (Convert.ToInt32(Session["OrgId"]) == 5)
                 {
 
-                    int lock_status = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "DISTINCT ISNULL(LOCKED_STATUS,0)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND CCODE='" + ddlCourse.SelectedValue + "'"));
-                    if (ViewState["RangeChange"].ToString() == "1")
-                    {
-                        if (lock_status == 0)
-                        {
-                            btnReRange.Enabled = true;
-                            btnReRange.Visible = true;
-                            btnRangeLock.Enabled = false;
-                            btnRangeLock.Visible = false;
-                            btnRangrlock.Visible = true;
-                            btnRangrUnlock.Visible = false;
-                            //btnRangrUnlock.Visible = false;
 
+                    int CREATED = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "COUNT(*)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND SEMESTERNO=" + ddlSemester.SelectedValue + " AND (SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " or " + Convert.ToInt32(ViewState["schemeno"]) + "=0) AND CCODE='" + ddlCourse.SelectedValue + "'"));
+                    if (CREATED > 0)
+                    {
+                        int lock_status = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "DISTINCT ISNULL(LOCKED_STATUS,0)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND CCODE='" + ddlCourse.SelectedValue + "'"));
+
+
+                        if (ViewState["RangeChange"].ToString() == "1")
+                        {
+                            if (lock_status == 0)
+                            {
+                                btnReRange.Enabled = true;
+                                btnReRange.Visible = true;
+                                btnRangeLock.Enabled = false;
+                                btnRangeLock.Visible = false;
+                                btnRangrlock.Visible = true;
+                                btnRangrUnlock.Visible = false;
+                                //btnRangrUnlock.Visible = false;
+
+                            }
+                            else
+                            {
+                                btnReRange.Visible = false;
+                                btnRangeLock.Enabled = false;
+                                btnRangeLock.Visible = false;
+                                btnRangrlock.Visible = false;
+                                //btnupdscaledn.Visible = false;
+                                btnRangrUnlock.Visible = true;
+                            }
                         }
                         else
                         {
@@ -966,50 +811,52 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                             btnRangeLock.Enabled = false;
                             btnRangeLock.Visible = false;
                             btnRangrlock.Visible = false;
-                            //btnupdscaledn.Visible = false;
-                            btnRangrUnlock.Visible = true;
+
                         }
-                    }
-                    else
-                    {
-                        btnReRange.Visible = false;
-                        btnRangeLock.Enabled = false;
-                        btnRangeLock.Visible = false;
-                        btnRangrlock.Visible = false;
-
-                    }
-
-
-                    string userno = Convert.ToString(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "count(*)","USERFORRANGE like '%"+Session["userno"]+"'")).ToString();
-                    if (userno != string.Empty || userno != null)
-                    {
-                        btnRangeLock.Visible = true;
-                        btnRangeLock.Enabled = true;
-                       // btnRangrlock.Visible = false;
-                    }
-                    else
-                    {
-                        btnRangeLock.Visible = false;
-                        btnRangeLock.Enabled = false;
-                        //btnRangrlock.Visible = false;
+                        string userno = Convert.ToString(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "count(*)", "USERFORRANGE like '%" + Session["userno"] + "'")).ToString();
+                        int userno_new = Convert.ToInt32(userno);
+                        if (userno_new > 0)
+                        {
+                            btnRangeLock.Visible = true;
+                            btnRangeLock.Enabled = true;
+                            // btnRangrlock.Visible = false;
+                        }
+                        else
+                        {
+                            btnRangeLock.Visible = false;
+                            btnRangeLock.Enabled = false;
+                            //btnRangrlock.Visible = false;
+                        }
                     }
                 }
                 else
                 {
-                    int lock_status = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "DISTINCT ISNULL(LOCKED_STATUS,0)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND CCODE='" + ddlCourse.SelectedValue + "'"));
-
-                    if (ViewState["RangeChange"].ToString() == "1")
+                    int CREATED = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "COUNT(*)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND SEMESTERNO=" + ddlSemester.SelectedValue + " AND (SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " or " + Convert.ToInt32(ViewState["schemeno"]) + "=0) AND CCODE='" + ddlCourse.SelectedValue + "'"));
+                    if (CREATED > 0)
                     {
+                        int lock_status = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "DISTINCT ISNULL(LOCKED_STATUS,0)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND CCODE='" + ddlCourse.SelectedValue + "'"));
 
-                        if (lock_status == 0)
+                        if (ViewState["RangeChange"].ToString() == "1")
                         {
-                            btnReRange.Enabled = true;
-                            btnReRange.Visible = true;
-                            btnRangeLock.Enabled = false;
-                            btnRangeLock.Visible = false;
-                            btnRangrlock.Visible = true;
-                            btnRangrUnlock.Visible = false;
 
+                            if (lock_status == 0)
+                            {
+                                btnReRange.Enabled = true;
+                                btnReRange.Visible = true;
+                                btnRangeLock.Enabled = false;
+                                btnRangeLock.Visible = false;
+                                btnRangrlock.Visible = true;
+                                btnRangrUnlock.Visible = false;
+                            }
+                            else
+                            {
+                                btnReRange.Visible = false;
+                                btnRangeLock.Enabled = false;
+                                btnRangeLock.Visible = false;
+                                btnRangrlock.Visible = false;
+                                //btnupdscaledn.Visible = false;
+                                btnRangrUnlock.Visible = true;
+                            }
                         }
                         else
                         {
@@ -1017,30 +864,22 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                             btnRangeLock.Enabled = false;
                             btnRangeLock.Visible = false;
                             btnRangrlock.Visible = false;
-                            //btnupdscaledn.Visible = false;
-                            btnRangrUnlock.Visible = true;
                         }
-                    }
-                    else
-                    {
-                            btnReRange.Visible = false;
-                            btnRangeLock.Enabled = false;
-                            btnRangeLock.Visible = false;
-                            btnRangrlock.Visible = false;
-                    }
 
-                    string userno = Convert.ToString(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "count(*)", "USERFORRANGE like '%" + Session["userno"] + "'")).ToString();
-                    int userno_new = Convert.ToInt32(userno);
-                    if (userno_new > 0)
-                    {
-                        btnRangeLock.Enabled = true;
-                        btnRangeLock.Visible = true;
-                        //btnRangrlock.Visible = true;
-                    }
-                    else
-                    {
-                        btnRangeLock.Visible = false;
-                        //btnRangrlock.Visible = true;
+                        string userno = Convert.ToString(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "count(*)", "USERFORRANGE like '%" + Session["userno"] + "'")).ToString();
+                        int userno_new = Convert.ToInt32(userno);
+                        if (userno_new > 0)
+                        {
+                            btnRangeLock.Enabled = true;
+                            btnRangeLock.Visible = true;
+                            //btnRangrlock.Visible = true;
+                        }
+                        else
+                        {
+                            btnRangeLock.Visible = false;
+                            btnRangeLock.Enabled = false;
+                            //btnRangrlock.Visible = true;
+                        }
                     }
                 }
             }
@@ -1065,16 +904,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
     protected void BindStudentlist()
     {
         DataSet dsStudentDetails = null;
-        //DataSet dsccode = objCommon.FillDropDown("ACD_STUDENT_RESULT", "CCODE", "", " SESSIONNO=" + ddlSession.SelectedValue + "AND schemeno=" + Convert.ToInt32(ViewState["schemeno"]) + "AND courseno=" + ddlCourse.SelectedValue, "");
-
-        //string Ccode = dsccode.Tables[0].Rows[0]["ccode"].ToString(); 
-
-        //string proc_nameSD = "PKG_SHOW_STUDMARKS_FROM_GRADE_POINT";
-        //string pram_nameSD = "@P_SESSIONNO,@P_SCHEMENO,@P_CCODE,@P_SEMESTERNO ,@P_OUT";
-        //string call_valuesSD = "" + ddlSession.SelectedValue + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Ccode.ToString() + "," + ddlSemester.SelectedValue + "," + 0 + "";
-        //dsStudentDetails = objCommon.DynamicSPCall_Select(proc_nameSD, pram_nameSD, call_valuesSD);
-
-
         string proc_nameSD = string.Empty;
         string pram_nameSD = string.Empty;
         string call_valuesSD = string.Empty;
@@ -1099,18 +928,9 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 lvStudentDetails.DataBind();
                 lvStudentDetails.Visible = true;
 
-                //lblnote.Visible = true;
-                //lblnote.Text = "Note:Remark Field is Only For Absent,UFM,Detaind,etc Students.";
-
-
                 if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
                 {
-                    //divscale.Visible = true;
-                    //string powerfactor = objCommon.LookUp("ACD_EXAM_GRADE_POINT_CALC_VALUES CV", "DISTINCT ISNULL(POWER_FACTOR_CPU,0)", "SESIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND CCODE='" + ddlCourse.SelectedValue + "' ");
-                    //lblfactor.Text = powerfactor;
-
-                    DataSet powerfactor = objCommon.FillDropDown("ACD_EXAM_GRADE_POINT_CALC_VALUES", "TOP 1 MAX_RANGE_CPU", "MIN_RANGE_CPU,POWER_FACTOR_CPU", "SESIONNO IN (SELECT SESIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + " AND CCODE='" + ddlCourse.SelectedValue + "')", "GDPOINTCALC_ID DESC");
-
+                   DataSet powerfactor = objCommon.FillDropDown("ACD_EXAM_GRADE_POINT_CALC_VALUES", "TOP 1 MAX_RANGE_CPU", "MIN_RANGE_CPU,POWER_FACTOR_CPU", "SESIONNO IN (SELECT SESIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + " AND CCODE='" + ddlCourse.SelectedValue + "')", "GDPOINTCALC_ID DESC");
                     if (powerfactor.Tables[0].Rows.Count > 0)
                     {
                         divpower.Visible = true;
@@ -1158,100 +978,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
         }
 
     }
-    //[WebMethod]
-    //public static MarkDetails[] GetAllotment(int session, int sem, int course, int scheme)
-    //{
-    //    try
-    //    {
-    //        DataSet ds = new DataSet();
-    //        DataTable dt = new DataTable();
-    //        DataTable dt1 = new DataTable();
-
-    //        List<MarkDetails> details = new List<MarkDetails>();
-    //        List<MarksGrade> detailsnew = new List<MarksGrade>();
-    //        SQLHelper objSQLHelper = new SQLHelper(System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString);
-
-    //        SqlParameter[] objParams = null;
-    //        objParams = new SqlParameter[5];
-
-    //        objParams[0] = new SqlParameter("@P_SESSIONNO", session);
-
-    //        objParams[1] = new SqlParameter("@P_SCHEMENO", scheme);
-    //        objParams[2] = new SqlParameter("@P_SEMESTERNO", sem);
-    //        objParams[3] = new SqlParameter("@P_COURSENO", course);
-    //        objParams[4] = new SqlParameter("@P_OP", SqlDbType.Int);
-    //        objParams[4].Direction = ParameterDirection.Output;
-
-    //        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_RELATIVE_GRADE_ANALYSIS_PBI_ATLAS", objParams);
-    //        dt = ds.Tables[0];
-
-    //        foreach (DataRow dtrow in dt.Rows)
-    //        {
-    //            MarkDetails us = new MarkDetails();
-    //            us.SRNO = dtrow["SRNO"].ToString();
-    //            us.MARKS = dtrow["MARKS"].ToString();
-    //            us.STUD_COUNT = dtrow["STUD_COUNT"].ToString();
-    //            //us.STUDENT_COUNT = dtrow["STUDENT_COUNT"].ToString();
-    //            //us.GRADE_NAME = dtrow["GRADE_NAME"].ToString();
-    //            details.Add(us);
-
-    //        }
-
-    //        return details.ToArray();     
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return null;
-    //    }
-    //}
-    //[WebMethod]
-    //public static MarksGrade[] GetGradeAllotment(int session, int sem, int course, int scheme)
-    //{
-    //    try
-    //    {
-    //        DataSet ds = new DataSet();
-    //        DataTable dt1 = new DataTable();
-    //       // DataTable dt1 = new DataTable();
-
-    //       // List<MarkDetails> details = new List<MarkDetails>();
-    //        List<MarksGrade> detailsnew = new List<MarksGrade>();
-    //        SQLHelper objSQLHelper = new SQLHelper(System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString);
-
-    //        SqlParameter[] objParams = null;
-    //        objParams = new SqlParameter[5];
-
-    //        objParams[0] = new SqlParameter("@P_SESSIONNO", session);
-
-    //        objParams[1] = new SqlParameter("@P_SCHEMENO", scheme);
-    //        objParams[2] = new SqlParameter("@P_SEMESTERNO", sem);
-    //        objParams[3] = new SqlParameter("@P_COURSENO", course);
-    //        objParams[4] = new SqlParameter("@P_OP", SqlDbType.Int);
-    //        objParams[4].Direction = ParameterDirection.Output;
-
-    //        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_RELATIVE_GRADE_ANALYSIS_PBI_ATLAS", objParams);
-    //        dt1 = ds.Tables[1];
-
-
-    //        foreach (DataRow dtrow in dt1.Rows)
-    //        {
-    //            MarksGrade us = new MarksGrade();
-
-    //            us.STUDENT_COUNT = dtrow["STUDENT_COUNT"].ToString();
-    //            us.GRADE_NAME = dtrow["GRADE_NAME"].ToString();
-    //            detailsnew.Add(us);
-
-    //        }
-    //        return detailsnew.ToArray();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return null;
-    //    }
-    //}
-
-    //added by prafull on dt-21062023
-
-
+  
     [WebMethod]
     public static MarkDetails[] GetAllotment(int session, int sem, string course, int scheme)
     {
@@ -1288,15 +1015,10 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 //us.STUDENT_COUNT = dtrow["STUDENT_COUNT"].ToString();
                 //us.GRADE_NAME = dtrow["GRADE_NAME"].ToString();
                 details.Add(us);
-
             }
 
             return details.ToArray();
-
-            //return [details,detailsnew];
-
-            // return {details,detailsnew};
-        }
+         }
         catch (Exception ex)
         {
             return null;
@@ -1515,10 +1237,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
         string SP_Name = string.Empty;
         string SP_Parameters = string.Empty;
         string Call_Values = string.Empty;
-
-        //  string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue));
-
-
         if (Convert.ToInt32(Session["OrgId"]) == 5)
         {
             SP_Name = "PKG_GET_COMPONENTWISE_MARK_DETAILS_RELATIVE_GRADE_ALLOTMENT";
@@ -1557,4 +1275,25 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             return;
         }
     }
+    private void Clear()
+    {    
+        lvGradeAllotment.DataSource = null;
+        lvGradeAllotment.DataBind();
+        lvGradeAllotment.Visible = false;
+        lvGradeRange.DataSource = null;
+        lvGradeRange.DataBind();
+        lvGradeRange.Visible = false;
+        lvStudentDetails.DataSource = null;
+        lvStudentDetails.DataBind();
+        lvStudentDetails.Visible = false;
+        btnReRange.Visible = false;
+        btnRangrlock.Visible = false;
+        btnRangrUnlock.Visible = false;
+        btnRangeLock.Visible = true;
+        btnRangeLock.Enabled = true;
+        btnGradeAllotment.Visible = false;
+        btnReport.Visible = false;
+        test.Visible = false;
+    }
+
 }
