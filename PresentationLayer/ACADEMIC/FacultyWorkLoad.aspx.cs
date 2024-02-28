@@ -151,7 +151,7 @@ public partial class ACADEMIC_FacultyWorkLoad : System.Web.UI.Page
                 ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                 ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
 
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER SM INNER JOIN ACD_COURSE_TEACHER CT ON(SM.SESSIONNO=CT.SESSIONNO)", "DISTINCT SM.SESSIONNO", "SM.SESSION_NAME", "SM.SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND CT.COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND CT.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SM.SESSIONNO DESC");
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER SM INNER JOIN ACD_COURSE_TEACHER CT ON(SM.SESSIONNO=CT.SESSIONNO)", "DISTINCT SM.SESSIONNO", "SM.SESSION_PNAME", "SM.SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND CT.COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND CT.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SM.SESSIONNO DESC");
                 ddlSession.Focus();
             }
         }
