@@ -719,7 +719,9 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 txtStudPanNo.Text = dtr["STUDENT_PANCARD_NO"] == null ? string.Empty : dtr["STUDENT_PANCARD_NO"].ToString();
                 txtFatherPanNo.Text = dtr["FATHER_PANCARD_NO"] == null ? string.Empty : dtr["FATHER_PANCARD_NO"].ToString();
                 txtMotherPanNo.Text = dtr["MOTHER_PANCARD_NO"] == null ? string.Empty : dtr["MOTHER_PANCARD_NO"].ToString();
+                ddlEWS.SelectedValue = dtr["IS_EWS"] == null ? "0" : dtr["IS_EWS"].ToString();
 
+                
                 string idno = objCommon.LookUp("ACD_STUD_PHOTO", "IDNO", "IDNO=" + Convert.ToInt32(txtIDNo.Text.Trim()));
                 if (idno != "")
                 {
@@ -1077,7 +1079,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     objS.StudentPanNo = txtStudPanNo.Text;
                     objS.FatherPanNo = txtFatherPanNo.Text;
                     objS.MotherPanNo = txtMotherPanNo.Text;
-
+                    objS.EWS = Convert.ToInt32(ddlEWS.SelectedValue);
                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentPersonalInformation(objS, objSAddress, objSPhoto, objSQualExam, MotherMobile, MotherOfficeNo, IndusEmail, Convert.ToInt32(Session["usertype"]), father_alive, mother_alive, parent_alive);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
