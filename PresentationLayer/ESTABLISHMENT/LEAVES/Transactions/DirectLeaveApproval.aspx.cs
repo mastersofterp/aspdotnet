@@ -437,7 +437,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
                     checkcount = checkcount + 1;
                     LETRNO = Convert.ToInt32(chkSelect.ToolTip);
                     DataSet ds = objApp.GetBalanceforDirectLeaveApproval(LETRNO, IDNO, LeaveNo);
-                    int bal = Convert.ToInt32(ds.Tables[0].Rows[0]["CLBal"].ToString());
+                    double bal = Convert.ToDouble(ds.Tables[0].Rows[0]["CLBal"].ToString());
 
                     if (bal >= noOfDays || Status.Equals("R"))
                     {
