@@ -125,7 +125,7 @@ public partial class HOSTEL_StudSearchInfo : System.Web.UI.Page
 
     private void bindlist(string category, string searchtext)
     {
-        DataSet ds = objRM.RetrieveHostelStudDetails(searchtext, category);
+        DataSet ds = objRM.RetrieveHostelStudDetails(searchtext.Trim(), category.Trim());  //Trim Condition Added By himanshu Tamrakar 27-02-2024
 
         if (ds.Tables[0].Rows.Count > 0)
         {
@@ -134,7 +134,12 @@ public partial class HOSTEL_StudSearchInfo : System.Web.UI.Page
             lblNoRecords.Text = "Total Records : " + ds.Tables[0].Rows.Count.ToString();
         }
         else
+        {
+            lvStudent.DataSource = null; // Code Added By Himanshu Tamrakar 27-02-2024
+            lvStudent.DataBind();
             lblNoRecords.Text = "Total Records : 0 ; Student have not alloted room yet.";  //show message added by Saurabh L on 04/10/2022
+        }
+         //lblNoRecords.Text = "Total Records : 0 ; Student have not alloted room yet.";  //show message added by Saurabh L on 04/10/2022
     }
 
     protected void lnkId_Click(object sender, EventArgs e)

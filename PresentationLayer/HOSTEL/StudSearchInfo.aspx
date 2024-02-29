@@ -556,7 +556,8 @@
                                         <asp:RadioButton ID="rbIdNo" runat="server" Text="IdNo" GroupName="edit" />
                                         <asp:RadioButton ID="rbBranch" runat="server" Text="Branch" GroupName="edit" />
                                         <asp:RadioButton ID="rbEnrollmentNo" runat="server" Text="Enrollmentno" GroupName="edit" />
-                                        <asp:RadioButton ID="rbRegNo" runat="server" Text="Rollno" GroupName="edit" Checked="True" />
+                                        <%--<asp:RadioButton ID="rbRegNo" runat="server" Text="Rollno" GroupName="edit" Checked="True" />--%>
+                                        <asp:RadioButton ID="rbRegNo" runat="server" Text="Regno" GroupName="edit" Checked="True" />  <%--Added By Himanshu Tamrakar 27022024--%>
                                         <asp:RadioButton ID="rbHostel" runat="server" Text="Hostel" GroupName="edit" />
                                         <asp:RadioButton ID="rbRoom" runat="server" Text="Room" GroupName="edit" />
                                     </div>
