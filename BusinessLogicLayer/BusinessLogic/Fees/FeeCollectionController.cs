@@ -6749,7 +6749,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-        public DataSet Get_Tally_Integration_Reports_Excel(DateTime from_dt, DateTime to_date, int degreeNo, int Branchno, int AcademicYear, int semesterNo, int Year)
+        // ( reptype ) Update by vipul t on date 29-02-2024 as per TNo:-52451
+        public DataSet Get_Tally_Integration_Reports_Excel(DateTime from_dt, DateTime to_date, int degreeNo, int Branchno, int AcademicYear, int semesterNo, int Year, string reptype)
         {
             DataSet ds = null;
             try
@@ -6765,7 +6766,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@ACADEMIC_YEAR", AcademicYear),
                     new SqlParameter("@SEMESTERNO", semesterNo), 
                     new SqlParameter("@YEAR", Year ), 
-                                  
+                    new SqlParameter("@RECIEPT_CODE", reptype ) 
+                                 
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_TALLY_INTEGRATION_DETAILS_REPORT", sqlParams);
             }
@@ -6775,7 +6777,6 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
-
 
         public DataSet GetStudentScholarshipDiscountDetailsSemesterReg(int studentId, int semesterno, string recieptcode, int sessionno)
         {

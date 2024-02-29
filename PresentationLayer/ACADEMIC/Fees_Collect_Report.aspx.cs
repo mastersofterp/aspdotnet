@@ -1,14 +1,16 @@
 ﻿//======================================================================================
-// PROJECT NAME  : UAIMS                                                                
+// PROJECT NAME  : RF-Common Code                                                                
 // MODULE NAME   : ACADEMIC                                                             
 // PAGE NAME     : STUDENT FEES RELATED REPORT                                 
 // CREATION DATE : 02-JULY-2013                                                       
 // CREATED BY    : ASHISH DHAKATE                                                           
 // MODIFIED DATE : 24-SEPT-2019
 // MODIFIED BY   : Rita Munde                                                  
-// MODIFIED DESC : Add Radio button for Excess Amount.....                                                                   
+// MODIFIED DESC : Add Radio button for Excess Amount.....  
+// MODIFIED DATE : 28-02-2024
+// MODIFIED BY   : Vipul Tichkule   
+// MODIFIED DESC : Added Fliter Reciept Type in Tally Integration Report (TkNo.52451)                                                                 
 //======================================================================================
-
 
 using System;
 using System.Collections;
@@ -2080,14 +2082,14 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     private void EXCEL_REPORT_TALLY_INTEGRATION()
     {
-        //string rectype = this.GetRecType();
+        string rectype = this.GetRecType();
 
-        //if (string.IsNullOrEmpty(rectype))
-        //{
-        //    objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
-        //    return;
-        //}
-        //rectype = rectype.Substring(0, rectype.Length - 1);
+        if (string.IsNullOrEmpty(rectype))
+        {
+            objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+            return;
+        }
+        rectype = rectype.Substring(0, rectype.Length - 1);
 
         int semesterNo = semesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
         int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
@@ -2097,10 +2099,10 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         int year = Convert.ToInt32(ddlYear.SelectedValue);
         //int admstatus = Convert.ToInt32(ddlAdmStatus.SelectedValue);
 
-     
-        DataSet dsfeestud = feeCntrl.Get_Tally_Integration_Reports_Excel( FromDate, ToDate, degreeno, branchno, Convert.ToInt32(ddlAcdYear.SelectedValue),semesterNo,year);
+        // ( rectype ) added by vipul t on date 29-02-2024 as per TNo:-52451
+        DataSet dsfeestud = feeCntrl.Get_Tally_Integration_Reports_Excel(FromDate, ToDate, degreeno, branchno, Convert.ToInt32(ddlAcdYear.SelectedValue), semesterNo, year, rectype);
 
-        if (dsfeestud != null && dsfeestud.Tables.Count > 0)
+        if (dsfeestud != null && dsfeestud.Tables[0].Rows.Count > 0)
         {
             dsfeestud.Tables[0].TableName = "TallyIntegrationReportDetails";
             
