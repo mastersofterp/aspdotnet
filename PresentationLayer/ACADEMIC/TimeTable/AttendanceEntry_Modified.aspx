@@ -4,7 +4,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <link href="<%#Page.ResolveClientUrl("~/fullcalendar/fullcalendar.css")%>" rel="stylesheet" />
-     <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
+    <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.js")%>"></script>
     <%--<style>
         #ctl00_ContentPlaceHolder1_pnlAttendenceEntry .dataTables_scrollHeadInner {
@@ -436,14 +436,14 @@
                                                             <%-- <asp:DropDownList ID="ddlTopicCovered" runat="server" data-select2-enable="true" AppendDataBoundItems="true" Visible="false">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             </asp:DropDownList>--%>
-                                                          <%--  <div class="checkbox-list-box">--%>
-                                                                <%-- <asp:CheckBox ID="chkTopicCovered" runat="server" Text="Select All Topics" onClick="SelectAllTopicCovered()" CssClass="select-all-checkbox" TabIndex="6" />
+                                                            <%--  <div class="checkbox-list-box">--%>
+                                                            <%-- <asp:CheckBox ID="chkTopicCovered" runat="server" Text="Select All Topics" onClick="SelectAllTopicCovered()" CssClass="select-all-checkbox" TabIndex="6" />
                                                                 <asp:CheckBoxList ID="ddlTopicCovered" runat="server"></asp:CheckBoxList>--%>
-                                                                <asp:ListBox ID="ddlTopicCovered" runat="server" AppendDataBoundItems="true" 
-                                                                    CssClass="form-control multi-select-demo" SelectionMode="multiple" onClick="SelectAllTopicCovered()"></asp:ListBox>
-                                                                <%-- <asp:RequiredFieldValidator ID="rfvddltopcv" runat="server" ControlToValidate="ddlTopicCovered" InitialValue="0"
+                                                            <asp:ListBox ID="ddlTopicCovered" runat="server" AppendDataBoundItems="true"
+                                                                CssClass="form-control multi-select-demo" SelectionMode="multiple" onClick="SelectAllTopicCovered()"></asp:ListBox>
+                                                            <%-- <asp:RequiredFieldValidator ID="rfvddltopcv" runat="server" ControlToValidate="ddlTopicCovered" InitialValue="0"
                                                                       Display="None" ValidationGroup="Submit" ErrorMessage="Please Select Topic Covered " SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
-                                                           <%-- </div>--%>
+                                                            <%-- </div>--%>
                                                         </div>
 
                                                         <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divTopicCoveredStatus" visible="false">
@@ -950,6 +950,7 @@
                                                         <asp:HiddenField ID="hdnAttendanceNo" runat="server" Value='<%#Eval("ATT_TPNO") %>' />
                                                         <asp:HiddenField ID="hdnExtraClass" runat="server" Value='<%#Eval("EXTRACLASS") %>' />
                                                         <asp:HiddenField ID="hdnTopicCoveredStatus" runat="server" Value='<%#Eval("TC_STATUS") %>' />
+                                                        <asp:HiddenField ID="hdnAttendanceStatus" runat="server" Value='<%#Eval("ATT_STATUS") %>' />
                                                     </td>
                                                     <td style="text-align: center">
                                                         <%#Eval("COURSE_TYPE")%>
@@ -1138,20 +1139,24 @@
         }
 
         function checkTC() {
+            ///Added By Rishabh on 28022024 to check topic covered mandatory for attendance status complete and continue.
             var AttStatusNo = $('#ctl00_ContentPlaceHolder1_ddlStatus').val();
-            var txtCONo = $('#ctl00_ContentPlaceHolder1_ddlCONumber').val();
+            var ddlTopicCovered = document.getElementById('<%= ddlTopicCovered.ClientID %>');
+            var selectedItems = 0;
 
-            var txtTCode = $('#ctl00_ContentPlaceHolder1_ddlTopicCovered').val();//$('#ctl00_ContentPlaceHolder1_txtTopcDesc').val();
+            for (var i = 0; i < ddlTopicCovered.options.length; i++) {
+                if (ddlTopicCovered.options[i].selected) {
+                    selectedItems++;
+                }
+            }
+            // AttStatusNo = Attendance Status
             if (AttStatusNo == "1" || AttStatusNo == "2") {
-                if (txtTCode == '0') {
-                    alert("Please Select Topic Covered");
+                if (selectedItems === 0) {
+                    alert("Please select at least one Topic Covered.");
                     return false;
                 }
-                //if (txtCONo == "0") {
-                //    alert("Please Select CO Number");
-                //    return false;
-                //}
             }
+            return true;
         }
 
         function totAllSubjects(headchk) {
@@ -1350,14 +1355,23 @@
             var classType = $("[id*=ctl00_ContentPlaceHolder1_ddlClassType]").val();
             var att_status = $("[id*=ctl00_ContentPlaceHolder1_ddlStatus]").val();
             var hdnTeachingPlanStatus = document.getElementById('<%=hdnTeachingPlanStatus.ClientID %>').value;
+            var tpno = "";
             // hdnTeachingPlanStatus=1 dropdown
             if (hdnTeachingPlanStatus == "1") {
-                var tpno = $("[id*=ctl00_ContentPlaceHolder1_ddlTopicCovered]").val();
-                if (tpno == 0) {
-                    alert('Please Select Topic Covered', 'Warning!');
-                    $("[id*=ctl00_ContentPlaceHolder1_ddlTopicCovered]").focus();
+                ///Modified By Rishabh on 28022024 for multiselect topic covered for copy attendance
+                var dropdownList = document.getElementById('<%= ddlTopicCovered.ClientID %>');
+                var selectedValues = [];
+                for (var i = 0; i < dropdownList.options.length; i++) {
+                    if (dropdownList.options[i].selected) {
+                        selectedValues.push(dropdownList.options[i].value);
+                    }
+                }
+                tpno = selectedValues.join(',');
+                if (tpno == "") {
+                    alert("Please select at least one Topic Covered.");
                     return false;
                 }
+                //alert(tpno);
             }
             else {
                 tpno = "0";
@@ -1380,7 +1394,7 @@
                 type: "POST",
                 url: '<%=Page.ResolveUrl("~/ACADEMIC/TimeTable/AttendanceEntry_Modified.aspx/CopyAttendance")%>',
                 //url: "AttendanceEntry_Modified.aspx/CopyAttendance",
-                data: '{slotno: ' + JSON.parse(ddlCopytoSlot) + ',att_no: ' + JSON.parse(hdnAttNo) + ',class_type: ' + JSON.parse(classType) + ',att_status: ' + JSON.parse(att_status) + ',topic_desc: ' + JSON.stringify(txtTopicDesc) + ',Tpno: ' + JSON.parse(tpno) + '}',
+                data: '{slotno: ' + JSON.parse(ddlCopytoSlot) + ',att_no: ' + JSON.parse(hdnAttNo) + ',class_type: ' + JSON.parse(classType) + ',att_status: ' + JSON.parse(att_status) + ',topic_desc: ' + JSON.stringify(txtTopicDesc) + ',Tpno: ' + JSON.stringify(tpno) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
