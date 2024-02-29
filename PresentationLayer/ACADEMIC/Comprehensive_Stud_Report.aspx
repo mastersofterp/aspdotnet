@@ -1277,6 +1277,8 @@
                                                                                     <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
                                                                                         <tr>
                                                                                             
+                                                                                            <th>Semester
+                                                                                            </th>
                                                                                             <th>CCode
                                                                                             </th>
                                                                                             <th>Semester 
@@ -2480,101 +2482,6 @@
         </div>
     </div>
 
-     <div class="modal" id="MyInternalmark" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Marks Detail</h4>
-                    <button type="button" class="close" data-dismiss="modal"></button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <asp:UpdatePanel ID="UpdatePanel5" runat="server">
-                        <ContentTemplate>
-                            <div class="col-12">
-                                <asp:Panel ID="Panel4" runat="server">
-                                    <%--Height="300px" Width="720px" Style="overflow-x: hidden;" ScrollBars="Vertical"--%>
-                                    <%--   <div class="row">--%>
-                                                   <%--  <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <div class="label-dynamic">
-                                                                <label>Course Name.</label>
-                                                                 <asp:Label ID="lblCoursename" runat="server" ></asp:Label>
-                                                            </div>
-                                                           
-                                                     </div>--%>
-                                          <div style="border: 1px solid #dee2e6;
-    padding: 7px 5px;">
-        <div class="MyInternalmark-d-flex">
-            <asp:Label ID="Label1" class="label-display" runat="server" Font-Bold="true" Text="Course name : "></asp:Label>
-             <asp:Label ID="lblCoursename" class="content-display" runat="server" ></asp:Label>
-        </div>
-       
-        <div class="MyInternalmark-d-flex">
-            <asp:Label ID="Label23" runat="server" class="label-display" Font-Bold="true" Text="Course Code : "></asp:Label>
-            <asp:Label ID="lblCCode" runat="server" class="content-display" ></asp:Label>
-        </div>
-       
-         <div class="MyInternalmark-d-flex">
-            <asp:Label ID="Label25" runat="server" class="label-display" Font-Bold="true" Text="Session Name : "></asp:Label>
-            <asp:Label ID="lblSessionname" class="content-display" runat="server" ></asp:Label>
-        </div>
-        </div>
-                                    <br />
-                                    <asp:ListView ID="LvinternalData2" runat="server" align="Center">
-                                        <LayoutTemplate>
-                                            <div class="table-responsive" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">
-                                                <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="">
-                                                    <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
-                                                        <tr>
-                                                            <th>Exam Name
-                                                            </th>
-                                                            <th>Total Mark
-                                                            </th>
-                                                            <th>Mark Obtained
-                                                            </th>
-                                                            
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </LayoutTemplate>
-                                        <ItemTemplate>
-                                            <tr>
-                                                <td>
-                                                    <%#Eval("FLDNAME") %>
-                                                </td>
-                                                <td>
-                                                    <%#Eval("MAXMARK") %>
-                                                </td>
-                                                <td>
-                                                    <%#Eval("MARKS") %><%--<asp:Label ID="lblReceiptDate" runat="server" Text='<%# (Eval("REC_DT").ToString() != string.Empty) ? ((DateTime)Eval("REC_DT")).ToShortDateString() : Eval("REC_DT") %>'></asp:Label>--%>
-                                                    
-                                                </td>
-                                               
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:ListView>
-                                    <%-- </div>--%>
-                                </asp:Panel>
-                            </div>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-                <asp:HiddenField ID="HiddenField2" runat="server" />
-            </div>
-        </div>
-    </div>
 
     
        <div class="modal" id="myCourseReg" role="dialog">
@@ -2675,10 +2582,6 @@
       <script type="text/javascript">
           function showModalCoursePop() {
               $("#myCourseReg").modal('show');
-
-          }
-          function showModalInternal() {
-              $("#MyInternalmark").modal('show');
 
           }
 
@@ -2932,13 +2835,13 @@
     <script>
         function Checktabid(tabid) {
             $("#ctl00_ContentPlaceHolder1_hdfDyanamicTabId").val($(tabid).attr("href").replace('#', ''));
-
+         
         }
 
 
         function SaveUpdateStudentConfig() {
             debugger;
-            //  var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}'
+          //  var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}'
             //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
             $.ajax({
                 type: "POST",
@@ -2948,7 +2851,7 @@
                 dataType: "json",
                 success: function (data) {
                     debugger;
-                    //  var Jdata = data.d;
+                  //  var Jdata = data.d;
                     alert(Jdata);
                 },
                 failure: function (response) {
@@ -2960,32 +2863,27 @@
                     alert(response.responseText);
                 }
             });
-        }
+        }       
     </script>
 
     <script type="text/javascript">
         function check() {
-
-            $.ajax({
-                type: "POST",
-                url: "Comprehensive_Stud_Report.aspx/GetAttendanceDetails",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    alert(response.d); // Display the response in an alert (replace with your logic)
-                },
-                error: function (xhr, status, error) {
-                    console.log(xhr.responseText); // Log the error to the console
-                }
-            });
-
+          
+                $.ajax({
+                    type: "POST",
+                    url: "Comprehensive_Stud_Report.aspx/GetAttendanceDetails",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        alert(response.d); // Display the response in an alert (replace with your logic)
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText); // Log the error to the console
+                    }
+                });
+          
         }
-
+     
 </script>
-      <script>
-          function HideTableColumns() {
-              $('.studcount').hide();
-          }
-    </script>
 
 </asp:Content>
