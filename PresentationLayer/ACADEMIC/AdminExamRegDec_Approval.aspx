@@ -22,6 +22,14 @@
 
         .btn-primary {
         }
+        .greenCheckbox {
+    color: green;
+}
+
+.redCheckbox {
+    color: red;
+}
+
     </style>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
@@ -61,6 +69,30 @@
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
                                     </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Degree</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlDegree" runat="server" AppendDataBoundItems="True" TabIndex="1" CssClass="form-control" data-select2-enable="true"
+                                            ToolTip="Please Select Degree" AutoPostBack="True"  OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged" >
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlDegree"
+                                            Display="None" ErrorMessage="Please Select Degree" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
+                                    </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                         <%--   <sup>* </sup>--%>
+                                            <label>Branch</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlbranch" runat="server" AppendDataBoundItems="True" TabIndex="1" CssClass="form-control" data-select2-enable="true"
+                                            ToolTip="Please Select Branch" AutoPostBack="True"  OnSelectedIndexChanged="ddlbranch_SelectedIndexChanged" >
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlbranch"
+                                            Display="None" ErrorMessage="Please Select Branch" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>--%>
+                                    </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -91,7 +123,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <asp:ListView ID="lvStudentRecords" runat="server" Visible="false">
+                                <asp:ListView ID="lvStudentRecords" runat="server" Visible="false" OnItemDataBound="lvFailCourse_ItemDataBound">
                                     <LayoutTemplate>
                                         <div id="listViewGrid" class="vista-grid">
                                             <%--<div class="titlebar">
@@ -105,25 +137,42 @@
                                                             All
                                                         </th>
 
-                                                        <th>Enrollment No.
+                                                        <th>Enrollment No.</th>
                                                         
                                                         <th>Student Name
                                                         </th>
 
-                                                            <th>Semester
+                                                            <th>Category
                                                             </th>
-                                                            <th>Course Code
-                                                            </th>
-                                                            <th>Status
-                                                            </th>
-                                                            <th>DATE
-                                                            </th>
-                                                        </th>
-                                                        <th>REMARK
-                                                        </th>
+                                                         <th>Current Year Balance Fee
+
+                                                         </th>
+                                                         <th>1st Year 
+
+                                                         </th>
+                                                         <th>2nd Year 
+
+                                                         </th>
+                                                        <th>3rd Year 
+
+                                                         </th>
+                                                        <th>4th Year 
+
+                                                         </th>
+                                                        
+                                                             <%--<tr class="bg-light-blue">--%>
+                                                  
+<%--                                                            <th>Status
+                                                            </th>--%>
+                                                         <%--   <th>DATE
+                                                            </th>--%>
+                                                        <%--</th>--%>
+                                                   <%--     <th>REMARK
+                                                        </th>--%>
                                                         <%--[PAY_STATUS] [PAY_MODE],TOTAL_AMT[TOTAL_AMT]--%>
                                                     </tr>
                                                 </thead>
+                                             
                                                 <tbody>
                                                     <tr id="itemPlaceholder" runat="server" />
                                                 </tbody>
@@ -132,9 +181,14 @@
                                     </LayoutTemplate>
                                     <ItemTemplate>
                                         <tr>
-                                            <td>
-                                                <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("DISCIPLINE_APPROVE"))==1 ? true : false)%>' Enabled='<%#(Convert.ToInt32(Eval("EXAM_REGISTERED"))==1 ? false : true)%>' /><%--OnCheckedChanged="chkAccept_CheckedChanged"--%>  <%--Checked='<%#(Convert.ToInt32(Eval("STUD_EXAM_REGISTERED"))==1 ? true : false)%>' --%>
-                                            </td>
+                                           <td>
+                                      <%--       <asp:Literal ID="Literal1" runat="server" Text='<%# "<span style=\'color:" + (Convert.ToInt32(Eval("STATUS")) == 1 ? "green" : "red") + "\'>" %>' />
+    <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Convert.ToInt32(Eval("STATUS")) == 1 %>' Enabled='<%# Convert.ToInt32(Eval("STATUS")) != 1 %>' />
+<asp:Literal ID="Literal2" runat="server" Text="</span>" />--%>
+
+                                                 <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("STATUS"))==1 ? true : false)%>' Enabled='<%#(Convert.ToInt32(Eval("STATUS"))==1 ? false : true)%>'/>
+                                             
+                                          </td>
 
                                             <td>
                                                 <%--<asp:LinkButton ID="lnkbtnPrint" runat="server" Text='<%# Eval("REGNO") %>' CommandArgument='<%# Eval("REGNO") %>' />--%>
@@ -146,27 +200,45 @@
                                                 <%--<%# Eval("STUDNAME")%>--%>
                                             </td>
                                             <td>
+                                                <asp:Label ID="Label1" runat="server" Text='<%# Eval("CATEGORY") %>' />
+                                                <%--<%# Eval("STUDNAME")%>--%>
+                                            </td>
 
-                                                <asp:Label ID="lblsem" runat="server" Text='<%# Eval("SEMESTERNO")%>' ToolTip='<%# Eval("SEMESTERNO")%>' />
+                                         <td> 
+                                               <asp:Label ID="lblcurrentyr" runat="server" Text='<%# Eval("CURRENT_TOTAL_BALANCE") %>' />
+                                          </td>
+                                              <td> 
+                                               <asp:Label ID="lblfirstyr" runat="server" Text='<%# Eval("BALANCE_1") %>' />
+                                          </td>
+                                              <td> 
+                                               <asp:Label ID="lblsecondyr" runat="server" Text='<%# Eval("BALANCE_2") %>' />
+                                          </td>
+                                              <td> 
+                                               <asp:Label ID="lblthirdyr" runat="server" Text='<%# Eval("BALANCE_3") %>' />
+                                          </td>
+                                              <td> 
+                                               <asp:Label ID="lblfourthyr" runat="server" Text='<%# Eval("BALANCE_4") %>' />
+                                          </td>
+                                                <%--<asp:Label ID="lblsem" runat="server" Text='<%# Eval("SEMESTERNO")%>' ToolTip='<%# Eval("SEMESTERNO")%>' />--%>
                                                 <%--<asp:HiddenField ID="hdfsem" runat="server" Value='<%# Eval("Semesterno") %>' ToolTip='<%# Eval("Semesterno")%>'/>--%>
-                                            </td>
-                                            <td>
+                                          <%--  </td>--%>
+                                            <%--<td>
                                                 <%-- <%# Eval("CCODE")%>--%>
-                                                <asp:Label ID="lblccode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
+                                                <%--<asp:Label ID="lblccode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />--%>
                                                 <%--<asp:HiddenField ID="hdfprev_status" runat="server" Value='<%# Eval("PREV_STATUS") %>' />--%>
-                                            </td>
-                                            <td>
-                                                <b><%# Eval("STATUS")%></b>
-                                            </td>
-                                            <td>
-                                                <b><%# Eval("DISCIPLINE_APPROVE_DATE","{0: dd/MM/yyyy}")%></b>
+                                            <%--</td>--%>
+                                           <%--<td>--%>
+                                                <%--<b><%# Eval("STATUS")%></b>--%>
+                                            <%--</td>--%>
+                                          <%--  <td>
+                                                <b><%# Eval("DISCIPLINE_APPROVE_DATE","{0: dd/MM/yyyy}")%></b>--%>
 
                                                 <%--<td><%# Eval("BirthDate", "{0: dd/MM/yyyy}")%></td>--%>
-                                            </td>
+                                            <%--</td>--%>
                                          
-                                            <td>
+                                          <%--  <td>
                                                 <asp:TextBox ID="DISCIPLINE_REMARK" class='defaultText' Text='<%# Eval("DISCIPLINE_REMARK") %>' runat="server"></asp:TextBox>
-                                            </td>
+                                            </td>--%>
                                         </tr>
                                     </ItemTemplate>
                                 </asp:ListView>

@@ -10,6 +10,7 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 using System.Data;
+using System.Data.SqlClient;
 
 public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
     {
@@ -20,6 +21,7 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
     StudentController studCont = new StudentController();
     Exam objExam = new Exam();
         StudentRegistration objSReg = new StudentRegistration();
+        private string _uaims_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
         protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -130,24 +132,13 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
     {
         try
         {
-            if (ddlCollege.SelectedIndex > 0)
-            {
-                objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
-                //rdoDegree.SelectedIndex = 0;
-            }
-            else
-            {
-                // ddlCollege.SelectedIndex = 0;
-                ddlCollege.SelectedIndex = 0;
-                ddlSession.SelectedIndex = 0;
+          
+            //.FillDropDownList(ddlCollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
 
-                btnsubmit.Enabled = false;
-                lvStudentRecords.Visible = false;
-            }
-            lvStudentRecords.Visible = false;
-            }
-            
-        
+           objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "", "COLLEGE_ID");
+          
+        }
+
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -162,7 +153,7 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
         {
             DataSet ds = null;
 
-            ds = objExamController.GetExamRegStud_Discipline(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue));
+            ds = GetExamRegStud_Discipline(Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlbranch.SelectedValue),Convert.ToInt32(ddlDegree.SelectedValue));
             
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -276,17 +267,17 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
         {
             if (ddlCollege.SelectedIndex > 0)
             {
-                DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlCollege.SelectedValue));
+               // DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlCollege.SelectedValue));
 
-                if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
-                {
-                    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-                    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                    ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+               // if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+                //{
+                   // ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                   // ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                   // ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                   // ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
                     if (ddlCollege.SelectedIndex > 0)
                     {
-                        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");
+                        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ddlCollege.SelectedValue), "SESSIONNO DESC");
                         ddlSession.Focus();
                     }
                     else
@@ -304,7 +295,7 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
         
         lvStudentRecords.Visible = false;
 
-                }
+            //    }
             }
             else
             {
@@ -327,13 +318,52 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
     {
         if (ddlSession.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+           // objCommon.FillDropDownList(ddlbranch, "ACD_BRANCH A WITH (NOLOCK) ", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND A.BRANCHNO = " + Convert.ToInt32(ViewState["branchno"]), "A.LONGNAME");
+           // objCommon.FillDropDownList(ddlbranch, "ACD_STUDENT  S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO=SR.IDNO ) INNER JOIN ACD_BRANCH B ON (S.BRANCHNO=B.BRANCHNO  AND ISNULL(ACTIVESTATUS,0)=1) ", "DISTINCT(B.BRANCHNO)", "B.LONGNAME", "B.BRANCHNO > 0 AND ISNULL(ADMCAN,0)=0 and COLLEGE_ID="+Convert.ToInt32(ddlCollege.SelectedValue) +" AND   SESSIONNO="+Convert.ToInt32(ddlSession.SelectedValue) , "B.LONGNAME");
+            objCommon.FillDropDownList(ddlDegree, "ACD_STUDENT  S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO=SR.IDNO ) INNER JOIN ACD_DEGREE D ON (S.DEGREENO=D.DEGREENO  AND ISNULL(ACTIVESTATUS,0)=1) ", "DISTINCT(D.DEGREENO)", "D.DEGREENAME", " ISNULL(ADMCAN,0)=0 and COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND   SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue), "D.DEGREENAME");
+
+            
+
+           // objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+          
+
         }
         else {
            // ddlCollege.SelectedIndex = 0;
             ddlSession.SelectedIndex = 0;
             ddlSemester.SelectedIndex = 0;
+            ddlbranch.SelectedIndex = 0;
+            ddlDegree.SelectedIndex = 0;
            
+            btnsubmit.Enabled = false;
+            lvStudentRecords.Visible = false;
+        }
+        lvStudentRecords.Visible = false;
+    }
+
+    protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
+    {
+         objCommon.FillDropDownList(ddlbranch, "ACD_STUDENT  S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO=SR.IDNO ) INNER JOIN ACD_BRANCH B ON (S.BRANCHNO=B.BRANCHNO  AND ISNULL(ACTIVESTATUS,0)=1) ", "DISTINCT(B.BRANCHNO)", "B.LONGNAME", "B.BRANCHNO > 0 AND ISNULL(ADMCAN,0)=0 and COLLEGE_ID="+Convert.ToInt32(ddlCollege.SelectedValue) +" AND   SESSIONNO="+Convert.ToInt32(ddlSession.SelectedValue) +" AND S.DEGREENO="+Convert.ToInt32(ddlDegree.SelectedValue), "B.LONGNAME");
+         objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO) INNER JOIN  ACD_STUDENT SS  ON (SS.IDNO=SR.IDNO ) ", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SS.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "S.SEMESTERNO");
+    }
+    protected void ddlbranch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlbranch.SelectedIndex > 0)
+        {
+            // objCommon.FillDropDownList(ddlbranch, "ACD_BRANCH A WITH (NOLOCK) ", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND A.BRANCHNO = " + Convert.ToInt32(ViewState["branchno"]), "A.LONGNAME");
+            //objCommon.FillDropDownList(ddlbranch, "ACD_STUDENT  S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO=SR.IDNO ) INNER JOIN ACD_BRANCH B ON (S.BRANCHNO=B.BRANCHNO  AND ISNULL(ACTIVESTATUS,0)=1) ", "DISTINCT(B.BRANCHNO)", "B.LONGNAME", "B.BRANCHNO > 0 AND ISNULL(ADMCAN,0)=0 and COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND   SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue), "B.LONGNAME");
+
+
+            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO) INNER JOIN  ACD_STUDENT SS  ON (SS.IDNO=SR.IDNO ) ", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND BRANCHNO =" + ddlbranch.SelectedValue +"AND SS.DEGREENO="+Convert.ToInt32(ddlDegree.SelectedValue), "S.SEMESTERNO");
+
+
+        }
+        else
+        {
+            // ddlCollege.SelectedIndex = 0;
+           // ddlSession.SelectedIndex = 0;
+        //    ddlSemester.SelectedIndex = 0;
+
             btnsubmit.Enabled = false;
             lvStudentRecords.Visible = false;
         }
@@ -350,7 +380,7 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
                 foreach (ListViewDataItem dataitem in lvStudentRecords.Items)
                 {
                     CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                    if (chk.Checked == true)
+                    if (chk.Checked == true && chk.Enabled==true)
                         cntcourse++;
                 }
 
@@ -380,22 +410,21 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
                     Label semester = dataitem.FindControl("lblsem") as Label;
                     Label lblCCode = dataitem.FindControl("lblccode") as Label;
                     Label lblregno = dataitem.FindControl("REGNO") as Label;
-                    Label lblflag = dataitem.FindControl("FLAG") as Label;
-                    //TextBox lblDISCIPLINE_REMARK = dataitem.FindControl("lblDISCIPLINE_REMARK") as TextBox;
-                    TextBox DISCIPLINE_REMARK = dataitem.FindControl("DISCIPLINE_REMARK") as TextBox;
+                   // Label lblflag = dataitem.FindControl("FLAG") as Label;
+                   
                     idnos = Convert.ToInt32(idno.ToolTip);
-                    courseno = lblCCode.ToolTip;// +",";
+                    //courseno = lblCCode.ToolTip;// +",";
                     // courseno = "3683. 3684. 3685. 3686";
-                    sem = Convert.ToInt32(semester.ToolTip);
-                    string txt = DISCIPLINE_REMARK.Text.ToString(); ; 
+                    //sem = Convert.ToInt32(semester.ToolTip);
+                  //  string txt = DISCIPLINE_REMARK.Text.ToString(); ; 
 
                     string SP_Name = "PKG_UPDATE_EXAM_REGISTRATION_STUDENT_BYADMIN_DISCIPLINE";
-                    string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_SCHEMENO,@P_UANO,@P_FLAG,@P_DISCIPLINE_REMARK,@P_OUT";
-                    string Call_Values = "" + Convert.ToInt32(idnos) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(sem) + "," + courseno + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Session["userno"] + "," + flag + "," + txt + ",0";
+                    string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_FLAG,@P_OUT";
+                    string Call_Values = "" + Convert.ToInt32(idnos) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," +  flag + ",0";
                     string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
                     if (que_out == "1")
                     {
-                        objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
+                        objCommon.DisplayMessage(this, "Students Approveed Sucessfully!!", this.Page);
                         BindListView();
                     }
                 }
@@ -408,6 +437,7 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
         ddlSemester.SelectedIndex = 0;
         btnsubmit.Enabled = false;
         lvStudentRecords.Visible = false;
+        ddlbranch.SelectedIndex = 0;
     }
     protected void btncancle_Click(object sender, EventArgs e)
     {
@@ -415,6 +445,7 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
         ddlCollege.SelectedIndex = 0;
         ddlSession.SelectedIndex = 0;
         ddlSemester.SelectedIndex = 0;
+        ddlbranch.SelectedIndex = 0;
       
         btnsubmit.Enabled = false;
         lvStudentRecords.Visible = false;
@@ -456,4 +487,48 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
         lvStudentRecords.DataBind();
        
     }
+    protected void lvFailCourse_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+
+        if (e.Item.ItemType == ListViewItemType.DataItem)
+        {
+            CheckBox chk = (CheckBox)e.Item.FindControl("chkAccept");
+            if (chk.Checked == true)
+            {
+                chk.BackColor = System.Drawing.Color.Green;
+            }
+        }
+    
+    }
+
+    #region ADDED BY GS FOR DECIPLINE APPROVAL
+    //ds = GetExamRegStud_Discipline(Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlbranch.SelectedValue));
+    public DataSet GetExamRegStud_Discipline(int semesterno, int session, int branch, int degreeno)
+    {
+        DataSet ds = null;
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+            SqlParameter[] objParams = new SqlParameter[4];
+            objParams[0] = new SqlParameter("@P_SEMESTERNO", semesterno);
+            objParams[1] = new SqlParameter("@P_BRANCHNO", branch);
+            objParams[2] = new SqlParameter("@P_SESSIONNO", session);
+            objParams[3] = new SqlParameter("@P_DEGREENO", degreeno);
+
+
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_STUD_ELIGIBILITY_REPORT", objParams);
+        }
+        catch (Exception ex)
+        {
+            return ds;
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.GetCourses-> " + ex.ToString());
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+        return ds;
+    }
+
+    #endregion
     }
