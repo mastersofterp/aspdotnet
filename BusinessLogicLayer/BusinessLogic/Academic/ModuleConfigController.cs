@@ -443,6 +443,35 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                public int InsertAttendanceDahsonoff(string sessionid, string collegeid)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionid);
+                        objParams[1] = new SqlParameter("@P_COLLEGEID", collegeid);
+                        objParams[2] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[2].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKF_ACD_ATTENDANCE_DASHBOARD_ONOFF", objParams, true);
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        return retStatus;
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ModuleConfigController.InsertAttendanceDahsonoff-> " + ex.ToString());
+                    }
+                }
             }
         }
     }
