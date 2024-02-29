@@ -179,6 +179,7 @@
                                     <%--<asp:ListItem Value="12">Exam form fill and Exam Registration Status</asp:ListItem>--%>
                                     <asp:ListItem Value="7">Session wise Exam Registration Count</asp:ListItem>
                                     <asp:ListItem Value="8">Session wise Exam Registration Details</asp:ListItem>
+                                    <asp:ListItem Value="16">Student Registered but Mark Entry not Done</asp:ListItem>
                                 </asp:RadioButtonList>
                             </div>
 

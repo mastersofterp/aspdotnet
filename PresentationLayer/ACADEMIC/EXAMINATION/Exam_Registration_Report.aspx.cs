@@ -670,6 +670,12 @@ public partial class Exam_Registration_Report : System.Web.UI.Page
             //rfvScheme.Enabled = true;
             // Clear();
         }
+        else if (rdbReport.SelectedValue == "16") //Added as per the ticket id- 55421
+        {
+            btnReport.Enabled = false;
+            BtnShow.Visible = false;
+
+        }
         else
         {
             if (rdbReport.SelectedValue == "2")
@@ -1069,6 +1075,26 @@ public partial class Exam_Registration_Report : System.Web.UI.Page
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ExcelReport(ds, filename);
+
+            }
+        }
+        else if (rdbReport.SelectedValue == "16")
+        {
+            if (ddlSession.SelectedIndex == 0)
+            {
+                objCommon.DisplayMessage(this.UpdatePanel1, "Please Select Session.", this.Page);
+                ddlSession.Focus();
+                return;
+            }
+            int sessionid = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONID", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
+            string pro_ = "PKG_GET_STUDENT_REG_MARK_NOT_DONE";
+            string para = "@P_SESSIONID";
+            string value = "" + sessionid + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(pro_, para, value);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ExcelReport(ds, "StudentRegisteredbutMarkEntryNotDone");
 
             }
         }
