@@ -140,7 +140,7 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
         string studIdno = string.Empty;
         string studName = string.Empty;
         int installmentno = 0;
-
+        string Order_Info = string.Empty;
         Panel_Debug.Visible = false;
         string message = "";
         Label_HashValidation.Text = "<font color='orange'><b>NOT CALCULATED</b></font>";
@@ -197,7 +197,14 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
                 txnStatus = isgPayReturnParams.isgPayResponse.ResponseCode;  // ResponseCode - success , failed
                 mihpayid = isgPayReturnParams.isgPayResponse.RetRefNo;   // TransactionId 
                 trackID = isgPayReturnParams.isgPayResponse.RetRefNo;      // TransactionId
-                Idno = isgPayReturnParams.isgPayResponse.OrderInfo; // Get retrive student IDNO
+                Order_Info = isgPayReturnParams.isgPayResponse.OrderInfo; // Get retrive student IDNO
+                var msg = isgPayReturnParams.isgPayResponse.Message;
+
+                var splitVal = Order_Info.Split('-');
+                Idno = splitVal[0].ToString();
+                installmentno = Convert.ToInt32(splitVal[1].ToString());
+                //Idno = isgPayReturnParams.isgPayResponse.OrderInfo; 
+
                 Session["Stud_IDNO"] = Idno;
                 //Idno = Session["idno"].ToString(); //isgPayReturnParams.isgPayResponse.UDF01;//Convert.ToString(Session["idno"]);  //studIdno; temp pass 
 
@@ -207,18 +214,7 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
                 }
                 ViewState["IDNO"] = Idno;
 
-                //if (Session["OrgId"].ToString() == "6")
-                //{
-                //    degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())));
-                //}
-                //if (Session["OrgId"].ToString() == "8")
-                //{
-                //    college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())));
-                //}
-
-
                 #region Fetch student details
-
                 Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + ViewState["IDNO"].ToString());
 
                 string BRANCHNAME = objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "B.LONGNAME", "A.IDNO=" + ViewState["IDNO"].ToString());

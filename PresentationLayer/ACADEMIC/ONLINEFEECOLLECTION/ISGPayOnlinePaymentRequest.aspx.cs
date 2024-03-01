@@ -249,8 +249,8 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
             transactionData.Add("TxnType", "Pay");
             transactionData.Add("ReturnURL", Session["ResponseUrl"].ToString());    // "http://localhost:50472/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/ISGPayOnlinePaymentResponse.aspx");   
             //transactionData.Add("UDF01", Session["idno"].ToString());
-
-            transactionData.Add("OrderInfo", Session["idno"].ToString()); //optinal passing student -Idno values
+            transactionData.Add("OrderInfo", Session["idno"].ToString() + "-" + Convert.ToInt32(Session["Installmentno"].ToString()));  //optinal passing student -Idno values + "-"+ Convert.ToInt32(Session["Installmentno"].ToString()) 
+            
             ////Optinal 
             //transactionData.Add("Email ", "abz@isg.com");
             //transactionData.Add("Phone  ", "919012345678");
