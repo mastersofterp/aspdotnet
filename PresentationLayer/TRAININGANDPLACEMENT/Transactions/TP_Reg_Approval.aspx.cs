@@ -33,7 +33,7 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
     Panel panelfordropdown;
     string file_path = System.Configuration.ConfigurationManager.AppSettings["DirPath"].ToString();
     decimal File_size;
-
+   
     protected void Page_PreInit(object sender, EventArgs e)
     {
         if (Session["masterpage"] != null)
@@ -49,7 +49,7 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
     {
         if (!Page.IsPostBack)
         {
-
+           
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
             {
@@ -171,10 +171,10 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
             foreach (ListViewDataItem lvItem in lvStudent.Items)
             {
                 CheckBox chkBox = lvItem.FindControl("cbRow") as CheckBox;
-                TextBox txtRegno = lvItem.FindControl("txtRegNo") as TextBox;
+                HiddenField txtRegno = lvItem.FindControl("txtRegNo") as HiddenField;
                 if (chkBox.Checked == true)
                 {
-                    if (txtRegno.Text.ToString().Trim().Equals(string.Empty))
+                    if (txtRegno.Value.ToString().Trim().Equals(string.Empty))
                     {
                         objCommon.DisplayMessage(this.Page, "Reg. No. can not Blank", this.Page);
                         txtRegno.Focus();
@@ -187,9 +187,9 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
 
 
                     if (RegNos.Equals(string.Empty))
-                        RegNos = txtRegno.Text.ToString();
+                        RegNos = txtRegno.Value.ToString();
                     else
-                        RegNos += "," + txtRegno.Text.ToString();
+                        RegNos += "," + txtRegno.Value.ToString();
                     cnt += 1;
                 }
 
@@ -499,5 +499,46 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
     {
         //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO > 0 AND COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "DEGREENAME");
         objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE B  INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.DEGREENO=B.DEGREENO) ", "DISTINCT(CD.DEGREENO)", "B.DEGREENAME", "CD.COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "CD.DEGREENO");
+    }
+    //protected void btncareer_Click(object sender, ImageClickEventArgs e)
+    //{
+
+    //}
+    //protected void btnSend_Click(object sender, EventArgs e)
+    //{
+
+    //}
+    //protected void btnCanceladdcompany_Click(object sender, EventArgs e)
+    //{
+
+    //}
+    protected void btnStatus_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int studentId = 0;
+            foreach (ListViewDataItem lvItem in lvStudent.Items)
+            {
+             
+                HiddenField txtidno = lvItem.FindControl("hdidno") as HiddenField;
+                studentId = Convert.ToInt32(txtidno.Value);
+               
+            }
+          //  int studentId = (int)Session["studentId"];
+            //ViewForm.Src = "/PresentationLayer/TRAININGANDPLACEMENT/Transactions/TP_Career_Profile.aspx?studentId="+ studentId;
+
+           // ,'width=600,height=400,addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + "TP_Career_Profile.aspx?studentId=" + studentId + "','mywindow', 'width=1000,height=1000,fullscreen=yes, scrollbars=auto');";
+            divMsg.InnerHtml += " </script>";
+            //hfValue.Value = "1";
+            // TRAININGANDPLACEMENT/Transactions/
+            //mdlopenPage.Show();
+        }
+        catch (Exception ex)
+        {
+                       return;
+        }
     }
 }

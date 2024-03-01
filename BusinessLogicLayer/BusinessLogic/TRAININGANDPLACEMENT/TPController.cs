@@ -7939,14 +7939,14 @@ namespace IITMS
                 }
 
 
-                public int UpdWorkExperience(int WORKEXPNO, int currentlyWorking, string WorkType, int SalaryType, decimal Salary, decimal Stipend, int currency, int cmpid, int JobSector, int JobType, int PositionType, string WorkSummery, string jobtitle, string location, DateTime StartDate, DateTime EndDate, double NrOfDays, string RelevantDocument)
+                public int UpdWorkExperience(int WORKEXPNO, int currentlyWorking, string WorkType, int SalaryType, decimal Salary, decimal Stipend, int currency, int cmpid, int JobSector, int JobType, int PositionType, string WorkSummery, string jobtitle, string location, DateTime StartDate, DateTime EndDate, double NrOfDays, string RelevantDocument, int isAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[19];
+                        objParams = new SqlParameter[20];
                         objParams[0] = new SqlParameter("@P_WORKEXPNO", WORKEXPNO);
                         objParams[1] = new SqlParameter("@P_COMPID", cmpid);
                         objParams[2] = new SqlParameter("@P_WorkType", WorkType);
@@ -7969,8 +7969,9 @@ namespace IITMS
                         objParams[15] = new SqlParameter("@P_Stipend", Stipend);
                         objParams[16] = new SqlParameter("@P_currency", currency);
                         objParams[17] = new SqlParameter("@P_RelevantDocument", RelevantDocument);
-                        objParams[18] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[18].Direction = ParameterDirection.Output;
+                        objParams[18] = new SqlParameter("@IsAdmin", isAdmin);
+                        objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[19].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("ACD_TP_CP_UPDATE_STU_WORKEXPERIENCE", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9190,14 +9191,14 @@ namespace IITMS
 
                 //------start------insert work experience Details
 
-                public int InsWorkExperience(int idno, int currentlyWorking, string WorkType, int SalaryType, decimal Salary, decimal Stipend, int currency, int cmpid, int JobSector, int JobType, int PositionType, string WorkSummery, string jobtitle, string location, DateTime StartDate, DateTime EndDate, double NrOfDays, string RelevantDocument, int org)
+                public int InsWorkExperience(int idno, int currentlyWorking, string WorkType, int SalaryType, decimal Salary, decimal Stipend, int currency, int cmpid, int JobSector, int JobType, int PositionType, string WorkSummery, string jobtitle, string location, DateTime StartDate, DateTime EndDate, double NrOfDays, string RelevantDocument, int org, int isAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[20];
+                        objParams = new SqlParameter[21];
                         objParams[0] = new SqlParameter("@P_IDNO", idno);
                         objParams[1] = new SqlParameter("@P_COMPID", cmpid);
                         objParams[2] = new SqlParameter("@P_WorkType", WorkType);
@@ -9221,8 +9222,9 @@ namespace IITMS
                         objParams[16] = new SqlParameter("@P_currency", currency);
                         objParams[17] = new SqlParameter("@P_RelevantDocument", RelevantDocument);
                         objParams[18] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[19].Direction = ParameterDirection.Output;
+                        objParams[19] = new SqlParameter("@IsAdmin", isAdmin);
+                        objParams[20] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[20].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("ACD_TP_CP_INSERT_STU_WORKEXPERIENCE", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9244,22 +9246,23 @@ namespace IITMS
 
                 //-----start---Techinical Skill
 
-                public int InsTechnicalSkill(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsTechnicalSkill(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[7];
+                        objParams = new SqlParameter[8];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_SKILNO", objTPT.SkillName);
                         objParams[3] = new SqlParameter("@P_PROFNO", objTPT.Proficiency);
                         objParams[4] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT", objTPT.ReleventDocument);
                         objParams[5] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[6].Direction = ParameterDirection.Output;
+                        objParams[6] = new SqlParameter("@IsAdmin", IsAdmin);
+                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TECHNICAL_SKILL", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9326,14 +9329,14 @@ namespace IITMS
                 //---start-----------------
                 #region Tab_4
                 #region Insert Project Data
-                public int InsUpdProject(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsUpdProject(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[15];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_PROJECT_TITLE", objTPT.ProjectTitle);
@@ -9351,8 +9354,11 @@ namespace IITMS
                         objParams[8] = new SqlParameter("@P_DESCRIPTION", objTPT.Descripition);
                         objParams[9] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT", objTPT.ReleventDocument1);
                         objParams[10] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
+                        objParams[11] = new SqlParameter("@Hr", objTPT.Hr);
+                        objParams[12] = new SqlParameter("@CompLoc", objTPT.CompLoc);
+                        objParams[13] = new SqlParameter("@IsAdmin", IsAdmin);
+                        objParams[14] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[14].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_PROJECTS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9414,14 +9420,14 @@ namespace IITMS
                 }
                 #endregion
                 #region Update Project Data
-                public int UpdProjects(TPTraining objTPT, int org, int id, int IDNO)
+                public int UpdProjects(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[15];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_PROJECT_TITLE", objTPT.ProjectTitle);
@@ -9437,8 +9443,11 @@ namespace IITMS
                         objParams[8] = new SqlParameter("@P_DESCRIPTION", objTPT.Descripition);
                         objParams[9] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT", objTPT.ReleventDocument1);
                         objParams[10] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
+                        objParams[11] = new SqlParameter("@Hr", objTPT.Hr);
+                        objParams[12] = new SqlParameter("@CompLoc", objTPT.CompLoc);
+                        objParams[13] = new SqlParameter("@IsAdmin", IsAdmin);
+                        objParams[14] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[14].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_PROJECTS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9463,14 +9472,14 @@ namespace IITMS
 
                 #region Tab_5
                 #region Insert Certification Data
-                public int InsUpdCertificate(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsUpdCertificate(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[11];
+                        objParams = new SqlParameter[12];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_TITLE", objTPT.Title);
@@ -9485,8 +9494,9 @@ namespace IITMS
                         objParams[7] = new SqlParameter("@P_CURRENTLY_WORKING1", objTPT.CurrentlyWork1);
                         objParams[8] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument2);
                         objParams[9] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[10].Direction = ParameterDirection.Output;
+                        objParams[10] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_CERTIFICATIONS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9553,14 +9563,14 @@ namespace IITMS
                 #endregion
 
                 #region Update Certification Data
-                public int UpdCertification(TPTraining objTPT, int org, int id, int IDNO)
+                public int UpdCertification(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[11];
+                        objParams = new SqlParameter[12];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_TITLE", objTPT.Title);
@@ -9575,8 +9585,9 @@ namespace IITMS
                         objParams[7] = new SqlParameter("@P_CURRENTLY_WORKING1", objTPT.CurrentlyWork1);
                         objParams[8] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument2);
                         objParams[9] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[10].Direction = ParameterDirection.Output;
+                        objParams[10] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_CERTIFICATIONS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9600,22 +9611,23 @@ namespace IITMS
 
                 #region
                 #region Insert Language Data
-                public int InsLanguage(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsLanguage(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[7];
+                        objParams = new SqlParameter[8];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_LANGUAGE", objTPT.language);
                         objParams[3] = new SqlParameter("@P_PROFICIECNY", objTPT.Proficiency);
                         objParams[4] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument3);
                         objParams[5] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[6].Direction = ParameterDirection.Output;
+                        objParams[6] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_LANGUAGE", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9683,22 +9695,23 @@ namespace IITMS
                 #endregion
 
                 #region Update Language Data
-                public int UpdLanguage(TPTraining objTPT, int org, int id, int IDNO)
+                public int UpdLanguage(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[7];
+                        objParams = new SqlParameter[8];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_LANGUAGE", objTPT.language);
                         objParams[3] = new SqlParameter("@P_PROFICIECNY", objTPT.Proficiency);
                         objParams[4] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument3);
                         objParams[5] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[6].Direction = ParameterDirection.Output;
+                        objParams[6] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_LANGUAGE", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9722,14 +9735,14 @@ namespace IITMS
 
                 #region
                 #region Insert Award & Recognition Data
-                public int InsAWARDS_RECOGNITIONS(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsAWARDS_RECOGNITIONS(TPTraining objTPT, int org, int id, int IDNO,int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[9];
+                        objParams = new SqlParameter[10];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_AWARD_TITLE", objTPT.Award_Title);
@@ -9738,8 +9751,9 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_LEVEL", objTPT.Level);
                         objParams[6] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument4);
                         objParams[7] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[8].Direction = ParameterDirection.Output;
+                        objParams[8] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[9].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_AWARDS_RECOGNITIONS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9807,14 +9821,14 @@ namespace IITMS
                 #endregion
 
                 #region Update Award & Recognition Data
-                public int UpdAWARDS_RECOGNITIONS(TPTraining objTPT, int org, int id, int IDNO)
+                public int UpdAWARDS_RECOGNITIONS(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[9];
+                        objParams = new SqlParameter[10];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_AWARD_TITLE", objTPT.Award_Title);
@@ -9823,8 +9837,9 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_LEVEL", objTPT.Level);
                         objParams[6] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument4);
                         objParams[7] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[8].Direction = ParameterDirection.Output;
+                        objParams[8] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[9].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_AWARDS_RECOGNITIONS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9849,14 +9864,14 @@ namespace IITMS
                 #region Competitions Tab
 
                 #region Insert Competitions Data
-                public int InsCompetitions(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsCompetitions(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[13];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_Competition_Title", objTPT.Competition_Title);
@@ -9868,8 +9883,9 @@ namespace IITMS
                         objParams[8] = new SqlParameter("@P_Participation_Status", objTPT.Participation_Status);
                         objParams[9] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument4);
                         objParams[10] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
+                        objParams[11] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_COMPETITIONS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9941,14 +9957,14 @@ namespace IITMS
                 #endregion
 
                 #region Update COMPETITIONS Data
-                public int UpdCOMPETITIONS(TPTraining objTPT, int org, int id, int IDNO)
+                public int UpdCOMPETITIONS(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[13];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_Competition_Title", objTPT.Competition_Title);
@@ -9960,8 +9976,9 @@ namespace IITMS
                         objParams[8] = new SqlParameter("@P_Participation_Status", objTPT.Participation_Status);
                         objParams[9] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument4);
                         objParams[10] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
+                        objParams[11] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_COMPETITIONS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9987,14 +10004,14 @@ namespace IITMS
                 #region Training And Workshop Tab
 
                 #region Insert Training And Workshop Data
-                public int InsTrainingAndWorkshop(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsTrainingAndWorkshop(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[10];
+                        objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_TRAINING_TITLE", objTPT.Training_Title);
@@ -10004,8 +10021,9 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_To_Date1", objTPT.To_Date1);
                         objParams[7] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument6);
                         objParams[8] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[9] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_TRAING_AND_WORKSHOP", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -10075,14 +10093,14 @@ namespace IITMS
 
 
                 #region Update Training And Workshop Data
-                public int UpdTrainingAndWorkshop(TPTraining objTPT, int org, int id, int IDNO)
+                public int UpdTrainingAndWorkshop(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[10];
+                        objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_TRAINING_TITLE", objTPT.Training_Title);
@@ -10092,8 +10110,9 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_To_Date1", objTPT.To_Date1);
                         objParams[7] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument6);
                         objParams[8] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[9] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_TRAING_AND_WORKSHOP", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -10118,14 +10137,14 @@ namespace IITMS
 
                 #region Test Scores Tab
                 #region Insert Test Scores Data
-                public int InsTestScores(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsTestScores(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[10];
+                        objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_Exam", objTPT.Exam);
@@ -10135,8 +10154,9 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument7);
                         objParams[7] = new SqlParameter("@P_OrganizationId", org);
                         objParams[8] = new SqlParameter("@P_IsBlob", objTPT.IsBlob);
-                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[9] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_TEST_SCORES", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -10206,14 +10226,14 @@ namespace IITMS
                 #endregion
 
                 #region Update Test Scores Data
-                public int UpdTestScores(TPTraining objTPT, int org, int id, int IDNO)
+                public int UpdTestScores(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[10];
+                        objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_Exam", objTPT.Exam);
@@ -10223,8 +10243,9 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument7);
                         objParams[7] = new SqlParameter("@P_OrganizationId", org);
                         objParams[8] = new SqlParameter("@P_IsBlob", objTPT.IsBlob);
-                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[9] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_TEST_SCORES", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -10247,19 +10268,20 @@ namespace IITMS
                 #endregion
 
                 #region Upload Resume
-                public int UploadResume(TPTraining objTPT, int IDNO)
+                public int UploadResume(TPTraining objTPT, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[4];
+                        objParams = new SqlParameter[5];
                         objParams[0] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[1] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument8);
                         objParams[2] = new SqlParameter("@P_IsBlob", objTPT.IsBlob1);
-                        objParams[3] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[3].Direction = ParameterDirection.Output;
+                        objParams[3] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[4] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[4].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_TP_UPLOAD_RESUME", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -11853,21 +11875,22 @@ namespace IITMS
                     return ds;
                 }
 
-                public int InsExamDetails(TPTraining objTPT, int org, int id, int IDNO)
+                public int InsExamDetails(TPTraining objTPT, int org, int id, int IDNO, int IsAdmin)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[6];
+                        objParams = new SqlParameter[7];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_GAP", objTPT.GAP);
                         objParams[3] = new SqlParameter("@P_ISGAP", objTPT.IS_GAP);
                         objParams[4] = new SqlParameter("@P_OrganizationId", org);
-                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[5].Direction = ParameterDirection.Output;
+                        objParams[5] = new SqlParameter("@P_IsAdmin", IsAdmin);
+                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_EXAMDETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)

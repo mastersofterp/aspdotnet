@@ -34,6 +34,8 @@ namespace IITMS
                     private DataTable _TP_STUDENT_EDUCATION_TBL = null;  //sHAIKH jUNED 18-11-2022
                     private DataTable _TP_STUDENT_CERTIFICATION_TBL = null;  //sHAIKH jUNED 21-11-2022
                     private DataTable _TP_STUDENT_SKILLS_TBL = null;  //sHAIKH jUNED 21-11-2022
+                    private string _Hr = string.Empty;
+                    private string _CompLoc = string.Empty;
                     
                     
                 #endregion
@@ -175,6 +177,30 @@ namespace IITMS
                             {
                                 this._TP_STUDENT_SKILLS_TBL = value;
                             }
+                        }
+                    }
+
+                    public string Hr
+                    {
+                        get
+                        {
+                            return _Hr;
+                        }
+                        set
+                        {
+                            _Hr = value;
+                        }
+                    }
+
+                    public string CompLoc
+                    {
+                        get
+                        {
+                            return _CompLoc;
+                        }
+                        set
+                        {
+                            _CompLoc = value;
                         }
                     }
                 //--------end

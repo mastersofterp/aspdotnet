@@ -44,22 +44,24 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     Panel panelfordropdown;
     string file_path = System.Configuration.ConfigurationManager.AppSettings["DirPath"].ToString();
     decimal File_size;
-    public string back = string.Empty;
-    protected void Page_PreInit(object sender, EventArgs e)
-    {
-        //To Set the MasterPage
-        if (Session["masterpage"] != null)
-            objCommon.SetMasterPage(Page, Session["masterpage"].ToString());
-        else
-            objCommon.SetMasterPage(Page, "");
-    }
+    public string stud_idno = string.Empty;
+    //protected void Page_PreInit(object sender, EventArgs e)
+    //{
+    //    //To Set the MasterPage
+    //    if (Session["masterpage"] != null)
+    //        objCommon.SetMasterPage(Page, Session["masterpage"].ToString());
+    //    else
+    //        objCommon.SetMasterPage(Page, "");
+    //}
     protected void Page_Load(object sender, EventArgs e)
+    
+    
     
     {
         try
         {
-            if (Request.QueryString["obj"] != null)   /// Eknath
-            { back = Request.QueryString["obj"].ToString().Trim(); }
+            if (Request.QueryString["studentId"] != null)   /// Eknath
+            { stud_idno = Request.QueryString["studentId"].ToString().Trim(); }
             if (!Page.IsPostBack)
             {
                 //Check Session
@@ -82,11 +84,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     //objCommon.FillDropDownList(ddlExam, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "QUALIFYNO NOT IN(0) AND QEXAMSTATUS='Q' ", "QUALIFYNO");
                 
                     //objCommon.FillDropDownList(ddlSkill, "ACD_TP_SKILLS", "SKILNO", "SKILLS", "STATUS!=0 ", "SKILLS");
-                    
 
-                    StudentInformation();
+                    ViewState["Stud_idno"] = stud_idno;
+                    StudentInformation(stud_idno);
                     int idno_iscomf = Convert.ToInt32(objCommon.LookUp("user_acc", "UA_IDNO", "UA_NO='" + Session["userno"] + "'"));
-                    string isconform = objCommon.LookUp("ACD_TP_STUDENT_REGISTRATION", "ConfirmStatus", "IDNO='" + idno_iscomf + "'");
+                    string isconform = objCommon.LookUp("ACD_TP_STUDENT_REGISTRATION", "ConfirmStatus", "IDNO='" + stud_idno + "'");
                     if (isconform=="Y")
                     {
                         chkConfirm.Checked = true;
@@ -98,7 +100,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objCommon.FillDropDownList(ddlCompany, "ACD_TP_COMPANY", "COMPID", "COMPNAME", "", "");
                     objCommon.FillDropDownList(ddlCompanySector, "ACD_TP_JOBSECTOR", "JOBSECNO", "JOBSECTOR", "STATUS=1", "");
                     objCommon.FillDropDownList(ddlJobType, "ACD_TP_JOBTYPE", "JOBNO", "JOBTYPE", "STATUS=1", "");
-                      objCommon.FillDropDownList(ddlCurrency, "ACD_CURRENCY", "CUR_NO", "CUR_NAME", "", "CUR_NAME");
+                    objCommon.FillDropDownList(ddlCurrency, "ACD_CURRENCY", "CUR_NO", "CUR_NAME", "STATUS=1", "CUR_NAME");
 
                     //Technical Skills
                       objCommon.FillDropDownList(ddlSkillName, "ACD_TP_SKILLS", "SKILNO", "SKILLS", "STATUS=1", "");
@@ -126,8 +128,8 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                       // objCommon.FillDropDownList(ddlParticipationStatus, "ACD_TP_PARTICIPATION", "PARTICIPATIONNO", "PARTICIPATIONS", "STATUS=1", "");
 
                     //find idno number
-                      int idno = Convert.ToInt32(objCommon.LookUp("user_acc", "UA_IDNO", "UA_NO='" + Session["userno"] + "'"));
-
+                    //  int idno = Convert.ToInt32(objCommon.LookUp("user_acc", "UA_IDNO", "UA_NO='" + Session["userno"] + "'"));
+                      int idno = Convert.ToInt32(stud_idno);
                     //rdoSalary.Checked = false;
                       BindCompDetails(idno);
                       BindSkillDetails(idno);
@@ -158,7 +160,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-    private void StudentInformation()
+    private void StudentInformation(string idno)
     {
         DataSet ds = null;
         //lblMsg.Text = string.Empty;
@@ -167,7 +169,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         try
         {
 
-            ds = objTP.GetstudentDetailByRegNo(Convert.ToString(Session["idno"]));
+            ds = objTP.GetstudentDetailByRegNo(idno);
             //if (ds.Tables[0].Rows.Count > 0)
             //{
             if (ds.Tables[0].Rows[0]["PHOTO"].ToString() != string.Empty)
@@ -381,7 +383,9 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             int currentlyWorking;
             int SalaryType=0;
             double NrOfDays;
-            int IDNO = Convert.ToInt32(Session["idno"]);
+           // int IDNO = Convert.ToInt32(Session["idno"]);
+            int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+            int IsAdmin = Convert.ToInt32(Session["userno"]);
             int org = Convert.ToInt32(Session["OrgId"]);
             string RelevantDocument = string.Empty;
 
@@ -600,7 +604,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             if (ViewState["action"].ToString().Equals("add"))
             {
 
-                CustomStatus cs = (CustomStatus)objCompany.InsWorkExperience(IDNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument, org,0);
+                CustomStatus cs = (CustomStatus)objCompany.InsWorkExperience(IDNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument, org, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -616,7 +620,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (ViewState["WORKEXPNO"] != null)
                 {
                     int WORKEXPNO = Convert.ToInt32(ViewState["WORKEXPNO"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdWorkExperience(WORKEXPNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument,0);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdWorkExperience(WORKEXPNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -812,9 +816,12 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objTPT.Proficiency = Convert.ToInt32(ddlProficiency.SelectedValue);
                 objTPT.ReleventDocument = RelevantDocTechSkill.Text;
 
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
+
+            //    int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO,0);
+                CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -835,9 +842,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int id = Convert.ToInt32(ViewState["TechSkill"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
                     int IDNO = 0;
-
-                    int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
-                    CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO,0);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
+                    int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
+                   // int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                    CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -1068,9 +1076,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objTPT.ReleventDocument1 = file;
                 objTPT.Hr = txtHr.Text.Trim().Equals(string.Empty) ? string.Empty : txtHr.Text.Trim().ToString();
                 objTPT.CompLoc = txtCompLoc.Text.Trim().Equals(string.Empty) ? string.Empty : txtCompLoc.Text.Trim().ToString();
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+             //   int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsUpdProject(objTPT, org, id, IDNO,0);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
+                CustomStatus cs = (CustomStatus)objCompany.InsUpdProject(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1109,13 +1119,16 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int IDNO =0;
                    // int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdProjects(objTPT, org, id, IDNO,0);
+                   // int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdProjects(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
                         ViewState["action"] = "add";
                         clear();
-                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); 
+                      //  int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); 
+                        int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
                         BindProjectDetails(IDNO1);
                         
                     }
@@ -1400,9 +1413,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                 objTPT.ReleventDocument2 = file;
 
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+             //   int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsUpdCertificate(objTPT, org, id, IDNO,0);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
+                CustomStatus cs = (CustomStatus)objCompany.InsUpdCertificate(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1436,15 +1451,18 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                     objTPT.ReleventDocument2 = file;
                     int IDNO = 0;
-                     IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                    // IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                     IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdCertification(objTPT,  org,  id,  IDNO,0);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdCertification(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
                         ViewState["action"] = "add";
                         clearCrt();
-                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                       // int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
                         BindCertificationDetails(IDNO1);
 
                     }
@@ -1588,9 +1606,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objTPT.Proficiency =Convert.ToInt32( ddlProficiencyLanguage.SelectedValue);
                 objTPT.ReleventDocument3 = RelevantDocLanguage.Text;
 
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+               // int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsLanguage(objTPT, org, id, IDNO,0);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
+                CustomStatus cs = (CustomStatus)objCompany.InsLanguage(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1611,15 +1631,18 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.Proficiency = Convert.ToInt32(ddlProficiencyLanguage.SelectedValue);
                     objTPT.ReleventDocument3 = RelevantDocLanguage.Text;
                     int IDNO = 0;
-                    IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                   // IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdLanguage(objTPT, org, id, IDNO,0);
+                     IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdLanguage(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
                         ViewState["action"] = "add";
                         clearLang();
-                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        //int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
                         BindLanguageDetails(IDNO1);
 
                     }
@@ -1758,8 +1781,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                   objTPT.Given_By = txtGivenBy.Text;
                   objTPT.Level = Convert.ToInt32(ddlLevel.SelectedValue);
                 objTPT.ReleventDocument4 = RelevantDocAward.Text;
-                int IsAdmin = 0;
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
+
+              //  int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
                 CustomStatus cs = (CustomStatus)objCompany.InsAWARDS_RECOGNITIONS(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
@@ -1783,18 +1808,20 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.Level = Convert.ToInt32(ddlLevel.SelectedValue);
                     objTPT.ReleventDocument4 = RelevantDocAward.Text;
                     int IDNO = 0;
-                    IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                   // IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                    IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    int IsAdmin = 0;
                     CustomStatus cs = (CustomStatus)objCompany.UpdAWARDS_RECOGNITIONS(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
                         ViewState["action"] = "add";
                         clearAward();
-                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        //int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
                         BindAwardsDetails(IDNO1);
-
+                        ViewState["AR_ID"] = null;
 
                     }
                 }
@@ -1915,10 +1942,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objTPT.Project_Title = txtProjectTitleCompetition.Text;
                 objTPT.Participation_Status = Convert.ToInt32(ddlParticipationStatus.SelectedValue);
                 objTPT.ReleventDocument5 = RelevantDocCompetition.Text;
-
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
+               // int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsCompetitions(objTPT, org, id, IDNO,0);
+                CustomStatus cs = (CustomStatus)objCompany.InsCompetitions(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1943,15 +1971,18 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.Participation_Status = Convert.ToInt32(ddlParticipationStatus.SelectedValue);
                     objTPT.ReleventDocument5 = RelevantDocCompetition.Text;
                     int IDNO = 0;
-                    IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                    //IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                    IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdCOMPETITIONS(objTPT, org, id, IDNO,0);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdCOMPETITIONS(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
                         ViewState["action"] = "add";
                         clearCompetitions();
-                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                       // int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
                         BindCompetitionsDetails(IDNO1);
 
                     }
@@ -1976,7 +2007,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         txtProjectTitleCompetition.Text=string.Empty;
         ddlParticipationStatus.SelectedValue="0";
         RelevantDocCompetition.Text=string.Empty;
-
+        ViewState["CP_ID"] = null;
     
     }
     protected void btnCancelCompetition_Click(object sender, EventArgs e)
@@ -2084,10 +2115,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objTPT.From_Date1 = Convert.ToDateTime(txtFromDateTraining.Text);
                 objTPT.To_Date1 = Convert.ToDateTime(txtToDateTraining.Text);
                 objTPT.ReleventDocument6 = RelevantDocTraining.Text;
-
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
+             //   int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsTrainingAndWorkshop(objTPT, org, id, IDNO,0);
+                CustomStatus cs = (CustomStatus)objCompany.InsTrainingAndWorkshop(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -2110,15 +2142,18 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.To_Date1 = Convert.ToDateTime(txtToDateTraining.Text);
                     objTPT.ReleventDocument5 = RelevantDocTraining.Text;
                     int IDNO = 0;
-                    IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                    IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
+                 //   IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdTrainingAndWorkshop(objTPT, org, id, IDNO,0);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdTrainingAndWorkshop(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
                         ViewState["action"] = "add";
                         clearTrainingAndWorkshop();
-                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        //int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
                         BindTrainingAndWorkshopDetails(IDNO1);
 
                     }
@@ -2142,7 +2177,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         txtToDateTraining.Text = string.Empty;
         RelevantDocTraining.Text = string.Empty;
         ViewState["action"] = "add";
-
+        ViewState["TW_ID"] = null;
     }
     protected void btnCancelTraining_Click(object sender, EventArgs e)
     {
@@ -2270,9 +2305,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 //{
                 //    objTPT.IsBlob = 0;
                 //}
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                //int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
 
 
                 //bool result1;
@@ -2337,7 +2373,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                   
 
                 //}
-                CustomStatus cs = (CustomStatus)objCompany.InsTestScores(objTPT, org, id, IDNO,0);
+                CustomStatus cs = (CustomStatus)objCompany.InsTestScores(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -2360,11 +2396,13 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.TestScore = txtTestScore.Text;
                    // objTPT.ReleventDocument7 = RelevantDocScore.Text;
                     int IDNO = 0;
-                   int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                  // int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                    int IDNO1 = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
 
-               
-                    CustomStatus cs = (CustomStatus)objCompany.UpdTestScores(objTPT, org, id, IDNO,0);
+
+                    CustomStatus cs = (CustomStatus)objCompany.UpdTestScores(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -2531,7 +2569,8 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         try
         {
             string IDNO = string.Empty;
-            IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'");
+           // IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'");
+            IDNO=ViewState["Stud_idno"].ToString();
             ShowReport("Training And Placement", "GenerateResumeReport.rpt", IDNO);
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
         }
@@ -2579,6 +2618,13 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         string FilePath = string.Empty;
         string DOCFOLDER = file_path + "ACADEMIC\\Resume";
         string filename = string.Empty;
+        if (UploadResume.HasFile == false)
+        {
+            objCommon.DisplayMessage(this.Page, "Please Upload Resume.", this.Page);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
+            return;
+        }
+
         if (lblBlobConnectiontring.Text != "")
         {
             objTPT.IsBlob1 = 1;
@@ -2651,9 +2697,8 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                                 }
                                 else
                                 {
-                                    int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
-                                  //  int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
-                                    int IsAdmin = 0;
+                                    int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                                    int IsAdmin = Convert.ToInt32(Session["userno"]);
                                     CustomStatus cs = (CustomStatus)objCompany.UploadResume(objTPT, IDNO, IsAdmin);
                                     if (cs.Equals(CustomStatus.RecordSaved))
                                     {
@@ -2690,7 +2735,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         try
         {
             int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
-            DataSet ds = objCompany.BindUploadResume(IDNO);
+            DataSet ds = objCompany.BindUploadResume(idno);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 lvResumeUpload.DataSource = ds;
@@ -2709,87 +2754,219 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
     }
 
+    //protected void imgbtnPreview_Click(object sender, ImageClickEventArgs e)
+    //{
+    //    string Url = string.Empty;
+    //    string directoryPath = string.Empty;
+    //    try
+    //    {
+    //        //string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
+    //        //string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerNameEmployee"].ToString();
+    //        string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+    //        string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+    //        CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+    //        CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();      
+    //        string directoryName = "~/ACADEMIC\\Resume" + "/";
+    //        directoryPath = Server.MapPath(directoryName);
+
+    //        if (!Directory.Exists(directoryPath.ToString()))
+    //        {
+
+    //            Directory.CreateDirectory(directoryPath.ToString());
+    //        }           
+
+    //        CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+    //        string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+    //        // string img = Convert.ToString(objCommon.LookUp("VEHICLE_BUS_STRUCTURE_IMAGE_DATA", "FILE_PATH", "ROUTEID='" + routeid + "' and BUSSTR_ID='" + seating + "'"));
+    //        var ImageName = img;
+    //        if (img == null || img == "")
+    //        {
+    //            string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
+    //            embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
+    //            embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+    //            embed += "</object>";
+    //            //ltEmbed.Text = "Image Not Found....!";
+
+    //        }
+    //        else
+    //        {
+    //            if (img != "")
+    //            {
+    //                 DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr,blob_ContainerName,img);
+    //                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                 
+    //                string filePath = directoryPath + "\\" + ImageName;
+    //                if ((System.IO.File.Exists(filePath)))
+    //                {
+    //                    System.IO.File.Delete(filePath);
+    //                }
+    //                blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+              
+    //                //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+    //                //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
+    //                //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+    //                //embed += "</object>";
+    //               // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
+
+
+    //                string FILENAME = img;
+                    
+                
+    //                string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
+
+
+    //                string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
+    //                FileInfo file = new FileInfo(filePath1);
+
+    //                if (file.Exists)
+    //                {
+    //                    Session["sb"] = filePath.ToString();
+    //                    //this.Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "window.open('"+filee+"'); alert('Your message here' );", true);
+
+    //                    //Response.Redirect("~/TRAININGANDPLACEMENT/Transactions/TP_PDF_Reader.aspx");
+
+    //                    string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
+
+    //                    url += "ACADEMIC/RESUME/" + FILENAME;
+                   
+
+    //                    //string url = filePath;
+               
+    //                    divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+    //                    divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+    //                    divMsg.InnerHtml += " </script>";                      
+    //            } 
+    //            }
+
+    //      }
+    //        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
+    //    }
+
+    //    catch (Exception ex)
+    //    {
+    //        throw;
+    //    }
+    //}
+
     protected void imgbtnPreview_Click(object sender, ImageClickEventArgs e)
     {
         string Url = string.Empty;
         string directoryPath = string.Empty;
         try
         {
-            //string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
-            //string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerNameEmployee"].ToString();
+            ////string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
+            ////string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerNameEmployee"].ToString();
+            //string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            //string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            //CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            //CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+            //string directoryName = "~/ACADEMIC\\Resume" + "/";
+            //directoryPath = Server.MapPath(directoryName);
+
+            //if (!Directory.Exists(directoryPath.ToString()))
+            //{
+
+            //    Directory.CreateDirectory(directoryPath.ToString());
+            //}
+            //CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            //string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            //// string img = Convert.ToString(objCommon.LookUp("VEHICLE_BUS_STRUCTURE_IMAGE_DATA", "FILE_PATH", "ROUTEID='" + routeid + "' and BUSSTR_ID='" + seating + "'"));
+            //var ImageName = img;
+            //if (img == null || img == "")
+            //{
+            //    string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
+            //    embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
+            //    embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //    embed += "</object>";
+            //    //ltEmbed.Text = "Image Not Found....!";
+
+
+            //}
+            //else
+            //{
+            //    if (img != "")
+            //    {
+            //        DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+            //        var blob = blobContainer.GetBlockBlobReference(ImageName);
+
+            //        string filePath = directoryPath + "\\" + ImageName;
+
+            //        if ((System.IO.File.Exists(filePath)))
+            //        {
+            //            System.IO.File.Delete(filePath);
+            //        }
+            //        blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+            //        //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+            //        //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
+            //        //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //        //embed += "</object>";
+            //        // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
+            //        string FILENAME = img;
+            //        string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
+
+
+            //        string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
+            //        FileInfo file = new FileInfo(filePath1);
+
+            //        if (file.Exists)
+            //        {
+            //            Session["sb"] = filePath.ToString();
+            //            //this.Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "window.open('"+filee+"'); alert('Your message here' );", true);
+
+            //            //Response.Redirect("~/TRAININGANDPLACEMENT/Transactions/TP_PDF_Reader.aspx");
+
+            //            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
+
+            //            url += "ACADEMIC/RESUME/" + FILENAME;
+            //            //string url = filePath;
+            //            // added by Gaurav varma 18/10/23
+            //            Response.Clear();
+            //            Response.AddHeader("Content-Disposition", "attachment; filename=" + FILENAME);
+            //            Response.AddHeader("Content-Length", file.Length.ToString());
+            //            Response.ContentType = "application/octet-stream";
+            //            Response.TransmitFile(filePath1);
+            //           // Response.End();
+            //            // end Gaurav varma 18/10/23
+
+            //            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //            divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //            divMsg.InnerHtml += " </script>";
+
+            //        }
+            //    }
+
+            //}
+            //ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
+
             string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
             string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
-
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
             CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
-            string directoryName = "~/ACADEMIC\\Resume" + "/";
-            directoryPath = Server.MapPath(directoryName);
 
-            if (!Directory.Exists(directoryPath.ToString()))
-            {
-
-                Directory.CreateDirectory(directoryPath.ToString());
-            }
             CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
             string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
-            // string img = Convert.ToString(objCommon.LookUp("VEHICLE_BUS_STRUCTURE_IMAGE_DATA", "FILE_PATH", "ROUTEID='" + routeid + "' and BUSSTR_ID='" + seating + "'"));
             var ImageName = img;
             if (img == null || img == "")
             {
-                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
-                embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
-                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                embed += "</object>";
-                //ltEmbed.Text = "Image Not Found....!";
 
 
             }
             else
             {
-                if (img != "")
-                {
-                    DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr,blob_ContainerName,img);
-                    var blob = blobContainer.GetBlockBlobReference(ImageName);
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
 
-                    string filePath = directoryPath + "\\" + ImageName;
-
-                    if ((System.IO.File.Exists(filePath)))
-                    {
-                        System.IO.File.Delete(filePath);
-                    }
-                    blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
-                    //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
-                    //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
-                    //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                    //embed += "</object>";
-                   // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
-                    string FILENAME = img;
-                    string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
-
-
-                    string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
-                    FileInfo file = new FileInfo(filePath1);
-
-                    if (file.Exists)
-                    {
-                        Session["sb"] = filePath.ToString();
-                        //this.Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "window.open('"+filee+"'); alert('Your message here' );", true);
-
-                        //Response.Redirect("~/TRAININGANDPLACEMENT/Transactions/TP_PDF_Reader.aspx");
-
-                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
-
-                        url += "ACADEMIC/RESUME/" + FILENAME;
-                        //string url = filePath;
-
-
-                        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-                        divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-                        divMsg.InnerHtml += " </script>";
-
-                    }  
-                }
-
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
             }
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
         }
@@ -2870,7 +3047,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 break;
         }
     }
-    protected void btnCancelResume_Click(object sender, EventArgs e)
+    protected void btnCancelResume_Click1(object sender, EventArgs e)
     {
         Session["sb"] = null;
         clear();
@@ -2899,9 +3076,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
                 objTPT.GAP = Convert.ToInt32(txtGapYear.Text);
 
-                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+               // int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                int IsAdmin = Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO,0);
+                CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -2927,8 +3106,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int id = Convert.ToInt32(hdnGapID.Value);
                     int org = Convert.ToInt32(Session["OrgId"]);
  
-                    int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
-                    CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO,0);
+                   // int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                    int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                    int IsAdmin = Convert.ToInt32(Session["userno"]);
+                    CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -3136,4 +3317,5 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
     }
+  
 }
