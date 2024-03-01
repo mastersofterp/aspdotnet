@@ -802,6 +802,26 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckScholarshipConAdj(false);", true);
                     }
 
+                    if (ds.Tables[0].Rows[0]["ENABLE_PARTIAL_PAYMENT"].ToString() != null && ds.Tables[0].Rows[0]["ENABLE_PARTIAL_PAYMENT"].ToString() == "1")
+                    {
+                        rdID = "hdfchkPartialPay";
+                        hdfchkPartialPay.Value = "true";
+                        DivMinamount.Style.Add("visibility", "");
+                        txtMinAmount.Text = ds.Tables[0].Rows[0]["MIN_AMOUNT_PARTIAL_PAYMENT"].ToString();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648113", "PartialPayment(true);", true);
+                    }
+                    else
+                    {
+                      //  DivMinamount.Style.Add("visibility", "");
+                        hdfchkPartialPay.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648113", "PartialPayment(false);", true);
+                    }
+
+                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_ATTACHMENT_IN_EMAIL"].ToString() != null)
+                    {
+                        ddlSendParentsEmail.SelectedValue = ds.Tables[0].Rows[0]["FEE_RECEIPT_ATTACHMENT_IN_EMAIL"].ToString();
+                    }
+
                 }
             }
         }
@@ -868,7 +888,24 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
-        {         
+        {
+            int PartPayment = 0; 
+            string Minamount = txtMinAmount.Text.Trim();
+            if (hdfchkPartialPay.Value == "true")
+            {
+                PartPayment = 1;
+            }
+            else
+            {
+                PartPayment = 0;
+            }
+            if (PartPayment == 1 && !string.IsNullOrEmpty(Minamount) && Minamount[0] == '0')
+            {
+                objCommon.DisplayMessage(this, "As Partial Payment Option is Enable so Minimum Amount Configuration for Partial Payment should not be zero or empty..!", this.Page);
+                BindData();
+                return;
+            }
+
             if (hfdregno.Value == "true")
             {
                 objMod.AllowRegno = true;
@@ -1220,6 +1257,9 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
             int studAttendance = Convert.ToInt32(ddlMarkingAttendance.SelectedValue); //Added By Vipul Tichakule on date 24-01-2024
             int RecEmail = Convert.ToInt32(ddlSendParentsEmail.SelectedValue); //Added By Jay Takalkhede on date 17-02-2024
+            
+            double ParMinimumAmount = 0;
+            
 
             //Check whether to add or update
             if (ViewState["action"] != null)
@@ -1234,7 +1274,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objMConfig.SaveModuleConfiguration(objMod, UANO, IP_ADDRESS, MAC_ID, Trisemstatus, chkoutstanding, sempromodemandcreation, semadmofflinebtn,
                         semadmbeforepromotion, semadmafterepromotion, studReactvationlarefine, IntakeCapacity, chktimeReport, chkGlobalCTAllotment,
                         BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow, TPSlot, UserLoginNos, usercourselocked,
-                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance, RecEmail); 
+                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance, RecEmail, PartPayment, Minamount);
                     //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
                     //RecEmail Added By Jay Takalkhede on date 17-02-2024
                     if (cs.Equals(CustomStatus.RecordSaved))
@@ -1246,7 +1286,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         //Clear();
-                        objCommon.DisplayMessage(this.updpnl_details, "Record Updated Successfully!", this.Page);                      
+                        objCommon.DisplayMessage(this.updpnl_details, "Record Updated Successfully!", this.Page);
                         this.BindData();
                     }
                     else
@@ -1906,7 +1946,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-           
+
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);
@@ -2061,4 +2101,17 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     #endregion
 
 
+    protected void txtMinAmount_TextChanged(object sender, EventArgs e)
+    {
+        string input = txtMinAmount.Text.Trim();
+        if (!string.IsNullOrEmpty(input))
+        {
+            if (!string.IsNullOrEmpty(input) && input[0] == '0' || !string.IsNullOrEmpty(input) && input[0] == '.')
+            {
+                objCommon.DisplayMessage(this, "Please Enter Valid Total Amount", this.Page);
+                txtMinAmount.Text = string.Empty;
+                return;
+            }
+        }
+    }
 }

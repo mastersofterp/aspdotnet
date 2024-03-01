@@ -624,6 +624,28 @@
                                                             <label data-on="Yes" tabindex="22" data-off="No" for="chkhosteltypeop"></label>
                                                         </div>
                                                     </div>
+                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblpartialpayment" runat="server" Font-Bold="true"> Yes, If Allow to Activate Partial Payment for Student</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chkpartialPayment" name="chkpartialPayment" onclick="ShowPartAmount();" />
+                                                            <label data-on="Yes" tabindex="22" data-off="No" for="chkpartialPayment"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-4 col-md-3 col-12" id="DivMinamount" style="visibility:hidden" runat="server">
+                                                        <div class="form-group col-md-12">
+                                                           <%-- <sup>*</sup>--%>
+                                                            <label><span style="color: red;">*</span>Minimum Amount Configuration for Partial Payment</Label>
+                                                            <asp:TextBox ID="txtMinAmount" runat="server" CssClass="form-control" TabIndex="3" ToolTip="Please Enter Minimum Amount for Partial Payment Configuration"
+                                                            MaxLength="10" AutoComplete="true" onkeyup="validateAmount()" />
+                                                         <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtMinAmount" ValidChars="1234567890." />
+                                                        </div>                                                      
+                                                       
+                                              
+                                                    </div>
 
                                                     <div class="col-12">
                                                         <div class="sub-heading">
@@ -1375,6 +1397,7 @@
                 <asp:HiddenField ID="hfdchkGlobalCTAllotment" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfdchkValueAddedCTAllotment" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfdchkhosteltypeop" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hdfchkPartialPay" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfSelectCollege" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfElectChoiceFor" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfSeatcapacitynewstud" runat="server" ClientIDMode="Static" />
@@ -1396,6 +1419,7 @@
             <%--       <asp:PostBackTrigger ControlID="btnSubmitPaymentMode" />--%>
             <asp:PostBackTrigger ControlID="ddlCollege" />
             <asp:PostBackTrigger ControlID="btnCourseExamReg" />
+            <%--<asp:PostBackTrigger ControlID="txtMinAmount" />--%>
 
         </Triggers>
     </asp:UpdatePanel>
@@ -2136,6 +2160,21 @@
             //SetStat(val);
         }
 
+        function ShowPartAmount(){
+            debugger;
+            //if ($('#ctl00_ContentPlaceHolder1_chkSelectCollege').is(":checked"))
+            if ($('#chkpartialPayment').is(":checked"))
+            {
+                $("#ctl00_ContentPlaceHolder1_DivMinamount").css({ visibility: 'visible' });
+            }
+            else
+                $("#ctl00_ContentPlaceHolder1_DivMinamount").css({ visibility: 'hidden' });
+            // $('#rdRegSame').val()='off';
+            //$('#rdRegSame').prop('checked', false);
+            //$("#ctl00_ContentPlaceHolder1_ddlCollege").prop('selectedIndex', 0);           
+            //SetStat(val);
+        }
+
         $(document).ready (function () {  
             $("#ctl00_ContentPlaceHolder1_ddlCollege").change (function () {  
                 var selectedClgID = $(this).children("#ctl00_ContentPlaceHolder1_ddlCollege :selected").val(); 
@@ -2368,6 +2407,9 @@
             $('[id*=chkhosteltypeop]').prop('checked', val);
         }
 
+        function PartialPayment(val) {
+            $('[id*=chkpartialPayment]').prop('checked', val);
+        }
         function ElectiveChoiceFor(val) {
             $('[id*=chkElectChoiceFor]').prop('checked', val);
         }
@@ -2448,6 +2490,7 @@
             $('#hfdchktimeReport').val($('#chktimeReport').prop('checked'));
             $('#hfdchkGlobalCTAllotment').val($('#chkGlobalCTAllotment').prop('checked'));
             $('#hfdchkhosteltypeop').val($('#chkhosteltypeop').prop('checked'));
+            $('#hdfchkPartialPay').val($('#chkpartialPayment').prop('checked'));
             $('#hfElectChoiceFor').val($('#chkElectChoiceFor').prop('checked'));
             $('#hfSeatcapacitynewstud').val($('#chkseatcapacitynewstudentry').prop('checked'));
             $('#hfoutstandingdashorad').val($('#chkoutstandingdashorad').prop('checked'));
@@ -2706,6 +2749,65 @@
                 $('#<%=OutstandingMessageDiv.ClientID %>').show();                
             }
         }
+
     </script>
+<%--    <script>
+        function validateAmount() {
+            var amountTextBox = document.getElementById('<%= txtMinAmount.ClientID %>');
+        var amount = amountTextBox.value;
+
+        // Check if the amount is a valid number with up to two decimal places
+        if (/^\d+(\.0\d{1,2})?$/.test(amount)) {
+            // Valid amount
+            amountTextBox.style.border = ""; // Remove any custom styling
+            return true;
+        } else {
+            // Invalid amount
+            alert("Please enter a valid amount.");
+            amountTextBox.focus();
+            amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
+            return false;
+        }
+        }
+
+
+</script>--%>
+    <script>
+        function validateAmount() {
+            var amountTextBox = document.getElementById('<%= txtMinAmount.ClientID %>');
+        var amount = amountTextBox.value;
+
+        // Check if the amount is a valid number with up to two decimal places
+        if (/^\d+(\.\d{1,2})?$/.test(amount)) {
+            // Check if the first digit is not zero
+            if (amount.charAt(0) !== '0') {
+                // Valid amount
+                amountTextBox.style.border = ""; // Remove any custom styling
+                return true;
+            } else {
+                alert("Amount cannot start with zero.");
+                amountTextBox.focus();
+                amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
+                return false;
+            }
+        }
+        else if(amount.charAt(0) !== ' ')
+        {
+            alert("Please enter a valid amount.");
+            amountTextBox.focus();
+            amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
+            return false;
+        }
+        else {
+            // Invalid amount
+            alert("Please enter a valid amount.");
+            amountTextBox.focus();
+            amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
+            return false;
+        }
+    }
+</script>
+
+
 </asp:Content>
 
