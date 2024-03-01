@@ -66,7 +66,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
             else
             {
                 //Page Authorization
-                //CheckPageAuthorization();
+                CheckPageAuthorization();
 
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
@@ -82,7 +82,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
                
               
                 //Populate the DropDownList 
-             
+                btnCourseFacultyReport.Visible = false;
                  var userNo = Session["userno"].ToString();
                  var uaType = Session["usertype"].ToString();
                  if (Session["usertype"].ToString() != "1")
@@ -155,6 +155,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
             if (ds.Tables[0].Rows.Count > 0)
             {
                 //Session["TempData"] = ds;
+                Div_lvCourseFaculty.Visible = false;
                 hftot.Value = ds.Tables[0].Rows.Count.ToString();
                 lvCourse.DataSource = ds;
                 lvCourse.DataBind();
@@ -165,10 +166,11 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
             }
             else
             {
-
+                Div_lvCourseFaculty.Visible = false;
                 lvCourse.DataSource = null;
                 lvCourse.DataBind();
                 objCommon.DisplayMessage(this.updpnlSection, "Record Not found!", this.Page);
+               
                 return;
             }
         }
@@ -208,51 +210,52 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
             {
                 if (ddlFaculty.SelectedValue != "" && ddlFaculty.SelectedValue != "0")
                 {
-                    if (ddlSemester.SelectedValue != "" && ddlSemester.SelectedValue != "0")
+                    //if (ddlSemester.SelectedValue != "" && ddlSemester.SelectedValue != "0")
+                    //{
+                    //    if (ddlCourseType.SelectedValue != "" && ddlCourseType.SelectedValue != "0")
+                    //    {
+                    //        if (ddlCourse.SelectedValue != "" && ddlCourse.SelectedValue != "0")
+                    //        {
+                    var semesternos = string.Empty;//ddlSemester.SelectedValue;
+                    pnlPreCorList.Visible = true;
+                    lvCourse.Visible = true;
+
+                    foreach (ListItem items in ddlSemester.Items)
                     {
-                        if (ddlCourseType.SelectedValue != "" && ddlCourseType.SelectedValue != "0")
-                        {
-                            if (ddlCourse.SelectedValue != "" && ddlCourse.SelectedValue != "0")
-                            {
-                                var semesternos = string.Empty;//ddlSemester.SelectedValue;
-                                pnlPreCorList.Visible = true;
-                                lvCourse.Visible = true;
-
-                                foreach (ListItem items in ddlSemester.Items)
-                                {
-                                    if (items.Selected == true)
-                                        semesternos += (items.Value).Split('-')[0] + ',';
-                                }
-                                semesternos = semesternos.TrimEnd(',');
-
-                                var courseType = ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
-                                var courseNo = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
-                                var sectionNo = ddlSection.SelectedValue == "" ? "0" : ddlSection.SelectedValue;
-                                var batchNo = ddlBatch.SelectedValue == "" ? "0" : ddlBatch.SelectedValue;
-                                var tut_batchNo = ddlTutorialBatch.SelectedValue == "" ? "0" : ddlTutorialBatch.SelectedValue;
-
-                                BindCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlFaculty.SelectedValue), semesternos, Convert.ToInt32(courseType), Convert.ToInt32(courseNo), Convert.ToInt32(sectionNo), Convert.ToInt32(batchNo), Convert.ToInt32(tut_batchNo));
-
-                            }
-                            else
-                            {
-                                objCommon.DisplayMessage(this.updpnlSection, "Please Select Course!", this.Page);
-                                return;
-                            }
-
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(this.updpnlSection, "Please Select Course Type!", this.Page);
-                            return;
-                        }
-
+                        if (items.Selected == true)
+                            semesternos += (items.Value).Split('-')[0] + ',';
                     }
-                    else
-                    {
-                        objCommon.DisplayMessage(this.updpnlSection, "Please Select Semester!", this.Page);
-                        return;
-                    }
+                    semesternos = semesternos.TrimEnd(',');
+
+                    // var semester = ddlSemester.SelectedValue == "" ? "0" : ddlSemester.SelectedValue;
+                    var courseType = ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
+                    var courseNo = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
+                    var sectionNo = ddlSection.SelectedValue == "" ? "0" : ddlSection.SelectedValue;
+                    var batchNo = ddlBatch.SelectedValue == "" ? "0" : ddlBatch.SelectedValue;
+                    var tut_batchNo = ddlTutorialBatch.SelectedValue == "" ? "0" : ddlTutorialBatch.SelectedValue;
+
+                    BindCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlFaculty.SelectedValue), semesternos, Convert.ToInt32(courseType), Convert.ToInt32(courseNo), Convert.ToInt32(sectionNo), Convert.ToInt32(batchNo), Convert.ToInt32(tut_batchNo));
+
+                    //        }
+                    //        else
+                    //        {
+                    //            objCommon.DisplayMessage(this.updpnlSection, "Please Select Course!", this.Page);
+                    //            return;
+                    //        }
+
+                    //    }
+                    //    else
+                    //    {
+                    //        objCommon.DisplayMessage(this.updpnlSection, "Please Select Course Type!", this.Page);
+                    //        return;
+                    //    }
+
+                    //}
+                    //else
+                    //{
+                    //    objCommon.DisplayMessage(this.updpnlSection, "Please Select Semester!", this.Page);
+                    //    return;
+                    //}
                 }
                 else
                 {
@@ -298,6 +301,10 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
         lvCourse.DataBind();
         pnlPreCorList.Visible = false;
         lvCourse.Visible = false;
+
+        Div_lvCourseFaculty.Visible = false;
+        lvCourseFaculty.DataSource = null;
+        lvCourseFaculty.DataBind();
     }
     #endregion
 
@@ -306,6 +313,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
     {
         if (ddlSession.SelectedIndex > 0)
         {
+            btnCourseFacultyReport.Visible = true;
             int SessionId = Convert.ToInt32(ddlSession.SelectedValue);
             this.objCommon.FillDropDownList(ddlFaculty, "ACD_COURSE_TEACHER CT WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO INNER JOIN USER_ACC AC WITH (NOLOCK)  ON (CT.UA_NO = AC.UA_NO OR CT.ADTEACHER = AC.UA_NO)", "DISTINCT AC.UA_NO", "AC.UA_FULLNAME ", "ISNULL(SM.IS_ACTIVE,0) = 1 AND ISNULL(CANCEL,0) = 0 AND SM.SESSIONID  = " + SessionId + "  ", "AC.UA_FULLNAME");
 
@@ -316,7 +324,14 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlSemester, "ACD_COURSE_TEACHER CT WITH (NOLOCK) INNER JOIN ACD_SEMESTER S WITH (NOLOCK) ON (CT.SEMESTERNO = S.SEMESTERNO ) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO ", "DISTINCT ISNULL(S.SEMESTERNO,0) SEMESTERNO", "S.SEMESTERNAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + "  AND ISNULL(CT.CANCEL, 0) = 0", "SEMESTERNO");
 
             }
-             //objCommon.FillDropDownList(ddlFaculty, "ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON SR.SESSIONNO = SM.SESSIONNO INNER JOIN ACD_SESSION S WITH (NOLOCK)  ON  SM.SESSIONID = S.SESSIONID INNER JOIN USER_ACC AC WITH (NOLOCK)  ON (SR.UA_NO = AC.UA_NO OR SR.UA_NO_PRAC = AC.UA_NO  OR SR.UA_NO_TUTR = AC.UA_NO)", "DISTINCT AC.UA_NO", "AC.UA_FULLNAME ", "UA_TYPE=3 AND ISNULL(S.IS_ACTIVE,0) = 1  AND S.SESSIONID = " + SessionId + "  ", "AC.UA_FULLNAME");
+            //objCommon.FillDropDownList(ddlFaculty, "ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON SR.SESSIONNO = SM.SESSIONNO INNER JOIN ACD_SESSION S WITH (NOLOCK)  ON  SM.SESSIONID = S.SESSIONID INNER JOIN USER_ACC AC WITH (NOLOCK)  ON (SR.UA_NO = AC.UA_NO OR SR.UA_NO_PRAC = AC.UA_NO  OR SR.UA_NO_TUTR = AC.UA_NO)", "DISTINCT AC.UA_NO", "AC.UA_FULLNAME ", "UA_TYPE=3 AND ISNULL(S.IS_ACTIVE,0) = 1  AND S.SESSIONID = " + SessionId + "  ", "AC.UA_FULLNAME");
+        }
+        else
+        {
+            btnCourseFacultyReport.Visible = false;
+            Div_lvCourseFaculty.Visible = false;
+            lvCourseFaculty.DataSource = null;
+            lvCourseFaculty.DataBind();
         }
     }
     protected void ddlFaculty_SelectedIndexChanged(object sender, EventArgs e)
@@ -378,49 +393,50 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
         {
             if (ddlFaculty.SelectedValue != "" && ddlFaculty.SelectedValue != "0")
             {
-                if (ddlSemester.SelectedValue != "" && ddlSemester.SelectedValue != "0")
+                //if (ddlSemester.SelectedValue != "" && ddlSemester.SelectedValue != "0")
+                //{
+                //    if (ddlCourseType.SelectedValue != "" && ddlCourseType.SelectedValue != "0")
+                //    {
+                //        if (ddlCourse.SelectedValue != "" && ddlCourse.SelectedValue != "0")
+                //        {
+
+                var semesternos = string.Empty;
+                foreach (ListItem items in ddlSemester.Items)
                 {
-                    if (ddlCourseType.SelectedValue != "" && ddlCourseType.SelectedValue != "0")
-                    {
-                        if (ddlCourse.SelectedValue != "" && ddlCourse.SelectedValue != "0")
-                        {
-                            
-                            var semesternos = string.Empty;
-                            foreach (ListItem items in ddlSemester.Items)
-                            {
-                                if (items.Selected == true)
-                                    semesternos += (items.Value).Split('-')[0] + ',';
-                            }
-                            semesternos = semesternos.TrimEnd(',');
-
-                            var courseType = ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
-                            var courseNo = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
-                            var sectionNo = ddlSection.SelectedValue == "" ? "0" : ddlSection.SelectedValue;
-                            var batchNo = ddlBatch.SelectedValue == "" ? "0" : ddlBatch.SelectedValue;
-                            var tut_batchNo = ddlTutorialBatch.SelectedValue == "" ? "0" : ddlTutorialBatch.SelectedValue;
-
-                           ds = objCC.GetStudentRollListAndRosterAllCourseRegistrationDataExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlFaculty.SelectedValue), semesternos, Convert.ToInt32(courseType), Convert.ToInt32(courseNo), Convert.ToInt32(sectionNo), Convert.ToInt32(batchNo), Convert.ToInt32(tut_batchNo));
-
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(this.updpnlSection, "Please Select Course!", this.Page);
-                            return;
-                        }
-
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(this.updpnlSection, "Please Select Course Type!", this.Page);
-                        return;
-                    }
-
+                    if (items.Selected == true)
+                        semesternos += (items.Value).Split('-')[0] + ',';
                 }
-                else
-                {
-                    objCommon.DisplayMessage(this.updpnlSection, "Please Select Semester!", this.Page);
-                    return;
-                }
+                semesternos = semesternos.TrimEnd(',');
+
+                // var semester = ddlSemester.SelectedValue == "" ? "0" : ddlSemester.SelectedValue;
+                var courseType = ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
+                var courseNo = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
+                var sectionNo = ddlSection.SelectedValue == "" ? "0" : ddlSection.SelectedValue;
+                var batchNo = ddlBatch.SelectedValue == "" ? "0" : ddlBatch.SelectedValue;
+                var tut_batchNo = ddlTutorialBatch.SelectedValue == "" ? "0" : ddlTutorialBatch.SelectedValue;
+
+                ds = objCC.GetStudentRollListAndRosterAllCourseRegistrationDataExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlFaculty.SelectedValue), semesternos, Convert.ToInt32(courseType), Convert.ToInt32(courseNo), Convert.ToInt32(sectionNo), Convert.ToInt32(batchNo), Convert.ToInt32(tut_batchNo));
+
+                //        }
+                //        else
+                //        {
+                //            objCommon.DisplayMessage(this.updpnlSection, "Please Select Course!", this.Page);
+                //            return;
+                //        }
+
+                //    }
+                //    else
+                //    {
+                //        objCommon.DisplayMessage(this.updpnlSection, "Please Select Course Type!", this.Page);
+                //        return;
+                //    }
+
+                //}
+                //else
+                //{
+                //    objCommon.DisplayMessage(this.updpnlSection, "Please Select Semester!", this.Page);
+                //    return;
+                //}
             }
             else
             {
@@ -434,31 +450,71 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
             return;
         }
 
+        GridView gv = new GridView();
+        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+        {
+            gv.DataSource = ds;
+            gv.DataBind();
+            string attachment = "attachment ; filename=FacultyWiseStudentRollListAndRoster" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/ms-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            gv.HeaderStyle.Font.Bold = true;
+            gv.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.updpnlSection, "Student Data Not Found!", this.Page);
+            return;
+        }
 
-            GridView gv = new GridView();
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
-                gv.DataSource = ds;
-                gv.DataBind();
-                string attachment = "attachment ; filename=FacultyWiseStudentRollListAndRoster" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-                Response.ClearContent();
-                Response.AddHeader("content-disposition", attachment);
-                Response.ContentType = "application/ms-excel";
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                gv.HeaderStyle.Font.Bold = true;
-                gv.RenderControl(htw);
-                Response.Write(sw.ToString());
-                Response.End();
-            }
-            else 
-            {
-                objCommon.DisplayMessage(this.updpnlSection, "Student Data Not Found!", this.Page);
-                return;
-            }
 
-      
     }
 
 
+    protected void btnCourseFacultyReport_Click(object sender, EventArgs e)
+    {
+        try {
+
+            int sessionNo = Convert.ToInt32(ddlSession.SelectedValue);
+            GetSessionWiseCourseFaculty_ReportData(sessionNo);
+        }
+        catch (Exception ex)
+        {
+        
+        }
+    }
+
+    protected void GetSessionWiseCourseFaculty_ReportData(int sessionId ) 
+    {
+        try {
+            DataSet ds = new DataSet();
+            CourseController objCC = new CourseController();
+            ds = objCC.GetCourseFacultyReport_SessionWise(sessionId);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                Div_lvCourseFaculty.Visible = true;
+                lvCourseFaculty.DataSource = ds;
+                lvCourseFaculty.DataBind();
+                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvCourse);//Set label 
+               
+            }
+            else 
+            {
+                Div_lvCourseFaculty.Visible = false;
+                lvCourseFaculty.DataSource = null;
+                lvCourseFaculty.DataBind();
+            }
+        }
+        catch (Exception ex) { }
+    }
+    protected void lvCourseFaculty_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+
+    }
 }

@@ -5538,6 +5538,29 @@ namespace IITMS
                     return ds;
                 }
 
+                public DataSet GetCourseFacultyReport_SessionWise(int sessionId)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionId);
+                        objParams[1] = new SqlParameter("@P_COLLEGE_ID", 0);
+                        objParams[2] = new SqlParameter("@P_SEMESTERNO", 0);
+
+                        //objParams[1] = new SqlParameter("@P_MODE", mode);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_COURSE_TEACHER_ALLOTMENT_REPORT_EXCEL_FOR_ROSTER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetCourseFacultyReport_SessionWise-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+
 
             }//END: BusinessLayer.BusinessLogic
 
