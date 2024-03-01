@@ -41,6 +41,19 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
+                                            <label>Session </label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSession" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AutoPostBack="true"
+                                            TabIndex="2" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="show">
+                                        </asp:RequiredFieldValidator>
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
                                             <label>College/Scheme </label>
                                         </div>
                                         <asp:DropDownList ID="ddlClgScheme" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
@@ -55,19 +68,7 @@
                                             Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme." ValidationGroup="show" >
                                         </asp:RequiredFieldValidator>--%>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Session </label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlSession" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AutoPostBack="true"
-                                            TabIndex="2" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
-                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="show">
-                                        </asp:RequiredFieldValidator>
-                                    </div>
+
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -281,9 +282,23 @@
                                                     <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtEndTime"
                                                 Display="None" ValidationGroup="submit" ErrorMessage="Please Enter End Time."></asp:RequiredFieldValidator>--%>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </asp:Panel>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <label>Attendance Marked </label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlattstatus"
+                                            TabIndex="6" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" AutoPostBack="true"
+                                                OnSelectedIndexChanged="ddlattstatus_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            <asp:ListItem Value="1">Yes</asp:ListItem>
+                                            <asp:ListItem Value="2">No</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
                                 </div>
                             </div>
 
@@ -354,6 +369,7 @@
                                                             <th>Semester</th>
                                                             <th>Time Table Date</th>
                                                             <th>Time Slot</th>
+                                                            <th>Attendance Marked</th>
                                                             <th>Start Date
                                                             </th>
                                                             <th>End Date
@@ -396,6 +412,10 @@
                                                 </td>
                                                 <td><%# Eval("TimeSlot") %>
                                                     <asp:HiddenField ID="hdnslotno" runat="server" Value='<%# Eval("SLOTNO")%>' />
+                                                </td>
+
+                                                <td><%# Eval("Attendance_Marked") %>
+                                                    
                                                 </td>
                                                 <td><%# Eval("START_DATE","{0:dd-MMM-yyyy}") %>
                                                     <asp:HiddenField ID="hdstdate" runat="server" Value='<%# Eval("START_DATE")%>' />
