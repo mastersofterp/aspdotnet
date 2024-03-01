@@ -604,13 +604,41 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         DataSet dsAttendanceDetails = objSC.GetDetailsOfAttendanceByIdno(idno, Convert.ToInt32(sessionno));
                         if (dsAttendanceDetails != null && dsAttendanceDetails.Tables.Count > 0 && dsAttendanceDetails.Tables[0].Rows.Count > 0)
                         {
-                            lvAttendanceDetails.DataSource = dsAttendanceDetails;
-                            lvAttendanceDetails.DataBind();
+                            string session = dsAttend.Tables[0].Rows[0]["SESSIONID"].ToString();
+                            string college = dsAttend.Tables[0].Rows[0]["COLLEGEID"].ToString();
+
+                            if (session != "" && college != "")
+                            {
+
+                                if (dsAttendanceDetails != null && dsAttendanceDetails.Tables.Count > 0 && dsAttendanceDetails.Tables[0].Rows.Count > 0)
+                                {
+                                    lvAttendanceDetails.DataSource = dsAttendanceDetails;
+                                    lvAttendanceDetails.DataBind();
+                                    lvAttendanceDetails.Visible = true;
+                                    lblStatus.Visible = false;
+                                }
+                                else
+                                {
+                                    lvAttendanceDetails.DataSource = null;
+                                    lvAttendanceDetails.DataBind();
+                                }
+                            }
+                            else
+                            {
+                                lvAttendanceDetails.Visible = false;
+                                lblStatus.Visible = true;
+                                lblStatus.ForeColor = System.Drawing.Color.Red;
+                                lblStatus.Text = "Activity disabled by admin !!";
+
+                            }
+
                         }
                         else
                         {
-                            lvAttendanceDetails.DataSource = null;
-                            lvAttendanceDetails.DataBind();
+                            lvAttendanceDetails.Visible = false;
+                            lblStatus.Visible = true;
+                            lblStatus.ForeColor = System.Drawing.Color.Red;
+                            lblStatus.Text = "Activity disabled by admin !!";
                         }
                         if (Convert.ToInt32(Session["OrgId"]) == 1)
                         {
@@ -913,6 +941,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             }
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
+
+
 
         }
         catch (Exception ex)
@@ -2233,6 +2263,12 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         ShowDetails();
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
 
+        //string CheckMgEntry = objCommon.LookUp("ACD_MODULE_CONFIG MG INNER JOIN ACD_SESSION_MASTER SM ON (MG.ATT_SESSIONIDS = SM.SESSIONID)", "ATT_SESSIONIDS", "SESSIONNO=" + ddlSession.SelectedValue);
+        //if (CheckMgEntry == "")
+        //{
+        //    objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
+        //}
+
     }
     #endregion
 
@@ -2332,6 +2368,10 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_JECRC.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
 
                     }
+                }
+                else if (Session["OrgId"].ToString().Equals("18"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                {
+                    this.ShowReport_ForCash_HITS("rpt_Feecollection_HITS.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
                 {
@@ -2797,6 +2837,21 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             // string para_name = "@P_IDNO,@P_SESSIONNO,@P_SCHEMENO,@P_DEGREENO,@P_BRANCHNO,@P_ORGID";
             // string call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "," + ORG + "";
             ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+            // Change by Vipul T on date 27-02-2024
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                lvCourseAtt.DataSource = ds;
+                lvCourseAtt.DataBind();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+            }
+
+            #region commented by vipul t as per new Requirement
+            //if (ds.Tables[1].Rows.Count > 0)
+            //{
 
 
             if (ds.Tables[1].Rows.Count > 0)
@@ -2909,9 +2964,9 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
     {
         int count = 0;
         //int sessionno = Convert.ToInt32(ViewState["SessionNo"]);
-         int sessionno =  Convert.ToInt32(ddlSession.SelectedValue);
+        int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
         //int idno = Convert.ToInt32(Session["idno"]);
-         int idno = 0;
+        int idno = 0;
         if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
         {
             idno = Convert.ToInt32(Session["idno"]);
@@ -2937,17 +2992,17 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
     {
         // int sessionno = Convert.ToInt32(Session["currentsession"].ToString());
         //int sessionno = Convert.ToInt32(ViewState["SessionNo"]);
-           int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-           int idno = 0;
-           if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
-           {
-               idno = Convert.ToInt32(Session["idno"]);
-           }
-           else
-           {
-               idno = Convert.ToInt32(ViewState["idno"]);
+        int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+        int idno = 0;
+        if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(ViewState["idno"]);
 
-           }
+        }
         try
         {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
@@ -2968,6 +3023,75 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         catch (Exception ex)
         {
             objCommon.DisplayMessage(this.Page, "Somethingwent Wrong.!!", this.Page);
+        }
+    }
+
+
+    // Added by vipul tichakule on date 28-02-2024
+    protected void lnkCcodepup_Click(object sender, EventArgs e)
+    {
+
+        int idno = 0;
+        if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(ViewState["idno"]);
+        }
+
+        LinkButton lnkcode = sender as LinkButton;
+        DataSet ds = null;
+        string proc_name = "PKG_ACD_BIND_COURSE_REG_MODEL_POP_DATA";
+        string para_name = "@P_IDNO,@P_COURSENO";
+        string call_values = "" + idno + "," + lnkcode.ToolTip + "";
+        // string para_name = "@P_IDNO,@P_SESSIONNO,@P_SCHEMENO,@P_DEGREENO,@P_BRANCHNO,@P_ORGID";
+        // string call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "," + ORG + "";
+        ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            crsTitleName.InnerHtml = ds.Tables[0].Rows[0]["CCODE"].ToString();
+            lvcoursemodelpop.DataSource = ds.Tables[0];
+            lvcoursemodelpop.DataBind();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCoursePop();", true);
+        }
+    }
+    private void ShowReport_ForCash_HITS(string rptName, int dcrNo, int studentNo, string copyNo, string UA_FULLNAME, int Cancel)
+    {
+        try
+        {
+            //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("Academic")));
+            int college_id = 0;
+            college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(studentNo)));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=Fee_Collection_Receipt";
+            url += "&path=~,Reports,Academic," + rptName;
+            url += "&param=@P_COLLEGE_CODE=" + college_id.ToString() + ",@P_IDNO=" + studentNo + ",@P_DCRNO=" + dcrNo + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]);
+
+
+
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["UAFULLNAME"].ToString() +
+            //"," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(Session["IDNO"].ToString(), studentNo, "0");
+            //divMsg.InnerHtml += " <script type='text/javascript' language='javascript'> try{ ";
+            //divMsg.InnerHtml += " window.open('" + url + "','Fee_Collection_Receipt','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " }catch(e){ alert('Error: ' + e.description);}</script>";
+
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //ScriptManager.RegisterClientScriptBlock(this.updEdit, this.updEdit.GetType(), "controlJSScript", sb.ToString(), true);
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "Academic_FeeCollection.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
 

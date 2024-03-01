@@ -408,7 +408,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-2 col-md-3 col-6">
-                                                         <asp:Image ID="imgPhoto" runat="server" src="../Images/nophoto.jpg" alt="photo" class="w-75" />
+                                                         <%--<asp:Image ID="imgPhoto" runat="server" src="../Images/nophoto.jpg" alt="photo" class="w-75" />--%>
+                                                        <asp:Image ID="imgPhoto" runat="server" Height="120px" Width="128px" />
+
                                                     </div>
                                                 </div>
 
