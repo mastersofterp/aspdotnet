@@ -3409,14 +3409,14 @@
                             if (data.length > 0) {
                                 $.each(data, function (row, item) {
                                     
-                                    if(currentUrl.indexOf('localhost'))
+                                    if(currentUrl.indexOf('localhost') !== -1 )
                                     {
-                                        html += '<li class="list-group-item"><a href="/PresentationLayer/' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank">' + item.LinkName + '</a></li>';
+                                        html += '<li class="list-group-item"><a href="/PresentationLayer/' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank" style="font-size: 120%">' + item.LinkName + '</a></li>';
                                         LinkCount += 1;
                                     }
                                     else
                                     {
-                                        html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank">' + item.LinkName + '</a></li>';
+                                        html += '<li class="list-group-item"><a href="/' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank" style="font-size: 120%">' + item.LinkName + '</a></li>';
                                         LinkCount += 1;
                                     }
                                 });
