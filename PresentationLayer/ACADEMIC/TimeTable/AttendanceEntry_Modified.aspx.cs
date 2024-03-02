@@ -1651,7 +1651,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                                 ddlClassType.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["CLASS_TYPE"]) == null ? "0" : Convert.ToString(ds1.Tables[0].Rows[0]["CLASS_TYPE"]);
                                 ddlStatus.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["ATTENDANCE_STATUS"]) == null ? "1" : Convert.ToString(ds1.Tables[0].Rows[0]["ATTENDANCE_STATUS"]); //Added by Rishabh on 29/02/2024 for binding selected value as attendance status
                                 ddlCONumber.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["CO_NUM"]) == null ? "0" : Convert.ToString(ds1.Tables[0].Rows[0]["CO_NUM"]);
-                                ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
+                                //ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
                                 ddltopicstatus.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["TC_STATUS"]) == null || Convert.ToString(ds1.Tables[0].Rows[0]["TC_STATUS"]) == "0" ? "1" : Convert.ToString(ds1.Tables[0].Rows[0]["TC_STATUS"]); //Added by rishabh on 05/05/23 - topic covered status
                                 txtTopcDesc.Visible = false;
                                 ddlTopicCovered.Visible = true;
@@ -1679,7 +1679,23 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             txtTopcDesc.Visible = false;
                             ddlTopicCovered.Visible = true;
                             divTopicCoveredStatus.Visible = true;
-                            ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
+                            ddltopicstatus.SelectedValue = hdnTopicCoveredStatus.Value == null || hdnTopicCoveredStatus.Value == "" || hdnTopicCoveredStatus.Value == "0" ? "1" : hdnTopicCoveredStatus.Value.ToString();
+                            //ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
+                        }
+                        if (string.IsNullOrEmpty(hdnAttendanceNo.Value))
+                            ddlTopicCovered.DataValueField = "0";
+                        else
+                        {
+                            if (ddlTopicCovered.Items.Count > 0)
+                            {
+                                foreach (ListItem itm in ddlTopicCovered.Items)
+                                {
+                                    if (hdnAttendanceNo.Value.Contains(itm.Value))
+                                        itm.Selected = true;
+                                }
+                            }
+                            else
+                                return;
                         }
                     }
                     else
