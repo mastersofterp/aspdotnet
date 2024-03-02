@@ -109,10 +109,6 @@ public partial class PAYROLL_TRANSACTIONS_Pay_DailyWagesEmployee : System.Web.UI
     {
 
     }
-    protected void ddlStaff_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
     protected void ddldepratment_SelectedIndexChanged(object sender, EventArgs e)
     {
 
@@ -251,12 +247,12 @@ public partial class PAYROLL_TRANSACTIONS_Pay_DailyWagesEmployee : System.Web.UI
             int DeptId = 0;
             if (checkCurrentMonthSalaryProcess() == 1)
             {
-                objCommon.DisplayMessage(UpdatePanel1, "Salary is Lock Permenantly,You Can not Re-enter Attendence", this);
+                objCommon.DisplayMessage(UpdatePanel1, "Salary is Lock Permenantly,You Can not Re-enter Attendance", this);
             }
-            else if (checkPreviousMonthSalaryProcess() == 2)
-            {
-                objCommon.DisplayMessage(UpdatePanel1, "Salary is Not Process for Previous Month,Future Date Month Attendence Not Allowed", this);
-            }
+            //else if (checkPreviousMonthSalaryProcess() == 2)
+            //{
+            //    objCommon.DisplayMessage(UpdatePanel1, "Salary is Not Process for Previous Month,Future Date Month Attendance Not Allowed", this);
+            //}
             else                     //if (checkSalaryProcess() == 0) 
             {
                 foreach (ListViewDataItem lvitem in lvIncrement.Items)
@@ -308,7 +304,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_DailyWagesEmployee : System.Web.UI
                     BindListViewValidation();
                     //lblerror.Text = null;
                     //lblmsg.Text = "Record Updated Successfully";
-                    objCommon.DisplayMessage(UpdatePanel1, "Daily Wages Attendence Saved Successfully", this);
+                    objCommon.DisplayMessage(UpdatePanel1, "Daily Wages Attendance Saved Successfully", this);
                 }
             }
         }
@@ -428,7 +424,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_DailyWagesEmployee : System.Web.UI
                 //lblerror.Text = null;
                 BindListViewValidation();
                 //lblmsg.Text = "Record Updated Successfully";
-                objCommon.DisplayMessage(UpdatePanel1, "Unlock Attendence Successfully", this);
+                objCommon.DisplayMessage(UpdatePanel1, "Unlock Attendance Successfully", this);
             }
         }
         catch (Exception ex)
