@@ -49,7 +49,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             }
             //By default setting ViewState["action"] to add
             ViewState["action"] = "add";
-
+            DeleteDirecPath(Docpath + "TEMP_NOMINATION_FILES\\" + _idnoEmp + "\\APP_0");
             FillDropDown();
 
 
@@ -372,7 +372,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                     {
                         if (objSevBook.ISBLOB == 0)
                         {
-                            objServiceBook.upload_new_files("NOMINATION", _idnoEmp, "NFNO", "PAYROLL_SB_NOMINIFOR", "NOM_", flupld);
+                            if (ViewState["DESTINATION_PATH"] != null)
+                            {
+                                string TNO = objCommon.LookUp("PAYROLL_SB_NOMINIFOR", "MAX(NFNO)", "");
+                                AddDocuments(Convert.ToInt32(TNO));
+                            }
                         }
                         this.Clear();
                         this.BindListViewNominee();
@@ -399,7 +403,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                         {
                             if (objSevBook.ISBLOB == 0)
                             {
-                                objServiceBook.update_upload("NOMINATION", objSevBook.NFNO, ViewState["attachment"].ToString(), _idnoEmp, "NOM_", flupld);
+                                if (ViewState["DESTINATION_PATH"] != null)
+                                {
+                                    string TNO = objCommon.LookUp("PAYROLL_SB_NOMINIFOR", "MAX(NFNO)", "");
+                                    AddDocuments(Convert.ToInt32(TNO));
+                                }
                             }
                             ViewState["action"] = "add";
                             this.Clear();
@@ -501,6 +509,47 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 txtState.Text = ds.Tables[0].Rows[0]["STATE"].ToString();
                 txtTaluka.Text = ds.Tables[0].Rows[0]["TALUKA"].ToString();
                 txtPincode.Text = ds.Tables[0].Rows[0]["PINCODE"].ToString();
+                //string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                //if (STATUS == "A")
+                //{
+                //    MessageBox("Your Details are Approved you cannot edit.");
+                //    return;
+                //}
+                //else
+                //{
+                //}
+                if (Convert.ToInt32(ds.Tables[1].Rows.Count) > 0)
+                {
+                    int rowCount = ds.Tables[1].Rows.Count;
+                    CreateTable();
+                    DataTable dtM = (DataTable)ViewState["FILE1"];
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        DataRow dr = dtM.NewRow();
+                        dr["FUID"] = ds.Tables[1].Rows[i]["FUID"].ToString();
+                        dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_" + nfNo;
+                        dr["GETFILE"] = ds.Tables[1].Rows[i]["GETFILE"].ToString();
+                        dr["DisplayFileName"] = ds.Tables[1].Rows[i]["DisplayFileName"].ToString();
+                        dr["IDNO"] = ds.Tables[1].Rows[i]["IDNO"].ToString();
+                        dr["FOLDER"] = "NOMINATION";
+                        dr["APPID"] = nfNo.ToString();
+                        dr["FILENAME"] = ds.Tables[1].Rows[i]["FILENAME"].ToString();
+                        dtM.Rows.Add(dr);
+                        dtM.AcceptChanges();
+                        ViewState["FILE1"] = dtM;
+                        ViewState["FUID"] = ds.Tables[1].Rows[i]["FUID"].ToString();
+                    }
+                    //lvCompAttach.DataSource = (DataTable)ViewState["FILE1"];
+                    //lvCompAttach.DataBind();
+                    pnlAttachmentList.Visible = true;
+                    this.BindListView_Attachments(dtM);
+                }
+                else
+                {
+                    pnlAttachmentList.Visible = false;
+                    lvCompAttach.DataSource = null;
+                    lvCompAttach.DataBind();
+                }
                 string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
                 if (STATUS == "A")
                 {
@@ -763,6 +812,425 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
         }
     }
 
+    #endregion
+
+    protected void txtPercentage_TextChanged(object sender, EventArgs e)
+    {
+        if (Convert.ToDouble(txtPercentage.Text) > 100.00)
+        {
+            MessageBox("Please enter valid percentage!");
+            btnSubmit.Enabled = false;
+            return;
+        }
+        else
+        {
+            btnSubmit.Enabled = true;
+        }
+    }
+    protected void btnAdd_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int idno = _idnoEmp;
+            ServiceBook objSevBook = new ServiceBook();
+            if (flupld.HasFile)
+            {
+                if (FileTypeValid(System.IO.Path.GetExtension(flupld.FileName)))
+                {
+                    if (flupld.HasFile)
+                    {
+                        if (flupld.FileContent.Length >= 1024 * 10000)
+                        {
+
+                            MessageBox("File Size Should Not Be Greater Than 10 Mb");
+                            flupld.Dispose();
+                            flupld.Focus();
+                            return;
+                        }
+                    }
+                    if (Session["serviceIdNo"] != null && Convert.ToInt32(Session["serviceIdNo"]) != 0)
+                    {
+                        idno = Convert.ToInt32(Session["serviceIdNo"].ToString().Trim());
+                    }
+                    else
+                    {
+                        Response.Redirect("~/default.aspx");
+                    }
+                    string FileName = flupld.FileName;
+                    if (ViewState["FILE1"] != null && ((DataTable)ViewState["FILE1"]) != null)
+                    {
+                        DataTable dtM = (DataTable)ViewState["FILE1"];
+                        for (int i = 0; i < dtM.Rows.Count; i++)
+                        {
+                            if (dtM.Rows[i]["DisplayFileName"].ToString() == FileName)
+                            {
+                                MessageBox("File Already Exist!");
+                                return;
+                            }
+                        }
+                    }
+
+                    string file = Docpath + "TEMP_NOMINATION_FILES\\" + idno + "\\APP_0";
+                    ViewState["SOURCE_FILE_PATH"] = file;
+                    string PATH = Docpath + "NOMINATION\\" + idno;
+                    ViewState["DESTINATION_PATH"] = PATH;
+                    if (lblBlobConnectiontring.Text == "")
+                    {
+                        objSevBook.ISBLOB = 0;
+                    }
+                    else
+                    {
+                        objSevBook.ISBLOB = 1;
+                    }
+                    if (objSevBook.ISBLOB == 1)
+                    {
+                        string filename = string.Empty;
+                        string FilePath = string.Empty;
+                        string IdNo = _idnoEmp.ToString();
+                        if (flupld.HasFile)
+                        {
+                            string contentType = contentType = flupld.PostedFile.ContentType;
+                            string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
+                            //HttpPostedFile file = flupld.PostedFile;
+                            //filename = objSevBook.IDNO + "_familyinfo" + ext;
+                            //string name = DateTime.Now.ToString("ddMMyyyy_hhmmss");
+                            string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            filename = IdNo + "_nomination_" + time + ext;
+                            objSevBook.ATTACHMENTS = filename;
+                            objSevBook.FILEPATH = "Blob Storage";
+
+                            if (flupld.FileContent.Length <= 1024 * 10000)
+                            {
+                                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                                bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                                if (result == true)
+                                {
+
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_nomination_" + time, flupld);
+                                    if (retval == 0)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                        return;
+                                    }
+                                    int tano = Addfieldstotbl(filename);
+                                    //BindListView_Attachments();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string filename = flupld.FileName;
+                        if (!System.IO.Directory.Exists(file))
+                        {
+                            System.IO.Directory.CreateDirectory(file);
+                        }
+
+                        if (!System.IO.Directory.Exists(path))
+                        {
+                            if (!File.Exists(path))
+                            {
+                                int tano = Addfieldstotbl(filename);
+                                path = file + "\\TC_" + tano + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
+                                flupld.PostedFile.SaveAs(path);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.jpg,.pdf,.xls,.doc,.txt]", this.Page);
+                    flupld.Focus();
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "Please Select File", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Complaints_TRANSACTION_Eapplication.btnAdd_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    private bool FileTypeValid(string FileExtention)
+    {
+        bool retVal = false;
+        string[] Ext = { ".jpg", ".JPG", ".bmp", ".BMP", ".gif", ".GIF", ".png", ".docx", ".PNG", ".pdf", ".PDF", ".XLS", ".xls", ".DOC", ".doc", ".TXT", ".txt" };
+        foreach (string ValidExt in Ext)
+        {
+            if (FileExtention == ValidExt)
+            {
+                retVal = true;
+            }
+        }
+        return retVal;
+    }
+    public string GetFileNamePath(object filename, object TNO, object idno, object folder, object AppID)
+    {
+        string[] extension = filename.ToString().Split('.');
+        if (filename != null && filename.ToString() != string.Empty)
+            return ("~/ESTABLISHMENT/upload_files/" + folder + "/" + idno.ToString() + "/APP_" + AppID + "/TC_" + TNO + "." + extension[1].ToString().Trim());
+        else
+            return "";
+    }
+    private int Addfieldstotbl(string filename)
+    {
+        if (ViewState["FILE1"] != null && ((DataTable)ViewState["FILE1"]) != null)
+        {
+            DataTable dt = (DataTable)ViewState["FILE1"];
+            DataRow dr = dt.NewRow();
+            int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dr["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_";
+            dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
+            dr["DisplayFileName"] = flupld.FileName;
+            dr["IDNO"] = _idnoEmp;
+            dr["FOLDER"] = "TEMP_NOMINATION_FILES";
+            dr["APPID"] = 0;
+            dr["FILENAME"] = filename;
+            dt.Rows.Add(dr);
+            ViewState["FILE1"] = dt;
+            //LVFiles.DataSource = ViewState["FILE1"];
+            //LVFiles.DataBind();
+            this.BindListView_Attachments(dt);
+            ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+        }
+        else
+        {
+            CreateTable();
+            DataTable dt = (DataTable)ViewState["FILE1"];
+            DataRow dr = dt.NewRow();
+            int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dr["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_";
+            dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
+            dr["DisplayFileName"] = flupld.FileName;
+            dr["IDNO"] = _idnoEmp;
+            dr["FOLDER"] = "TEMP_NOMINATION_FILES";
+            dr["APPID"] = 0;
+            dr["FILENAME"] = filename;
+            ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dt.Rows.Add(dr);
+            ViewState["FILE1"] = dt;
+            //LVFiles.DataSource = (DataTable)ViewState["FILE1"];
+            //LVFiles.DataBind();
+            //pnlfiles.Visible = true;
+            pnlAttachmentList.Visible = true;
+            this.BindListView_Attachments(dt);
+        }
+        return Convert.ToInt32(ViewState["FUID"]);
+    }
+    private void CreateTable()
+    {
+        DataTable dt = new DataTable();
+        DataColumn dc;
+        dc = new DataColumn("FUID", typeof(int));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("FILEPATH", typeof(string));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("DisplayFileName", typeof(string));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("GETFILE", typeof(string));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("IDNO", typeof(int));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("FOLDER", typeof(string));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("APPID", typeof(int));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("FILENAME", typeof(string));
+        dt.Columns.Add(dc);
+
+        ViewState["FILE1"] = dt;
+    }
+    private void AddDocuments(int TNO)
+    {
+        try
+        {
+            string sourcePath = string.Empty;
+            string targetPath = string.Empty;
+
+            int idno = _idnoEmp;
+
+            string PATH = ViewState["DESTINATION_PATH"].ToString();
+
+            sourcePath = ViewState["SOURCE_FILE_PATH"].ToString();
+            targetPath = PATH + "\\APP_" + TNO;
+
+            if (!Directory.Exists(targetPath))
+            {
+                Directory.CreateDirectory(targetPath);
+            }
+            foreach (var srcPath in Directory.GetFiles(sourcePath))
+            {
+                //Copy the file from sourcepath and place into mentioned target path, 
+                //Overwrite the file if same file is exist in target path
+                File.Copy(srcPath, srcPath.Replace(sourcePath, targetPath), true);
+            }
+            DeleteDirectory(sourcePath);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Complaints_TRANSACTION_Eapplication.AddDocuments-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    private void DeleteDirectory(string path)
+    {
+        if (Directory.Exists(path))
+        {
+            //Delete all files from the Directory
+            foreach (string file in Directory.GetFiles(path))
+            {
+                File.Delete(file);
+            }
+            //Delete all child Directories
+            foreach (string directory in Directory.GetDirectories(path))
+            {
+                DeleteDirectory(directory);
+            }
+            //Delete a Directory
+            Directory.Delete(path);
+        }
+    }
+    protected void btnDelFile_Click(object sender, ImageClickEventArgs e)
+    {
+        try
+        {
+            int idno = _idnoEmp;
+            ImageButton btnDelete = sender as ImageButton;
+            string fname = btnDelete.CommandArgument;
+            int appid = Convert.ToInt32(btnDelete.AlternateText);
+            if (appid != 0)
+            {
+                path = Docpath + "NOMINATION" + "\\" + idno + "\\APP_" + Convert.ToInt32(ViewState["nfNo"].ToString());
+            }
+            else
+            {
+                path = Docpath + "TEMP_NOMINATION_FILES" + "\\" + idno + "\\APP_" + appid;
+            }
+
+            if (ViewState["FILE1"] != null && ((DataTable)ViewState["FILE1"]) != null)
+            {
+                DataTable dt = (DataTable)ViewState["FILE1"];
+                dt.Rows.Remove(this.GetEditableDatarowBill(dt, fname));
+                ViewState["FILE1"] = dt;
+                //LVFiles.DataSource = dt;
+                //LVFiles.DataBind();
+                ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('File Deleted Successfully.');", true);
+
+                if (ViewState["DELETE_BILLS"] != null && ((DataTable)ViewState["DELETE_BILLS"]) != null)
+                {
+                    DataTable dtD = (DataTable)ViewState["DELETE_BILLS"];
+                    DataRow dr = dtD.NewRow();
+                    dr["FILEPATH"] = path;
+                    dr["FILENAME"] = fname;
+                    dtD.Rows.Add(dr);
+                    ViewState["DELETE_BILLS"] = dtD;
+                }
+                else
+                {
+                    DataTable dtD = this.CreateTableBill();
+                    DataRow dr = dtD.NewRow();
+                    dr["FILEPATH"] = path;
+                    dr["FILENAME"] = fname;
+                    dtD.Rows.Add(dr);
+                    ViewState["DELETE_BILLS"] = dtD;
+                }
+                DataTable dtM = (DataTable)ViewState["FILE1"];
+                pnlAttachmentList.Visible = true;
+                this.BindListView_Attachments(dtM);
+
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Complaints_TRANSACTION_Eapplication.btnDeleteNew_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    private DataTable CreateTableBill()
+    {
+        DataTable dtRe = new DataTable();
+        dtRe.Columns.Add(new DataColumn("FILENAME", typeof(string)));
+        dtRe.Columns.Add(new DataColumn("FILEPATH", typeof(string)));
+        return dtRe;
+    }
+    private DataRow GetEditableDatarowBill(DataTable dtM, string value)
+    {
+        DataRow datRow = null;
+        try
+        {
+            foreach (DataRow dr in dtM.Rows)
+            {
+                if (dr["GETFILE"].ToString() == value)
+                {
+                    datRow = dr;
+                    break;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Complaints_TRANSACTION_Eapplication.btnDeleteNew_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+        return datRow;
+    }
+    private void DeletePath()
+    {
+        if (ViewState["DELETE_BILLS"] != null && ((DataTable)ViewState["DELETE_BILLS"]) != null)
+        {
+            int i = 0;
+            DataTable DtDel = (DataTable)ViewState["DELETE_BILLS"];
+            foreach (DataRow Dr in DtDel.Rows)
+            {
+                string filename = DtDel.Rows[i]["FILENAME"].ToString();
+                string filepath = DtDel.Rows[i]["FILEPATH"].ToString();
+
+                if (File.Exists(filepath + "\\" + filename))
+                {
+                    File.Delete(filepath + "\\" + filename);
+                }
+                i++;
+            }
+            ViewState["DELETE_BILLS"] = null;
+        }
+    }
+    private void DeleteDirecPath(string FilePath)
+    {
+        if (System.IO.Directory.Exists(FilePath))
+        {
+            try
+            {
+                System.IO.Directory.Delete(FilePath, true);
+            }
+
+            catch (System.IO.IOException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
     protected void imgbtnPreview_Click(object sender, ImageClickEventArgs e)
     {
         string Url = string.Empty;

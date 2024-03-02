@@ -140,6 +140,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
         txtScopus.Text = string.Empty;
         txtOrchid.Text = string.Empty;
         txtSupervisor.Text = string.Empty;
+        txtGoogleScId.Text = string.Empty;
         txtThesisTitle.Text = string.Empty;
         txtThesisUniversity.Text = string.Empty;
         txtMonth.Text = string.Empty;
@@ -711,6 +712,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                     dr["SCOPUS"] = ds.Tables[4].Rows[i]["SCOPUSID"].ToString();
                     dr["ORCHID"] = ds.Tables[4].Rows[i]["ORCHIDID"].ToString();
                     dr["RESEARCH"] = ds.Tables[4].Rows[i]["SUPERVISORID"].ToString();
+                    dr["GOOGLESCID"] = ds.Tables[4].Rows[i]["GOOGLESCID"].ToString();
 
                     dtM.Rows.Add(dr);
                     dtM.AcceptChanges();
@@ -1815,10 +1817,11 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
         dtId.Columns.Add(new DataColumn("SCOPUS", typeof(string)));
         dtId.Columns.Add(new DataColumn("ORCHID", typeof(string)));
         dtId.Columns.Add(new DataColumn("RESEARCH", typeof(string)));
+        dtId.Columns.Add(new DataColumn("GOOGLESCID", typeof(string)));
         return dtId;
     }
 
-    private bool CheckDuplicateIdDetail(DataTable dt, string value, string value1, string value2, string value3)
+    private bool CheckDuplicateIdDetail(DataTable dt, string value, string value1, string value2, string value3, string value4)
     {
         bool retVal = false;
         DataRow datRow = null;
@@ -1826,7 +1829,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
         {
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr["WEB"].ToString() == value && dr["SCOPUS"].ToString() == value1 && dr["ORCHID"].ToString() == value2 && dr["RESEARCH"].ToString() == value3)
+                if (dr["WEB"].ToString() == value && dr["SCOPUS"].ToString() == value1 && dr["ORCHID"].ToString() == value2 && dr["RESEARCH"].ToString() == value3 && dr["GOOGLESCID"].ToString() == value4)
                 {
                     datRow = dr;
                     retVal = true;
@@ -1852,7 +1855,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                 {
                     DataTable dtIdDet = (DataTable)ViewState["IdRecTbl"];
                     DataRow dr = dtIdDet.NewRow();
-                    if (CheckDuplicateIdDetail(dtIdDet, txtWeb.Text.Trim(), txtScopus.Text, txtOrchid.Text, txtSupervisor.Text))
+                    if (CheckDuplicateIdDetail(dtIdDet, txtWeb.Text.Trim(), txtScopus.Text, txtOrchid.Text, txtSupervisor.Text, txtGoogleScId.Text))
                     {
                         ClearIDDetails();
                         MessageBox("Record Already Exist!");
@@ -1877,6 +1880,15 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                     {
                         dr["RESEARCH"] = txtSupervisor.Text.Trim();
                     }
+                    if (txtGoogleScId.Text == string.Empty)
+                    {
+                        dr["GOOGLESCID"] = string.Empty;
+                    }
+                    else
+                    {
+                        dr["GOOGLESCID"] = txtGoogleScId.Text.Trim();
+                    }
+
                     dtIdDet.Rows.Add(dr);
                     ViewState["IdRecTbl"] = dtIdDet;
                     lvIDList.DataSource = dtIdDet;
@@ -1908,6 +1920,14 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                     else
                     {
                         dr["RESEARCH"] = txtSupervisor.Text.Trim();
+                    }
+                    if (txtGoogleScId.Text == string.Empty)
+                    {
+                        dr["GOOGLESCID"] = string.Empty;
+                    }
+                    else
+                    {
+                        dr["GOOGLESCID"] = txtGoogleScId.Text.Trim();
                     }
 
                     ViewState["SIDNO"] = Convert.ToInt32(ViewState["SIDNO"]) + 1;
@@ -1948,6 +1968,14 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                     {
                         dr["RESEARCH"] = txtSupervisor.Text.Trim();
                     }
+                    if (txtGoogleScId.Text == string.Empty)
+                    {
+                        dr["GOOGLESCID"] = string.Empty;
+                    }
+                    else
+                    {
+                        dr["GOOGLESCID"] = txtGoogleScId.Text.Trim();
+                    }
 
                     dtIdDet.Rows.Add(dr);
 
@@ -1973,6 +2001,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
         txtScopus.Text = string.Empty;
         txtOrchid.Text = string.Empty;
         txtSupervisor.Text = string.Empty;
+        txtGoogleScId.Text = string.Empty;
         ViewState["dtIDaction"] = null;
         ViewState["EDIT_SIDNO_SHORTDESC"] = null;
     }
@@ -2329,6 +2358,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
             txtScopus.Text = dr["SCOPUS"].ToString();
             txtOrchid.Text = dr["ORCHID"].ToString();
             txtSupervisor.Text = dr["RESEARCH"].ToString();
+            txtGoogleScId.Text = dr["GOOGLESCID"].ToString();
             dtShorDesc.Rows.Remove(dr);
             ViewState["IdRecTbl"] = dtShorDesc;
             lvIDList.DataSource = dtShorDesc;

@@ -8346,6 +8346,172 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                //Added by Piyush Thakre 29/02/2024
+                #region Payroll_SB_RevenueGenerated
+                public int AddRevenueGenerated(ServiceBook objRevenue, DataTable dt)
+                {
+                    int retStatus = 0;
+
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add New File
+
+                        objParams = new SqlParameter[12];
+                        objParams[0] = new SqlParameter("@P_IDNO", objRevenue.IDNO);
+                        objParams[1] = new SqlParameter("@P_YEAR", objRevenue.YEAR);
+                        objParams[2] = new SqlParameter("@P_RGT_VAC", objRevenue.RGVAC);
+                        objParams[3] = new SqlParameter("@P_RGT_EVENT", objRevenue.RGEVENTS);
+                        objParams[4] = new SqlParameter("@P_RGT_SPONSOR", objRevenue.RGSPONSORSHIP);
+                        objParams[5] = new SqlParameter("@P_WEBLINK", objRevenue.WEBLINK);
+                        objParams[6] = new SqlParameter("@P_COLLEGE_CODE", objRevenue.COLLEGE_CODE);
+                        objParams[7] = new SqlParameter("@P_ATTACHMENT", objRevenue.ATTACHMENTS);
+                        objParams[8] = new SqlParameter("@P_FILEPATH ", objRevenue.FILEPATH);
+                        objParams[9] = new SqlParameter("@P_ISBLOB", objRevenue.ISBLOB);
+                        objParams[10] = new SqlParameter("@P_PAYROLL_SB_REVENUE_GENERATED_DOCUMENT_UPLOAD", dt);
+                        objParams[11] = new SqlParameter("@P_RGNO", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_INS_SB_REVENUE_GENERATED", objParams, false);
+                        if (ret != null)
+                        {
+                            if (ret.ToString().Equals("-1"))
+                            {
+                                retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                            }
+                            else
+                            {
+                                retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.ServiceBookController.AddRevenueGenerated-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int UpdateRevenueGenerated(ServiceBook objRevenue, DataTable dt)
+                {
+                    int retStatus = 0;
+
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add New File
+                        objParams = new SqlParameter[13];
+                        objParams[0] = new SqlParameter("@P_IDNO", objRevenue.IDNO);
+                        objParams[1] = new SqlParameter("@P_RGNO", objRevenue.RGNO);
+                        objParams[2] = new SqlParameter("@P_YEAR", objRevenue.YEAR);
+                        objParams[3] = new SqlParameter("@P_RGT_VAC", objRevenue.RGVAC);
+                        objParams[4] = new SqlParameter("@P_RGT_EVENT", objRevenue.RGEVENTS);
+                        objParams[5] = new SqlParameter("@P_RGT_SPONSOR", objRevenue.RGSPONSORSHIP);
+                        objParams[6] = new SqlParameter("@P_WEBLINK", objRevenue.WEBLINK);
+                        objParams[7] = new SqlParameter("@P_COLLEGE_CODE", objRevenue.COLLEGE_CODE);
+                        objParams[8] = new SqlParameter("@P_ATTACHMENT", objRevenue.ATTACHMENTS);
+                        objParams[9] = new SqlParameter("@P_FILEPATH", objRevenue.FILEPATH);
+                        objParams[10] = new SqlParameter("@P_ISBLOB", objRevenue.ISBLOB);
+                        objParams[11] = new SqlParameter("@P_PAYROLL_SB_REVENUE_GENERATED_DOCUMENT_UPLOAD", dt);
+                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_SB_REVENUE_GENERATED", objParams, false);
+                        if (ret != null)
+                        {
+                            if (ret.ToString().Equals("-1"))
+                            {
+                                retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                            }
+                            if (Convert.ToInt32(ret) > 0)
+                            {
+                                retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.ServiceBookController.UpdateRevenueGenerated-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet GetAllRevenueGeneratedOfEmployee(int idNo)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IDNO", idNo);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_REVENUE_GENERATED", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllRevenueGeneratedOfEmployee-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetSingleRevenueGeneratedOfEmployee(int RGNO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_RGNO", RGNO);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_SINGLE_SB_REVENUE_GENERATED", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetSingleRevenueGeneratedOfEmployee-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public int DeleteRevenueGenerated(int RGNO)
+                {
+                    int retStatus = 0;
+
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add New File
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_RGNO", RGNO);
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_DEL_SB_REVENUE_GENERATED", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordDeleted);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.ServiceBookController.DeleteRevenueGenerated.-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                #endregion
             }
 
         }

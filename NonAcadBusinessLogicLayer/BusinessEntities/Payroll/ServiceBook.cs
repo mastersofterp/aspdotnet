@@ -545,6 +545,13 @@ namespace IITMS
                 //added by Piyush Thakre
                 private int _PARTITION_TYPE;
                 private string _ThemeOfTrainingAttended;
+
+                //added by Piyush Thakre 28/02/2024
+                private int _RGNO;
+                private double _RGVAC;
+                private double _RGEVENTS;
+                private double _RGSPONSORSHIP;
+
                 #endregion
 
                 #region Public Members
@@ -5687,6 +5694,65 @@ namespace IITMS
                         }
                     }
                 }
+
+                //Added by Piyush Thakre 28/02/2024
+                public int RGNO
+                {
+                    get
+                    {
+                        return this._RGNO;
+                    }
+                    set
+                    {
+                        if ((this._RGNO != value))
+                        {
+                            this._RGNO = value;
+                        }
+                    }
+                }
+                public double RGVAC
+                {
+                    get
+                    {
+                        return this._RGVAC;
+                    }
+                    set
+                    {
+                        if ((this._RGVAC != value))
+                        {
+                            this._RGVAC = value;
+                        }
+                    }
+                }
+                public double RGEVENTS
+                {
+                    get
+                    {
+                        return this._RGEVENTS;
+                    }
+                    set
+                    {
+                        if ((this._RGEVENTS != value))
+                        {
+                            this._RGEVENTS = value;
+                        }
+                    }
+                }
+                public double RGSPONSORSHIP
+                {
+                    get
+                    {
+                        return this._RGSPONSORSHIP;
+                    }
+                    set
+                    {
+                        if ((this._RGSPONSORSHIP != value))
+                        {
+                            this._RGSPONSORSHIP = value;
+                        }
+                    }
+                }
+
             }//end class ServiceBook
 
         }//end namespace  BusinessLogicLayer.BusinessEntities 

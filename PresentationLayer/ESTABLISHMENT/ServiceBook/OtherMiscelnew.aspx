@@ -745,12 +745,22 @@
                                                                     SetFocusOnError="True">
                                                                 </asp:RequiredFieldValidator>--%>
                                                             </div>
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
+                                                                    <label>Google Scholar ID :<span style="color: Red">*</span></label>
+                                                                </div>
+                                                                <asp:TextBox ID="txtGoogleScId" runat="server" CssClass="form-control" ToolTip="Enter Google Scholar ID"
+                                                                    MaxLength="150" TabIndex="30"></asp:TextBox>
+                                                                <asp:RequiredFieldValidator ID="rfvGoogleScId" runat="server" ControlToValidate="txtGoogleScId"
+                                                                    Display="None" ErrorMessage="Please Enter Google Scholar ID" ValidationGroup="IDDetail"
+                                                                    SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-12 form-group">
                                                         <p class="text-center">
-                                                            <asp:Button ID="btnIDAdd" runat="server" Text="Add" CssClass="btn btn-primary" TabIndex="30" ToolTip="Click to add" ValidationGroup="IDDetail"
+                                                            <asp:Button ID="btnIDAdd" runat="server" Text="Add" CssClass="btn btn-primary" TabIndex="31" ToolTip="Click to add" ValidationGroup="IDDetail"
                                                                 OnClick="btnIDAdd_Click" />
                                                             <asp:ValidationSummary ID="ValidationID" runat="server" ValidationGroup="IDDetail"
                                                                 ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
@@ -779,6 +789,7 @@
                                                                                     <th>Scopus ID</th>
                                                                                     <th>Orchid ID</th>
                                                                                     <th>Research Supervisor ID</th>
+                                                                                    <th>Google Scholar ID</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -812,6 +823,9 @@
                                                                             <td>
                                                                                 <%# Eval("RESEARCH")%>                                                                        
                                                                             </td>
+                                                                            <td>
+                                                                                <%# Eval("GOOGLESCID")%>                                                                        
+                                                                            </td>
                                                                         </tr>
                                                                     </ItemTemplate>
                                                                 </asp:ListView>
@@ -840,7 +854,7 @@
                                                                     <label>Thesis title :<span style="color: Red">*</span></label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtThesisTitle" runat="server" CssClass="form-control" ToolTip="Enter Thesis title"
-                                                                    MaxLength="500" TabIndex="31"></asp:TextBox>
+                                                                    MaxLength="500" TabIndex="32"></asp:TextBox>
                                                                 <asp:RequiredFieldValidator ID="rfvTitle" runat="server" ControlToValidate="txtThesisTitle"
                                                                     Display="None" ErrorMessage="Please Enter Thesis title" ValidationGroup="Thesis"
                                                                     SetFocusOnError="True"></asp:RequiredFieldValidator>
@@ -851,7 +865,7 @@
                                                                     <label>University/Institute :<span style="color: Red">*</span></label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtThesisUniversity" runat="server" CssClass="form-control" ToolTip="Enter University/Institue"
-                                                                    MaxLength="150" TabIndex="32"></asp:TextBox>
+                                                                    MaxLength="150" TabIndex="33"></asp:TextBox>
                                                                 <asp:RequiredFieldValidator ID="rfvUni" runat="server" ControlToValidate="txtThesisUniversity"
                                                                     Display="None" ErrorMessage="Please Enter University/Institute Name" ValidationGroup="Thesis"
                                                                     SetFocusOnError="True"></asp:RequiredFieldValidator>
@@ -862,7 +876,7 @@
                                                                     <label>Month :</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtMonth" runat="server" CssClass="form-control" ToolTip="Enter Month"
-                                                                    MaxLength="20" TabIndex="33"></asp:TextBox>
+                                                                    MaxLength="20" TabIndex="34"></asp:TextBox>
                                                                 <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtCandidate"
                                                                     Display="None" ErrorMessage="Please Enter Name of Candidate" ValidationGroup="PhdDetails"
                                                                     SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
@@ -873,7 +887,7 @@
                                                                     <label>Year :</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtThesisYear" runat="server" CssClass="form-control" ToolTip="Enter Year"
-                                                                    MaxLength="4" TabIndex="34" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                                                    MaxLength="4" TabIndex="35" onkeyup="validateNumeric(this);"></asp:TextBox>
                                                                 <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="txtUniversity"
                                                                     Display="None" ErrorMessage="Please Enter Name of University" ValidationGroup="PhdDetails"
                                                                     SetFocusOnError="True">
@@ -884,7 +898,7 @@
 
                                                     <div class="col-md-12 form-group">
                                                         <p class="text-center">
-                                                            <asp:Button ID="btnThesis" runat="server" Text="Add" CssClass="btn btn-primary" TabIndex="35" ToolTip="Click to add" ValidationGroup="Thesis"
+                                                            <asp:Button ID="btnThesis" runat="server" Text="Add" CssClass="btn btn-primary" TabIndex="36" ToolTip="Click to add" ValidationGroup="Thesis"
                                                                 OnClick="btnThesis_Click" />
                                                             <asp:ValidationSummary ID="validateThesis" runat="server" ValidationGroup="Thesis"
                                                                 ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
@@ -971,9 +985,9 @@
                         </div>
 
                         <div class="col-md-12 text-center">
-                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" TabIndex="26"
+                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" TabIndex="37"
                                 ValidationGroup="emp" CssClass="btn btn-primary" OnClick="btnSubmit_Click" />
-                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" TabIndex="27"
+                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" TabIndex="38"
                                 CausesValidation="false" OnClick="btnCancel_Click" />
                             <asp:ValidationSummary ID="vsEmp" runat="server" ValidationGroup="emp" ShowMessageBox="true"
                                 ShowSummary="false" DisplayMode="List" />
