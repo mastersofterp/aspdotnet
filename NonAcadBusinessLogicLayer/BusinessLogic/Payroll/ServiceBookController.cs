@@ -6352,7 +6352,7 @@ namespace IITMS
 
                         objParams[23] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
                         objParams[24] = new SqlParameter("@P_MODE", objProf.MODE);
-                        objParams[25] = new SqlParameter("@P_AcadYear", objProf.YEAR);
+                        objParams[25] = new SqlParameter("@P_AcadYear", objProf.PASSYEAR);
                         objParams[26] = new SqlParameter("@P_PARTITION_TYPE", objProf.PARTITION_TYPE);
                         objParams[27] = new SqlParameter("@P_ThemeOfTrainingAttended", objProf.ThemeOfTrainingAttended);
                         objParams[28] = new SqlParameter("@P_ISBLOB", objProf.ISBLOB);
@@ -6428,7 +6428,7 @@ namespace IITMS
 
                         objParams[21] = new SqlParameter("@P_PROFESSIONAL_BODY", objProf.PROFESSIONALBODY);
                         objParams[22] = new SqlParameter("@P_MODE", objProf.MODE);
-                        objParams[23] = new SqlParameter("@P_AcadYear", objProf.YEAR);
+                        objParams[23] = new SqlParameter("@P_AcadYear", objProf.PASSYEAR);
                         objParams[24] = new SqlParameter("@P_PARTITION_TYPE", objProf.PARTITION_TYPE);
                         objParams[25] = new SqlParameter("@P_ThemeOfTrainingAttended", objProf.ThemeOfTrainingAttended);
                         objParams[26] = new SqlParameter("@P_ISBLOB", objProf.ISBLOB);

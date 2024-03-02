@@ -229,11 +229,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
 
             if (txtAcadYear.Text != string.Empty)
             {
-                objSevBook.YEAR = Convert.ToInt32(txtAcadYear.Text);
+                objSevBook.PASSYEAR = txtAcadYear.Text;
             }
             else
             {
-                objSevBook.YEAR = null;
+                objSevBook.PASSYEAR = null;
             }
             if (ddlPartitionType.SelectedIndex > 0)
             {
