@@ -56,7 +56,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 }
                 else
                 { // Check User Authority 
-                    this.CheckPageAuthorization();
+                   // this.CheckPageAuthorization();
                 }
 
                 // Set the Page Title
@@ -359,7 +359,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 }
 
                 string input = lblAmount.Text.Trim();
-                  if (Convert.ToDouble(MinAmount) > Convert.ToDouble(input))
+                if (Convert.ToDouble(MinAmount) > Convert.ToDouble(input))
                 //if (Convert.ToDouble(input) > Convert.ToDouble(MinAmount))
                 //if ((Convert.ToDouble(MinAmount) < Convert.ToDouble(input))|| (Convert.ToDouble(MinAmount) > Convert.ToDouble(input)))
                 {
@@ -369,7 +369,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 }
 
 
-                  if (partial_Payment == 1 && Convert.ToDouble(input) < MinAmount )
+                if (partial_Payment == 1 && Convert.ToDouble(input) < MinAmount)
                 {
                     divparnote.Visible = true;
                     divval.Visible = true;
@@ -444,7 +444,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
         if (string.IsNullOrEmpty(input))
         {
-           // objCommon.DisplayMessage(this, "Please Enter Amount to be Paid.", this.Page);
+            // objCommon.DisplayMessage(this, "Please Enter Amount to be Paid.", this.Page);
             divval.Visible = true;
             lblval.Text = "Please Enter Amount to be Paid.";
             return;
@@ -453,7 +453,6 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         int status1 = 0;
         int Currency = 1;
         string amount = string.Empty;
-        
         //amount = Convert.ToString("1");
         try
         {
@@ -483,14 +482,12 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             Session["studEmail"] = lblMailId.Text;
 
             Session["ReceiptType"] = ddlReceiptType.SelectedValue;
-            
             Session["paysession"] = hdfSessioNo.Value;
             Session["paysemester"] = ddlSemester.SelectedValue;
             Session["homelink"] = "OnlinePayment.aspx";
             Session["regno"] = lblRegno.Text;
             Session["payStudName"] = lblStudName.Text;
             Session["paymobileno"] = lblMobileNo.Text;
-           
             Session["Branchname"] = lblStudBranch.Text;
 
             //Added by Nikhil L. on 23-08-2022 for getting response and request url as per degreeno for RCPIPER.
@@ -564,20 +561,45 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             }
             //**********************************End by Nikhil L.********************************************//
 
-
-            DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
-            if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+            if (Session["OrgId"].ToString() == "18")
             {
-                if (ds1.Tables[0].Rows.Count > 1)
-                {
 
-                }
-                else
+                college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                int Degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                int Branchno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                //**********************************End by Nikhil L.********************************************//
+                DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_V2(OrganizationId, Convert.ToInt32(ddlSemester.SelectedValue), ddlReceiptType.Text, college_id, Degreeno, Branchno);
+                if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
                 {
-                    Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
-                    string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                    Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
-                    Response.Redirect(RequestUrl);
+                    if (ds1.Tables[0].Rows.Count > 1)
+                    {
+
+                    }
+                    else
+                    {
+                        Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();
+                        string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
+                        //Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
+                        Response.Redirect(RequestUrl);
+                    }
+                }
+            }
+            else
+            {
+                DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
+                if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+                {
+                    if (ds1.Tables[0].Rows.Count > 1)
+                    {
+
+                    }
+                    else
+                    {
+                        Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
+                        string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
+                        Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
+                        Response.Redirect(RequestUrl);
+                    }
                 }
             }
         }
@@ -1652,24 +1674,47 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 Session["payactivityno"] = 1;
             }
 
-            DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
-            if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+            if ((Session["OrgId"].ToString() == "18"))
             {
+                college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                int Degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                int Branchno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+            //**********************************End by Nikhil L.********************************************//
+            DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_V2(OrganizationId, Convert.ToInt32(ddlSemester.SelectedValue), ddlReceiptType.Text, college_id, Degreeno, Branchno);
+            if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+                {
                 if (ds1.Tables[0].Rows.Count > 1)
-                {
+                    {
 
-                }
+                    }
                 else
-                {
-                    Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
+                    {
+                    Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                    Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
+                    //Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
-                    //Response.Redirect("https://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
-
+                    }
                 }
             }
-
+            else{
+                 DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
+                 if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+                 {
+                     if (ds1.Tables[0].Rows.Count > 1)
+                     {
+                 
+                     }
+                     else
+                     {
+                         Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
+                         string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
+                         Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
+                         Response.Redirect(RequestUrl);
+                         //Response.Redirect("https://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
+                 
+                     }
+                 }
+            }
         }
         catch (Exception ex)
         {
@@ -2140,7 +2185,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             string input = txtPartAmount.Text.Trim();
 
             //if (input != null || input != "" || input !=null)
-             if (!string.IsNullOrEmpty(input))
+            if (!string.IsNullOrEmpty(input))
             {
                 if (!string.IsNullOrEmpty(input) && input[0] == '0' || !string.IsNullOrEmpty(input) && input[0] == '.')
                 {
@@ -2157,7 +2202,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                         divval.Visible = true;
                         //objCommon.DisplayMessage(this, "Minimum Amount Reached.Please Enter amount greater than  " + Minamount + "  as Configured", this.Page);
                         //lblval.Text = "you can Enter the Minimum amount greater than " + Minamount + "  as Configured";
-                        lblval.Text = "Minimum allowed amount should be greater than " + Minamount ;
+                        lblval.Text = "Minimum allowed amount should be greater than " + Minamount;
                         txtPartAmount.Text = string.Empty;
                         //txtPartAmount.Text = Session["PayableAmount"].ToString();
                         return;
