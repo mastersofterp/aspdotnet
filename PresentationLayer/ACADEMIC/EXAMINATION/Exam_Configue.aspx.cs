@@ -289,6 +289,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         int remark = 0;
         string subjecttype = string.Empty;
         string userforrange = string.Empty;
+        int subexamwise = 0;
 
 
         foreach (ListItem item in ddluser.Items)
@@ -510,6 +511,11 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         {
             remark = 1;
         }
+        if (hdfSubexamwise.Value == "true")
+        {
+            subexamwise = 1;
+        }
+
 
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype);
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0);
@@ -520,7 +526,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session, feescollection, relative, absolute, barcode, feedback, attendance, attendance_percentage, intsubexam, intassessment, intexcelformat, admissionstatus, endsemcomponent, adminexapproval, admincomponent, facultycomponent);
 
         //EXCEL TIMETABLE,INTERNAL MARK PUBLISH, COMPONENTWISE EXCEL FLAG ADDED AS PER THE REQUIREMENT.
-        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session, feescollection, relative, absolute, barcode, feedback, attendance, attendance_percentage, intsubexam, intassessment, intexcelformat, admissionstatus, endsemcomponent, adminexapproval, admincomponent, facultycomponent, exceltimetable, intmarkpublish, compwiseexcel,remark,subjecttype,userforrange);
+        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session, feescollection, relative, absolute, barcode, feedback, attendance, attendance_percentage, intsubexam, intassessment, intexcelformat, admissionstatus, endsemcomponent, adminexapproval, admincomponent, facultycomponent, exceltimetable, intmarkpublish, compwiseexcel, remark, subjecttype, userforrange, subexamwise);
 
         if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
         {
@@ -605,6 +611,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         hdftimetableexcel.Value = "";
         hdfintmarkpublish.Value = "";
         hdfcompwiseexcel.Value = "";
+        hdfSubexamwise.Value = "";
         BindView();
 
     }

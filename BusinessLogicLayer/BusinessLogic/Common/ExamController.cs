@@ -8196,13 +8196,13 @@ namespace IITMS
                 #endregion
 
                 #region Added By Injamam on date 02_01_2024
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, int remark, string subjecttype, string userforrange)
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, int remark, string subjecttype,string userforrange,int subexamwise)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[43];
+                        SqlParameter[] objParam = new SqlParameter[44];
                         objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
                         objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
                         objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
@@ -8246,6 +8246,7 @@ namespace IITMS
                         objParam[40] = new SqlParameter("@P_REMARK", remark);
                         objParam[41] = new SqlParameter("@P_SUBJETTYPE", subjecttype);
                         objParam[42] = new SqlParameter("@P_USERFORRANGE", userforrange);
+                        objParam[43] = new SqlParameter("@P_INTERNALSUBEXAMWISE", subexamwise);
 
                         //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
 

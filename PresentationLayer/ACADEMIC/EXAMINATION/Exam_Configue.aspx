@@ -642,6 +642,18 @@
                                             <asp:HiddenField ID="hdfremark" runat="server" ClientIDMode="Static" />
                                         </div>
                                     </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_Subexamwise" style="font-size: small;">Internal Mark Subexam-wise</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Subexamwise">
+                                            <label class="custom-control-label" for="chk_Subexamwise"></label>
+                                            <asp:HiddenField ID="hdfSubexamwise" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
                                      <div class="form-group col-lg-6 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
@@ -835,6 +847,7 @@
             var compwiseexcel = document.getElementById("chk_compwiseexcel");
 
             var remark = document.getElementById("chk_remark");
+            var Subexamwise = document.getElementById("chk_Subexamwise");
 
             if (examreg.checked) {
                 $('#hdfexamregister').val(true);
@@ -1111,7 +1124,13 @@
             else {
                 $('#hdfremark').val(false)
             }
-
+            if (Subexamwise.checked) {
+                
+                $('#hdfSubexamwise').val(true)
+            }
+            else {
+                $('#hdfSubexamwise').val(false)
+            }
         }
 
 
