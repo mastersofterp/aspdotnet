@@ -890,9 +890,17 @@
                                                         <sup></sup>
                                                         <label>Signature Authority.</label>
                                                     </div>
-                                                    <asp:RadioButton runat="server" ID="rdDirector" Text="Chancellor" GroupName="g1" Checked="True" />
+
+                                                    <asp:RadioButtonList ID="rdblSignatureAuthority" runat="server" GroupName="g1" AppendDataBoundItems="true" RepeatDirection="Horizontal">
+                                                        <asp:ListItem Value="1" Text="Chancellor" Selected="True" ></asp:ListItem>
+                                                        <asp:ListItem Value="2" Text="Pro Chancellor"></asp:ListItem>
+                                                        <asp:ListItem Value="3" Text="Special Officer"></asp:ListItem></asp:RadioButtonList>
+
+                                                 
+
+                                                    <%--<asp:RadioButton runat="server" ID="rdDirector" Text="Chancellor" GroupName="g1" Checked="True" />
                                                     <asp:RadioButton runat="server" ID="rdforDirector" Text="Pro Chancellor" GroupName="g1" />
-                                                     <asp:RadioButton runat="server" ID="rdspcloffcr" Text="Special Officer" GroupName="g1" />
+                                                     <asp:RadioButton runat="server" ID="rdspcloffcr" Text="Special Officer" GroupName="g1" />--%>
                                                 </div>
 
                                             </asp:Panel>

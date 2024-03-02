@@ -55,6 +55,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
      private double _TRANSPORT_CHARG;
 
      private int _INSURED;
+     private int _SigningAuthorityid;       //01032024
        //----start---16-03-2023-----
      private string _NatureOfWork;
      private string _OurReferenceNo;
@@ -817,6 +818,26 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              }
          }
      }
+
+
+     public int SigningAuthorityid
+     {
+         get
+         {
+             return _SigningAuthorityid;
+         }
+         set
+         {
+             if (_SigningAuthorityid != value)
+             {
+                 _SigningAuthorityid = value;
+             }
+         }
+
+
+     }
+
+
      public char ISTYPE
      {
          get
