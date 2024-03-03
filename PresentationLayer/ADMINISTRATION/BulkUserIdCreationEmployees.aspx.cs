@@ -600,6 +600,22 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
             return input.Contains(" ");
         }
 
+        private bool ContainsAlphabet(int number)
+        {
+            // Convert the integer to a string
+            string numberString = number.ToString();
+
+            // Check if the string contains any non-digit characters
+            foreach (char c in numberString)
+            {
+                if (!Char.IsDigit(c))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         private void ExcelToDatabase(string FilePath, string Extension, string isHDR)
         {
 
@@ -810,31 +826,47 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         //str.Any(Char.IsWhiteSpace);
                         //string mobNo = str;
                  //   Check for spaces in the string
-                        if (ContainsSpace(str))
-                    {
-                        // Register JavaScript alert if space is found
-                       // string script = "alert('Space found in the string!');";
-                        // ScriptManager.RegisterStartupScript(this, this.GetType(), "SpaceAlert", script, true);
+                        //  return Regex.IsMatch(mobileNumber, @"^\d{10}$");
+                        string mobil = dtNew.Rows[i]["Mobile No"].ToString();
+                        bool isValidmobil = Regex.IsMatch(mobil, @"^\d{10}$");
 
-                        message = "<span style='color:Red'><b>Space found in the Mobile no.</b></span>";
-                        messageexp = "Mobile no Is Already Exists.";
-                        ErrorString = ErrorString + message + " | ";
-                        ErrorString1 = ErrorString1 + messageexp + " | ";
-                        IsErrorInUpload = true;
-                      }
-                else
-                {
-                    string mobNo = str;
-                        ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "PHONENO='" + mobNo + "'", "");
-                        if (ds1.Tables[0].Rows.Count > 0)
+                        if (!isValidmobil)
                         {
-                            message = "<span style='color:Red'><b> Mobile no Is Already Exists.</b></span>";
-                            messageexp = "Mobile no Is Already Exists.";
+                            message = "<span style='color:Red'><b>Please enter Valid mobile number</b> </span>";
+                            messageexp = "Please enter Valid mobile number";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
+                        else
+                        {
+                            if (ContainsSpace(str))
+                            {
+                                // Register JavaScript alert if space is found
+                                // string script = "alert('Space found in the string!');";
+                                // ScriptManager.RegisterStartupScript(this, this.GetType(), "SpaceAlert", script, true);
+
+                                message = "<span style='color:Red'><b>Space found in the Mobile no.</b></span>";
+                                messageexp = "Mobile no Is Already Exists.";
                                 ErrorString = ErrorString + message + " | ";
                                 ErrorString1 = ErrorString1 + messageexp + " | ";
                                 IsErrorInUpload = true;
-                         }
-                }
+                            }
+                            else
+                            {
+                                string mobNo = str;
+                                ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "PHONENO='" + mobNo + "'", "");
+                                if (ds1.Tables[0].Rows.Count > 0)
+                                {
+                                    message = "<span style='color:Red'><b> Mobile no Is Already Exists.</b></span>";
+                                    messageexp = "Mobile no Is Already Exists.";
+                                    ErrorString = ErrorString + message + " | ";
+                                    ErrorString1 = ErrorString1 + messageexp + " | ";
+                                    IsErrorInUpload = true;
+                                }
+                            }
+                        }
+                        
                      string EmailId = dtNew.Rows[i]["E-mail ID"].ToString();
                      if (ContainsSpace(EmailId))
                      {
@@ -948,16 +980,16 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
 
                                  //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                                 string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
-                                 ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
-                                 if (ds1.Tables[0].Rows.Count > 0)
-                                 {
-                                     message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
-                                     messageexp = "FName LName and Date Of Birth Is Already Exists.";
-                                     ErrorString = ErrorString + message + " | ";
-                                     ErrorString1 = ErrorString1 + messageexp + " | ";
-                                     IsErrorInUpload = true;
-                                 }
+                                 //string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
+                                 //ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
+                                 //if (ds1.Tables[0].Rows.Count > 0)
+                                 //{
+                                 //    message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
+                                 //    messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                                 //    ErrorString = ErrorString + message + " | ";
+                                 //    ErrorString1 = ErrorString1 + messageexp + " | ";
+                                 //    IsErrorInUpload = true;
+                                 //}
                              }
                         // }
                          else
@@ -1586,27 +1618,42 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                         if (!(dtNew.Rows[i]["Mobile No"]).ToString().Equals(string.Empty))
                         {
-                            objPayMas.RegNo = dtNew.Rows[i]["Mobile No"].ToString();
-                             string mobileNo= dtNew.Rows[i]["Mobile No"].ToString();
-                             if (mobileNo.Length < 10 || mobileNo.Length > 10)
-                                 {
-                               message = "<span style='color:Red'><b>Please enter Valid 10 digit Mobile Number </b></span>";
-                               messageexp = "Please enter Valid 10 digit Mobile Number ";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                              }
-                            
-                            //Mobile Number start with 0 Validation
+                            //  return Regex.IsMatch(mobileNumber, @"^\d{10}$");
+                            string mobil1 = dtNew.Rows[i]["Mobile No"].ToString();
+                            bool isValidmobil1 = Regex.IsMatch(mobil, @"^\d{10}$");
 
-                            if (mobileNo.StartsWith("0"))
-                                  {
-                                      message = "<span style='color:Red'><b>Mobile Number Dont start with 0 </b></span>";
-                                      messageexp = "Mobile Number Dont start with 0 ";
-                                      ErrorString = ErrorString + message + " | ";
-                                      ErrorString1 = ErrorString1 + messageexp + " | ";
-                                      IsErrorInUpload = true;
-                                  }
+                            if (!isValidmobil1)
+                            {
+                                message = "<span style='color:Red'><b>Please enter Valid mobile number</b> </span>";
+                                messageexp = "Please enter Valid mobile number";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                            }
+                            else
+                            {
+                                objPayMas.RegNo = dtNew.Rows[i]["Mobile No"].ToString();
+                                string mobileNo = dtNew.Rows[i]["Mobile No"].ToString();
+                                if (mobileNo.Length < 10 || mobileNo.Length > 10)
+                                {
+                                    message = "<span style='color:Red'><b>Please enter Valid 10 digit Mobile Number </b></span>";
+                                    messageexp = "Please enter Valid 10 digit Mobile Number ";
+                                    ErrorString = ErrorString + message + " | ";
+                                    ErrorString1 = ErrorString1 + messageexp + " | ";
+                                    IsErrorInUpload = true;
+                                }
+
+                                //Mobile Number start with 0 Validation
+
+                                if (mobileNo.StartsWith("0"))
+                                {
+                                    message = "<span style='color:Red'><b>Mobile Number Dont start with 0 </b></span>";
+                                    messageexp = "Mobile Number Dont start with 0 ";
+                                    ErrorString = ErrorString + message + " | ";
+                                    ErrorString1 = ErrorString1 + messageexp + " | ";
+                                    IsErrorInUpload = true;
+                                }
+                            }
                       }
                         else
                         {
@@ -1618,18 +1665,31 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         }
                         if (!(dtNew.Rows[i]["E-mail ID"]).ToString().Equals(string.Empty))
                         {
-                            objPayMas.RegNo = dtNew.Rows[i]["E-mail ID"].ToString();
-                                 string email = dtNew.Rows[i]["E-mail ID"].ToString();
-                                 var mail = new MailAddress(email);
-                                 bool isValidEmail = mail.Host.Contains(".");
-                                 if(!isValidEmail){
-                                     message = "<span style='color:Red'><b>Please enter Valid E-mail ID</b> </span>";
-                                     messageexp = "Please enter Valid E-mail ID";
-                                     ErrorString = ErrorString + message + " | ";
-                                     ErrorString1 = ErrorString1 + messageexp + " | ";
-                                     IsErrorInUpload = true;
+                            //objPayMas.RegNo = dtNew.Rows[i]["E-mail ID"].ToString();
+                            //     string email = dtNew.Rows[i]["E-mail ID"].ToString();
+                            //     var mail = new MailAddress(email);
+                            //     bool isValidEmail = mail.Host.Contains(".");
+                            //     if(!isValidEmail){
+                            //         message = "<span style='color:Red'><b>Please enter Valid E-mail ID</b> </span>";
+                            //         messageexp = "Please enter Valid E-mail ID";
+                            //         ErrorString = ErrorString + message + " | ";
+                            //         ErrorString1 = ErrorString1 + messageexp + " | ";
+                            //         IsErrorInUpload = true;
 
-                                 } 
+                            //     } 
+
+                            string email = dtNew.Rows[i]["E-mail ID"].ToString();
+                            bool isValidEmail = Regex.IsMatch(email, @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$");
+
+                            if (!isValidEmail)
+                            {
+                                message = "<span style='color:Red'><b>Please enter Valid E-mail ID</b> </span>";
+                                messageexp = "Please enter Valid E-mail ID";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                            }
+
                         }
                         else
                         {
