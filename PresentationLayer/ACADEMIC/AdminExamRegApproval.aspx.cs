@@ -704,8 +704,18 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         lvStudentRecords.DataSource = null;
         lvStudentRecords.DataBind();
         rdoDegree.SelectedValue = null;
-
-        RadioCheck();
+        #region for backlog added by Rohit For Hide 
+        if (ddlStudetType.SelectedValue == "1")
+        {
+            rdoDegree.Items.FindByValue("1").Selected = true;
+            rdoDegree.Items.FindByValue("0").Attributes.Add("style", "display:none;");          
+        }
+        else
+        {
+            
+            rdoDegree.Items.FindByValue("0").Selected = true;
+        }
+        #endregion
     }
 
 }
