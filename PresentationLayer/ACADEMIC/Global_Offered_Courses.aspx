@@ -925,7 +925,8 @@
                                                         TargetControlID="txtAttLockDay" />
                                                 </div>
 
-                                                <div class="form-group col-lg-2 col-md-6 col-6">
+                                                 <%--(d-none) added by vipul T on date 04-03-2024 as per TNO:-55726 --%>
+                                                <div class="form-group col-lg-2 col-md-6 col-6 d-none">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <label>SMS Facility</label>
@@ -937,7 +938,7 @@
                                                 </div>
 
 
-                                                <div class="form-group col-lg-2 col-md-6 col-6">
+                                                <div class="form-group col-lg-2 col-md-6 col-6 d-none">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <label>Email Facility</label>
@@ -947,7 +948,7 @@
                                                         <label data-on="Yes" data-off="No" for="rdEmailYes"></label>
                                                     </div>
                                                 </div>
-
+                                                <%--  end--%> 
 
                                                 <div class="form-group col-lg-2 col-md-6 col-6" style="display: none">
                                                     <div class="label-dynamic">
@@ -1013,8 +1014,8 @@
                                                                     <th>Start Date</th>
                                                                     <th>End Date</th>
                                                                     <th>Att Lock Days</th>
-                                                                    <th>SMS Facility</th>
-                                                                    <th>Email Facility</th>
+                                                                    <th class="d-none">SMS Facility</th>
+                                                                    <th class="d-none">Email Facility</th>
 
                                                                     <th>Teaching Plan</th>
                                                                     <th>Active</th>
@@ -1036,8 +1037,8 @@
                                                         <td><%#Eval("START_DATE")%></td>
                                                         <td><%#Eval("END_DATE")%></td>
                                                         <td><%#Eval("LOCK_ATT_DAYS")%></td>
-                                                        <td><%#Eval("SMS_FACILITY")%></td>
-                                                        <td><%#Eval("EMAIL_FACILITY")%></td>
+                                                       <%-- <td><%#Eval("SMS_FACILITY")%></td>
+                                                        <td><%#Eval("EMAIL_FACILITY")%></td>--%>
                                                         <td><%#Eval("TEACHING_PLAN")%></td>
                                                         <td><%#Eval("ACTIVE")%></td>
                                                     </tr>
