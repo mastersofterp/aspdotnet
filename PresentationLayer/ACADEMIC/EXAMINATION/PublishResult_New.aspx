@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="PublishResult.aspx.cs" Inherits="ACADEMIC_PublishResult" %>
+<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="PublishResult_New.aspx.cs" Inherits="ACADEMIC_PublishResult_New" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
@@ -24,7 +24,9 @@
                     <div class="box box-primary">
                         <div id="div2" runat="server"></div>
                         <div class="box-header with-border">
-                            <h3 class="box-title">PUBLISH RESULTS</h3>
+                           <h3 class="box-title">
+                                <asp:Label ID="lblDynamicPageTitle" runat="server" style="text-transform: uppercase;"></asp:Label>
+                           </h3>
                         </div>
                         <div class="box-body">
 
@@ -34,25 +36,14 @@
                                     <div class="col-12">
                                         <div class="row">
 
-                                              <div class="col-lg-3 col-md-6 col-12 form-group d-none">
-                                                <div class="label-dynamic">
-                                                    <sup>* </sup>
-                                                    <label>Scheme</label>
-                                                </div>
-                                                <asp:DropDownList ID="ddlScheme" runat="server" AppendDataBoundItems="true"
-                                                    AutoPostBack="True" OnSelectedIndexChanged="ddlScheme_SelectedIndexChanged" data-select2-enable="true" TabIndex="1">
-                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                </asp:DropDownList>
-                                                <asp:requiredfieldvalidator id="rfvscheme" runat="server" controltovalidate="ddlscheme"
-                                                    display="none" initialvalue="0" errormessage="please select scheme" validationgroup=""></asp:requiredfieldvalidator>
-                                            </div>
 
 
-                                              <div class="form-group col-lg-3 col-md-6 col-12">
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <sup>* </sup>
                                                     <label>College</label>
-                                                    <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
+                                                    <%--<asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>--%>
                                                 </div>
                                                 <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
                                                     ValidationGroup="save" data-select2-enable="true" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged" TabIndex="1">
@@ -88,7 +79,7 @@
                                                     Display="None" ErrorMessage="Please Select Institute" InitialValue="0" ValidationGroup=""></asp:RequiredFieldValidator>
                                             </div>
 
-                                            <div class="col-lg-3 col-md-6 col-12 form-group d-none">
+                                            <div class="col-lg-3 col-md-6 col-12 form-group">
                                                 <div class="label-dynamic">
                                                     <%--<sup>* </sup>--%>
                                                     <label>Degree</label>
@@ -101,7 +92,7 @@
                                             Display="None" ErrorMessage="Please Select Degree" InitialValue="0" ValidationGroup="report"></asp:RequiredFieldValidator>--%>
                                             </div>
 
-                                            <div class="col-lg-3 col-md-6 col-12 form-group d-none">
+                                            <div class="col-lg-3 col-md-6 col-12 form-group">
                                                 <div class="label-dynamic">
                                                     <%-- <sup>* </sup>--%>
                                                     <label>Programme/Branch</label>
@@ -114,7 +105,18 @@
                                             Display="None" ErrorMessage="Please Select Branch" InitialValue="0" ValidationGroup="report"></asp:RequiredFieldValidator>--%>
                                             </div>
 
-
+                                            <div class="col-lg-3 col-md-6 col-12 form-group d-none">
+                                                <div class="label-dynamic">
+                                                    <%-- <sup>* </sup>--%>
+                                                    <label>Scheme</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlScheme" runat="server" AppendDataBoundItems="true"
+                                                    AutoPostBack="True" OnSelectedIndexChanged="ddlScheme_SelectedIndexChanged" data-select2-enable="true" TabIndex="1">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <%--<asp:RequiredFieldValidator ID="rfvScheme" runat="server" ControlToValidate="ddlScheme"
+                                                    Display="None" InitialValue="0" ErrorMessage="Please Select Scheme" ValidationGroup=""></asp:RequiredFieldValidator>--%>
+                                            </div>
 
                                             <div class="col-lg-3 col-md-6 col-12 form-group">
                                                 <div class="label-dynamic">
@@ -338,9 +340,6 @@
                                                         </td>
                                                         <td>
                                                             <%# Eval("REGNO")%>
-                                                          <%--  <asp:Label ID="lblStudname" runat="server" Visible="false" ToolTip='<%# Eval("UA_NO")%>'></asp:Label>--%>
-
-                                                            <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("UA_NO") %>' />
                                                         </td>
 
                                                         <td>
