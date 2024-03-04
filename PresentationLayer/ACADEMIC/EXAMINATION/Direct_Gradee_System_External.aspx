@@ -1,33 +1,95 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="Direct_Gradee_System_External.aspx.cs" Inherits="ACADEMIC_EXAMINATION_Direct_Gradee_System" %>
-  <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
-<script runat="server">
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
-   
-</script>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <style>
+        .multiselect-container {
+            position: absolute;
+            transform: translate3d(0px, -46px, 0px);
+            top: 0px;
+            left: 0px;
+            will-change: transform;
+            height: 200px;
+            overflow: auto;
+        }
+    </style>
+
+    <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.js")%>"></script>
+    <script type="text/javascript">
+        //var MulSel = $.noConflict();
+        $(document).ready(function () {
+            debugger
+            $('.multi-select-demo').multiselect();
+            var prm = Sys.WebForms.PageRequestManager.getInstance();
+            prm.add_endRequest(function () {
+                $('.multi-select-demo').multiselect({
+                    includeSelectAllOption: true,
+                    enableFiltering: true,
+                    filterPlaceholder: 'Search',
+                    enableCaseInsensitiveFiltering: true,
+                    enableHTML: true,
+                    templates: {
+                        filter: '<li class="multiselect-item multiselect-filter"><div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div><input class="form-control multiselect-search" type="text" /></div></li>',
+                        filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default multiselect-clear-filter" style="height: 33px;" type="button"><i style="margin-right: 4px;" class="fa fa-eraser"></i></button></span>'
+                    }
+                    //dropRight: true,
+                    //search: true,
+                });
+
+            });
+        });
+    </script>
  
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <asp:UpdatePanel ID="updDirectGrade" runat="server">
-        <ContentTemplate>
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-12">
-            <div class="box box-primary">
-                <div id="div1" runat="server"></div>
-                <div class="box-header with-border">
-                    <h3 class="box-title">Direct Grading System</h3>
+   
+     <div>
+         
+        <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updDirectGrade"
+            DynamicLayout="true" DisplayAfter="0">
+            <ProgressTemplate>
+                <div id="preloader">
+                    <div id="loader-img">
+                        <div id="loader">
+                        </div>
+                        <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                    </div>
                 </div>
 
-                <div class="box-body">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="form-group col-lg-4 col-md-12 col-12">
-                                <div class="row">
-                                    <div class="form-group col-lg-12 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>College Scheme</label>
+                            <div class="box-body">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="form-group col-lg-4 col-md-12 col-12">
+                                            <div class="row">
+                                               
+                                                <div class="form-group col-lg-12 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>College Scheme</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlCollegeScheme" runat="server" CssClass="form-control" AppendDataBoundItems="true" data-select2-enable="true" Visible="false" TabIndex="1">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:ListBox ID="lstcollege" runat="server" AppendDataBoundItems="true" Width="100px" SelectionMode="Multiple" CssClass="multi-select-demo"
+                                                    TabIndex="1"></asp:ListBox>
+                                                   <%-- <asp:RequiredFieldValidator ID="lstcollege1" runat="server" ControlToValidate="lstcollege"
+                                                        Display="None" ErrorMessage="Please Select College/Scheme." InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
+
+                                                </div>
+                                                <div class="form-group col-lg-12 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Level</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlLevel" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="2" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlLevel_SelectedIndexChanged">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        <asp:ListItem Value="1">CGPA/AGPA</asp:ListItem>
+                                                        <asp:ListItem Value="2">Marks Range</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="ddllevel1" runat="server" ControlToValidate="ddlLevel"
+                                                        Display="None" ErrorMessage="Please Select College/Scheme." InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                </div>
+                                            </div>
                                         </div>
                                         <asp:DropDownList ID="ddlCollegeScheme" runat="server" CssClass="form-control" AppendDataBoundItems="true" data-select2-enable="true"  TabIndex="1" >
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
