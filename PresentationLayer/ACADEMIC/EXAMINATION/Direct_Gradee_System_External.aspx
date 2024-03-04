@@ -82,7 +82,7 @@
                                                     <asp:DropDownList ID="ddlCollegeScheme" runat="server" CssClass="form-control" AppendDataBoundItems="true" data-select2-enable="true" Visible="false" TabIndex="1">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                    <asp:ListBox ID="lstcollege" runat="server" AppendDataBoundItems="true" Width="100px" SelectionMode="Multiple" AutoPostBack="true" OnSelectedIndexChanged="lstcollege_SelectedIndexChanged" CssClass="multi-select-demo"
+                                                    <asp:ListBox ID="lstcollege" runat="server" AppendDataBoundItems="true" Width="100px" SelectionMode="Multiple" CssClass="multi-select-demo"
                                                     TabIndex="1"></asp:ListBox>
                                                    <%-- <asp:RequiredFieldValidator ID="lstcollege1" runat="server" ControlToValidate="lstcollege"
                                                         Display="None" ErrorMessage="Please Select College/Scheme." InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
