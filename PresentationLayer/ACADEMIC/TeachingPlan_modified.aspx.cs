@@ -664,7 +664,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             {
                 dvTutorial.Visible = false;
             }
-            int subId = Convert.ToInt16(objCommon.LookUp("ACD_COURSE", "DISTINCT SUBID", "COURSENO = " + ddlCourse.SelectedValue));
+            int subId = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "DISTINCT SUBID", "COURSENO = " + ddlCourse.SelectedValue));
             if (subId == 2)
             {
                 rfvBatch.Visible = true;
@@ -1846,7 +1846,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     }
                     else
                     {
-                        objExam.UnitNo = Convert.ToInt16(dt.Rows[i]["UNIT_NO"] == DBNull.Value ? "0" : dt.Rows[i]["UNIT_NO"].ToString().Trim());
+                        objExam.UnitNo = Convert.ToInt32(dt.Rows[i]["UNIT_NO"] == DBNull.Value ? "0" : dt.Rows[i]["UNIT_NO"].ToString().Trim());
                     }
 
                     if (dt.Rows[i]["LECTURE_NO"].ToString() == string.Empty)  // Topic covered
@@ -1857,7 +1857,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     }
                     else
                     {
-                        objExam.Lecture_No = Convert.ToInt16(dt.Rows[i]["LECTURE_NO"] == DBNull.Value ? "0" : dt.Rows[i]["LECTURE_NO"].ToString().Trim());
+                        objExam.Lecture_No = Convert.ToInt32(dt.Rows[i]["LECTURE_NO"] == DBNull.Value ? "0" : dt.Rows[i]["LECTURE_NO"].ToString().Trim());
                     }
 
                     if (dt.Rows[i]["SESSION_REQUIRED"].ToString() == string.Empty)  // Topic covered
@@ -1868,7 +1868,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     }
                     else
                     {
-                        objExam.sessionPlan = Convert.ToInt16(dt.Rows[i]["SESSION_REQUIRED"] == DBNull.Value ? "0" : dt.Rows[i]["SESSION_REQUIRED"].ToString().Trim());
+                        objExam.sessionPlan = Convert.ToInt32(dt.Rows[i]["SESSION_REQUIRED"] == DBNull.Value ? "0" : dt.Rows[i]["SESSION_REQUIRED"].ToString().Trim());
                     }
 
                     //if (dt.Rows[i]["SECTIONNAME"].ToString() == string.Empty)  // Topic covered
@@ -1880,7 +1880,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     //else
                     //{
                     //    string section = objCommon.LookUp("ACD_SECTION", "SECTIONNO", "SECTIONNAME ='" + dt.Rows[i]["SECTIONNAME"].ToString().Trim() + "'");
-                    //    objExam.Sectionno = Convert.ToInt16(section == "" ? "0" : section);
+                    //    objExam.Sectionno = Convert.ToInt32(section == "" ? "0" : section);
                     //}
 
                     try
@@ -1903,10 +1903,10 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     objExam.Remark = dt.Rows[i]["REMARK"].ToString().Trim();
 
                     //string batch = objCommon.LookUp("ACD_BATCH", "BATCHNO", "BATCHNAME ='" + dt.Rows[i]["BATCH"].ToString().Trim() + "'");
-                    //objExam.BatchNo = Convert.ToInt16(batch == "" ? "0" : batch);
+                    //objExam.BatchNo = Convert.ToInt32(batch == "" ? "0" : batch);
 
                     //string slot = objCommon.LookUp("ACD_TIME_SLOT", "SLOTNO", "SLOTNAME ='" + dt.Rows[i]["SLOTNAME"].ToString().Trim() + "'");
-                    //objExam.Slot = Convert.ToInt16(slot == "" ? "0" : slot);
+                    //objExam.Slot = Convert.ToInt32(slot == "" ? "0" : slot);
 
 
                     string slottypeno = string.Empty;
@@ -1984,7 +1984,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     else
                         objExam.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
 
-                    objExam.Ua_No = Convert.ToInt16(Session["userno"].ToString());
+                    objExam.Ua_No = Convert.ToInt32(Session["userno"].ToString());
                     //int Istutorial = ddlTutorial.SelectedValue == "2" ? 1 : 0;
                     int Istutorial = ddlTutorial.SelectedValue == "2" || (Convert.ToInt32(ViewState["IS_TUTORIAL"]) > 0 && Convert.ToInt32(ViewState["IS_PRACTICAL"]) == 0 && Convert.ToInt32(ViewState["IS_THEORY"]) == 0) ? 1 : 0;
                     int OrgId = Convert.ToInt32(Session["OrgId"]);
