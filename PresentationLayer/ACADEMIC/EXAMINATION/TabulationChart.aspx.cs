@@ -261,6 +261,43 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = true;//added by tejas thakre as on 16-12-2023
+                btnpassingcrft.Visible = true;
+
+                btnLedger.Visible = true;
+                btnufm.Visible = true;
+
+            }
+            #endregion
+            #region For ADCET added on 22/01/2024 by Tejas as on 22-01-2024
+            else if (Convert.ToInt32(Session["OrgId"]) == 22)
+            {
+                btnCount.Visible = true;
+                tab_year.Visible = true;
+                btncoursegrade.Visible = false;
+                btngraderange.Visible = false;
+                btnExcel.Visible = false;
+                btnExamFeesPaid.Visible = false;
+                btnConvocationExcelReport.Visible = false;
+                Yearid.Visible = false;
+                btnConsolidateGradeCard.Visible = false;
+                Dateissue.Visible = false;
+                btnConsoli.Visible = false;
+                btnConsoliA4.Visible = false;
+                btnLedgerReport.Visible = false;
+
+                btnProgrssionrpt.Visible = false;
+                pre_eleven.Visible = false;
+
+                DatePublish.Visible = false;
+
+                btnResultStatistics.Visible = false;
+                pre_eight.Visible = false;
+                btnSRNo.Visible = false;
+                btnProvisionalDegree.Visible = false;
+                txtScrutinized.Visible = false;
+                lblScrutinized.Visible = false;
+                btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = false;
 
             }
             #endregion
@@ -5681,7 +5718,19 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
     {
         try
         {
-            ShowLedgerRegister("Student_Ledger_Report", "rptledger_RCPIT.rpt", 2);
+            #region Added Condition on 04032024 
+            if (Convert.ToInt32(Session["OrgId"]) == 6)
+            {
+                ShowLedgerRegister("Student_Ledger_Report", "rptledger_RCPIPER.rpt", 2);
+
+            }
+            #endregion
+            else
+            {
+                ShowLedgerRegister("Student_Ledger_Report", "rptledger_RCPIT.rpt", 2);
+
+            }
+
         }
         catch (Exception ex)
         {
