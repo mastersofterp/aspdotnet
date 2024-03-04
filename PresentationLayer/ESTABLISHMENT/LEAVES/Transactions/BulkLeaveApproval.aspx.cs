@@ -1248,6 +1248,13 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_BulkLeaveApproval : Syste
             foreach (ListViewDataItem items in lvPendingList.Items)
             {
                 CheckBox chkSelect = items.FindControl("chkSelect") as CheckBox;
+                HiddenField idno = items.FindControl("hdnEmpno") as HiddenField;
+                HiddenField leaveno = items.FindControl("hdnLeaveno") as HiddenField;
+                Label NoOfDays = items.FindControl("noOfDays") as Label;
+
+                int IDNO = Convert.ToInt32(idno.Value);
+                int LeaveNo = Convert.ToInt32(leaveno.Value);
+                double noOfDays = Convert.ToDouble(NoOfDays.Text);
 
                 int UA_NO = Convert.ToInt32(Session["userno"]);
                 string Status;
@@ -1261,7 +1268,13 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_BulkLeaveApproval : Syste
                 {
                     checkcount = checkcount + 1;
                     LETRNO = Convert.ToInt32(chkSelect.ToolTip);
-                    cs = Convert.ToInt32(objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0));                    
+                    DataSet ds = objApp.GetBalanceforDirectLeaveApproval(LETRNO, IDNO, LeaveNo);
+                    double bal = Convert.ToDouble(ds.Tables[0].Rows[0]["CLBal"].ToString());
+
+                    if (bal >= noOfDays || Status.Equals("R"))
+                    {
+                        cs = Convert.ToInt32(objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0));
+                    }
 
                 }
             }
