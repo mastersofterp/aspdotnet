@@ -112,7 +112,7 @@ namespace IITMS
                     }
                     return ds;
                 }
-                public int Add_DirectGradeSystem(string Schemano, int level, int Grade, decimal mini, decimal max, int grandpoint, string indicator, int active)
+     public int Add_DirectGradeSystem(string Schemano, int level, int Grade, decimal mini, decimal max, int grandpoint, string indicator, int active)
                 {
                     int status = 0;
                     try
