@@ -8693,7 +8693,7 @@ new SqlParameter("@P_OP", SqlDbType.Int)
                 #endregion
 
 
-                #region Revaluation Mark Entry 
+                #region Revaluation Mark Entry
                 public int RevalGradeGeneration_CC(int sessionno, int Courseno, string idnos, int th_pr, int ua_no, string ipaddress, int Schemeno, int Semesterno)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -8774,6 +8774,174 @@ new SqlParameter("@P_OP", SqlDbType.Int)
                     return retStatus;
                 }
                 #endregion
+
+                //Added by Suraj.Y for Mark Entry Status on 27-02-2024
+                public int AddMarkEntryStatus(string CodeDesc, int CodeValue, string ShortName, int OrgID, string FinalGrade, double GradePoint, int QueryType)
+                {
+                    int status1 = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] sqlParams = new SqlParameter[]
+                       {
+                          new SqlParameter("@P_Code_Desc",CodeDesc),
+                          new SqlParameter("@P_Code_Value", CodeValue),
+                          new SqlParameter("@P_Short_Name", ShortName),
+                          new SqlParameter("@P_OrgID", OrgID),
+                          new SqlParameter("@P_Final_Grade", FinalGrade),
+                          new SqlParameter("@P_Grade_Point",GradePoint),
+                          new SqlParameter("@P_QueryType",QueryType),
+               
+                   
+                       };
+
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_MARK_ENTRY_STATUS_CODES", sqlParams, true);
+
+                        if (Convert.ToInt32(obj) == 2)
+                            status1 = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status1 = Convert.ToInt32(CustomStatus.RecordSaved);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status1 = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.AddBatch() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status1;
+
+                }
+
+                //Added by Suraj Y on 27-02-2024
+                public DataSet GetAllMarkEntryStatus(int QueryType)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[] { new SqlParameter("@P_QueryType", QueryType) };
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_MARK_ENTRY_STATUS_CODES", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.GetAllBatch() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return ds;
+                }
+
+                //Added by Suraj Y on 27-02-2024
+                public DataSet GetMarkEntryStatusBYID(int ID, int QueryType)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[] { new SqlParameter("@P_ID", ID), new SqlParameter("P_QueryType", QueryType) };
+
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_MARK_ENTRY_STATUS_CODES", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.GetBatchByNo() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return ds;
+                }
+
+                //Added By Suraj Y On 27-02-2024
+                public int UPDMarkEntryStatus(string CodeDesc, int CodeValue, string ShortName, int OrgID, string FinalGrade, double GradePoint, int QueryType)
+                {
+                    int status1 = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] sqlParams = new SqlParameter[]
+                     {
+                        new SqlParameter("@P_Code_Desc",CodeDesc),
+                        new SqlParameter("@P_Code_Value", CodeValue),
+                        new SqlParameter("@P_Short_Name", ShortName),
+                        new SqlParameter("@P_OrgID", OrgID),
+               
+                        new SqlParameter("@P_Final_Grade", FinalGrade),
+                        new SqlParameter("@P_Grade_Point",GradePoint),
+                        new SqlParameter("@P_QueryType",QueryType),
+               
+                   
+                     };
+
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_MARK_ENTRY_STATUS_CODES", sqlParams, true);
+
+                        if (Convert.ToInt32(obj) == 2)
+                            status1 = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status1 = Convert.ToInt32(CustomStatus.RecordSaved);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status1 = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.AddBatch() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status1;
+
+                }
+
+                //Added by Suraj Y on 28-02-2024
+                public int DeleteMarkEntryStatus(int Id, int QueryType)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[] { new SqlParameter("@P_ID", Id), new SqlParameter("@P_QueryType", QueryType) };
+
+
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_MARK_ENTRY_STATUS_CODES", objParams, true);
+
+                        if (Convert.ToInt32(obj) == 5)
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordNotFound);
+                        }
+                        else
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordDeleted);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.GetBatchByNo() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+
+                }
+
+                public DataSet CheckDuplicateCodeValue(int CodeValue)
+                {
+
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[] { new SqlParameter("@P_Code_Value", CodeValue) };
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_MARK_ENTRY_STATUS_CODES", objParams);
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.GetBatchByNo() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return ds;
+
+                }
+                //Added End
 
             }
 
