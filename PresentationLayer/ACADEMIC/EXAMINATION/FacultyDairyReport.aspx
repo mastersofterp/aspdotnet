@@ -1158,6 +1158,8 @@
                                                         ToolTip="Select to Report" CssClass="btn btn-primary" OnClick="btnFinalExamrpt_Click" />
                                                     <asp:Button ID="btnExamReport" runat="server" Text="Exams Report" ValidationGroup="Add"
                                                         ToolTip="Select to Report" CssClass="btn btn-primary" OnClick="btnExamReport_Click" />
+                                                    <asp:Button ID="btnUnitTest" runat="server" Text="Unit Test Report" ValidationGroup="Add"
+                                                        ToolTip="Select to Report" CssClass="btn btn-primary" OnClick="btnUnitTest_Click" />
                                                     <asp:Button ID="btnIClear" runat="server" Text="Clear" TabIndex="1"
                                                         CssClass="btn btn-warning" OnClick="btnIClear_Click" />
 

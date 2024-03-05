@@ -80,6 +80,10 @@ public partial class ACADEMIC_EXAMINATION_FacultyDairyReport : System.Web.UI.Pag
     {
         try 
         {
+            ddlSubjectType.Items.Clear();
+            ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
+            ddlCourse.Items.Clear();
+            ddlCourse.Items.Add(new ListItem("Please Select", "0"));
             if (Convert.ToInt32(ddlSession.SelectedIndex) > 0)
             {
                 objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", "DISTINCT R.SUBID", "SUBNAME", "S.SUBID > 0 AND (UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " OR UA_NO_PRAC=" + Convert.ToInt32(Session["userno"].ToString()) + ") AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "", "");
@@ -101,7 +105,9 @@ public partial class ACADEMIC_EXAMINATION_FacultyDairyReport : System.Web.UI.Pag
     protected void ddlSubjectType_SelectedIndexChanged(object sender, EventArgs e)
     {
         try 
-        { 
+        {
+            ddlCourse.Items.Clear();
+            ddlCourse.Items.Add(new ListItem("Please Select", "0"));
             if(ddlSubjectType.SelectedIndex > 0)
             {
                 objCommon.FillDropDownList(ddlCourse, " ACD_STUDENT_RESULT R INNER JOIN ACD_COURSE C ON (R.CCODE = C.CCODE ) ", "DISTINCT R.COURSENO", "C.COURSE_NAME", " SESSIONNO = " + Convert.ToInt16(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0) = 0 AND C.SUBID = " + Convert.ToInt16(ddlSubjectType.SelectedValue) + " AND ((UA_NO = " + Convert.ToInt16(Session["userno"]) + ") OR (UA_NO_PRAC = " + Convert.ToInt16(Session["userno"]) + "))", "R.COURSENO");
@@ -300,5 +306,35 @@ public partial class ACADEMIC_EXAMINATION_FacultyDairyReport : System.Web.UI.Pag
             else
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
+    }
+
+    // added by shubham
+    protected void btnUnitTest_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string SP_Name = "PKG_RESULT_ANALYSIS_REPORTS_UNIT_TEST_RCPIT";
+            string SP_Parameters = "@P_USERNO,@P_COURSENO,@P_SESSIONNO,@P_SUBID";
+            string Call_Values = "" + Convert.ToInt32(Session["userno"]) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "";
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                ShowReport("Unit_Exams_Reports", "rptUnitResultAnalysis_RCPIT.rpt");
+            }
+            else
+            {
+                objCommon.DisplayMessage(updatePanel2, "No Data Found for current selection.", this.Page);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ACADEMIC_EXAMINATION_FacultyDairyReport.btnUnitTest_Click()-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+
     }
 }
