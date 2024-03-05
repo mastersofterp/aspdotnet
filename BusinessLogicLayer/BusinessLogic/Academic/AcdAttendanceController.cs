@@ -7764,7 +7764,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-
+        // Modify(ToDateTime) by Vipul T on date 04-03-2024 as per Tno:-52930
         public int SaveFacultyDiary(Attendance.FacultyDiary objFac, string XmlData)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -7779,8 +7779,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[2] = new SqlParameter("@P_SCHEMENO", objFac.Schemeno);
                 objParams[3] = new SqlParameter("@P_SESSIONNO", objFac.Sessionno);
                 objParams[4] = new SqlParameter("@P_SEMESTERNO", objFac.Semesterno);
-                objParams[5] = new SqlParameter("@P_FROM_DATE", objFac.FromDate);
-                objParams[6] = new SqlParameter("@P_TO_DATE", objFac.ToDate);
+                objParams[5] = new SqlParameter("@P_FROM_DATE", Convert.ToDateTime(objFac.FromDate).ToString("yyyy/MM/dd"));
+                objParams[6] = new SqlParameter("@P_TO_DATE", Convert.ToDateTime(objFac.ToDate).ToString("yyyy/MM/dd"));
                 objParams[7] = new SqlParameter("@P_SUBMITTED_BY", System.Web.HttpContext.Current.Session["userno"].ToString());
                 objParams[8] = new SqlParameter("@P_IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString());
                 objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
@@ -7803,6 +7803,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return retStatus;
         }
+
+     
 
     }
 }
