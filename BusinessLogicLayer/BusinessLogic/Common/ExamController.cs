@@ -112,6 +112,37 @@ namespace IITMS
                     }
                     return ds;
                 }
+     public int Add_DirectGradeSystem(string Schemano, int level, int Grade, decimal mini, decimal max, int grandpoint, string indicator, int active)
+                {
+                    int status = 0;
+                    try
+                    {
+
+
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParam = new SqlParameter[8];
+
+                        objParam[0] = new SqlParameter("@P_SCHEMANO", Schemano);
+                        objParam[1] = new SqlParameter("@P_LEVELNO", level);
+                        objParam[2] = new SqlParameter("@P_GRADENO", Grade);
+                        objParam[3] = new SqlParameter("@P_MINIRANGE", mini);
+                        objParam[4] = new SqlParameter("@P_MAXIRANGE", max);
+                        objParam[5] = new SqlParameter("@P_GRADEPOINT", grandpoint);
+                        objParam[6] = new SqlParameter("@P_INDICATOR", indicator);
+                        objParam[7] = new SqlParameter("@P_ACTIVESTATUS", active);
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_DIRECT_GRADE_SYSTEM", objParam, true);
+                        if (obj != null)
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
 
                 public DataSet GetStudentIAMarksForSMS(int sessionno, int collegeno, int degreeno, int branchno, int semesterno, string examname)
                 {
