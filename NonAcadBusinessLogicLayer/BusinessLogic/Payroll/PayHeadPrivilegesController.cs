@@ -277,7 +277,7 @@ namespace IITMS
                 }
 
                 //---------Start 05-11-2022 Shaikh Juned 
-                public int SaveEmployeeExcelSheetData(int ClgCode, int OrgId, PayMaster objPayMas, int usertype, int Uano)
+                public int SaveEmployeeExcelSheetData(int ClgCode, int OrgId, PayMaster objPayMas, int usertype, int Uano, int IsMaster)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
@@ -286,14 +286,15 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[6];
+                        objParams = new SqlParameter[7];
                         objParams[0] = new SqlParameter("@P_COLLEGE_CODE", ClgCode);
                         objParams[1] = new SqlParameter("@P_OrganizationId", OrgId);
                         objParams[2] = new SqlParameter("@P_EMP_MIGRATION_DATA", objPayMas.EmployeeDataImport_TBL);
                         objParams[3] = new SqlParameter("@P_User_Type", usertype);
                         objParams[4] = new SqlParameter("@P_CreatedBY", Uano);
-                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[5].Direction = ParameterDirection.Output;
+                        objParams[5] = new SqlParameter("@P_IsMaster", IsMaster);
+                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
 
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_EMPLOYEE_DATA_MIGRATION_EXCEL", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -311,13 +312,14 @@ namespace IITMS
 
                 //---------START  02-01-2024 SHAIKH JUNED
 
-                public DataSet GetMasterData()
+                public DataSet GetMasterData(int ischeck)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[0];
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IsCheck", ischeck);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_PAYROLL_EMPLOYEE_MASTER_DATA", objParams);
                     }
                     catch (Exception ex)
@@ -338,7 +340,7 @@ namespace IITMS
 
 
 
-              
+
                 //---------END----02-01-2024----SHAIKH JUNDED
 
             }

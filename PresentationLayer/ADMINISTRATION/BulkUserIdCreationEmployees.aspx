@@ -719,6 +719,13 @@
                                                                                                     </div>
                                                                                                     <asp:FileUpload ID="FileUpload2" runat="server" ToolTip="Select file to upload" TabIndex="2" />
                                                                                                 </div>
+                                                                                                 <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                                                    <div class="label-dynamic">
+                                                                                                        <sup> </sup>
+                                                                                                        <label>With Master</label>
+                                                                                                    </div>
+                                                                                                    <asp:CheckBox ID="chismaster" runat="server" ToolTip="Check if no need to master data" TabIndex="3" />
+                                                                                                </div>
 
                                                                                                 <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="divRecords" runat="server" visible="false">
                                                                                                     <div class="label-dynamic">

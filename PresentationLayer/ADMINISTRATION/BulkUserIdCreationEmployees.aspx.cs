@@ -657,10 +657,15 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 connExcel.Open();
                 System.Data.DataTable dtExcelSchema;
                 dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                string SheetName=string.Empty;
+                if (chismaster.Checked==true)
+                {
 
-                
-
-                string SheetName = dtExcelSchema.Rows[4]["TABLE_NAME"].ToString();
+                 SheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                }
+                else{
+                      SheetName = dtExcelSchema.Rows[4]["TABLE_NAME"].ToString();
+                }
                 connExcel.Close();
 
                 //Read Data from First Sheet
@@ -775,389 +780,391 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 for (i = 0; i < dtNew.Rows.Count; i++)
                 {
                     ErrorString = string.Empty;
-                  
+
                     RowNum = RowNum + 1;
                     ErrorString = ErrorString + Environment.NewLine + "Row : " + RowNum.ToString() + " - ";
-                        IsErrorInUpload = false;
-                        DataRow row = dtNew.Rows[i];//ds.Tables[0].Rows[i];
-                        object Regno = row[0];
+                    IsErrorInUpload = false;
+                    DataRow row = dtNew.Rows[i];//ds.Tables[0].Rows[i];
+                    object Regno = row[0];
 
 
-                        DataSet ds1 = null;
-                        string empId = dtNew.Rows[i]["Employee Id"].ToString();
-                        ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "EmployeeId='" + empId + "'", "");
-                   
-                        //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
-                        if (ds1.Tables[0].Rows.Count>0)
+                    DataSet ds1 = null;
+                    string empId = dtNew.Rows[i]["Employee Id"].ToString();
+                    ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "EmployeeId='" + empId + "'", "");
+
+                    //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
+                    if (ds1.Tables[0].Rows.Count > 0)
+                    {
+                        //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
+                        //if (empId1 == empId)
+                        //{
+
+                        message = "<span style='color:Red'><b> Employee Id Already Exists.</b></span>";
+                        messageexp = " Employee Id Already Exists.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                        //}
+                    }
+                    string SchoolName = dtNew.Rows[i]["College Name"].ToString();
+                    ds1 = objCommon.FillDropDown("ACD_COLLEGE_MASTER", "*", "COLLEGE_NAME", "COLLEGE_NAME='" + SchoolName + "'", "");
+
+                    //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
+                    if (ds1.Tables[0].Rows.Count == 0)
+                    {
+                        //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
+                        //if (empId1 == empId)
+                        //{
+                        message = " <span style='color:Red'><b>Employee College Name is Not Correct. Please check Master Data.</span>";
+                        messageexp = "Employee College Name is Not Correct. Please check Master Data.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                        //}
+                    }
+
+                    string str = dtNew.Rows[i]["Mobile No"].ToString();
+
+                    //str = Regex.Replace(str, @"\s", "");
+                    //string mobNo = str;
+
+                    //str.Any(Char.IsWhiteSpace);
+                    //string mobNo = str;
+                    //   Check for spaces in the string
+                    //  return Regex.IsMatch(mobileNumber, @"^\d{10}$");
+                    string mobil = dtNew.Rows[i]["Mobile No"].ToString();
+                    bool isValidmobil = Regex.IsMatch(mobil, @"^\d{10}$");
+
+                    if (!isValidmobil)
+                    {
+                        message = "<span style='color:Red'><b>Please enter Valid mobile number</b> </span>";
+                        messageexp = "Please enter Valid mobile number";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+                    else
+                    {
+                        if (ContainsSpace(str))
                         {
-                            //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
-                            //if (empId1 == empId)
-                            //{
+                            // Register JavaScript alert if space is found
+                            // string script = "alert('Space found in the string!');";
+                            // ScriptManager.RegisterStartupScript(this, this.GetType(), "SpaceAlert", script, true);
 
-                            message = "<span style='color:Red'><b> Employee Id Already Exists.</b></span>";
-                                messageexp = " Employee Id Already Exists.";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-                            //}
-                        }
-                        string SchoolName = dtNew.Rows[i]["College Name"].ToString();
-                        ds1 = objCommon.FillDropDown("ACD_COLLEGE_MASTER", "*", "COLLEGE_NAME", "COLLEGE_NAME='" + SchoolName + "'", "");
-
-                        //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
-                        if (ds1.Tables[0].Rows.Count == 0)
-                        {
-                            //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
-                            //if (empId1 == empId)
-                            //{
-                            message = " <span style='color:Red'><b>Employee College Name is Not Correct. Please check Master Data.</span>";
-                            messageexp = "Employee College Name is Not Correct. Please check Master Data.";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                            //}
-                        }
-
-                        string str = dtNew.Rows[i]["Mobile No"].ToString();
-                        
-                        //str = Regex.Replace(str, @"\s", "");
-                        //string mobNo = str;
-                        
-                        //str.Any(Char.IsWhiteSpace);
-                        //string mobNo = str;
-                 //   Check for spaces in the string
-                        //  return Regex.IsMatch(mobileNumber, @"^\d{10}$");
-                        string mobil = dtNew.Rows[i]["Mobile No"].ToString();
-                        bool isValidmobil = Regex.IsMatch(mobil, @"^\d{10}$");
-
-                        if (!isValidmobil)
-                        {
-                            message = "<span style='color:Red'><b>Please enter Valid mobile number</b> </span>";
-                            messageexp = "Please enter Valid mobile number";
+                            message = "<span style='color:Red'><b>Space found in the Mobile no.</b></span>";
+                            messageexp = "Mobile no Is Already Exists.";
                             ErrorString = ErrorString + message + " | ";
                             ErrorString1 = ErrorString1 + messageexp + " | ";
                             IsErrorInUpload = true;
                         }
                         else
                         {
-                            if (ContainsSpace(str))
+                            string mobNo = str;
+                            ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "PHONENO='" + mobNo + "'", "");
+                            if (ds1.Tables[0].Rows.Count > 0)
                             {
-                                // Register JavaScript alert if space is found
-                                // string script = "alert('Space found in the string!');";
-                                // ScriptManager.RegisterStartupScript(this, this.GetType(), "SpaceAlert", script, true);
-
-                                message = "<span style='color:Red'><b>Space found in the Mobile no.</b></span>";
+                                message = "<span style='color:Red'><b> Mobile no Is Already Exists.</b></span>";
                                 messageexp = "Mobile no Is Already Exists.";
                                 ErrorString = ErrorString + message + " | ";
                                 ErrorString1 = ErrorString1 + messageexp + " | ";
                                 IsErrorInUpload = true;
                             }
-                            else
-                            {
-                                string mobNo = str;
-                                ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "PHONENO='" + mobNo + "'", "");
-                                if (ds1.Tables[0].Rows.Count > 0)
-                                {
-                                    message = "<span style='color:Red'><b> Mobile no Is Already Exists.</b></span>";
-                                    messageexp = "Mobile no Is Already Exists.";
-                                    ErrorString = ErrorString + message + " | ";
-                                    ErrorString1 = ErrorString1 + messageexp + " | ";
-                                    IsErrorInUpload = true;
-                                }
-                            }
                         }
-                        
-                     string EmailId = dtNew.Rows[i]["E-mail ID"].ToString();
-                     if (ContainsSpace(EmailId))
-                     {
-                         // Register JavaScript alert if space is found
-                         // string script = "alert('Space found in the string!');";
-                         // ScriptManager.RegisterStartupScript(this, this.GetType(), "SpaceAlert", script, true);
+                    }
 
-                         message = "<span style='color:Red'><b>Space found in the E mail Id.</b></span>";
-                         messageexp = "Space found in the E mail Id.";
-                         ErrorString = ErrorString + message + " | ";
-                         ErrorString1 = ErrorString1 + messageexp + " | ";
-                         IsErrorInUpload = true;
-                     }
-                     ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "EMAILID='" + EmailId + "'", "");
-                     if (ds1.Tables[0].Rows.Count > 0)
-                     {
-                         message = "<span style='color:Red'> <b>Email Id Is Already Exists.</b></span>";
-                         messageexp = "Email Id Is Already Exists.";
-                         ErrorString = ErrorString + message + " | ";
-                         ErrorString1 = ErrorString1 + messageexp + " | ";
-                         IsErrorInUpload = true;
-                     }
+                    string EmailId = dtNew.Rows[i]["E-mail ID"].ToString();
+                    if (ContainsSpace(EmailId))
+                    {
+                        // Register JavaScript alert if space is found
+                        // string script = "alert('Space found in the string!');";
+                        // ScriptManager.RegisterStartupScript(this, this.GetType(), "SpaceAlert", script, true);
+
+                        message = "<span style='color:Red'><b>Space found in the E mail Id.</b></span>";
+                        messageexp = "Space found in the E mail Id.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+                    ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "EMAILID='" + EmailId + "'", "");
+                    if (ds1.Tables[0].Rows.Count > 0)
+                    {
+                        message = "<span style='color:Red'> <b>Email Id Is Already Exists.</b></span>";
+                        messageexp = "Email Id Is Already Exists.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
 
 
 
 
-                     string Fname = dtNew.Rows[i]["First Name"].ToString();
-                     string Lname = dtNew.Rows[i]["Last Name"].ToString();
+                    string Fname = dtNew.Rows[i]["First Name"].ToString();
+                    string Lname = dtNew.Rows[i]["Last Name"].ToString();
 
-                   
+
                     //------------start-----------
 
 
-                     if (!(dtNew.Rows[i]["RFIDNO"]).ToString().Equals(string.Empty))
-                     {
-                         string UID_No = Convert.ToString(dtNew.Rows[i]["RFIDNO"]);
-                         int numericValue;
-                         bool isNumber = int.TryParse(UID_No, out numericValue);
+                    if (!(dtNew.Rows[i]["RFIDNO"]).ToString().Equals(string.Empty))
+                    {
+                        string UID_No = Convert.ToString(dtNew.Rows[i]["RFIDNO"]);
+                        int numericValue;
+                        bool isNumber = int.TryParse(UID_No, out numericValue);
 
-                         if (isNumber == false)
-                         {
-                             message = "<span style='color:Red'><b>Please enter RFIDNO In Eight Digit Numbers Format</b> </span>";
-                             messageexp = "Please enter RFIDNO In Eight Digit Numbers Foramt ";
-                             ErrorString = ErrorString + message + " | ";
-                             ErrorString1 = ErrorString1 + messageexp + " | ";
-                             IsErrorInUpload = true;
+                        if (isNumber == false)
+                        {
+                            message = "<span style='color:Red'><b>Please enter RFIDNO In Eight Digit Numbers Format</b> </span>";
+                            messageexp = "Please enter RFIDNO In Eight Digit Numbers Foramt ";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
 
-                         }
+                        }
 
-                     }
-
-
-
-                    
-                     //    string DOB = string.Empty;
-                     //    string DOB1 = dtNew.Rows[i]["Date of Birth"].ToString();
-                     //    //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                     //     DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                     //    ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
-                     //    if (ds1.Tables[0].Rows.Count > 0)
-                     //    {
-                     //        message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
-                     //        messageexp = "FName LName and Date Of Birth Is Already Exists.";
-                     //        ErrorString = ErrorString + message + " | ";
-                     //        ErrorString1 = ErrorString1 + messageexp + " | ";
-                     //        IsErrorInUpload = true;
-                     //    }
-
-                     //    //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                     //     DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                     //    ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
-                     //    if (ds1.Tables[0].Rows.Count > 0)
-                     //    {
-                     //        message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
-                     //        messageexp = "FName LName and Date Of Birth Is Already Exists.";
-                     //        ErrorString = ErrorString + message + " | ";
-                     //        ErrorString1 = ErrorString1 + messageexp + " | ";
-                     //        IsErrorInUpload = true;
-                     //    }
-
-                     if (!(dtNew.Rows[i]["Date of Birth"]).ToString().Equals(string.Empty))
-                     {
-                         objPayMas.RegNo = dtNew.Rows[i]["Date of Birth"].ToString();
-                         string datedob = dtNew.Rows[i]["Date of Birth"].ToString();
-                         DateTime date1;
-                         if (DateTime.TryParseExact(datedob, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
-                         {
-
-                          
-                             //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                             string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
-                             ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
-                             if (ds1.Tables[0].Rows.Count > 0)
-                             {
-                                 message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
-                                 messageexp = "FName LName and Date Of Birth Is Already Exists.";
-                                 ErrorString = ErrorString + message + " | ";
-                                 ErrorString1 = ErrorString1 + messageexp + " | ";
-                                 IsErrorInUpload = true;
-                             }
-                         }
-                         //else if (!(dtNew.Rows[i]["Date of Birth"]).ToString().Equals(string.Empty))
-                         //{
-                         //    objPayMas.RegNo = dtNew.Rows[i]["Date of Birth"].ToString();
-                             //string datedob = dtNew.Rows[i]["Date of Birth"].ToString();
-                             //DateTime date1;
-                         else   if (DateTime.TryParseExact(datedob, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
-                             {
-
-                               
+                    }
 
 
-                                 //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                                 //string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
-                                 //ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
-                                 //if (ds1.Tables[0].Rows.Count > 0)
-                                 //{
-                                 //    message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
-                                 //    messageexp = "FName LName and Date Of Birth Is Already Exists.";
-                                 //    ErrorString = ErrorString + message + " | ";
-                                 //    ErrorString1 = ErrorString1 + messageexp + " | ";
-                                 //    IsErrorInUpload = true;
-                                 //}
-                             }
+
+
+                    //    string DOB = string.Empty;
+                    //    string DOB1 = dtNew.Rows[i]["Date of Birth"].ToString();
+                    //    //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                    //     DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                    //    ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
+                    //    if (ds1.Tables[0].Rows.Count > 0)
+                    //    {
+                    //        message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
+                    //        messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                    //        ErrorString = ErrorString + message + " | ";
+                    //        ErrorString1 = ErrorString1 + messageexp + " | ";
+                    //        IsErrorInUpload = true;
+                    //    }
+
+                    //    //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                    //     DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                    //    ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
+                    //    if (ds1.Tables[0].Rows.Count > 0)
+                    //    {
+                    //        message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
+                    //        messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                    //        ErrorString = ErrorString + message + " | ";
+                    //        ErrorString1 = ErrorString1 + messageexp + " | ";
+                    //        IsErrorInUpload = true;
+                    //    }
+
+                    if (!(dtNew.Rows[i]["Date of Birth"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Date of Birth"].ToString();
+                        string datedob = dtNew.Rows[i]["Date of Birth"].ToString();
+                        DateTime date1;
+                        if (DateTime.TryParseExact(datedob, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
+                        {
+
+
+                            //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                            string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
+                            ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
+                            if (ds1.Tables[0].Rows.Count > 0)
+                            {
+                                message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
+                                messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                            }
+                        }
+                        //else if (!(dtNew.Rows[i]["Date of Birth"]).ToString().Equals(string.Empty))
+                        //{
+                        //    objPayMas.RegNo = dtNew.Rows[i]["Date of Birth"].ToString();
+                        //string datedob = dtNew.Rows[i]["Date of Birth"].ToString();
+                        //DateTime date1;
+                        else if (DateTime.TryParseExact(datedob, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
+                        {
+
+
+
+
+                            //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                            //string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
+                            //ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
+                            //if (ds1.Tables[0].Rows.Count > 0)
+                            //{
+                            //    message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
+                            //    messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                            //    ErrorString = ErrorString + message + " | ";
+                            //    ErrorString1 = ErrorString1 + messageexp + " | ";
+                            //    IsErrorInUpload = true;
+                            //}
+                        }
                         // }
-                         else
-                         {
-                             message = "<span style='color:Red'><b> Date Of Birth is Invalid date [dd MM yyyy] format .</b></span>";
-                             messageexp = "Date Of Birth is Invalid date format .";
-                             ErrorString = ErrorString + message + " | ";
-                             ErrorString1 = ErrorString1 + messageexp + " | ";
-                             IsErrorInUpload = true;
-                         }
+                        else
+                        {
+                            message = "<span style='color:Red'><b> Date Of Birth is Invalid date [dd MM yyyy] format .</b></span>";
+                            messageexp = "Date Of Birth is Invalid date format .";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
 
-                }
-                     else
-                     {
-                         message = "<span style='color:Red'><b>Please enter Date of Birth </b></span>";
-                         messageexp = "Please enter Date of Birth ";
-                         ErrorString = ErrorString + message + " | ";
-                         ErrorString1 = ErrorString1 + messageexp + " | ";
-                         IsErrorInUpload = true;
-                     }
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Date of Birth </b></span>";
+                        messageexp = "Please enter Date of Birth ";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
 
-                     if (!(dtNew.Rows[i]["Date of Joining"]).ToString().Equals(string.Empty))
-                     {
-                         objPayMas.RegNo = dtNew.Rows[i]["Date of Joining"].ToString();
-                         string datedoj = dtNew.Rows[i]["Date of Joining"].ToString();
-                         DateTime date2;
-                         if (DateTime.TryParseExact(datedoj, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date2))
-                         {
+                    if (!(dtNew.Rows[i]["Date of Joining"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Date of Joining"].ToString();
+                        string datedoj = dtNew.Rows[i]["Date of Joining"].ToString();
+                        DateTime date2;
+                        if (DateTime.TryParseExact(datedoj, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date2))
+                        {
 
-                         }
-                         else if (DateTime.TryParseExact(datedoj, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date2))
-                         {
+                        }
+                        else if (DateTime.TryParseExact(datedoj, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date2))
+                        {
 
-                         }
-                         else
-                         {
-                             message = "<span style='color:Red'><b> Date Of Joining is Invalid date [dd MM yyyy] format .</b></span>";
-                             messageexp = "Date Of Birth is Invalid date format .";
-                             ErrorString = ErrorString + message + " | ";
-                             ErrorString1 = ErrorString1 + messageexp + " | ";
-                             IsErrorInUpload = true;
-                         }
+                        }
+                        else
+                        {
+                            message = "<span style='color:Red'><b> Date Of Joining is Invalid date [dd MM yyyy] format .</b></span>";
+                            messageexp = "Date Of Birth is Invalid date format .";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
 
-                     }
-                     else
-                     {
-                         message = "<span style='color:Red'><b>Please enter Date of Joining</b> </span>";
-                         messageexp = "Please enter Date of Joining";
-                         ErrorString = ErrorString + message + " | ";
-                         ErrorString1 = ErrorString1 + messageexp + " | ";
-                         IsErrorInUpload = true;
-                     }
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Date of Joining</b> </span>";
+                        messageexp = "Please enter Date of Joining";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
 
 
-                     if (!(dtNew.Rows[i]["Date of Retirement"]).ToString().Equals(string.Empty))
-                     {
-                         string datedor = dtNew.Rows[i]["Date of Retirement"].ToString();
-                         DateTime date3;
-                         if (DateTime.TryParseExact(datedor, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date3))
-                         {
+                    if (!(dtNew.Rows[i]["Date of Retirement"]).ToString().Equals(string.Empty))
+                    {
+                        string datedor = dtNew.Rows[i]["Date of Retirement"].ToString();
+                        DateTime date3;
+                        if (DateTime.TryParseExact(datedor, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date3))
+                        {
 
-                         }
-                         else if (DateTime.TryParseExact(datedor, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date3))
-                         {
+                        }
+                        else if (DateTime.TryParseExact(datedor, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date3))
+                        {
 
-                         }
-                         else
-                         {
-                             message = "<span style='color:Red'><b> Date Of Retirement is Invalid date [dd MM yyyy] format .</b></span>";
-                             messageexp = "Date Of Birth is Invalid date format .";
-                             ErrorString = ErrorString + message + " | ";
-                             ErrorString1 = ErrorString1 + messageexp + " | ";
-                             IsErrorInUpload = true;
-                         }
-                     }
+                        }
+                        else
+                        {
+                            message = "<span style='color:Red'><b> Date Of Retirement is Invalid date [dd MM yyyy] format .</b></span>";
+                            messageexp = "Date Of Birth is Invalid date format .";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
+                    }
 
-                     if (!(dtNew.Rows[i]["Date of Increment"]).ToString().Equals(string.Empty))
-                     {
-                         string datedoi = dtNew.Rows[i]["Date of Increment"].ToString();
-                         DateTime date4;
-                         if (DateTime.TryParseExact(datedoi, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date4))
-                         {
+                    if (!(dtNew.Rows[i]["Date of Increment"]).ToString().Equals(string.Empty))
+                    {
+                        string datedoi = dtNew.Rows[i]["Date of Increment"].ToString();
+                        DateTime date4;
+                        if (DateTime.TryParseExact(datedoi, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date4))
+                        {
 
-                         }
-                         else if (DateTime.TryParseExact(datedoi, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date4))
-                         {
+                        }
+                        else if (DateTime.TryParseExact(datedoi, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date4))
+                        {
 
-                         }
-                         else
-                         {
-                             message = "<span style='color:Red'><b> Date Of Increment is Invalid date [dd MM yyyy] format .</b></span>";
-                             messageexp = "Date Of Birth is Invalid date format .";
-                             ErrorString = ErrorString + message + " | ";
-                             ErrorString1 = ErrorString1 + messageexp + " | ";
-                             IsErrorInUpload = true;
-                         }
-                     }
+                        }
+                        else
+                        {
+                            message = "<span style='color:Red'><b> Date Of Increment is Invalid date [dd MM yyyy] format .</b></span>";
+                            messageexp = "Date Of Birth is Invalid date format .";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
+                    }
 
 
                     //-------------end---------
-                   ////  string DOB1 = dtNew.Rows[i]["Date of Birth"].ToString();
-                   //  string DOB = Convert.ToDateTime(dtNew.Rows[i]["Date of Birth"]).ToString("dd/MM/yyyy");
-                     ////string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                     ////ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='"+DOB+"'", "");
-                     ////if (ds1.Tables[0].Rows.Count > 0)
-                     ////{
-                     ////    message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
-                     ////    messageexp = "FName LName and Date Of Birth Is Already Exists.";
-                     ////    ErrorString = ErrorString + message + " | ";
-                     ////    ErrorString1 = ErrorString1 + messageexp + " | ";
-                     ////    IsErrorInUpload = true;
-                     ////}
+                    ////  string DOB1 = dtNew.Rows[i]["Date of Birth"].ToString();
+                    //  string DOB = Convert.ToDateTime(dtNew.Rows[i]["Date of Birth"]).ToString("dd/MM/yyyy");
+                    ////string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                    ////ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='"+DOB+"'", "");
+                    ////if (ds1.Tables[0].Rows.Count > 0)
+                    ////{
+                    ////    message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
+                    ////    messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                    ////    ErrorString = ErrorString + message + " | ";
+                    ////    ErrorString1 = ErrorString1 + messageexp + " | ";
+                    ////    IsErrorInUpload = true;
+                    ////}
 
 
 
 
-                        //if (!(dtNew.Rows[i]["Society Name"]).ToString().Equals(string.Empty))
-                        //{
-                        //    objPayMas.RegNo = dtNew.Rows[i]["Society Name"].ToString();
-                        //}
-                        //else
-                        //{
-                        //    message = "<span style='color:Red'><b>Please enter Society Name </b></span>";
-                        //    messageexp = "Please enter Society Name ";
-                        //    ErrorString = ErrorString + message + " | ";
-                        //    ErrorString1 = ErrorString1 + messageexp + " | ";
-                        //    IsErrorInUpload = true;
-                        //}
-                        if (!(dtNew.Rows[i]["College Name"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["College Name"].ToString();
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'><b>Please enter College Name</b></span> ";
-                            messageexp = "Please enter College Name";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
+                    //if (!(dtNew.Rows[i]["Society Name"]).ToString().Equals(string.Empty))
+                    //{
+                    //    objPayMas.RegNo = dtNew.Rows[i]["Society Name"].ToString();
+                    //}
+                    //else
+                    //{
+                    //    message = "<span style='color:Red'><b>Please enter Society Name </b></span>";
+                    //    messageexp = "Please enter Society Name ";
+                    //    ErrorString = ErrorString + message + " | ";
+                    //    ErrorString1 = ErrorString1 + messageexp + " | ";
+                    //    IsErrorInUpload = true;
+                    //}
+                    if (!(dtNew.Rows[i]["College Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["College Name"].ToString();
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter College Name</b></span> ";
+                        messageexp = "Please enter College Name";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
 
-                        }
-                        if (!(dtNew.Rows[i]["Employee Id"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["Employee Id"].ToString();
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'><b>Please enter Employee Id</b></span> ";
-                            messageexp = "Please enter Employee Id";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                        }
-                        if (!(dtNew.Rows[i]["Title"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["Title"].ToString();
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'>Please enter Title </span>";
-                            messageexp = "Please enter Title ";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                        }
+                    }
+                    if (!(dtNew.Rows[i]["Employee Id"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Employee Id"].ToString();
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Employee Id</b></span> ";
+                        messageexp = "Please enter Employee Id";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+                    if (!(dtNew.Rows[i]["Title"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Title"].ToString();
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'>Please enter Title </span>";
+                        messageexp = "Please enter Title ";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
 
                     //------start title
-
+                    #region start Check Masters data
+                    if (chismaster.Checked != true)
+                    {
                         string Title = dtNew.Rows[i]["Title"].ToString();
                         ds1 = objCommon.FillDropDown("PAYROLL_TITLE", "*", "TITLE", "TITLE='" + Title + "'", "");
 
@@ -1175,96 +1182,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             //}
                         }
 
-                    //------end  title
-                        if (!(dtNew.Rows[i]["First Name"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["First Name"].ToString();
-                            string FName = Convert.ToString(dtNew.Rows[i]["First Name"]);
 
-                            for (int j = 0; j < FName.Length; j++)
-                            {
-                                int result;
-                                if (int.TryParse(FName[j].ToString(), out result))
-                                {
-                                    message = "<span style='color:Red'><b>Please enter Valid First Name Dont Use Numeric Value</b> </span>";
-                                    messageexp = "Please enter Valid First Name Dont Use Numeric Value ";
-                                    ErrorString = ErrorString + message + " | ";
-                                    ErrorString1 = ErrorString1 + messageexp + " | ";
-                                    IsErrorInUpload = true;
-                                    // return;
-                                    break;
-                                }
-                                else
-                                {
-                                    // not a number
-                                }
-                            }
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'><b>Please enter First Name</b></span> ";
-                            messageexp = "Please enter First Name ";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-
-                        }
-                        if (!(dtNew.Rows[i]["Middle Name"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["Middle Name"].ToString();
-                            string MName = Convert.ToString(dtNew.Rows[i]["Middle Name"]);
-
-                            for (int j = 0; j < MName.Length; j++)
-                            {
-                                int result;
-                                if (int.TryParse(MName[j].ToString(), out result))
-                                {
-                                    message = "<span style='color:Red'><b>Please enter Valid Middle Name Dont Use Numeric Value </b></span>";
-                                    messageexp = "Please enter Valid Middle Name Dont Use Numeric Value ";
-                                    ErrorString = ErrorString + message + " | ";
-                                    ErrorString1 = ErrorString1 + messageexp + " | ";
-                                    IsErrorInUpload = true;
-                                    break;
-                                }
-                                else
-                                {
-                                    // not a number
-                                }
-                            }
-                        }
-                        if (!(dtNew.Rows[i]["Last Name"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["Last Name"].ToString();
-                            string LName = Convert.ToString(dtNew.Rows[i]["Last Name"]);
-
-                            for (int j = 0; j < LName.Length; j++)
-                            {
-                                int result;
-                                if (int.TryParse(LName[j].ToString(), out result))
-                                { 
-                                    message = "<span style='color:Red'><b>Please enter Valid Last Name Dont Use Numeric Value </b></span>";
-                                    messageexp = "Please enter Valid Last Name Dont Use Numeric Value ";
-                                    ErrorString = ErrorString + message + " | ";
-                                    ErrorString1 = ErrorString1 + messageexp + " | ";
-                                    IsErrorInUpload = true;
-                                    break;
-                                }
-                                else
-                                {
-                                    // not a number
-                                }
-                            }
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'><b>Please enter Last Name </b></span>";
-                            messageexp = "Please enter Last Name ";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                        }
-
-                    //------------start--gender
+                        //------------start--gender
 
                         string gender = dtNew.Rows[i]["Gender"].ToString();
                         ds1 = objCommon.FillDropDown("ACD_GENDER", "*", "GENDERNAME", "GENDERNAME='" + gender + "'", "");
@@ -1283,200 +1202,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             //}
                         }
 
-                    //------------end----gender
-
-                         if (!(dtNew.Rows[i]["Gender"]).ToString().Equals(string.Empty))
-                        {
-                            if (dtNew.Rows[i]["Gender"].ToString().Trim().ToUpper().Equals("FEMALE"))
-                            {
-                                objPayMas.gender = Convert.ToChar("F");
-                            }
-                            else if (dtNew.Rows[i]["Gender"].ToString().Trim().ToUpper().Equals("MALE"))
-                            {
-                                objPayMas.gender = Convert.ToChar("M");
-                            }
-                            else
-                            {
-                                message = "<span style='color:Red'><b>Please enter Gender in given format (MALE/FEMALE)</b></span>";
-                                messageexp = "Please enter Gender in given format (MALE/FEMALE)";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-                            }
-                        }
-
-                         if (!(dtNew.Rows[i]["Fathers Name"]).ToString().Equals(string.Empty))
-                         {
-                             objPayMas.RegNo = dtNew.Rows[i]["Fathers Name"].ToString();
-                             string FaName = Convert.ToString(dtNew.Rows[i]["Fathers Name"]);
-
-                             for (int j = 0; j < FaName.Length; j++)
-                             {
-                                 int result;
-                                 if (int.TryParse(FaName[j].ToString(), out result))
-                                 {
-                                     //element is a number   
-                                     message = "<span style='color:Red'><b>Please enter Valid Fathers Name Dont Use Numeric Value </b></span>";
-                                     messageexp = "Please enter Valid Fathers Name Dont Use Numeric Value ";
-                                     ErrorString = ErrorString + message + " | ";
-                                     ErrorString1 = ErrorString1 + messageexp + " | ";
-                                     IsErrorInUpload = true;
-                                     // return;
-                                     break;
-                                 }
-                                 else
-                                 {
-                                     // not a number
-                                 }
-                             }
-                         }
-
-                         if (!(dtNew.Rows[i]["Mothers Name"]).ToString().Equals(string.Empty))
-                         {
-                             objPayMas.RegNo = dtNew.Rows[i]["Mothers Name"].ToString();
-                             string MoName = Convert.ToString(dtNew.Rows[i]["Mothers Name"]);
-
-                             for (int j = 0; j < MoName.Length; j++)
-                             {
-                                 int result;
-                                 if (int.TryParse(MoName[j].ToString(), out result))
-                                 {
-                                     //element is a number   
-                                     message = "<span style='color:Red'><b>Please enter Valid Mothers Name Dont Use Numeric Value </b></span>";
-                                     messageexp = "Please enter Valid Mothers Name Dont Use Numeric Value ";
-                                     ErrorString = ErrorString + message + " | ";
-                                     ErrorString1 = ErrorString1 + messageexp + " | ";
-                                     IsErrorInUpload = true;
-                                     // return;
-                                     break;
-                                 }
-                                 else
-                                 {
-                                     // not a number
-                                 }
-                             }
-                         }
-
-                         if (!(dtNew.Rows[i]["Husbands Name"]).ToString().Equals(string.Empty))
-                         {
-                             objPayMas.RegNo = dtNew.Rows[i]["Husbands Name"].ToString();
-                             string HuName = Convert.ToString(dtNew.Rows[i]["Husbands Name"]);
-
-                             for (int j = 0; j < HuName.Length; j++)
-                             {
-                                 int result;
-                                 if (int.TryParse(HuName[j].ToString(), out result))
-                                 {
-                                     //element is a number   
-                                     message = "<span style='color:Red'><b>Please enter Valid Husbands Name Dont Use Numeric Value</b> </span>";
-                                     messageexp = "Please enter Valid Husbands Name Dont Use Numeric Value ";
-                                     ErrorString = ErrorString + message + " | ";
-                                     ErrorString1 = ErrorString1 + messageexp + " | ";
-                                     IsErrorInUpload = true;
-                                     // return;
-                                     break;
-                                 }
-                                 else
-                                 {
-                                     // not a number
-                                 }
-                             }
-                         }
-
-                        
-                        
-                        //if (!(dtNew.Rows[i]["Date of Retirement"]).ToString().Equals(string.Empty))
-                        //{
-                        //    objPayMas.RegNo = dtNew.Rows[i]["Date of Retirement"].ToString();
-                        //}
-                        //else
-                        //{
-                        //    message = "<span style='color:Red'><b>Please enter Date of Retirement </b></span>";
-                        //    messageexp = "Please enter Date of Retirement ";
-                        //    ErrorString = ErrorString + message + " | ";
-                        //    ErrorString1 = ErrorString1 + messageexp + " | ";
-                        //    IsErrorInUpload = true;
-                        //}
-                        //if (!(dtNew.Rows[i]["Date of Increment"]).ToString().Equals(string.Empty))
-                        //{
-                        //    objPayMas.RegNo = dtNew.Rows[i]["Date of Increment"].ToString();
-                        //}
-                        //else
-                        //{
-                        //    message = "<span style='color:Red'><b>Please enter Date of Increment</b></span> ";
-                        //    messageexp = "Please enter Date of Increment";
-                        //    ErrorString = ErrorString + message + " | ";
-                        //    ErrorString1 = ErrorString1 + messageexp + " | ";
-                        //    IsErrorInUpload = true;
-                        //}
-
-                        //if (!(dtNew.Rows[i]["UID No"]).ToString().Equals(string.Empty))
-                        //{
-                        //    string UID_No = Convert.ToString(dtNew.Rows[i]["UID No"]);
-                        //    int numericValue;
-                        //    bool isNumber = int.TryParse(UID_No, out numericValue);
-
-                        //    if (isNumber==false)
-                        //    {
-                        //        message = "<span style='color:Red'><b>Please enter UID No In Number Format</b> </span>";
-                        //        messageexp = "Please enter UID No In Number Foramt ";
-                        //        ErrorString = ErrorString + message + " | ";
-                        //        ErrorString1 = ErrorString1 + messageexp + " | ";
-                        //        IsErrorInUpload = true;
-   
-                        //    }
-                           
-                        //}
-
-                        if (!(dtNew.Rows[i]["Actual Basic"]).ToString().Equals(string.Empty))
-                        {
-                            string Actual_Basic = Convert.ToString(dtNew.Rows[i]["Actual Basic"]);
-                            int numericValue;
-                            bool isNumber = int.TryParse(Actual_Basic, out numericValue);
-
-                            if (isNumber == false)
-                            {
-                                message = "<span style='color:Red'><b>Please enter Actual Basic In Number Foramt </b></span>";
-                                messageexp = "Please enter Actual Basic In Number Foramt";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-
-                            }
-
-                        }
-
-                        if (!(dtNew.Rows[i]["Grade Pay"]).ToString().Equals(string.Empty))
-                        {
-                            string Grade_Pay = Convert.ToString(dtNew.Rows[i]["Grade Pay"]);
-                            int numericValue;
-                            bool isNumber = int.TryParse(Grade_Pay, out numericValue);
-
-                            if (isNumber == false)
-                            {
-                                message = "<span style='color:Red'><b>Please enter Grade Pay In Number Foramt</b> </span>";
-                                messageexp = "Please enter Grade Pay In Number Foramt ";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-
-                            }
-
-                        }
-
-                        if (!(dtNew.Rows[i]["Department"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["Department"].ToString();
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'><b>Please enter Department </b></span>";
-                            messageexp = "Please enter Department ";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                        }
-
+                        //------------end----gender
 
                         //------------start--Department
 
@@ -1499,21 +1225,6 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                         //------------end----Department
 
-
-
-                        if (!(dtNew.Rows[i]["Designation"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["Designation"].ToString();
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'><b>Please enter Designation </b></span>";
-                            messageexp = "Please enter Designation ";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                        }
-
                         //------------start--Designation
 
                         string Designation = dtNew.Rows[i]["Designation"].ToString();
@@ -1534,20 +1245,6 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         }
 
                         //------------end----Designation
-
-
-                        if (!(dtNew.Rows[i]["Staff Name"]).ToString().Equals(string.Empty))
-                        {
-                            objPayMas.RegNo = dtNew.Rows[i]["Staff Name"].ToString();
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'><b>Please enter Staff Name </b></span>";
-                            messageexp = "Please enter Staff Name ";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                        }
 
                         //------------start--Staff Name
 
@@ -1573,24 +1270,24 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         //------------start--Pay rule
 
                         string Payrule = dtNew.Rows[i]["Pay rule"].ToString();
-                        if (Payrule!="")
-                    {
-                        ds1 = objCommon.FillDropDown("[dbo].[PAYROLL_RULE]", "*", "PAYRULE", "PAYRULE='" + Payrule + "'", "");
-
-                        //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
-                        if (ds1.Tables[0].Rows.Count == 0)
+                        if (Payrule != "")
                         {
-                            //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
-                            //if (empId1 == empId)
-                            //{
-                            message = " <span style='color:Red'><b>Employee Pay rule is Not Correct. Please check Master Data.</span>";
-                            messageexp = "Employee Pay rule is Not Correct. Please check Master Data.";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                            //}
+                            ds1 = objCommon.FillDropDown("[dbo].[PAYROLL_RULE]", "*", "PAYRULE", "PAYRULE='" + Payrule + "'", "");
+
+                            //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
+                            if (ds1.Tables[0].Rows.Count == 0)
+                            {
+                                //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
+                                //if (empId1 == empId)
+                                //{
+                                message = " <span style='color:Red'><b>Employee Pay rule is Not Correct. Please check Master Data.</span>";
+                                messageexp = "Employee Pay rule is Not Correct. Please check Master Data.";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                //}
+                            }
                         }
-                    }
                         //------------end----Pay rule
 
                         //------------start--NATURE OF APPONIMENT
@@ -1616,98 +1313,10 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         }
                         //------------end----NATURE OF APPONIMENT
 
-                        if (!(dtNew.Rows[i]["Mobile No"]).ToString().Equals(string.Empty))
-                        {
-                            //  return Regex.IsMatch(mobileNumber, @"^\d{10}$");
-                            string mobil1 = dtNew.Rows[i]["Mobile No"].ToString();
-                            bool isValidmobil1 = Regex.IsMatch(mobil, @"^\d{10}$");
-
-                            if (!isValidmobil1)
-                            {
-                                message = "<span style='color:Red'><b>Please enter Valid mobile number</b> </span>";
-                                messageexp = "Please enter Valid mobile number";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-                            }
-                            else
-                            {
-                                objPayMas.RegNo = dtNew.Rows[i]["Mobile No"].ToString();
-                                string mobileNo = dtNew.Rows[i]["Mobile No"].ToString();
-                                if (mobileNo.Length < 10 || mobileNo.Length > 10)
-                                {
-                                    message = "<span style='color:Red'><b>Please enter Valid 10 digit Mobile Number </b></span>";
-                                    messageexp = "Please enter Valid 10 digit Mobile Number ";
-                                    ErrorString = ErrorString + message + " | ";
-                                    ErrorString1 = ErrorString1 + messageexp + " | ";
-                                    IsErrorInUpload = true;
-                                }
-
-                                //Mobile Number start with 0 Validation
-
-                                if (mobileNo.StartsWith("0"))
-                                {
-                                    message = "<span style='color:Red'><b>Mobile Number Dont start with 0 </b></span>";
-                                    messageexp = "Mobile Number Dont start with 0 ";
-                                    ErrorString = ErrorString + message + " | ";
-                                    ErrorString1 = ErrorString1 + messageexp + " | ";
-                                    IsErrorInUpload = true;
-                                }
-                            }
-                      }
-                        else
-                        {
-                            message = "<span style='color:Red'>Please enter Mobile No </span>";
-                            messageexp = "Please enter Mobile No";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-                        }
-                        if (!(dtNew.Rows[i]["E-mail ID"]).ToString().Equals(string.Empty))
-                        {
-                            //objPayMas.RegNo = dtNew.Rows[i]["E-mail ID"].ToString();
-                            //     string email = dtNew.Rows[i]["E-mail ID"].ToString();
-                            //     var mail = new MailAddress(email);
-                            //     bool isValidEmail = mail.Host.Contains(".");
-                            //     if(!isValidEmail){
-                            //         message = "<span style='color:Red'><b>Please enter Valid E-mail ID</b> </span>";
-                            //         messageexp = "Please enter Valid E-mail ID";
-                            //         ErrorString = ErrorString + message + " | ";
-                            //         ErrorString1 = ErrorString1 + messageexp + " | ";
-                            //         IsErrorInUpload = true;
-
-                            //     } 
-
-                            string email = dtNew.Rows[i]["E-mail ID"].ToString();
-                            bool isValidEmail = Regex.IsMatch(email, @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$");
-
-                            if (!isValidEmail)
-                            {
-                                message = "<span style='color:Red'><b>Please enter Valid E-mail ID</b> </span>";
-                                messageexp = "Please enter Valid E-mail ID";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-                            }
-
-                        }
-                        else
-                        {
-                            message = "<span style='color:Red'<b>>Please enter E-mail ID</b> </span>";
-                            messageexp = "Please enter Valid E-mail ID";
-                            ErrorString = ErrorString + message + " | ";
-                            ErrorString1 = ErrorString1 + messageexp + " | ";
-                            IsErrorInUpload = true;
-      
-
-                        }
-
-
-
                         if (!(dtNew.Rows[i]["Employee Type"]).ToString().Equals(string.Empty))
                         {
                             //objPayMas.RegNo = dtNew.Rows[i]["Employee Type"].ToString();
-                            string employeetype=dtNew.Rows[i]["Employee Type"].ToString();
+                            string employeetype = dtNew.Rows[i]["Employee Type"].ToString();
                             ds1 = objCommon.FillDropDown("[dbo].[PAYROLL_EMPLOYEETYPE]", "*", "EMPLOYEETYPE", "EMPLOYEETYPE='" + employeetype + "'", "");
 
                             //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
@@ -1724,52 +1333,425 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                                 //}
                             }
                         }
+                    }
+
+
+                    // }
+                    #endregion end Check Masters data
+
+                    //------end  title
+                    if (!(dtNew.Rows[i]["First Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["First Name"].ToString();
+                        string FName = Convert.ToString(dtNew.Rows[i]["First Name"]);
+
+                        for (int j = 0; j < FName.Length; j++)
+                        {
+                            int result;
+                            if (int.TryParse(FName[j].ToString(), out result))
+                            {
+                                message = "<span style='color:Red'><b>Please enter Valid First Name Dont Use Numeric Value</b> </span>";
+                                messageexp = "Please enter Valid First Name Dont Use Numeric Value ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                // return;
+                                break;
+                            }
+                            else
+                            {
+                                // not a number
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter First Name</b></span> ";
+                        messageexp = "Please enter First Name ";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+
+                    }
+                    if (!(dtNew.Rows[i]["Middle Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Middle Name"].ToString();
+                        string MName = Convert.ToString(dtNew.Rows[i]["Middle Name"]);
+
+                        for (int j = 0; j < MName.Length; j++)
+                        {
+                            int result;
+                            if (int.TryParse(MName[j].ToString(), out result))
+                            {
+                                message = "<span style='color:Red'><b>Please enter Valid Middle Name Dont Use Numeric Value </b></span>";
+                                messageexp = "Please enter Valid Middle Name Dont Use Numeric Value ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                break;
+                            }
+                            else
+                            {
+                                // not a number
+                            }
+                        }
+                    }
+                    if (!(dtNew.Rows[i]["Last Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Last Name"].ToString();
+                        string LName = Convert.ToString(dtNew.Rows[i]["Last Name"]);
+
+                        for (int j = 0; j < LName.Length; j++)
+                        {
+                            int result;
+                            if (int.TryParse(LName[j].ToString(), out result))
+                            {
+                                message = "<span style='color:Red'><b>Please enter Valid Last Name Dont Use Numeric Value </b></span>";
+                                messageexp = "Please enter Valid Last Name Dont Use Numeric Value ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                break;
+                            }
+                            else
+                            {
+                                // not a number
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Last Name </b></span>";
+                        messageexp = "Please enter Last Name ";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+
+
+                    if (!(dtNew.Rows[i]["Gender"]).ToString().Equals(string.Empty))
+                    {
+                        if (dtNew.Rows[i]["Gender"].ToString().Trim().ToUpper().Equals("FEMALE"))
+                        {
+                            objPayMas.gender = Convert.ToChar("F");
+                        }
+                        else if (dtNew.Rows[i]["Gender"].ToString().Trim().ToUpper().Equals("MALE"))
+                        {
+                            objPayMas.gender = Convert.ToChar("M");
+                        }
                         else
                         {
-                            message = "<span style='color:Red'><b>Please enter Employee Type</b></span> ";
-                            messageexp = "Please enter Employee Id";
+                            message = "<span style='color:Red'><b>Please enter Gender in given format (MALE/FEMALE)</b></span>";
+                            messageexp = "Please enter Gender in given format (MALE/FEMALE)";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
+                    }
+
+                    if (!(dtNew.Rows[i]["Fathers Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Fathers Name"].ToString();
+                        string FaName = Convert.ToString(dtNew.Rows[i]["Fathers Name"]);
+
+                        for (int j = 0; j < FaName.Length; j++)
+                        {
+                            int result;
+                            if (int.TryParse(FaName[j].ToString(), out result))
+                            {
+                                //element is a number   
+                                message = "<span style='color:Red'><b>Please enter Valid Fathers Name Dont Use Numeric Value </b></span>";
+                                messageexp = "Please enter Valid Fathers Name Dont Use Numeric Value ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                // return;
+                                break;
+                            }
+                            else
+                            {
+                                // not a number
+                            }
+                        }
+                    }
+
+                    if (!(dtNew.Rows[i]["Mothers Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Mothers Name"].ToString();
+                        string MoName = Convert.ToString(dtNew.Rows[i]["Mothers Name"]);
+
+                        for (int j = 0; j < MoName.Length; j++)
+                        {
+                            int result;
+                            if (int.TryParse(MoName[j].ToString(), out result))
+                            {
+                                //element is a number   
+                                message = "<span style='color:Red'><b>Please enter Valid Mothers Name Dont Use Numeric Value </b></span>";
+                                messageexp = "Please enter Valid Mothers Name Dont Use Numeric Value ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                // return;
+                                break;
+                            }
+                            else
+                            {
+                                // not a number
+                            }
+                        }
+                    }
+
+                    if (!(dtNew.Rows[i]["Husbands Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Husbands Name"].ToString();
+                        string HuName = Convert.ToString(dtNew.Rows[i]["Husbands Name"]);
+
+                        for (int j = 0; j < HuName.Length; j++)
+                        {
+                            int result;
+                            if (int.TryParse(HuName[j].ToString(), out result))
+                            {
+                                //element is a number   
+                                message = "<span style='color:Red'><b>Please enter Valid Husbands Name Dont Use Numeric Value</b> </span>";
+                                messageexp = "Please enter Valid Husbands Name Dont Use Numeric Value ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                // return;
+                                break;
+                            }
+                            else
+                            {
+                                // not a number
+                            }
+                        }
+                    }
+
+
+                    if (!(dtNew.Rows[i]["Actual Basic"]).ToString().Equals(string.Empty))
+                    {
+                        string Actual_Basic = Convert.ToString(dtNew.Rows[i]["Actual Basic"]);
+                        int numericValue;
+                        bool isNumber = int.TryParse(Actual_Basic, out numericValue);
+
+                        if (isNumber == false)
+                        {
+                            message = "<span style='color:Red'><b>Please enter Actual Basic In Number Foramt </b></span>";
+                            messageexp = "Please enter Actual Basic In Number Foramt";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+
+                        }
+
+                    }
+
+                    if (!(dtNew.Rows[i]["Grade Pay"]).ToString().Equals(string.Empty))
+                    {
+                        string Grade_Pay = Convert.ToString(dtNew.Rows[i]["Grade Pay"]);
+                        int numericValue;
+                        bool isNumber = int.TryParse(Grade_Pay, out numericValue);
+
+                        if (isNumber == false)
+                        {
+                            message = "<span style='color:Red'><b>Please enter Grade Pay In Number Foramt</b> </span>";
+                            messageexp = "Please enter Grade Pay In Number Foramt ";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+
+                        }
+
+                    }
+
+                    if (!(dtNew.Rows[i]["Department"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Department"].ToString();
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Department </b></span>";
+                        messageexp = "Please enter Department ";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+
+
+
+
+
+                    if (!(dtNew.Rows[i]["Designation"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Designation"].ToString();
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Designation </b></span>";
+                        messageexp = "Please enter Designation ";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+
+
+
+                    if (!(dtNew.Rows[i]["Staff Name"]).ToString().Equals(string.Empty))
+                    {
+                        objPayMas.RegNo = dtNew.Rows[i]["Staff Name"].ToString();
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Staff Name </b></span>";
+                        messageexp = "Please enter Staff Name ";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+
+
+                    if (!(dtNew.Rows[i]["Mobile No"]).ToString().Equals(string.Empty))
+                    {
+                        //  return Regex.IsMatch(mobileNumber, @"^\d{10}$");
+                        string mobil1 = dtNew.Rows[i]["Mobile No"].ToString();
+                        bool isValidmobil1 = Regex.IsMatch(mobil1, @"^\d{10}$");
+
+                        if (!isValidmobil1)
+                        {
+                            //message = "<span style='color:Red'><b>Please enter Valid mobile number</b> </span>";
+                            //messageexp = "Please enter Valid mobile number";
+                            //ErrorString = ErrorString + message + " | ";
+                            //ErrorString1 = ErrorString1 + messageexp + " | ";
+                            //IsErrorInUpload = true;
+                        }
+                        else
+                        {
+                            objPayMas.RegNo = dtNew.Rows[i]["Mobile No"].ToString();
+                            string mobileNo = dtNew.Rows[i]["Mobile No"].ToString();
+                            if (mobileNo.Length < 10 || mobileNo.Length > 10)
+                            {
+                                message = "<span style='color:Red'><b>Please enter Valid 10 digit Mobile Number </b></span>";
+                                messageexp = "Please enter Valid 10 digit Mobile Number ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                            }
+
+                            //Mobile Number start with 0 Validation
+
+                            if (mobileNo.StartsWith("0"))
+                            {
+                                message = "<span style='color:Red'><b>Mobile Number Dont start with 0 </b></span>";
+                                messageexp = "Mobile Number Dont start with 0 ";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'>Please enter Mobile No </span>";
+                        messageexp = "Please enter Mobile No";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+                    if (!(dtNew.Rows[i]["E-mail ID"]).ToString().Equals(string.Empty))
+                    {
+                        //objPayMas.RegNo = dtNew.Rows[i]["E-mail ID"].ToString();
+                        //     string email = dtNew.Rows[i]["E-mail ID"].ToString();
+                        //     var mail = new MailAddress(email);
+                        //     bool isValidEmail = mail.Host.Contains(".");
+                        //     if(!isValidEmail){
+                        //         message = "<span style='color:Red'><b>Please enter Valid E-mail ID</b> </span>";
+                        //         messageexp = "Please enter Valid E-mail ID";
+                        //         ErrorString = ErrorString + message + " | ";
+                        //         ErrorString1 = ErrorString1 + messageexp + " | ";
+                        //         IsErrorInUpload = true;
+
+                        //     } 
+
+                        string email = dtNew.Rows[i]["E-mail ID"].ToString();
+                        bool isValidEmail = Regex.IsMatch(email, @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$");
+
+                        if (!isValidEmail)
+                        {
+                            message = "<span style='color:Red'><b>Please enter Valid E-mail ID</b> </span>";
+                            messageexp = "Please enter Valid E-mail ID";
                             ErrorString = ErrorString + message + " | ";
                             ErrorString1 = ErrorString1 + messageexp + " | ";
                             IsErrorInUpload = true;
                         }
 
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'<b>>Please enter E-mail ID</b> </span>";
+                        messageexp = "Please enter Valid E-mail ID";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
 
-                        if (IsErrorInUpload == false)
-                        {
-                            TotalRecordUploadCount++;
-
-                            message = "<span style='color:Green'> <b>Record Is Ok</b></span> ";
-                            messageexp = "Record Is Ok";
-                           
-                               ErrorString = ErrorString + message + " | ";
-                               ErrorString1 = ErrorString1 + messageexp + " | ";
-                            
-                        }
-
-                        else
-                        {
-
-                            TotalRecordErrorCount++;
-                            IsErrorInUpload = true;
-                        }
-
-                        if (ErrorString.Trim().EndsWith("|"))
-                        {
-                            ErrorString = ErrorString.Remove(ErrorString.Length - 2, 1);
-                        }
-                        dr = dt1.NewRow();
-                        dr["RowId"] = (i + 1).ToString();
-                        dr["Description"] = ErrorString;
-                        dt1.Rows.Add(dr);
-
-
-                        dr1 = dt2.NewRow();
-                        dr1["RowId"] = (i + 1).ToString();
-                        dr1["Description"] = ErrorString1;
-                        dt2.Rows.Add(dr1);
-                        ViewState["CurrentTable"] = dt2;
 
                     }
+
+
+
+                    if (!(dtNew.Rows[i]["Employee Type"]).ToString().Equals(string.Empty))
+                    {
+
+                    }
+                    else
+                    {
+                        message = "<span style='color:Red'><b>Please enter Employee Type</b></span> ";
+                        messageexp = "Please enter Employee Id";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+
+                    if (IsErrorInUpload == false)
+                    {
+                        TotalRecordUploadCount++;
+
+                        message = "<span style='color:Green'> <b>Record Is Ok</b></span> ";
+                        messageexp = "Record Is Ok";
+
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+
+                    }
+
+                    else
+                    {
+
+                        TotalRecordErrorCount++;
+                        IsErrorInUpload = true;
+                    }
+
+                    if (ErrorString.Trim().EndsWith("|"))
+                    {
+                        ErrorString = ErrorString.Remove(ErrorString.Length - 2, 1);
+                    }
+                    dr = dt1.NewRow();
+                    dr["RowId"] = (i + 1).ToString();
+                    dr["Description"] = ErrorString;
+                    dt1.Rows.Add(dr);
+
+
+                    dr1 = dt2.NewRow();
+                    dr1["RowId"] = (i + 1).ToString();
+                    dr1["Description"] = ErrorString1;
+                    dt2.Rows.Add(dr1);
+                    ViewState["CurrentTable"] = dt2;
+
+                    //      }
 
                     //dr = dt1.NewRow();
                     //dr["RowId"] = (i + 1).ToString();
@@ -1777,7 +1759,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     //dt1.Rows.Add(dr);
                     //ViewState["CurrentTable"] = dt1;
 
-                //}
+                    //}
+                }
 
                 // Display Total count here
                 lblTotalRecordCount.Text = TotalRecordCount.ToString();
@@ -1796,14 +1779,18 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 }
                 if (lblTotalRecordCount.Text == lblTotalRecordUploadCount.Text)
                 {
-                   
+                    int IsMaster = 0;
                     int ClgCode = Convert.ToInt32(Session["colcode"]);
                     int OrgId = Convert.ToInt32(Session["OrgId"]);
                     int Uano = Convert.ToInt32(Session["userNo"]);
                     DataTable();
                     //int usertype =Convert.ToInt32( ddlEmployeeType.SelectedValue);
                     int usertype = Convert.ToInt32(DropDownList1.SelectedValue);
-                    cs = (CustomStatus)objPayHeadController.SaveEmployeeExcelSheetData(ClgCode, OrgId, objPayMas, usertype, Uano);
+                    if (chismaster.Checked==true)
+                    {
+                        IsMaster = 1;
+                    }
+                    cs = (CustomStatus)objPayHeadController.SaveEmployeeExcelSheetData(ClgCode, OrgId, objPayMas, usertype, Uano, IsMaster);
                     ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
 
                 }
@@ -2381,10 +2368,89 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
             try
             {
+                int ischeck = 0;
+                if (chismaster.Checked == true)
+                {
+                    ischeck = 1;
+                }
+                DataSet ds = objPayHeadController.GetMasterData(ischeck);
 
-                DataSet ds = objPayHeadController.GetMasterData();
-
+                if (chismaster.Checked==true)
+                {
                 ds.Tables[0].TableName = "Employee_Data_Migration_Format";
+               // ds.Tables[1].TableName = "College Name";
+                string status = string.Empty;
+
+                //foreach (System.Data.DataTable dt in ds.Tables[0].Rows)
+                //{
+                //    if (dt.Rows.Count == 0)
+                //    {
+                //        status += dt.TableName + ",";
+
+                //    }
+                //}
+                foreach (System.Data.DataRow dr in ds.Tables[0].Rows)
+                {
+                    if (dr.ItemArray.Length == 0)
+                    {
+                        status += dr.Table.TableName + ",";
+                    }
+                }
+
+                if (status != string.Empty)
+                {
+                    status = status.Trim(',');
+                    objCommon.DisplayMessage(Page, "Data not available in ERP Master Table " + status, this.Page);
+                    return;
+                }
+
+                //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[1].Rows.Count > 0 && ds.Tables[2].Rows.Count > 0)
+                //{
+                    using (XLWorkbook wb = new XLWorkbook())
+                    {
+                        foreach (System.Data.DataTable dt in ds.Tables)
+                        {
+                            //Add System.Data.DataTable as Worksheet.
+                            var ws = wb.Worksheets.Add(dt);
+                            int i = 0;
+                            // var ws = wb.Worksheets.Add(dt, dt.TableName.ToString());
+                            for (int j = 1; j <= ds.Tables[0].Columns.Count; j++)
+                            {
+
+                                // var temp = ds.Tables[0].Columns[j];
+
+                                if ("College Name" == ds.Tables[0].Columns[i].ToString() || "Employee Id" == ds.Tables[0].Columns[i].ToString() || "Title" == ds.Tables[0].Columns[i].ToString() || "First Name" == ds.Tables[0].Columns[i].ToString() || "Last Name" == ds.Tables[0].Columns[i].ToString() || "Gender" == ds.Tables[0].Columns[i].ToString() || "Date of Birth" == ds.Tables[0].Columns[i].ToString() || "Date of Joining" == ds.Tables[0].Columns[i].ToString() || "Department" == ds.Tables[0].Columns[i].ToString() || "Designation" == ds.Tables[0].Columns[i].ToString() || "Staff Name" == ds.Tables[0].Columns[i].ToString() || "Mobile No" == ds.Tables[0].Columns[i].ToString() || "E-mail ID" == ds.Tables[0].Columns[i].ToString() || "Employee Type" == ds.Tables[0].Columns[i].ToString())
+                                {
+
+                                    ws.Cell(1, j).Style.Fill.BackgroundColor = XLColor.FromArgb(255, 64, 0); //All columns of second row
+                                }
+                                else
+                                {
+                                    ws.Cell(1, j).Style.Fill.BackgroundColor = XLColor.FromArgb(0, 150, 255); //All columns of second row
+                                }
+                                i++;
+                            }
+                        }
+
+                        //Export the Excel file.
+                        Response.Clear();
+                        Response.Buffer = true;
+                        Response.Charset = "";
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        Response.AddHeader("content-disposition", "attachment;filename=PreFormat_For_UploadEmployee_Data.xlsx");
+                        using (MemoryStream MyMemoryStream = new MemoryStream())
+                        {
+                            wb.SaveAs(MyMemoryStream);
+                            MyMemoryStream.WriteTo(Response.OutputStream);
+                            Response.Flush();
+                            Response.End();
+                        }
+                    //}
+                }
+                }
+                else
+                {
+                    ds.Tables[0].TableName = "Employee_Data_Migration_Format";
                 ds.Tables[1].TableName = "College Name";
                 ds.Tables[2].TableName = "Title";
                 ds.Tables[3].TableName = "Gender";
@@ -2395,60 +2461,22 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 ds.Tables[8].TableName = "NATURE OF APPONIMENT";
                 ds.Tables[9].TableName = "Employee Type";
                 string status = string.Empty;
-                //// added by kajal jaiswal on 16-02-2023 for checking table is blank 
-                //foreach (System.Data.DataTable dt in ds.Tables)
-                //{
-                //    if (dt.Rows.Count == 0)
-                //    {
-                //        status += dt.TableName + ",";
 
-                //    }
-                //}
+                foreach (System.Data.DataTable dt in ds.Tables)
+                {
+                    if (dt.Rows.Count == 0)
+                    {
+                        status += dt.TableName + ",";
 
-                //if (status != string.Empty)
-                //{
-                //    status = status.Trim(',');
-                //    objCommon.DisplayMessage(Page, "Data not available in ERP Master Table " + status, this.Page);
-                //    return;
-                //}
+                    }
+                }
 
-
-
-                //using (XLWorkbook wb = new XLWorkbook())
-                //{
-                //    foreach (System.Data.DataTable dt in ds.Tables)
-                //    {
-                //        //Add System.Data.DataTable as Worksheet.
-                //        wb.Worksheets.Add(dt);
-                //    }
-
-
-
-
-
-                //    //Export the Excel file.
-                //    Response.Clear();
-                //    Response.Buffer = true;
-                //    Response.Charset = "";
-                //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                //    Response.AddHeader("content-disposition", "attachment;filename=PreFormat_For_UploadStudentData.xlsx");
-                //    using (MemoryStream MyMemoryStream = new MemoryStream())
-                //    {
-                //        wb.SaveAs(MyMemoryStream);
-                //        MyMemoryStream.WriteTo(Response.OutputStream);
-                //        Response.Flush();
-                //        Response.End();
-                //    }
-
-                    //Response.ClearContent();
-                    //Response.AddHeader("content-disposition", attachment);
-                    //Response.ContentType = "application/vnd.MS-excel";
-                    //StringWriter sw = new StringWriter();
-                    //HtmlTextWriter htw = new HtmlTextWriter(sw);
-                    //GVEmpChallan.RenderControl(htw);
-                    //Response.Write(sw.ToString());
-                    //Response.End();
-               // }
+                if (status != string.Empty)
+                {
+                    status = status.Trim(',');
+                    objCommon.DisplayMessage(Page, "Data not available in ERP Master Table " + status, this.Page);
+                    return;
+                }
 
                 if (ds.Tables[0].Rows.Count > 0 && ds.Tables[1].Rows.Count > 0 && ds.Tables[2].Rows.Count > 0)
                 {
@@ -2459,7 +2487,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             //Add System.Data.DataTable as Worksheet.
                             var ws = wb.Worksheets.Add(dt);
                             int i = 0;
-                           // var ws = wb.Worksheets.Add(dt, dt.TableName.ToString());
+                            // var ws = wb.Worksheets.Add(dt, dt.TableName.ToString());
                             for (int j = 1; j <= ds.Tables[0].Columns.Count; j++)
                             {
 
@@ -2493,6 +2521,12 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         }
                     }
                 }
+                }
+
+
+                
+
+             
             }
             catch (Exception ex)
             {
