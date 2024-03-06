@@ -191,7 +191,12 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
                
                 ViewState["order_id"] = parameters["ORDERID"].ToString();
                 var Idno = objCommon.LookUp("ACD_DCR_TEMP", "IDNO", "ORDER_ID='" + Order_ID + "'");
-                 
+                var installment_No = objCommon.LookUp("ACD_DCR_TEMP", "sem_reg", "ORDER_ID='" + Order_ID + "'");
+                if (installment_No != "")
+                {
+                    installmentno = Convert.ToInt32(installment_No);
+                }
+
                 ViewState["IDNO"] = Idno;
                 Session["order_id"] = order_id.ToString();
                 Session["idno"] = Idno;
