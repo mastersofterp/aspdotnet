@@ -3,7 +3,11 @@
  Created Date     : 09-02-2023
  Description        : To get student for manual fee entry for admission portal.
 */
-
+//-----------------------------------------------------------------------------------------------------------------------------
+//--Version   Modified    On Modified         By Purpose
+//-----------------------------------------------------------------------------------------------------------------------------
+//--1.0.1    16-02-2024     Rutuja         Changes for the PHD
+//--------------------------------------------- -------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +35,7 @@ using System.IO;
 using System.Threading.Tasks;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
+
 
 
 public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
@@ -98,7 +103,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
     {
         try
         {
-              
+          
             lblName.Text = string.Empty;
             lblEmail.Text = string.Empty;
             lblMobile.Text = string.Empty;
@@ -114,6 +119,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 spValue = "" + appId + "";
                 DataSet dsGet = null;
                 dsGet = objCommon.DynamicSPCall_Select(spName, spParameters, spValue);
+                DataSet ds_degreenamePHD = objCommon.FillDropDown("ACD_college_degree_branch AD INNER JOIN ACD_PHD_REGISTRATION AUR ON (AD.BRANCHNO=AUR.DEPARTMENT_NO)", "AD.DEGREENO", "USERNO", "USERNO=" + Convert.ToInt32(ViewState["USERNO"]) + "AND USERNAME =" + appId + " AND UGPGOT=3", "");
                 if (dsGet != null && dsGet.Tables.Count > 0 && dsGet.Tables[0].Rows.Count > 0)
                 {
                     divDetails.Visible = true;
@@ -131,11 +137,18 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`Payment Already Done.`)", true);
                         lblPayStatus.ForeColor = System.Drawing.Color.Green;
                         btnSubmit.Visible = false;
+
+
+                        if (lblDegree.Text != "Doctor of Philosophy")
+                        {
+                            btnreceipt.Visible = true;
+                        }
                     }
                     else
                     {
                         lblPayStatus.ForeColor = System.Drawing.Color.Red;
                         btnSubmit.Visible = true;
+                        btnreceipt.Visible = false;
                     }
                     btnCancel.Visible = true;
                 }
@@ -144,6 +157,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 divDetails.Visible = false;
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`No record found.`)", true);
                 btnCancel.Visible = false;
+                btnreceipt.Visible = false;
                 btnSubmit.Visible = false;
                 return;
             }
@@ -194,13 +208,14 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 }
             }
 
-
+    
 
             string lookupResult = objCommon.LookUp("ACD_DEGREE AD INNER JOIN ACD_USER_REGISTRATION AUR ON (AD.DEGREENO=AUR.DEGREENO)", "AD.DEGREENO", "USERNO=" + userNo + " AND USERNAME ='" + appId + "'");
             DataSet dsPay = null;
             dsPay = objCommon.DynamicSPCall_Select(spName, spParameters, spValue);
             if (dsPay != null && dsPay.Tables.Count > 0 && dsPay.Tables[0].Rows.Count > 0)
             {
+                //<1.0.1> 
                 if (dsPay.Tables[0].Rows[0]["OUTPUT"].ToString().Equals("1"))
                 {
                     //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`Manual payment done successfully.`)", true);
@@ -235,9 +250,11 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                         {
                             Task<int> x = SendMailForAppId_PG();
                         }
-                        ShowReport("OnlineFeePayment", "rptOnlineReceipt_Online_Adm.rpt");
+                      //  ShowReport("OnlineFeePayment", "rptOnlineReceipt_Online_Adm.rpt");
+
+                        btnreceipt.Visible = true;
                     }
-                   
+                   //</1.0.1>
                     return;
               }
             }
@@ -262,13 +279,14 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             btnSubmit.Visible = false;
             divDetails.Visible = false;
             btnCancel.Visible = false;
+            btnreceipt.Visible = false;
         }
         catch (Exception ex)
         {
             throw;
         }
     }
-
+     //<1.0.1> 
     protected async Task<int> SendMailForAppId_PG()
     {
         int ret = 0;
@@ -478,8 +496,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             //    cc.Add(new EmailAddress(i));
             //}
             #endregion
-
-            // int userno = Convert.ToInt32(Session["userno"]);
+       
             string email =  objCommon.LookUp("ACD_USER_REGISTRATION", "EMAILID", "USERNO=" + userno);
             string Name = objCommon.LookUp("ACD_USER_REGISTRATION", "FIRSTNAME", "USERNO=" + userno);
             ViewState["firstName"] = Name;
@@ -1152,12 +1169,13 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
           
             string DcrNo = string.Empty;
             string IDNO = string.Empty;
-            DataSet dsDCR_IDNO = objCommon.FillDropDown("ACD_DCR_ONLINE", "DCR_NO", "IDNO", " IDNO=" + Convert.ToInt32(ViewState["USERNO"])+ "" , "");
+            DataSet dsDCR_IDNO = objCommon.FillDropDown("ACD_DCR_ONLINE", "DCR_NO", "IDNO,NAME", " IDNO=" + Convert.ToInt32(ViewState["USERNO"]) + "", "");
             //DataSet dsDCR_IDNO = objCommon.FillDropDown("ACD_DCR_ONLINE ", "ORDER_ID,DCR_NO ", "IDNO", "IDNO " + Convert.ToInt32(ViewState["USERNO"])+ "" , string.Empty);    //objNew.Get_Dcr_Idno_From_OrderId_ForReport(lblOrderId.Text.ToString());
             if (dsDCR_IDNO.Tables[0].Rows.Count > 0)
             {
                 DcrNo = dsDCR_IDNO.Tables[0].Rows[0]["DCR_NO"].ToString();
                 IDNO = dsDCR_IDNO.Tables[0].Rows[0]["IDNO"].ToString();
+                string IDNO1 = dsDCR_IDNO.Tables[0].Rows[0]["NAME"].ToString();
             }
             /// string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("")));
          //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ManualEntryOA")));
@@ -1486,16 +1504,17 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
         Common.SetDBLogonForReport(connectionInfo, customReport);
     }
 
-    //protected void btnreceipt_Click(object sender, EventArgs e)
-    //{
-    //    try
-    //    {
-    //        ShowReport("OnlineFeePayment", "rptOnlineReceipt_Online_Adm.rpt");
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        objCommon.DisplayMessage(this.Page, "Oops! Something Went Wrong!", this.Page);
-    //        return;
-    //    }
-    //}
+    protected void btnreceipt_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            ShowReport("OnlineFeePayment", "rptOnlineReceipt_Online_Adm.rpt");
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops! Something Went Wrong!", this.Page);
+            return;
+        }
+ //</1.0.1> 
+    }
 }
