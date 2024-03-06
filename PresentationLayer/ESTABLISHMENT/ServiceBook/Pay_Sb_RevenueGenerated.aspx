@@ -45,7 +45,7 @@
                                         <div class="form-group col-lg-4 col-md-6 col-12">
                                           <div class="label-dynamic">
                                           <sup>* </sup>
-                                          <label>Revenue Generated Through VAC (INR) :</label>
+                                          <label>Revenue Generated Through VAC (INR)</label>
                                           </div>
                                           <asp:TextBox ID="txtRGTVAC" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through VAC (INR)" TabIndex="2" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
                                           <asp:RequiredFieldValidator ID="rfvVAC" runat="server" ControlToValidate="txtRGTVAC"
@@ -56,7 +56,7 @@
                                         <div class="form-group col-lg-4 col-md-6 col-12">
                                           <div class="label-dynamic">
                                           <sup>*</sup>
-                                          <label>Revenue Generated Through Conducting Events / Training</label>
+                                          <label>Revenue Generated Through Events / Training</label>
                                           </div>
                                           <asp:TextBox ID="txtRGTEvents" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through Conducting Events/Training" TabIndex="3" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
                                           <asp:RequiredFieldValidator ID="rfvEvents" runat="server" ControlToValidate="txtRGTEvents"

@@ -106,7 +106,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
                         if (flupld.FileContent.Length >= 1024 * 10000)
                         {
 
-                            MessageBox("File Size Should Not Be Greater Than 10 Mb");
+                            MessageBox("File Size Should Not Be Greater Than 5 Mb");
                             flupld.Dispose();
                             flupld.Focus();
                             return;
