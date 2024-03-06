@@ -138,7 +138,17 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         try
         {
             //ddlSem.Items.Clear();
-            //ddlSem.Items.Add(new ListItem("Please Select", "0"));           
+            //ddlSem.Items.Add(new ListItem("Please Select", "0"));
+ 
+            // added by shubham B on 02-03-2024
+            //ddlCollege.SelectedIndex = 0;
+            //ddlAdmBatch.SelectedIndex = 0;
+            ddlDegree.SelectedIndex = 0;
+            ddlBranch.SelectedIndex = 0;
+            ddlScheme.SelectedIndex = 0;
+            ddlSem.SelectedIndex = 0;
+            ddlMeritList.SelectedIndex = 0;
+            //end
             ddlBranch.Items.Clear();
 
             if (ddlDegree.SelectedIndex > 0)
@@ -166,7 +176,18 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         try
         {
             //ddlSem.Items.Clear();
-            //ddlSem.Items.Add(new ListItem("Please Select", "0"));           
+            //ddlSem.Items.Add(new ListItem("Please Select", "0"));    
+
+            // added by shubham B on 02-03-2024
+            //ddlCollege.SelectedIndex = 0;
+            //ddlAdmBatch.SelectedIndex = 0;
+            //ddlDegree.SelectedIndex = 0;
+            ddlBranch.SelectedIndex = 0;
+            ddlScheme.SelectedIndex = 0;
+            ddlSem.SelectedIndex = 0;
+            ddlMeritList.SelectedIndex = 0;
+            //end
+
             if (ddlBranch.SelectedIndex > 0)
             {
 
@@ -200,7 +221,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
 
     private void ClearAllDropDowns()
     {
-
+        ddlClgname.SelectedIndex = 0;
         ddlCollege.SelectedIndex = 0;
         ddlSession.SelectedIndex = 0;
         ddlDegree.SelectedIndex = 0;
@@ -208,6 +229,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         ddlSem.SelectedIndex = 0;
         ddlScheme.SelectedIndex = 0;
         ddlMeritList.SelectedIndex = 0;
+        ddlAdmBatch.SelectedIndex = 0;
     }
 
     protected void btnReport_Click(object sender, EventArgs e)
@@ -216,16 +238,44 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         {
             if (Convert.ToInt32(rdoPurpose.SelectedValue) == 1)
             {
-                ShowReport(rdoReportType.SelectedValue, "rptBranchwiseTopperList.rpt");
+                if (rdoReportType.SelectedValue == "pdf")
+                {
+                    ShowReportPdf(rdoReportType.SelectedValue, "rptBranchwiseTopperList.rpt");
+                }
+                else if (rdoReportType.SelectedValue == "xls")
+                {
+                    ShowReport(rdoReportType.SelectedValue, "rptBranchwiseTopperList.rpt");
+                }
+
+               // ShowReport(rdoReportType.SelectedValue, "rptBranchwiseTopperList.rpt");
             }
 
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 2)
             {
-                MeritShowReport(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
+                //MeritShowReport(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
+                if (rdoReportType.SelectedValue == "pdf")
+                {
+                    MeritShowReport1(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
+                }
+                else if (rdoReportType.SelectedValue == "xls")
+                {
+                    MeritShowReport(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
+                }
+                
+                
             }
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 3)
             {
-                BranchMeritShowReport(rdoReportType.SelectedValue, "rptBranchTopperMeritList.rpt");
+                if (rdoReportType.SelectedValue == "pdf")
+                {
+                    BranchMeritShowReportPdf(rdoReportType.SelectedValue, "rptBranchTopperMeritList.rpt");
+                }
+                else if (rdoReportType.SelectedValue == "xls")
+                {
+                    BranchMeritShowReport(rdoReportType.SelectedValue, "rptBranchTopperMeritList.rpt");
+                }
+
+                //BranchMeritShowReport(rdoReportType.SelectedValue, "rptBranchTopperMeritList.rpt");
 
             }
 
@@ -243,9 +293,6 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             }
         }
     }
-
-
-
 
     //GridView GVStudData = new GridView();
 
@@ -269,6 +316,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
     //    Response.End();
 
     //Method for Show topper list Report 
+
     private void ShowReport(string exporttype, string rptFileName)
     {
         try
@@ -281,10 +329,54 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
-            url += "exporttype=" + exporttype;
+            url += "exporttype=" + exporttype; // comment by shubham 04032024 
             url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue;
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " window.close();";
+            //divMsg.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+
+            //Response.End();
+            //Response.Flush();
+            //HttpContext.Current.ApplicationInstance.CompleteRequest();
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_REPORTS_CoursewiseStudentRollList.ShowReportRegForm() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    private void ShowReportPdf(string reportTitle, string rptFileName)
+    {
+        try
+        {
+
+            //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+            //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+            //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+            //ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            // url += "exporttype=" + exporttype; // comment by shubham 04032024 
+            url += "pagetitle=" + reportTitle;
+            // url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue;
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -327,7 +419,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             url += "exporttype=" + exporttype;
             url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text;
 
 
             //To open new window from Updatepanel
@@ -347,6 +439,32 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
     }
 
     //Method for Show Merit topper list Report 
+    // added by shubham on 02-03-2024
+    private void MeritShowReport1(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_InvigilationDuty.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
     private void MeritShowReport(string exporttype, string rptFileName)
     {
         try
@@ -360,12 +478,18 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             url += "exporttype=" + exporttype;
             url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;//+ ddlDegree.SelectedItem.Text + "_" + ddlBranch.SelectedItem.Text + "_" 
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
 
             //To open new window from Updatepanel
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            //sb.Append(@"window.open('" + url + "','','" + features + "');");
+            //ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
+
             ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
         }
         catch (Exception ex)
@@ -376,7 +500,6 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
 
     //Method for Show Branch wise Merit topper list Report 
     private void BranchMeritShowReport(string exporttype, string rptFileName)
@@ -393,7 +516,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             url += "exporttype=" + exporttype;
             url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -408,6 +531,35 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         }
     }
 
+    private void BranchMeritShowReportPdf(string reportTitle, string rptFileName)
+    {
+        try
+        {
+
+            //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+            //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+            //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+            //ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+           // url += "exporttype=" + exporttype;
+            url += "pagetitle=" + reportTitle;
+            //url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_REPORTS_CoursewiseStudentRollList.ShowReportRegForm() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 
     //Method for Show convocation label report
     private void ConvLabelShowReport(string exporttype, string rptFileName)
@@ -424,7 +576,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             url += "exporttype=" + exporttype;
             url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -438,7 +590,6 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
@@ -511,12 +662,34 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
     // added on 22-04-2020 by Vaishali
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
+        // added by shubham B on 02-03-2024
+        ddlCollege.SelectedIndex = 0;
+        ddlAdmBatch.SelectedIndex = 0;
+        ddlDegree.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlScheme.SelectedIndex = 0;
+        ddlSem.SelectedIndex = 0;
+        ddlMeritList.SelectedIndex = 0;
+        //end
+
         objCommon.FillDropDownList(ddlDegree, "ACD_COLLEGE_DEGREE A WITH (NOLOCK) INNER JOIN ACD_DEGREE B WITH (NOLOCK) ON A.DEGREENO = B.DEGREENO", "DISTINCT B.DEGREENO", "DEGREENAME", "A.COLLEGE_ID = " + Convert.ToInt32(ddlCollege.SelectedValue) + " AND B.DEGREENO > 0", "B.DEGREENO");
     }
+
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
     {
 
         Common objCommon = new Common();
+
+        // added by shubham B on 02-03-2024
+        ddlSession.SelectedIndex = 0;
+        ddlCollege.SelectedIndex = 0;
+        ddlAdmBatch.SelectedIndex = 0;
+        ddlDegree.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlScheme.SelectedIndex = 0;
+        ddlSem.SelectedIndex = 0;
+        ddlMeritList.SelectedIndex = 0;
+        // end
 
         if (ddlClgname.SelectedIndex > 0)
         {
@@ -541,9 +714,18 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
 
 
     }
+
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+        // added by shubham B on 02-03-2024
+        ddlCollege.SelectedIndex = 0;
+        ddlAdmBatch.SelectedIndex = 0;
+        ddlDegree.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlScheme.SelectedIndex = 0;
+        ddlSem.SelectedIndex = 0;
+        ddlMeritList.SelectedIndex = 0;
+        // end
 
         if (ddlSession.SelectedIndex > 0)
         {
@@ -568,5 +750,127 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
 
 
 
+    }
+
+    //added by shubham On 17-04-23
+    private void ShowReportExcel(string exporttype, string rptFileName)
+    {
+        //try
+        //{
+        //    int SessionNo = Convert.ToInt32(objCommon.LookUp("ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONID = S.SESSIONID)", "SM.SESSIONNO", "isnull(SM.IS_ACTIVE,0)=1 and COLLEGE_ID=" + ViewState["college_id"].ToString() + "AND S.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue)));
+        //    string EXAMDAT = Convert.ToString(ddlDate.SelectedItem);
+        //    string EXAMDATE = (Convert.ToDateTime(EXAMDAT)).ToString("yyyy-MM-dd");
+        //    string attachment = "attachment; filename=" + "InvigilationDutyEntry" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+
+        //    Response.ClearContent();
+        //    Response.AddHeader("content-disposition", attachment);
+        //    Response.ContentType = "application/" + "ms-excel";
+        //    StringWriter sw = new StringWriter();
+        //    HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+        //    SQLHelper objSQLHelper = new SQLHelper(connectionString);
+        //    SqlParameter[] objParams = new SqlParameter[] 
+        //   { 
+        //       new SqlParameter("@P_SESSIONNO", Convert.ToInt32(SessionNo)),
+        //       new SqlParameter("@P_EXAM_NO", Convert.ToInt32(ddlExTTType.SelectedValue)),
+        //       new SqlParameter("@P_EXAM_DATE", EXAMDATE),
+              
+        //   };
+        //    DataSet dsfee = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_REPORT_INVIGILATION_DUTY", objParams);
+        //    if (dsfee.Tables[0].Rows.Count > 0)
+        //    {
+        //        DataTable dt = dsfee.Tables[0];
+        //        foreach (DataColumn dc in dt.Columns)
+        //        {
+
+        //        }
+        //        DataGrid dg = new DataGrid();
+
+        //        if (dsfee.Tables.Count > 0)
+        //        {
+        //            dg.DataSource = dsfee.Tables[0];
+        //            dg.DataBind();
+
+        //        }
+        //        dg.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        //        dg.HeaderStyle.BackColor = System.Drawing.Color.DeepSkyBlue;
+        //        dg.HeaderStyle.Font.Bold = true;
+        //        dg.RenderControl(htw);
+        //        Response.Write(sw.ToString());
+        //        Response.End();
+        //    }
+        //    else
+        //    {
+        //        objCommon.DisplayMessage(updInvigDuty, "No Data Found for current selection.", this.Page);
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+        //    if (Convert.ToBoolean(Session["error"]) == true)
+        //        objUCommon.ShowError(Page, "Academic_REPORTS_CoursewiseStudentRollList.ShowReportRegForm() --> " + ex.Message + " " + ex.StackTrace);
+        //    else
+        //        objUCommon.ShowError(Page, "Server Unavailable.");
+        //}
+    }
+
+    //added by shubham On 17-04-23
+    private void ShowReportWord(string exporttype, string rptFileName)
+    {
+    //    try
+    //    {
+    //        int SessionNo = Convert.ToInt32(objCommon.LookUp("ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONID = S.SESSIONID)", "SM.SESSIONNO", "isnull(SM.IS_ACTIVE,0)=1 and COLLEGE_ID=" + ViewState["college_id"].ToString() + "AND S.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue)));
+    //        string EXAMDAT = Convert.ToString(ddlDate.SelectedItem);
+    //        string EXAMDATE = (Convert.ToDateTime(EXAMDAT)).ToString("yyyy-MM-dd");
+    //        string attachment = "attachment; filename=" + "InvigilationDutyEntry.doc";
+
+    //        Response.ClearContent();
+    //        Response.AddHeader("content-disposition", attachment);
+    //        Response.ContentType = "application/" + "ms-excel";
+    //        StringWriter sw = new StringWriter();
+    //        HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+    //        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+    //        SqlParameter[] objParams = new SqlParameter[] 
+    //       { 
+    //           new SqlParameter("@P_SESSIONNO", Convert.ToInt32(SessionNo)),
+    //           new SqlParameter("@P_EXAM_NO", Convert.ToInt32(ddlExTTType.SelectedValue)),
+    //           new SqlParameter("@P_EXAM_DATE",EXAMDATE) ,
+              
+    //       };
+    //        DataSet dsfee = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_REPORT_INVIGILATION_DUTY", objParams);
+    //        if (dsfee.Tables[0].Rows.Count > 0)
+    //        {
+    //            DataTable dt = dsfee.Tables[0];
+    //            foreach (DataColumn dc in dt.Columns)
+    //            {
+
+    //            }
+    //            DataGrid dg = new DataGrid();
+
+    //            if (dsfee.Tables.Count > 0)
+    //            {
+    //                dg.DataSource = dsfee.Tables[0];
+    //                dg.DataBind();
+
+    //            }
+    //            dg.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    //            dg.HeaderStyle.BackColor = System.Drawing.Color.DeepSkyBlue;
+    //            dg.HeaderStyle.Font.Bold = true;
+    //            dg.RenderControl(htw);
+    //            Response.Write(sw.ToString());
+    //            Response.End();
+    //        }
+    //        else
+    //        {
+    //            objCommon.DisplayMessage(updInvigDuty, "No Data Found for current selection.", this.Page);
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        if (Convert.ToBoolean(Session["error"]) == true)
+    //            objUCommon.ShowError(Page, "Academic_REPORTS_CoursewiseStudentRollList.ShowReportRegForm() --> " + ex.Message + " " + ex.StackTrace);
+    //        else
+    //            objUCommon.ShowError(Page, "Server Unavailable.");
+    //    }
     }
 }
