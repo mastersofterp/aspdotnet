@@ -33,13 +33,13 @@
                         </div>
                         <div class="col-lg-12 col-md-12 col-12" id="divrdofeedback" runat="server">
                             <div class="row">
-                                <div class="form-group col-lg-12 col-md-12 col-12">
+                                <div class="form-group col-12">
 
                                     <div class="label-dynamic">
                                         <%-- <sup>* </sup>
                                                                             <label></label>--%>
                                     </div>
-                                    <asp:RadioButtonList ID="rdotcpartfull" runat="server" CssClass="col-4" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdotcpartfull_SelectedIndexChanged" AutoPostBack="true">
+                                    <asp:RadioButtonList ID="rdotcpartfull" runat="server" CssClass="col-6" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdotcpartfull_SelectedIndexChanged" AutoPostBack="true">
                                         <asp:ListItem Value="1">&nbsp;Faculty Feedback Report</asp:ListItem>
                                         <asp:ListItem Value="2">&nbsp;Course Teacher Feedback Report</asp:ListItem>
 
