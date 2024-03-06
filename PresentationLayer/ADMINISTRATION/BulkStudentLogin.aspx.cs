@@ -8,7 +8,11 @@
 // MODIFIED BY   : RUCHIKA DHAKATE
 // MODIFIED DESC : 
 //=================================================================================
-
+//------------------------------------------------------------------------------------------------------------------------------------
+//Version     Modified On          Modified By          Purpose
+//------------------------------------------------------------------------------------------------------------------------------------
+//1.0.1      19-02-2024            Rutuja Dawle        Use email template on the send email button.
+//--------------------------------------------- -------------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Collections;
@@ -112,18 +116,25 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     private void CheckPageAuthorization()
     {
-        if (Request.QueryString["pageno"] != null)
+        try
         {
-            //Check for Authorization of Page
-            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
+            if (Request.QueryString["pageno"] != null)
+            {
+                //Check for Authorization of Page
+                if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
+                {
+                    Response.Redirect("~/notauthorized.aspx?page=BulkStudentLogin.aspx");
+                }
+            }
+            else
             {
                 Response.Redirect("~/notauthorized.aspx?page=BulkStudentLogin.aspx");
             }
         }
-        else
+        catch (Exception ex)
         {
-            //Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=BulkStudentLogin.aspx");
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
         }
     }
    
@@ -151,15 +162,13 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
         {
             if (ddlDegree.SelectedIndex > 0)
             {
-                //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.COLLEGE_ID=" + Convert.ToInt32(ddlColg.SelectedValue) + "AND B.DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue), "A.LONGNAME");
                 objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.COLLEGE_ID=" + Convert.ToInt32(ddlColg.SelectedValue) + "AND B.DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue), "A.LONGNAME");
 
             }
             else
             {
                 ddlBranch.Items.Clear();
-                //   ddlDegree.SelectedIndex = 0;
-
+             
             }
         }
         catch (Exception ex)
@@ -175,9 +184,17 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     private void ShowMessage(string message)
     {
-        if (message != string.Empty)
+        try
         {
-            divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('" + message + "'); </script>";
+            if (message != string.Empty)
+            {
+                divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('" + message + "'); </script>";
+            }
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
         }
     }
 
@@ -200,30 +217,45 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     protected void btnExportUploadLog_Click(object sender, EventArgs e)
     {
-        GridView gvStudData = new GridView();
-        gvStudData.DataSource = ViewState["ExcelData"];
-        gvStudData.DataBind();
-        string FinalHead = @"<style>.FinalHead { font-weight:bold; }</style>";
-        string attachment = "attachment; filename=DATA_IMPORT_LOG.xls";
-        Response.ClearContent();
-        Response.AddHeader("content-disposition", attachment);
-        Response.ContentType = "application/vnd.MS-excel";
-        StringWriter sw = new StringWriter();
-        HtmlTextWriter htw = new HtmlTextWriter(sw);
-        Response.Write(FinalHead);
-        gvStudData.RenderControl(htw);
-        //string a = sw.ToString().Replace("_", " ");
-        Response.Write(sw.ToString());
-        Response.End();
+        try
+        {
+            GridView gvStudData = new GridView();
+            gvStudData.DataSource = ViewState["ExcelData"];
+            gvStudData.DataBind();
+            string FinalHead = @"<style>.FinalHead { font-weight:bold; }</style>";
+            string attachment = "attachment; filename=DATA_IMPORT_LOG.xls";
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/vnd.MS-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            Response.Write(FinalHead);
+            gvStudData.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void btnCancelUpload_Click(object sender, EventArgs e)
     {
-        ddlStudAdmBatch.SelectedIndex = 0;
-        LvDescription.DataSource = null;
-        LvDescription.DataBind();
-        LvDescription.Visible = false;
-        divCount.Visible = false;
+        try
+        {
+            ddlStudAdmBatch.SelectedIndex = 0;
+            LvDescription.DataSource = null;
+            LvDescription.DataBind();
+            LvDescription.Visible = false;
+            divCount.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     private void releaseObject(object obj)
@@ -236,7 +268,6 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
         catch (Exception ex)
         {
             obj = null;
-            //MessageBox.Show("Exception Occured while releasing object " + ex.ToString());
         }
         finally
         {
@@ -275,10 +306,6 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            //if (Convert.ToBoolean(Session["error"]) == true)
-            //    objUCommon.ShowError(Page, "LEADMANAGEMENT_Transactions_EnquiryGeneration.Uploaddata()-> " + ex.Message + " " + ex.StackTrace);
-            //else
-            //    objUCommon.ShowError(Page, "Server UnAvailable");
             objCommon.DisplayMessage(updpnl, "Cannot access the file. Please try again.", this.Page);
             return;
         }
@@ -286,20 +313,12 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     private void ExcelToDatabase(string FilePath, string Extension, string isHDR)
     {
-
-
         CustomStatus cs = new CustomStatus();
         string conStr = "";
         string datacolumnerror = string.Empty;
 
         switch (Extension)
         {
-            //case ".xls": //Excel 97-03
-            //    conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
-            //    break;
-            //case ".xlsx": //Excel 07
-            //    conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
-            //    break;
             case ".xls": //Excel 97-03
                 conStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + FilePath + ";Extended Properties='Excel 8.0'";
                 break;
@@ -315,41 +334,33 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
         try
         {
-
             System.Data.DataTable dt = new System.Data.DataTable();
             cmdExcel.Connection = connExcel;
-            //Get the name of First Sheet
-            //datacolumnerror = "\\nDrivers are not configured.\\nPlease contact system administrator.";
             datacolumnerror = "\\nPlease contact system administrator.";
 
             connExcel.Open();
             System.Data.DataTable dtExcelSchema;
             dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-            //string SheetName = dtExcelSchema.Rows[4]["TABLE_NAME"].ToString();
+        
 
             string SheetName = "Student Admission Data Format$"; //Added  By Ruchika Dhakate on 30.09.2022
 
 
             connExcel.Close();
 
-            //Read Data from First Sheet
             connExcel.Open();
             cmdExcel.CommandText = "SELECT * From [" + SheetName + "]";
             oda.SelectCommand = cmdExcel;
             oda.Fill(dt);
-
-            //Bind Excel to GridView
             DataSet ds = new DataSet();
             oda.Fill(ds);
 
             DataView dv1 = dt.DefaultView;
-            //dv1.RowFilter = "isnull(REGISTRATIONNO,0)<>0";
-            //dv1.RowFilter = "isnull(STUDENTNAME,'')<>''";
-            //System.Data.DataTable dtNew = dv1.ToTable();
+
 
             System.Data.DataTable dtNew = ds.Tables[0];
 
-            lvStudent.DataSource = dtNew; // ds.Tables[0]; /// dSet.Tables[0].DefaultView.RowFilter = "Frequency like '%30%')"; ;
+            lvStudent.DataSource = dtNew; 
             lvStudent.DataBind();
             objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label -
             lvStudent.Visible = true;
@@ -389,18 +400,11 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
             int TotalAlreadyExistsCount = 0;
             int TotalRecordErrorCount = 0;
             string RecordExist = string.Empty;
-
-            //objCommon.DisplayMessage(this.updpnl, count + " Student records already saved", this.Page);
             divRecords.Visible = true;
             divtotcount.Visible = true;
             divrecupload.Visible = true;
             divrecexist.Visible = true;
             divRecwitherror.Visible = true;
-
-            //lblTotalRecordUploadCount.Text = count.ToString();
-            //lblTotalAlreadyExistsCount.Text = count.ToString();
-            //lblRecExist.Text = count.ToString();
-            //lblTotcount.Text = count.ToString();
 
             lblTotalRecordCount.Text = TotalRecordCount.ToString();
             lblTotalRecordUploadCount.Text = TotalRecordUploadCount.ToString();
@@ -463,13 +467,8 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                 {
 
                     IsErrorInUpload = false;
-
-
-                    DataRow row = dtNew.Rows[i];//ds.Tables[0].Rows[i];
+                    DataRow row = dtNew.Rows[i];
                     object Regno = row[0];
-
-                    //if (Regno != null && !String.IsNullOrEmpty(Regno.ToString().Trim()))
-                    //{
                     string admbatch = string.Empty;
                     string category = string.Empty;
                     string degree = string.Empty;
@@ -506,9 +505,7 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                     }
 
 
-                    //if (!(dtNew.Rows[i]["ROLLNO"]).ToString().Equals(string.Empty))
-                    //{
-                    datacolumnerror = RowNum.ToString() + "-ROLLNO";
+                  datacolumnerror = RowNum.ToString() + "-ROLLNO";
                     objSC.RollNo = dtNew.Rows[i]["ROLLNO"].ToString();
                     //}
                     datacolumnerror = RowNum.ToString() + "-GENDER";
@@ -525,17 +522,13 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                         else
                         {
                             message = "Please enter Gender in given format (MALE/FEMALE)";
-                            //   objCommon.DisplayMessage(updpnl, message + (i + 1), this.Page);
                             ErrorString = ErrorString + message + " | ";
                             IsErrorInUpload = true;
-                            //   RecordUpload = true;
-                            //return;
-
                         }
                     }
                     else
                     {
-                        objSC.Sex = Convert.ToChar(' '); //= Convert.ToChar("");
+                        objSC.Sex = Convert.ToChar(' '); 
                     }
 
                     datacolumnerror = RowNum.ToString() + "-ACADEMIC_YEAR";
@@ -1304,7 +1297,6 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
             {
                 foreach (System.Data.DataTable dt in ds.Tables)
                 {
-                    //Add System.Data.DataTable as Worksheet.
                     wb.Worksheets.Add(dt);
                 }
 
@@ -1321,15 +1313,7 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                     Response.Flush();
                     Response.End();
                 }
-
-                //Response.ClearContent();
-                //Response.AddHeader("content-disposition", attachment);
-                //Response.ContentType = "application/vnd.MS-excel";
-                //StringWriter sw = new StringWriter();
-                //HtmlTextWriter htw = new HtmlTextWriter(sw);
-                //GVEmpChallan.RenderControl(htw);
-                //Response.Write(sw.ToString());
-                //Response.End();
+             
             }
         }
         catch (Exception ex)
@@ -1345,32 +1329,52 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     protected void ddlColg_SelectedIndexChanged(object sender, EventArgs e)
     {
-        objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D , ACD_COLLEGE_DEGREE C", "D.DEGREENO", "D.DEGREENAME", "D.DEGREENO=C.DEGREENO AND C.DEGREENO>0 AND C.COLLEGE_ID=" + ddlColg.SelectedValue + "", "DEGREENO");
+        try
+        {
+            objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D , ACD_COLLEGE_DEGREE C", "D.DEGREENO", "D.DEGREENAME", "D.DEGREENO=C.DEGREENO AND C.DEGREENO>0 AND C.COLLEGE_ID=" + ddlColg.SelectedValue + "", "DEGREENO");
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (Convert.ToInt32(ddlBranch.SelectedValue) > 0)
+        try
         {
-            objCommon.FillDropDownList(ddSemester, "ACD_STUDENT A INNER JOIN ACD_SEMESTER B ON(A.SEMESTERNO=B.SEMESTERNO)", "DISTINCT B.SEMESTERNO", "B.SEMESTERNAME", "A.COLLEGE_ID=" + Convert.ToInt32(ddlColg.SelectedValue) + "AND A.ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + "AND A.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "AND A.BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue), "SEMESTERNO");
-            //objCommon.FillDropDownList(ddSemester, "ACD_STUDENT A INNER JOIN ACD_SEMESTER B ON(A.SEMESTERNO=B.SEMESTERNO )INNER JOIN ACD_BRANCH  C ON(A.BRANCHNO = C.BRANCHNO)LEFT JOIN ACD_ADMBATCH AB ON(A.BATCHNO =AB.BATCHNO)", "DISTINCT B.SEMESTERNO", "B.SEMESTERNAME ,C.BRANCHNAME_ORIGNAL ", "A.COLLEGE_ID=" + Convert.ToInt32(ddlColg.SelectedValue) + "AND A.ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + "AND A.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "AND A.BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue), "SEMESTERNO");
-
-
+            if (Convert.ToInt32(ddlBranch.SelectedValue) > 0)
+            {
+                objCommon.FillDropDownList(ddSemester, "ACD_STUDENT A INNER JOIN ACD_SEMESTER B ON(A.SEMESTERNO=B.SEMESTERNO)", "DISTINCT B.SEMESTERNO", "B.SEMESTERNAME", "A.COLLEGE_ID=" + Convert.ToInt32(ddlColg.SelectedValue) + "AND A.ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + "AND A.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "AND A.BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue), "SEMESTERNO");
+            }
+            else
+            {
+                ddSemester.SelectedIndex = 0;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            ddSemester.SelectedIndex = 0;
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
         }
     }
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        // Response.Redirect(Request.Url.ToString());
-        ddlDegree.SelectedIndex = 0;
-        ddlColg.SelectedIndex = 0;
-        ddSemester.SelectedIndex = 0;
-        ddlAdmBatch.SelectedIndex = 0;
-        ddlBranch.SelectedIndex = 0;
+        try
+        {
+            ddlDegree.SelectedIndex = 0;
+            ddlColg.SelectedIndex = 0;
+            ddSemester.SelectedIndex = 0;
+            ddlAdmBatch.SelectedIndex = 0;
+            ddlBranch.SelectedIndex = 0;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
 
     }
 
@@ -1396,290 +1400,311 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     protected void btnShow_Click(object sender, EventArgs e)
     {
-
-        int _ADMBATCH = 0;
-        int _COLLEGEID = 0;
-        int _DEGREENO = 0;
-        int _BRANCHNO = 0;
-        int _SEMESTERNO = 0;
-
-        _ADMBATCH = Convert.ToInt32(ddlAdmBatch.SelectedValue);
-        _COLLEGEID = Convert.ToInt32(ddlColg.SelectedValue);
-        _DEGREENO = Convert.ToInt32(ddlDegree.SelectedValue);
-        _BRANCHNO = Convert.ToInt32(ddlBranch.SelectedValue);
-        _SEMESTERNO = Convert.ToInt32(ddSemester.SelectedValue);
-
-        DataSet ds = objStud.GetUserCreationList(_ADMBATCH, _COLLEGEID, _DEGREENO, _BRANCHNO, _SEMESTERNO);
-
-        if (ds.Tables[0].Rows.Count > 0)
+        try
         {
-            lvStudents.DataSource = ds.Tables[0];
-            lvStudents.DataBind();
-            //pnllistview.Visible = true;
-            lvStudents.Visible = true;
-            //btnUpdate.Enabled = true;
+            int _ADMBATCH = 0;
+            int _COLLEGEID = 0;
+            int _DEGREENO = 0;
+            int _BRANCHNO = 0;
+            int _SEMESTERNO = 0;
+
+            _ADMBATCH = Convert.ToInt32(ddlAdmBatch.SelectedValue);
+            _COLLEGEID = Convert.ToInt32(ddlColg.SelectedValue);
+            _DEGREENO = Convert.ToInt32(ddlDegree.SelectedValue);
+            _BRANCHNO = Convert.ToInt32(ddlBranch.SelectedValue);
+            _SEMESTERNO = Convert.ToInt32(ddSemester.SelectedValue);
+
+            DataSet ds = objStud.GetUserCreationList(_ADMBATCH, _COLLEGEID, _DEGREENO, _BRANCHNO, _SEMESTERNO);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                lvStudents.DataSource = ds.Tables[0];
+                lvStudents.DataBind();
+                //pnllistview.Visible = true;
+                lvStudents.Visible = true;
+                //btnUpdate.Enabled = true;
+            }
+            else
+            {
+                lvStudents.DataSource = null;
+                lvStudents.DataBind();
+                //pnllistview.Visible = false;
+                lvStudents.Visible = false;
+                // btnUpdate.Enabled = false;
+                //objCommon.DisplayUserMessage(upduser, "No Record Found!", Page);
+                objCommon.DisplayMessage(this.updpnl, "No Record Found!", this.Page);
+
+            }
         }
-        else
+        catch (Exception ex)
         {
-            lvStudents.DataSource = null;
-            lvStudents.DataBind();
-            //pnllistview.Visible = false;
-            lvStudents.Visible = false;
-            // btnUpdate.Enabled = false;
-            //objCommon.DisplayUserMessage(upduser, "No Record Found!", Page);
-            objCommon.DisplayMessage(this.updpnl, "No Record Found!", this.Page);
-
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
         }
     }
 
     protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvStudent.DataSource = null;
-        lvStudent.DataBind();
-        lvStudent.Visible = false;
+        try
+        {
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvStudent.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void lvStudent_ItemCommand(object sender, ListViewCommandEventArgs e)
     {
-
-        if ((e.Item.ItemType == ListViewItemType.DataItem))
+        try
         {
-            ListViewDataItem dataItem = (ListViewDataItem)e.Item;
-            DataRow dr = ((DataRowView)dataItem.DataItem).Row;
-
-            if (dr["REGISTRATIONNO"].ToString() == string.Empty)
+            if ((e.Item.ItemType == ListViewItemType.DataItem))
             {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblRegNo")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblRegNo")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblRegNo")).Font.Bold = true;
-            }
+                ListViewDataItem dataItem = (ListViewDataItem)e.Item;
+                DataRow dr = ((DataRowView)dataItem.DataItem).Row;
 
-            if (!(dr["GENDER"]).Equals(string.Empty) && (!(dr["GENDER"].Equals("MALE"))))
-            {
-                if (!(dr["GENDER"].ToString().Equals("FEMALE")))
-                {
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblGender")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblGender")).Font.Bold = true;
-                }
-
-            }
-            if (!(dr["CATEGORY"]).ToString().Equals(string.Empty))
-            {
-                string categoryno = objCommon.LookUp("ACD_CATEGORY", "COUNT(1)", "CATEGORY='" + dr["CATEGORY"].ToString() + "'");
-                if (Convert.ToInt32(categoryno) == 0)
+                if (dr["REGISTRATIONNO"].ToString() == string.Empty)
                 {
                     divNote.Visible = true;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCategory")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCategory")).Font.Bold = true;
-
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblRegNo")).Text = "--";
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblRegNo")).ForeColor = System.Drawing.Color.Red;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblRegNo")).Font.Bold = true;
                 }
-            }
 
-            if (!(dr["PHYSICALLY_HANDICAPPED"]).ToString().Equals(string.Empty))
-            {
-                if (!(dr["PHYSICALLY_HANDICAPPED"].ToString().Equals("YES")) && (!(dr["PHYSICALLY_HANDICAPPED"].ToString().Equals("NO"))))
+                if (!(dr["GENDER"]).Equals(string.Empty) && (!(dr["GENDER"].Equals("MALE"))))
                 {
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPH")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPH")).Font.Bold = true;
+                    if (!(dr["GENDER"].ToString().Equals("FEMALE")))
+                    {
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblGender")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblGender")).Font.Bold = true;
+                    }
+
+                }
+                if (!(dr["CATEGORY"]).ToString().Equals(string.Empty))
+                {
+                    string categoryno = objCommon.LookUp("ACD_CATEGORY", "COUNT(1)", "CATEGORY='" + dr["CATEGORY"].ToString() + "'");
+                    if (Convert.ToInt32(categoryno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCategory")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCategory")).Font.Bold = true;
+
+                    }
                 }
 
-            }
+                if (!(dr["PHYSICALLY_HANDICAPPED"]).ToString().Equals(string.Empty))
+                {
+                    if (!(dr["PHYSICALLY_HANDICAPPED"].ToString().Equals("YES")) && (!(dr["PHYSICALLY_HANDICAPPED"].ToString().Equals("NO"))))
+                    {
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPH")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPH")).Font.Bold = true;
+                    }
+
+                }
 
 
-            if (dr["STUDENTNAME"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblStudName")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblStudName")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblStudName")).Font.Bold = true;
-            }
-
-            if (!(dr["ADMISSIONTYPE"]).ToString().Equals(string.Empty))
-            {
-                if (!(dr["ADMISSIONTYPE"]).ToString().Equals("Regular") && !(dr["ADMISSIONTYPE"]).ToString().Equals("Direct Second Year(Lateral)"))
+                if (dr["STUDENTNAME"].ToString() == string.Empty)
                 {
                     divNote.Visible = true;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblStudName")).Text = "--";
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblStudName")).ForeColor = System.Drawing.Color.Red;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblStudName")).Font.Bold = true;
+                }
+
+                if (!(dr["ADMISSIONTYPE"]).ToString().Equals(string.Empty))
+                {
+                    if (!(dr["ADMISSIONTYPE"]).ToString().Equals("Regular") && !(dr["ADMISSIONTYPE"]).ToString().Equals("Direct Second Year(Lateral)"))
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).Font.Bold = true;
+                    }
+                }
+
+                else if ((dr["ADMISSIONTYPE"].ToString() == string.Empty))
+                {
+                    divNote.Visible = true;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).Text = "--";
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).ForeColor = System.Drawing.Color.Red;
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).Font.Bold = true;
                 }
-            }
 
-            else if ((dr["ADMISSIONTYPE"].ToString() == string.Empty))
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblIdType")).Font.Bold = true;
-            }
-
-            if (dr["SEMESTER"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSemester")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSemester")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSemester")).Font.Bold = true;
-            }
-            if (dr["YEAR"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblYear")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblYear")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblYear")).Font.Bold = true;
-            }
-
-            if (!(dr["DEGREE"]).ToString().Equals(string.Empty))
-            {
-                string degreeno = objCommon.LookUp("ACD_DEGREE", "COUNT(1)", "DEGREENAME='" + dr["DEGREE"].ToString() + "'");
-                if (Convert.ToInt32(degreeno) == 0)
+                if (dr["SEMESTER"].ToString() == string.Empty)
                 {
                     divNote.Visible = true;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSemester")).Text = "--";
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSemester")).ForeColor = System.Drawing.Color.Red;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSemester")).Font.Bold = true;
+                }
+                if (dr["YEAR"].ToString() == string.Empty)
+                {
+                    divNote.Visible = true;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblYear")).Text = "--";
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblYear")).ForeColor = System.Drawing.Color.Red;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblYear")).Font.Bold = true;
+                }
+
+                if (!(dr["DEGREE"]).ToString().Equals(string.Empty))
+                {
+                    string degreeno = objCommon.LookUp("ACD_DEGREE", "COUNT(1)", "DEGREENAME='" + dr["DEGREE"].ToString() + "'");
+                    if (Convert.ToInt32(degreeno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).Font.Bold = true;
+
+                    }
+                }
+
+                if (dr["DEGREE"].ToString() == string.Empty)
+                {
+                    divNote.Visible = true;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).Text = "--";
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).ForeColor = System.Drawing.Color.Red;
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).Font.Bold = true;
-
                 }
-            }
 
-            if (dr["DEGREE"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDegree")).Font.Bold = true;
-            }
+                if (!(dr["COLLEGENAME"]).ToString().Equals(string.Empty))
+                {
+                    string collegeno = objCommon.LookUp("ACD_COLLEGE_MASTER", "COUNT(1)", "COLLEGE_NAME='" + dr["COLLEGENAME"].ToString() + "'");
+                    if (Convert.ToInt32(collegeno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).Font.Bold = true;
 
-            if (!(dr["COLLEGENAME"]).ToString().Equals(string.Empty))
-            {
-                string collegeno = objCommon.LookUp("ACD_COLLEGE_MASTER", "COUNT(1)", "COLLEGE_NAME='" + dr["COLLEGENAME"].ToString() + "'");
-                if (Convert.ToInt32(collegeno) == 0)
+                    }
+                }
+
+                if (dr["COLLEGENAME"].ToString() == string.Empty)
                 {
                     divNote.Visible = true;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).Text = "--";
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).ForeColor = System.Drawing.Color.Red;
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).Font.Bold = true;
-
                 }
-            }
 
-            if (dr["COLLEGENAME"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCollege")).Font.Bold = true;
-            }
+                if (!(dr["BRANCH"]).ToString().Equals(string.Empty))
+                {
+                    string branchno = objCommon.LookUp("ACD_BRANCH", "COUNT(1)", "LONGNAME='" + dr["BRANCH"].ToString() + "'");
+                    if (Convert.ToInt32(branchno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).Font.Bold = true;
 
-            if (!(dr["BRANCH"]).ToString().Equals(string.Empty))
-            {
-                string branchno = objCommon.LookUp("ACD_BRANCH", "COUNT(1)", "LONGNAME='" + dr["BRANCH"].ToString() + "'");
-                if (Convert.ToInt32(branchno) == 0)
+                    }
+                }
+                if (dr["BRANCH"].ToString() == string.Empty)
                 {
                     divNote.Visible = true;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).Text = "--";
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).ForeColor = System.Drawing.Color.Red;
                     ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).Font.Bold = true;
-
                 }
-            }
-            if (dr["BRANCH"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBranch")).Font.Bold = true;
-            }
 
-           
-            if (!(dr["COUNTRYNAME"]).ToString().Equals(string.Empty))
-            {
-                string stateno = objCommon.LookUp("ACD_COUNTRY", "COUNT(1)", "COUNTRYNAME='" + dr["COUNTRYNAME"].ToString() + "'");
-                if (Convert.ToInt32(stateno) == 0)
+
+                if (!(dr["COUNTRYNAME"]).ToString().Equals(string.Empty))
+                {
+                    string stateno = objCommon.LookUp("ACD_COUNTRY", "COUNT(1)", "COUNTRYNAME='" + dr["COUNTRYNAME"].ToString() + "'");
+                    if (Convert.ToInt32(stateno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCountry")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCountry")).Font.Bold = true;
+
+                    }
+                }
+
+
+                if (!(dr["STATE"]).ToString().Equals(string.Empty))
+                {
+                    string stateno = objCommon.LookUp("ACD_STATE", "COUNT(1)", "STATENAME='" + dr["STATE"].ToString() + "'");
+                    if (Convert.ToInt32(stateno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblState")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblState")).Font.Bold = true;
+
+                    }
+                }
+
+                if (!(dr["DISTRICT"]).ToString().Equals(string.Empty))
+                {
+                    string districtno = objCommon.LookUp("ACD_DISTRICT", "COUNT(1)", "DISTRICTNAME='" + dr["DISTRICT"].ToString() + "'");
+                    if (Convert.ToInt32(districtno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDistrict")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDistrict")).Font.Bold = true;
+
+                    }
+                }
+
+                if (!(dr["BLOODGROUP"]).ToString().Equals(string.Empty))
+                {
+                    string bloodgroupno = objCommon.LookUp("ACD_BLOODGRP", "COUNT(1)", "BLOODGRPNAME='" + dr["BLOODGROUP"].ToString() + "'");
+                    if (Convert.ToInt32(bloodgroupno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBloogGrp")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBloogGrp")).Font.Bold = true;
+
+                    }
+                }
+
+                if (!(dr["PAYMENT_TYPE"]).ToString().Equals(string.Empty))
+                {
+                    string bloodgroupno = objCommon.LookUp("ACD_PAYMENTTYPE", "COUNT(1)", "PAYTYPENAME='" + dr["PAYMENT_TYPE"].ToString() + "'");
+                    if (Convert.ToInt32(bloodgroupno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPayType")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPayType")).Font.Bold = true;
+
+                    }
+                }
+
+                if (dr["MOBILENO"].ToString() == string.Empty)
                 {
                     divNote.Visible = true;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCountry")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblCountry")).Font.Bold = true;
-
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblMobile")).Text = "--";
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblMobile")).ForeColor = System.Drawing.Color.Red;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblMobile")).Font.Bold = true;
                 }
-            }
 
-
-            if (!(dr["STATE"]).ToString().Equals(string.Empty))
-            {
-                string stateno = objCommon.LookUp("ACD_STATE", "COUNT(1)", "STATENAME='" + dr["STATE"].ToString() + "'");
-                if (Convert.ToInt32(stateno) == 0)
+                if (dr["EMAILID"].ToString() == string.Empty)
                 {
                     divNote.Visible = true;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblState")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblState")).Font.Bold = true;
-
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblEmail")).Text = "--";
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblEmail")).ForeColor = System.Drawing.Color.Red;
+                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblEmail")).Font.Bold = true;
                 }
-            }
 
-            if (!(dr["DISTRICT"]).ToString().Equals(string.Empty))
-            {
-                string districtno = objCommon.LookUp("ACD_DISTRICT", "COUNT(1)", "DISTRICTNAME='" + dr["DISTRICT"].ToString() + "'");
-                if (Convert.ToInt32(districtno) == 0)
+                //Added By Ruchika Dhakate  on 07.09.2022
+                if (!(dr["SECTION"]).ToString().Equals(string.Empty))
                 {
-                    divNote.Visible = true;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDistrict")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblDistrict")).Font.Bold = true;
+                    string sectionno = objCommon.LookUp("ACD_SECTION", "COUNT(1)", "SECTIONNAME='" + dr["SECTION"].ToString() + "'");
+                    if (Convert.ToInt32(sectionno) == 0)
+                    {
+                        divNote.Visible = true;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSection")).ForeColor = System.Drawing.Color.Red;
+                        ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSection")).Font.Bold = true;
 
+                    }
                 }
+
             }
-
-            if (!(dr["BLOODGROUP"]).ToString().Equals(string.Empty))
-            {
-                string bloodgroupno = objCommon.LookUp("ACD_BLOODGRP", "COUNT(1)", "BLOODGRPNAME='" + dr["BLOODGROUP"].ToString() + "'");
-                if (Convert.ToInt32(bloodgroupno) == 0)
-                {
-                    divNote.Visible = true;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBloogGrp")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblBloogGrp")).Font.Bold = true;
-
-                }
-            }
-
-            if (!(dr["PAYMENT_TYPE"]).ToString().Equals(string.Empty))
-            {
-                string bloodgroupno = objCommon.LookUp("ACD_PAYMENTTYPE", "COUNT(1)", "PAYTYPENAME='" + dr["PAYMENT_TYPE"].ToString() + "'");
-                if (Convert.ToInt32(bloodgroupno) == 0)
-                {
-                    divNote.Visible = true;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPayType")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblPayType")).Font.Bold = true;
-
-                }
-            }
-
-            if (dr["MOBILENO"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblMobile")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblMobile")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblMobile")).Font.Bold = true;
-            }
-
-            if (dr["EMAILID"].ToString() == string.Empty)
-            {
-                divNote.Visible = true;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblEmail")).Text = "--";
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblEmail")).ForeColor = System.Drawing.Color.Red;
-                ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblEmail")).Font.Bold = true;
-            }
-
-            //Added By Ruchika Dhakate  on 07.09.2022
-            if (!(dr["SECTION"]).ToString().Equals(string.Empty))
-            {
-                string sectionno = objCommon.LookUp("ACD_SECTION", "COUNT(1)", "SECTIONNAME='" + dr["SECTION"].ToString() + "'");
-                if (Convert.ToInt32(sectionno) == 0)
-                {
-                    divNote.Visible = true;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSection")).ForeColor = System.Drawing.Color.Red;
-                    ((System.Web.UI.WebControls.Label)e.Item.FindControl("lblSection")).Font.Bold = true;
-
-                }
-            }
-
         }
-
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void btnCreateLogin_Click(object sender, EventArgs e)
@@ -1721,7 +1746,7 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                 System.Web.UI.WebControls.Label lblMobileNo = itm.FindControl("lblMobileNo") as System.Web.UI.WebControls.Label;
                 System.Web.UI.WebControls.Label lblBranch = itm.FindControl("lblBranch") as System.Web.UI.WebControls.Label;
                 System.Web.UI.WebControls.Label lblsemester = itm.FindControl("lblsemester") as System.Web.UI.WebControls.Label;
-               
+             
                 if (chk.Checked == true && (chk.Enabled == true && chk.Text == ""))
                 {
 
@@ -1808,98 +1833,127 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     protected void btnSendEmail_Click(object sender, EventArgs e)
     {
-
-        User_AccController objUC = new User_AccController();
-        UserAcc objUA = new UserAcc();
-      
-        string CodeStandard = objCommon.LookUp("Reff", "CODE_STANDARD", "");
-        string issendgrid = objCommon.LookUp("Reff", "SENDGRID_STATUS", "");
-        string loginurl = System.Configuration.ConfigurationManager.AppSettings["WebServer"].ToString();
-
-        int countstud = 0;
-        int countstudcheck = 0;
-        foreach (ListViewDataItem item in lvStudents.Items)
+        try
         {
-            System.Web.UI.WebControls.CheckBox chk = item.FindControl("chkRow") as System.Web.UI.WebControls.CheckBox;
-            System.Web.UI.WebControls.Label lblLogin = item.FindControl("lblLogin") as System.Web.UI.WebControls.Label;
-           System.Web.UI.WebControls.Label lblEmailId = item.FindControl("lblEmailId") as System.Web.UI.WebControls.Label;
+            User_AccController objUC = new User_AccController();
+            UserAcc objUA = new UserAcc();
 
-           if (chk.Checked == true)
-           {
-               countstudcheck++;
-           }
+            string CodeStandard = objCommon.LookUp("Reff", "CODE_STANDARD", "");
+            string issendgrid = objCommon.LookUp("Reff", "SENDGRID_STATUS", "");
+            string loginurl = System.Configuration.ConfigurationManager.AppSettings["WebServer"].ToString();
 
-           if (chk.Checked == true && (chk.Text == "CREATED") && lblLogin.Text == "" && lblEmailId.Text != "")
+            int countstud = 0;
+            int countstudcheck = 0;
+            foreach (ListViewDataItem item in lvStudents.Items)
             {
-                countstud++;
-                System.Web.UI.WebControls.Label lblreg = item.FindControl("lblreg") as System.Web.UI.WebControls.Label;
-                System.Web.UI.WebControls.Label lblStudName = item.FindControl("lblstud") as System.Web.UI.WebControls.Label;
-                System.Web.UI.WebControls.Label lblPwd = item.FindControl("lblreg") as System.Web.UI.WebControls.Label;
+                System.Web.UI.WebControls.CheckBox chk = item.FindControl("chkRow") as System.Web.UI.WebControls.CheckBox;
+                System.Web.UI.WebControls.Label lblLogin = item.FindControl("lblLogin") as System.Web.UI.WebControls.Label;
+                System.Web.UI.WebControls.Label lblEmailId = item.FindControl("lblEmailId") as System.Web.UI.WebControls.Label;
 
-                //string useremail = objCommon.LookUp("acd_student a inner join user_acc b on (a.idno=b.UA_IDNO)", "a.EMAILID", "UA_NAME='" + lblreg.Text.Replace("'", "`").Trim() + "' and UA_NAME IS NOT NULL");
-                string email = lblEmailId.Text;
-                string getpwd = objCommon.LookUp("User_Acc", "UA_PWD", "UA_NAME='" + lblreg.Text + "'");
-                string strPwd = clsTripleLvlEncyrpt.ThreeLevelDecrypt(getpwd);
+                if (chk.Checked == true)
+                {
+                    countstudcheck++;
+                }
+                // <1.0.1>  
+                //added by rutuja 12/02/24
+                if (chk.Checked == true && (chk.Text == "CREATED") && lblLogin.Text == "" && lblEmailId.Text != "")
+                {
+                    countstud++;
+                    System.Web.UI.WebControls.Label lblreg = item.FindControl("lblreg") as System.Web.UI.WebControls.Label;
+                    System.Web.UI.WebControls.Label lblStudName = item.FindControl("lblstud") as System.Web.UI.WebControls.Label;
+                    System.Web.UI.WebControls.Label lblPwd = item.FindControl("lblreg") as System.Web.UI.WebControls.Label;
+                    string email = lblEmailId.Text;
+                    string getpwd = objCommon.LookUp("User_Acc", "UA_PWD", "UA_NAME='" + lblreg.Text + "'");
+                    string strPwd = clsTripleLvlEncyrpt.ThreeLevelDecrypt(getpwd);
+                    int TemplateTypeId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATETYPE", "TEMPTYPEID", "TEMPLATETYPE='User Login'"));
+                    int TemplateId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATE", "TOP 1 TEMPLATEID", "TEMPTYPEID=" + TemplateTypeId + " AND TEMPLATENAME = 'Login Credentials'"));
 
-                //string message = "Your MIS Student Account has been create successfully! Login with Username : " + lblreg.Text + " Password : " + "" + lblPwd.Text + "" + "</b>";
-                string message = "Dear " + lblStudName.Text + "<br />";
-                message = message + "Your ERP Student Account has been created successfully! <br />";
-                message = message + "Please Login using following details <br />";
-                message = message + "Login Name : " + lblreg.Text + "<br />";
-                //message = message + "Passwod : " + lblreg.Text + "<br />";
-                message = message + "Password : " + strPwd + "<br />";
-                message = message + "click  " + loginurl + " here to Login";
+                    string message = "";
+                    DataSet ds_mstQry1 = objCommon.FillDropDown("ACD_ADMP_EMAILTEMPLATE AEM", "TOP 1 TEMPLATETEXT", "", "TEMPLATEID=" + TemplateId + "", "AEM.TEMPTYPEID ");
 
-                string Subject = CodeStandard + " ERP || Login Credentials";// "MIS Login Credentials";
 
-                //------------Code for sending email---------------
-               //added by kajal jaiswal on 03-06-2023
-                int status = 0;
-                SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
-                status = objSendEmail.SendEmail(email, message, Subject); //Calling Method
-               
+                    if (ds_mstQry1 != null)
+                    {
+                        message = ds_mstQry1.Tables[0].Rows[0]["TEMPLATETEXT"].ToString();
+                        message = message.Replace("[FIRST NAME]", lblStudName.Text);
+                        message = message.Replace("[LOGIN NAME]", lblreg.Text);
+                        message = message.Replace("[USERPASSWORD]", strPwd);
+                        message = message.Replace("[CLICKHERELOGIN]", loginurl);
+                    }
+                    string Subject = CodeStandard + " ERP || Login Credentials";  // "MIS Login Credentials";
+                    int status = 0;
+                    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+                    status = objSendEmail.SendEmail(email, message, Subject); //Calling Method
+                    // </1.0.1>  
+                }
+            }
+
+            // added by kajal jaiswal on 16-02-2023 for validating send email button 
+            if (countstud != 0)
+            {
+                objCommon.DisplayMessage(updpnl, "Email send successfully to the Student having Proper EmailId !", this.Page);
+            }
+            else if (lvStudents.Items.Count == 0)
+            {
+                objCommon.DisplayMessage(updpnl, "No Record Found!", this.Page);
+            }
+            else if (lvStudents.Items.Count != 0 && countstudcheck == 0)
+            {
+                objCommon.DisplayMessage(updpnl, "Please select at least one Student !", this.Page);
+            }
+            else
+            {
+                objCommon.DisplayMessage(updpnl, "Email send successfully to the Student having Proper EmailId !", this.Page);
             }
         }
-
-        // added by kajal jaiswal on 16-02-2023 for validating send email button 
-        if (countstud != 0)
+        catch (Exception ex)
         {
-            objCommon.DisplayMessage(updpnl, "Email send successfully to the Student having Proper EmailId !", this.Page);
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
         }
-        else if (lvStudents.Items.Count == 0)
-        {
-            objCommon.DisplayMessage(updpnl, "No Record Found!", this.Page);
-        }
-        else if (lvStudents.Items.Count != 0 && countstudcheck == 0)
-        {
-            objCommon.DisplayMessage(updpnl, "Please select at least one Student !", this.Page);
-        }
-        else
-        {
-            objCommon.DisplayMessage(updpnl, "Email send successfully to the Student having Proper EmailId !", this.Page);
-        }
-
     }
 
     protected void rdRegPass_CheckedChanged(object sender, EventArgs e)
     {
-        txtEnterPassword.Text = string.Empty;
-        txtEnterPassword.Visible = false;
-        divPassWord.Visible = false;
+        try
+        {
+            txtEnterPassword.Text = string.Empty;
+            txtEnterPassword.Visible = false;
+            divPassWord.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void rdGeneratepass_CheckedChanged(object sender, EventArgs e)
     {
+        try{
         txtEnterPassword.Text = string.Empty;
         txtEnterPassword.Visible = false;
         divPassWord.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void rdoCustomPass_CheckedChanged(object sender, EventArgs e)
     {
+        try{
         txtEnterPassword.Text = string.Empty;
         txtEnterPassword.Visible = true;
         divPassWord.Visible = true;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     #endregion
@@ -1930,15 +1984,11 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
         {
             if (ddlParentDegree.SelectedIndex > 0)
             {
-                //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.COLLEGE_ID=" + Convert.ToInt32(ddlColg.SelectedValue) + "AND B.DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue), "A.LONGNAME");
                 objCommon.FillDropDownList(ddlParentBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.COLLEGE_ID=" + Convert.ToInt32(ddlParentColg.SelectedValue) + "AND B.DEGREENO = " + Convert.ToInt32(ddlParentDegree.SelectedValue), "A.LONGNAME");
-
             }
             else
             {
                 ddlParentBranch.Items.Clear();
-                //   ddlDegree.SelectedIndex = 0;
-
             }
         }
         catch (Exception ex)
@@ -1954,11 +2004,20 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
 
     protected void ddlParentColg_SelectedIndexChanged(object sender, EventArgs e)
     {
+        try{
         objCommon.FillDropDownList(ddlParentDegree, "ACD_DEGREE D , ACD_COLLEGE_DEGREE C", "D.DEGREENO", "D.DEGREENAME", "D.DEGREENO=C.DEGREENO AND C.DEGREENO>0 AND C.COLLEGE_ID=" + ddlParentColg.SelectedValue + "", "DEGREENO");
-    }
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
+     }
 
     protected void ddlParentBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
+        try
+        {
         if (Convert.ToInt32(ddlParentBranch.SelectedValue) > 0)
         {
             objCommon.FillDropDownList(ddlParentSemester, "ACD_STUDENT A INNER JOIN ACD_SEMESTER B ON(A.SEMESTERNO=B.SEMESTERNO)", "DISTINCT B.SEMESTERNO", "B.SEMESTERNAME", "A.COLLEGE_ID=" + Convert.ToInt32(ddlParentColg.SelectedValue) + "AND A.ADMBATCH=" + Convert.ToInt32(ddlParentAdmBatch.SelectedValue) + "AND A.DEGREENO=" + Convert.ToInt32(ddlParentDegree.SelectedValue) + "AND A.BRANCHNO=" + Convert.ToInt32(ddlParentBranch.SelectedValue), "SEMESTERNO");
@@ -1967,13 +2026,20 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
         {
             ddlParentSemester.SelectedIndex = 0;
         }
-        
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     //Added by Ruchika Dhakate on  19.09.2022
     //For Parent  Show Login
     protected void BtnParentShow_Click(object sender, EventArgs e)
     {
+        try
+        {
         int _ADMBATCHP = 0;
         int _COLLEGEIDP = 0;
         int _DEGREENOP = 0;
@@ -1992,19 +2058,22 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
         {
             lvParent.DataSource = ds.Tables[0];
             lvParent.DataBind();
-            //pnllistview.Visible = true;
             lvParent.Visible = true;
-            //btnUpdate.Enabled = true;
+          
         }
         else
         {
            
             lvParent.DataSource = null;
             lvParent.DataBind();
-            //pnllistview.Visible = false;
             lvParent.Visible = false;
-            // btnUpdate.Enabled = false;
             objCommon.DisplayUserMessage(this.updpnl, "No Record Found!", Page);
+        }
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
         }
     }
 
@@ -2047,8 +2116,8 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                 System.Web.UI.WebControls.Label lblFatherEmailID = itm.FindControl("lblFatherEmailID") as System.Web.UI.WebControls.Label;
                 System.Web.UI.WebControls.Label lblFatherMobile = itm.FindControl("lblFatherMobile") as System.Web.UI.WebControls.Label;
                 //System.Web.UI.WebControls.Label lblBranch = itm.FindControl("lblBranch") as System.Web.UI.WebControls.Label;
-
-
+                int org = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+                // changed by rutuja 06-03-2024
                 if (chkID.Checked == true && (chkID.Enabled == true && chkID.Text == ""))
                 {
 
@@ -2143,38 +2212,69 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
     //Added By Ruchika Dhakate on 21.09.2022
     protected void btnPCancel_Click(object sender, EventArgs e)
     {
+        try{
         ddlParentAdmBatch.SelectedIndex = 0;
         ddlParentColg.SelectedIndex = 0;
         ddlParentDegree.SelectedIndex = 0;
         ddlParentSemester.SelectedIndex = 0;
         ddlParentBranch.SelectedIndex = 0;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     //Added By Ruchika Dhakate on 22.09.2022
     protected void rdoParentRegpd_CheckedChanged(object sender, EventArgs e)
     {
+        try{
         txtPEnterPass.Text = string.Empty;
         txtPEnterPass.Visible = false;
         divParentPassword.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void rdoParentGeneratepd_CheckedChanged(object sender, EventArgs e)
     {
+        try
+        {
         txtPEnterPass.Text = string.Empty;
         txtPEnterPass.Visible = false;
         divParentPassword.Visible = false;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     protected void rdoParentCustompd_CheckedChanged(object sender, EventArgs e)
     {
+        try
+        {
         txtPEnterPass.Text = string.Empty;
         txtPEnterPass.Visible = true;
         divParentPassword.Visible = true;
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     //Added By Ruchika Dhakate on  23.09.2022
     protected void btnSendParentEmail_Click(object sender, EventArgs e)
     {
+        try{
         User_AccController objUC = new User_AccController();
         UserAcc objUA = new UserAcc();
         string CodeStandard = objCommon.LookUp("Reff", "CODE_STANDARD", "");
@@ -2192,8 +2292,8 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
             {
                 countpartcheck++;
             }
-
-            if (chkID.Checked == true && (chkID.Text == "CREATED") && lblPLogin.Text == "" && lblFatherEmailID.Text != "")
+           // <1.0.1>  
+            if (chkID.Checked == true && (chkID.Text == "CREATED") && lblFatherEmailID.Text != "")
             {
                 countparent++;
                 //  System.Web.UI.WebControls.Label lblPreg = item.FindControl("lblPreg") as System.Web.UI.WebControls.Label;
@@ -2205,15 +2305,21 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                 string email = lblFatherEmailID.Text;
                 string getpwd = objCommon.LookUp("User_Acc", "UA_PWD", "UA_NAME='" + lblFatherMobile.Text + "'");
                 string strPwd = clsTripleLvlEncyrpt.ThreeLevelDecrypt(getpwd);
+                int TemplateTypeId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATETYPE", "TEMPTYPEID", "TEMPLATETYPE='User Login'"));
+                int TemplateId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATE", "TOP 1 TEMPLATEID", "TEMPTYPEID=" + TemplateTypeId + " AND TEMPLATENAME = 'Login Credentials'"));
 
-                //string message = "Your MIS Student Account has been create successfully! Login with Username : " + lblreg.Text + " Password : " + "" + lblPwd.Text + "" + "</b>";
-                string message = "Dear " + lblPstudent.Text + "<br />";
-                message = message + "Your ERP Parent Account has been created successfully! <br />";
-                message = message + "Please Login using following details <br />";
-                message = message + "Login Name : " + lblFatherMobile.Text + "<br />";
-                //message = message + "Passwod : " + lblreg.Text + "<br />";
-                message = message + "Password : " + strPwd + "<br />";
-                message = message + "click  " + loginurl + " here to Login";
+                string message = "";
+                DataSet ds_mstQry1 = objCommon.FillDropDown("ACD_ADMP_EMAILTEMPLATE AEM", "TOP 1 TEMPLATETEXT", "", "TEMPLATEID=" + TemplateId + "", "AEM.TEMPTYPEID ");
+
+
+                if (ds_mstQry1 != null)
+                {
+                    message = ds_mstQry1.Tables[0].Rows[0]["TEMPLATETEXT"].ToString();
+                    message = message.Replace("[FIRST NAME]", lblPstudent.Text);
+                    message = message.Replace("[LOGIN NAME]", lblFatherMobile.Text);
+                    message = message.Replace("[USERPASSWORD]", strPwd);
+                    message = message.Replace("[CLICKHERELOGIN]", loginurl);
+                }
 
                 string Subject = CodeStandard + " ERP || Login Credentials";// "MIS Login Credentials";
 
@@ -2222,7 +2328,7 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
                 int status = 0;
                 SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
                 status = objSendEmail.SendEmail(email, message, Subject); //Calling Method
-
+                // </1.0.1>  
             }
         }
         // added by kajal jaiswal on 16-02-2023 for validating send email button 
@@ -2242,7 +2348,12 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
         {
             objCommon.DisplayMessage(updpnl, "Email send successfully to the Parent having Proper EmailId !", this.Page);
         }
-
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Oops!Something went wrong.", this.Page);
+            return;
+        }
     }
 
     #endregion
