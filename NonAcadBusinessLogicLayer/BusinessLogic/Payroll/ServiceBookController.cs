@@ -2470,7 +2470,8 @@ namespace IITMS
                         objParams[20] = new SqlParameter("@P_Theme_Of_Training", objTraining.ThemeOfTraining);
                         objParams[21] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
                         objParams[22] = new SqlParameter("@P_MODE", objTraining.MODE);
-                        objParams[23] = new SqlParameter("@P_AcadYear", objTraining.YEAR);
+                        //objParams[23] = new SqlParameter("@P_AcadYear", objTraining.YEAR);
+                        objParams[23] = new SqlParameter("@P_AcadYear", objTraining.PASSYEAR);
                         objParams[24] = new SqlParameter("@P_FILEPATH", objTraining.FILEPATH);
                         objParams[25] = new SqlParameter("@P_ISBLOB", objTraining.ISBLOB);
 
@@ -2546,7 +2547,8 @@ namespace IITMS
                         objParams[19] = new SqlParameter("@P_Certification_Type", objTraining.CertificationType);
                         objParams[20] = new SqlParameter("@P_Theme_Of_Training", objTraining.ThemeOfTraining);
                         objParams[21] = new SqlParameter("@P_MODE", objTraining.MODE);
-                        objParams[22] = new SqlParameter("@P_AcadYear", objTraining.YEAR);
+                        //objParams[22] = new SqlParameter("@P_AcadYear", objTraining.YEAR);
+                        objParams[22] = new SqlParameter("@P_AcadYear", objTraining.PASSYEAR);
                         objParams[23] = new SqlParameter("@P_FILEPATH", objTraining.FILEPATH);
                         objParams[24] = new SqlParameter("@P_ISBLOB", objTraining.ISBLOB);
                         objParams[25] = new SqlParameter("@P_OUT", SqlDbType.Int);

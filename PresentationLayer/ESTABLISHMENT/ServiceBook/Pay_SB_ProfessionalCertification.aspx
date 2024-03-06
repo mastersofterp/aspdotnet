@@ -88,7 +88,7 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <label>Academic Year : </label>
-                                            <asp:TextBox ID="txtAcadYear" runat="server" CssClass="form-control" MaxLength="20" TabIndex="20"
+                                            <asp:TextBox ID="txtAcadYear" runat="server" CssClass="form-control" MaxLength="50" TabIndex="20"
                                                 ToolTip="Enter Academic Year" autocomplete="off"></asp:TextBox>
                                             <%--<ajaxToolKit:FilteredTextBoxExtender ID="ftbAcadYear" runat="server" TargetControlID="txtAcadYear"
                                                 ValidChars="" Enabled="True">
