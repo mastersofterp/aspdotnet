@@ -278,15 +278,16 @@ public partial class PAYROLL_PAY_Configuration_Pay_Configuration : System.Web.UI
                 {
                     ChkAutoUserCreated.Checked = false;
                 }
-            
+                if (Convert.ToBoolean(dtr.Tables[0].Rows[0]["IsRetirmentDateCalculation"]) == true)
+                {
+                    chkretirmentdatecalculate.Checked = true;
+                }
+                else
+                {
+                    chkretirmentdatecalculate.Checked = false;
+                }
                 ViewState["imgEmpSign"] = (dtr.Tables[0].Rows[0]["REGISTRAR_SIGN"])as byte[];  
                 imgEmpSign.ImageUrl = "../../../showimage.aspx?id=" + Convert.ToString(Organizationid) + "&type=REGISTRAR_SIGN";
-               
-                
-
-
-
-
         }
     }
 
@@ -521,6 +522,7 @@ public partial class PAYROLL_PAY_Configuration_Pay_Configuration : System.Web.UI
                 objPayCon.PhotoSign = (byte[])(ViewState["imgEmpSign"]); //27-09-2022
             }
             objPayCon.IsAutoUserCreated = ChkAutoUserCreated.Checked ? true : false;
+            objPayCon.IsRetirmentDateCalculation = chkretirmentdatecalculate.Checked ? true : false;
 
             CustomStatus cs = (CustomStatus)objConfig.UpdateRefTable(objPayCon);
 

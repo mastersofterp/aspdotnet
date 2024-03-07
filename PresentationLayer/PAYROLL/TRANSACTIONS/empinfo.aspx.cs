@@ -19,7 +19,7 @@ public partial class payroll_empinfo : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     int OrganizationId;
     bool IsGradepayApplicable;
-    
+    bool IsRetirmentDateCalculation;
 
     #region Page Load
 
@@ -85,6 +85,8 @@ public partial class payroll_empinfo : System.Web.UI.Page
                 {
                     txtGradePay.Enabled = false;
                 }
+                IsRetirmentDateCalculation = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(IsRetirmentDateCalculation,0) IsRetirmentDateCalculation", string.Empty));
+               
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 //Populate all the DropDownLists
@@ -1139,7 +1141,35 @@ public partial class payroll_empinfo : System.Web.UI.Page
         //        return;
         //    }
         //}
+        IsRetirmentDateCalculation = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(IsRetirmentDateCalculation,0) IsRetirmentDateCalculation", string.Empty));
+        if (IsRetirmentDateCalculation == true)
+        {
+            EmpCreateController objECC = new EmpCreateController();
+            DateTime RetDate = DateTime.MinValue;
+            DateTime Joindate = DateTime.MinValue;
+            DateTime selectedBirthData = Convert.ToDateTime(txtJoinDate.Text);
 
+            if (ddlStaff.SelectedValue != "0")
+            {
+                if (!txtJoinDate.Text.Trim().Equals(string.Empty))
+                {
+                    //  DateTime RetDate = DateTime.MinValue;
+                    Joindate = Convert.ToDateTime(txtJoinDate.Text);
+                    RetDate = Convert.ToDateTime(objECC.RetirementDate(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(Joindate)).ToString("dd/MM/yyyy"));
+                    if (RetDate == Convert.ToDateTime("9999-12-31"))
+                    {
+
+                    }
+                    else
+                    {
+                        txtRetireDate.Text = Convert.ToString(RetDate);
+                    }
+                }
+            }
+        }
+        else if(IsRetirmentDateCalculation ==  false)
+        {
+        }
     }
 
     public void MessageBox(string msg)

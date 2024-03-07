@@ -793,8 +793,13 @@
                                                         <asp:CheckBox ID="ChkAutoUserCreated" runat="server"  TabIndex="66" />&nbsp;&nbsp;Auto User Created</label>
                                                 </div>
                                             </div>
-
-
+                                            
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                 <label>
+                                                  <asp:CheckBox ID="chkretirmentdatecalculate" runat="server"  TabIndex="66" />&nbsp;&nbsp;Retirment Date Calculation on Joining Date</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

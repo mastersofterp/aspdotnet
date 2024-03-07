@@ -854,7 +854,7 @@
                                                             <div class="input-group-addon">
                                                                 <i id="imgCalJoinDate" runat="server" class="fa fa-calendar text-blue"></i>
                                                             </div>
-                                                            <asp:TextBox ID="txtJoinDate" CssClass="form-control" runat="server" Enabled="true" TabIndex="48"
+                                                            <asp:TextBox ID="txtJoinDate" CssClass="form-control" runat="server" Enabled="true" TabIndex="48" AutoPostBack="true"
                                                                 OnTextChanged="txtJoinDate_TextChanged"></asp:TextBox>
                                                             <ajaxToolKit:CalendarExtender ID="ceJoinDate" runat="server" Format="dd/MM/yyyy"
                                                                 TargetControlID="txtJoinDate" PopupButtonID="imgCalJoinDate" Enabled="true" EnableViewState="true" OnClientDateSelectionChanged="CheckDateEalier">

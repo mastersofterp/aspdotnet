@@ -119,7 +119,7 @@ namespace IITMS
                 private bool _IsAutoUserCreated;
 
 
-
+                private bool _IsRetirmentDateCalculation;
 
 
 
@@ -1614,9 +1614,18 @@ namespace IITMS
                     set { _PhotoSign = value; }
                 }
 
-
+                public bool IsRetirmentDateCalculation
+                {
+                    get
+                    {
+                        return _IsRetirmentDateCalculation;
+                    }
+                    set
+                    {
+                        _IsRetirmentDateCalculation = value;
+                    }
+                }
                 # endregion
-
             }
         }
     }
