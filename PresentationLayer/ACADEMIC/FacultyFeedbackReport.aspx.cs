@@ -73,14 +73,19 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
                 PopulateDropDownList();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
                 
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
                 //objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
                 //PopulateDropDown();
 
                 //objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
+<<<<<<< HEAD
 <<<<<<< HEAD
 
                 //FillDropDownList();
@@ -102,6 +107,13 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
                     sectiondv.Visible = false;
                 }
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+
+                //FillDropDownList();
+                //to clear all controls
+                AllClear();
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
             }
         }
         divMsg.InnerHtml = string.Empty;
@@ -115,6 +127,7 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
 
     #region Old Logic Code
     //function to fill all dropdown
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
@@ -130,6 +143,9 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
         objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO >0 AND ISNULL(ACTIVESTATUS,0)=1", "SEMESTERNO");
     }
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
 
     //function to check page is authorized or not
     private void CheckPageAuthorization()
@@ -201,6 +217,7 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
         url += "&path=~,Reports,Academic," + rptFileName;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(2);
 
 =======
@@ -213,6 +230,10 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
             url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
         }
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+        url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(2);
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
         //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
         //divMsg.InnerHtml += " window.open('" + url + "','Student_FeedBack','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
         //divMsg.InnerHtml += " </script>";
@@ -260,6 +281,7 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
 
                     //objCommon.FillDropDownList(ddlFaculty, "USER_ACC UA WITH (NOLOCK) INNER JOIN ACD_ONLINE_FEEDBACK FDB  ON UA.UA_NO = FDB.UA_NO INNER JOIN ACD_SESSION_MASTER SM ON FDB.SESSIONNO =  SM.SESSIONNO", "DISTINCT UA.UA_NO ", "UA.UA_FULLNAME AS FULLNAME", "UA_TYPE=3 AND SM.SESSIONID=" + ddlSession1.SelectedValue, "UA_FULLNAME");
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                     #region Get Fetch Faculty wise report details
 
@@ -274,11 +296,24 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
 
 =======
                   
+=======
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
                     #region Get Fetch Faculty wise report details
 
-                    DataSet ds = objSFBC.GetFacultyWiseFeedbackData(Convert.ToInt32(SessionID), Faculty_UA_NO);
+                    //DataSet ds = objSFBC.GetFacultyWiseFeedbackData(Convert.ToInt32(SessionID), Faculty_UA_NO);
+                    string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
+                    DataSet ds = new DataSet();
+                    SP_Name = "PKG_ACD_STUDENT_FACULTY_WISE_FEEDBACK_REPORT";
+                    SP_Parameters = "@P_SESSIONID,@P_FUA_NO";
+                    Call_Values = "" + Convert.ToInt32(SessionID) + "," + Faculty_UA_NO ;
+                    ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
                     
+<<<<<<< HEAD
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
                     string param = string.Empty;
                     if (Session["usertype"].ToString() == "1")
                     {
@@ -294,11 +329,15 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
                     if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
                     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
 
                         int ua_nos = Convert.ToInt32(Session["userno"]);
 
                         //ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Student.rpt", param);
                         if (Session["usertype"].ToString() == "1")
+<<<<<<< HEAD
                         {
                             ShowReport("Student_FeedBack_Count", "SubjectFacultyWiseFeedback_Student.rpt", param);
                             //ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Student.rpt", param);
@@ -311,33 +350,22 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
 
 =======
                         if (Convert.ToInt32(Session["OrgId"]) == 2)
+=======
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
                         {
-
-                            if (ddlSection.SelectedValue == "0")
-                            {
-                                objCommon.DisplayUserMessage(updFeed, "Please Select Section", this.Page);
-                                return;
-                            }
-
-                            ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Crescent.rpt", param);
-                        }
-                        else
-                        {
-                            int ua_nos = Convert.ToInt32(Session["userno"]);
-
+                            ShowReport("Student_FeedBack_Count", "SubjectFacultyWiseFeedback_Student.rpt", param);
                             //ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Student.rpt", param);
-                            if (Session["usertype"].ToString() == "1")
-                            {
-                                ShowReport("Student_FeedBack_Count", "SubjectFacultyWiseFeedback_Student.rpt", param);
-                                //ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Student.rpt", param);
-                            }
-                            else if (Session["usertype"].ToString() == "3")
-                            {
-                                ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Faculty.rpt", param);
-                                //ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon.rpt", param);
-                            }
                         }
+<<<<<<< HEAD
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+                        else if (Session["usertype"].ToString() == "3")
+                        {
+                            ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Faculty.rpt", param);
+                            //ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon.rpt", param);
+                        }
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
                     }
                     else
                     {
@@ -453,6 +481,7 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
         ddlCollege.SelectedIndex = -1;
         ddlFeedbackType.SelectedIndex = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     }
 
@@ -462,13 +491,21 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
         int Faculty_UA_NO = 0;
 =======
         
+=======
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
     }
-    
+
     protected void btnreport_Click(object sender, EventArgs e)
     {
+<<<<<<< HEAD
          string SessionNo = string.Empty;
          int Faculty_UA_NO = 0;
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+        string SessionNo = string.Empty;
+        int Faculty_UA_NO = 0;
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
         //foreach (ListItem itm in ddlCollege.Items)
         //{
         //    if (itm.Selected != true)
@@ -477,6 +514,9 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
         //}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
         if (ddlSession1.SelectedValue != "" && ddlSession1.SelectedValue != "0")
         {
             var SessionNO = objCommon.LookUp("ACD_SESSION_MASTER", " TOP 1 SESSIONNO", "ISNULL(IS_ACTIVE,0) = 1 AND SESSIONID=" + ddlSession1.SelectedValue);
@@ -486,6 +526,7 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
         {
 
         }
+<<<<<<< HEAD
 
         //SessionNo = SessionNo.Remove(SessionNo.Length - 1);
         Faculty_UA_NO = Convert.ToInt32(ddlFaculty.SelectedValue);
@@ -505,6 +546,12 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
         Faculty_UA_NO = Convert.ToInt32(ddlFaculty.SelectedValue);
         
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+
+        //SessionNo = SessionNo.Remove(SessionNo.Length - 1);
+        Faculty_UA_NO = Convert.ToInt32(ddlFaculty.SelectedValue);
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
         int degree = 0;
         int scheme = 0;
         int branch = 0;
@@ -527,6 +574,7 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
             ds.Tables[2].Rows.Add("No Record Found");
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         //if (ds.Tables.Count!=null)
@@ -556,32 +604,39 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
 
 =======
   
+=======
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
         //if (ds.Tables.Count!=null)
         //{
-            using (XLWorkbook wb = new XLWorkbook())
+        using (XLWorkbook wb = new XLWorkbook())
+        {
+            foreach (System.Data.DataTable dt in ds.Tables)
             {
-                foreach (System.Data.DataTable dt in ds.Tables)
-                {
-                    //Add System.Data.DataTable as Worksheet.
-                    wb.Worksheets.Add(dt);
-                }
-
-                //Export the Excel file.
-                Response.Clear();
-                Response.Buffer = true;
-                Response.Charset = "";
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=AllFeedbackReport.xlsx");
-                using (MemoryStream MyMemoryStream = new MemoryStream())
-                {
-                    wb.SaveAs(MyMemoryStream);
-                    MyMemoryStream.WriteTo(Response.OutputStream);
-                    Response.Flush();
-                    Response.End();
-                }
+                //Add System.Data.DataTable as Worksheet.
+                wb.Worksheets.Add(dt);
             }
+<<<<<<< HEAD
       
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+
+            //Export the Excel file.
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "";
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment;filename=AllFeedbackReport.xlsx");
+            using (MemoryStream MyMemoryStream = new MemoryStream())
+            {
+                wb.SaveAs(MyMemoryStream);
+                MyMemoryStream.WriteTo(Response.OutputStream);
+                Response.Flush();
+                Response.End();
+            }
+        }
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
     }
 
     #endregion Old Logic Code
@@ -622,7 +677,11 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
     #endregion
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
      
 >>>>>>> a5e05e30 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
+=======
+
+>>>>>>> 5bf66587 ([ENHANCEMENT] [55046] [DAIICT FEEDBACK REPORT])
