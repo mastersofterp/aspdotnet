@@ -54,9 +54,13 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-                <div class="box-header with-border">
+               <%-- <div class="box-header with-border">
                     <h3 class="box-title">Hostel Gate Pass Request</h3>
+                </div>--%>
+                <div class="box-header with-border">  <%--lblDynamicPageTitle Added By Himanshu tamrakar 23-02-2024--%>
+                    <h3 class="box-title" style="text-transform:uppercase;" ><asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
+
                 <br /><br /><br />
                 <div class="box-body">
 
@@ -133,6 +137,19 @@
                             </div>
                             <div class="form-group col-lg-1 col-md-4 col-12">
                             </div>
+                            <div class="form-group col-lg-2 col-md-4 col-12">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>AM/PM</label>
+                                </div>
+                                <asp:DropDownList ID="ddlAM_PM1" AppendDataBoundItems="true" runat="server" TabIndex="7" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlAM_PM1_SelectedIndexChanged" AutoPostBack="true">
+                                    <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                    <asp:ListItem Value="AM">AM</asp:ListItem>
+                                    <asp:ListItem Value="PM">PM</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvDropDownList1" Display="None" runat="server" ErrorMessage="Please Select AM/PM For Out Date" ControlToValidate="ddlAM_PM1" ValidationGroup="submit" InitialValue="0"></asp:RequiredFieldValidator>
+                            </div>
+
                             <div class="form-group col-lg-2 col-md-4 col-12">
                                 <div class="label-dynamic">
                                     <sup>* </sup>

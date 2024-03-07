@@ -143,7 +143,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             {
                 objGatePass.Admin_UANO = Convert.ToInt32(Session["userno"]);
             }
-
+            
                 if (ViewState["action"].ToString().Equals("add"))
                 {
                     if (CheckDuplicateEntry() == true)
@@ -165,6 +165,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                     //    objCommon.DisplayMessage("Parent Login Not Found. Contact to Administrator.", this.Page);
                     //    ViewState["action"] = "add";
                     //}
+                    else if (cs == 7)
+                    {
+                        objCommon.DisplayMessage("You Already Applied Gate Pass For Selected Date.", this.Page); //Added By himanshu tamrakar 07-03-2024
+                        ViewState["action"] = "add";
+                        Clear();
+                    }
                     else if (cs == -99)
                     {
                         objCommon.DisplayMessage("Passing path Not found. Contact to Administrator.", this.Page);
@@ -189,6 +195,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         if (cs == 2)
                         {
                             objCommon.DisplayMessage("Record Updated Successfully.", this.Page);
+                            ViewState["action"] = "add";
+                            Clear();
+                        }
+                        else if (cs == 7)
+                        {
+                            objCommon.DisplayMessage("You Already Applied Gate Pass For Selected Date.", this.Page);  //Added By himanshu tamrakar 07-03-2024
                             ViewState["action"] = "add";
                             Clear();
                         }
@@ -383,7 +395,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     {
         try
         {
-            objCommon.FillDropDownList(ddlPurpose, "ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME", "ISACTIVE=1", "PURPOSE_NO");
+            objCommon.FillDropDownList(ddlPurpose, "ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME", "ISACTIVE=1", "");
         }
         catch (Exception ex)
         {
@@ -586,7 +598,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
             DateTime InDate = Convert.ToDateTime(txtinDate.Text);
-
+            if (ddlAM_PM2.SelectedValue == "PM")  //Added By Himanshu Tamrakar 06-03-2024
+            {
+                ddlinHourFrom.SelectedValue = "11";
+                ddlinMinFrom.SelectedValue = "59";
+            }
+            
             bool res = DateTime.Equals(OutDate, InDate);
             if (res)
             {
@@ -615,6 +632,32 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         return;
                     }
                 }
+                if (ddlAM_PM2.SelectedValue == "AM") //Added By himanshu tamrakar
+                {
+                    if (ddlAM_PM1.SelectedValue == "AM")
+                    {
+                        if (Convert.ToInt32(ddlinHourFrom.SelectedValue)<= Convert.ToInt32(ddloutHourFrom.SelectedValue))
+                        {
+                            objCommon.DisplayMessage("In hour should be greater than Hour From",this.Page);
+                            ddloutHourFrom.SelectedValue="11";
+                            ddloutMinFrom.SelectedValue="59";
+                            ddlAM_PM2.Focus();
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+           
+        }
+        else
+        {
+            if (txtinDate.Text == "" && txtinDate.Text == string.Empty)
+            {
+                objCommon.DisplayMessage("Please Select In Date First.", this.Page);
+                return;
             }
         }
     }
@@ -626,7 +669,37 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
             DateTime InDate = Convert.ToDateTime(txtinDate.Text);
-
+            if (ddlAM_PM1.SelectedValue == "PM")
+            {
+                if (ddlinHourFrom.SelectedValue == "0")
+                {
+                    objCommon.DisplayMessage("For PM you can not select 00 for In Hour From.", this.Page);
+                    int hour;
+                    if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= 0)
+                    {
+                        if (Convert.ToInt32(ddloutHourFrom.SelectedValue) > 12)
+                        {
+                            hour = Convert.ToInt32(ddloutHourFrom.SelectedValue);
+                            hour = hour - 12;
+                        }
+                        else
+                        {
+                            hour = Convert.ToInt32(ddloutHourFrom.SelectedValue);
+                        }
+                    }
+                    else
+                    {
+                        hour = DateTime.Now.Hour;
+                        if (hour > 12)
+                        {
+                            hour = hour - 12;
+                        }
+                    }
+                    ddlinHourFrom.SelectedValue = Convert.ToString(hour + 1);
+                    ddlinHourFrom.Focus();
+                    return;
+                }
+            }
             if (InDate == Convert.ToDateTime(currentDate))
             {
                 if (ddlAM_PM2.SelectedValue == "0")
@@ -646,12 +719,25 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             {
                 if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue)
                 {
-                    if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                    if (ddloutHourFrom.SelectedValue == "12")
                     {
-                        objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
-                        ddlinHourFrom.SelectedIndex = 0;
-                        ddlinHourFrom.Focus();
-                        return;
+                        if (ddlinHourFrom.SelectedValue == "12")
+                        {
+                            objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
+                            ddlinHourFrom.SelectedIndex = 0;
+                            ddlinHourFrom.Focus();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                        {
+                            objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
+                            ddlinHourFrom.SelectedIndex = 0;
+                            ddlinHourFrom.Focus();
+                            return;
+                        }
                     }
                 }
                 else
@@ -677,6 +763,21 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             string currentDate = System.DateTime.Now.ToString("dd/MM/yyyy");
 
+            if (ddlAM_PM1.SelectedValue == "PM") //Added By Himanshu Tamrakar 06-03-2024
+            {
+                if (ddloutHourFrom.SelectedValue == "0")
+                {
+                    objCommon.DisplayMessage("For PM  you Can not Select 0 for in Hour from", this.Page);
+                    int hour = DateTime.Now.Hour;
+                    if (hour > 12)
+                    {
+                        hour=hour-12;
+                    }
+                    ddloutHourFrom.SelectedValue = Convert.ToString(hour);
+                    ddloutHourFrom.Focus();
+                    return;
+                }
+            }
             if (Convert.ToDateTime(txtoutDate.Text) == Convert.ToDateTime(currentDate))
             {
                 if (ddlAM_PM1.SelectedValue == "0")
@@ -814,4 +915,36 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         }
     }
 
+    protected void ddlAM_PM1_SelectedIndexChanged(object sender, EventArgs e) //Added By Himanshu Tamrakar 06-03-2024
+    {
+        int hour = DateTime.Now.Hour;
+        int minute = DateTime.Now.Minute;
+        if(ddlAM_PM1.SelectedValue=="PM")
+        {
+            if (DateTime.Now.Hour>= 12)
+            {
+                //ddloutHourFrom.SelectedValue = Convert.ToString(DateTime.Now.Hour);
+                ddloutHourFrom.SelectedValue = Convert.ToString(hour-12);
+                ddloutMinFrom.SelectedValue = Convert.ToString(minute-12);
+            }
+        }
+        if (ddlAM_PM1.SelectedValue == "AM")
+        {
+            if(ddlAM_PM2.SelectedValue == "AM")
+            {
+                if (Convert.ToInt32(ddloutHourFrom.SelectedValue) > Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                {
+                    objCommon.DisplayMessage("In hour from should be greater than Out hour from.", this.Page);
+                    ddloutHourFrom.Focus();
+                    return;
+                }
+            }
+        }
+        if (txtoutDate.Text == string.Empty)
+        {
+            objCommon.DisplayMessage("Please select Out Date First.",this.Page);
+            ddlAM_PM1.SelectedValue = "0";
+            return;
+        }
+    }
 }
