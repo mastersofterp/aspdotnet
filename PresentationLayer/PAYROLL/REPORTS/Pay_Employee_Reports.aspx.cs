@@ -181,7 +181,19 @@ public partial class PAYROLL_REPORTS_Pay_Employee_Reports : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-        ShowReport("Abstract Salary Report", "PayEmployee_Joining_Report.rpt");
+        int OrganizationId = Convert.ToInt32(Session["OrgId"]);
+
+        string ReportName = objCommon.LookUp("PayReportConfiguration", "IDCardReportName", "OrganizationId=" + OrganizationId + " and IDCardType='JoiningReport'");
+        if (ReportName == "")
+        {
+            ShowReport("Joining Report", "PayEmployee_Joining_Report.rpt");
+        }
+        else
+        {
+            ShowReport("Joining Report", ReportName);
+        }
+
+        
     }
 
     private void ShowReport(string reportTitle, string rptFileName)
@@ -194,7 +206,7 @@ public partial class PAYROLL_REPORTS_Pay_Employee_Reports : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Payroll," + rptFileName;
             //@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",
-            url += "&param=@P_IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString()) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            url += "&param=@P_IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())+ ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
