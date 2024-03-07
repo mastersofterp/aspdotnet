@@ -42,7 +42,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
             }
             if (!Page.IsPostBack)
             {
-             
+                
                 // Check User Session
                 if (Session["userno"] == null || Session["username"] == null ||
                     Session["usertype"] == null || Session["userfullname"] == null)
@@ -68,9 +68,11 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
                     }
                    
                 }
+               
             }
             divMsg.InnerHtml = string.Empty;
           // CheckActivity(); COMMENT(1)
+            RadioCheck();
           
 
            
@@ -203,6 +205,8 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
                 lvStudentRecords.DataSource = ds;
                 lvStudentRecords.DataBind();
                 objCommon.DisplayMessage(this,"Record Not Found", this.Page);
+                
+                //ddlStudetType_SelectedIndexChanged(sender, e);
             }
            
         }
@@ -678,12 +682,30 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         }
     }
 
-    protected void ddlStudetType_SelectedIndexChanged(object sender, EventArgs e)
+    protected void RadioCheck()
     {
+        #region for backlog
+        if (ddlStudetType.SelectedValue == "1")
+        {
+            rdoDegree.Items.FindByValue("1").Selected = true;
+            rdoDegree.Items.FindByValue("0").Attributes.Add("style", "display:none;");
+            //rdoDegree.Enabled = false;
+        }
+        else
+        {
+            //rdoDegree.Items.FindByValue("0").Attributes.Add("style", "display:none;");
+            rdoDegree.Items.FindByValue("0").Selected = true;
+        }
+        #endregion
+    }
+    protected void ddlStudetType_SelectedIndexChanged(object sender, EventArgs e)
+     {
         //ddlStudetType_SelectedIndexChanged
         lvStudentRecords.DataSource = null;
         lvStudentRecords.DataBind();
         rdoDegree.SelectedValue = null;
+
+        RadioCheck();
     }
 
 }

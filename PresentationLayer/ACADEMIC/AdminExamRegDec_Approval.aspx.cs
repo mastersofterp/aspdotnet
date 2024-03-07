@@ -417,15 +417,17 @@ public partial class ACADEMIC_AdminExamRegDec_Approval : System.Web.UI.Page
                     // courseno = "3683. 3684. 3685. 3686";
                     //sem = Convert.ToInt32(semester.ToolTip);
                   //  string txt = DISCIPLINE_REMARK.Text.ToString(); ; 
-
-                    string SP_Name = "PKG_UPDATE_EXAM_REGISTRATION_STUDENT_BYADMIN_DISCIPLINE";
-                    string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_FLAG,@P_OUT";
-                    string Call_Values = "" + Convert.ToInt32(idnos) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," +  flag + ",0";
-                    string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
-                    if (que_out == "1")
+                    if (chk.Checked == true)
                     {
-                        objCommon.DisplayMessage(this, "Students Approveed Sucessfully!!", this.Page);
-                        BindListView();
+                        string SP_Name = "PKG_UPDATE_EXAM_REGISTRATION_STUDENT_BYADMIN_DISCIPLINE";
+                        string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_FLAG,@P_OUT";
+                        string Call_Values = "" + Convert.ToInt32(idnos) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + flag + ",0";
+                        string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+                        if (que_out == "1")
+                        {
+                            objCommon.DisplayMessage(this, "Students Approveed Sucessfully!!", this.Page);
+                            BindListView();
+                        }
                     }
                 }
                 }               

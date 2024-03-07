@@ -1854,6 +1854,35 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 Amt = 0;
                 CourseAmtt = 0;
 
+                if (ViewState["usertype"].ToString() == "2")
+                {
+                    //  ViewState["TotalSubFee"] = (Convert.ToDecimal(TotalAmt) + Convert.ToDecimal(lblfessapplicable.Text) + Convert.ToDecimal(lblCertificateFee.Text) + Convert.ToDecimal(lblpapervalMax.Text)).ToString();
+                    ViewState["TotalSubFee"] = Convert.ToDecimal(TotalAmt);
+                    FinalTotal.Text = (Convert.ToDecimal(TotalAmt) + Convert.ToDecimal(lblfessapplicable.Text) + Convert.ToDecimal(lblCertificateFee.Text) + Convert.ToDecimal(ViewState["latefee"])).ToString();
+                    Amt = 0;
+                    CourseAmtt = 0;
+                }
+                else
+                {
+                    int IfDemandCreated = 0;
+                    IfDemandCreated = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND", "COUNT(DISTINCT 1) _COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO =" + Convert.ToInt32(ViewState["sessionnonew"]) + " AND RECIEPT_CODE = 'AEF' AND ISNULL(CAN,0)=0 and SEMESTERNO=" + Convert.ToInt32(Session["semesterNO"])));
+
+                    if (IfDemandCreated > 0)
+                    {
+                        ViewState["TotalSubFee"] = (Convert.ToDecimal(TotalAmt)).ToString();
+                        FinalTotal.Text = (Convert.ToDecimal(TotalAmt)).ToString();// + Convert.ToDecimal(lblfessapplicable.Text) + Convert.ToDecimal(lblCertificateFee.Text) + Convert.ToDecimal(ViewState["latefee"]) + valuationfee).ToString();
+                        Amt = 0;
+                        CourseAmtt = 0;
+                    }
+                    else
+                    {
+                        ViewState["TotalSubFee"] = Convert.ToDecimal(TotalAmt);
+                        FinalTotal.Text = (Convert.ToDecimal(TotalAmt) + Convert.ToDecimal(lblfessapplicable.Text) + Convert.ToDecimal(lblCertificateFee.Text) + Convert.ToDecimal(ViewState["latefee"])).ToString();
+                        Amt = 0;
+                        CourseAmtt = 0;
+                    }
+
+                }
 
             }
             else

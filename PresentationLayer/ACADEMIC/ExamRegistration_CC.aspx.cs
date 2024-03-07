@@ -94,7 +94,30 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                         {
                             if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)//ADDED BY GAURAV 29_02_2024
                             {
-                               
+
+                                #region Check STUDENT ADMISSION APPROVAL OR NOT 01_11_2023
+
+                                int ADMSTATUS = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ADMISSION_STATUS,0)", ""));
+
+
+                                if (ADMSTATUS == 1)
+                                {
+
+
+                                    int CHECKAPPROVAL = Convert.ToInt32(objCommon.LookUp("ACD_ADMISSION_STATUS_LOG", "ISNULL(STATUS,0) ", "IDNO=" + idno + " UNION ALL SELECT 0 AS STATUS"));
+                                    if (CHECKAPPROVAL == 0 || CHECKAPPROVAL == 2)
+                                    {
+                                        objCommon.DisplayMessage(updatepnl, "YOU HAVE NOT COMPLETED STUDENT INFORMATION. PLEASE COMPLETE IMMEDIATELY AND CONTACT TO STUDENT SECTION FOR APPROVAL.", this.Page);
+                                        divbtn.Visible = false;
+                                        //  return;
+
+                                    }
+
+
+                                }
+                                #endregion
+
+                                #region
                                 int CheckExamRegApprovalAdmin1 = Convert.ToInt32(objCommon.LookUp("ACD_ADMIN_DISCIPLINE_LOG", "ISNULL(STATUS,0) STATUS ", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNO=" + semesterno + " UNION ALL SELECT 0 AS STATUS"));
 
 
@@ -103,13 +126,14 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
 
                                     objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page);
                                     this.ShowDetails();
-                                    bindcourses(); 
+                                    bindcourses();
                                     divbtn.Visible = false;
                                     return;
 
 
 
                                 }
+                                #endregion
                             }
                             else
                             {
