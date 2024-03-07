@@ -2976,7 +2976,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     }
                     else if (Convert.ToInt32(Session["OrgId"]) == 10) //Added By Tejas Thakre for PRMITR as on 06032024
                     {
-                        url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
+                        url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
                     }
                     else
                     {
@@ -6382,98 +6382,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.btnpassingcrft_Click() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
-        }
-    }
-
-    //ADDED BY SHUBHAM TID 54828 ON 21032024 RCPIPER CONSOLIDATED GRADE CARD ON 08032024
-    private void ShowconsolitedGradeCardNewRCPIPER(string reportTitle, string rptFileName, string ids)
-    {
-        try
-        {
-
-            int count = 0;
-            foreach (ListViewItem item in lvStudent.Items)
-            {
-                if ((item.FindControl("chkStudent") as CheckBox).Checked == true)
-                {
-                    count++;
-                }
-            }
-
-            if (count > 0)
-            {
-
-                DateTime dateofissue = DateTime.MinValue;
-                string dateofIssue = txtDateOfIssue.Text == "" ? string.Empty : (txtDateOfIssue.Text);
-                if (dateofIssue == string.Empty)
-                {
-                    dateofIssue = "";
-                    dateofissue = DateTime.Today;
-                }
-                else
-                // DateTime dateofissue = Convert.ToDateTime(txtDateofIssue.Text);
-                {
-
-                    if (txtDateOfIssue.Text != "")
-                    {
-                        dateofissue = Convert.ToDateTime(txtDateOfIssue.Text);
-                        txtDateOfIssue.Text = dateofissue.ToString("dd-MMM-yyyy");
-                        // dateofissue =Convert.ToDateTime( txtDateofIssue.Text);
-                    }
-                    else
-                    {
-                        DateTime? dtt = null;
-                        dateofissue = DateTime.Today;
-                    }
-                }
-                string spec = string.Empty;
-                string Result = string.Empty;
-                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-                url += "Reports/CommonReport.aspx?";
-                url += "pagetitle=" + reportTitle;
-                url += "&path=~,Reports,Academic," + rptFileName;
-                if (Convert.ToInt32(Session["OrgId"]) == 1)
-                {
-                    // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0 + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
-                    url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0 + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@DateofIssue=" + DateTime.Today.Date;
-                }
-                #region For RCPIPER Grade Card added on 25/07/2023 by shubham
-                else if (Convert.ToInt32(Session["OrgId"]) == 6)
-                {
-                    url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0 + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue);
-                }
-                #endregion
-                #region For MIT Grade Card added on 18/09/2023 by Tejas Thakre
-                else if (Convert.ToInt32(Session["OrgId"]) == 8)
-                {
-                    //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0 + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
-                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW();
-                }
-                #endregion
-                else
-                {
-                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
-
-                }
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-                sb.Append(@"window.open('" + url + "','','" + features + "');");
-
-                ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-            else
-            {
-                objCommon.DisplayMessage(this.updpnlExam, "Please Select at least one student !!!!", this.Page);
-                return;
-            }
-        }
-        catch (Exception ex)
-        {
-            //lblMsg.Text = ex.ToString();
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.btnTranscript_Click-> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 }
