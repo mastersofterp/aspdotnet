@@ -681,6 +681,9 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
         {
             SetInitialRow();
 
+
+            int conversion = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(CHECK_CONVERSION_ON_COMPONENT,0)", ""));
+            ViewState["Conversion"] = conversion.ToString();
             ViewState["PATTERNNO"] = 0;
             ViewState["SUBEXAM_SUBID"] = 0;
             ViewState["SCHEMENO"] = 0;
@@ -1187,16 +1190,38 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                                 //ViewState["TotalMarks"] = Math.Round(Convert.ToDecimal(ViewState["TotalMarks"].ToString()) + TotalMarks);
                                 ViewState["TotalMarks"] = (Convert.ToDecimal(ViewState["TotalMarks"].ToString()) + TotalMarks);
 
-                                if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) !=5 ) )
+
+
+                                if (ViewState["Conversion"].ToString() == "1")
                                 {
-                                    if (Intertnal < Convert.ToDecimal(ViewState["TotalMarks"].ToString()))
+                                    //no need to check conversion calcultaion
+                                }
+                                else
+                                {
+                                    if (((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5)))
                                     {
-                                        decimal marks = Convert.ToDecimal(ViewState["TotalMarks"].ToString());
-                                        ViewState["TotalMarks"] = "0";
-                                        objCommon.DisplayMessage(updSession, "Internal Marks is" + " " + Intertnal + " " + " And your Weightage is" + " " + marks + " " + "Weightage cannot be greater than Internal mark.Please Enter Proper Weightage", this.Page);
-                                        return;
+                                        if (Intertnal < Convert.ToDecimal(ViewState["TotalMarks"].ToString()))
+                                        {
+                                            decimal marks = Convert.ToDecimal(ViewState["TotalMarks"].ToString());
+                                            ViewState["TotalMarks"] = "0";
+                                            objCommon.DisplayMessage(updSession, "Internal Marks is" + " " + Intertnal + " " + " And your Weightage is" + " " + marks + " " + "Weightage cannot be greater than Internal mark.Please Enter Proper Weightage", this.Page);
+                                            return;
+                                        }
                                     }
                                 }
+                                
+
+
+                                //if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) !=5 ) )
+                                //{
+                                //    if (Intertnal < Convert.ToDecimal(ViewState["TotalMarks"].ToString()))
+                                //    {
+                                //        decimal marks = Convert.ToDecimal(ViewState["TotalMarks"].ToString());
+                                //        ViewState["TotalMarks"] = "0";
+                                //        objCommon.DisplayMessage(updSession, "Internal Marks is" + " " + Intertnal + " " + " And your Weightage is" + " " + marks + " " + "Weightage cannot be greater than Internal mark.Please Enter Proper Weightage", this.Page);
+                                //        return;
+                                //    }
+                                //}
 
                             }
                             else if (ExamType == 2)
@@ -1204,14 +1229,32 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                                 decimal OutOfMarks = Convert.ToDecimal(markoutof.Text);
                                 decimal weightagemarks = Convert.ToDecimal(weightage.Text);
                                 decimal TotalMarks = OutOfMarks * (weightagemarks / 100);
-                                if (External < TotalMarks)
+
+                                if (ViewState["Conversion"].ToString() == "1")
                                 {
-                                    if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5))
+                                    //no need to check conversion calcultaion
+                                }
+                                else
+                                {
+                                    if (External < TotalMarks)
                                     {
-                                        objCommon.DisplayMessage(updSession, "External Marks is" + " " + External + " " + " And your Weightage is" + " " + TotalMarks + " " + "Weightage cannot be greater than External marks.Please Enter Proper Weightage", this.Page);
-                                        return;
+                                        if ((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5))
+                                        {
+                                            objCommon.DisplayMessage(updSession, "External Marks is" + " " + External + " " + " And your Weightage is" + " " + TotalMarks + " " + "Weightage can not be greater than External mark.Please Enter Proper Weightage", this.Page);
+                                            return;
+                                        }
+
                                     }
                                 }
+
+                                //if (External < TotalMarks)
+                                //{
+                                //    if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5))
+                                //    {
+                                //        objCommon.DisplayMessage(updSession, "External Marks is" + " " + External + " " + " And your Weightage is" + " " + TotalMarks + " " + "Weightage cannot be greater than External marks.Please Enter Proper Weightage", this.Page);
+                                //        return;
+                                //    }
+                                //}
 
                             }
                         }
@@ -1371,16 +1414,39 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
 
                 ViewState["Total"] =Convert.ToDecimal(ViewState["Total"].ToString()) + TotalMarks;
 
-                if (Convert.ToInt32(Session["OrgId"]) != 8 && Convert.ToInt32(Session["OrgId"]) != 10 && ((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5)))
+
+                if (ViewState["Conversion"].ToString() == "1")
                 {
-                    if (Internal < Convert.ToDecimal(ViewState["Total"].ToString()))
+                    //no need to check conversion calcultaion
+                }
+                else
+                {
+                    if (((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5)))
                     {
-                        string marks = (ViewState["Total"].ToString());
-                        ViewState["Total"] = "0";
-                        objCommon.DisplayMessage(updSession, "Internal Marks is" + " " + Internal + " " + " And your Weightage is" + " " + marks + " " + "Weightage cannot be greater than Internal marks.Please Enter Proper Weightage", this.Page);
-                        return;
+                        if (Internal < Convert.ToDecimal(ViewState["Total"].ToString()))
+                        {
+                            string marks = (ViewState["Total"].ToString());
+                            ViewState["Total"] = "0";
+                            objCommon.DisplayMessage(updSession, "Internal Marks is" + " " + Internal + " " + " And your Weightage is" + " " + marks + " " + "Weightage cannot be greater than Internal marks.Please Enter Proper Weightage", this.Page);
+                            return;
+                        }
                     }
                 }
+
+                #region   conversion_patch_comment as per tkno:55552 on dt:06/03/2024
+
+                //if (Convert.ToInt32(Session["OrgId"]) != 8 && Convert.ToInt32(Session["OrgId"]) != 10 && ((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5)))
+                //{
+                //    if (Internal < Convert.ToDecimal(ViewState["Total"].ToString()))
+                //    {
+                //        string marks = (ViewState["Total"].ToString());
+                //        ViewState["Total"] = "0";
+                //        objCommon.DisplayMessage(updSession, "Internal Marks is" + " " + Internal + " " + " And your Weightage is" + " " + marks + " " + "Weightage cannot be greater than Internal marks.Please Enter Proper Weightage", this.Page);
+                //        return;
+                //    }
+                //}
+
+                #endregion
             }
             else if (ExamType == 2)
             {
@@ -1388,24 +1454,36 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                 decimal weightagemarks = Convert.ToDecimal(txtWeightage.Text);
                 decimal TotalMarks = OutOfMarks * (weightagemarks / 100);
 
-                if (External < TotalMarks)
+
+                if (ViewState["Conversion"].ToString()== "1")
                 {
-                    if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5))
+                    //no need to check conversion calcultaion
+                }
+                else
+                {
+                    if (External < TotalMarks)
                     {
-                        objCommon.DisplayMessage(updSession, "External Marks is" + " " + External + " " + " And your Weightage is" + " " + TotalMarks + " " + "Weightage can not be greater than External mark.Please Enter Proper Weightage", this.Page);
-                        return;
+                        if ((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5))
+                        {
+                            objCommon.DisplayMessage(updSession, "External Marks is" + " " + External + " " + " And your Weightage is" + " " + TotalMarks + " " + "Weightage can not be greater than External mark.Please Enter Proper Weightage", this.Page);
+                            return;
+                        }
+
                     }
                 }
-            }
-            //objCommon.DisplayMessage(updSession, "success", this.Page);
-            //return;
-            //objCommon.DisplayUserMessage(updSession, "Exam Component Added Successfully.", this.Page);
 
-            ////ddlAssessment.SelectedIndex = -1;
-            //ddlAssessment.SelectedIndex = 0;
-            //txtWeightage.Text = "";
-            //txtOutOfMarks.Text = "";
-            //SetInitialRow();
+                #region   conversion_patch_comment as per tkno:55552 on dt:06/03/2024
+                //if (External < TotalMarks)
+                //{
+                //    if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5))
+                //    {
+                //        objCommon.DisplayMessage(updSession, "External Marks is" + " " + External + " " + " And your Weightage is" + " " + TotalMarks + " " + "Weightage can not be greater than External mark.Please Enter Proper Weightage", this.Page);
+                //        return;
+                //    }
+                //}
+                #endregion
+            }
+          
         }
         cs = (CustomStatus)objExamDa.Insert_Exam_Components_Details(SrNo, ExamNo, Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlsubjecttype.SelectedValue), OutOffmarks, Weightage, (txtCaPer1.Text), (txtFinal.Text), (txtOverall.Text), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ViewState["SEMESTERNO"].ToString()), Convert.ToInt32(ViewState["schemeno"].ToString()), Convert.ToInt32(ViewState["SUBEXAM_SUBID"].ToString()), TotalMark, isLock);
 
@@ -1414,9 +1492,6 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
             objCommon.DisplayMessage(this.updSession, "Exam Component Added Successfully.", this.Page);
             ddlsubjecttype_SelectedIndexChanged(new object(), new EventArgs());
 
-            // BindListViewRuleAllocation();
-            //BindListView();
-            //ClearDDL();
             return;
         }
         else
