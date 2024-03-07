@@ -607,6 +607,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Training : System.Web.UI.P
         txtAcadYear.Text = string.Empty;
 
         ViewState["action"] = "add";
+        ViewState["attachment"] = null;
     }
 
     public string GetFileNamePath(object filename, object TNO, object idno)
