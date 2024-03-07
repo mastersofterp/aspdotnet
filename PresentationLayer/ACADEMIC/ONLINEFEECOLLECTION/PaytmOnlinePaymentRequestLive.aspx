@@ -15,9 +15,9 @@
     <link href="../../plugins/newbootstrap/fontawesome-free-5.15.4/css/all.min.css" rel="stylesheet" />
     <link href="../../plugins/newbootstrap/css/newcustom.css" rel="stylesheet" />
 
-     <script type="application/javascript" src="https://business.paytm.com/demo//static/js/jquery.min.js"></script>
-    <%--<script src="../../plugins/newbootstrap/js/jquery-3.5.1.min.js"></script>--%>
-<%--    <script src="../../plugins/newbootstrap/js/popper.min.js"></script>
+    <script type="application/javascript" src="https://business.paytm.com/demo//static/js/jquery.min.js"></script>
+   <%-- <script src="../../plugins/newbootstrap/js/jquery-3.5.1.min.js"></script>
+    <script src="../../plugins/newbootstrap/js/popper.min.js"></script>
     <script src="../../plugins/newbootstrap/js/bootstrap.min.js"></script>--%>
 
     <style>
@@ -134,10 +134,8 @@
 
 
     <div id="divMsg" runat="server"></div>
-     
 
-
-    <script type="application/javascript" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/People73378390650054.js"></script>
+    <script type="application/javascript" src="https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/PEOPLE31207336692326.js"></script>
 
     <script type="text/javascript">
 
@@ -155,7 +153,7 @@
         function onPayScriptLoad() {
             var config = {
                 "root": "",
-                "flow": "WEBSTAGING",
+                "flow": "DEFAULT",
                 "merchant": {
                     "name": "Peoples University",
                     "logo": "https://business.paytm.com/demo//static/images/merchant-logo.png?v=1.4"
