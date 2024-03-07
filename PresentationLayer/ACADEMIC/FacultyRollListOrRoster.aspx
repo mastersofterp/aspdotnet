@@ -71,24 +71,7 @@
                                                         Display="None" ErrorMessage="Please Select Faculty" InitialValue="0" ValidationGroup="show" />
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <%--<sup>* </sup>--%>
-                                                        <%-- <label>Semester </label>--%>
-                                                        <asp:Label ID="lblddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
-                                                    </div>
-                                                    <%--<asp:ListBox ID="ddlSemester" runat="server" SelectionMode="Multiple" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control multi-select-demo"></asp:ListBox>--%>
-
-                                                    <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
-                                                        CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
-
-                                                  <%--  <asp:RequiredFieldValidator ID="ddlSemester1" runat="server" ControlToValidate="ddlSemester"
-                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="submit" />
-                                                    <asp:RequiredFieldValidator ID="ddlSemester2" runat="server" ControlToValidate="ddlSemester"
-                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="show" />--%>
-                                                </div>
+                                               
                                              
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -123,6 +106,25 @@
                                                 </div>
 
                                                
+                                                 <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <%--<sup>* </sup>--%>
+                                                        <%-- <label>Semester </label>--%>
+                                                        <asp:Label ID="lblddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
+                                                    </div>
+                                                    <%--<asp:ListBox ID="ddlSemester" runat="server" SelectionMode="Multiple" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control multi-select-demo"></asp:ListBox>--%>
+
+                                                    <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
+                                                        CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+
+                                                  <%--  <asp:RequiredFieldValidator ID="ddlSemester1" runat="server" ControlToValidate="ddlSemester"
+                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="submit" />
+                                                    <asp:RequiredFieldValidator ID="ddlSemester2" runat="server" ControlToValidate="ddlSemester"
+                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="show" />--%>
+                                                </div>
+
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -134,16 +136,12 @@
                                                         CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                  <%--  <asp:RequiredFieldValidator ID="rfvddlSection" runat="server" ControlToValidate="ddlSection"
-                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="submit" />--%>
-                                                  <%--  <asp:RequiredFieldValidator ID="rfvddlSection" runat="server" ControlToValidate="ddlSection"
-                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="show" />--%>
+                                                
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="DivBatch" visible="false">
                                                     <div class="label-dynamic">
                                                        <%-- <sup>* </sup>--%>
-                                                        <%--<label>Path/Scheme </label>--%>
                                                         <asp:Label ID="lblDYddlBatch" runat="server" Font-Bold="true">Batch</asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlBatch" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
@@ -159,17 +157,13 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="DivTutorialBatch" visible="false">
                                                     <div class="label-dynamic">
                                                       <%--  <sup>* </sup>--%>
-                                                        <%--<label>Path/Scheme </label>--%>
-                                                        <asp:Label ID="Label1" runat="server" Font-Bold="true">Tutorial Batch</asp:Label>
+                                                        <asp:Label ID="lblTutorialBatch" runat="server" Font-Bold="true">Tutorial Batch</asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlTutorialBatch" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
                                                         CssClass="form-control" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvddlTutorialBatch1" runat="server" ControlToValidate="ddlTutorialBatch"
-                                                        Display="None" ErrorMessage="Please Select Tutorial Batch" InitialValue="0" ValidationGroup="submit" />
-                                                    <asp:RequiredFieldValidator ID="rfvddlTutorialBatch2" runat="server" ControlToValidate="ddlTutorialBatch"
-                                                        Display="None" ErrorMessage="Please Select Tutorial Batch" InitialValue="0" ValidationGroup="show" />--%>
+                                                  
                                                 </div>
 
 
@@ -228,7 +222,7 @@
                                                                          <th>CCODE - COURSE</th>
                                                                          <th>SECTION</th>
                                                                          <th>BATCH</th>
-                                                                         <th>TH BATCH</th>
+                                                                         <th>TUT BATCH</th>
                                                                         <th>Mail ID</th>
                                                                         <th>REGISTRATION STATUS</th>
 
@@ -257,13 +251,13 @@
                                                                 <asp:Label ID="lblSTUDNAME" runat="server" Text='<%# Eval("STUDNAME")%>' />
                                                             </td>
                                                              <td>
-                                                                <asp:Label ID="lblSEMESTERNAME" runat="server" Text='<%# Eval("SEMESTERNAME")%>' />
+                                                                <asp:Label ID="lblSEMESTERNAME" runat="server" Text='<%# Eval("SEMESTER")%>' />
                                                             </td>
                                                              <td>
                                                                 <asp:Label ID="lblCCODE" runat="server" Text=' <%#  Eval("COURSENAME") +" - "+   Eval("CCODE") %>' />
                                                             </td>
                                                              <td>
-                                                                <asp:Label ID="Label2" runat="server" Text='<%# Eval("SECTION")%>' />
+                                                                <asp:Label ID="lblSECTION" runat="server" Text='<%# Eval("SECTION")%>' />
                                                             </td>
                                                             <td>
                                                                 <asp:Label ID="lblBATCHNAME" runat="server" Text='<%# Eval("BATCHNAME")%>' />
