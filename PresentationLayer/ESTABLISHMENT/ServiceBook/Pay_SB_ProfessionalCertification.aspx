@@ -411,19 +411,18 @@
                                         </asp:UpdatePanel>
                                     </div>
                                 </div>
+                                <div class="col-12 btn-footer">
+                                    <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="23"
+                                        CssClass="btn btn-primary" ToolTip="Click here to Submit" OnClick="btnSubmit_Click" />
+                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="24"
+                                        CssClass="btn btn-warning" ToolTip="Click here to Reset" OnClick="btnCancel_Click" />
+                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="ServiceBook"
+                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                 </div>
-                                                <div class="col-12 btn-footer">
-                                                    <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="23"
-                                                        CssClass="btn btn-primary" ToolTip="Click here to Submit" OnClick="btnSubmit_Click" />
-                                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="24"
-                                                        CssClass="btn btn-warning" ToolTip="Click here to Reset" OnClick="btnCancel_Click" />
-                                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="ServiceBook"
-                                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                                                </div>
                             </ContentTemplate>
                             <Triggers>
                                 <%--<asp:PostBackTrigger ControlID="btnUpload" />--%>
-
+                                <asp:PostBackTrigger ControlID="btnCancel" />
                                 <asp:PostBackTrigger ControlID="btnSubmit" />
                             </Triggers>
                         </asp:UpdatePanel>
