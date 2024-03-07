@@ -146,6 +146,7 @@
                                             <asp:ListItem Value="1">Top One</asp:ListItem>
                                             <asp:ListItem Value="2">Top Two</asp:ListItem>
                                             <asp:ListItem Value="3">Marks</asp:ListItem>
+                                            <asp:ListItem Value="4">Average</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="ddlconversion" SetFocusOnError="true"
                                             Display="None" ErrorMessage="Please Select Conversion Type" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
