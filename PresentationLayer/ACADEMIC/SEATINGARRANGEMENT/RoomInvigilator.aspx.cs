@@ -1,4 +1,14 @@
-﻿using System;
+﻿//======================================================================================
+// PROJECT NAME  : RFC COMMON
+// MODULE NAME   : EXAMINATION
+// PAGE NAME     : INVIGILATOR DUTY COUNT ROOM ENTRY 
+// CREATION DATE : 
+// CREATED BY    : SHUBHAM BARKE
+// MODIFIED DATE :
+// MODIFIED DESC :
+//======================================================================================
+
+using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -153,11 +163,15 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this, "Data Not Found..!!", this.Page);
+                    lvRoomMaster.DataSource = null;
+                    lvRoomMaster.DataBind();
                 }
             }
             else
             {
                 objCommon.DisplayMessage(this, "Data Not Found..!!", this.Page);
+                lvRoomMaster.DataSource = null;
+                lvRoomMaster.DataBind();
             }
         }
         catch (Exception ex)
@@ -194,6 +208,11 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
 
     protected void ddlDept_SelectedIndexChanged(object sender, EventArgs e)
     {
+        
+        ddlFloorNo.Items.Clear();
+        ddlFloorNo.Items.Add(new ListItem("Please Select", "0"));
+        ddlBlockNo.Items.Clear();
+        ddlBlockNo.Items.Add(new ListItem("Please Select", "0"));
         if (ddlDept.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNO ASC");
@@ -242,6 +261,11 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
     }
     protected void ddlFloorNo_SelectedIndexChanged(object sender, EventArgs e)
     {
+
+        
+        ddlBlockNo.Items.Clear();
+        ddlBlockNo.Items.Add(new ListItem("Please Select", "0"));
+
         if (ddlFloorNo.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlBlockNo, "ACD_BLOCK ", "BLOCKNO", "BLOCKNAME", "BLOCKNO > 0 AND ACTIVESTATUS=1", "BLOCKNAME ASC");
@@ -263,6 +287,12 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         // Branch Name
+        ddlDept.Items.Clear();
+        ddlDept.Items.Add(new ListItem("Please Select", "0"));
+        ddlFloorNo.Items.Clear();
+        ddlFloorNo.Items.Add(new ListItem("Please Select", "0"));
+        ddlBlockNo.Items.Clear();
+        ddlBlockNo.Items.Add(new ListItem("Please Select", "0"));
         if (ddlCollege.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlDept, "ACD_DEPARTMENT D, ACD_COLLEGE_DEPT C ", "D.DEPTNO", "D.DEPTNAME", "D.DEPTNO=C.DEPTNO AND C.DEPTNO >0 AND C.COLLEGE_ID=" + ddlCollege.SelectedValue + "", "DEPTNAME");
@@ -289,7 +319,15 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
     }
     protected void ddlBlockNo_SelectedIndexChanged(object sender, EventArgs e)
     {
-        this.BindRooms();
+        if(ddlBlockNo.SelectedIndex > 0)
+        {
+            this.BindRooms();
+        }else
+        {
+            lvRoomMaster.DataSource = null;
+            lvRoomMaster.DataBind();
+        }
+        
     }
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
