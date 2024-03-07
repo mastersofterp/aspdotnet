@@ -146,15 +146,37 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         }
         else
         {
-            //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.ORGANIZATION_ID = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "(COSCHNO,COL_SCHEME_NAME)", "", "SM.COLLEGE_ID =" + (Convert.ToInt32(Session["college_nos"])) AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND (DB.DEPTNO =ISNULL  + (Convert.ToInt32(Session["userdeptno"]), 0)", "");
-            //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
-            objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO AND CT.COLLEGE_ID=SC.COLLEGE_ID)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "SC.COSCHNO");
+            //objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO AND CT.COLLEGE_ID=SC.COLLEGE_ID)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "SC.COSCHNO");
+            FillFaculty();
         }
 
         objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO >0 AND ISNULL(ACTIVESTATUS,0)=1", "SEMESTERNO");
     }
 
+    public void FillFaculty()
+    {
+        ddlClgname.Items.Clear();
+        ddlClgname.Items.Add(new ListItem("Please Select", "0"));
 
+        string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
+        DataSet ds = new DataSet();
+        SP_Name = "PKG_ACD_GET_SCHEME_FOR_FEEDBACK";
+        SP_Parameters = "@P_UA_NO";
+        Call_Values = "" + Convert.ToInt32(Session["userno"]) ;
+        ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+        if (ds.Tables[0].Rows.Count > 0 && ds.Tables != null)
+        {
+            ddlClgname.DataSource = ds;
+            ddlClgname.DataTextField = "COL_SCHEME_NAME";
+            ddlClgname.DataValueField = "COSCHNO";
+            ddlClgname.DataBind();
+        }
+        else
+        {
+            ddlClgname.DataSource = null;
+            ddlClgname.DataBind();
+        }
+    }
     //function to check page is authorized or not
     private void CheckPageAuthorization()
     {
