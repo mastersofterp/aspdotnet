@@ -146,7 +146,7 @@
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
-                                                Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="FeedbackFaculty">
+                                                Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" >
                                             </asp:RequiredFieldValidator>
                                         </div>
 
@@ -163,7 +163,7 @@
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvSession1" runat="server" ControlToValidate="ddlSession"
                                                 Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
-                                                ValidationGroup="FeedbackFaculty"></asp:RequiredFieldValidator>
+                                                ></asp:RequiredFieldValidator>
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Semester" runat="server">
@@ -178,7 +178,7 @@
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlSemester"
                                                 Display="None" ErrorMessage="Please Select Semester" InitialValue="0" SetFocusOnError="True"
-                                                ValidationGroup="FeedbackFaculty"></asp:RequiredFieldValidator>
+                                                ></asp:RequiredFieldValidator>
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Section" runat="server">
@@ -207,7 +207,7 @@
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvFeedback" runat="server" ControlToValidate="ddlFeedbackTyp"
                                                 Display="None" ErrorMessage="Please Select Feedback Type" InitialValue="0" SetFocusOnError="True"
-                                                ValidationGroup="FeedbackFaculty"></asp:RequiredFieldValidator>
+                                                ></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
