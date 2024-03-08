@@ -633,9 +633,11 @@
 
                     if ($("#hdnEditMode").val() == "1") {
                         alert('Attendance Configuration Updated Successfully !!!');
+                        $('#btnCancel').click(); // Added by vipul t on date 08/03/2024 as per Tno:- 55726
                     }
                     else {
                         alert('Attendance Configuration Added Successfully !!!');
+                        $('#btnCancel').click(); // Added by vipul t on date 08/03/2024 as per Tno:- 55726
                     }
 
 
