@@ -364,9 +364,9 @@
                                                             <sup>* </sup>
                                                             <asp:Label ID="lblDYddlAdmBatch" runat="server"></asp:Label>
                                                         </div>
-                                                        <asp:TextBox ID="txtAdmBatch" runat="server" MaxLength="9" AutoComplete="off" CssClass="form-control" TabIndex="1" ToolTip="Please Enter Admission Batch" />
+                                                        <asp:TextBox ID="txtAdmBatch" runat="server" MaxLength="20" AutoComplete="off" CssClass="form-control" TabIndex="1" ToolTip="Please Enter Admission Batch" />
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server"
-                                                            FilterMode="ValidChars" FilterType="Custom" ValidChars="0123456987-" TargetControlID="txtAdmBatch" />
+                                                            FilterMode="InvalidChars" FilterType="Custom" InvalidChars="~`!@#$%^*_+=,./:;<>?'{}[]\|-&&quot;'" TargetControlID="txtAdmBatch" />
                                                         <asp:RequiredFieldValidator ID="rfvtxtAdmBatch" runat="server" ControlToValidate="txtAdmBatch"
                                                             Display="None" ErrorMessage="Please Enter Admission Batch" SetFocusOnError="True"
                                                             ValidationGroup="AdmBatch"></asp:RequiredFieldValidator>
