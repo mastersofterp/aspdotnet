@@ -112,7 +112,7 @@ namespace IITMS
                     }
                     return ds;
                 }
-     public int Add_DirectGradeSystem(string Schemano, int level, int Grade, decimal mini, decimal max, int grandpoint, string indicator, int active)
+                public int Add_DirectGradeSystem(string Schemano, int level, int Grade, decimal mini, decimal max, int grandpoint, string indicator, int active)
                 {
                     int status = 0;
                     try
@@ -8227,13 +8227,13 @@ namespace IITMS
                 #endregion
 
                 #region Added By Injamam on date 02_01_2024
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, int remark, string subjecttype,string userforrange,int subexamwise)
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, int remark, string subjecttype, string userforrange, int subexamwise, string multiexternalexam, int publish, int conversion, string url)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[44];
+                        SqlParameter[] objParam = new SqlParameter[48];
                         objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
                         objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
                         objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
@@ -8278,6 +8278,10 @@ namespace IITMS
                         objParam[41] = new SqlParameter("@P_SUBJETTYPE", subjecttype);
                         objParam[42] = new SqlParameter("@P_USERFORRANGE", userforrange);
                         objParam[43] = new SqlParameter("@P_INTERNALSUBEXAMWISE", subexamwise);
+                        objParam[44] = new SqlParameter("@P_MULTI_EXTERNAL_EXAM", multiexternalexam);
+                        objParam[45] = new SqlParameter("@P_PUBLISH_INTERNAL_MARKS_ENTRY", publish);//added on 05-03-2024
+                        objParam[46] = new SqlParameter("@P_CHECK_CONVERSION_ON_COMPONENT", conversion);//added on 05-03-2024
+                        objParam[47] = new SqlParameter("@P_OBE_ERP_URL", url);//added on 06-03-2024
 
                         //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
 

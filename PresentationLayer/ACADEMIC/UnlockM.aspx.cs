@@ -432,17 +432,17 @@ public partial class ACADEMIC_UnlockM : System.Web.UI.Page
                     if (ddlSubType.SelectedValue == "1")
                     {
                         facultynotheory = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString();
-                        facultynopractical = "0";
+                        facultynopractical = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString(); ;
                     }
                     else if (ddlSubType.SelectedValue == "2" || ddlSubType.SelectedValue == "11" || ddlSubType.SelectedValue == "12")
                     {
                         facultynopractical = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString();
-                        facultynotheory = "0";
+                        facultynotheory = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString(); ;
                     }
                     else if (ddlSubType.SelectedValue == "3")
                     {
                         facultynotheory = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString();
-                        facultynopractical = "0";
+                        facultynopractical = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString(); ;
                     }
                     else if (ddlSubType.SelectedValue == "4")
                     {
@@ -454,7 +454,7 @@ public partial class ACADEMIC_UnlockM : System.Web.UI.Page
                     else
                     {
                         facultynotheory = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString();
-                        facultynopractical = "0";
+                        facultynopractical = ((Label)dataRow.FindControl("lblFaculty")).ToolTip == "" ? "0" : ((Label)dataRow.FindControl("lblFaculty")).ToolTip.ToString(); ;
                     }
                 }
 

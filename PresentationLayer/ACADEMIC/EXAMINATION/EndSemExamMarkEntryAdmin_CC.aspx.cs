@@ -85,12 +85,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 //Page Authorization
                 CheckPageAuthorization();
                 this.PopulateDropDown();
-                
+
 
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
 
-             
+
                 if (Request.QueryString["pageno"] != null)
                 {
                     int ADMIN_LEVEL_MARKS_ENTRY_USER = Convert.ToInt32(objCommon.LookUp("REFF", "isnull(ADMIN_LEVEL_MARKS_ENTRY,0)", ""));
@@ -101,6 +101,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     CheckPageAuthorization();
                 }
             }
+
+
         }
         if (Convert.ToInt32(Session["OrgId"]) == 6)  //Added by lalit dt 21-07-23 regarding RCPIPER backlog
         {
@@ -116,8 +118,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         try
         {
-            //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO>0", "SESSIONNO DESC");
-
             DataSet ds = objCommon.FillDropDown("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "COLLEGE_IDS,DEGREENO", "BRANCH,SEMESTER", "STARTED = 1 AND SHOW_STATUS =1  AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "");
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -126,7 +126,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 ViewState["Branchno"] = ds.Tables[0].Rows[0]["BRANCH"].ToString();
                 ViewState["Semesterno"] = ds.Tables[0].Rows[0]["SEMESTER"].ToString();
             }
-         
+
             if (Session["usertype"].ToString().Equals("1"))
             {
 
@@ -181,76 +181,44 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     private void SaveAndLock(int lock_status)
     {
-            try
+        try
+        {
+            string examtype = string.Empty;
+            string Subexam = string.Empty;
+
+            //check for if any exams on
+            if (ddlExam.SelectedIndex > 0)
             {
-                string examtype = string.Empty;
-                string Subexam = string.Empty;
-
-                //check for if any exams on
-                if (ddlExam.SelectedIndex > 0)
+                //Check for lock and null marks
+                if (CheckMarks(lock_status) == false)
                 {
-                    //Check for lock and null marks
-                    if (CheckMarks(lock_status) == false)
+                    return;
+                }
+                string studids = string.Empty;
+                string marks = string.Empty;
+
+                MarksEntryController objMarksEntry = new MarksEntryController();
+                Label lbl;
+                TextBox txtMarks;
+                CheckBox chk;
+
+                string[] Exam = ddlExam.SelectedValue.Split('-');
+
+                if (Exam[0].StartsWith("S"))
+                    examtype = "S";
+                else if (Exam[0].StartsWith("E"))
+                    examtype = "E";
+
+                //added by prafull on dt 20012023 to check conversion Rule 
+
+                if (Convert.ToInt32(Session["OrgId"]) == 8)
+                {
+
+                    int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "DISTINCT ADMBATCH", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString())));
+
+                    if (admbatch >= 17)
                     {
-                        return;
-                    }
-                    string studids = string.Empty;
-                    string marks = string.Empty;
 
-                    MarksEntryController objMarksEntry = new MarksEntryController();
-                    Label lbl;
-                    TextBox txtMarks;
-                    CheckBox chk;
-
-                    string[] Exam = ddlExam.SelectedValue.Split('-');
-
-                    if (Exam[0].StartsWith("S"))
-                        examtype = "S";
-                    else if (Exam[0].StartsWith("E"))
-                        examtype = "E";
-
-                    //added by prafull on dt 20012023 to check conversion Rule 
-
-                    if (Convert.ToInt32(Session["OrgId"]) == 8)
-                    {
-
-                        int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "DISTINCT ADMBATCH", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString())));
-
-                        if (admbatch >= 17)
-                        {
-
-                            if (examtype == "E")
-                            {
-                                double intermark_master = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + ddlCourse.SelectedValue));
-                                for (int i = 0; i < gvStudent.Rows.Count; i++)
-                                {
-                                    TextBox intermark = gvStudent.Rows[i].FindControl("lblInternal") as TextBox;
-                                    double markinter;
-                                    string newvar = intermark.ToolTip;
-                                    if (newvar == "" || newvar == string.Empty)
-                                    {
-                                        markinter = 0.00;
-                                    }
-                                    else
-                                    {
-                                        markinter = Convert.ToDouble(intermark.ToolTip);
-                                    }
-                                    if (markinter > intermark_master)
-                                    {
-                                        objCommon.DisplayMessage(updpnl, "Please Check The Conversion Rule For Internal Mark...!", this.Page);
-                                        return;
-                                    }
-
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //no need for validation data;
-                        }
-                    }
-                    else
-                    {
                         if (examtype == "E")
                         {
                             double intermark_master = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + ddlCourse.SelectedValue));
@@ -272,169 +240,197 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     objCommon.DisplayMessage(updpnl, "Please Check The Conversion Rule For Internal Mark...!", this.Page);
                                     return;
                                 }
+
                             }
                         }
                     }
-
-
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //Note : -100 for Marks will be converted as NULL           
-                    //NULL means mark entry not done.                           
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    for (int i = 0; i < gvStudent.Rows.Count; i++)
+                    else
                     {
-                        chk = gvStudent.Rows[i].FindControl("chkMarks") as CheckBox;
-
-                        if (lock_status == 0)
+                        //no need for validation data;
+                    }
+                }
+                else
+                {
+                    if (examtype == "E")
+                    {
+                        double intermark_master = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + ddlCourse.SelectedValue));
+                        for (int i = 0; i < gvStudent.Rows.Count; i++)
                         {
-
-                            //Gather Student IDs 
-                            lbl = gvStudent.Rows[i].FindControl("lblIDNO") as Label;
-                            studids += lbl.ToolTip + ",";
-                            if (examtype == "S")
+                            TextBox intermark = gvStudent.Rows[i].FindControl("lblInternal") as TextBox;
+                            double markinter;
+                            string newvar = intermark.ToolTip;
+                            if (newvar == "" || newvar == string.Empty)
                             {
-                                //Gather Exam Marks 
-                                txtMarks = gvStudent.Rows[i].FindControl("txtintMarks") as TextBox;
-                                marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
+                                markinter = 0.00;
                             }
                             else
                             {
-                                txtMarks = gvStudent.Rows[i].FindControl("txtMarks") as TextBox;
-                                marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
+                                markinter = Convert.ToDouble(intermark.ToolTip);
                             }
-
-                        }
-                        else if (lock_status == 1 || lock_status == 2)
-                        {
-                            //Gather Student IDs 
-                            lbl = gvStudent.Rows[i].FindControl("lblIDNO") as Label;
-                            studids += lbl.ToolTip + ",";
-
-                            //Gather Exam Marks 
-
-                            if (examtype == "S")
+                            if (markinter > intermark_master)
                             {
-                                //Gather Exam Marks 
-                                txtMarks = gvStudent.Rows[i].FindControl("txtintMarks") as TextBox;
-                                marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
-                            }
-                            else
-                            {
-                                txtMarks = gvStudent.Rows[i].FindControl("txtMarks") as TextBox;
-                                marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
+                                objCommon.DisplayMessage(updpnl, "Please Check The Conversion Rule For Internal Mark...!", this.Page);
+                                return;
                             }
                         }
                     }
-                    studids = studids.TrimEnd(',');
+                }
 
-                    if (studids == string.Empty)
+
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //Note : -100 for Marks will be converted as NULL           
+                //NULL means mark entry not done.                           
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                for (int i = 0; i < gvStudent.Rows.Count; i++)
+                {
+                    chk = gvStudent.Rows[i].FindControl("chkMarks") as CheckBox;
+
+                    if (lock_status == 0)
                     {
-                        objCommon.DisplayMessage(updpnl, "Please Select Student!!!", this.Page);
-                        return;
-                    }
 
-                    string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
-
-
-                  
-                    string examname = string.Empty;
-
-                    examname = Exam[0]; //Column Name like S1,S2.....EXTERMARK
-
-                    string SubExamName = string.Empty;
-                    string SubExamComponentName = string.Empty;
-
-
-                    if (divSubExamName.Visible == true)
-                    {
-                        //if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11")
-                        //{
-                        //    Subexam = ddlSubExamName.SelectedValue;
-                        //    SubExamComponentName = ddlSubExamName.SelectedItem.Text;
-                        //}
+                        //Gather Student IDs 
+                        lbl = gvStudent.Rows[i].FindControl("lblIDNO") as Label;
+                        studids += lbl.ToolTip + ",";
                         if (examtype == "S")
                         {
-                            SubExamComponentName = ddlSubExamName.SelectedValue;
-                            examname = ddlExam.SelectedValue;
+                            //Gather Exam Marks 
+                            txtMarks = gvStudent.Rows[i].FindControl("txtintMarks") as TextBox;
+                            marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
                         }
                         else
                         {
-                            SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Exam[1]); ;
-                            //  string SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
-                            // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[1]);
-
-                            Subexam = ddlSubExamName.SelectedValue;
-                            //Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SA.SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+                            txtMarks = gvStudent.Rows[i].FindControl("txtMarks") as TextBox;
+                            marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
                         }
+
+                    }
+                    else if (lock_status == 1 || lock_status == 2)
+                    {
+                        //Gather Student IDs 
+                        lbl = gvStudent.Rows[i].FindControl("lblIDNO") as Label;
+                        studids += lbl.ToolTip + ",";
+
+                        //Gather Exam Marks 
+
+                        if (examtype == "S")
+                        {
+                            //Gather Exam Marks 
+                            txtMarks = gvStudent.Rows[i].FindControl("txtintMarks") as TextBox;
+                            marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
+                        }
+                        else
+                        {
+                            txtMarks = gvStudent.Rows[i].FindControl("txtMarks") as TextBox;
+                            marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
+                        }
+                    }
+                }
+                studids = studids.TrimEnd(',');
+
+                if (studids == string.Empty)
+                {
+                    objCommon.DisplayMessage(updpnl, "Please Select Student!!!", this.Page);
+                    return;
+                }
+
+                string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
+
+
+
+                string examname = string.Empty;
+
+                examname = Exam[0]; //Column Name like S1,S2.....EXTERMARK
+
+                string SubExamName = string.Empty;
+                string SubExamComponentName = string.Empty;
+
+
+                if (divSubExamName.Visible == true)
+                {
+
+                    if (examtype == "S")
+                    {
+                        SubExamComponentName = ddlSubExamName.SelectedValue;
+                        examname = ddlExam.SelectedValue;
                     }
                     else
                     {
                         SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Exam[1]); ;
-                      //  string SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
-                       // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[1]);
+                        //  string SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
+                        // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[1]);
 
-
-                        Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SA.SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
-
+                        Subexam = ddlSubExamName.SelectedValue;
+                        //Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SA.SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
                     }
+                }
+                else
+                {
+                    SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Exam[1]); ;
+                    //  string SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
+                    // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[1]);
 
-                    #region added  by gaurav s 
-                    if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
+
+                    Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SA.SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+
+                }
+
+                #region added  by gaurav s
+                if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
+                {
+                    if (examtype != "S")
                     {
-                        if (examtype != "S")
-                        {
-                            SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
-                            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToInt32(Exam[1]) + "AND  SUBEXAMNO=" + ddlSubExamName.SelectedValue.Split('-')[1]);
-                        }
+                        SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
+                        Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToInt32(Exam[1]) + "AND  SUBEXAMNO=" + ddlSubExamName.SelectedValue.Split('-')[1]);
                     }
-                    #endregion
-                    CustomStatus cs = 0; 
-                        if (examtype == "S")
-                        {
-                             cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNewAdmin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, 0, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, SubExamComponentName, Convert.ToInt32(ddlsemester.SelectedValue), 0);
-                        }
-                        else
-                        {
-                             cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_cc(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, ddlExam.SelectedValue, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
-                        }
-                    if (cs.Equals(CustomStatus.RecordSaved))
+                }
+                #endregion
+                CustomStatus cs = 0;
+                if (examtype == "S")
+                {
+                    cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNewAdmin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, 0, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, SubExamComponentName, Convert.ToInt32(ddlsemester.SelectedValue), 0);
+                }
+                else
+                {
+                    cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_cc(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, ddlExam.SelectedValue, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
+                }
+                if (cs.Equals(CustomStatus.RecordSaved))
+                {
+                    if (lock_status == 1)
                     {
-                        if (lock_status == 1)
-                        {
-                            objCommon.DisplayMessage(updpnl, "Marks Locked Successfully!!!", this.Page);
-                            objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                            lnkExcekImport.Visible = false;
-                        }
-                        else if (lock_status == 2)
-                        {
-                            objCommon.DisplayMessage(updpnl, "Marks Unlocked Successfully!!!", this.Page);
-                        }
-                        else
-                            objCommon.DisplayMessage(updpnl, "Marks Saved Successfully. Please Click on Lock button to Final Submit the Marks", this.Page);
+                        objCommon.DisplayMessage(updpnl, "Marks Locked Successfully!!!", this.Page);
                         objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-
-                        //btnReport.Enabled = true;
-                        ShowStudents();
+                        lnkExcekImport.Visible = false;
                     }
-                    else if (cs.Equals(CustomStatus.RecordUpdated))
+                    else if (lock_status == 2)
                     {
-
-                        objCommon.DisplayMessage(updpnl, "Marks Saved Successfully. Please Click on Lock button to Final Submit the Marks", this.Page);
-                        objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                        ShowStudents();
+                        objCommon.DisplayMessage(updpnl, "Marks Unlocked Successfully!!!", this.Page);
                     }
                     else
-                        objCommon.DisplayMessage(updpnl, "Error in Saving Marks!", this.Page);
+                        objCommon.DisplayMessage(updpnl, "Marks Saved Successfully. Please Click on Lock button to Final Submit the Marks", this.Page);
+                    objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
+
+                    //btnReport.Enabled = true;
+                    ShowStudents();
                 }
-            }
-            catch (Exception ex)
-            {
-                if (Convert.ToBoolean(Session["error"]) == true)
-                    objUCommon.ShowError(Page, "Academic_MarkEntry.SaveAndLock --> " + ex.Message + " " + ex.StackTrace);
+                else if (cs.Equals(CustomStatus.RecordUpdated))
+                {
+
+                    objCommon.DisplayMessage(updpnl, "Marks Saved Successfully. Please Click on Lock button to Final Submit the Marks", this.Page);
+                    objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
+                    ShowStudents();
+                }
                 else
-                    objUCommon.ShowError(Page, "Server Unavailable.");
+                    objCommon.DisplayMessage(updpnl, "Error in Saving Marks!", this.Page);
             }
-        
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_MarkEntry.SaveAndLock --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+
     }
 
     private bool CheckExamON()
@@ -446,206 +442,206 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     private bool CheckMarks(int lock_status)
     {
-        
-            bool flag = true;
-            try
+
+        bool flag = true;
+        try
+        {
+            Label lbl;
+            TextBox txt;
+            string marks = string.Empty;
+            string maxMarks = string.Empty;
+            string examtype = string.Empty;
+            string[] Exam = ddlExam.SelectedValue.Split('-');
+
+
+
+            if (Exam[0].StartsWith("S"))
+                examtype = "S";
+            else if (Exam[0].StartsWith("E"))
+                examtype = "E";
+
+
+            if (examtype == "S")
             {
-                Label lbl;
-                TextBox txt;
-                string marks = string.Empty;
-                string maxMarks = string.Empty;
-                string examtype = string.Empty;
-                string[] Exam = ddlExam.SelectedValue.Split('-');
-
-
-
-                if (Exam[0].StartsWith("S"))
-                    examtype = "S";
-                else if (Exam[0].StartsWith("E"))
-                    examtype = "E";
-
-
-                if (examtype == "S")
+                for (int j = 4; j < gvStudent.Columns.Count; j++)    //columns
                 {
-                    for (int j = 4; j < gvStudent.Columns.Count; j++)    //columns
+                    for (int i = 0; i < gvStudent.Rows.Count; i++)   //rows 
                     {
-                        for (int i = 0; i < gvStudent.Rows.Count; i++)   //rows 
+                        if (gvStudent.Columns[j].Visible == true)
                         {
-                            if (gvStudent.Columns[j].Visible == true)
+                            if (j == 4) //TA MARKS
                             {
-                                if (j == 4) //TA MARKS
+                                lbl = gvStudent.Rows[i].Cells[j].FindControl("lblintMarks") as Label;      //Max Marks 
+                                txt = gvStudent.Rows[i].Cells[j].FindControl("txtintMarks") as TextBox;    //Marks Entered 
+                                maxMarks = lbl.Text.Trim();
+                                marks = txt.Text.Trim();
+
+                                if (!txt.Text.Trim().Equals(string.Empty) && !lbl.Text.Trim().Equals(string.Empty) || txt.Enabled == true)
                                 {
-                                    lbl = gvStudent.Rows[i].Cells[j].FindControl("lblintMarks") as Label;      //Max Marks 
-                                    txt = gvStudent.Rows[i].Cells[j].FindControl("txtintMarks") as TextBox;    //Marks Entered 
-                                    maxMarks = lbl.Text.Trim();
-                                    marks = txt.Text.Trim();
-
-                                    if (!txt.Text.Trim().Equals(string.Empty) && !lbl.Text.Trim().Equals(string.Empty) || txt.Enabled == true)
+                                    if (txt.Text == "")
                                     {
-                                        if (txt.Text == "")
+                                        if (lock_status == 1)
                                         {
-                                            if (lock_status == 1)
-                                            {
-                                                objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
-                                                //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
-                                                txt.Focus();
-                                                flag = false;
-                                                break;
-                                            }
+                                            objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
+                                            //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
+                                            txt.Focus();
+                                            flag = false;
+                                            break;
                                         }
-                                        else
-                                        {
-                                            //Check for Marks entered greater than Max Marks
-                                            if (Convert.ToDouble(txt.Text) > Convert.ToDouble(lbl.Text))
-                                            {
-                                                if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
-                                                {
-                                                    objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]", this.Page);
-                                                    //ShowMessage("Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]");
-                                                    txt.Focus();
-                                                    flag = false;
-                                                    break;
-                                                }
-                                            }
-                                            else if (Convert.ToDouble(txt.Text) < 0)
-                                            {
-                                                //Note : 401 for Absent and Not Eligible
-                                                if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
-                                                {
-                                                }
-                                                else
-                                                {
-                                                    objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.", this.Page);
-                                                    //ShowMessage("Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.");
-                                                    txt.Focus();
-                                                    flag = false;
-                                                    break;
-                                                }
-                                            }
-                                        }
-
                                     }
                                     else
                                     {
-                                        if (txt.Enabled == true)
+                                        //Check for Marks entered greater than Max Marks
+                                        if (Convert.ToDouble(txt.Text) > Convert.ToDouble(lbl.Text))
                                         {
-                                            if (lock_status == 1)
+                                            if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
                                             {
-                                                objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
-                                                //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
+                                                objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]", this.Page);
+                                                //ShowMessage("Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]");
                                                 txt.Focus();
                                                 flag = false;
                                                 break;
                                             }
+                                        }
+                                        else if (Convert.ToDouble(txt.Text) < 0)
+                                        {
+                                            //Note : 401 for Absent and Not Eligible
+                                            if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
+                                            {
+                                            }
+                                            else
+                                            {
+                                                objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.", this.Page);
+                                                //ShowMessage("Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.");
+                                                txt.Focus();
+                                                flag = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (txt.Enabled == true)
+                                    {
+                                        if (lock_status == 1)
+                                        {
+                                            objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
+                                            //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
+                                            txt.Focus();
+                                            flag = false;
+                                            break;
                                         }
                                     }
                                 }
                             }
-                            if (flag == false) break;
                         }
+                        if (flag == false) break;
                     }
                 }
-                else
+            }
+            else
+            {
+                for (int j = 3; j < gvStudent.Columns.Count; j++)    //columns
                 {
-                    for (int j = 3; j < gvStudent.Columns.Count; j++)    //columns
+                    for (int i = 0; i < gvStudent.Rows.Count; i++)   //rows 
                     {
-                        for (int i = 0; i < gvStudent.Rows.Count; i++)   //rows 
+                        if (gvStudent.Columns[j].Visible == true)
                         {
-                            if (gvStudent.Columns[j].Visible == true)
+                            if (j == 3) //TA MARKS
                             {
-                                if (j == 3) //TA MARKS
+                                lbl = gvStudent.Rows[i].Cells[j].FindControl("lblMarks") as Label;      //Max Marks 
+                                txt = gvStudent.Rows[i].Cells[j].FindControl("txtMarks") as TextBox;    //Marks Entered 
+                                maxMarks = lbl.Text.Trim();
+                                marks = txt.Text.Trim();
+
+                                if (!txt.Text.Trim().Equals(string.Empty) && !lbl.Text.Trim().Equals(string.Empty) || txt.Enabled == true)
                                 {
-                                    lbl = gvStudent.Rows[i].Cells[j].FindControl("lblMarks") as Label;      //Max Marks 
-                                    txt = gvStudent.Rows[i].Cells[j].FindControl("txtMarks") as TextBox;    //Marks Entered 
-                                    maxMarks = lbl.Text.Trim();
-                                    marks = txt.Text.Trim();
-
-                                    if (!txt.Text.Trim().Equals(string.Empty) && !lbl.Text.Trim().Equals(string.Empty) || txt.Enabled == true)
+                                    if (txt.Text == "")
                                     {
-                                        if (txt.Text == "")
+                                        if (lock_status == 1)
                                         {
-                                            if (lock_status == 1)
-                                            {
-                                                objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
-                                                //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
-                                                txt.Focus();
-                                                flag = false;
-                                                break;
-                                            }
+                                            objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
+                                            //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
+                                            txt.Focus();
+                                            flag = false;
+                                            break;
                                         }
-                                        else
-                                        {
-                                            //Check for Marks entered greater than Max Marks
-                                            if (Convert.ToDouble(txt.Text) > Convert.ToDouble(lbl.Text))
-                                            {
-                                                if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
-                                                {
-                                                    objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]", this.Page);
-                                                    //ShowMessage("Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]");
-                                                    txt.Focus();
-                                                    flag = false;
-                                                    break;
-                                                }
-                                            }
-                                            else if (Convert.ToDouble(txt.Text) < 0)
-                                            {
-                                                //Note : 401 for Absent and Not Eligible
-                                                if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
-                                                {
-                                                }
-                                                else
-                                                {
-                                                    objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.", this.Page);
-                                                    //ShowMessage("Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.");
-                                                    txt.Focus();
-                                                    flag = false;
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-
                                     }
                                     else
                                     {
-                                        if (txt.Enabled == true)
+                                        //Check for Marks entered greater than Max Marks
+                                        if (Convert.ToDouble(txt.Text) > Convert.ToDouble(lbl.Text))
                                         {
-                                            if (lock_status == 1)
+                                            if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
                                             {
-                                                objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
-                                                //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
+                                                objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]", this.Page);
+                                                //ShowMessage("Marks Entered [" + txt.Text + "] cant be Greater than Max Marks[" + lbl.Text + "]");
                                                 txt.Focus();
                                                 flag = false;
                                                 break;
                                             }
+                                        }
+                                        else if (Convert.ToDouble(txt.Text) < 0)
+                                        {
+                                            //Note : 401 for Absent and Not Eligible
+                                            if (Convert.ToDouble(txt.Text) != 902 && Convert.ToDouble(txt.Text) != 903 && Convert.ToDouble(txt.Text) != 904 && Convert.ToDouble(txt.Text) != 905 && Convert.ToDouble(txt.Text) != 906)
+                                            {
+                                            }
+                                            else
+                                            {
+                                                objCommon.DisplayMessage(updpnl, "Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.", this.Page);
+                                                //ShowMessage("Marks Entered [" + txt.Text + "] cant be Less 0 (zero). Only -1, -2, -3 and -4 are allowed.");
+                                                txt.Focus();
+                                                flag = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    if (txt.Enabled == true)
+                                    {
+                                        if (lock_status == 1)
+                                        {
+                                            objCommon.DisplayMessage(updpnl, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
+                                            //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
+                                            txt.Focus();
+                                            flag = false;
+                                            break;
                                         }
                                     }
                                 }
                             }
-
-                            #region Not Needed Commented by Manish
-
-                            #endregion
-
-                            #region comment
-                            //}
-
-                            #endregion
-
-                            if (flag == false) break;
                         }
+
+                        #region Not Needed Commented by Manish
+
+                        #endregion
+
+                        #region comment
+                        //}
+
+                        #endregion
+
+                        if (flag == false) break;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                if (Convert.ToBoolean(Session["error"]) == true)
-                    objUCommon.ShowError(Page, "Academic_MarkEntry.CheckMarks --> " + ex.Message + " " + ex.StackTrace);
-                else
-                    objUCommon.ShowError(Page, "Server Unavailable.");
-            }
-            return flag;
-       
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_MarkEntry.CheckMarks --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return flag;
+
     }
     #endregion
 
@@ -658,7 +654,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     protected void btnCancel2_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
-       
+
     }
 
     private void Clear()
@@ -676,14 +672,14 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-      
-        string  semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SA.SEMESTER", "STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
+
+        string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SA.SEMESTER", "STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
         objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO IN(" + semester + ") AND  SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
 
 
         string subjecttype = string.Empty;
-            
-           
+
+
 
     }
     protected void ddlExam_SelectedIndexChanged(object sender, EventArgs e)
@@ -702,44 +698,19 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         divSubExamName.Visible = false;
         pnlStudGrid.Visible = false;
 
-  
-            if (examtype == "S")
+
+        if (examtype == "S")
+        {
+            if (ddlExam.SelectedIndex > 0)
             {
-                if (ddlExam.SelectedIndex > 0)
+                btnReGrade.Enabled = false;
+                btnGrade.Visible = false;
+                string[] Exam = ddlExam.SelectedValue.Split('-');
+
+                #region RCPIPER
+                if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
                 {
-                    btnReGrade.Enabled = false;
-                    btnGrade.Visible = false;
-                    string[] Exam = ddlExam.SelectedValue.Split('-');
-
-                    #region RCPIPER
-                    if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
-                    {
-                        if (stu1 == "1")
-                        {
-                            if (Convert.ToInt32(Session["usertype"]) == 1)
-                            {
-                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                            }
-                            else
-                            {
-                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                            }
-                        }
-                        else
-                        {
-                            if (Convert.ToInt32(Session["usertype"]) == 1)
-                            {
-                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1  AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                            }
-                            else
-                            {
-                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                            }
-
-                        }
-                    }
-                    #endregion
-                    else
+                    if (stu1 == "1")
                     {
                         if (Convert.ToInt32(Session["usertype"]) == 1)
                         {
@@ -747,77 +718,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         }
                         else
                         {
-                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                        }
-
-                    }
-                  
-
-                        //  ddlSubExamName.SelectedIndex = 1;
-
-                    if (Exam[0].ToUpper() == "S2" || Exam[0].ToUpper().ToUpper() == "S3" || Exam[0].ToUpper() == "S1" || Exam[0].ToUpper() == "S6" || Exam[0].ToUpper() == "S10" || Exam[0].ToUpper() == "S5" || Exam[0].ToUpper() == "S4" || Exam[0].ToUpper() == "S7" || Exam[0].ToUpper() == "S8")
-                        {
-
-                            DataSet dsSubExam = objCommon.FillDropDown("ACD_EXAM_NAME", " CAST(EXAMNO AS NVARCHAR)+'-'+ FLDNAME AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>''AND FLDNAME NOT IN ('EXTERMARK')", "EXAMNO");
-                            //MainSubExamBind(ddlSubExamName, dsSubExam);
-                            divSubExamName.Visible = true;
-                        }
-                    }
-                
-                Clear();
-            }
-            else
-            {
-                string ENDSEMCOMPONENT =  objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(MULTIPALE_END_SEM_COMPONENT,0)", "");
-                ViewState["ENDSEMCOMPONENT"] = ENDSEMCOMPONENT.ToString();
-
-                if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
-                {
-                    divSubExamName.Visible = true;
-                }
-                else if (ENDSEMCOMPONENT == "1")
-                {
-                    divSubExamName.Visible = true;
-                }
-                else
-                {
-                    divSubExamName.Visible = false;
-                }
-                pnlStudGrid.Visible = false;
-
-                if (ddlExam.SelectedIndex > 0)
-                {
-                        string[] Exam = ddlExam.SelectedValue.Split('-');
-
-                        if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
-                        {
-                            if (stu1 == "1")
-                            {
-                                if (Convert.ToInt32(Session["usertype"]) == 1)
-                                {
-                                    objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                                }
-                                else
-                                {
-                                    objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                                }
-                            }
-                            else
-                            {
-                                if (Convert.ToInt32(Session["usertype"]) == 1)
-                                {
-                                    objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1  AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                                }
-                                else
-                                {
-                                    objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
-                                }
-
-                            }
-                        }
-                        else
-                        {
-                            if (Convert.ToInt32(Session["usertype"]) == 1)
+                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
                             {
                                 objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
                             }
@@ -825,34 +726,183 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                             {
                                 objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
                             }
-
                         }
-
-                        // ddlSubExamName.SelectedIndex = 1;
-                        if (ddlSubExamName.Items.Count > 1)
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(Session["usertype"]) == 1)
                         {
-                            ddlSubExamName.SelectedIndex = 1;
+                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1  AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
                         }
                         else
                         {
-                            ddlSubExamName.SelectedIndex = 0;
-                            ddlExam.SelectedIndex = 0;
-                            objCommon.DisplayMessage(updpnl, "Subexam Or Assesment Component is not defined for selected exam..!!", this.Page);
-                            return;
+                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                            {
+                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                            }
+                            else
+                            {
+                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                            }
                         }
-
-                          if (Exam[0].ToUpper() == "S2" || Exam[0].ToUpper().ToUpper() == "S3" || Exam[0].ToUpper() == "S1" || Exam[0].ToUpper() == "S6" || Exam[0].ToUpper() == "S10" || Exam[0].ToUpper() == "S5" || Exam[0].ToUpper() == "S4" || Exam[0].ToUpper() == "S7" || Exam[0].ToUpper() == "S8")
-                  
-                        {
-                            DataSet dsSubExam = objCommon.FillDropDown("ACD_EXAM_NAME", " DISTINCT CAST(EXAMNO AS NVARCHAR)+'-'+ FLDNAME AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND EXAMTYPE=2 AND FLDNAME IN('EXTERMARK')", "EXAMNO");
-                            MainSubExamBind(ddlSubExamName, dsSubExam);
-                            divSubExamName.Visible = true;
-                        }
-                    
+                    }
                 }
-                Clear();
+                #endregion
+                else
+                {
+                    if (Convert.ToInt32(Session["usertype"]) == 1)
+                    {
+                        objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                    }
+                    else
+                    {
+                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                        {
+                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                        }
+                        else
+                        {
+                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                        }
+                    }
+
+                }
+
+
+                //  ddlSubExamName.SelectedIndex = 1;
+
+                if (Exam[0].ToUpper() == "S2" || Exam[0].ToUpper().ToUpper() == "S3" || Exam[0].ToUpper() == "S1" || Exam[0].ToUpper() == "S6" || Exam[0].ToUpper() == "S10" || Exam[0].ToUpper() == "S5" || Exam[0].ToUpper() == "S4" || Exam[0].ToUpper() == "S7" || Exam[0].ToUpper() == "S8")
+                {
+
+                    DataSet dsSubExam = objCommon.FillDropDown("ACD_EXAM_NAME", " CAST(EXAMNO AS NVARCHAR)+'-'+ FLDNAME AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>''AND FLDNAME NOT IN ('EXTERMARK')", "EXAMNO");
+                    //MainSubExamBind(ddlSubExamName, dsSubExam);
+                    divSubExamName.Visible = true;
+                }
             }
-        
+
+            Clear();
+        }
+        else
+        {
+            string ENDSEMCOMPONENT = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(MULTIPALE_END_SEM_COMPONENT,0)", "");
+            ViewState["ENDSEMCOMPONENT"] = ENDSEMCOMPONENT.ToString();
+
+            string MULTI_EXTERNAL_EXAM = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(MULTI_EXTERNAL_EXAM,0)", "");
+            ViewState["SUBJECTFORMARK"] = MULTI_EXTERNAL_EXAM.ToString();
+
+            //string SUBJECT_FOR_MARK = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(SUBJECT_FOR_MARK,0)", "");
+            //ViewState["SUBJECTFORMARK"] = SUBJECT_FOR_MARK.ToString();
+
+            if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
+            {
+                divSubExamName.Visible = true;
+            }
+            else if (ENDSEMCOMPONENT == "1")
+            {
+                ViewState["SubType"] = "0";
+
+                foreach (string items in ViewState["SUBJECTFORMARK"].ToString().Split(','))
+                {
+                    if (ddlSubjectType.SelectedValue.ToString() == items)
+                    {
+                        ViewState["SubType"] = items.ToString();
+                        divSubExamName.Visible = true;
+                    }
+                }
+            }
+            else
+            {
+                divSubExamName.Visible = false;
+            }
+            pnlStudGrid.Visible = false;
+
+            if (ddlExam.SelectedIndex > 0)
+            {
+                string[] Exam = ddlExam.SelectedValue.Split('-');
+
+                if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
+                {
+                    if (stu1 == "1")
+                    {
+                        if (Convert.ToInt32(Session["usertype"]) == 1)
+                        {
+                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                        }
+                        else
+                        {
+                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                            {
+                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                            }
+                            else
+                            {
+                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(Session["usertype"]) == 1)
+                        {
+                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1  AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                        }
+                        else
+                        {
+                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                            {
+                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                            }
+                            else
+                            {
+                                objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (Convert.ToInt32(Session["usertype"]) == 1)
+                    {
+                        objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                    }
+                    else
+                    {
+                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                        {
+                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                        }
+                        else
+                        {
+
+                            objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "DISTINCT CAST(FLDNAME AS VARCHAR)+'-'+CAST(SA.SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                        }
+                    }
+                }
+
+                // ddlSubExamName.SelectedIndex = 1;
+                if (ddlSubExamName.Items.Count > 1)
+                {
+                    ddlSubExamName.SelectedIndex = 1;
+                }
+                else
+                {
+                    ddlSubExamName.SelectedIndex = 0;
+                    ddlExam.SelectedIndex = 0;
+                    objCommon.DisplayMessage(updpnl, "Subexam Or Assesment Component is not defined for selected exam..!!", this.Page);
+                    return;
+                }
+
+                if (Exam[0].ToUpper() == "S2" || Exam[0].ToUpper().ToUpper() == "S3" || Exam[0].ToUpper() == "S1" || Exam[0].ToUpper() == "S6" || Exam[0].ToUpper() == "S10" || Exam[0].ToUpper() == "S5" || Exam[0].ToUpper() == "S4" || Exam[0].ToUpper() == "S7" || Exam[0].ToUpper() == "S8")
+                {
+                    DataSet dsSubExam = objCommon.FillDropDown("ACD_EXAM_NAME", " DISTINCT CAST(EXAMNO AS NVARCHAR)+'-'+ FLDNAME AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND EXAMTYPE=2 AND FLDNAME IN('EXTERMARK')", "EXAMNO");
+                    MainSubExamBind(ddlSubExamName, dsSubExam);
+                    divSubExamName.Visible = true;
+                }
+
+            }
+            Clear();
+        }
+
     }
     protected void ddlSubExamName_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -879,9 +929,9 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
 
         if (ddlSubjectType.SelectedIndex > 0)
-        {               
-              
-            if (Session["usertype"] == "3")
+        {
+
+            if (Session["usertype"].ToString() == "3")
             {
 
                 objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_STUDENT_RESULT SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(SR.CCODE + ' - ' + SR.COURSENAME) COURSE_NAME ", "SR.SCHEMENO = " + ViewState["schemeno"] + " AND (UA_NO=" + Convert.ToInt32(Session["userno"]) + " OR UA_NO_PRAC=" + Convert.ToInt32(Session["userno"]) + ") AND SR.SUBID = " + ddlSubjectType.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + "AND SR.SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue), "COURSE_NAME");
@@ -890,10 +940,10 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             {
                 objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_STUDENT_RESULT SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(SR.CCODE + ' - ' + SR.COURSENAME) COURSE_NAME ", "SR.SCHEMENO = " + ViewState["schemeno"] + " AND SR.SUBID = " + ddlSubjectType.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + "AND SR.SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue), "COURSE_NAME");
             }
-                ddlCourse.Focus();
-                ddlSubExamName.SelectedIndex = 0;
-                divSubExamName.Visible = false;
-                DIVEXAM.Visible = true;
+            ddlCourse.Focus();
+            ddlSubExamName.SelectedIndex = 0;
+            divSubExamName.Visible = false;
+            DIVEXAM.Visible = true;
         }
         else
         {
@@ -910,8 +960,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     protected void btnShow_Click(object sender, EventArgs e)
     {
         int Is_Specialcase = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-
-        //int admin_grade= Convert.ToInt32(objCommon.LookUp)
         int admin_grade = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(GRADE_ADMIN,0)", ""));
         int Faculty_grade = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(GRADE_FACULTY,0)", ""));
 
@@ -927,261 +975,228 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     private void ShowStudents()
     {
-        
-            try
+
+        try
+        {
+            string[] course = ddlCourse.SelectedItem.Text.Split('-');
+            string[] Exam = ddlExam.SelectedValue.Split('-');
+            string SubExam = string.Empty;
+            string SubExamName = string.Empty;
+            DataSet ds = null;
+            Boolean LOCK1 = false;
+            Boolean LOCK2 = false;
+            int Subexamno = 0;
+            string examtype = string.Empty;
+
+            if (Exam[0].StartsWith("S"))
+                examtype = "S";
+            else if (Exam[0].StartsWith("E"))
+                examtype = "E";
+
+
+            if (divSubExamName.Visible == true)
             {
-                string[] course = ddlCourse.SelectedItem.Text.Split('-');
-                string[] Exam = ddlExam.SelectedValue.Split('-');
-                string SubExam = string.Empty;
-                string SubExamName = string.Empty;
-                DataSet ds = null;
-                Boolean LOCK1 = false;
-                Boolean LOCK2 = false;
-                int Subexamno = 0;
-                string examtype = string.Empty;
-
-                if (Exam[0].StartsWith("S"))
-                    examtype = "S";
-                else if (Exam[0].StartsWith("E"))
-                    examtype = "E";
-
-
-                if (divSubExamName.Visible == true)
-                {
-                    SubExam = ddlSubExamName.SelectedValue;
-                    SubExamName = ddlSubExamName.SelectedItem.Text;
-                }
-                else
-                {
-                    if (Convert.ToInt32(Session["OrgId"]) == 6)
-                    {
-                        if (ddlStudenttype.SelectedValue == "1")
-                        {
-                            SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
-                        }
-                        else
-                        {
-                            SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
-                        }
-
-                    }
-                    else
-                    {
-                        SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
-                    }
-                    
-                }
-
-                Subexamno = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue)));
-                    //Subexamno = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1]));
-
-                    if (Convert.ToInt32(Session["OrgId"]) == 6)
-                    {
-                        if (ddlStudenttype.SelectedValue == "1")
-                        {
-                            ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
-
-                        }
-                        else
-                        {
-                            ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
-
-                        }
-                    }
-                    else
-                    {
-                        ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
-
-                    }
-                
-                string extermark = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-                if (extermark != "0.00")
-                {
-                    if (ds != null && ds.Tables[0].Rows.Count > 0)
-                    {
-                        if (Convert.ToInt32(ds.Tables[0].Rows[0][0]) < 0)
-                        {
-                            objCommon.DisplayMessage(this, "STOP !!! Rule 1 for End Sem Exam is not Defined", this.Page);
-                            return;
-                        }
-                        else if (Convert.ToInt32(ds.Tables[0].Rows[0][1]) < 0)
-                        {
-                            objCommon.DisplayMessage(this, "STOP !!! Rule 2 for End Sem Exam is not Defined", this.Page);
-                            return;
-                        }
-                    }
-                    else
-                    {
-
-                        objCommon.DisplayMessage(this, "STOP !!! Exam Rule is not Defined", this.Page);
-                        return;
-                    }
-                }
-
-                DataSet dsStudent = null;
-                string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
-
+                SubExam = ddlSubExamName.SelectedValue;
+                SubExamName = ddlSubExamName.SelectedItem.Text;
+            }
+            else
+            {
                 if (Convert.ToInt32(Session["OrgId"]) == 6)
                 {
                     if (ddlStudenttype.SelectedValue == "1")
                     {
-                        if (examtype == "S")
-                        {
-                            dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin_new(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[0], Convert.ToInt32(ViewState["schemeno"].ToString()), (ddlSubExamName.SelectedValue).Split('-')[0], SubExamName, Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32((ddlExam.SelectedValue).Split('-')[1]), Convert.ToInt32((ddlSubExamName.SelectedValue).Split('-')[1]), Convert.ToInt32(ddlsemester.SelectedValue));
-                        }
-                        else
-                        {
-                            dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin_cc(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[0], Convert.ToInt32(ViewState["schemeno"].ToString()), SubExam, SubExamName, Convert.ToInt32(ViewState["college_id"]),Convert.ToInt32(ddlsemester.SelectedValue));
-                        }
+                        SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
                     }
-                    else 
+                    else
                     {
-                        if (examtype == "S")
-                        {
-                            string sp_procedure = "PKG_STUD_GET_STUD_FOR_MARKENTRY_FOR_ADMIN_INTERNAL_ADMIN_CC_BACKLOG";
-                            string sp_parameters = "@P_SESSIONNO,@P_UA_NO,@P_CCODE,@P_SECTIONNO,@P_SUBID,@P_EXAM,@P_SCHEMENO,@P_SUBEXAM,@P_SUBEXAMNAME,@P_COLLEGE_ID,@P_EXAMNO,@P_SUBEXAMNO";
-                            string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(Session["userno"].ToString()) + "," + ccode + "," + 0 + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "," + Exam[0] + "," + Convert.ToInt32(ViewState["schemeno"].ToString()) + "," + (ddlSubExamName.SelectedValue).Split('-')[0] + "," + SubExamName + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32((ddlExam.SelectedValue).Split('-')[1]) + "," + Convert.ToInt32((ddlSubExamName.SelectedValue).Split('-')[1]) + "";
-                            dsStudent = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                      
-                        }
-                        else
-                        {
-
-                           
-                            string sp_procedure = "PKG_STUD_GET_STUD_FOR_MARKENTRY_FOR_ADMIN_INTERNAL_CC_Backlog";
-                            string sp_parameters = "@P_SESSIONNO,@P_UA_NO,@P_CCODE,@P_SECTIONNO,@P_SUBID,@P_EXAM,@P_SCHEMENO,@P_SUBEXAM,@P_SUBEXAMNAME,@P_COLLEGE_ID";
-                            string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(Session["userno"].ToString()) + "," + ccode + "," + 0 + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "," + Exam[0] + "," + Convert.ToInt32(ViewState["schemeno"].ToString()) + "," + SubExam + "," + SubExamName + "," + Convert.ToInt32(ViewState["college_id"]) + "";
-                            dsStudent = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                       
-                        }
-
+                        SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
                     }
-                   
+
                 }
                 else
                 {
+                    SubExam = objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue));
+                }
+
+            }
+
+            Subexamno = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME SA INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT EC ON(EC.SUBEXAMNO=SA.SUBEXAMNO)", "SA.SUBEXAMNO", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " and  ISNULL(CANCLE,0)=0 and ISNULL(ACTIVESTATUS,0)=1 AND EC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue)));
+
+            if (Convert.ToInt32(Session["OrgId"]) == 6)
+            {
+                if (ddlStudenttype.SelectedValue == "1")
+                {
+                    ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
+
+                }
+                else
+                {
+                    ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
+
+                }
+            }
+            else
+            {
+                ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
+
+            }
+
+            string extermark = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
+            if (extermark != "0.00")
+            {
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    if (Convert.ToInt32(ds.Tables[0].Rows[0][0]) < 0)
+                    {
+                        objCommon.DisplayMessage(this, "STOP !!! Rule 1 for End Sem Exam is not Defined", this.Page);
+                        return;
+                    }
+                    else if (Convert.ToInt32(ds.Tables[0].Rows[0][1]) < 0)
+                    {
+                        objCommon.DisplayMessage(this, "STOP !!! Rule 2 for End Sem Exam is not Defined", this.Page);
+                        return;
+                    }
+                }
+                else
+                {
+
+                    objCommon.DisplayMessage(this, "STOP !!! Exam Rule is not Defined", this.Page);
+                    return;
+                }
+            }
+
+            DataSet dsStudent = null;
+            string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
+
+            if (Convert.ToInt32(Session["OrgId"]) == 6)
+            {
+                if (ddlStudenttype.SelectedValue == "1")
+                {
                     if (examtype == "S")
                     {
-
-                        dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin_new(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[0], Convert.ToInt32(ViewState["schemeno"].ToString()), (ddlSubExamName.SelectedValue).Split('-')[0], SubExamName, Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32((ddlExam.SelectedValue).Split('-')[1]), Convert.ToInt32((ddlSubExamName.SelectedValue).Split('-')[1]),Convert.ToInt32(ddlsemester.SelectedValue));
+                        dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin_new(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[0], Convert.ToInt32(ViewState["schemeno"].ToString()), (ddlSubExamName.SelectedValue).Split('-')[0], SubExamName, Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32((ddlExam.SelectedValue).Split('-')[1]), Convert.ToInt32((ddlSubExamName.SelectedValue).Split('-')[1]), Convert.ToInt32(ddlsemester.SelectedValue));
                     }
                     else
                     {
                         dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin_cc(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[0], Convert.ToInt32(ViewState["schemeno"].ToString()), SubExam, SubExamName, Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlsemester.SelectedValue));
                     }
-                } 
-                if (dsStudent != null && dsStudent.Tables.Count > 0)
+                }
+                else
                 {
-                    if (dsStudent.Tables[0].Rows.Count > 0)
+                    if (examtype == "S")
+                    {
+                        string sp_procedure = "PKG_STUD_GET_STUD_FOR_MARKENTRY_FOR_ADMIN_INTERNAL_ADMIN_CC_BACKLOG";
+                        string sp_parameters = "@P_SESSIONNO,@P_UA_NO,@P_CCODE,@P_SECTIONNO,@P_SUBID,@P_EXAM,@P_SCHEMENO,@P_SUBEXAM,@P_SUBEXAMNAME,@P_COLLEGE_ID,@P_EXAMNO,@P_SUBEXAMNO";
+                        string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(Session["userno"].ToString()) + "," + ccode + "," + 0 + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "," + Exam[0] + "," + Convert.ToInt32(ViewState["schemeno"].ToString()) + "," + (ddlSubExamName.SelectedValue).Split('-')[0] + "," + SubExamName + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32((ddlExam.SelectedValue).Split('-')[1]) + "," + Convert.ToInt32((ddlSubExamName.SelectedValue).Split('-')[1]) + "";
+                        dsStudent = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+
+                    }
+                    else
                     {
 
-                       
-                        string excelStatus = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ExcelMarkEntry", "");
-                        if (excelStatus == "1")
+
+                        string sp_procedure = "PKG_STUD_GET_STUD_FOR_MARKENTRY_FOR_ADMIN_INTERNAL_CC_Backlog";
+                        string sp_parameters = "@P_SESSIONNO,@P_UA_NO,@P_CCODE,@P_SECTIONNO,@P_SUBID,@P_EXAM,@P_SCHEMENO,@P_SUBEXAM,@P_SUBEXAMNAME,@P_COLLEGE_ID";
+                        string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(Session["userno"].ToString()) + "," + ccode + "," + 0 + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "," + Exam[0] + "," + Convert.ToInt32(ViewState["schemeno"].ToString()) + "," + SubExam + "," + SubExamName + "," + Convert.ToInt32(ViewState["college_id"]) + "";
+                        dsStudent = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+
+                    }
+
+                }
+
+            }
+            else
+            {
+                if (examtype == "S")
+                {
+
+                    dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin_new(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[0], Convert.ToInt32(ViewState["schemeno"].ToString()), (ddlSubExamName.SelectedValue).Split('-')[0], SubExamName, Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32((ddlExam.SelectedValue).Split('-')[1]), Convert.ToInt32((ddlSubExamName.SelectedValue).Split('-')[1]), Convert.ToInt32(ddlsemester.SelectedValue));
+                }
+                else
+                {
+                    dsStudent = objMarksEntry.GetStudentsForMarkEntryadmin_cc(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Exam[0], Convert.ToInt32(ViewState["schemeno"].ToString()), SubExam, SubExamName, Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlsemester.SelectedValue));
+                }
+            }
+            if (dsStudent != null && dsStudent.Tables.Count > 0)
+            {
+                if (dsStudent.Tables[0].Rows.Count > 0)
+                {
+
+
+                    string excelStatus = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ExcelMarkEntry,0)", "");
+                    if (excelStatus == "1")
+                    {
+                        lnkExcekImport.Visible = true;
+
+                    }
+                    else
+                    {
+                        lnkExcekImport.Visible = false;
+                    }
+                    if (Convert.ToInt32(Session["OrgId"]) == 6)
+                    {
+                        btnEndSemReport.Visible = true;
+                    }
+                    else
+                    {
+                        btnEndSemReport.Visible = false;
+                    }
+
+
+                    ////HIDE STUDENT NAME COLUMN IF MARK ENTRY IS FROM EMDSEM
+                    if (Convert.ToString(ddlExam.SelectedValue).Split('-')[0] == "EXTERMARK")
+                    {
+                        gvStudent.Columns[2].Visible = true;
+                    }
+                    else
+                    {
+                        gvStudent.Columns[2].Visible = true;
+                    }
+                    if (examtype == "S")
+                    {
+                        if (Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["SMAX"].ToString() == string.Empty ? "0" : dsStudent.Tables[0].Rows[0]["SMAX"].ToString()) > 0)
                         {
-                            lnkExcekImport.Visible = true;
+
+                            if (divSubExamName.Visible == false)
+                            {
+                                hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
+                                hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
+
+
+                                gvStudent.Columns[4].HeaderText = ddlExam.SelectedItem.Text + " " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
+                            }
+                            else
+                            {
+                                hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
+                                hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
+                                gvStudent.Columns[4].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
+                            }
+
+
+                            gvStudent.Columns[4].Visible = true;
+                            gvStudent.Columns[5].Visible = false;
+                            gvStudent.Columns[6].Visible = false;
+                            gvStudent.Columns[3].Visible = false;
+                            ViewState["maxmarks"] = dsStudent.Tables[0].Rows[0]["SMAX"];
+                            ViewState["minmarks"] = dsStudent.Tables[0].Rows[0]["SMIN"];
+                            ViewState["LockStatus"] = dsStudent.Tables[0].Rows[0]["LOCK"];
+
 
                         }
                         else
                         {
-                            lnkExcekImport.Visible = false;
+                            gvStudent.Columns[4].Visible = false;
                         }
-                        if (Convert.ToInt32(Session["OrgId"]) == 6)
+                    }
+                    else
+                    {
+                        string extermarkNEW = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
+                        if (extermarkNEW != "0.00")
                         {
-                            btnEndSemReport.Visible = true;
-                        }
-                        else
-                        {
-                            btnEndSemReport.Visible = false;
-                        }
-
-
-                        ////HIDE STUDENT NAME COLUMN IF MARK ENTRY IS FROM EMDSEM
-                        if (Convert.ToString(ddlExam.SelectedValue).Split('-')[0] == "EXTERMARK")
-                        {
-                            gvStudent.Columns[2].Visible = true;
-                        }
-                        else
-                        {
-                            gvStudent.Columns[2].Visible = true;
-                        }
-                        if (examtype == "S")
-                        {
+                            //Convert.ToDecimal(Convert.ToString(dsStudent.Tables[0].Rows[0]["SMAX"].ToString() == string.Empty ? "0" : dsStudent.Tables[0].Rows[0]["SMAX"].ToString())
                             if (Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["SMAX"].ToString() == string.Empty ? "0" : dsStudent.Tables[0].Rows[0]["SMAX"].ToString()) > 0)
                             {
 
-                                if (divSubExamName.Visible == false)
-                                {
-                                    hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
-                                    hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
-
-
-                                    gvStudent.Columns[4].HeaderText = ddlExam.SelectedItem.Text + " " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
-                                }
-                                else
-                                {
-                                    hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
-                                    hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
-                                    gvStudent.Columns[4].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
-                                }
-
-
-                                gvStudent.Columns[4].Visible = true;
-                                gvStudent.Columns[5].Visible = false;
-                                gvStudent.Columns[6].Visible = false;
-                                gvStudent.Columns[3].Visible = false;
-                                ViewState["maxmarks"] = dsStudent.Tables[0].Rows[0]["SMAX"];
-                                ViewState["minmarks"] = dsStudent.Tables[0].Rows[0]["SMIN"];
-                                ViewState["LockStatus"] = dsStudent.Tables[0].Rows[0]["LOCK"];
-
-
-                            }
-                            else
-                            {
-                                gvStudent.Columns[4].Visible = false;
-                            }
-                        }
-                        else
-                        {
-                            string extermarkNEW = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-                            if (extermarkNEW != "0.00")
-                            {
-                                //Convert.ToDecimal(Convert.ToString(dsStudent.Tables[0].Rows[0]["SMAX"].ToString() == string.Empty ? "0" : dsStudent.Tables[0].Rows[0]["SMAX"].ToString())
-                                if (Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["SMAX"].ToString() == string.Empty ? "0" : dsStudent.Tables[0].Rows[0]["SMAX"].ToString()) > 0)
-                                {
-
-                                    if (divSubExamName.Visible == false)
-                                    {
-                                        hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
-                                        hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
-
-                                        //gvStudent.Columns[4].HeaderText = ddlExam.SelectedItem.Text + "  " + "[Min : " + dsStudent.Tables[0].Rows[0]["SMIN"].ToString() + "]" + " - " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
-                                        gvStudent.Columns[5].HeaderText = ddlExam.SelectedItem.Text + " " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
-                                    }
-                                    else
-                                    {
-                                        hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
-                                        hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
-                                        //gvStudent.Columns[4].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Min : " + dsStudent.Tables[0].Rows[0]["SMIN"].ToString() + "]" + " - " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
-                                        gvStudent.Columns[5].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
-                                    }
-
-                                    //string name1 = gvStudent.Columns[2].HeaderText;
-                                    //gvStudent.Columns[1].Visible = false;
-                                    gvStudent.Columns[5].Visible = true;
-                                    gvStudent.Columns[3].Visible = true;
-                                    gvStudent.Columns[4].Visible = false;
-                                    ViewState["maxmarks"] = dsStudent.Tables[0].Rows[0]["SMAX"];
-                                    ViewState["minmarks"] = dsStudent.Tables[0].Rows[0]["SMIN"];
-                                    ViewState["LockStatus"] = dsStudent.Tables[0].Rows[0]["LOCK"];
-                                }
-                                else
-                                {
-                                    gvStudent.Columns[5].Visible = false;
-                                }
-                            }
-                            else
-                            {
                                 if (divSubExamName.Visible == false)
                                 {
                                     hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
@@ -1197,284 +1212,138 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     //gvStudent.Columns[4].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Min : " + dsStudent.Tables[0].Rows[0]["SMIN"].ToString() + "]" + " - " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
                                     gvStudent.Columns[5].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
                                 }
-                                gvStudent.Columns[5].Visible = false;
+
+                                //string name1 = gvStudent.Columns[2].HeaderText;
+                                //gvStudent.Columns[1].Visible = false;
+                                gvStudent.Columns[5].Visible = true;
                                 gvStudent.Columns[3].Visible = true;
                                 gvStudent.Columns[4].Visible = false;
-                                //btnSave.Visible = false;
-                                //btnLock.Visible = false;
                                 ViewState["maxmarks"] = dsStudent.Tables[0].Rows[0]["SMAX"];
                                 ViewState["minmarks"] = dsStudent.Tables[0].Rows[0]["SMIN"];
                                 ViewState["LockStatus"] = dsStudent.Tables[0].Rows[0]["LOCK"];
                             }
-
-                        }
-                        lblStudents.Text = "Total Students : " + dsStudent.Tables[0].Rows.Count.ToString();
-
-                        //Bind the Student List
-                        gvStudent.DataSource = dsStudent;
-                        gvStudent.DataBind();
-
-
-
-                        //added by prafull on dt 13042023   
-
-                        
-                        int lockcount = 0;
-                        int lockcount_test = 0;
-                        int lockcount_new = 0;
-
-                        if (examtype == "E")
-                        {
-                            for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                            else
                             {
-                                if (ViewState["ENDSEMCOMPONENT"].ToString() == "1")
+                                gvStudent.Columns[5].Visible = false;
+                            }
+                        }
+                        else
+                        {
+                            if (divSubExamName.Visible == false)
+                            {
+                                hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
+                                hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
+
+                                //gvStudent.Columns[4].HeaderText = ddlExam.SelectedItem.Text + "  " + "[Min : " + dsStudent.Tables[0].Rows[0]["SMIN"].ToString() + "]" + " - " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
+                                gvStudent.Columns[5].HeaderText = ddlExam.SelectedItem.Text + " " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
+                            }
+                            else
+                            {
+                                hfdMaxMark.Value = dsStudent.Tables[0].Rows[0]["SMAX"].ToString();
+                                hfdMinMark.Value = dsStudent.Tables[0].Rows[0]["SMIN"].ToString();
+                                //gvStudent.Columns[4].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Min : " + dsStudent.Tables[0].Rows[0]["SMIN"].ToString() + "]" + " - " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
+                                gvStudent.Columns[5].HeaderText = ddlSubExamName.SelectedItem.Text + "  " + "[Max : " + dsStudent.Tables[0].Rows[0]["SMAX"].ToString() + "]";
+                            }
+                            gvStudent.Columns[5].Visible = false;
+                            gvStudent.Columns[3].Visible = true;
+                            gvStudent.Columns[4].Visible = false;
+                            //btnSave.Visible = false;
+                            //btnLock.Visible = false;
+                            ViewState["maxmarks"] = dsStudent.Tables[0].Rows[0]["SMAX"];
+                            ViewState["minmarks"] = dsStudent.Tables[0].Rows[0]["SMIN"];
+                            ViewState["LockStatus"] = dsStudent.Tables[0].Rows[0]["LOCK"];
+                        }
+
+                    }
+                    lblStudents.Text = "Total Students : " + dsStudent.Tables[0].Rows.Count.ToString();
+
+                    //Bind the Student List
+                    gvStudent.DataSource = dsStudent;
+                    gvStudent.DataBind();
+                    //added by prafull on dt 13042023   
+                    int lockcount = 0;
+                    int lockcount_test = 0;
+                    int lockcount_new = 0;
+
+                    if (examtype == "E")
+                    {
+                        for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                        {
+                            if (ViewState["ENDSEMCOMPONENT"].ToString() == "1" && ViewState["SubType"].ToString() == ddlSubjectType.SelectedValue)
+                            {
+                                if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["FINAL_LOCK"]) == true)
                                 {
-                                    if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["FINAL_LOCK"]) == true)
-                                    {
-                                        lockcount++;
-                                    }
-                                }
-                                else
-                                {
-                                    if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["LOCK"]) == true)
-                                    {
-                                        lockcount++;
-                                    }
+                                    lockcount++;
                                 }
                             }
-
-                            for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                            else
                             {
                                 if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["LOCK"]) == true)
                                 {
-                                    lockcount_new++;
+                                    lockcount++;
                                 }
                             }
                         }
 
-                        else
+                        for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
                         {
-
-                            for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                            if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["LOCK"]) == true)
                             {
-                                if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["TESTLOCK"]) == true)
-                                {
-                                    lockcount_test++;
-                                }
+                                lockcount_new++;
                             }
-                        }                      
-                        btnSave.Enabled = true;
-                        btnLock.Enabled = true;
-                        btnSave.Visible = true;
-                        btnLock.Visible = true;
-                        btnExcelReport.Enabled = true;
-                        btnExcelReport.Visible = true;
-                        btnPrint.Visible = true;
-                        btnPrint.Enabled = true;
-                        //lnkExcekImport.Visible = true;
-                        int TestMark = 0;
-                        TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
-                        string extermarmew = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
+                        }
+                    }
 
-                        btnGrade.Visible = false;
-                        if (examtype == "S")
+                    else
+                    {
+
+                        for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
                         {
-                            int SESSION_TYPE = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "SESSIONNO=" + ddlSession.SelectedValue));
-                               if (SESSION_TYPE == 1)
-                               {
-                              
-                                    if (dsStudent.Tables[0].Rows[0]["TESTLOCK"].ToString() == "True")
-                                    {
-                                        #region
-                                          if (lockcount_test == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
-                                             {
+                            if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["TESTLOCK"]) == true)
+                            {
+                                lockcount_test++;
+                            }
+                        }
+                    }
+                    btnSave.Enabled = true;
+                    btnLock.Enabled = true;
+                    btnSave.Visible = true;
+                    btnLock.Visible = true;
+                    btnExcelReport.Enabled = true;
+                    btnExcelReport.Visible = true;
+                    btnPrint.Visible = true;
+                    btnPrint.Enabled = true;
+                    //lnkExcekImport.Visible = true;
+                    int TestMark = 0;
+                    TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
+                    string extermarmew = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
 
-                                        btnSave.Enabled = false;
-                                        btnLock.Enabled = false;
+                    btnGrade.Visible = false;
+                    if (examtype == "S")
+                    {
+                        int SESSION_TYPE = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "SESSIONNO=" + ddlSession.SelectedValue));
+                        if (SESSION_TYPE == 1)
+                        {
 
-                                        btnSave.Visible = false;
-                                        btnLock.Visible = false;
-                                        lnkExcekImport.Enabled = false;
-
-
-                                        //TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
-                                        //extermarmew = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-                                        if (TestMark > 0)
-                                        {
-
-                                            if (extermarmew == "0.00")
-                                            {
-                                                string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                                string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                                string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                                DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                                if (dschk.Tables.Count > 0)
-                                                {
-                                                    if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                    {
-                                                        string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                        if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                        {
-                                                            // objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to Generat the Grade marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
-
-                                                            btnGrade.Enabled = false;
-                                                            btnGrade.Visible = false;
-
-                                                        }
-                                                        else
-                                                        {
-                                                            if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                            {
-
-                                                                if(ViewState["Faculty_grade"]=="1")
-                                                                {
-                                                                  btnReGrade.Enabled = true;
-                                                                  btnReGrade.Visible = true;
-                                                                }
-                                                                else if (ViewState["admin_grade"] == "1")
-                                                                {
-                                                                    btnReGrade.Enabled = true;
-                                                                    btnReGrade.Visible = true;
-                                                                }
-                                                                else
-                                                                {
-                                                                    btnReGrade.Enabled = false;
-                                                                    btnReGrade.Visible = false;
-                                                                }
-
-                                                                btnGrade.Enabled = false;
-                                                                btnGrade.Visible = false;
-                                                            }
-                                                            else
-                                                            {
-                                                                btnReGrade.Enabled = false;
-                                                                btnReGrade.Visible = false;
-
-                                                                if (ViewState["Faculty_grade"] == "1")
-                                                                {
-                                                                    btnGrade.Enabled = true;
-                                                                    btnGrade.Visible = true;
-                                                                }
-                                                                else if (ViewState["admin_grade"] == "1")
-                                                                {
-                                                                    btnGrade.Enabled = true;
-                                                                    btnGrade.Visible = true;
-                                                                }
-                                                                else
-                                                                {
-                                                                    btnGrade.Enabled = false;
-                                                                    btnGrade.Visible = false;
-                                                                }
-
-                                                                //btnGrade.Enabled = true;
-                                                                //btnGrade.Visible = true;
-                                                            }
-
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                btnGrade.Enabled = false;
-                                                btnGrade.Visible = false;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            btnGrade.Enabled = false;
-                                            btnGrade.Visible = false;
-                                        }
-                                        lnkExcekImport.Enabled = false;
-
-                                        //btnReGrade.Enabled = false;
-                                        //btnReGrade.Visible = false;
-
-                                    }
-                                         else
-                                          {
-
-                                        btnSave.Enabled = true;
-                                        btnLock.Enabled = true;
-
-                                        btnSave.Visible = true;
-                                        btnLock.Visible = true;
-                                        lnkExcekImport.Enabled = true;
-                                        lnkExcekImport.Visible = true;
-                                       if (TestMark > 0)
-                                        {
-
-                                            if (extermarmew == "0.00")
-                                            {
-                                                string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                                string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                                string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                                DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                                if (dschk.Tables.Count > 0)
-                                                {
-                                                    if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                    {
-                                                        string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                        if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                        {
-                                                            // objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to Generat the Grade marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
-
-                                                            btnGrade.Enabled = false;
-                                                            btnGrade.Visible = false;
-
-                                                        }
-                                                        else
-                                                        {
-                                                            if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                            {
-                                                                btnReGrade.Enabled = true;
-                                                                btnReGrade.Visible = true;
-                                                                btnGrade.Enabled = false;
-                                                                btnGrade.Visible = false;
-                                                            }
-                                                            else
-                                                            {
-                                                                btnReGrade.Enabled = false;
-                                                                btnReGrade.Visible = false;
-                                                                btnGrade.Enabled = true;
-                                                                btnGrade.Visible = true;
-                                                            }
-
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                btnGrade.Enabled = false;
-                                                btnGrade.Visible = false;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            btnGrade.Enabled = false;
-                                            btnGrade.Visible = false;
-                                        }
-                                        lnkExcekImport.Enabled = true;
-
-                                        //btnReGrade.Enabled = false;
-                                        //btnReGrade.Visible = false;
-                                }
-                               #endregion
-                                    }
-                                 else
+                            if (dsStudent.Tables[0].Rows[0]["TESTLOCK"].ToString() == "True")
+                            {
+                                #region
+                                if (lockcount_test == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
                                 {
-                                    gvStudent.Columns[5].Visible = false;
-                                    gvStudent.Columns[6].Visible = false;
-                                    btnSave.Enabled = true;
-                                    btnLock.Enabled = true;
-                                    btnSave.Visible = true;
-                                    btnLock.Visible = true;
-                                    lnkExcekImport.Enabled = true;
+
+                                    btnSave.Enabled = false;
+                                    btnLock.Enabled = false;
+
+                                    btnSave.Visible = false;
+                                    btnLock.Visible = false;
+                                    lnkExcekImport.Enabled = false;
+
+
+                                    //TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
+                                    //extermarmew = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
                                     if (TestMark > 0)
                                     {
+
                                         if (extermarmew == "0.00")
                                         {
                                             string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
@@ -1489,8 +1358,114 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
                                                     if (islocked == "0" || islocked == string.Empty || islocked == null)
                                                     {
+                                                        // objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to Generat the Grade marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
+
                                                         btnGrade.Enabled = false;
                                                         btnGrade.Visible = false;
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                        {
+
+                                                            if (ViewState["Faculty_grade"].ToString() == "1")
+                                                            {
+                                                                btnReGrade.Enabled = true;
+                                                                btnReGrade.Visible = true;
+                                                            }
+                                                            else if (ViewState["admin_grade"].ToString() == "1")
+                                                            {
+                                                                btnReGrade.Enabled = true;
+                                                                btnReGrade.Visible = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                btnReGrade.Enabled = false;
+                                                                btnReGrade.Visible = false;
+                                                            }
+
+                                                            btnGrade.Enabled = false;
+                                                            btnGrade.Visible = false;
+                                                        }
+                                                        else
+                                                        {
+                                                            btnReGrade.Enabled = false;
+                                                            btnReGrade.Visible = false;
+
+                                                            if (ViewState["Faculty_grade"].ToString() == "1")
+                                                            {
+                                                                btnGrade.Enabled = true;
+                                                                btnGrade.Visible = true;
+                                                            }
+                                                            else if (ViewState["admin_grade"].ToString() == "1")
+                                                            {
+                                                                btnGrade.Enabled = true;
+                                                                btnGrade.Visible = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                btnGrade.Enabled = false;
+                                                                btnGrade.Visible = false;
+                                                            }
+
+                                                            //btnGrade.Enabled = true;
+                                                            //btnGrade.Visible = true;
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                    lnkExcekImport.Enabled = false;
+
+                                    //btnReGrade.Enabled = false;
+                                    //btnReGrade.Visible = false;
+
+                                }
+                                else
+                                {
+
+                                    btnSave.Enabled = true;
+                                    btnLock.Enabled = true;
+
+                                    btnSave.Visible = true;
+                                    btnLock.Visible = true;
+                                    lnkExcekImport.Enabled = true;
+                                    lnkExcekImport.Visible = true;
+                                    if (TestMark > 0)
+                                    {
+
+                                        if (extermarmew == "0.00")
+                                        {
+                                            string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                            string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                            string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                            DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                            if (dschk.Tables.Count > 0)
+                                            {
+                                                if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                                {
+                                                    string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                                    if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                                    {
+                                                        // objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to Generat the Grade marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
+
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+
                                                     }
                                                     else
                                                     {
@@ -1508,6 +1483,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                                             btnGrade.Enabled = true;
                                                             btnGrade.Visible = true;
                                                         }
+
                                                     }
                                                 }
                                             }
@@ -1520,472 +1496,531 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     }
                                     else
                                     {
-                                        btnReGrade.Enabled = false;
-                                        btnReGrade.Visible = false;
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
                                     }
+                                    lnkExcekImport.Enabled = true;
+
+                                    //btnReGrade.Enabled = false;
+                                    //btnReGrade.Visible = false;
                                 }
+                                #endregion
                             }
-                            else if (SESSION_TYPE == 2)
-                               {
-
-                                   if (dsStudent.Tables[0].Rows[0]["TESTLOCK"].ToString() == "True")
-                                   {
-                                       #region
-                                       if (lockcount_test == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
-                                       {
-
-                                           btnSave.Enabled = false;
-                                           btnLock.Enabled = false;
-
-                                           btnSave.Visible = false;
-                                           btnLock.Visible = false;
-                                           if (TestMark > 0)
-                                           {
-
-                                               if (extermarmew == "0.00")
-                                               {
-                                                   string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                                   string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                                   string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                                   DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                                   if (dschk.Tables.Count > 0)
-                                                   {
-                                                       if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                       {
-                                                           string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                           if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                           {
-                                                               btnGrade.Enabled = false;
-                                                               btnGrade.Visible = false;
-
-                                                           }
-                                                           else
-                                                           {
-                                                               if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                               {
-                                                                   btnReGrade.Enabled = true;
-                                                                   btnReGrade.Visible = true;
-                                                                   btnGrade.Enabled = false;
-                                                                   btnGrade.Visible = false;
-                                                               }
-                                                               else
-                                                               {
-                                                                   btnReGrade.Enabled = false;
-                                                                   btnReGrade.Visible = false;
-                                                                   btnGrade.Enabled = true;
-                                                                   btnGrade.Visible = true;
-                                                               }
-
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                               else
-                                               {
-                                                   btnGrade.Enabled = false;
-                                                   btnGrade.Visible = false;
-                                               }
-                                           }
-                                           else
-                                           {
-                                               btnGrade.Enabled = false;
-                                               btnGrade.Visible = false;
-                                           }
-                                           lnkExcekImport.Enabled = false;
-
-                                       }
-                                       else
-                                       {
-
-                                           btnSave.Enabled = true;
-                                           btnLock.Enabled = true;
-
-                                           btnSave.Visible = true;
-                                           btnLock.Visible = true;
-                                           if (TestMark > 0)
-                                           {
-
-                                               if (extermarmew == "0.00")
-                                               {
-                                                   string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                                   string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                                   string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                                   DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                                   if (dschk.Tables.Count > 0)
-                                                   {
-                                                       if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                       {
-                                                           string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                           if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                           {
-                                                               
-
-                                                               btnGrade.Enabled = false;
-                                                               btnGrade.Visible = false;
-
-                                                           }
-                                                           else
-                                                           {
-                                                               if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                               {
-                                                                   btnReGrade.Enabled = true;
-                                                                   btnReGrade.Visible = true;
-                                                                   btnGrade.Enabled = false;
-                                                                   btnGrade.Visible = false;
-                                                               }
-                                                               else
-                                                               {
-                                                                   btnReGrade.Enabled = false;
-                                                                   btnReGrade.Visible = false;
-                                                                   btnGrade.Enabled = true;
-                                                                   btnGrade.Visible = true;
-                                                               }
-
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                               else
-                                               {
-                                                   btnGrade.Enabled = false;
-                                                   btnGrade.Visible = false;
-                                               }
-                                           }
-                                           else
-                                           {
-                                               btnGrade.Enabled = false;
-                                               btnGrade.Visible = false;
-                                           }
-                                           lnkExcekImport.Enabled = false;
-                                      }
-                                       #endregion
-                                   }
-                                   else
-                                   {
-                                       gvStudent.Columns[5].Visible = false;
-                                       gvStudent.Columns[6].Visible = false;
-
-                                       btnSave.Enabled = true;
-                                       btnLock.Enabled = true;
-
-                                       btnSave.Visible = true;
-                                       btnLock.Visible = true;
-                                       lnkExcekImport.Enabled = true;
-                                
-                                       if (TestMark > 0)
-                                       {
-                                           if (extermarmew == "0.00")
-                                           {
-                                               string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                               string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                               string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                               DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                               if (dschk.Tables.Count > 0)
-                                               {
-                                                   if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                   {
-                                                       string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                       if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                       {
-                                                           btnGrade.Enabled = false;
-                                                           btnGrade.Visible = false;
-                                                       }
-                                                       else
-                                                       {
-                                                           if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                           {
-                                                               btnReGrade.Enabled = true;
-                                                               btnReGrade.Visible = true;
-                                                               btnGrade.Enabled = false;
-                                                               btnGrade.Visible = false;
-                                                           }
-                                                           else
-                                                           {
-                                                               btnReGrade.Enabled = false;
-                                                               btnReGrade.Visible = false;
-                                                               btnGrade.Enabled = true;
-                                                               btnGrade.Visible = true;
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                           }
-                                           else
-                                           {
-                                               btnGrade.Enabled = false;
-                                               btnGrade.Visible = false;
-                                           }
-                                       }
-                                       else
-                                       {
-                                           btnReGrade.Enabled = false;
-                                           btnReGrade.Visible = false;
-                                       }
-                                   }
-
-                               }
-
-                               #region Session_type3
-
-                               ///******************added by prafull on dt:12092023 For Remedial ExamType 2******************************
-                               else if(SESSION_TYPE==3)
-                               {
-
-                                   if (dsStudent.Tables[0].Rows[0]["TESTLOCK"].ToString() == "True")
-                                   {
-                                       #region
-                                       if (lockcount_test == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
-                                       {
-
-                                           btnSave.Enabled = false;
-                                           btnLock.Enabled = false;
-
-                                           btnSave.Visible = false;
-                                           btnLock.Visible = false;
-                                           if (TestMark > 0)
-                                           {
-
-                                               if (extermarmew == "0.00")
-                                               {
-                                                   string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                                   string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                                   string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                                   DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                                   if (dschk.Tables.Count > 0)
-                                                   {
-                                                       if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                       {
-                                                           string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                           if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                           {
-                                                               // objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to Generat the Grade marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
-
-                                                               btnGrade.Enabled = false;
-                                                               btnGrade.Visible = false;
-
-                                                           }
-                                                           else
-                                                           {
-                                                               if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                               {
-                                                                   btnReGrade.Enabled = true;
-                                                                   btnReGrade.Visible = true;
-                                                                   btnGrade.Enabled = false;
-                                                                   btnGrade.Visible = false;
-                                                               }
-                                                               else
-                                                               {
-                                                                   btnReGrade.Enabled = false;
-                                                                   btnReGrade.Visible = false;
-                                                                   btnGrade.Enabled = true;
-                                                                   btnGrade.Visible = true;
-                                                               }
-
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                               else
-                                               {
-                                                   btnGrade.Enabled = false;
-                                                   btnGrade.Visible = false;
-                                               }
-                                           }
-                                           else
-                                           {
-                                               btnGrade.Enabled = false;
-                                               btnGrade.Visible = false;
-                                           }
-                                           lnkExcekImport.Enabled = false;
-
-                                       }
-                                       else
-                                       {
-
-                                           btnSave.Enabled = true;
-                                           btnLock.Enabled = true;
-
-                                           btnSave.Visible = true;
-                                           btnLock.Visible = true;
-                                           if (TestMark > 0)
-                                           {
-
-                                               if (extermarmew == "0.00")
-                                               {
-                                                   string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                                   string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                                   string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                                   DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                                   if (dschk.Tables.Count > 0)
-                                                   {
-                                                       if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                       {
-                                                           string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                           if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                           {
-
-
-                                                               btnGrade.Enabled = false;
-                                                               btnGrade.Visible = false;
-
-                                                           }
-                                                           else
-                                                           {
-                                                               if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                               {
-                                                                   btnReGrade.Enabled = true;
-                                                                   btnReGrade.Visible = true;
-                                                                   btnGrade.Enabled = false;
-                                                                   btnGrade.Visible = false;
-                                                               }
-                                                               else
-                                                               {
-                                                                   btnReGrade.Enabled = false;
-                                                                   btnReGrade.Visible = false;
-                                                                   btnGrade.Enabled = true;
-                                                                   btnGrade.Visible = true;
-                                                               }
-
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                               else
-                                               {
-                                                   btnGrade.Enabled = false;
-                                                   btnGrade.Visible = false;
-                                               }
-                                           }
-                                           else
-                                           {
-                                               btnGrade.Enabled = false;
-                                               btnGrade.Visible = false;
-                                           }
-                                           lnkExcekImport.Enabled = false;
-                                       }
-                                       #endregion
-                                   }
-                                   else
-                                   {
-                                       gvStudent.Columns[5].Visible = false;
-                                       gvStudent.Columns[6].Visible = false;
-
-                                       btnSave.Enabled = true;
-                                       btnLock.Enabled = true;
-
-                                       btnSave.Visible = true;
-                                       btnLock.Visible = true;
-                                       lnkExcekImport.Enabled = true;
-                              
-                                       if (TestMark > 0)
-                                       {
-                                           if (extermarmew == "0.00")
-                                           {
-                                               string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                               string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                               string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                               DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                               if (dschk.Tables.Count > 0)
-                                               {
-                                                   if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                                   {
-                                                       string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                                       if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                                       {
-                                                           btnGrade.Enabled = false;
-                                                           btnGrade.Visible = false;
-
-                                                       }
-                                                       else
-                                                       {
-                                                           if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                                           {
-                                                               btnReGrade.Enabled = true;
-                                                               btnReGrade.Visible = true;
-                                                               btnGrade.Enabled = false;
-                                                               btnGrade.Visible = false;
-                                                           }
-                                                           else
-                                                           {
-                                                               btnReGrade.Enabled = false;
-                                                               btnReGrade.Visible = false;
-                                                               btnGrade.Enabled = true;
-                                                               btnGrade.Visible = true;
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                           }
-                                           else
-                                           {
-                                               btnGrade.Enabled = false;
-                                               btnGrade.Visible = false;
-                                           }
-                                       }
-                                       else
-                                       {
-                                           btnReGrade.Enabled = false;
-                                           btnReGrade.Visible = false;
-                                       }
-                                  
-                                   }
-                               }
-                           
-                            #endregion
-                            pnlStudGrid.Visible = true;                         
-                            lblStudents.Visible = true;
-
-                          
-                            if (TestMark > 0)
+                            else
                             {
-                                if (extermarmew == "0.00")
+                                gvStudent.Columns[5].Visible = false;
+                                gvStudent.Columns[6].Visible = false;
+                                btnSave.Enabled = true;
+                                btnLock.Enabled = true;
+                                btnSave.Visible = true;
+                                btnLock.Visible = true;
+                                lnkExcekImport.Enabled = true;
+                                if (TestMark > 0)
                                 {
-                                    string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                                    string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                    string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                                    DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                    if (dschk.Tables.Count > 0)
+                                    if (extermarmew == "0.00")
                                     {
-                                        if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                        string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                        string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                        string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                        DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                        if (dschk.Tables.Count > 0)
                                         {
-                                            string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                            if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                            if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
                                             {
-                                                gvStudent.Columns[7].Visible = false;
-                                                btnReGrade.Enabled = false;
-                                                btnReGrade.Visible = false;
+                                                string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
 
-                                            }
-                                            else
-                                            {
-                                                if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                if (islocked == "0" || islocked == string.Empty || islocked == null)
                                                 {
-                                                    gvStudent.Columns[7].Visible = true;
-                                                    btnReGrade.Enabled = true;
-                                                    btnReGrade.Visible = true;
+                                                    btnGrade.Enabled = false;
+                                                    btnGrade.Visible = false;
                                                 }
                                                 else
                                                 {
-                                                    gvStudent.Columns[7].Visible = false;
-                                                    btnReGrade.Enabled = false;
-                                                    btnReGrade.Visible = false;
+                                                    if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                    {
+                                                        btnReGrade.Enabled = true;
+                                                        btnReGrade.Visible = true;
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        btnReGrade.Enabled = false;
+                                                        btnReGrade.Visible = false;
+                                                        btnGrade.Enabled = true;
+                                                        btnGrade.Visible = true;
+                                                    }
                                                 }
                                             }
                                         }
                                     }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
                                 }
                                 else
                                 {
-                                    gvStudent.Columns[7].Visible = false;
                                     btnReGrade.Enabled = false;
                                     btnReGrade.Visible = false;
+                                }
+                            }
+                        }
+                        else if (SESSION_TYPE == 2)
+                        {
+
+                            if (dsStudent.Tables[0].Rows[0]["TESTLOCK"].ToString() == "True")
+                            {
+                                #region
+                                if (lockcount_test == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                {
+
+                                    btnSave.Enabled = false;
+                                    btnLock.Enabled = false;
+
+                                    btnSave.Visible = false;
+                                    btnLock.Visible = false;
+                                    if (TestMark > 0)
+                                    {
+
+                                        if (extermarmew == "0.00")
+                                        {
+                                            string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                            string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                            string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                            DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                            if (dschk.Tables.Count > 0)
+                                            {
+                                                if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                                {
+                                                    string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                                    if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                                    {
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                        {
+                                                            btnReGrade.Enabled = true;
+                                                            btnReGrade.Visible = true;
+                                                            btnGrade.Enabled = false;
+                                                            btnGrade.Visible = false;
+                                                        }
+                                                        else
+                                                        {
+                                                            btnReGrade.Enabled = false;
+                                                            btnReGrade.Visible = false;
+                                                            btnGrade.Enabled = true;
+                                                            btnGrade.Visible = true;
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                    lnkExcekImport.Enabled = false;
+
+                                }
+                                else
+                                {
+
+                                    btnSave.Enabled = true;
+                                    btnLock.Enabled = true;
+
+                                    btnSave.Visible = true;
+                                    btnLock.Visible = true;
+                                    if (TestMark > 0)
+                                    {
+
+                                        if (extermarmew == "0.00")
+                                        {
+                                            string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                            string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                            string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                            DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                            if (dschk.Tables.Count > 0)
+                                            {
+                                                if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                                {
+                                                    string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                                    if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                                    {
+
+
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                        {
+                                                            btnReGrade.Enabled = true;
+                                                            btnReGrade.Visible = true;
+                                                            btnGrade.Enabled = false;
+                                                            btnGrade.Visible = false;
+                                                        }
+                                                        else
+                                                        {
+                                                            btnReGrade.Enabled = false;
+                                                            btnReGrade.Visible = false;
+                                                            btnGrade.Enabled = true;
+                                                            btnGrade.Visible = true;
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                    lnkExcekImport.Enabled = false;
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                gvStudent.Columns[5].Visible = false;
+                                gvStudent.Columns[6].Visible = false;
+
+                                btnSave.Enabled = true;
+                                btnLock.Enabled = true;
+
+                                btnSave.Visible = true;
+                                btnLock.Visible = true;
+                                lnkExcekImport.Enabled = true;
+
+                                if (TestMark > 0)
+                                {
+                                    if (extermarmew == "0.00")
+                                    {
+                                        string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                        string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                        string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                        DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                        if (dschk.Tables.Count > 0)
+                                        {
+                                            if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                            {
+                                                string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                                if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                                {
+                                                    btnGrade.Enabled = false;
+                                                    btnGrade.Visible = false;
+                                                }
+                                                else
+                                                {
+                                                    if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                    {
+                                                        btnReGrade.Enabled = true;
+                                                        btnReGrade.Visible = true;
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        btnReGrade.Enabled = false;
+                                                        btnReGrade.Visible = false;
+                                                        btnGrade.Enabled = true;
+                                                        btnGrade.Visible = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                }
+                                else
+                                {
+                                    btnReGrade.Enabled = false;
+                                    btnReGrade.Visible = false;
+                                }
+                            }
+
+                        }
+
+                        #region Session_type3
+
+                        ///******************added by prafull on dt:12092023 For Remedial ExamType 2******************************
+                        else if (SESSION_TYPE == 3)
+                        {
+
+                            if (dsStudent.Tables[0].Rows[0]["TESTLOCK"].ToString() == "True")
+                            {
+                                #region
+                                if (lockcount_test == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                {
+
+                                    btnSave.Enabled = false;
+                                    btnLock.Enabled = false;
+
+                                    btnSave.Visible = false;
+                                    btnLock.Visible = false;
+                                    if (TestMark > 0)
+                                    {
+
+                                        if (extermarmew == "0.00")
+                                        {
+                                            string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                            string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                            string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                            DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                            if (dschk.Tables.Count > 0)
+                                            {
+                                                if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                                {
+                                                    string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                                    if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                                    {
+                                                        // objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to Generat the Grade marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
+
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                        {
+                                                            btnReGrade.Enabled = true;
+                                                            btnReGrade.Visible = true;
+                                                            btnGrade.Enabled = false;
+                                                            btnGrade.Visible = false;
+                                                        }
+                                                        else
+                                                        {
+                                                            btnReGrade.Enabled = false;
+                                                            btnReGrade.Visible = false;
+                                                            btnGrade.Enabled = true;
+                                                            btnGrade.Visible = true;
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                    lnkExcekImport.Enabled = false;
+
+                                }
+                                else
+                                {
+
+                                    btnSave.Enabled = true;
+                                    btnLock.Enabled = true;
+
+                                    btnSave.Visible = true;
+                                    btnLock.Visible = true;
+                                    if (TestMark > 0)
+                                    {
+
+                                        if (extermarmew == "0.00")
+                                        {
+                                            string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                            string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                            string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                            DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                            if (dschk.Tables.Count > 0)
+                                            {
+                                                if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                                {
+                                                    string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                                    if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                                    {
+
+
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                        {
+                                                            btnReGrade.Enabled = true;
+                                                            btnReGrade.Visible = true;
+                                                            btnGrade.Enabled = false;
+                                                            btnGrade.Visible = false;
+                                                        }
+                                                        else
+                                                        {
+                                                            btnReGrade.Enabled = false;
+                                                            btnReGrade.Visible = false;
+                                                            btnGrade.Enabled = true;
+                                                            btnGrade.Visible = true;
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                    lnkExcekImport.Enabled = false;
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                gvStudent.Columns[5].Visible = false;
+                                gvStudent.Columns[6].Visible = false;
+
+                                btnSave.Enabled = true;
+                                btnLock.Enabled = true;
+
+                                btnSave.Visible = true;
+                                btnLock.Visible = true;
+                                lnkExcekImport.Enabled = true;
+
+                                if (TestMark > 0)
+                                {
+                                    if (extermarmew == "0.00")
+                                    {
+                                        string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                        string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                        string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                        DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                        if (dschk.Tables.Count > 0)
+                                        {
+                                            if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                            {
+                                                string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                                if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                                {
+                                                    btnGrade.Enabled = false;
+                                                    btnGrade.Visible = false;
+
+                                                }
+                                                else
+                                                {
+                                                    if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                                    {
+                                                        btnReGrade.Enabled = true;
+                                                        btnReGrade.Visible = true;
+                                                        btnGrade.Enabled = false;
+                                                        btnGrade.Visible = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        btnReGrade.Enabled = false;
+                                                        btnReGrade.Visible = false;
+                                                        btnGrade.Enabled = true;
+                                                        btnGrade.Visible = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                }
+                                else
+                                {
+                                    btnReGrade.Enabled = false;
+                                    btnReGrade.Visible = false;
+                                }
+
+                            }
+                        }
+
+                        #endregion
+                        pnlStudGrid.Visible = true;
+                        lblStudents.Visible = true;
+
+
+                        if (TestMark > 0)
+                        {
+                            if (extermarmew == "0.00")
+                            {
+                                string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                                string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                                string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                                DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                                if (dschk.Tables.Count > 0)
+                                {
+                                    if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
+                                    {
+                                        string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
+
+                                        if (islocked == "0" || islocked == string.Empty || islocked == null)
+                                        {
+                                            gvStudent.Columns[7].Visible = false;
+                                            btnReGrade.Enabled = false;
+                                            btnReGrade.Visible = false;
+
+                                        }
+                                        else
+                                        {
+                                            if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                            {
+                                                gvStudent.Columns[7].Visible = true;
+                                                btnReGrade.Enabled = true;
+                                                btnReGrade.Visible = true;
+                                            }
+                                            else
+                                            {
+                                                gvStudent.Columns[7].Visible = false;
+                                                btnReGrade.Enabled = false;
+                                                btnReGrade.Visible = false;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             else
@@ -1997,245 +2032,20 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         }
                         else
                         {
-                            int SESSION_TYPE = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "SESSIONNO=" + ddlSession.SelectedValue));
-                            if (SESSION_TYPE == 1)
+                            gvStudent.Columns[7].Visible = false;
+                            btnReGrade.Enabled = false;
+                            btnReGrade.Visible = false;
+                        }
+                    }
+                    else
+                    {
+                        int SESSION_TYPE = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "SESSIONNO=" + ddlSession.SelectedValue));
+                        if (SESSION_TYPE == 1)
+                        {
+                            if (ViewState["ENDSEMCOMPONENT"].ToString() == "1" && ViewState["SubType"].ToString() == ddlSubjectType.SelectedValue)
                             {
-                                if (ViewState["ENDSEMCOMPONENT"].ToString() == "1")
-                                {
 
-                                    if (dsStudent.Tables[0].Rows[0]["FINAL_LOCK"].ToString() == "True")
-                                    {
-
-                                        if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
-                                        {
-
-                                            gvStudent.Columns[3].Visible = true;
-                                            gvStudent.Columns[6].Visible = true;
-                                            //gvStudent.Columns[4].Enabled = false;
-                                            btnSave.Enabled = false;
-                                            btnLock.Enabled = false;
-
-                                            btnSave.Visible = false;
-                                            btnLock.Visible = false;
-                                            btnExcelReport.Enabled = true;
-                                            btnExcelReport.Visible = true;
-                                            btnPrint.Visible = true;
-                                            btnPrint.Enabled = true;
-                                            lnkExcekImport.Visible = false;
-
-                                            int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-                                            //added by prafull on dt 30032023  for grade button only for admin login
-
-                                            if (Convert.ToInt32(Session["OrgId"]) != 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-
-                                                btnEndSemReport.Visible = false;
-                                            }
-                                            else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-                                                btnEndSemReport.Visible = true;
-                                            }
-                                            else
-                                            {
-                                                btnGrade.Enabled = false;
-                                                btnGrade.Visible = false;
-                                                btnEndSemReport.Visible = true;
-                                            }
-                                        }
-                                        else
-                                        {
-
-                                            gvStudent.Columns[3].Visible = true;
-                                            gvStudent.Columns[6].Visible = true;
-                                            //gvStudent.Columns[4].Enabled = false;
-                                            btnSave.Enabled = true;
-                                            btnLock.Enabled = true;
-
-                                            btnSave.Visible = true;
-                                            btnLock.Visible = true;
-                                            btnExcelReport.Enabled = true;
-                                            btnExcelReport.Visible = true;
-                                            btnPrint.Visible = true;
-                                            btnPrint.Enabled = true;
-                                            lnkExcekImport.Enabled = true;
-                                          
-                                            //lnkExcekImport.Visible = false;
-
-                                            int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-                                            //added by prafull on dt 30032023  for grade button only for admin login
-
-                                            if (Convert.ToInt32(Session["OrgId"]) != 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-
-                                                btnEndSemReport.Visible = false;
-                                            }
-                                            else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-                                                btnEndSemReport.Visible = true;
-                                            }
-                                            else
-                                            {
-                                                btnGrade.Enabled = false;
-                                                btnGrade.Visible = false;
-                                                btnEndSemReport.Visible = true;
-                                            }
-
-                                        }
-
-                                        //end 
-
-                                    }
-                                    else
-                                    {
-                                        if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                        {
-                                            if (lockcount_new == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
-                                            {
-                                                btnSave.Enabled = false;
-                                                btnLock.Enabled = false;
-                                                lnkExcekImport.Visible = false;
-                                            }
-                                            else
-                                            {
-                                                btnSave.Enabled = true;
-                                                btnLock.Enabled = true;
-                                            }
-                                           
-                                        }
-                                        else
-                                        {
-                                            btnSave.Enabled = true;
-                                            btnLock.Enabled = true;
-                                            lnkExcekImport.Visible = true;
-                                        }
-                                        gvStudent.Columns[3].Visible = true;
-                                        gvStudent.Columns[6].Visible = false;
-                                        
-                                    }
-                                }
-                                else
-                                {
-
-                                    if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                    {
-
-                                        if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
-                                        {
-
-                                            gvStudent.Columns[3].Visible = true;
-                                            gvStudent.Columns[6].Visible = true;
-                                            //gvStudent.Columns[4].Enabled = false;
-                                            btnSave.Enabled = false;
-                                            btnLock.Enabled = false;
-                                            lnkExcekImport.Enabled = false;
-
-                                            btnSave.Visible = false;
-                                            btnLock.Visible = false;
-                                            btnExcelReport.Enabled = true;
-                                            btnExcelReport.Visible = true;
-                                            btnPrint.Visible = true;
-                                            btnPrint.Enabled = true;
-                                            lnkExcekImport.Enabled = false;
-                                            lnkExcekImport.Visible = false;
-                                            //lnkExcekImport.Visible = false;
-
-                                            int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-                                            //added by prafull on dt 30032023  for grade button only for admin login
-
-                                            if (Convert.ToInt32(Session["OrgId"]) != 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-
-                                                btnEndSemReport.Visible = false;
-                                            }
-                                            else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-                                                btnEndSemReport.Visible = true;
-                                            }
-                                            else
-                                            {
-                                                btnGrade.Enabled = false;
-                                                btnGrade.Visible = false;
-                                                btnEndSemReport.Visible = true;
-                                            }
-                                        }
-                                        else
-                                        {
-
-                                            gvStudent.Columns[3].Visible = true;
-                                            gvStudent.Columns[6].Visible = true;
-                                            //gvStudent.Columns[4].Enabled = false;
-                                            btnSave.Enabled = true;
-                                            btnLock.Enabled = true;
-
-                                            btnSave.Visible = true;
-                                            btnLock.Visible = true;
-                                            btnExcelReport.Enabled = true;
-                                            btnExcelReport.Visible = true;
-                                            btnPrint.Visible = true;
-                                            btnPrint.Enabled = true;
-                                            lnkExcekImport.Enabled = true;
-                                            lnkExcekImport.Visible = true;
-                                            //lnkExcekImport.Visible = false;
-
-                                            int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-
-
-                                            //added by prafull on dt 30032023  for grade button only for admin login
-
-                                            if (Convert.ToInt32(Session["OrgId"]) != 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-
-                                                btnEndSemReport.Visible = false;
-                                            }
-                                            else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
-                                            {
-                                                btnGrade.Enabled = true;
-                                                btnGrade.Visible = true;
-                                                btnEndSemReport.Visible = true;
-                                            }
-                                            else
-                                            {
-                                                btnGrade.Enabled = false;
-                                                btnGrade.Visible = false;
-                                                btnEndSemReport.Visible = true;
-                                            }
-
-                                        }
-
-                                        //end 
-
-                                    }
-                                    else
-                                    {
-                                        gvStudent.Columns[3].Visible = true;
-                                        gvStudent.Columns[6].Visible = false;
-                                        //lnkExcekImport.Visible = true;
-                                    }
-                                }
-
-                            }
-
-                            else if (SESSION_TYPE == 2)
-                            {
-                                if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                if (dsStudent.Tables[0].Rows[0]["FINAL_LOCK"].ToString() == "True")
                                 {
 
                                     if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
@@ -2253,11 +2063,9 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                         btnExcelReport.Visible = true;
                                         btnPrint.Visible = true;
                                         btnPrint.Enabled = true;
-                                        //lnkExcekImport.Visible = false;
+                                        lnkExcekImport.Visible = false;
 
                                         int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-
 
                                         //added by prafull on dt 30032023  for grade button only for admin login
 
@@ -2296,9 +2104,139 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                         btnExcelReport.Visible = true;
                                         btnPrint.Visible = true;
                                         btnPrint.Enabled = true;
+                                        lnkExcekImport.Enabled = true;
+
                                         //lnkExcekImport.Visible = false;
 
                                         int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
+
+                                        //added by prafull on dt 30032023  for grade button only for admin login
+
+                                        if (Convert.ToInt32(Session["OrgId"]) != 6)
+                                        {
+                                            btnGrade.Enabled = true;
+                                            btnGrade.Visible = true;
+
+                                            btnEndSemReport.Visible = false;
+                                        }
+                                        else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
+                                        {
+                                            btnGrade.Enabled = true;
+                                            btnGrade.Visible = true;
+                                            btnEndSemReport.Visible = true;
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                            btnEndSemReport.Visible = true;
+                                        }
+
+                                    }
+
+                                    //end 
+
+                                }
+                                else
+                                {
+                                    if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                    {
+                                        if (lockcount_new == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                        {
+                                            btnSave.Enabled = false;
+                                            btnLock.Enabled = false;
+                                            lnkExcekImport.Visible = false;
+                                        }
+                                        else
+                                        {
+                                            btnSave.Enabled = true;
+                                            btnLock.Enabled = true;
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        btnSave.Enabled = true;
+                                        btnLock.Enabled = true;
+                                        lnkExcekImport.Visible = true;
+                                    }
+                                    gvStudent.Columns[3].Visible = true;
+                                    gvStudent.Columns[6].Visible = false;
+
+                                }
+                            }
+                            else
+                            {
+
+                                if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                                {
+
+                                    if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                    {
+
+                                        gvStudent.Columns[3].Visible = true;
+                                        gvStudent.Columns[6].Visible = true;
+                                        //gvStudent.Columns[4].Enabled = false;
+                                        btnSave.Enabled = false;
+                                        btnLock.Enabled = false;
+                                        lnkExcekImport.Enabled = false;
+
+                                        btnSave.Visible = false;
+                                        btnLock.Visible = false;
+                                        btnExcelReport.Enabled = true;
+                                        btnExcelReport.Visible = true;
+                                        btnPrint.Visible = true;
+                                        btnPrint.Enabled = true;
+                                        lnkExcekImport.Enabled = false;
+                                        lnkExcekImport.Visible = false;
+                                        //lnkExcekImport.Visible = false;
+
+                                        int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
+
+                                        //added by prafull on dt 30032023  for grade button only for admin login
+
+                                        if (Convert.ToInt32(Session["OrgId"]) != 6)
+                                        {
+                                            btnGrade.Enabled = true;
+                                            btnGrade.Visible = true;
+
+                                            btnEndSemReport.Visible = false;
+                                        }
+                                        else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
+                                        {
+                                            btnGrade.Enabled = true;
+                                            btnGrade.Visible = true;
+                                            btnEndSemReport.Visible = true;
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                            btnEndSemReport.Visible = true;
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        gvStudent.Columns[3].Visible = true;
+                                        gvStudent.Columns[6].Visible = true;
+                                        //gvStudent.Columns[4].Enabled = false;
+                                        btnSave.Enabled = true;
+                                        btnLock.Enabled = true;
+
+                                        btnSave.Visible = true;
+                                        btnLock.Visible = true;
+                                        btnExcelReport.Enabled = true;
+                                        btnExcelReport.Visible = true;
+                                        btnPrint.Visible = true;
+                                        btnPrint.Enabled = true;
+                                        lnkExcekImport.Enabled = true;
+                                        lnkExcekImport.Visible = true;
+                                        //lnkExcekImport.Visible = false;
+
+                                        int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
+
+
 
                                         //added by prafull on dt 30032023  for grade button only for admin login
 
@@ -2334,153 +2272,194 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     //lnkExcekImport.Visible = true;
                                 }
                             }
-                            else if (SESSION_TYPE == 3)
+
+                        }
+
+                        else if (SESSION_TYPE == 2)
+                        {
+                            if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
                             {
-                                if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                                {
 
-                                    if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
-                                    {
-
-                                        gvStudent.Columns[3].Visible = true;
-                                        gvStudent.Columns[6].Visible = true;
-                                        //gvStudent.Columns[4].Enabled = false;
-                                        btnSave.Enabled = false;
-                                        btnLock.Enabled = false;
-
-                                        btnSave.Visible = false;
-                                        btnLock.Visible = false;
-                                        btnExcelReport.Enabled = true;
-                                        btnExcelReport.Visible = true;
-                                        btnPrint.Visible = true;
-                                        btnPrint.Enabled = true;
-                                        //lnkExcekImport.Visible = false;
-
-                                        int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-                                        //added by prafull on dt 30032023  for grade button only for admin login
-                                        
-                                        if (Convert.ToInt32(Session["OrgId"]) != 6)
-                                        {
-                                            btnGrade.Enabled = true;
-                                            btnGrade.Visible = true;
-
-                                            btnEndSemReport.Visible = false;
-                                        }
-                                        else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
-                                        {
-                                            btnGrade.Enabled = true;
-                                            btnGrade.Visible = true;
-                                            btnEndSemReport.Visible = true;
-                                        }
-                                        else
-                                        {
-                                            btnGrade.Enabled = false;
-                                            btnGrade.Visible = false;
-                                            btnEndSemReport.Visible = true;
-                                        }
-                                    }
-                                    else
-                                    {
-
-                                        gvStudent.Columns[3].Visible = true;
-                                        gvStudent.Columns[6].Visible = true;
-                                        //gvStudent.Columns[4].Enabled = false;
-                                        btnSave.Enabled = true;
-                                        btnLock.Enabled = true;
-
-                                        btnSave.Visible = true;
-                                        btnLock.Visible = true;
-                                        btnExcelReport.Enabled = true;
-                                        btnExcelReport.Visible = true;
-                                        btnPrint.Visible = true;
-                                        btnPrint.Enabled = true;
-
-                                        //lnkExcekImport.Visible = false;
-
-                                        int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-                                        //added by prafull on dt 30032023  for grade button only for admin login
-
-                                        if (Convert.ToInt32(Session["OrgId"]) != 6)
-                                        {
-                                            btnGrade.Enabled = true;
-                                            btnGrade.Visible = true;
-
-                                            btnEndSemReport.Visible = false;
-                                        }
-                                        else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
-                                        {
-                                            btnGrade.Enabled = true;
-                                            btnGrade.Visible = true;
-                                            btnEndSemReport.Visible = true;
-                                        }
-                                        else
-                                        {
-                                            btnGrade.Enabled = false;
-                                            btnGrade.Visible = false;
-                                            btnEndSemReport.Visible = true;
-                                        }
-
-                                        #region ADDED BY GAURAV FOR CPU HIDE GRADE BUTTON 13_09_2023
-                                        if (Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 3)
-                                        {
-                                            btnGrade.Enabled = false;
-                                            btnGrade.Visible = false;
-                                            gvStudent.Columns[7].Visible = false;
-                                            btnReGrade.Visible = false;
-                                            btnReGrade.Enabled = false;
-
-
-                                        }
-                                        #endregion
-
-                                    }
-                                }
-                                else
-                                {
-                                    gvStudent.Columns[3].Visible = true;
-                                    gvStudent.Columns[6].Visible = false;
-                                    //lnkExcekImport.Visible = true;
-                                }
-                            }
-                            pnlStudGrid.Visible = true;                          
-                            lblStudents.Visible = true;
-
-
-
-                            if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
-                            {
                                 if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
                                 {
-                                    gvStudent.Columns[7].Visible = true;
-                                    //gvStudent.Columns[5].Visible = true;
+
+                                    gvStudent.Columns[3].Visible = true;
+                                    gvStudent.Columns[6].Visible = true;
+                                    //gvStudent.Columns[4].Enabled = false;
                                     btnSave.Enabled = false;
                                     btnLock.Enabled = false;
 
                                     btnSave.Visible = false;
                                     btnLock.Visible = false;
-                                    btnGrade.Enabled = false;
-                                    btnGrade.Visible = false;
+                                    btnExcelReport.Enabled = true;
+                                    btnExcelReport.Visible = true;
+                                    btnPrint.Visible = true;
+                                    btnPrint.Enabled = true;
+                                    //lnkExcekImport.Visible = false;
+
+                                    int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
+
+
+
                                     //added by prafull on dt 30032023  for grade button only for admin login
 
                                     if (Convert.ToInt32(Session["OrgId"]) != 6)
                                     {
-                                        btnReGrade.Enabled = true;
-                                        btnReGrade.Visible = true;
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+
+                                        btnEndSemReport.Visible = false;
                                     }
                                     else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
                                     {
-                                        btnReGrade.Enabled = true;
-                                        btnReGrade.Visible = true;
-                                        lnkExcekImport.Enabled = false;
-
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+                                        btnEndSemReport.Visible = true;
                                     }
                                     else
                                     {
-                                        btnReGrade.Enabled = false;
-                                        btnReGrade.Visible = false;
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                        btnEndSemReport.Visible = true;
                                     }
+                                }
+                                else
+                                {
+
+                                    gvStudent.Columns[3].Visible = true;
+                                    gvStudent.Columns[6].Visible = true;
+                                    //gvStudent.Columns[4].Enabled = false;
+                                    btnSave.Enabled = true;
+                                    btnLock.Enabled = true;
+
+                                    btnSave.Visible = true;
+                                    btnLock.Visible = true;
+                                    btnExcelReport.Enabled = true;
+                                    btnExcelReport.Visible = true;
+                                    btnPrint.Visible = true;
+                                    btnPrint.Enabled = true;
+                                    //lnkExcekImport.Visible = false;
+
+                                    int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
+
+                                    //added by prafull on dt 30032023  for grade button only for admin login
+
+                                    if (Convert.ToInt32(Session["OrgId"]) != 6)
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+
+                                        btnEndSemReport.Visible = false;
+                                    }
+                                    else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+                                        btnEndSemReport.Visible = true;
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                        btnEndSemReport.Visible = true;
+                                    }
+
+                                }
+
+                                //end 
+
+                            }
+                            else
+                            {
+                                gvStudent.Columns[3].Visible = true;
+                                gvStudent.Columns[6].Visible = false;
+                                //lnkExcekImport.Visible = true;
+                            }
+                        }
+                        else if (SESSION_TYPE == 3)
+                        {
+                            if (dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                            {
+
+                                if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                {
+
+                                    gvStudent.Columns[3].Visible = true;
+                                    gvStudent.Columns[6].Visible = true;
+                                    //gvStudent.Columns[4].Enabled = false;
+                                    btnSave.Enabled = false;
+                                    btnLock.Enabled = false;
+
+                                    btnSave.Visible = false;
+                                    btnLock.Visible = false;
+                                    btnExcelReport.Enabled = true;
+                                    btnExcelReport.Visible = true;
+                                    btnPrint.Visible = true;
+                                    btnPrint.Enabled = true;
+                                    //lnkExcekImport.Visible = false;
+
+                                    int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
+
+                                    //added by prafull on dt 30032023  for grade button only for admin login
+
+                                    if (Convert.ToInt32(Session["OrgId"]) != 6)
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+
+                                        btnEndSemReport.Visible = false;
+                                    }
+                                    else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+                                        btnEndSemReport.Visible = true;
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                        btnEndSemReport.Visible = true;
+                                    }
+                                }
+                                else
+                                {
+
+                                    gvStudent.Columns[3].Visible = true;
+                                    gvStudent.Columns[6].Visible = true;
+                                    //gvStudent.Columns[4].Enabled = false;
+                                    btnSave.Enabled = true;
+                                    btnLock.Enabled = true;
+
+                                    btnSave.Visible = true;
+                                    btnLock.Visible = true;
+                                    btnExcelReport.Enabled = true;
+                                    btnExcelReport.Visible = true;
+                                    btnPrint.Visible = true;
+                                    btnPrint.Enabled = true;
+                                    int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
+
+                                    //added by prafull on dt 30032023  for grade button only for admin login
+                                    if (Convert.ToInt32(Session["OrgId"]) != 6)
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+
+                                        btnEndSemReport.Visible = false;
+                                    }
+                                    else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+                                        btnEndSemReport.Visible = true;
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                        btnEndSemReport.Visible = true;
+                                    }
+
                                     #region ADDED BY GAURAV FOR CPU HIDE GRADE BUTTON 13_09_2023
                                     if (Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 3)
                                     {
@@ -2493,59 +2472,103 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
                                     }
                                     #endregion
-                                }
-                                else
-                                {
-
-                                    gvStudent.Columns[7].Visible = false;
-                                    gvStudent.Columns[6].Visible = false;
-                                    //gvStudent.Columns[5].Visible = true;
-                                    btnSave.Enabled = true;
-                                    btnLock.Enabled = true;
-
-                                    btnSave.Visible = true;
-                                    btnLock.Visible = true;
-                                    btnGrade.Enabled = false;
-                                    btnGrade.Visible = false;
-                                    //added by prafull on dt 30032023  for grade button only for admin login
-
-                                    if (Convert.ToInt32(Session["OrgId"]) != 6)
-                                    {
-                                        btnReGrade.Enabled = false;
-                                        btnReGrade.Visible = false;
-                                    }
-                                    else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
-                                    {
-                                        btnReGrade.Enabled = false;
-                                        btnReGrade.Visible = false;
-                                    }
-                                    else
-                                    {
-                                        btnReGrade.Enabled = false;
-                                        btnReGrade.Visible = false;
-                                    }
 
                                 }
-                             
                             }
                             else
                             {
-                                gvStudent.Columns[7].Visible = false;
-                                // btnSave.Enabled = true;
-                                // btnLock.Enabled = true;
-                                //   btnSave.Visible = true;
-                                //  btnLock.Visible = true;
-                                // btnGrade.Enabled = false;
-                                //btnGrade.Visible = false;
-                                btnReGrade.Enabled = false;
-                                btnReGrade.Visible = false;
-
+                                gvStudent.Columns[3].Visible = true;
+                                gvStudent.Columns[6].Visible = false;
                             }
                         }
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(updpnl, "Students Not Found..!!", this.Page);
+                        pnlStudGrid.Visible = true;
+                        lblStudents.Visible = true;
+
+
+
+                        if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
+                        {
+                            if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                            {
+                                gvStudent.Columns[7].Visible = true;
+                                btnSave.Enabled = false;
+                                btnLock.Enabled = false;
+
+                                btnSave.Visible = false;
+                                btnLock.Visible = false;
+                                btnGrade.Enabled = false;
+                                btnGrade.Visible = false;
+                                //added by prafull on dt 30032023  for grade button only for admin login
+                                if (Convert.ToInt32(Session["OrgId"]) != 6)
+                                {
+                                    btnReGrade.Enabled = true;
+                                    btnReGrade.Visible = true;
+                                }
+                                else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
+                                {
+                                    btnReGrade.Enabled = true;
+                                    btnReGrade.Visible = true;
+                                    lnkExcekImport.Enabled = false;
+
+                                }
+                                else
+                                {
+                                    btnReGrade.Enabled = false;
+                                    btnReGrade.Visible = false;
+                                }
+                                #region ADDED BY GAURAV FOR CPU HIDE GRADE BUTTON 13_09_2023
+                                if (Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 3)
+                                {
+                                    btnGrade.Enabled = false;
+                                    btnGrade.Visible = false;
+                                    gvStudent.Columns[7].Visible = false;
+                                    btnReGrade.Visible = false;
+                                    btnReGrade.Enabled = false;
+
+
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+
+                                gvStudent.Columns[7].Visible = false;
+                                gvStudent.Columns[6].Visible = false;
+                                btnSave.Enabled = true;
+                                btnLock.Enabled = true;
+
+                                btnSave.Visible = true;
+                                btnLock.Visible = true;
+                                btnGrade.Enabled = false;
+                                btnGrade.Visible = false;
+                                //added by prafull on dt 30032023  for grade button only for admin login
+
+                                if (Convert.ToInt32(Session["OrgId"]) != 6)
+                                {
+                                    btnReGrade.Enabled = false;
+                                    btnReGrade.Visible = false;
+                                }
+                                else if (Convert.ToInt32(Session["usertype"]) == 1 && Convert.ToInt32(Session["OrgId"]) == 6)
+                                {
+                                    btnReGrade.Enabled = false;
+                                    btnReGrade.Visible = false;
+                                }
+                                else
+                                {
+                                    btnReGrade.Enabled = false;
+                                    btnReGrade.Visible = false;
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            gvStudent.Columns[7].Visible = false;
+                            btnReGrade.Enabled = false;
+                            btnReGrade.Visible = false;
+
+                        }
                     }
                 }
                 else
@@ -2553,15 +2576,20 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     objCommon.DisplayMessage(updpnl, "Students Not Found..!!", this.Page);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                if (Convert.ToBoolean(Session["error"]) == true)
-                    objUCommon.ShowError(Page, "Academic_MarkEntry.ShowStudents --> " + ex.Message + " " + ex.StackTrace);
-                else
-                    objUCommon.ShowError(Page, "Server Unavailable.");
-                objCommon.DisplayMessage(ex.ToString(), this.Page);
+                objCommon.DisplayMessage(updpnl, "Students Not Found..!!", this.Page);
             }
-        
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_MarkEntry.ShowStudents --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+            objCommon.DisplayMessage(ex.ToString(), this.Page);
+        }
+
     }
 
     protected void btnUnlock_Click(object sender, EventArgs e)
@@ -2595,7 +2623,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                            // ddlSession.Focus();
 
                             objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'  and USERTYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "");
-                            ddlSession.Focus();                          
+                            ddlSession.Focus();
                         }
                         else
                         {
@@ -2625,7 +2653,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
 
-    }    
+    }
     protected void btnGrade_Click(object sender, EventArgs e)
     {
         try
@@ -2772,8 +2800,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     protected void ddlsemester_SelectedIndexChanged(object sender, EventArgs e)
     {
 
-
-
         if (Convert.ToInt32(Session["usertype"]) == 1)
         {
             objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", " DISTINCT R.SUBID", "S.SUBNAME", "R.SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "R.SUBID");
@@ -2784,7 +2810,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             Subjecttypes = Convert.ToString(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "SUBJECT_FOR_MARK", ""));
             if (Subjecttypes != string.Empty)
             {
-                objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", " DISTINCT R.SUBID", "S.SUBNAME", "R.SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND R.SUBID IN(" + Subjecttypes.ToString()+")", "R.SUBID");
+                objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", " DISTINCT R.SUBID", "S.SUBNAME", "R.SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND R.SUBID IN(" + Subjecttypes.ToString() + ")", "R.SUBID");
             }
             else
             {
@@ -2792,59 +2818,35 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             }
         }
     }
+
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ViewState["ADMIN_COMPONENT"] = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ADMIN_COMPONENT,0)", ""));
 
-            string stu = (ddlStudenttype.SelectedValue);
-            if (ddlCourse.SelectedIndex <= 0)
+        string stu = (ddlStudenttype.SelectedValue);
+        if (ddlCourse.SelectedIndex <= 0)
+        {
+            ddlExam.SelectedIndex = 0;
+            ddlExam.ClearSelection();
+            ddlExam.Items.Clear();
+            return;
+        }
+        else
+        {
+
+            DIVEXAM.Visible = true;
+
+            DataSet dsMainExam = null;
+            DataSet ds = objMarksEntry.GetLevelMarksEntryCourseDetail(Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Convert.ToInt32(ddlSubjectType.SelectedValue));
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                ddlExam.SelectedIndex = 0;
-                ddlExam.ClearSelection();
-                return;
+                Session["Pattern"] = Convert.ToInt32(ds.Tables[0].Rows[0]["PATTERNNO"]);
             }
-            else
+
+
+            if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
             {
-                
-                   DIVEXAM.Visible = true;
-               
-                DataSet dsMainExam=null;
-                DataSet ds = objMarksEntry.GetLevelMarksEntryCourseDetail(Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Convert.ToInt32(ddlSubjectType.SelectedValue));
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    Session["Pattern"] = Convert.ToInt32(ds.Tables[0].Rows[0]["PATTERNNO"]);
-                }
-
-
-                if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
-                {
-                    if (stu == "1")
-                    {
-                        if (Convert.ToInt32(Session["usertype"]) == 1)
-                        {
-                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                        }
-                        else
-                        {
-                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                        }
-                    }
-                    else
-                    {
-
-                        if (Convert.ToInt32(Session["usertype"]) == 1)
-                        {
-                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                        }
-                        else
-                        {
-                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                        }
-
-
-                    }
-
-                }
-                else
+                if (stu == "1")
                 {
                     if (Convert.ToInt32(Session["usertype"]) == 1)
                     {
@@ -2852,164 +2854,91 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     }
                     else
                     {
-                        dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                        {
+                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                        else
+                        {
+                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (Convert.ToInt32(Session["usertype"]) == 1)
+                    {
+                        dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                    }
+                    else
+                    {
+                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                        {
+                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                        else
+                        {
+                            dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
                     }
 
                 }
 
+            }
+            else
+            {
+                if (Convert.ToInt32(Session["usertype"]) == 1)
+                {
+                    dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                }
+                else
+                {
 
-                MainSubExamBind(ddlExam, dsMainExam);
-                int TestMark = 0;
-                double maxmark_i = 0;
-                double maxmark_e = 0;
-                maxmark_i = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-                maxmark_e = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-                TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
-
-                    if (maxmark_i > 0)
+                    if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
                     {
-                        if (TestMark > 0)
+                        dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                    }
+                    else
+                    {
+                        dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                    }
+                }
+
+            }
+            MainSubExamBind(ddlExam, dsMainExam);
+            int TestMark = 0;
+            double maxmark_i = 0;
+            double maxmark_e = 0;
+            maxmark_i = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
+            maxmark_e = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
+            TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
+
+            if (maxmark_i > 0)
+            {
+                if (TestMark > 0)
+                {
+
+                    string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
+                    string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
+                    string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
+                    DataSet dsMainExamnew = null;
+                    DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+                    if (dschk.Tables.Count > 0)
+                    {
+                        if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
                         {
+                            string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
 
-                            string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CC";
-                            string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                            string sp_callValues = "" + (ddlCourse.SelectedValue) + "," + ViewState["schemeno"].ToString() + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-                            DataSet dsMainExamnew=null;
-                            DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                            if (dschk.Tables.Count > 0)
+                            if (islocked == "0" || islocked == string.Empty || islocked == null)
                             {
-                                if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                {
-                                    string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                    if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                    {
-                                        objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to enter the external marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
-                                        ddlSubExamName.SelectedIndex = 0;
-                                        divSubExamName.Visible = false;
-                                        ddlExam.SelectedIndex = 0;
-                                        gvStudent.DataSource = null;
-                                        gvStudent.DataBind();
-                                        pnlStudGrid.Visible = false;
-                                        ddlExam.Items.Clear();
-                                        ddlExam.Items.Add("Please Select");
-                                        ddlExam.SelectedItem.Value = "0";
-
-
-                                        if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
-                                        {
-                                            if (stu == "1")
-                                            {
-                                                if (Convert.ToInt32(Session["usertype"]) == 1)
-                                                {
-                                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                                }
-                                                else
-                                                {
-                                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                                }
-                                            }
-                                            else
-                                            {
-
-                                                if (Convert.ToInt32(Session["usertype"]) == 1)
-                                                {
-                                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                                }
-                                                else
-                                                {
-                                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                                }
-
-
-                                            }
-
-                                        }
-                                        else
-                                        {
-                                            if (Convert.ToInt32(Session["usertype"]) == 1)
-                                            {
-                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                            }
-                                            else
-                                            {
-                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                            }
-
-                                        }
-
-                                      
-                                        MainSubExamBind(ddlExam, dsMainExamnew);
-                                        return;
-                                    }
-                                }
-                                else
-                                {
-                                    //DataSet dsMainExamnew=null;
-                                    ddlSubExamName.SelectedIndex = 0;
-                                    divSubExamName.Visible = false;
-                                    ddlExam.SelectedIndex = 0;
-                                    gvStudent.DataSource = null;
-                                    gvStudent.DataBind();
-                                    ddlExam.Items.Clear();
-                                    ddlExam.Items.Add("Please Select");
-                                    ddlExam.SelectedItem.Value = "0";
-
-
-
-
-                                    if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
-                                    {
-                                        if (stu == "1")
-                                        {
-                                            if (Convert.ToInt32(Session["usertype"]) == 1)
-                                            {
-                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK') GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                            }
-                                            else
-                                            {
-                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK') GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                            }
-                                        }
-                                        else
-                                        {
-
-                                            if (Convert.ToInt32(Session["usertype"]) == 1)
-                                            {
-                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                            }
-                                            else
-                                            {
-                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                            }
-
-
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        if (Convert.ToInt32(Session["usertype"]) == 1)
-                                        {
-                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                        }
-                                        else
-                                        {
-                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                        }
-
-                                    }
-                                    // DataSet dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME", "FLDNAME+'-'+CAST(EXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND FLDNAME NOT IN('EXTERMARK')", "EXAMNO");
-                                    MainSubExamBind(ddlExam, dsMainExamnew);
-                                }
-                            }
-                            else
-                            {
+                                objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to enter the external marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
                                 ddlSubExamName.SelectedIndex = 0;
                                 divSubExamName.Visible = false;
                                 ddlExam.SelectedIndex = 0;
                                 gvStudent.DataSource = null;
                                 gvStudent.DataBind();
+                                pnlStudGrid.Visible = false;
                                 ddlExam.Items.Clear();
                                 ddlExam.Items.Add("Please Select");
                                 ddlExam.SelectedItem.Value = "0";
@@ -3021,11 +2950,18 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     {
                                         if (Convert.ToInt32(Session["usertype"]) == 1)
                                         {
-                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
                                         }
                                         else
                                         {
-                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                            {
+                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            }
+                                            else
+                                            {
+                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            }
                                         }
                                     }
                                     else
@@ -3033,13 +2969,19 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
                                         if (Convert.ToInt32(Session["usertype"]) == 1)
                                         {
-                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
                                         }
                                         else
                                         {
-                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                            {
+                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            }
+                                            else
+                                            {
+                                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                            }
                                         }
-
 
                                     }
 
@@ -3048,34 +2990,37 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                 {
                                     if (Convert.ToInt32(Session["usertype"]) == 1)
                                     {
-                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
                                     }
                                     else
                                     {
-                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                        {
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        }
+                                        else
+                                        {
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        }
                                     }
-
                                 }
-                                //   DataSet dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME", "FLDNAME+'-'+CAST(EXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>''", "EXAMNO");
-                                MainSubExamBind(ddlExam, dsMainExamnew);
 
+
+                                MainSubExamBind(ddlExam, dsMainExamnew);
+                                return;
                             }
                         }
                         else
                         {
-                            objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to enter the external marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
+                            //DataSet dsMainExamnew=null;
                             ddlSubExamName.SelectedIndex = 0;
                             divSubExamName.Visible = false;
                             ddlExam.SelectedIndex = 0;
                             gvStudent.DataSource = null;
                             gvStudent.DataBind();
-                            pnlStudGrid.Visible = false;
                             ddlExam.Items.Clear();
                             ddlExam.Items.Add("Please Select");
                             ddlExam.SelectedItem.Value = "0";
-                            DataSet dsMainExamnew=null;
-
-
                             if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
                             {
                                 if (stu == "1")
@@ -3086,7 +3031,14 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     }
                                     else
                                     {
-                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                        {
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK') GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        }
+                                        else
+                                        {
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK') GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        }
                                     }
                                 }
                                 else
@@ -3098,9 +3050,15 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     }
                                     else
                                     {
-                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                        {
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        }
+                                        else
+                                        {
+                                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                        }
                                     }
-
 
                                 }
 
@@ -3109,17 +3067,23 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                             {
                                 if (Convert.ToInt32(Session["usertype"]) == 1)
                                 {
-                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
                                 }
                                 else
                                 {
-                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                    {
+                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    }
+                                    else
+                                    {
+                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    }
                                 }
 
                             }
-                            //  DataSet dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME", " FLDNAME+'-'+CAST(EXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND FLDNAME NOT IN('EXTERMARK')", "EXAMNO");
+                            // DataSet dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME", "FLDNAME+'-'+CAST(EXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND FLDNAME NOT IN('EXTERMARK')", "EXAMNO");
                             MainSubExamBind(ddlExam, dsMainExamnew);
-                            return;
                         }
                     }
                     else
@@ -3132,61 +3096,234 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         ddlExam.Items.Clear();
                         ddlExam.Items.Add("Please Select");
                         ddlExam.SelectedItem.Value = "0";
-                         DataSet dsMainExamnew=null;
-
-                        //INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO)
-                        //INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=955 AND SESSIONNO=238 AND AC.UA_NO=1 AND ISNULL(CANCLE,0)=0)
-
-                        ////DataSet dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME", "FLDNAME+'-'+CAST(EXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>''", "EXAMNO");
-
-                         if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
-                         {
-                             if (stu == "1")
-                             {
-                                 if (Convert.ToInt32(Session["usertype"]) == 1)
-                                 {
-                                     dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                 }
-                                 else
-                                 {
-                                     dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                 }
-                             }
-                             else
-                             {
-
-                                 if (Convert.ToInt32(Session["usertype"]) == 1)
-                                 {
-                                     dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1   GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                 }
-                                 else
-                                 {
-                                     dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1   GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                                 }
 
 
-                             }
+                        if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
+                        {
+                            if (stu == "1")
+                            {
+                                if (Convert.ToInt32(Session["usertype"]) == 1)
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                                else
+                                {
+                                    if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                    {
+                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    }
+                                    else
+                                    {
+                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    }
+                                }
+                            }
+                            else
+                            {
 
-                         }
-                         else
-                         {
-                             if (Convert.ToInt32(Session["usertype"]) == 1)
-                             {
-                                 dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                             }
-                             else
-                             {
-                                 dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
-                             }
+                                if (Convert.ToInt32(Session["usertype"]) == 1)
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                                else
+                                {
+                                    if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                    {
+                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    }
+                                    else
+                                    {
+                                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                    }
+                                }
 
-                         }
+                            }
+
+                        }
+                        else
+                        {
+                            if (Convert.ToInt32(Session["usertype"]) == 1)
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                            else
+                            {
+                                //ADMIN_COMPONENT = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ADMIN_COMPONENT", ""));
+
+                                if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                                else
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                            }
+
+                        }
+                        //   DataSet dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME", "FLDNAME+'-'+CAST(EXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>''", "EXAMNO");
                         MainSubExamBind(ddlExam, dsMainExamnew);
 
                     }
                 }
+                else
+                {
+                    objCommon.DisplayMessage(this.updpnl, "Internal marks are not locked,kindky lock the data to enter the external marks for " + ddlCourse.SelectedItem.Text.ToString() + " !", this.Page);
+                    ddlSubExamName.SelectedIndex = 0;
+                    divSubExamName.Visible = false;
+                    ddlExam.SelectedIndex = 0;
+                    gvStudent.DataSource = null;
+                    gvStudent.DataBind();
+                    pnlStudGrid.Visible = false;
+                    ddlExam.Items.Clear();
+                    ddlExam.Items.Add("Please Select");
+                    ddlExam.SelectedItem.Value = "0";
+                    DataSet dsMainExamnew = null;
+
+
+                    if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
+                    {
+                        if (stu == "1")
+                        {
+                            if (Convert.ToInt32(Session["usertype"]) == 1)
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK') GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                            else
+                            {
+                                if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                                else
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            if (Convert.ToInt32(Session["usertype"]) == 1)
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                            else
+                            {
+                                if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                                else
+                                {
+                                    dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                                }
+                            }
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(Session["usertype"]) == 1)
+                        {
+                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                        else
+                        {
+                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                            else
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 AND EN.FLDNAME NOT IN('EXTERMARK')  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                        }
+
+                    }
+                    //  DataSet dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME", " FLDNAME+'-'+CAST(EXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND FLDNAME NOT IN('EXTERMARK')", "EXAMNO");
+                    MainSubExamBind(ddlExam, dsMainExamnew);
+                    return;
+                }
+            }
+            else
+            {
+                ddlSubExamName.SelectedIndex = 0;
+                divSubExamName.Visible = false;
+                ddlExam.SelectedIndex = 0;
+                gvStudent.DataSource = null;
+                gvStudent.DataBind();
+                ddlExam.Items.Clear();
+                ddlExam.Items.Add("Please Select");
+                ddlExam.SelectedItem.Value = "0";
+                DataSet dsMainExamnew = null;
+
+                if (Convert.ToInt32(Session["OrgId"]) == 6) //Added by lalit regarding RCPIPER BACKLOG exam TICKET
+                {
+                    if (stu == "1")
+                    {
+                        if (Convert.ToInt32(Session["usertype"]) == 1)
+                        {
+                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1 GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                        else
+                        {
+                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                            else
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        if (Convert.ToInt32(Session["usertype"]) == 1)
+                        {
+                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1   GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                        else
+                        {
+                            if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1   GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                            else
+                            {
+                                dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1   GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                            }
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    if (Convert.ToInt32(Session["usertype"]) == 1)
+                    {
+                        dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                    }
+                    else
+                    {
+                        if (ViewState["ADMIN_COMPONENT"].ToString() == "1")
+                        {
+                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                        else
+                        {
+                            dsMainExamnew = objCommon.FillDropDown("ACD_EXAM_NAME EN INNER JOIN ACD_SUBEXAM_NAME SN ON(SN.EXAMNO=EN.EXAMNO AND SN.PATTERNNO=EN.PATTERNNO) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON(AC.SUBEXAMNO=SN.SUBEXAMNO AND AC.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND AC.UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND ISNULL(CANCLE,0)=0)", " EN.FLDNAME+'-'+ CAST(EN.EXAMNO AS NVARCHAR)", "EXAMNAME", "EN.PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND ISNULL(EN.ACTIVESTATUS,0)=1  GROUP BY EN.EXAMNO,EN.FLDNAME,EN.EXAMNAME  ", "EN.EXAMNO");
+                        }
+                    }
+                }
+                MainSubExamBind(ddlExam, dsMainExamnew);
 
             }
-
+        }
+    }
     //added by prafull on dt 23092022
 
     protected void btnBlankDownld_Click(object sender, EventArgs e)
@@ -3209,8 +3346,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             int MExamNo = Convert.ToInt32((ddlExam.SelectedValue).Split('-')[1]);
             string subexamno = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "ISNULL(ACTIVESTATUS,0)=1 AND FLDNAME='" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + "'");
 
-
-
             dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry_Admin_IA(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ccode, 0, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ddlsemester.SelectedValue), MExamNo, Convert.ToInt32(ddlCourse.SelectedValue), (ddlSubExamName.SelectedValue.Split('-')[1]));
 
             if (dsStudent != null && dsStudent.Tables.Count > 0)
@@ -3220,7 +3355,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     //excelname = Session["username"].ToString() + '_' + ddlSession.SelectedItem.Text + '_' + ViewState["CCODE"].ToString() + '_' + ddlExam.SelectedItem.Text + "_" + DateTime.Now.ToString("dd-MM-yyyy");
                     //excelname = Session["username"].ToString() + '_' + ddlSession.SelectedItem.Text + '_' + ViewState["CCODE"].ToString() + '_' + ddlSubExam.SelectedItem.Text + "_" + ddlSubExam.SelectedItem.Text + "_" + DateTime.Now.ToString("dd-MM-yyyy");
 
-                    excelname = Session["username"].ToString() + '_' + ddlSession.SelectedItem.Text + '_' + ccode + '_' + ddlSubExamName.SelectedItem.Text + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"); 
+                    excelname = Session["username"].ToString() + '_' + ddlSession.SelectedItem.Text + '_' + ccode + '_' + ddlSubExamName.SelectedItem.Text + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
                     ViewState["StudCount"] = dsStudent.Tables[0].Rows.Count;
                     //Bind the Student List
@@ -3261,12 +3396,10 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                             }
                         }
                     }
-
                     //   pnlSelection.Visible = false;
                     pnlMarkEntry.Visible = true;
                     pnlStudGrid.Visible = true;
                     lblStudents.Visible = true;
-                    //btnBack.Visible = true;
 
                 }
                 else
@@ -3284,12 +3417,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
             objCommon.DisplayMessage(ex.ToString(), this.Page);
         }
-        // }
-        //else
-        //{
-        //    objCommon.DisplayMessage(updpanle1, "Please Select Exam!!", this.Page);
-        //    ddlSubExam.Focus();
-        //}
     }
     private bool CheckExcelMarks(int lock_status, DataTable dt)
     {
@@ -3342,32 +3469,19 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     }
                                     else if (Convert.ToDouble(marks) < 0)
                                     {
-                                        ////Note : 401 for Absent and Not Eligible
-                                        //if (Convert.ToDouble(marks) == -1 || Convert.ToDouble(marks) == -2 || Convert.ToDouble(marks) == -3 || Convert.ToDouble(marks) == -4)
-                                        //{
-                                        //}
-                                        //else
-                                        //{
-                                            ShowMessage("Marks Entered [" + marks + "] can not be Less than 0 (zero).");
-
-                                            flag = false;
-                                            break;
-                                       // }
+                                        ShowMessage("Marks Entered [" + marks + "] can not be Less than 0 (zero).");
+                                        flag = false;
+                                        break;
                                     }
                                 }
-
-
                             }
                             else
                             {
-
                                 ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
                                 flag = false;
                                 break;
-
                             }
                         }
-
                         if (flag == false)
                             break;
                     }
@@ -3461,11 +3575,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[1]);
             }
 
-
-
-
-
-            //return;
             if (!string.IsNullOrEmpty(studids))
             {
 
@@ -3512,7 +3621,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         try
         {
-            
+
 
             //if (ddlSubExam.SelectedIndex != 0)
             //{
@@ -3533,8 +3642,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
                     //DataTable dt = AL.Blob_GetAllBlobs(blob_ConStr, blob_ContainerName);
                     //gdvBlobs.DataSource = dt;
-                    //gdvBlobs.DataBind();                  
-
+                    //gdvBlobs.DataBind();      
 
                     if (!CheckFormatAndImport(Extension, Filepath, "yes"))
                     {
@@ -3560,7 +3668,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     objCommon.DisplayMessage(updpnl, "Only Excel Sheet is Allowed!", this);
                     return;
                 }
-
             }
 
             else
@@ -3568,10 +3675,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 objCommon.DisplayMessage(updpnl, "Select File to Upload!!!", this);
                 return;
             }
-
-
         }
-
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -3591,7 +3695,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
                 break;
             case ".xlsx": //Excel 07 Excel07ConString
-                  //conStr = ConfigurationManager.ConnectionStrings["Excel07+ConString"].ConnectionString;
+                //conStr = ConfigurationManager.ConnectionStrings["Excel07+ConString"].ConnectionString;
                 conStr = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
                 break;
         }
@@ -3793,7 +3897,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 GVStudData.DataBind();
                 //string attachment = "attachment; filename=CourseWiseExamRegistartion" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 //string attachment = "attachment;filename=InternalExternalMarkentryExcel.xls";
-                string attachment = "attachment;filename=InternalExternalMarkentryExcel" +"_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                string attachment = "attachment;filename=InternalExternalMarkentryExcel" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.Charset = "";
@@ -4072,7 +4176,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         {
                             objCommon.DisplayMessage(updpnl, "Grade Generated Successfully!!!", this.Page);
                             //btnReport.Enabled = true;
-                           // ShowStudentsSpecialSubject();
+                            // ShowStudentsSpecialSubject();
                         }
                     }
                 }

@@ -79,6 +79,9 @@
         /*table, td {
             padding-right:20px;
         }*/
+        .btn-primary {
+            height: 26px;
+        }
     </style>
 
     <asp:UpdatePanel ID="mainpnl" runat="server">
@@ -468,6 +471,7 @@
 
                                         </div>
                                     </div>
+                                    <div class="form-group col-lg-3 col-md-2 col-12 ">
                                     <div class="max_tickets">
                                         <asp:TextBox ID="txtAttendance" runat="server"></asp:TextBox>
                                         <%-- <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator1"
@@ -476,7 +480,7 @@
                                             ErrorMessage="Only Numbers Accepted."
                                             Display="Dynamic" />--%>
                                     </div>
-                                    <div class="form-group col-lg-1 col-md-1 col-12 ">
+                                   <%-- <div class="form-group col-lg-1 col-md-1 col-12 ">--%>
                                         <%-- <span class="pr-6">
                                             <label for="chk_intsubexam" style="font-size: small;"></label>
                                         </span>--%>
@@ -543,7 +547,7 @@
                                     </div>
                                     <div class="form-group col-md-1">
                                         <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="chk_endsemcomponent">
+                                            <input type="checkbox" class="custom-control-input" id="chk_endsemcomponent" onclick="test()">
                                             <label class="custom-control-label" for="chk_endsemcomponent"></label>
                                             <asp:HiddenField ID="hdfendsemcomponent" runat="server" ClientIDMode="Static" />
                                         </div>
@@ -642,7 +646,8 @@
                                             <asp:HiddenField ID="hdfremark" runat="server" ClientIDMode="Static" />
                                         </div>
                                     </div>
-                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+
+                                     <div class="form-group col-lg-2 col-md-2 col-12 ">
                                         <span class="pr-5">
                                             <label for="chk_Subexamwise" style="font-size: small;">Internal Mark Subexam-wise</label>
                                         </span>
@@ -654,21 +659,71 @@
                                             <asp:HiddenField ID="hdfSubexamwise" runat="server" ClientIDMode="Static" />
                                         </div>
                                     </div>
-                                     <div class="form-group col-lg-6 col-md-6 col-12">
+
+                                     <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_Publish" style="font-size: small;">Publish Internal Mark Entry </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Publish">
+                                            <label class="custom-control-label" for="chk_Publish"></label>
+                                            <asp:HiddenField ID="hdfPublishInternalMarks" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_Conversion" style="font-size: small;">Check Conversion on Component</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Conversion">
+                                            <label class="custom-control-label" for="chk_Conversion"></label>
+                                            <asp:HiddenField ID="hdfCheckConversion" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                  <div class="form-group col-lg-4 col-md-2 col-12 ">
+                                      <sup>* </sup>
+                                      <label for="txtOBEurl" style="font-size: small;">OBE ERP URL</label>
+                                       <asp:TextBox runat="server" ID="txtOBEurl" CssClass="form-control number-only" 
+                                               ToolTip="Please Enter ERP URL" AutoComplete="off"
+                                               placeholder="Enter URL"></asp:TextBox>
+                                  </div>
+                                  </div>
+                                <div class="row"> 
+                                    
+                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
                                                             <asp:Label ID="lbluser" runat="server" Font-Bold="true">Select User to Regenerate Grade Range.</asp:Label>
-                                                        </div>
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <%--</div>--%>
+                                                      <%--  <div class="form-group col-lg-6 col-md-6 col-12">--%>
                                                             <%--<asp:ListBox ID="ddluser" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>--%>
                                                               <asp:ListBox ID="ddluser" runat="server" SelectionMode="Multiple" 
                                         CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
                                                             
                                                               </div>
                                      </div>
+                                     <div class="form-group col-lg-3 col-md-6 col-12" style="display:none;" id="divsubtype">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblsubjectttype" runat="server" Font-Bold="true">Select Subject Type for Multiple External Exam</asp:Label>
+                                                        <%--</div>--%>
+                                                       <%-- <div class="form-group col-lg-6 col-md-6 col-12">--%>
+                                                            <%--<asp:ListBox ID="ddluser" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>--%>
+                                                              <asp:ListBox ID="ddlsubtype" runat="server" SelectionMode="Multiple" 
+                                        CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
+                                                            
+                                                              </div>
+                                     </div>
 
 
-                                      <div class="form-group col-lg-6 col-md-4 col-12">
+
+                                      <div class="form-group col-lg-6 col-md-6 col-12">
                                                 <span class="pr-5">
                                                     <label for="chksubjecttype" style="font-size: small;">Subject For Marks By Faculty</label>
                                                 </span>
@@ -682,9 +737,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-                                   
+                                    </div>
 
                                 </div>
 
@@ -756,9 +809,10 @@
                                 </asp:UpdatePanel>
                             </div>
 
-                            <div class="col-12 text-center mt-3">
-                                <asp:Button ID="btnSave" runat="server" ToolTip="Submit" Text="Save" CssClass="btn btn-primary" OnClick="btnSave_Click" OnClientClick="return SetStat(this);" TabIndex="0" />
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" TabIndex="0" />
+                             <div class="col-12 text-center mt-3">
+
+                                <asp:Button ID="btnSave" runat="server" ToolTip="Submit" Text="Save" CssClass="btn btn-primary" TabIndex="0" OnClick="btnSave_Click" OnClientClick="return SetStat(this);"/>
+                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" TabIndex="0" ToolTip="Clear" />
 
                             </div>
                         </div>
@@ -773,6 +827,7 @@
         </Triggers>
 
     </asp:UpdatePanel>
+
     <script>
 
         jQuery(document).ready(function ($) {
@@ -783,10 +838,42 @@
             }).change();
         });
     </script>
+   
+  
+    <script>
+        function test()
+        {
+            var endsemcomponent = document.getElementById("chk_endsemcomponent");
+            if (endsemcomponent.checked) {
+                //alert('yes');
+                document.getElementById("divsubtype").style.display = "block";
+               
+            }
+            else {
+                //alert('no');
+                document.getElementById("divsubtype").style.display = "none";
+            }
+        }
+
+        function SetActive(val, chkValue)
+        {
+            var chk = val.id;
+            var select = chkValue;
+            if (chk == "chk_endsemcomponent" && chkValue == "true") {
+                document.getElementById("divsubtype").style.display = "block";
+            }
+            else
+            {
+                document.getElementById("divsubtype").style.display = "none";
+            }
+
+        }
+
+
+    </script>
+
 
     <script>
-
-
         $(document).ready(function () {
             debugger
             document.getElementById("<%= pnlrule.ClientID %>").style.display = "none";
@@ -845,9 +932,11 @@
             var exceltimetable = document.getElementById("chk_timetableexcel");
             var intmarkpublish = document.getElementById("chk_intmarkpublish");
             var compwiseexcel = document.getElementById("chk_compwiseexcel");
-
-            var remark = document.getElementById("chk_remark");
             var Subexamwise = document.getElementById("chk_Subexamwise");
+            var remark = document.getElementById("chk_remark");
+            var publish = document.getElementById("chk_Publish");
+            var conversion = document.getElementById("chk_Conversion");
+           
 
             if (examreg.checked) {
                 $('#hdfexamregister').val(true);
@@ -865,8 +954,6 @@
             else {
                 $('#hdfexamrule').val(false);
             }
-
-
             if (gracerule.checked) {
 
                 $('#hdfgarcerule').val(true);
@@ -933,25 +1020,18 @@
             else {
                 $('#hdfdecodenos').val(false);
             }
-
-
             if (gradeadmin.checked) {                      //not working
                 $('#hdfadmingrade').val(true);
             }
             else {
                 $('#hdfadmingrade').val(false);
             }
-
-
             if (gradefaculty.checked) {
                 $('#hdfFacgrade').val(true);
             }
             else {
                 $('#hdfFacgrade').val(false);
             }
-
-
-
             if (seatno.checked) {
                 $('#hdfSeatno').val(true);
             }
@@ -1124,13 +1204,29 @@
             else {
                 $('#hdfremark').val(false)
             }
+
             if (Subexamwise.checked) {
-                
+
                 $('#hdfSubexamwise').val(true)
             }
             else {
                 $('#hdfSubexamwise').val(false)
             }
+            if (publish.checked) {
+
+                $('#hdfPublishInternalMarks').val(true)
+            }
+            else {
+                $('#hdfPublishInternalMarks').val(false)
+            }
+            if (conversion.checked) {
+
+                $('#hdfCheckConversion').val(true)
+            }
+            else {
+                $('#hdfCheckConversion').val(false)
+            }
+
         }
 
 
@@ -1171,6 +1267,8 @@
               });
           });
     </script>
+
+
     <%-- <script type="text/javascript">
             $(document).ready(function () {
                 debugger;
