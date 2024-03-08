@@ -512,7 +512,7 @@
                                         <label>Reason</label>
                                     </div>
                                     <asp:TextBox ID="txtReason" runat="server" CssClass="form-control" TextMode="MultiLine"
-                                        ToolTip="Enter Reason" TabIndex="19" />
+                                        ToolTip="Enter Reason" TabIndex="19"  MaxLength="199" onkeyDown="checkTextAreaMaxLength(this,event,'199');" onkeyup="textCounter(this, this.form.remLen, 199);"/>
                                     <asp:RequiredFieldValidator ID="rfvReason" runat="server"
                                         ControlToValidate="txtReason" Display="None" ErrorMessage="Please Enter Reason"
                                         ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
@@ -522,7 +522,8 @@
                                         <label>Address During Leave</label>
                                     </div>
                                     <asp:TextBox ID="txtadd" runat="server" CssClass="form-control" TextMode="MultiLine"
-                                        ToolTip="Enter Address During Leave" TabIndex="20" />
+                                        ToolTip="Enter Address During Leave" TabIndex="20" MaxLength="170" 
+                                        onkeyDown="checkTextAreaMaxLength(this,event,'170');" onkeyup="textCounter(this, this.form.remLen, 170);"/>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <div class="label-dynamic">
@@ -544,7 +545,8 @@
                                         <label>Alternate Arrangement</label>
                                     </div>
                                     <asp:TextBox ID="txtcharge" runat="server" CssClass="form-control" ToolTip="Enter Charge Handed Over To"
-                                        TextMode="MultiLine" TabIndex="23"></asp:TextBox>
+                                        TextMode="MultiLine" TabIndex="23" MaxLength="90"
+                                        onkeyDown="checkTextAreaMaxLength(this,event,'90');" onkeyup="textCounter(this, this.form.remLen, 90);"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvcharge" runat="server" ControlToValidate="txtcharge"
                                         Display="None" ErrorMessage="Please Enter Alternate Arrangement" ValidationGroup="Leaveapp">
                                     </asp:RequiredFieldValidator>

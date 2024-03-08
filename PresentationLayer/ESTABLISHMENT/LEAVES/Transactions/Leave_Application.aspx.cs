@@ -232,7 +232,9 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                 ViewState["dtLoad"] = dtLoad;
                 ViewState["SRNO"] = null;
             }
-
+            txtReason.Attributes.Add("maxlength", txtReason.MaxLength.ToString());
+            txtadd.Attributes.Add("maxlength", txtadd.MaxLength.ToString());
+            txtcharge.Attributes.Add("maxlength", txtcharge.MaxLength.ToString());
 
         }
         divMsg.InnerHtml = string.Empty;
