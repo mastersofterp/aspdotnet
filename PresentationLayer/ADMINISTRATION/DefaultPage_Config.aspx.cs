@@ -1,12 +1,13 @@
 ﻿using System;
-using IITMS;
-using IITMS.UAIMS;
 using System.Collections.Generic;
-using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System;
+using IITMS;
+using IITMS.UAIMS;
+using System.Data.Linq.Mapping;
 using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
@@ -16,75 +17,55 @@ using System.Data.SqlClient;
 using System.Data;
 using mastersofterp_MAKAUAT;
 using BusinessLogicLayer.BusinessLogic.Administration;
-using BusinessLogicLayer.BusinessLogic.Administration;
+using System.Data;
 
 /*                            
 ---------------------------------------------------------------------------------------------------------------------------                            
-Created By : RUTUAJA DAWLE                     
-Created On :  25-10-2023                   
-Purpose :                         
-Version :                         
+Created By  : Isha Kanojiya                     
+Created On  :  02-03-2024                  
+Purpose     : To update default congfiguration param value                          
+Version     : 1.0.0                        
 ---------------------------------------------------------------------------------------------------------------------------                            
 Version  Modified On   Modified By      Purpose                            
 ---------------------------------------------------------------------------------------------------------------------------     
 --------------------------------------------------------------------------------------------------------------------------                                               
-*/       
-public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
+*/
+
+public partial class ADMINISTRATION_DefaultPage_Config : System.Web.UI.Page
 {
     Common objCommon = new Common();
     ParameterListController objPLC = new ParameterListController();
-    string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+    DataSet ds = null;
 
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
         {
+            if (Session["userno"] == null && Session["username"] == null &&
+              Session["usertype"] == null && Session["userfullname"] == null)
+            {
+                Response.Redirect("~/default.aspx");
+            }
             GetParameterList();
         }
     }
 
-    private DataSet GetParameterList()
-    {
-        DataSet ds = objCommon.FillDropDown("ACD_PARAMETER", "PARAMID, PARAM_NAME", "PARAM_VALUE, PARAM_DESCRIPTION", "", "");
-        lvGetParam.DataSource = ds;
-        lvGetParam.DataBind();
-        return ds;  
-    }
-
-    public DataTable CreateTable_ParamList()
-    {
-        DataTable dtParamList = new DataTable();
-        dtParamList.Columns.Add("PARAMID", typeof(int));
-        dtParamList.Columns.Add("PARAM_VALUE", typeof(string));
-        dtParamList.Columns.Add("UA_NO", typeof(int));
-        return dtParamList;
-    }
-
-    protected void chkparam_CheckedChanged1(object sender, EventArgs e)
+    protected void GetParameterList()
     {
         try
         {
-            foreach (ListViewItem item in lvGetParam.Items)
-            {
-                var chk = (CheckBox)item.FindControl("chkparam");
-                var txtval = (TextBox)item.FindControl("txtparamval");
-                if (chk.Checked)
-                {
-                    txtval.Enabled = true;
-                }
-                else
-                {
-                    txtval.Enabled = false;
-                }
-            }
+            ds = objCommon.FillDropDown("ACD_DEFAULT_PAGE_CONFIGURATION", "CONFIGID, PARAM_NAME", "PARAM_VALUE, PARAM_DESCRIPTION", "", "");
+            lvConfig.DataSource = ds;
+            lvConfig.DataBind();
         }
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "ParameterList.chkparam_CheckedChanged1 --> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "DefaultPage_Config.GetParameterList --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
+
     }
 
     protected void btnsubmit_Click(object sender, EventArgs e)
@@ -94,28 +75,26 @@ public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
             DataTable dt = CreateTable_ParamList();
             int count = 0;
 
-            foreach (ListViewItem lvItems in lvGetParam.Items)
+            foreach (ListViewItem lvItems in lvConfig.Items)
             {
                 DataRow dRow = dt.NewRow();
 
-                HiddenField hdnparamid = lvItems.FindControl("hdnparamid") as HiddenField;
+                HiddenField hdnparamid = lvItems.FindControl("hdnconfigid") as HiddenField;
 
-                TextBox txtparamval = lvItems.FindControl("txtparamval") as TextBox;
+                TextBox txtparamval = lvItems.FindControl("txtparamvalue") as TextBox;
                 CheckBox chkparam = lvItems.FindControl("chkparam") as CheckBox;
 
                 if (chkparam.Checked)
                 {
                     if (string.IsNullOrEmpty(txtparamval.Text))
                     {
-
                         Label lblparamname = lvItems.FindControl("lblparamname") as Label;
                         objCommon.DisplayMessage(this.Page, "Please enter param value for " + lblparamname.Text, Page);
                         return;
                     }
 
-                    dRow["PARAMID"] = Convert.ToInt32(hdnparamid.Value);
+                    dRow["CONFIGID"] = Convert.ToInt32(hdnparamid.Value);
                     dRow["PARAM_VALUE"] = txtparamval.Text;
-                    dRow["UA_NO"] = Convert.ToInt32(Session["userno"]);
                     dt.Rows.Add(dRow);
                 }
                 else
@@ -124,7 +103,7 @@ public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
                 }
             }
 
-            if (count == lvGetParam.Items.Count)
+            if (count == lvConfig.Items.Count)
             {
                 objCommon.DisplayMessage(this.Page, "Please select at least one record!", Page);
                 return;
@@ -138,7 +117,7 @@ public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
             }
 
             int userno = Convert.ToInt32(Session["userno"]);
-            int status = objPLC.AddParam(userno, ParamList);
+            int status = objPLC.AddParameter(userno, ParamList);
 
             if (status == 1)
             {
@@ -153,22 +132,31 @@ public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "ParameterList.btnsubmit_Click --> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "DefaultPage_Config.btnsubmit_Click --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
+    }
+
+    public DataTable CreateTable_ParamList()
+    {
+        DataTable dtParamList = new DataTable();
+        dtParamList.Columns.Add("CONFIGID", typeof(int));
+        dtParamList.Columns.Add("PARAM_VALUE", typeof(string));
+        dtParamList.Columns.Add("UA_NO", typeof(int));
+        return dtParamList;
     }
 
     protected void btnclear_Click(object sender, EventArgs e)
     {
         try
         {
-            foreach (var lvItems in lvGetParam.Items)
+            foreach (var lvItems in lvConfig.Items)
             {
-                HiddenField hdnparamid = lvItems.FindControl("hdnparamid") as HiddenField;
-                TextBox txtparamval = lvItems.FindControl("txtparamval") as TextBox;
+                HiddenField hdnparamid = lvItems.FindControl("hdnconfigid") as HiddenField;
+                TextBox txtparamval = lvItems.FindControl("txtparamvalue") as TextBox;
                 CheckBox chkparam = lvItems.FindControl("chkparam") as CheckBox;
-                var txtparamlist = txtparamval;
+
                 if (chkparam.Checked)
                 {
                     hdnparamid.Value = null;
@@ -182,7 +170,35 @@ public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "ParameterList.btnclear_Click --> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "DefaultPage_Config.btnclear_Click --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    protected void chkparam_CheckedChanged(object sender, System.EventArgs e)
+    {
+        try
+        {
+            foreach (ListViewItem item in lvConfig.Items)
+            {
+                var chk = (CheckBox)item.FindControl("chkparam");
+                var txtvalue = (TextBox)item.FindControl("txtparamvalue");
+
+                if (chk.Checked)
+                {
+                    txtvalue.Enabled = true;
+                }
+                else
+                {
+                    txtvalue.Enabled = false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "DefaultPage_Config.chkparam_CheckedChanged --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
@@ -195,24 +211,27 @@ public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
             DataSet ds = objCommon.FillDropDown("reff", "DEV_PASS", "", "", "");
             string pass = ds.Tables[0].Rows[0]["DEV_PASS"].ToString();
             string db_pwd = clsTripleLvlEncyrpt.DecryptPassword(pass);
+
             if (txtPass.Text.Trim() == db_pwd)
             {
                 popup.Visible = false;
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "window", "javascript:window.close();", true);
             }
             else
+            {
                 objCommon.DisplayMessage("Password does not match!", this.Page);
+            }
         }
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "ParameterList.btnConnect_Click --> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "DefaultPage_Config.btnConnect_Click --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
 
-    protected void btnCancel_Click(object sender, EventArgs e)
+    protected void btnCancel_Click(object sender, System.EventArgs e)
     {
         try
         {
@@ -240,10 +259,9 @@ public partial class ADMINISTRATION_ParameterList : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "ParameterList.btnCancel_Click --> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "DefaultPage_Config.btnCancel_Click --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
 }
-      
