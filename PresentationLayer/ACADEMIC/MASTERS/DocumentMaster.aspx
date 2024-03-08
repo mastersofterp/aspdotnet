@@ -10,6 +10,8 @@ Version     :
 Version     Modified On     Modified By       Purpose
 ---------------------------------------------------------------------------------------------------------------------------
 1.0.1       28-02-2024      Anurag Baghele    [53807]-Make two tabs for Document Name and Document Mapping
+------------------------------------------- ---------------------------------------------------------------------------------
+1.0.2       08-03-2024      Anurag Baghele    [53807]-Change the column name
 ------------------------------------------- ---------------------------------------------------------------------------------%>
 
 
@@ -324,7 +326,7 @@ Version     Modified On     Modified By       Purpose
                                                             <th>
                                                                 <asp:Label ID="blDYddlAdmType" runat="server" Font-Bold="true"></asp:Label>
                                                             </th>
-                                                            <th>Sr. No.
+                                                            <th>Document Sr. No. <%--<1.0.2>--%>
                                                             </th>
                                                             <th>Active Status
                                                             </th>

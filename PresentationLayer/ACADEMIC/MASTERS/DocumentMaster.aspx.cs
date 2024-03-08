@@ -27,6 +27,8 @@ Version     Modified On     Modified By       Purpose
 ------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
 1.0.2       28-02-2024      Anurag Baghele    [53807]-Added region Document Name for tab 1 and created ToggleTab method
 ------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
+1.0.3       08-03-2024      Anurag Baghele    [53807]-Change the massage and remove null condition
+------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
 */
 
 public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
@@ -291,7 +293,7 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
                     }
                     if (srno != null && srno != string.Empty && srno != "0")
                     {
-                        objCommon.DisplayMessage(this.updDocument, "Sr. No. Already Exist", this.Page);
+                        objCommon.DisplayMessage(this.updDocument, "Document Sr. No. Already Exist", this.Page); //<1.0.3>
                         return;
                     }
                     //Add Batch
@@ -429,7 +431,7 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
-        ViewState["action"] = null;
+        //ViewState["action"] = null; //<1.0.3>
     }
 
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
