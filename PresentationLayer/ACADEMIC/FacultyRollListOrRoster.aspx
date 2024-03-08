@@ -197,6 +197,8 @@
 
                                         <div class="col-12">
                                             <asp:Panel ID="pnlPreCorList" runat="server">
+
+                                                   <div id="Div_lvCourse" runat="server" visible="false">
                                                 <asp:ListView ID="lvCourse" runat="server" OnItemDataBound="lvCourse_ItemDataBound">
                                                     <LayoutTemplate>
                                                         <div class="sub-heading">
@@ -219,7 +221,7 @@
                                                                         <th>REGNO</th>
                                                                         <th>NAME</th>
                                                                          <th>SEMESTER</th>
-                                                                         <th>CCODE - COURSE</th>
+                                                                         <th>COURSE (CCODE)</th>
                                                                          <th>SECTION</th>
                                                                          <th>BATCH</th>
                                                                          <th>TUT BATCH</th>
@@ -254,7 +256,7 @@
                                                                 <asp:Label ID="lblSEMESTERNAME" runat="server" Text='<%# Eval("SEMESTER")%>' />
                                                             </td>
                                                              <td>
-                                                                <asp:Label ID="lblCCODE" runat="server" Text=' <%#  Eval("COURSENAME") +" - "+   Eval("CCODE") %>' />
+                                                                <asp:Label ID="lblCCODE" runat="server" Text=' <%#  Eval("COURSENAME") +" ("+ Eval("CCODE") +")" %>' />
                                                             </td>
                                                              <td>
                                                                 <asp:Label ID="lblSECTION" runat="server" Text='<%# Eval("SECTION")%>' />
@@ -286,9 +288,10 @@
                                                         </tr>
                                                     </ItemTemplate>
                                                 </asp:ListView>
+                                                       </div>
 
                                                 <div id="Div_lvCourseFaculty" runat="server" visible="false">
-                                                <asp:ListView ID="lvCourseFaculty" runat="server" OnItemDataBound="lvCourseFaculty_ItemDataBound">
+                                                <asp:ListView ID="lvCourseFaculty" runat="server">
                                                     <LayoutTemplate>
                                                         <div class="sub-heading">
                                                             <h5>Course Faculty List</h5>
@@ -298,7 +301,7 @@
                                                                 <thead class="bg-light-blue">
                                                                     <tr id="trRow">
                                                                         <th>SR </th>
-                                                                        <th>COURSE NAME</th>
+                                                                        <th>COURSE NAME (CCODE)</th>
                                                                        <%-- <th>COURSE CREDIT</th>--%>
                                                                          <th>COURSE TYPE</th>
                                                                          <th>ASSIGNED FACULTY</th>

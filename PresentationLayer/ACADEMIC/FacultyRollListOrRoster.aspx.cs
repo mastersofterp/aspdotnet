@@ -137,6 +137,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
                 //this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID DESC");
                 //Fill Dropdown Session 
             }
+         
         }
         catch (Exception ex)
         {
@@ -173,9 +174,13 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
             }
             else
             {
+                Div_lvCourse.Visible = false;
                 Div_lvCourseFaculty.Visible = false;
+                lvCourse.Visible = false;
                 lvCourse.DataSource = null;
                 lvCourse.DataBind();
+                lvCourseFaculty.DataSource = null;
+                lvCourseFaculty.DataBind();
                 objCommon.DisplayMessage(this.updpnlSection, "Record Not found!", this.Page);
                
                 return;
@@ -220,6 +225,8 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
                    
                     var semesternos = string.Empty;//ddlSemester.SelectedValue;
                     pnlPreCorList.Visible = true;
+                    Div_lvCourse.Visible = true;
+                    Div_lvCourseFaculty.Visible = false;
                     lvCourse.Visible = true;
 
                     foreach (ListItem items in ddlSemester.Items)
@@ -288,9 +295,10 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
         pnlPreCorList.Visible = false;
         lvCourse.Visible = false;
 
+        btnCourseFacultyReport.Visible = false;
         Div_lvCourseFaculty.Visible = false;
         lvCourseFaculty.DataSource = null;
-        lvCourseFaculty.DataBind();
+        lvCourseFaculty.DataBind();       
     }
     #endregion
 
@@ -300,6 +308,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
         if (ddlSession.SelectedIndex > 0)
         {
             btnCourseFacultyReport.Visible = true;
+            Div_lvCourseFaculty.Visible = true;
             int SessionId = Convert.ToInt32(ddlSession.SelectedValue);
             this.objCommon.FillDropDownList(ddlFaculty, "ACD_COURSE_TEACHER CT WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO INNER JOIN USER_ACC AC WITH (NOLOCK)  ON (CT.UA_NO = AC.UA_NO OR CT.ADTEACHER = AC.UA_NO)", "DISTINCT AC.UA_NO", "AC.UA_FULLNAME ", "ISNULL(SM.IS_ACTIVE,0) = 1 AND ISNULL(CANCEL,0) = 0 AND SM.SESSIONID  = " + SessionId + "  ", "AC.UA_FULLNAME");
 
@@ -348,7 +357,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
             int SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
             int FacultyUANo = Convert.ToInt32(ddlFaculty.SelectedValue);
             // objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT C.COURSENO", "C.CCODE+ ' - ' +C.COURSE_NAME  AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND CT.SEMESTERNO  = " + SemesterNo + " AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  CT.SUBID = " + Convert.ToInt32(ddlCourseType.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");
-            objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT CT.CCODE", "C.CCODE+ ' - ' +C.COURSE_NAME  AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  CT.SUBID = " + Convert.ToInt32(ddlCourseType.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");          
+            objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT CT.CCODE", "(C.COURSE_NAME + ' - ' + C.CCODE + ' - ' + ST.SUBNAME )AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  CT.SUBID = " + Convert.ToInt32(ddlCourseType.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");          
         }
     }
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
@@ -450,6 +459,12 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
     {
         try {
 
+            Div_lvCourse.Visible = false;
+            DataSet ds = null;
+            lvCourse.DataSource = ds;
+            lvCourse.DataBind();
+            lvCourse.Visible = false;
+           
             int sessionNo = Convert.ToInt32(ddlSession.SelectedValue);
             GetSessionWiseCourseFaculty_ReportData(sessionNo);
         }
@@ -461,7 +476,8 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
 
     protected void GetSessionWiseCourseFaculty_ReportData(int sessionId ) 
     {
-        try {
+        try
+        {
             DataSet ds = new DataSet();
             CourseController objCC = new CourseController();
             //ds = objCC.GetCourseFacultyReport_SessionWise(sessionId);
@@ -478,15 +494,21 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
 
             if (ds.Tables[0].Rows.Count > 0)
             {
+                pnlPreCorList.Visible = true;
                 Div_lvCourseFaculty.Visible = true;
+                lvCourseFaculty.Visible = true;//
                 lvCourseFaculty.DataSource = ds;
                 lvCourseFaculty.DataBind();
-                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvCourse);//Set label 
-               
+                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvCourseFaculty);//Set label 
+
             }
-            else 
+            else
             {
+                Div_lvCourse.Visible = false;
                 Div_lvCourseFaculty.Visible = false;
+                lvCourse.Visible = false;
+                lvCourse.DataSource = null;
+                lvCourse.DataBind();
                 lvCourseFaculty.DataSource = null;
                 lvCourseFaculty.DataBind();
                 objCommon.DisplayMessage(this.updpnlSection, "Faculty Data Not Found!", this.Page);
@@ -495,8 +517,5 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
         }
         catch (Exception ex) { }
     }
-    protected void lvCourseFaculty_ItemDataBound(object sender, ListViewItemEventArgs e)
-    {
-
-    }
+    
 }
