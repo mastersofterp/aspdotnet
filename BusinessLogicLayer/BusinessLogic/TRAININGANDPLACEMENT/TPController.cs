@@ -6419,12 +6419,15 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[4];
+                        objParams = new SqlParameter[7];
                         objParams[0] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[1] = new SqlParameter("@P_STUDCONFIRM", StudconfStatus);
                         objParams[2] = new SqlParameter("@P_SCHEDULENO", scheduleno);
-                        objParams[3] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[3].Direction = ParameterDirection.Output;
+                        objParams[3] = new SqlParameter("@P_ATTACHMENT", objTP.ATTACHMENTS);
+                        objParams[4] = new SqlParameter("@P_ISBLOB", objTP.ISBLOB);
+                        objParams[5] = new SqlParameter("@P_FILEPATH", objTP.FILEPATH);
+                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("ACD_TP_UPDATED_STUDENT_CONFIRMATION_SATUS", objParams, true);
                         if (Convert.ToInt32(ret) == 2)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);

@@ -135,6 +135,7 @@
                                                     <th>Status</th>
                                                     <th>Job Details</th>
                                                     <th>Round Details</th>
+                                                    <th>Download</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -162,6 +163,8 @@
                                             <td class="text-center"><%--<i class="fa fa-eye" aria-hidden="true" data-toggle="modal" data-target="#View_Details">--%>
                                                 <asp:LinkButton ID="lnkrdetails" runat="server" CssClass="fa fa-eye" OnClick="lnkrdetails_Click" ToolTip='<%# Eval("SCHEDULENO") %>'></asp:LinkButton></td>
                                             <asp:HiddenField ID="hdscheduleno" runat="server" Value='<%# Eval("SCHEDULENO") %>' />
+                                            <td class="text-center">
+                                                <asp:LinkButton ID="lnkDownloadOffer" runat="server" CssClass="fa fa-download" CommandArgument='<%# Eval("SCHEDULENO") %>' ToolTip='<%# Eval("ATTACHMENTS") %>' OnClick="lnkDownloadOffer_Click"></asp:LinkButton></td>
                                         </tr>
                                     </ItemTemplate>
                                 </asp:ListView>
@@ -487,7 +490,20 @@
                                             <asp:ListItem Value="2">Rejected</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
-
+                                    <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divofferletter" style="margin-left: 198px;">
+                                        <div class="label-dynamic">
+                                            <label>Offer letter</label>
+                                        </div>
+                                        <asp:FileUpload ID="OfferLetterUpload" runat="server" ToolTip="Click here to Upload Offer Letter"/>
+                                        <br />
+                                        <span style="color: red;">Upload File Maximum Size 500 kb</span>
+                                    </div>
+                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                     </div>
                                 </div>
                             </ContentTemplate>
                             <Triggers>

@@ -13,6 +13,11 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 using BusinessLogicLayer.BusinessLogic;
 using System.IO;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage;
+using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
+
 public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -20,6 +25,8 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
     TPController objCompany = new TPController();
     TrainingPlacement objTP = new TrainingPlacement();
     StudentController objtS = new StudentController();
+    BlobController objBlob = new BlobController();
+
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -61,7 +68,9 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                     //}
                     BindStudroundDetails();
                     BindLVOfferDetails();
-                }                
+
+                }
+                BlobDetails();
             }
         }
         catch (Exception ex)
@@ -330,40 +339,71 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
 
     protected void lnkrdetails_Click(object sender, EventArgs e)
     {
-        //foreach (ListViewItem item in lvJobProfile.Items)
-        //{
-        //    LinkButton ibschedule = item.FindControl("lnkrdetails") as LinkButton;
-        //ViewState["Sceduleno"] = ibschedule.ToolTip;
+        
         LinkButton btnSchedule = sender as LinkButton;
         ViewState["Sceduleno"] = btnSchedule.ToolTip;
 
             string idno = Session["idno"].ToString();
 
         int Scheduleno =Convert.ToInt32( ViewState["Sceduleno"]);
-       // AllConditions(Scheduleno);
-        string studconfirm1 = objCommon.LookUp("ACD_TP_REGISTER ", "INTVSELECT", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and INTVSELECT=1");
-        if (studconfirm1 == "False")
+        // AllConditions(Scheduleno);
+        string studconfirm1 = objCommon.LookUp("ACD_TP_REGISTER ", "INTVSELECT", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and INTVSELECT=1 and OFFER_SEND=1");
+        if (studconfirm1 == "")
         {
-            objCommon.DisplayMessage(this.Page, "Before Selection It Will Be Not Applicable.", this.Page);
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#View_Details').modal('hide');", true);
+            btnSubmitOffer.Enabled = false;
+            ddlStatus.Enabled = false;      
+            ddlStatus.SelectedValue = "0";
+            //objCommon.DisplayMessage(this.Page, "Before Selection It Will Be Not Applicable.", this.Page);
 
-            return;
+            //ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#View_Details').modal('hide');", true);
+
+            //return;
         }
 
         string studconfirm2 = objCommon.LookUp("ACD_TP_REGISTER ", "STUDCONFIRM", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and STUDCONFIRM=1");
-        if (studconfirm1 == "True")
+        if (studconfirm2 == "True")
         {
-            btnSubmitOffer.Enabled = false;
-            btnCancelOffer.Enabled = false;
+            //btnSubmitOffer.Enabled = false;
+            //btnCancelOffer.Enabled = false;
+
+            int studconfirmselection = Convert.ToInt32(objCommon.LookUp("ACD_TP_REGISTER ", "cast(isnull(STUDCONFIRM,0) as int) STUDCONFIRM", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and STUDCONFIRM=1"));
+            if (studconfirmselection == 1)
+            {
+                ddlStatus.SelectedValue = "1";
+                ddlStatus.Enabled = false;
+                btnSubmitOffer.Enabled = false;
+            }
+            else if (studconfirmselection == 2)
+            {
+                ddlStatus.SelectedValue = "2";
+                ddlStatus.Enabled = false;
+                btnSubmitOffer.Enabled = false;
+            }
+            else
+            {
+                ddlStatus.SelectedValue = "0";
+                ddlStatus.Enabled = true;
+                btnSubmitOffer.Enabled = true;
+
+            }
+
+
         }
-           
-            BindLVOfferDetails();
-            BindListViewJobProfile();
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Pop", "Showround();", true);
-            BindStudroundDetails();
-            //return;
+        else
+        {
+            divbutton.Visible = false;
+            pnlrounds.Visible = false;
+        }
+
+
+        BindLVOfferDetails();
+        BindListViewJobProfile();
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Pop", "Showround();", true);
+        BindStudroundDetails();
+        //return;
         //}
+       
        
     }
 
@@ -380,6 +420,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                 lvappldetails.DataBind();
                 lvappldetails.Visible = true;
                 pnlrounds.Visible = true;
+                divofferletter.Visible = true;
                 //ViewState["TSno"] = Convert.ToInt32(ds.Tables[0].Rows.Count);
             }
             else
@@ -387,6 +428,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                 lvappldetails.DataSource = null;
                 lvappldetails.DataBind();
                 lvappldetails.Visible = false;
+                divofferletter.Visible = false;
               //  pnlrounds.Visible = false;
                 
             }
@@ -400,6 +442,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void lnkdownload_Click(object sender, EventArgs e)
     {
         LinkButton DownLoadBtn = sender as LinkButton;
@@ -445,18 +488,39 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
         try
         {
             //-----start------Validation for student is In Disciplinary Action ----
-            DateTime AnnounToDate = Convert.ToDateTime(objCommon.LookUp("ACD_TP_COMPSCHEDULE", "INTERVIEWTO", "SCHEDULENO='" + Scheduleno + "'"));
-
-            int disciplinaryAction = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_TP_DISCIPLINARY_ACTION B ON (A.REGNO=B.REGNO and A.ENROLLNO=B.ENROLLNO)", "COUNT(*)", "IDNO='" + (Session["idno"]).ToString() + "' and '"+Convert.ToDateTime(AnnounToDate).ToString("yyyy-MM-dd")+"' between B.DISCIPLINARY_START_DATE and B.DISCIPLINARY_END_DATE"));
-            if (disciplinaryAction > 0)
+            DateTime AnnounLastDate = Convert.ToDateTime(objCommon.LookUp("ACD_TP_COMPSCHEDULE", "LASTDATE", "SCHEDULENO='" + Scheduleno + "'"));
+            DateTime dateTime = DateTime.UtcNow.Date;
+            if (AnnounLastDate < dateTime)
             {
-                objCommon.DisplayMessage(this.Page, "Sorry You Are Not Eligible For Job Application Due To Disciplinary Action Found Agains You .", this.Page);
-                // Details_Veiw.Visible = false;
-               // ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "ClosePopup();", true);
+                objCommon.DisplayMessage(this.Page, "Sorry Job Announcement Last Date of Apply is Expired .", this.Page);
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#Details_Veiw').modal('hide');", true);
-                //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "ModalHide", "$('body').removeClass('modal-open');$('.modal-backdrop').remove();$('#Details_Veiw').hide();", true);
                 return;
             }
+
+            int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "Isnull(UA_IDNO,0) UA_IDNO", "UA_NO='" + Session["userno"] + "'"));
+            //  int REGNO =Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "Isnull(REGNO,0) REGNO", "IDNO='" + IDNO + "'"));
+            DateTime INTERVIEWFROM = Convert.ToDateTime(objCommon.LookUp("ACD_TP_COMPSCHEDULE", "INTERVIEWTO", "SCHEDULENO='" + Scheduleno + "'"));
+            DateTime AnnounToDate = Convert.ToDateTime(objCommon.LookUp("ACD_TP_COMPSCHEDULE", "INTERVIEWTO", "SCHEDULENO='" + Scheduleno + "'"));
+            DataSet dsdate = objCommon.FillDropDown("ACD_TP_DISCIPLINARY_ACTION", "DISCIPLINARY_END_DATE", "*", "REGNO='" + Scheduleno + "'", "");
+            if (dsdate.Tables[0].Rows.Count > 0)
+            {
+                DateTime disciplinarydate = Convert.ToDateTime(dsdate.Tables[0].Rows[0]["DISCIPLINARY_END_DATE"].ToString());
+                DateTime localDate = DateTime.Now;
+            }
+            //int disciplinaryAction = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_TP_DISCIPLINARY_ACTION B ON (A.REGNO=B.REGNO and A.ENROLLNO=B.ENROLLNO)", "COUNT(*)", "IDNO='" + (Session["idno"]).ToString() + "' and '"+Convert.ToDateTime(AnnounToDate).ToString("yyyy-MM-dd")+"' between B.DISCIPLINARY_START_DATE and B.DISCIPLINARY_END_DATE"));
+            //int disciplinaryAction = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_TP_DISCIPLINARY_ACTION B ON (A.REGNO=B.REGNO and A.ENROLLNO=B.ENROLLNO)", "isnull(COUNT(*),0)", "IDNO='" + (Session["idno"]).ToString() + "' and  DISCIPLINARY_END_DATE  between '" + INTERVIEWFROM + "' and '" + AnnounToDate + "'"));
+            //if (disciplinaryAction > 0)
+            //{
+            // if (INTERVIEWFROM > disciplinarydate )
+            // {
+            // objCommon.DisplayMessage(this.Page, "Sorry You Are Not Eligible For Job Application Due To Disciplinary Action Found Agains You .", this.Page);
+            // // Details_Veiw.Visible = false;
+            //// ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "ClosePopup();", true);
+            // ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#Details_Veiw').modal('hide');", true);
+            // //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "ModalHide", "$('body').removeClass('modal-open');$('.modal-backdrop').remove();$('#Details_Veiw').hide();", true);
+            // return;
+            // }
+            //}
             //else
             //{
             //   // ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "ShowPopup();", true);
@@ -464,7 +528,16 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
             //   // ScriptManager.RegisterStartupScript(Page, Page.GetType(), "ModalHide", "$('body').removeClass('modal-open');$('.modal-backdrop').remove();$('#Details_Veiw').show();", true);
             //}
 
-           
+
+
+            string studapply = objCommon.LookUp("ACD_TP_REGISTER", "STUDAPPLY", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO ='" + Scheduleno + "'");
+            if (studapply != "")
+            {
+
+                btnApply.Enabled = false;
+                btnCancel.Enabled = false;
+            }
+
 
 
             //--------end--------------------------
@@ -480,7 +553,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                 //ddlStatus.Enabled = false;
                 pnljob.Visible = false;
                 pnlhide.Visible = false;
-               // pnlrounds.Visible = false;
+                // pnlrounds.Visible = false;
             }
             else
             {
@@ -489,7 +562,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                 btnCancelOffer.Visible = true;
                 pnljob.Visible = true;
                 pnlhide.Visible = true;
-               // Details_Veiw.Visible = true;
+                // Details_Veiw.Visible = true;
                 ViewState["hdshedno"] = Scheduleno.ToString();
 
             }
@@ -538,14 +611,14 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                 //pnlrounds.Visible = false;
                 //btnSubmitOffer.Visible = false;
                 //btnCancelOffer.Visible = false;
-             //   divbutton.Visible = false;
-               // btnSubmitOffer.Visible = false;
-               // btnCancelOffer.Visible = false;
+                //   divbutton.Visible = false;
+                // btnSubmitOffer.Visible = false;
+                // btnCancelOffer.Visible = false;
                 //ddlStatus.SelectedValue = (1).ToString();
                 //ddlStatus.Enabled = false;
             }
             //---------end----Rounds Details-----
-          
+
         }
         catch (Exception ex)
         {
@@ -624,16 +697,118 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                                     }
 
 
-     protected void btnSubmitOffer_Click(object sender, EventArgs e)
+    protected void btnSubmitOffer_Click(object sender, EventArgs e)
      {
          int idno = Convert.ToInt32(Session["idno"]);
          int scheduleno =Convert.ToInt32 (ViewState["Sceduleno"]);
+
+         if (OfferLetterUpload.HasFile)
+         {
+             if (OfferLetterUpload.FileContent.Length >= 1024 * 500)
+             {
+
+                 MessageBox("File Size Should Not Be Greater Than 500 kb");
+                 OfferLetterUpload.Dispose();
+                 OfferLetterUpload.Focus();
+                 return;
+             }
+
+             string fileExtension = System.IO.Path.GetExtension(OfferLetterUpload.FileName);
+             if (fileExtension.ToLower() != ".pdf")
+             {
+                 MessageBox("Please Upload pdf file only");
+                 return;
+             }
+             
+         }
+
+         if (lblBlobConnectiontring.Text == "")
+         {
+             objTP.ISBLOB = 0;
+         }
+         else
+         {
+             objTP.ISBLOB = 1;
+         }
+         if (objTP.ISBLOB == 1)
+         {
+             string filename = string.Empty;
+             string FilePath = string.Empty;
+             //int IdNo = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+             if (OfferLetterUpload.HasFile)
+             {
+                 string contentType = contentType = OfferLetterUpload.PostedFile.ContentType;
+                 string ext = System.IO.Path.GetExtension(OfferLetterUpload.PostedFile.FileName);
+                 //HttpPostedFile file = flupld.PostedFile;
+                 //filename = objSevBook.IDNO + "_familyinfo" + ext;
+                 //string name = ddlQualification.SelectedItem.Text.Replace(" ", "");
+                 string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                 filename = idno + OfferLetterUpload.FileName ;
+                 objTP.ATTACHMENTS = filename;
+                 objTP.FILEPATH = "Blob Storage";
+
+                 if (OfferLetterUpload.FileContent.Length <= 1024 * 500)
+                 {
+                     string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                     string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                     bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                     if (result == true)
+                     {
+
+                         int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, idno + OfferLetterUpload.FileName + time, OfferLetterUpload);
+                         if (retval == 0)
+                         {
+                             ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                             return;
+                         }
+                     }
+                 }
+             }
+             else
+             {
+                 if (ViewState["attachment"] != null)
+                 {
+                     objTP.ATTACHMENTS = ViewState["attachment"].ToString();
+                 }
+                 else
+                 {
+                     objTP.ATTACHMENTS = string.Empty;
+                 }
+
+             }
+         }
+         else
+         {
+             if (OfferLetterUpload.HasFile)
+             {
+                 objTP.ATTACHMENTS = Convert.ToString(OfferLetterUpload.PostedFile.FileName.ToString());
+             }
+             else
+             {
+                 if (ViewState["attachment"] != null)
+                 {
+                     objTP.ATTACHMENTS = ViewState["attachment"].ToString();
+                 }
+                 else
+                 {
+                     objTP.ATTACHMENTS = string.Empty;
+                 }
+
+             }
+         }
+
+
          if (ddlStatus.SelectedValue == "1")
          {
              int ConfStatus = 1;
              CustomStatus CS = (CustomStatus)objCompany.UpdateStudConfirmStatus(objTP, idno, ConfStatus, scheduleno);
              if (CS.Equals(CustomStatus.RecordUpdated))
              {
+                 //if (objTP.ISBLOB == 0)
+                 //{
+                     //objCompany.upload_new_files("QUALIFICATION", _idnoEmp, "QNO", "PAYROLL_SB_QUALI", "QUA_", flupld);
+                 //}
                  objCommon.DisplayMessage(upnlJobProfile, "Response Saved Successfully.", this.Page);
                  ViewState["action"] = null;
                  //clear();
@@ -654,8 +829,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
          }
      }
 
-
-           public void DownloadFile(string path, string fileName)
+    public void DownloadFile(string path, string fileName)
     {
         try
         {
@@ -683,6 +857,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
             Response.Write("Unable to download the attachment.");
         }
     }
+
     private string GetResponseType(string fileExtension)
     {
         switch (fileExtension.ToLower())
@@ -724,6 +899,82 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
                 break;
         }
     }
-  
-     
+
+    #region Blob
+    private void BlobDetails()
+    {
+        try
+        {
+            string Commandtype = "ContainerNametandpdoctest";
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
+                string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
+                string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
+                // Session["blob_ConStr"] = blob_ConStr;
+                // Session["blob_ContainerName"] = blob_ContainerName;
+                hdnBlobCon.Value = blob_ConStr;
+                hdnBlobContainer.Value = blob_ContainerName;
+                lblBlobConnectiontring.Text = Convert.ToString(hdnBlobCon.Value);
+                lblBlobContainer.Text = Convert.ToString(hdnBlobContainer.Value);
+            }
+            else
+            {
+                hdnBlobCon.Value = string.Empty;
+                hdnBlobContainer.Value = string.Empty;
+                lblBlobConnectiontring.Text = string.Empty;
+                lblBlobContainer.Text = string.Empty;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+    #endregion
+
+    public void MessageBox(string msg)
+    {
+        ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
+    }
+
+    protected void lnkDownloadOffer_Click(object sender, EventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.LinkButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+                MessageBox("Document not uploaded");
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blobpath = dtBlobPic.Rows[0]["Uri"].ToString();
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string Script = string.Empty;
+
+                string DocLink = blobpath;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 }
