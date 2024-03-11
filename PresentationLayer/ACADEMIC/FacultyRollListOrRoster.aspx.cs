@@ -237,7 +237,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
                     semesternos = semesternos.TrimEnd(',');
 
                     // var semester = ddlSemester.SelectedValue == "" ? "0" : ddlSemester.SelectedValue;
-                    var courseType = ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
+                    var courseType = "0";  //ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
                     //var courseNo = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
                     var ccode = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
                     if (ccode == "0")
@@ -282,7 +282,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
         ddlSession.SelectedIndex = -1;
         ddlFaculty.SelectedIndex = -1; 
         ddlSemester.SelectedIndex = -1;
-        ddlCourseType.SelectedIndex = -1;
+       // ddlCourseType.SelectedIndex = -1;
         ddlCourse.SelectedIndex = -1;
         ddlSection.SelectedIndex = -1;
         ddlBatch.SelectedIndex = -1;
@@ -317,8 +317,8 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
                 ddlFaculty.SelectedValue = Session["userno"].ToString();
                 int FacultyUANo = Convert.ToInt32(Session["userno"].ToString());
                 //objCommon.FillDropDownList(ddlSemester, "ACD_COURSE_TEACHER CT WITH (NOLOCK) INNER JOIN ACD_SEMESTER S WITH (NOLOCK) ON (CT.SEMESTERNO = S.SEMESTERNO ) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO ", "DISTINCT ISNULL(S.SEMESTERNO,0) SEMESTERNO", "S.SEMESTERNAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + "  AND ISNULL(CT.CANCEL, 0) = 0", "SEMESTERNO");
-                this.objCommon.FillDropDownList(ddlCourseType, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO INNER JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT ST.SUBID", "ST.SUBNAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ")  AND SM.SESSIONID  = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  ISNULL(CT.CANCEL, 0) = 0 ", "ST.SUBNAME");
-
+                //this.objCommon.FillDropDownList(ddlCourseType, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO INNER JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT ST.SUBID", "ST.SUBNAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ")  AND SM.SESSIONID  = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  ISNULL(CT.CANCEL, 0) = 0 ", "ST.SUBNAME");
+                objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT CT.CCODE", "(C.COURSE_NAME + ' - ' + C.CCODE + ' - ' + ST.SUBNAME )AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");          
             }
             //objCommon.FillDropDownList(ddlFaculty, "ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON SR.SESSIONNO = SM.SESSIONNO INNER JOIN ACD_SESSION S WITH (NOLOCK)  ON  SM.SESSIONID = S.SESSIONID INNER JOIN USER_ACC AC WITH (NOLOCK)  ON (SR.UA_NO = AC.UA_NO OR SR.UA_NO_PRAC = AC.UA_NO  OR SR.UA_NO_TUTR = AC.UA_NO)", "DISTINCT AC.UA_NO", "AC.UA_FULLNAME ", "UA_TYPE=3 AND ISNULL(S.IS_ACTIVE,0) = 1  AND S.SESSIONID = " + SessionId + "  ", "AC.UA_FULLNAME");
         }
@@ -336,7 +336,9 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
         {
             int FacultyUANo = Convert.ToInt32(ddlFaculty.SelectedValue);
             //objCommon.FillDropDownList(ddlSemester, "ACD_COURSE_TEACHER CT WITH (NOLOCK) INNER JOIN ACD_SEMESTER S WITH (NOLOCK) ON (CT.SEMESTERNO = S.SEMESTERNO ) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO ", "DISTINCT ISNULL(S.SEMESTERNO,0) SEMESTERNO", "S.SEMESTERNAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + "  AND ISNULL(CT.CANCEL, 0) = 0", "SEMESTERNO");
-            this.objCommon.FillDropDownList(ddlCourseType, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO INNER JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT ST.SUBID", "ST.SUBNAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ")  AND SM.SESSIONID  = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  ISNULL(CT.CANCEL, 0) = 0 ", "ST.SUBNAME");
+           // this.objCommon.FillDropDownList(ddlCourseType, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO INNER JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT ST.SUBID", "ST.SUBNAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ")  AND SM.SESSIONID  = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  ISNULL(CT.CANCEL, 0) = 0 ", "ST.SUBNAME");
+            objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT CT.CCODE", "(C.COURSE_NAME + ' - ' + C.CCODE + ' - ' + ST.SUBNAME )AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");          
+       
         }
     }
     protected void ddlSemester_SelectedIndexChanged(object sender, EventArgs e)
@@ -350,16 +352,18 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
            
         }
     }
-    protected void ddlCourseType_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlCourseType.SelectedIndex > 0)
-        {
-            int SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
-            int FacultyUANo = Convert.ToInt32(ddlFaculty.SelectedValue);
-            // objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT C.COURSENO", "C.CCODE+ ' - ' +C.COURSE_NAME  AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND CT.SEMESTERNO  = " + SemesterNo + " AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  CT.SUBID = " + Convert.ToInt32(ddlCourseType.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");
-            objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT CT.CCODE", "(C.COURSE_NAME + ' - ' + C.CCODE + ' - ' + ST.SUBNAME )AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  CT.SUBID = " + Convert.ToInt32(ddlCourseType.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");          
-        }
-    }
+  
+    //protected void ddlCourseType_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    if (ddlCourseType.SelectedIndex > 0)
+    //    {
+    //        int SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
+    //        int FacultyUANo = Convert.ToInt32(ddlFaculty.SelectedValue);
+    //        // objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT C.COURSENO", "C.CCODE+ ' - ' +C.COURSE_NAME  AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND CT.SEMESTERNO  = " + SemesterNo + " AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  CT.SUBID = " + Convert.ToInt32(ddlCourseType.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");
+    //       // objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON CT.COURSENO = C.COURSENO LEFT JOIN ACD_SUBJECTTYPE ST ON (C.SUBID =  ST.SUBID) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK)  ON CT.SESSIONNO = SM.SESSIONNO", "DISTINCT CT.CCODE", "(C.COURSE_NAME + ' - ' + C.CCODE + ' - ' + ST.SUBNAME )AS COURSE_NAME", "(CT.UA_NO = " + FacultyUANo + " OR  CT.ADTEACHER = " + FacultyUANo + ") AND SM.SESSIONID = " + Convert.ToInt32(ddlSession.SelectedValue) + " AND  CT.SUBID = " + Convert.ToInt32(ddlCourseType.SelectedValue) + " AND ISNULL(CT.CANCEL, 0) = 0 ", "COURSE_NAME");          
+    //    }
+    //}
+
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlCourse.SelectedIndex > 0)
@@ -397,7 +401,7 @@ public partial class Administration_FacultyRollListOrRoster : System.Web.UI.Page
                 semesternos = semesternos.TrimEnd(',');
 
                 // var semester = ddlSemester.SelectedValue == "" ? "0" : ddlSemester.SelectedValue;
-                var courseType = ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
+                var courseType = "0"; //ddlCourseType.SelectedValue == "" ? "0" : ddlCourseType.SelectedValue;
                 //var courseNo = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
                 var ccode = ddlCourse.SelectedValue == "" ? "0" : ddlCourse.SelectedValue;
                 if (ccode == "0")
