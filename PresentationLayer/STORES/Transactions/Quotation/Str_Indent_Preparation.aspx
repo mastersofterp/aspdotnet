@@ -286,6 +286,18 @@
                                                 <HeaderStyle HorizontalAlign="Left" />
                                                 <ItemStyle HorizontalAlign="Left" />
                                             </asp:BoundField>
+                                            <asp:BoundField DataField="LAST_PURCHASE_DATE" HeaderText="LAST PURCHASE DATE" HeaderStyle-CssClass="bg-light-blue">
+                                                <HeaderStyle HorizontalAlign="Left"/>
+                                                <ItemStyle HorizontalAlign="Left"/> 
+                                            </asp:BoundField>
+                                            <asp:BoundField DataField="LAST_RATE" HeaderText="LAST PURCHASE RATE" HeaderStyle-CssClass="bg-light-blue">
+                                                 <HeaderStyle HorizontalAlign="Left"/>
+                                                <ItemStyle HorizontalAlign="Left"/> 
+                                           </asp:BoundField>
+                                            <asp:BoundField DataField="AVAILABLE_QTY" HeaderText="AVAILABLE STOCK" HeaderStyle-CssClass="bg-light-blue">
+                                                 <HeaderStyle HorizontalAlign="Left"/>
+                                                <ItemStyle HorizontalAlign="Left"/> 
+                                           </asp:BoundField>
 
                                         </Columns>
                                         <EmptyDataRowStyle BackColor="WhiteSmoke" />
@@ -330,6 +342,22 @@
                                             </ajaxToolKit:FilteredTextBoxExtender>
                                         </ItemTemplate>
                                     </asp:TemplateField>
+
+
+
+                                     <asp:BoundField DataField="LAST_RATE" HeaderText="LAST RATE" HeaderStyle-CssClass="bg-light-blue">
+                                        <HeaderStyle HorizontalAlign="Left" />
+                                        <ItemStyle HorizontalAlign="Left" />
+                                    </asp:BoundField>
+                                     <asp:BoundField DataField="LAST_PURCHASE_DATE" HeaderText="LAST PURCHASE DATE" HeaderStyle-CssClass="bg-light-blue">
+                                        <HeaderStyle HorizontalAlign="Left" />
+                                        <ItemStyle HorizontalAlign="Left" />
+                                    </asp:BoundField>
+                                     <asp:BoundField DataField="AVAILABLE_QTY" HeaderText="AVAILABLE QTY" HeaderStyle-CssClass="bg-light-blue">
+                                        <HeaderStyle HorizontalAlign="Left" />
+                                        <ItemStyle HorizontalAlign="Left" />
+                                    </asp:BoundField>
+
                                     <asp:TemplateField Visible="false">
                                         <ItemTemplate>
 
