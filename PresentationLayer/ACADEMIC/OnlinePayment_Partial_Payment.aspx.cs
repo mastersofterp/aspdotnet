@@ -122,6 +122,10 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
     {
         if (ddlSemester.SelectedIndex > 0)
         {
+            divparnote.Visible = false;
+            lblval.Text = string.Empty;
+
+            txtPartAmount.Text = string.Empty;
             btnPayment.Visible = false;
             divMSG.Visible = false;
             int HostelTypeSelection = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(HOSTE_TYPE_ONLINE_PAY,0) as HOSTE_TYPE_ONLINE_PAY", ""));
@@ -239,6 +243,19 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 divHostelTransport.Visible = false;
             }
         }
+        else
+        {
+            divparnote.Visible = false;
+            divval.Visible = false;
+            divpartpay.Visible = false;
+        }
+
+        //if (ddlSemester.SelectedIndex == 0)
+        //{
+        //    divparnote.Visible = false;
+        //    divval.Visible = false;
+        //    divpartpay.Visible = false;
+        //}
 
 
     }
@@ -288,8 +305,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
     public void SemesterWiseFees()
     {
-
+        
         bindfeesdetails();
+       
         DataSet ds = null;
         int IDNO = Convert.ToInt32(ViewState["StudId"].ToString());
         ds = objFee.GetStudentFeesforOnlinePayment(ddlReceiptType.SelectedValue, Convert.ToInt32(ddlSemester.SelectedValue), IDNO);
@@ -401,6 +419,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 div_Studentdetail.Visible = true;
                 lblmsg.Attributes.Add("style", "color:green");
                 lblmsg.Text = "Fees already paid for selected semester.";
+                divparnote.Visible = false;
+                divval.Visible = false;
+                divpartpay.Visible = false;
                 if (Session["OrgId"].ToString() == "5")
                 {
                     int HostelTypeSelection = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(HOSTE_TYPE_ONLINE_PAY,0) as HOSTE_TYPE_ONLINE_PAY", ""));
@@ -432,6 +453,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             divMSG.Visible = true;
             lblmsg.Attributes.Add("style", "color:red");
             lblmsg.Text = "Fees demand not Created for Selected Semester, Please Contact MIS Administrator!!";
+            divparnote.Visible = false;
+            divval.Visible = false;
+            divpartpay.Visible = false;
             return;
         }
     }
@@ -1169,18 +1193,28 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
     protected void ddlReceiptType_SelectedIndexChanged(object sender, EventArgs e)
     {
 
-        int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
+        if (ddlReceiptType.SelectedIndex > 0)
+        {
+            int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
 
-        this.objCommon.FillDropDownList(ddlSemester, "ACD_DEMAND D INNER JOIN ACD_SEMESTER S ON (D.SEMESTERNO= S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND IDNO =" + IDNO, "S.SEMESTERNO");
+            this.objCommon.FillDropDownList(ddlSemester, "ACD_DEMAND D INNER JOIN ACD_SEMESTER S ON (D.SEMESTERNO= S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND IDNO =" + IDNO, "S.SEMESTERNO");
 
-        ddlSemester.SelectedIndex = 0;
-        //div_Studentdetail.Visible = false;
-        btnPayment.Visible = false;
-        divMSG.Visible = false;
-        lblmsg.Text = string.Empty;
-        divFeeItems.Visible = false;
-        lvFeeItems.DataSource = null;
-        lvFeeItems.DataBind();
+            ddlSemester.SelectedIndex = 0;
+            //div_Studentdetail.Visible = false;
+            btnPayment.Visible = false;
+            divMSG.Visible = false;
+            lblmsg.Text = string.Empty;
+            divFeeItems.Visible = false;
+            lvFeeItems.DataSource = null;
+            lvFeeItems.DataBind();
+        }
+        else 
+        {
+            divparnote.Visible = false;
+            divval.Visible = false;
+            divpartpay.Visible = false;
+        
+        }
 
     }
 
