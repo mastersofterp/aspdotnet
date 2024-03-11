@@ -318,6 +318,7 @@
     <Compile Include="BusinessLogic\Academic\ODTrackerController.cs" />
     <Compile Include="BusinessLogic\Academic\OnlineAdmissionController.cs" />
     <Compile Include="BusinessLogic\Academic\OnlineAdmissionGroupwiseController.cs" />
+    <Compile Include="BusinessLogic\Academic\ParameterListController.cs" />
     <Compile Include="BusinessLogic\Academic\PBIConfigurationController.cs" />
     <Compile Include="BusinessLogic\Academic\PhdController.cs" />
     <Compile Include="BusinessLogic\Academic\PStaffController.cs" />
