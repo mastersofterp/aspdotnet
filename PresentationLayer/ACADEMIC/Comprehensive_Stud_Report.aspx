@@ -1277,9 +1277,9 @@
                                                                                     <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
                                                                                         <tr>
                                                                                             
-                                                                                            <th>Semester
-                                                                                            </th>
                                                                                             <th>CCode
+                                                                                            </th>
+                                                                                            <th>Semester 
                                                                                             </th>
                                                                                             <th>Course Name
                                                                                             </th>
