@@ -223,19 +223,17 @@ public partial class ACADEMIC_FineAllotment : System.Web.UI.Page
                 {
                     string CollegeId = objCommon.LookUp("ACD_DEMAND D INNER JOIN ACD_STUDENT S ON(D.IDNO=S.IDNO)", "ISNULL(COLLEGE_ID,0)COLLEGE_ID", "D.IDNO=" + Convert.ToInt32(ViewState["StudentId"]) + " AND RECIEPT_CODE='OF' AND SESSIONNO=" + Convert.ToInt32(Session["currentsession"]) + " AND D.SEMESTERNO=" + Convert.ToInt32(semesterNo));
 
-
-
-
                     if (CollegeId == "")
                     {
                         CollegeId = "0";
                     }
                     btnSubmit.Enabled = true;
                     ViewState["COLLEGE_ID"] = CollegeId;
-
+                    lvfeehead.Visible = true;
                     /// Bind fee items list view with the data source found.
                     lvFeeItems.DataSource = ds;
                     lvFeeItems.DataBind();
+                    lvFeeItems.Visible = true;
                     string RecieptCode = ds.Tables[0].Rows[0]["RECIEPT_CODE"].ToString();
                     if (RecieptCode == "TF" || RecieptCode == "EF" || RecieptCode == "HF" || RecieptCode == "BCA" || RecieptCode == "MBA" || RecieptCode == "PG" || RecieptCode == "EVF" ||
                         RecieptCode == "PGF" || RecieptCode == "BMF" || RecieptCode == "BHE" || RecieptCode == "PDF" || RecieptCode == "UNG" || RecieptCode == "OF")
@@ -271,8 +269,6 @@ public partial class ACADEMIC_FineAllotment : System.Web.UI.Page
                     /// submit button and show the div FeeItems.
                     btnSubmit.Enabled = true;
                     //divFeeItems.Visible = true;
-
-
                 }
 
                 else
@@ -300,6 +296,8 @@ public partial class ACADEMIC_FineAllotment : System.Web.UI.Page
 
             else
             {
+                lvfeehead.Visible = false;
+                lvFeeItems.Visible = false;     
                 int currentSemesterno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(SEMESTERNO,0) SEMESTERNO", "IDNO=" + studId));
                 //int count = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN ACD_STUDENT S ON (D.IDNO=S.IDNO)", "ISNULL(DM_NO,0) AS DM_NO", "IDNO =" + IDNO + " AND SEMESTERNO =" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND RECIPTCODE = '" + Convert.ToString(ddlReceiptType.SelectedValue) + "'" + "AND ISNULL(INSTAL_CANCEL,0)=0"));
 
@@ -331,8 +329,6 @@ public partial class ACADEMIC_FineAllotment : System.Web.UI.Page
                 {
 
                 }
-
-
             }
             // DisplayExcessAmount(studId);//sunita
         }
