@@ -243,17 +243,29 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
     }
     protected void ddlLevel_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (ddlLevel.SelectedIndex == 1)
+        if (lstcollege.SelectedIndex == 0)
         {
+            if (ddlLevel.SelectedIndex == 0)
+            {
+                lvCGPA.Visible = false;
+                lvGrade.Visible = false;
+            }
+            else if (ddlLevel.SelectedIndex == 1)
+            {
                 GetID();
                 lvCGPA.Visible = true;
                 lvGrade.Visible = false;
-        }
-        else
-        {
+            }
+            else
+            {
                 GetID2();
                 lvGrade.Visible = true;
                 lvCGPA.Visible = false;
+            }
+        }
+        else
+        {
+
         }
     }
     private void BindcgpaListView()
@@ -314,6 +326,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
     {
         ddlCollegeScheme.SelectedIndex = 0;
         ddlLevel.SelectedIndex = 0;
+        //lstcollege.Items.Clear();
         foreach (ListViewDataItem item in lvCGPA.Items)
         {
             TextBox txtMinRange = item.FindControl("txtMinRange") as TextBox;
@@ -421,7 +434,8 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                             CustomStatus cs = (CustomStatus)objexam.Add_DirectGradeSystem(schemeno, level, id, min1, max1, gradepoint, indi, ActiveStatus);
                             if (cs.Equals(CustomStatus.RecordSaved))
                             {
-                                min1 = 0;
+
+                                objCommon.DisplayMessage(this.updDirectGrade, "Insert Successfully", this.Page);
                             }
                             else
                             {
@@ -467,9 +481,10 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                                 objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
                             }
                     }
-                   
-                    cleartext();
-                    
+
+                    Clear();
+                    //listbox();
+
                 }
                 else if (ddlLevel.SelectedItem.Text == "Marks Range")
                 {
@@ -524,7 +539,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                             CustomStatus cs = (CustomStatus)objexam.Add_DirectGradeSystem(schema, level, id, min2, max2, gradepot, indicator, ActiveStatus);
                             if (cs.Equals(CustomStatus.RecordSaved))
                             {
-                                min2 = 0;
+                                objCommon.DisplayMessage(this.updDirectGrade, "Insert Successfully", this.Page);
                             }
                             else
                             {
@@ -573,6 +588,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                                
                     }
                     cleartext();
+                    //listbox();
                 }
                 else
                 {
@@ -632,4 +648,21 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
 
         }
     }
+    protected void lstcollege_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (lstcollege.SelectedIndex == -1)
+        {
+            lvGrade.Visible = false;
+            lvCGPA.Visible = false;
+            ddlLevel.SelectedValue="0";
+        
+
+        }
+        else
+        {
+
+        }
+    }
+
+   
 }
