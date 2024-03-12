@@ -98,8 +98,6 @@
                                             ValidationGroup="submit" Width="200px"></asp:RequiredFieldValidator>
                                     </div>
 
-
-
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -115,24 +113,35 @@
                                             SetFocusOnError="True" InitialValue="0"></asp:RequiredFieldValidator>
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                   <%-- <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Subject Type </label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlSubType" runat="server" AppendDataBoundItems="True" AutoPostBack="true"
+                                        </div>--%>
+                                       <%-- <asp:DropDownList ID="ddlSubType" runat="server" AppendDataBoundItems="True" AutoPostBack="true"
                                             ValidationGroup="submit" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSubType_SelectedIndexChanged">
                                             <%--<asp:ListItem Value="0">Please Select</asp:ListItem>
                                             <asp:ListItem Value="1">Theory</asp:ListItem>
                                             <asp:ListItem Value="2">Practical</asp:ListItem>--%>
                                             <%--Added By Nikhil V.Lambe on 24/02/2021 for Sessional Sub Type in MAKAUT--%>
                                             <%--    <asp:ListItem Value="3">Sessional</asp:ListItem>--%>
-                                        </asp:DropDownList>
+                                       <%-- </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSubType" runat="server" ControlToValidate="ddlSubType"
                                             Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                    </div>
+                                    </div>--%>
 
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Subject Type</label>
+                                        </div>
+                                        <asp:ListBox ID="ddlSubType" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo"
+                                            OnSelectedIndexChanged="ddlSubType_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
+                                        <asp:RequiredFieldValidator ID="rfvSubType" runat="server" ControlToValidate="ddlSubType"
+                                            Display="None" ErrorMessage="Please Select at least one Subject Type" InitialValue="" SetFocusOnError="True"
+                                            ValidationGroup="submit" Width="200px"></asp:RequiredFieldValidator>
+                                    </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
                                             <sup>* </sup>

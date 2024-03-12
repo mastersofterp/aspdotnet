@@ -25,7 +25,7 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
     #region Page Events
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
-     Exam ObjE = new Exam();
+    Exam ObjE = new Exam();
     GradeEntryController objGEC = new GradeEntryController();
     GradeEntry objGradeEntry = new GradeEntry();
 
@@ -58,31 +58,23 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
-
             }
             ViewState["College_ID"] = objCommon.LookUp("User_Acc", "UA_COLLEGE_NOS", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()));
             // objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE", "SUBID", "SUBNAME", "SUBID>0", "SUBID");
-
             //objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND COLLEGE_ID IN (" + Session["college_nos"].ToString() + ") AND OrganizationId=" + Convert.ToInt32(Session["OrgId"].ToString()) + "", "COLLEGE_ID");
-            
             objCommon.FillDropDownList(ddlGradeType, "ACD_GRADE_TYPE", "GRADE_TYPE", "GRADE_TYPE_NAME", "GRADE_TYPE>0 AND ISNULL(ACTIVESTATUS,0)=1", "GRADE_TYPE");
             // objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENO");
-           // objCommon.FillDropDownList(ddlSection, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0 AND UA_SECTION IN(1,2)", "UA_SECTION");
+            // objCommon.FillDropDownList(ddlSection, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0 AND UA_SECTION IN(1,2)", "UA_SECTION");
             objCommon.FillDropDownList(ddlSection, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0 AND ISNULL(ACTIVESTATUS,0)=1", "UA_SECTION");
-           // MultipleCollegeBind();
-            objCommon.FillDropDownList(ddlSubType, "ACD_SUBJECTTYPE ", "SUBID", "SUBNAME", "SUBID > 0 AND ISNULL(ACTIVESTATUS,0)=1  ", "SUBID ");
+            // MultipleCollegeBind();
+            objCommon.FillListBox(ddlSubType, "ACD_SUBJECTTYPE ", "SUBID", "SUBNAME", "SUBID > 0 AND ISNULL(ACTIVESTATUS,0)=1  ", "SUBID ");
             objCommon.FillListBox(ddlALType, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0 AND UA_SECTION IN(1,2)", "UA_SECTION");
             //BindListView();
-           // ViewState["action"] = "add";
+            // ViewState["action"] = "add";
             int userno = Convert.ToInt32(Session["userno"]);
             //lvGrade.FindControl("tdEdit").Visible = false;
-
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -
-
-            //objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  -  
-
-
-
+            //objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  
         }
         //BindListView();
     }
@@ -110,7 +102,6 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
         {
             objCommon.DisplayMessage(this.updGradeEntry, "Please Select Scheme!", this.Page);
             return;
-
         }
 
         int Count = 0;
@@ -120,7 +111,6 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
             {
                 Count++;
             }
-
         }
         if (Count > 1)
         {
@@ -130,10 +120,33 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
             btnSubmit.Visible = false;
             return;
         }
-         lvGrade.Visible = true;
+        //added by Pallavi M on 11/03/2024
+        if (ddlSubType.SelectedIndex == -1)
+        {
+            objCommon.DisplayMessage(this.updGradeEntry, "Please Select Subject Type!", this.Page);
+            return;
+
+        }
+        int count = 0;
+        foreach (ListItem items in ddlSubType.Items)
+        {
+            if (items.Selected == true)
+            {
+                count++;
+            }
+        }
+        if (count > 1)
+        {
+            objCommon.DisplayMessage(this.updGradeEntry, "Please Select Only One Subject Type!", this.Page);
+            btnLock.Visible = false;
+            btnUnlock.Visible = false;
+            btnSubmit.Visible = false;
+            return;
+        }
+        lvGrade.Visible = true;
         //btnSubmit.Visible = true;
         BindListView();
-
+        #region
         //foreach (ListViewDataItem dataitem in lvGrade.Items)
         //{
         //    Exam ObjE = new Exam();
@@ -307,6 +320,7 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
         //    else
         //        objUCommon.ShowError(Page, "Server UnAvailable");
         //}
+        #endregion
     }
 
     private void LoadGrade()
@@ -330,19 +344,9 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-
-
     protected void Clear()
     {
-        // txtGradeDesc.Text = string.Empty;
-        // txtGradePoint.Text = string.Empty;
-        //ddlSubjectType.SelectedIndex = 0;
-        //ddlDegree.SelectedIndex = 0;
-        //ddlGradeType.SelectedIndex = 0;
-        //txtGrade.Text = string.Empty;
-        //txtMaxMark.Text = string.Empty;
-        //txtMinMark.Text = string.Empty;
-        //txtGradeDesc.Text = string.Empty;
+        
         Label1.Text = string.Empty;
         ddlSection.SelectedIndex = 0;
         ddlGradeType.SelectedIndex = 0;
@@ -351,9 +355,7 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
         btnSubmit.Visible = false;
         btnLock.Visible = false;
         btnUnlock.Visible = false;
-
         //rdoPassFailType.SelectedValue = "-1";
-
     }
 
     private void BindListView()
@@ -361,61 +363,54 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
         try
         {
             //int UGPGOTNO = 0;
-            
-                GradeEntryController objGEC = new GradeEntryController();
-               // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(1),Convert.ToInt32(ddlSubType.SelectedValue),Convert.ToInt32(ddlcollege.SelectedValue));
 
-             // UGPGOTNO = Convert.ToInt32(objCommon.LookUp("ACD_DEGREE", "DEGREETYPEID", "DEGREENO=" + Convert.ToInt16(ViewState["degreeno"])));//added gaurav
+            GradeEntryController objGEC = new GradeEntryController();
+            // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(1),Convert.ToInt32(ddlSubType.SelectedValue),Convert.ToInt32(ddlcollege.SelectedValue));
 
-             // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(UGPGOTNO), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
-             // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(UGPGOTNO), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ViewState["schemeno"]));
-             // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(UGPGOTNO), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]), 0);
-                DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ViewState["schemeno"]));
-            
-            
-                lvGrade.DataSource = ds;
-                lvGrade.DataBind();
-               // this.LoadGrade();
-                lvGrade.Visible = true;
-                  
-                  btnSubmit.Visible = true;
-                  btnLock.Visible = true;
-                  btnUnlock.Visible = true;
-                  btnSave.Visible = true ;
-                  //btnSubmit.Visible = true;
-               // btnLock.Visible = true;
-                //foreach (ListViewDataItem item in lvGrade.Items)
-                //{
-                //    objGradeEntry.GradeType = Convert.ToInt32(ddlGradeType.SelectedValue);
-                //    objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
-                //    int SubType=Convert.ToInt32(ddlSubType.SelectedValue);
-                //    Label Grade = item.FindControl("lblGrade") as Label;
-                //    int Gradeno_New = Convert.ToInt32(Grade.ToolTip);
-                //    int CollegeId = Convert.ToInt32(ddlcollege.SelectedValue);
+            // UGPGOTNO = Convert.ToInt32(objCommon.LookUp("ACD_DEGREE", "DEGREETYPEID", "DEGREENO=" + Convert.ToInt16(ViewState["degreeno"])));//added gaurav
 
-                //    string Chk = objCommon.LookUp("ACD_GRADE", "COUNT(1)", "GRADE_TYPE ='" + objGradeEntry.GradeType + "' AND UGPGOT = '" + objGradeEntry.UGPGOTNO + "' AND GRADENO_NEW = '" + Gradeno_New + "' AND SUBID = '" + SubType + "' AND COLLEGE_ID = '" + CollegeId + "' AND IsLock = '" + 1 + "'");
+            // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(UGPGOTNO), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
+            // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(UGPGOTNO), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ViewState["schemeno"]));
+            // DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(UGPGOTNO), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]), 0);
+            DataSet ds = objGEC.GetAllGradeEntry(Convert.ToInt32(ddlGradeType.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlSubType.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ViewState["schemeno"]));
+            lvGrade.DataSource = ds;
+            lvGrade.DataBind();
+            // this.LoadGrade();
+            lvGrade.Visible = true;
+            btnSubmit.Visible = true;
+            btnLock.Visible = true;
+            btnUnlock.Visible = true;
+            btnSave.Visible = true;
+            //btnSubmit.Visible = true;
+            // btnLock.Visible = true;
+            //foreach (ListViewDataItem item in lvGrade.Items)
+            //{
+            //    objGradeEntry.GradeType = Convert.ToInt32(ddlGradeType.SelectedValue);
+            //    objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
+            //    int SubType=Convert.ToInt32(ddlSubType.SelectedValue);
+            //    Label Grade = item.FindControl("lblGrade") as Label;
+            //    int Gradeno_New = Convert.ToInt32(Grade.ToolTip);
+            //    int CollegeId = Convert.ToInt32(ddlcollege.SelectedValue);
 
-                //    if ((Chk != null || Chk != string.Empty) && Chk != "0")
-                //    {
-                //        lvGrade.Visible = true;
-                //        btnSave.Visible = false;
-                //        btnLock.Visible = false;
-                //        btnSubmit.Visible = false;
-                //        btnUnlock.Visible = true;
+            //    string Chk = objCommon.LookUp("ACD_GRADE", "COUNT(1)", "GRADE_TYPE ='" + objGradeEntry.GradeType + "' AND UGPGOT = '" + objGradeEntry.UGPGOTNO + "' AND GRADENO_NEW = '" + Gradeno_New + "' AND SUBID = '" + SubType + "' AND COLLEGE_ID = '" + CollegeId + "' AND IsLock = '" + 1 + "'");
 
-
-                //    }
-                //    else
-                //    {
-                //        lvGrade.Visible = true;
-                //        btnSave.Visible = true;
-                //        btnSubmit.Visible = true;
-                //        btnLock.Visible = true;
-                //        btnUnlock.Visible = false;
-                //    }
-                //}
-               
-
+            //    if ((Chk != null || Chk != string.Empty) && Chk != "0")
+            //    {
+            //        lvGrade.Visible = true;
+            //        btnSave.Visible = false;
+            //        btnLock.Visible = false;
+            //        btnSubmit.Visible = false;
+            //        btnUnlock.Visible = true;
+            //    }
+            //    else
+            //    {
+            //        lvGrade.Visible = true;
+            //        btnSave.Visible = true;
+            //        btnSubmit.Visible = true;
+            //        btnLock.Visible = true;
+            //        btnUnlock.Visible = false;
+            //    }
+            //}
         }
         catch (Exception ex)
         {
@@ -425,13 +420,10 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
-       
     }
-
     //private bool CheckDuplicateRoom()
     //{
     //    //Check Room Name is duplicate entry or not
@@ -450,8 +442,6 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
         ImageButton btnEdit = sender as ImageButton;
-
-
         ViewState["Gradeno"] = int.Parse(btnEdit.CommandArgument);
         int gradeno = Convert.ToInt32(ViewState["Gradeno"]);
         ViewState["action"] = "edit";
@@ -473,17 +463,9 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                 // ddlGradeType.SelectedValue = dr["GRADE_TYPE"].ToString();
                 // ddlSection.SelectedValue = dr["UGPGOT"].ToString();
                 // rdoPassFailType.SelectedValue = dr["RESULT"].ToString();
-
                 //if(Convert.ToInt32(rdoPassFailType.SelectedValue = dr["RESULT"].ToString()) == 0)
                 //{
-
-
-
-
                 //}  
-
-
-
                 if (dr["ACTIVESTATUS"].ToString() == "Active")
                 {
                     ScriptManager.RegisterStartupScript(this, GetType(), "Src", "settimeslotgradenew(true);", true);
@@ -493,11 +475,6 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                     ScriptManager.RegisterStartupScript(this, GetType(), "Src", "settimeslotgradenew(false);", true);
                 }
 
-
-
-
-
-
                 //if (ds.Tables[0].Rows[0]["ACTIVESTATUS"].ToString() == "Active")
                 //{
                 //    ScriptManager.RegisterStartupScript(this, GetType(), "Src", "settimeslot(true);", true);
@@ -506,25 +483,18 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                 //{
                 //    ScriptManager.RegisterStartupScript(this, GetType(), "Src", "settimeslot(false);", true);
                 //}
-
-
-
-
             }
         }
     }
     protected void txtMaxMark_TextChanged(object sender, EventArgs e)
     {
-
     }
     protected void btnSubmit_Click(object sender, EventArgs e)
-    
     {
         int DegreeNo = 0; int Branchno = 0; int College_id = 0; int Schemeno = 0;
-
+        int subids = 0;
         try
         {
-            
             foreach (ListItem items in ddlcollege.Items)
             {
                 if (items.Selected == true)
@@ -537,144 +507,117 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                         Branchno = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]);
                         College_id = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]);
                         Schemeno = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]);
-                        // FILL DROPDOWN  ddlSession_SelectedIndexChanged
-                        //Added down three
-            //        }                    
-            //    }
-            //}
-                       // return;
-           // Sem = Sem.Remove(Sem.Length - 1);
-           // Semname = Semname.Remove(Semname.Length - 1);
 
-           // return;
+                        //Added by Pallavi M on  11/03/2024
+                        DataSet dst = objCommon.FillDropDown("ACD_SUBJECTTYPE", "SUBID", "SUBNAME", "SUBID>0 AND ISNULL(ACTIVESTATUS,0)=1 ", "SUBID");
 
-            foreach (ListViewDataItem item in lvGrade.Items)
-            {
-                Exam ObjE = new Exam();
-                objGradeEntry.GradeType = Convert.ToInt32(ddlGradeType.SelectedValue);
-               // objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
-                objGradeEntry.UGPGOTNO = Convert.ToInt32(objCommon.LookUp("ACD_DEGREE", "DEGREETYPEID", "DEGREENO=" + DegreeNo));//added gaurav
-                Label Grade = item.FindControl("lblGrade") as Label;
-
-                TextBox GradePoint = item.FindControl("txtGradePoint") as TextBox;
-                TextBox MaxMark = item.FindControl("txtMaxMark") as TextBox;
-                TextBox MinMark = item.FindControl("txtMinMark") as TextBox;
-                TextBox GradeDesc = item.FindControl("txtGradeDesc") as TextBox;
-                DropDownList Result = item.FindControl("ddlResult") as DropDownList;
-                CheckBox Status = item.FindControl("chkStatus") as CheckBox;
-                objGradeEntry.Grade = Grade.Text.Trim();
-                objGradeEntry.GradePoint = GradePoint.Text.Trim();
-                
-                string MaxMarks = MaxMark.Text.Trim();
-                string MinMarks = MinMark.Text.Trim();
-               // string maxMark =(objGradeEntry.MaxMark).ToString();
-               //objGradeEntry.MinMark = Convert.ToInt32(MinMark.Text.Trim());
-                objGradeEntry.GradeDesc = GradeDesc.Text.Trim();
-                objGradeEntry.Result = Convert.ToInt32((Result.SelectedValue));
-                ObjE.ActiveStatus = Status.Checked ? true : false;
-                objGradeEntry.CollegeCode = Session["colcode"].ToString();
-                int OrgID = Convert.ToInt32(Session["OrgId"]);
-                int Gradeno_New = Convert.ToInt32(Grade.ToolTip);
-                int SubType = Convert.ToInt32(ddlSubType.SelectedValue);
-                int CollegeId = College_id;//added gaurav
-
-                if (Convert.ToInt32(Session["OrgId"]) == 18)
-                {
-
-                    CustomStatus cs = (CustomStatus)objGEC.AddGradeEntry(objGradeEntry, OrgID, ObjE.ActiveStatus, Gradeno_New, SubType, CollegeId, MaxMarks, MinMarks, DegreeNo, Schemeno);
-                    if (cs.Equals(CustomStatus.RecordSaved))
-                    {
-                        //ViewState["action"] = "add";
-
-                        objCommon.DisplayMessage(this.updGradeEntry, "Record Saved Successfully!", this.Page);
-                        //this.LoadGrade();
-                        this.BindListView();
-
-                    }
-                    else if (cs.Equals(CustomStatus.RecordUpdated))
-                    {
-                        objCommon.DisplayMessage(this.updGradeEntry, "Record Update successfully!", this.Page);
-                        this.BindListView();
-
-                    }
-
-
-
-                }
-                else
-                {
-
-                    if ((decimal.Parse(MaxMark.Text) >= decimal.Parse(MinMark.Text)) && decimal.Parse(MaxMark.Text) > 0)
-                    {
-
-                        //if (decimal.Parse(MaxMark.Text) > decimal.Parse(MinMark.Text))
-                        //{
-                        //  CustomStatus cs=(CustomStatus)objGEC.AddGradeEntry(objGradeEntry,OrgID, 
-
-                        //}
-
-                        //if (ViewState["action"] != null)
-                        //{
-                        //    if (ViewState["action"].ToString().Equals("add"))
-                        //    {
-                        CustomStatus cs = (CustomStatus)objGEC.AddGradeEntry(objGradeEntry, OrgID, ObjE.ActiveStatus, Gradeno_New, SubType, CollegeId, MaxMarks, MinMarks, DegreeNo, Schemeno);
-                        if (cs.Equals(CustomStatus.RecordSaved))
+                        if (dst.Tables[0].Rows.Count > 0 && dst.Tables[0] != null)
                         {
-                            //ViewState["action"] = "add";
+                            foreach (ListItem itms in ddlSubType.Items)
+                            {
+                                if (itms.Selected == true)
+                                {
+                                    subids = Convert.ToInt32(itms.Value);
+                                   
+                                    foreach (ListViewDataItem item in lvGrade.Items)
+                                    {
+                                        Exam ObjE = new Exam();
+                                        objGradeEntry.GradeType = Convert.ToInt32(ddlGradeType.SelectedValue);
+                                        // objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
+                                        objGradeEntry.UGPGOTNO = Convert.ToInt32(objCommon.LookUp("ACD_DEGREE", "DEGREETYPEID", "DEGREENO=" + DegreeNo));//added gaurav
+                                        Label Grade = item.FindControl("lblGrade") as Label;
+                                        TextBox GradePoint = item.FindControl("txtGradePoint") as TextBox;
+                                        TextBox MaxMark = item.FindControl("txtMaxMark") as TextBox;
+                                        TextBox MinMark = item.FindControl("txtMinMark") as TextBox;
+                                        TextBox GradeDesc = item.FindControl("txtGradeDesc") as TextBox;
+                                        DropDownList Result = item.FindControl("ddlResult") as DropDownList;
+                                        CheckBox Status = item.FindControl("chkStatus") as CheckBox;
+                                        objGradeEntry.Grade = Grade.Text.Trim();
+                                        objGradeEntry.GradePoint = GradePoint.Text.Trim();
+                                        string MaxMarks = MaxMark.Text.Trim();
+                                        string MinMarks = MinMark.Text.Trim();
+                                        // string maxMark =(objGradeEntry.MaxMark).ToString();
+                                        //objGradeEntry.MinMark = Convert.ToInt32(MinMark.Text.Trim());
+                                        objGradeEntry.GradeDesc = GradeDesc.Text.Trim();
+                                        objGradeEntry.Result = Convert.ToInt32((Result.SelectedValue));
+                                        ObjE.ActiveStatus = Status.Checked ? true : false;
+                                        objGradeEntry.CollegeCode = Session["colcode"].ToString();
+                                        int OrgID = Convert.ToInt32(Session["OrgId"]);
+                                        int Gradeno_New = Convert.ToInt32(Grade.ToolTip);
+                                       // int SubType = Convert.ToInt32(ddlSubType.SelectedValue);
+                                        int CollegeId = College_id;//added gaurav
 
-                            objCommon.DisplayMessage(this.updGradeEntry, "Record Saved Successfully!", this.Page);
-                            //this.LoadGrade();
-                            this.BindListView();
+                                        if (Convert.ToInt32(Session["OrgId"]) == 18)
+                                        {
 
+                                            CustomStatus cs = (CustomStatus)objGEC.AddGradeEntry(objGradeEntry, OrgID, ObjE.ActiveStatus, Gradeno_New, subids, CollegeId, MaxMarks, MinMarks, DegreeNo, Schemeno);
+                                            if (cs.Equals(CustomStatus.RecordSaved))
+                                            {
+                                                //ViewState["action"] = "add";
+                                                objCommon.DisplayMessage(this.updGradeEntry, "Record Saved Successfully!", this.Page);
+                                                //this.LoadGrade();
+                                                this.BindListView();
+                                            }
+                                            else if (cs.Equals(CustomStatus.RecordUpdated))
+                                            {
+                                                objCommon.DisplayMessage(this.updGradeEntry, "Record Update successfully!", this.Page);
+                                                this.BindListView();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if ((decimal.Parse(MaxMark.Text) >= decimal.Parse(MinMark.Text)) && decimal.Parse(MaxMark.Text) > 0)
+                                            {
+                                                //if (decimal.Parse(MaxMark.Text) > decimal.Parse(MinMark.Text))
+                                                //{
+                                                //  CustomStatus cs=(CustomStatus)objGEC.AddGradeEntry(objGradeEntry,OrgID, 
+                                                //}
+                                                //if (ViewState["action"] != null)
+                                                //{
+                                                //    if (ViewState["action"].ToString().Equals("add"))
+                                                //    {
+                                                CustomStatus cs = (CustomStatus)objGEC.AddGradeEntry(objGradeEntry, OrgID, ObjE.ActiveStatus, Gradeno_New, subids, CollegeId, MaxMarks, MinMarks, DegreeNo, Schemeno);
+                                                if (cs.Equals(CustomStatus.RecordSaved))
+                                                {
+                                                    //ViewState["action"] = "add";
+
+                                                    objCommon.DisplayMessage(this.updGradeEntry, "Record Saved Successfully!", this.Page);
+                                                    //this.LoadGrade();
+                                                    this.BindListView();
+
+                                                }
+                                                else if (cs.Equals(CustomStatus.RecordUpdated))
+                                                {
+                                                    objCommon.DisplayMessage(this.updGradeEntry, "Record Update successfully!", this.Page);
+                                                    this.BindListView();
+                                                }
+                                            }
+                                            else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
+                                            {
+                                                // objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                                            }
+
+                                            else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
+                                            {
+                                                // objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                                            }
+                                            else
+                                            {
+                                                objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        else if (cs.Equals(CustomStatus.RecordUpdated))
-                        {
-                            objCommon.DisplayMessage(this.updGradeEntry, "Record Update successfully!", this.Page);
-                            this.BindListView();
-
-                        }
-
-
-
-                        // }
-
-                        // }
-                    }
-                    else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
-                    {
-                       // objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
-                    }
-
-                    else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
-                    {
-                       // objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
-                    }
-                }
-
-
-
-            }
-
-
-            //added gaurav
                     }
                 }
             }
-
 
             lvGrade.Visible = false;
             btnSubmit.Visible = false;
             btnSave.Visible = true;
             BindListView();
-
-
-
-
-
         }
         catch (Exception ex)
         {
@@ -683,10 +626,7 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
-
-
     }
-
     protected void ddlGradeType_SelectedIndexChanged(object sender, EventArgs e)
     {
         btnSubmit.Visible = false;
@@ -694,28 +634,23 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
         lvGrade.Visible = false;
         btnLock.Visible = false;
         btnUnlock.Visible = false;
-        ddlSubType.SelectedIndex = 0;
-        //ddlSection.SelectedIndex = 0;
+        ddlSubType.SelectedIndex = -1;
     }
     protected void ddlSection_SelectedIndexChanged(object sender, EventArgs e)
     {
-
         MultipleCollegeBind();
         btnSubmit.Visible = false;
         btnSave.Visible = true;
         lvGrade.Visible = false;
         btnLock.Visible = false;
         btnUnlock.Visible = false;
-        ddlSubType.SelectedIndex = 0;
+        ddlSubType.SelectedIndex = -1;
     }
-
     protected void btnLock_Click(object sender, EventArgs e)
     {
-          int DegreeNo = 0; int Branchno = 0; int College_id = 0; int Schemeno = 0;
-
+        int DegreeNo = 0; int Branchno = 0; int College_id = 0; int Schemeno = 0;
         try
-        {     
-            
+        {
             foreach (ListItem items in ddlcollege.Items)
             {
                 if (items.Selected == true)
@@ -728,43 +663,32 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                         Branchno = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]);
                         College_id = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]);
                         Schemeno = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]);
-                        // FILL DROPDOWN  ddlSession_SelectedIndexChanged
-                       // Added down three
-                  
-
-          //  return;
-            foreach (ListViewDataItem item in lvGrade.Items)
-            {
-                objGradeEntry.GradeType = Convert.ToInt32(ddlGradeType.SelectedValue);
-                //objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
-                objGradeEntry.UGPGOTNO=Convert.ToInt32(objCommon.LookUp("ACD_DEGREE", "DEGREETYPEID", "DEGREENO=" + DegreeNo));//added gaurav
-                int SubType = Convert.ToInt32(ddlSubType.SelectedValue);
-                Label Grade = item.FindControl("lblGrade") as Label;
-                objGradeEntry.Grade = Grade.Text.Trim();
-                int OrgID = Convert.ToInt32(Session["OrgId"]);
-                int Gradeno_New = Convert.ToInt32(Grade.ToolTip);
-               // int CollegeId = Convert.ToInt32(ddlcollege.SelectedValue);
-                int CollegeId = College_id; 
-                //CustomStatus cs = (CustomStatus)objGEC.LockGradeEntry(objGradeEntry, OrgID, Gradeno_New, SubType, CollegeId);
-                CustomStatus cs = (CustomStatus)objGEC.LockGradeEntryNew(objGradeEntry, OrgID, SubType, CollegeId, Schemeno, DegreeNo);
-                if (cs.Equals(CustomStatus.RecordSaved))
-                {
-
-                    objCommon.DisplayMessage(this.updGradeEntry, "Record Locked Successfully!", this.Page);
-                    BindListView();
-                    //this.LoadGrade();
-
-                }
-
-            }
-
-                       // Added by gaurav three
+                       
+                        foreach (ListViewDataItem item in lvGrade.Items)
+                        {
+                            objGradeEntry.GradeType = Convert.ToInt32(ddlGradeType.SelectedValue);
+                            //objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
+                            objGradeEntry.UGPGOTNO = Convert.ToInt32(objCommon.LookUp("ACD_DEGREE", "DEGREETYPEID", "DEGREENO=" + DegreeNo));//added gaurav
+                            int SubType = Convert.ToInt32(ddlSubType.SelectedValue);
+                            Label Grade = item.FindControl("lblGrade") as Label;
+                            objGradeEntry.Grade = Grade.Text.Trim();
+                            int OrgID = Convert.ToInt32(Session["OrgId"]);
+                            int Gradeno_New = Convert.ToInt32(Grade.ToolTip);
+                            // int CollegeId = Convert.ToInt32(ddlcollege.SelectedValue);
+                            int CollegeId = College_id;
+                            //CustomStatus cs = (CustomStatus)objGEC.LockGradeEntry(objGradeEntry, OrgID, Gradeno_New, SubType, CollegeId);
+                            CustomStatus cs = (CustomStatus)objGEC.LockGradeEntryNew(objGradeEntry, OrgID, SubType, CollegeId, Schemeno, DegreeNo);
+                            if (cs.Equals(CustomStatus.RecordSaved))
+                            {
+                                objCommon.DisplayMessage(this.updGradeEntry, "Record Locked Successfully!", this.Page);
+                                BindListView();
+                                //this.LoadGrade();
+                            }
+                        }
                     }
                 }
             }
-
         }
-
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -772,19 +696,12 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
-
     }
-
-
     protected void btnUnlock_Click(object sender, EventArgs e)
     {
-
         try
         {
             int DegreeNo = 0; int Branchno = 0; int CollegeId = 0; int Schemeno = 0;
-
-
-
             foreach (ListItem items in ddlcollege.Items)
             {
                 if (items.Selected == true)
@@ -798,39 +715,31 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                         CollegeId = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]);
                         Schemeno = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]);
 
-
-
                         foreach (ListViewDataItem item in lvGrade.Items)
                         {
                             objGradeEntry.GradeType = Convert.ToInt32(ddlGradeType.SelectedValue);
-                           // objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
+                            // objGradeEntry.UGPGOTNO = Convert.ToInt32(ddlSection.SelectedValue);
                             objGradeEntry.UGPGOTNO = Convert.ToInt32(objCommon.LookUp("ACD_DEGREE", "DEGREETYPEID", "DEGREENO=" + DegreeNo));//added gaurav
                             int SubType = Convert.ToInt32(ddlSubType.SelectedValue);
                             Label Grade = item.FindControl("lblGrade") as Label;
                             objGradeEntry.Grade = Grade.Text.Trim();
                             int OrgID = Convert.ToInt32(Session["OrgId"]);
                             //int Gradeno_New = Convert.ToInt32(Grade.ToolTip);
-                           // int CollegeId = Convert.ToInt32(ddlcollege.SelectedValue);
+                            // int CollegeId = Convert.ToInt32(ddlcollege.SelectedValue);
                             //CustomStatus cs = (CustomStatus)objGEC.UnLockGradeEntry(objGradeEntry, OrgID, Gradeno_New, SubType,CollegeId);
                             CustomStatus cs = (CustomStatus)objGEC.UnLockGradeEntryNew(objGradeEntry, OrgID, SubType, CollegeId, Schemeno, DegreeNo);
-                           
+
                             if (cs.Equals(CustomStatus.RecordSaved))
                             {
-
                                 objCommon.DisplayMessage(this.updGradeEntry, "Record UnLocked Successfully!", this.Page);
                                 BindListView();
-                               // this.LoadGrade();
-
+                                // this.LoadGrade();
                             }
-
                         }
-
                     }
                 }
             }
-                }
-
-
+        }
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -838,38 +747,62 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
-
-
-
-
     }
     protected void ddlSubType_SelectedIndexChanged(object sender, EventArgs e)
     {
-        btnSubmit.Visible = false;
-        btnSave.Visible = true;
-        lvGrade.Visible = false;
-        btnLock.Visible = false;
-        btnUnlock.Visible = false;
+        if (Convert.ToString(ViewState["EDIT_HIT"]) == "1")
+        {
+        }
+        else
+        {
+            string subno = string.Empty;
+
+            string subnos = string.Empty;
+
+            foreach (ListItem items in ddlSubType.Items)
+            {
+                if (items.Selected == true)
+                {
+                    subnos += (items.Value).Split('-')[0] + ',';
+                }
+            }
+            if (subnos.Length > 1)
+            {
+                subnos = subnos.Remove(subnos.Length - 1);
+            }
+
+            if (subnos.Length > 0)
+            {
+                DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlSubType.SelectedValue));
+
+                if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+                {
+                    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                    ViewState["subtype"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"]).ToString();
+                }
+            }
+            else
+            {
+            }
+        }
     }
     protected void ddlcollege_SelectedIndexChanged(object sender, EventArgs e)
     {
-
         btnSubmit.Visible = false;
         btnSave.Visible = true;
         lvGrade.Visible = false;
         btnLock.Visible = false;
         btnUnlock.Visible = false;
         ddlGradeType.SelectedIndex = 0;
-        ddlSubType.SelectedIndex = 0;
+        ddlSubType.SelectedIndex = -1;
         ddlSection.SelectedIndex = 0;
-
-
     }
     private void MultipleCollegeBind()
     {
         try
         {
-
             //objCommon.FillListBox(ddlcollege, "ACD_COLLEGE_SCHEME_MAPPING  M INNER JOIN   ACD_DEGREE D ON (D.DEGREENO=M.DEGREENO) ", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"].ToString() + ") AND COSCHNO>0 AND M.COLLEGE_ID > 0 AND M.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + "AND DEGREETYPEID=" + ddlSection.SelectedValue, "COLLEGE_ID");
             objCommon.FillListBox(ddlcollege, "ACD_COLLEGE_SCHEME_MAPPING  M INNER JOIN   ACD_DEGREE D ON (D.DEGREENO=M.DEGREENO) ", "COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND M.COLLEGE_ID > 0 AND M.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + "AND DEGREETYPEID=" + ddlSection.SelectedValue, "COLLEGE_ID");
             //objCommon.FillListBox(ddlcollege, "ACD_COLLEGE_MASTER WITH (NOLOCK)", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
@@ -883,23 +816,16 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
     {
         if (Convert.ToString(ViewState["EDIT_HIT"]) == "1")
         {
-
         }
         else
         {
-            //chkBranchList.Items.Clear();
-            //chkSemesterList.Items.Clear();
-           // chkDegreeList.Items.Clear();
             string collegenose = string.Empty;
-            //
             string collegenos = string.Empty;
-            //string collegenames = string.Empty;
             foreach (ListItem items in ddlcollege.Items)
             {
                 if (items.Selected == true)
                 {
                     collegenos += (items.Value).Split('-')[0] + ','; //Add by maithili [08-09-2022]
-
                     //collegenos += items.Value + ','; 
                     //collegenames += items.Text + ',';
                 }
@@ -911,31 +837,26 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
 
             if (collegenos.Length > 0)
             {
-               // MultipleSessionBind(collegenos);
-               // ddlSession.Focus();
+                // MultipleSessionBind(collegenos);
+                // ddlSession.Focus();
                 //PopulateDegreeList();
-               // BindDegreeWithMultipleCollege(collegenos);
-
+                // BindDegreeWithMultipleCollege(collegenos);
                 //if (ddlcollege.SelectedIndex > 0)
                 //{
-                    DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlcollege.SelectedValue));
+                DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlcollege.SelectedValue));
 
-                    if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
-                    {
-                        ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-                        ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                        ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                        ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
-                        // FILL DROPDOWN  ddlSession_SelectedIndexChanged
-                    }
-                //}
+                if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+                {
+                    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                    ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+                    // FILL DROPDOWN  ddlSession_SelectedIndexChanged
+                }
             }
             else
             {
-               // ddlcollege.Items.Clear();
-               // ddlcollege.Items.Add(new ListItem("Please Select", "0"));
             }
         }
     }
-
 }
