@@ -775,6 +775,22 @@ namespace IITMS
                     }
                     return ds;
                 }
+                public DataSet GetFacultyNotTagToCourse()
+                {
+
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = new SqlParameter[0];
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_FACULTY_NOT_TAG_LIST", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseTeacherAllotment.GetFacultyNotTagToCourse-> " + ex.ToString());
+                    }
+                    return ds;
+                }
 
             }//end of Class
         }
