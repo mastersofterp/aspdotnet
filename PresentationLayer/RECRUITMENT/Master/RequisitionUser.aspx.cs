@@ -46,7 +46,6 @@ public partial class RECRUITMENT_Master_RequisitionUser : System.Web.UI.Page
                 Page.Title = Session["coll_name"].ToString();
                 CheckPageAuthorization();
                 FillDepartment();
-                FillPost();
                 BindReqUser();
             }
         }
@@ -98,6 +97,7 @@ public partial class RECRUITMENT_Master_RequisitionUser : System.Web.UI.Page
 
     protected void ddlDepartment_SelectedIndexChanged(object sender, EventArgs e)
     {
+        FillPost();
         FillUser();
     }
 
@@ -105,7 +105,8 @@ public partial class RECRUITMENT_Master_RequisitionUser : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = objReq.GetPosts();
+            int deptno = Convert.ToInt32(ddlDepartment.SelectedValue);
+            DataSet ds = objReq.GetPosts(deptno);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 lstPost.DataSource = ds;
@@ -132,7 +133,10 @@ public partial class RECRUITMENT_Master_RequisitionUser : System.Web.UI.Page
         ddlUser.SelectedIndex = 0;
         ddlPostCategory.SelectedIndex = 0;
         lstPost.ClearSelection();
+        lstPost.Items.Clear();
         BindReqUser();
+        ddlDepartment.Enabled = true;
+        ddlUser.Enabled = true;
         //ViewState["action"] = null;
         ViewState["REQUNO"] = null;
     }
@@ -188,7 +192,7 @@ public partial class RECRUITMENT_Master_RequisitionUser : System.Web.UI.Page
             }
             else
             {
-                MessageBox("Please select atleast one allowed post!");
+                MessageBox("Please Select Atleast One Allowed Post!");
                 return;
             }
 
@@ -258,6 +262,8 @@ public partial class RECRUITMENT_Master_RequisitionUser : System.Web.UI.Page
         ImageButton btnEdit = sender as ImageButton;
         int REQUNO = int.Parse(btnEdit.CommandArgument);
         ShowDetails(REQUNO);
+        ddlDepartment.Enabled = false;
+        ddlUser.Enabled = false;
     }
     private void ShowDetails(Int32 REQUNO)
     {
@@ -286,7 +292,7 @@ public partial class RECRUITMENT_Master_RequisitionUser : System.Web.UI.Page
                 }
                 string postno = ds.Tables[0].Rows[0]["POST_NO"].ToString();
                 string[] valuesArray = postno.Split(',');
-
+                FillPost();
                 // Bind the values to the ListBox
                 foreach (string value in valuesArray)
                 {

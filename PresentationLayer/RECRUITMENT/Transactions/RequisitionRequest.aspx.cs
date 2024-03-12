@@ -51,9 +51,10 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
                 pnlbtn.Visible = false;
                 pnlList.Visible = true;
                 FillDepartment();
-                FillPost();
                 BindLVRequisitionReqStatus();
             }
+            txtDescription.Attributes.Add("maxlength", txtDescription.MaxLength.ToString());
+            txtReqAppLvl.Attributes.Add("maxlength", txtReqAppLvl.MaxLength.ToString());
         }
     }
     private void CheckPageAuthorization()
@@ -90,7 +91,8 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
     {
         try
         {
-            DataSet ds = objReq.GetPosts();
+            int deptNo = Convert.ToInt32(ddlDepartment.SelectedValue);
+            DataSet ds = objReq.GetPosts(deptNo);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlPost.DataSource = ds;
@@ -285,6 +287,8 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
         ddlDepartment.SelectedIndex = 0;
         ddlpostType.SelectedIndex = 0;
         ddlPost.SelectedIndex = 0;
+        ddlPost.Items.Clear();
+        ddlPost.Items.Add("Please Select");
         txtNoofPosition.Text = string.Empty;
         txtDescription.Text = string.Empty;
         //txtReqAppLvl.Text = string.Empty;
@@ -297,7 +301,7 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
         bool result = false;
         DataSet ds = new DataSet();
 
-        ds = objCommon.FillDropDown("REC_REQUISITION_REQUEST", "*", "", "REQUISITION_NO= '" + txtReqNo.Text + "' AND APPROVAL_STATUS IN ('P','F')", "");
+        ds = objCommon.FillDropDown("REC_REQUISITION_REQUEST", "*", "", "REQUISITION_NO= '" + txtReqNo.Text + "' OR APPROVAL_STATUS IN ('P','F') AND DEPT_NO= '" + ddlDepartment.SelectedValue + "' and POSTTYPE_NO='" + ddlpostType.SelectedValue + "'and POST_NO ='" + ddlPost.SelectedValue + "'", "");
         if (ds.Tables[0].Rows.Count > 0)
         {
             result = true;
@@ -460,7 +464,7 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
                 if (status == "A")
                 {
                     btnSave.Enabled = false;
-                    objCommon.DisplayMessage(this.updPanel, "Requisition Request is Already Approved by authority, You can not modify", this.Page);
+                    objCommon.DisplayMessage(this.updPanel, "Requisition Request is Already Approved by authority, You cannot modify", this.Page);
                     return;
                 }
                 else
@@ -473,13 +477,13 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
             if (statusnew == "A" || statusnew == "T")
             {
                 btnSave.Enabled = false;
-                objCommon.DisplayMessage(this.updPanel, "Requisition Request is Already Approved by authority, You can not modify", this.Page);
+                objCommon.DisplayMessage(this.updPanel, "Requisition Request Is Already Approved By Authority, You Cannot Modify", this.Page);
                 return;
             }
             else if (statusnew == "R")
             {
                 btnSave.Enabled = false;
-                objCommon.DisplayMessage(this.updPanel, "Requisition Request is Already Rejected by authority, You can not modify", this.Page);
+                objCommon.DisplayMessage(this.updPanel, "Requisition Request Is Already Rejected By Authority, You Cannot Modify", this.Page);
                 return;
 
             }
@@ -532,6 +536,7 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
                 txtReqNo.Text = ds.Tables[0].Rows[0]["REQUISITION_NO"].ToString();
                 ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["DEPT_NO"].ToString();
                 ddlpostType.SelectedValue = ds.Tables[0].Rows[0]["POSTTYPE_NO"].ToString();
+                FillPost();
                 ddlPost.SelectedValue = ds.Tables[0].Rows[0]["POST_NO"].ToString();
                 txtNoofPosition.Text = ds.Tables[0].Rows[0]["NO_OF_POSITION"].ToString();
                 txtDescription.Text = ds.Tables[0].Rows[0]["DESCRIPTION"].ToString();
@@ -564,7 +569,7 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
                 if (status == "A")
                 {
                     btnSave.Enabled = false;
-                    objCommon.DisplayMessage(this.updPanel, "Requisition Request is Already Approved by authority, You can not delete", this.Page);
+                    objCommon.DisplayMessage(this.updPanel, "Requisition Request Is Already Approved By Authority, You Cannot Delete", this.Page);
                     return;
                 }
                 else
@@ -577,13 +582,13 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
             if (statusnew == "A" || statusnew == "T")
             {
                 btnSave.Enabled = false;
-                objCommon.DisplayMessage(this.updPanel, "Requisition Request is Already Approved by authority, You can not delete", this.Page);
+                objCommon.DisplayMessage(this.updPanel, "Requisition Request Is Already Approved By Authority, You Cannot Delete", this.Page);
                 return;
             }
             else if (statusnew == "R")
             {
                 btnSave.Enabled = false;
-                objCommon.DisplayMessage(this.updPanel, "Requisition Request is Already Rejected by authority, You can not delete", this.Page);
+                objCommon.DisplayMessage(this.updPanel, "Requisition Request Is Already Approved By Authority, You Cannot Delete", this.Page);
                 return;
 
             }
@@ -623,5 +628,9 @@ public partial class RECRUITMENT_Transactions_RequisitionRequest : System.Web.UI
                 objUCommon.ShowError(Page, "Server.UnAvailable");
 
         }
+    }
+    protected void ddlDepartment_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        FillPost();
     }
 }

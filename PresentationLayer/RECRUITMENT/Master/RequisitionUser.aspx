@@ -76,8 +76,8 @@
                                     <label>Allowed Post </label>
                                 </div>
                                <asp:ListBox ID="lstPost" runat="server" SelectionMode="Multiple" TabIndex="4" CssClass="form-control multi-select-demo"  AppendDataBoundItems="true"></asp:ListBox>
-                                 <asp:RequiredFieldValidator ID="rfvPost" runat="server" InitialValue="0" ControlToValidate="lstPost"
-                                  Display="None" ErrorMessage="Please Select Post" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                 <asp:RequiredFieldValidator ID="rfvPost" runat="server" ControlToValidate="lstPost"
+                                 Display="None" ErrorMessage="Please Select Allowed Post" ValidationGroup="submit"></asp:RequiredFieldValidator>
                             <%--    <div class="border rounded p-2">
                                     <asp:CheckBoxList ID="CheckBoxList" runat="server" RepeatDirection="Horizontal" RepeatColumns="2" TabIndex="1">
                                         <asp:ListItem Value="1"> Assistance Professor &nbsp;&nbsp;</asp:ListItem>
@@ -100,8 +100,8 @@
                     </div>
 
                     <div class="col-12 btn-footer">
-                        <asp:Button ID="btnSubmit" runat="server" Text="Submit" TabIndex="6" OnClick="btnSubmit_Click" CssClass="btn btn-primary" ValidationGroup="submit"/>
-                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="7" OnClick="btnCancel_Click" CssClass="btn btn-warning" />
+                        <asp:Button ID="btnSubmit" runat="server" Text="Submit" ToolTip="Submit" TabIndex="6" OnClick="btnSubmit_Click" CssClass="btn btn-primary" ValidationGroup="submit"/>
+                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Clear" TabIndex="7" OnClick="btnCancel_Click" CssClass="btn btn-warning" />
                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="submit"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                     </div>

@@ -47,7 +47,6 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
                 Page.Title = Session["coll_name"].ToString();
                 CheckPageAuthorization();
                 FillDepartment();
-                FillPost();
                 BindReqApprLvl();
                 dtPR = setPRGridViewDataset(dtPR, "dtPR").Clone();
                 ViewState["dtPR"] = dtPR;
@@ -89,7 +88,8 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
     {
         try
         {
-            DataSet ds = objReq.GetPosts();
+            int Deptno = Convert.ToInt32(ddlDepartment.SelectedValue);
+            DataSet ds = objReq.GetPosts(Deptno);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 lstPost.DataSource = ds;
@@ -128,61 +128,125 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
     }
     protected void ddlDepartment_SelectedIndexChanged(object sender, EventArgs e)
     {
+        FillPost();
         FillUser();
+
     }
-    protected void btnAddAppr_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            dtPR = (DataTable)ViewState["dtPR"];
-            DataRow dr = dtPR.NewRow();
+    //protected void btnAddAppr_Click(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        dtPR = (DataTable)ViewState["dtPR"];
+    //        DataRow dr = dtPR.NewRow();
 
-            if (CheckDuplicatePR(dtPR, ddlApproval.SelectedItem.Text))
-            {
-                MessageBox("Record Already Exist!");
-                return;
-            }
+    //        if (CheckDuplicatePR(dtPR, ddlApproval.SelectedItem.Text))
+    //        {
+    //            MessageBox("Record Already Exist!");
+    //            return;
+    //        }
 
-            if (ddlApproval.SelectedIndex > 0)
-            {
-                dr["Authority"] = Convert.ToString(ddlApproval.SelectedItem.Text);
-                dr["AuthorityNo"] = Convert.ToInt32(ddlApproval.SelectedValue);
-            }
-            else
-            {
-                dr["Authority"] = string.Empty;
-                dr["AuthorityNo"] = string.Empty;
-            }
+    //        if (ddlApproval.SelectedIndex > 0)
+    //        {
+    //            dr["Authority"] = Convert.ToString(ddlApproval.SelectedItem.Text);
+    //            dr["AuthorityNo"] = Convert.ToInt32(ddlApproval.SelectedValue);
+    //        }
+    //        else
+    //        {
+    //            //dr["Authority"] = string.Empty;
+    //            //dr["AuthorityNo"] = string.Empty;
+    //            MessageBox("Please Select Approval Authority");
+    //            return;
+    //        }
 
-            dtPR.Columns["SRNO"].AutoIncrementStep = 1;
+    //        dtPR.Columns["SRNO"].AutoIncrementStep = 1;
 
-            if (dtPR.Rows.Count > 0)
-            {
+    //        if (dtPR.Rows.Count > 0)
+    //        {
 
-                //int maxSeqNo = dtPR.AsEnumerable().Max(row => row.Field<int>("SRNO"));
-                int maxSeqNo = dtPR.AsEnumerable()
-                   .Where(row => row["SRNO"] != DBNull.Value && row["SRNO"] != null)
-                   .Max(row => Convert.ToInt32(row["SRNO"]));
-                dr["SRNO"] = maxSeqNo + 1;
-            }
-            else
-            {
-                dr["SRNO"] = 1;
-            }
+    //            //int maxSeqNo = dtPR.AsEnumerable().Max(row => row.Field<int>("SRNO"));
+    //            int maxSeqNo = dtPR.AsEnumerable()
+    //               .Where(row => row["SRNO"] != DBNull.Value && row["SRNO"] != null)
+    //               .Max(row => Convert.ToInt32(row["SRNO"]));
+    //            dr["SRNO"] = maxSeqNo + 1;
+    //        }
+    //        else
+    //        {
+    //            dr["SRNO"] = 1;
+    //        }
 
-            dtPR.Rows.Add(dr);
-            dtPR.AcceptChanges();
-            lvApplvl.DataSource = dtPR;
-            lvApplvl.DataBind();
-            pnlAl.Visible = true;
-            lvApplvl.Visible = true;
-            ddlApproval.SelectedIndex = 0;
-        }
-        catch (Exception ex)
-        {
+    //        dtPR.Rows.Add(dr);
+    //        dtPR.AcceptChanges();
+    //        lvApplvl.DataSource = dtPR;
+    //        lvApplvl.DataBind();
+    //        pnlAl.Visible = true;
+    //        lvApplvl.Visible = true;
+    //        ddlApproval.SelectedIndex = 0;
+    //    }
+    //    catch (Exception ex)
+    //    {
             
+    //    }
+    //}
+
+protected void btnAddAppr_Click(object sender, EventArgs e)
+{
+    try
+    {
+        dtPR = (DataTable)ViewState["dtPR"];
+        if (dtPR.Rows.Count >= 5)
+        {
+            MessageBox("You Cannot Add More Than 5 Approval Authorities");
+            return;
         }
+
+        DataRow dr = dtPR.NewRow();
+
+        if (CheckDuplicatePR(dtPR, ddlApproval.SelectedItem.Text))
+        {
+            MessageBox("Record Already Exist!");
+            return;
+        }
+
+        if (ddlApproval.SelectedIndex > 0)
+        {
+            dr["Authority"] = Convert.ToString(ddlApproval.SelectedItem.Text);
+            dr["AuthorityNo"] = Convert.ToInt32(ddlApproval.SelectedValue);
+        }
+        else
+        {
+            MessageBox("Please Select Approval Authority");
+            return;
+        }
+
+        dtPR.Columns["SRNO"].AutoIncrementStep = 1;
+
+        if (dtPR.Rows.Count > 0)
+        {
+            int maxSeqNo = dtPR.AsEnumerable()
+               .Where(row => row["SRNO"] != DBNull.Value && row["SRNO"] != null)
+               .Max(row => Convert.ToInt32(row["SRNO"]));
+            dr["SRNO"] = maxSeqNo + 1;
+        }
+        else
+        {
+            dr["SRNO"] = 1;
+        }
+
+        dtPR.Rows.Add(dr);
+        dtPR.AcceptChanges();
+        lvApplvl.DataSource = dtPR;
+        lvApplvl.DataBind();
+        pnlAl.Visible = true;
+        lvApplvl.Visible = true;
+        ddlApproval.SelectedIndex = 0;
     }
+    catch (Exception ex)
+    {
+        // Handle the exception
+        MessageBox(ex.Message);
+    }
+}
+
     private bool CheckDuplicatePR(DataTable dt, string value1)
     {
         bool retVal = false;
@@ -258,6 +322,7 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
     {
         ddlDepartment.SelectedIndex = 0;
         lstPost.ClearSelection();
+        lstPost.Items.Clear();
         ddlApproval.SelectedIndex = 0;
         ddlUser.SelectedIndex = 0;
         dtPR = (DataTable)ViewState["dtPR"];
@@ -266,6 +331,9 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
             dtPR.Clear();
         }
         pnlAl.Visible = false;
+        ddlDepartment.Enabled = true;
+        ddlUser.Enabled = true;
+        ViewState["REQ_PANO"] = null;
     }
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -387,7 +455,7 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
             }
             else
             {
-                MessageBox("Please add atleast one approval level");
+                MessageBox("Please Add Atleast One Approval Level");
                 return;
             }
 
@@ -544,7 +612,7 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
                 }
                 string postno = ds.Tables[0].Rows[0]["POST_NO"].ToString();
                 string[] valuesArray = postno.Split(',');
-
+                FillPost();
                 // Bind the values to the ListBox
                 foreach (string value in valuesArray)
                 {
@@ -575,6 +643,8 @@ public partial class RECRUITMENT_Master_RequisitionApprovalLevels : System.Web.U
         ImageButton btnEdit = sender as ImageButton;
         int REQ_PANO = int.Parse(btnEdit.CommandArgument);
         ShowDetails(REQ_PANO);
+        ddlDepartment.Enabled = false;
+        ddlUser.Enabled = false;
     }
 
     public bool CheckReqAppLvl()

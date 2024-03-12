@@ -27,15 +27,15 @@ namespace IITMS
                 private string constr = System.Configuration.ConfigurationManager.ConnectionStrings["REC"].ConnectionString;
 
 
-                public DataSet GetPosts()
+                public DataSet GetPosts(int Deptno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[0];
-                        //objParams[0] = new SqlParameter("@P_DEPTNO", Deptno);
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_DEPTNO", Deptno);
                         ds = objSQLHelper.ExecuteDataSetSP("SP_POST_BROWSE_REP", objParams);
 
                     }

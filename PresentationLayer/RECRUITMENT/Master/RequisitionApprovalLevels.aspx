@@ -37,11 +37,37 @@
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
-                                    <label>Post</label>
+                                    <label>Allowed Post</label>
                                 </div>
                                 <asp:ListBox ID="lstPost" runat="server" SelectionMode="Multiple" TabIndex="1" CssClass="form-control multi-select-demo" AppendDataBoundItems="true" ></asp:ListBox>
+                                <asp:RequiredFieldValidator ID="rfvPost" runat="server" ControlToValidate="lstPost"
+                                Display="None" ErrorMessage="Please Select Allowed Post" ValidationGroup="submit"></asp:RequiredFieldValidator>
                             </div>
                             
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>Requisition User</label>
+                                </div>
+                                <asp:DropDownList ID="ddlUser" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" TabIndex="2">
+                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                </asp:DropDownList>
+                                 <asp:RequiredFieldValidator ID="rfvUser" runat="server" InitialValue="0" ControlToValidate="ddlUser"
+                                  Display="None" ErrorMessage="Please Select Requisition User" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                <%--<asp:ListBox ID="lstUsers" runat="server" SelectionMode="Multiple" TabIndex="1" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>--%>
+                            </div>
+
+                            <div class="form-group col-lg-2 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <%--<sup>* </sup>--%>
+                                    <label>Status</label>
+                                </div>
+                                <div class="switch form-inline">
+                                    <input type="checkbox" id="rdActive" name="switch" checked tabindex="1" />
+                                    <label data-on="Active" data-off="Inactive" for="rdActive"></label>
+                                </div>
+                            </div>
+
                             <div class="form-group col-lg-4 col-md-6 col-12">
                                 <table class="table table-striped table-bordered nowrap">
                                     <thead class="bg-light-blue">
@@ -63,16 +89,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                <div class="label-dynamic">
-                                    <%--<sup>* </sup>--%>
-                                    <label>Status</label>
-                                </div>
-                                <div class="switch form-inline">
-                                    <input type="checkbox" id="rdActive" name="switch" checked tabindex="1" />
-                                    <label data-on="Active" data-off="Inactive" for="rdActive"></label>
-                                </div>
-                            </div>
+                            
 
                         <%--     <div class="form-group col-lg-3 col-md-6 col-12">
                                    <div class="label-dynamic">
@@ -137,30 +154,21 @@
                                        TabIndex="7" ToolTip="Path"></asp:TextBox>
                                </div>--%>
 
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <div class="label-dynamic">
-                                    <sup>* </sup>
-                                    <label>User</label>
-                                </div>
-                                <asp:DropDownList ID="ddlUser" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" TabIndex="2">
-                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                </asp:DropDownList>
-                                 <asp:RequiredFieldValidator ID="rfvUser" runat="server" InitialValue="0" ControlToValidate="ddlUser"
-                                  Display="None" ErrorMessage="Please Select User" ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                <%--<asp:ListBox ID="lstUsers" runat="server" SelectionMode="Multiple" TabIndex="1" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>--%>
-                            </div>
+                            
 
                             <div class="col-md-6">
                               <asp:Panel ID="pnlAl" runat="server" Visible="false">
                                   <asp:ListView ID="lvApplvl" runat="server">
                                       <LayoutTemplate>
                                           <div id="lgv1">
-                                              <h4>Approval Authority level List</h4>
+                                              <div class="label-dynamic">
+                                                <label>Approval Authority level List</label>
+                                                </div>
                                               <table class="table table-bordered table-hover">
                                                   <thead>
                                                       <tr class="bg-light-blue">
                                                           <th>Remove</th>
-                                                          <th>AuthorityNo</th>
+                                                          <th>Authority No.</th>
                                                           <th>Authority</th>
                                                       </tr>
                                                   </thead>
@@ -186,8 +194,8 @@
                     </div>
 
                     <div class="col-12 btn-footer">
-                        <asp:Button ID="btnSubmit" runat="server" Text="Submit" TabIndex="1" CssClass="btn btn-primary" OnClick="btnSubmit_Click"  ValidationGroup="submit"/>
-                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" OnClick="btnCancel_Click"/>
+                        <asp:Button ID="btnSubmit" runat="server" Text="Submit" ToolTip="Submit" TabIndex="1" CssClass="btn btn-primary" OnClick="btnSubmit_Click"  ValidationGroup="submit"/>
+                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Clear" TabIndex="1" CssClass="btn btn-warning" OnClick="btnCancel_Click"/>
                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="submit"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                     </div>
@@ -314,7 +322,7 @@
             });
         });
     </script>
-
+   
 <div id="divMsg" runat="server">
 </div>
 </asp:Content>

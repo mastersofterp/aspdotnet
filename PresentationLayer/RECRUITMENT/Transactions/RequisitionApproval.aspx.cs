@@ -87,7 +87,7 @@ public partial class RECRUITMENT_Transactions_RequisitionApproval : System.Web.U
         try
         {
             int deptNo = Convert.ToInt32(ddlDepartment.SelectedValue);
-            DataSet ds = objReq.GetPosts();
+            DataSet ds = objReq.GetPosts(deptNo);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlPost.DataSource = ds;
@@ -143,13 +143,13 @@ public partial class RECRUITMENT_Transactions_RequisitionApproval : System.Web.U
             {
                 if (ddlFilter.SelectedValue == "1")
                 {
-                    MessageBox("Pending Requests data not found !");
+                    MessageBox("Pending Requests Data Not Found !");
                     pnlPndRequiAppList.Visible = false;
                     return;
                 }
                 else
                 {
-                    MessageBox("Approved Requests data not found !");
+                    MessageBox("Approved Requests Data Not Found !");
                     pnlApprlist.Visible = false;
                     return;
                 }
@@ -199,13 +199,13 @@ public partial class RECRUITMENT_Transactions_RequisitionApproval : System.Web.U
             {
                 if (ddlFilter.SelectedValue == "1")
                 {
-                    MessageBox("Pending Requests data not found !");
+                    MessageBox("Pending Requests Data Not Found !");
                     pnlPndRequiAppList.Visible = false;
                     return;
                 }
                 else
                 {
-                    MessageBox("Approved Requests data not found !");
+                    MessageBox("Approved Requests Data Not Found !");
                     pnlApprlist.Visible = false;
                     return;
                 }
@@ -297,7 +297,7 @@ public partial class RECRUITMENT_Transactions_RequisitionApproval : System.Web.U
             }
             if (instCount == 1)
             {
-                MessageBox("Record updated successfully");
+                MessageBox("Record Saved Successfully");
                 Clear();
             }
         }

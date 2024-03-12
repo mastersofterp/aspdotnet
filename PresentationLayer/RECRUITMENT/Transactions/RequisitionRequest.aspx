@@ -71,7 +71,7 @@
                                                         <sup>*</sup>
                                                         <label>Requisition No.</label>
                                                     </div>
-                                                    <asp:TextBox ID="txtReqNo" runat="server" CssClass="form-control" ToolTip="Activity Code"
+                                                    <asp:TextBox ID="txtReqNo" runat="server" CssClass="form-control" ToolTip="Requisition No."
                                                         Width="100%" MaxLength="100" Enabled="false" ></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="rfvReqNo" runat="server"
                                                         ControlToValidate="txtReqNo" Display="None"
@@ -86,7 +86,7 @@
                                                 <label>Department</label>
                                             </div>
                                             <asp:DropDownList ID="ddlDepartment" runat="server" AppendDataBoundItems="true" CssClass="form-control" ToolTip="Select Department" data-select2-enable="true"
-                                                TabIndex="6">
+                                                TabIndex="6" OnSelectedIndexChanged="ddlDepartment_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvDepartment" runat="server" InitialValue="0" ControlToValidate="ddlDepartment"
@@ -95,16 +95,16 @@
                                          <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
-                                                <label>Post Type</label>
+                                                <label>Post Category</label>
                                             </div>
-                                            <asp:DropDownList ID="ddlpostType" runat="server" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" ToolTip="Select Post Type" data-select2-enable="true"
+                                            <asp:DropDownList ID="ddlpostType" runat="server" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" ToolTip="Select Post Category" data-select2-enable="true"
                                                 TabIndex="3" >
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                <asp:ListItem Value="1">Teaching</asp:ListItem>
                                                <asp:ListItem Value="2">Non Teaching</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvPostType" runat="server" InitialValue="0" ControlToValidate="ddlpostType"
-                                                Display="None" ErrorMessage="Please Select Post Type" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select Post Category" ValidationGroup="submit"></asp:RequiredFieldValidator>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
@@ -130,24 +130,26 @@
                                             <asp:RequiredFieldValidator ID="rfvNoofPosition" ControlToValidate="txtNoofPosition" runat="server" ErrorMessage="Please Enter No. of Position" ValidationGroup="submit" Display="None"></asp:RequiredFieldValidator>
                                         </div>
 
-                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                         <div class="form-group col-lg-5 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
                                                 <label>Description</label>
                                             </div>
-                                            <asp:TextBox ID="txtDescription" runat="server" Text="" CssClass="form-control" IsRequired="True" IsValidate="True"  MaxLength="500" 
-                                                TabIndex="4" ToolTip="Please Enter Description" TextMode="MultiLine">
+                                            <asp:TextBox ID="txtDescription" runat="server" Text="" CssClass="form-control" IsRequired="True" IsValidate="True"
+                                                TabIndex="4" ToolTip="Please Enter Description" TextMode="MultiLine" MaxLength="200" EnableViewState="True" 
+                                                onkeyDown="checkTextAreaMaxLength(this,event,'200');" onkeyup="textCounter(this, this.form.remLen, 200);">
                                             </asp:TextBox>
                                             <asp:RequiredFieldValidator ID="rfvDescription" ControlToValidate="txtDescription" runat="server" ErrorMessage="Please Enter Description" ValidationGroup="submit" Display="None"></asp:RequiredFieldValidator>
                                         </div>
                                        
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="form-group col-lg-4 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
                                                 <label>Requisition Approval levels</label>
                                             </div>
-                                            <asp:TextBox ID="txtReqAppLvl" runat="server" Text="" CssClass="form-control" IsRequired="True" IsValidate="True"  MaxLength="500" 
-                                                TabIndex="4" ToolTip="Budget Passing Path" TextMode="MultiLine" Enabled="false">
+                                            <asp:TextBox ID="txtReqAppLvl" runat="server" Text="" CssClass="form-control" IsRequired="True" IsValidate="True"  MaxLength="200" 
+                                                TabIndex="4" ToolTip="Requisition Approval Passing Path" TextMode="MultiLine" Enabled="false"
+                                                onkeyDown="checkTextAreaMaxLength(this,event,'200');" onkeyup="textCounter(this, this.form.remLen, 200);">
                                             </asp:TextBox>
                                             <asp:RequiredFieldValidator ID="rfvReqAppLvl" ControlToValidate="txtReqAppLvl" runat="server" ErrorMessage="Please Enter Requisition Approval levels" ValidationGroup="submit" Display="None"></asp:RequiredFieldValidator>
                                         </div>
@@ -186,11 +188,11 @@
                                                 <thead class="bg-light-blue" >
                                                     <tr>
                                                         <th>Action</th>
-                                                        <th>Requisition No
+                                                        <th>Requisition No.
                                                         </th>
                                                         <th>Department
                                                         </th>
-                                                        <th>Post Type
+                                                        <th>Post Category
                                                         </th>
                                                          <th>Post
                                                         </th>

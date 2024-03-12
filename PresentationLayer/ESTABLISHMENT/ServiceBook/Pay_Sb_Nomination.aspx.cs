@@ -563,6 +563,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 //else
                 //{
                 //}
+               
                 if (Convert.ToInt32(ds.Tables[1].Rows.Count) > 0)
                 {
                     int rowCount = ds.Tables[1].Rows.Count;
@@ -588,6 +589,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                     //lvCompAttach.DataBind();
                     pnlAttachmentList.Visible = true;
                     this.BindListView_Attachments(dtM);
+                    //if (lblBlobConnectiontring.Text != "")
+                    //{
+                    //    //GetFileNamePath()
+                    //        //GetFileNamePath(object filename, object TNO, object idno, object folder, object AppID)
+                    //}
                 }
                 else
                 {
@@ -1076,7 +1082,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
         }
         return retVal;
     }
-    public string GetFileNamePath(object filename, object TNO, object idno, object folder, object AppID)
+    public string GetFileNamePathForMultiple(object filename, object TNO, object idno, object folder, object AppID)
     {
         string[] extension = filename.ToString().Split('.');
         if (filename != null && filename.ToString() != string.Empty)
@@ -1092,7 +1098,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             DataRow dr = dt.NewRow();
             int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
             dr["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
-            dr["FILEPATH"] = Docpath + "TRAINING_CONDUCTED" + ViewState["idno"] + "\\APP_";
+            //dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_";
+            dr["FILEPATH"] = Docpath + "NOMINATION" + "\\" +_idnoEmp + "\\APP_";
             dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
             dr["DisplayFileName"] = flupld.FileName;
             dr["IDNO"] = _idnoEmp;
@@ -1113,7 +1120,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             DataRow dr = dt.NewRow();
             int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
             dr["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
-            dr["FILEPATH"] = Docpath + "TRAINING_CONDUCTED" + ViewState["idno"] + "\\APP_";
+            //dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_";
+            dr["FILEPATH"] = Docpath + "NOMINATION" + "\\" + _idnoEmp + "\\APP_";
             dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
             dr["DisplayFileName"] = flupld.FileName;
             dr["IDNO"] = _idnoEmp;
