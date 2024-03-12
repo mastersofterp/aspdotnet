@@ -478,7 +478,7 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
                     // return;
                 }
 
-                this.BindListView();
+                //this.BindListView();
             }
 
         }

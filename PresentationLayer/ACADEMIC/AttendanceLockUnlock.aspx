@@ -457,7 +457,7 @@
         <Triggers>
             <%-- <asp:PostBackTrigger ControlID="btnShow" />--%>
             <%--<asp:PostBackTrigger ControlID="lvattendancelockunlock" />--%>
-            <asp:PostBackTrigger ControlID="btnSubmit" />
+            <%--<asp:PostBackTrigger ControlID="btnSubmit" />--%>
         </Triggers>
 
     </asp:UpdatePanel>
