@@ -587,8 +587,8 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
         {
             lvGrade.Visible = false;
             lvCGPA.Visible = false;
-            ddlLevel.SelectedValue = "0";
-
+            ddlLevel.SelectedValue="0";
+        
 
         }
         else
@@ -597,5 +597,5 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
         }
     }
 
-
+   
 }
