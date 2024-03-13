@@ -82,6 +82,8 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             //Added by Nehal on Dated-20/02/2023
             objCommon.FillDropDownList(ddlSessionCollege, "ACD_SESSION", "SESSIONID", "SESSION_NAME", "ISNULL(IS_ACTIVE,0)=1", "SESSIONID DESC");
             objCommon.FillListBox(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID>0 AND ActiveStatus=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
+            objCommon.FillDropDownList(ddlAcademicYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ISNULL(ACTIVE_STATUS,0) = 1", "ACADEMIC_YEAR_ID DESC");
+
         }
         catch (Exception ex)
         {
@@ -241,7 +243,10 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                     objSession.IsActive = false;
                 }
 
-                objSession.academic_year = txtacadyear.Text.Trim();
+                objSession.academic_year = ddlAcademicYear.SelectedItem.Text; // txtacadyear.Text.Trim(); // modified by Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+                objSession.AcademicYearID = Convert.ToInt32(ddlAcademicYear.SelectedValue);// Added by Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+                objSession.StudyPatternNo = Convert.ToInt32(ddlStudyPattern.SelectedValue);// Added by Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+
                 objSession.sequence_no = Convert.ToInt32(txtSeqNo.Text.Trim()); //Added by Vinay Mishra on Dated 16/06/2023
                 DataSet ds1 = (DataSet)ViewState["GetAllSession"];
                 //DataRow[] dr = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no);
@@ -265,6 +270,8 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
 
                 //Added Mahesh on Dated 29/07/2021
                 // objSession.PROVISIONAL_CERTIFICATE_SESSION_NAME = txtProvisionalCertificateSessionName.Text;
+
+
 
                 //Check for add or edit
                 if (Session["action"] != null && Session["action"].ToString().Equals("edit"))
@@ -374,7 +381,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                     //hdnDate.Value = Convert.ToDateTime(dr["SESSION_STDATE"].ToString()).ToString("MMM dd, yyyy") + " - " + Convert.ToDateTime(dr["SESSION_ENDDATE"].ToString()).ToString("MMM dd, yyyy");
                     hdnDate.Value = dr["SESSION_STDATE"] != DBNull.Value ? Convert.ToDateTime(dr["SESSION_STDATE"].ToString()).ToString("MMM dd, yyyy") + " - " + Convert.ToDateTime(dr["SESSION_ENDDATE"].ToString()).ToString("MMM dd, yyyy") : Convert.ToDateTime(DateTime.Now).ToString("MMM dd, yyyy") + " - " + Convert.ToDateTime(DateTime.Now).ToString("MMM dd, yyyy");
 
-                    txtacadyear.Text = dr["ACADEMIC_YEAR"] == null ? string.Empty : dr["ACADEMIC_YEAR"].ToString();
+                    // txtacadyear.Text = dr["ACADEMIC_YEAR"] == null ? string.Empty : dr["ACADEMIC_YEAR"].ToString(); //Commented BY SHAILENDRA K ON DATED 13.03.2024 AS PER T-55537 & 55470
                     txtSeqNo.Text = dr["SEQUENCE_NO"] == null ? string.Empty : dr["SEQUENCE_NO"].ToString();
 
                     if (dr["ODD_EVEN"] == null | dr["ODD_EVEN"].ToString().Equals(""))
@@ -386,6 +393,21 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                         ddlStatus.SelectedIndex = 0;
                     else
                         ddlStatus.Text = dr["EXAMTYPE"].ToString();
+
+                    //below code ADDED BY SHAILENDRA K ON DATED 13.03.2024 AS PER T-55537 & 55470
+
+                    int sessionRegdCount = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1) CNT", @"ISNULL(CANCEL,0)=0 AND
+                                                                    SESSIONNO IN (
+                                                                    SELECT DISTINCT SM.SESSIONNO FROM ACD_SESSION S 
+                                                                    INNER JOIN ACD_SESSION_MASTER SM ON S.SESSIONID=SM.SESSIONID
+                                                                    WHERE S.SESSIONID=" + Session_No + ")"));
+
+                    txtSLongName.Enabled = sessionRegdCount > 0 ? false : true;
+                    txtSShortName.Enabled = sessionRegdCount > 0 ? false : true;
+
+                    ddlAcademicYear.SelectedValue = dr["ACADEMIC_YEAR_ID"].ToString();
+                    ddlStudyPattern.SelectedValue = dr["STUDY_PATTERN"].ToString();
+                    // Above code ADDED BY SHAILENDRA K ON DATED 13.03.2024 AS PER T-55537 & 55470
 
                     //Added By Rishabh on Dated 28/10/2021
                     if (dr["IS_ACTIVE"].ToString() == "Active")
@@ -434,11 +456,15 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
         txtSeqNo.Text = string.Empty;
         //chkFlock.Checked = false;
         Session["action"] = null;
-        txtacadyear.Text = string.Empty;
+       // txtacadyear.Text = string.Empty;
         txtProvisionalCertificateSessionName.Text = string.Empty;
         //ddlCollege.SelectedIndex = 0;
         //ddlCollege.Enabled = true;
         ddlCollege.ClearSelection(); // Modify by maithili [20-08-2022]
+        ddlAcademicYear.SelectedIndex = 0;
+        ddlStudyPattern.SelectedIndex = 0;
+        txtSLongName.Enabled = true;
+        txtSShortName.Enabled = true;
     }
 
     protected void btnReport_Click(object sender, EventArgs e)

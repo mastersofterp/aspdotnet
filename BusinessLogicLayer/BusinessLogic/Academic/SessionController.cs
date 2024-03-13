@@ -224,7 +224,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
                         //update
-                        objParams = new SqlParameter[13];
+                        objParams = new SqlParameter[15];
                         objParams[0] = new SqlParameter("@P_SESSIONID", objSession.SessionNo);
                         objParams[1] = new SqlParameter("@P_SESSION_PNAME", objSession.Session_PName);
                         objParams[2] = new SqlParameter("@P_SESSION_STDATE", objSession.Session_SDate);
@@ -239,10 +239,15 @@ namespace IITMS
                         objParams[11] = new SqlParameter("@P_SEQUENCE_NO", objSession.sequence_no); //Modified by Vinay Mishra on 16/06/2023
                         //objParams[11] = new SqlParameter("@P_PROVISIONAL_CERTIFICATE_SESSION_NAME", objSession.PROVISIONAL_CERTIFICATE_SESSION_NAME);
                         //objParams[12] = new SqlParameter("@P_COLLEGE_ID", objSession.College_Id_str); //modify by maithili [19-08-2022]
-                        objParams[12] = new SqlParameter("@P_ORGANIZATION_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); //Added By Rishabh on 25/01/2022
+
+                        objParams[12] = new SqlParameter("@P_ACADEMIC_YEAR_ID", objSession.AcademicYearID); // Added by Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+                        objParams[13] = new SqlParameter("@P_STUDY_PATTERN_ID", objSession.StudyPatternNo); // Added by Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+                        objParams[14] = new SqlParameter("@P_ORGANIZATION_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); //Added By Rishabh on 25/01/2022
 
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_SESSION_SP_UPD_SESSION_MODIFIED", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+
 
                     }
                     catch (Exception ex)
@@ -264,7 +269,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add
-                        objParams = new SqlParameter[14];
+                        objParams = new SqlParameter[16];
                         objParams[0] = new SqlParameter("@P_SESSION_PNAME", objSession.Session_PName);
                         objParams[1] = new SqlParameter("@P_SESSION_STDATE", objSession.Session_SDate);
                         objParams[2] = new SqlParameter("@P_SESSION_ENDDATE", objSession.Session_EDate);
@@ -280,8 +285,12 @@ namespace IITMS
                         //objParams[11] = new SqlParameter("@P_PROVISIONAL_CERTIFICATE_SESSION_NAME", objSession.PROVISIONAL_CERTIFICATE_SESSION_NAME);
                         //objParams[12] = new SqlParameter("@P_COLLEGE_ID", objSession.College_Id_str); //modify by maithili [19-08-2022]
                         objParams[12] = new SqlParameter("@P_ORGANIZATION_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); //Added By Rishabh on 25/01/2022
-                        objParams[13] = new SqlParameter("@P_SESSIONID", SqlDbType.Int);
-                        objParams[13].Direction = ParameterDirection.Output;
+
+                        objParams[13] = new SqlParameter("@P_ACADEMIC_YEAR_ID", objSession.AcademicYearID); // Added by Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+                        objParams[14] = new SqlParameter("@P_STUDY_PATTERN_ID", objSession.StudyPatternNo); // Added by Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+
+                        objParams[15] = new SqlParameter("@P_SESSIONID", SqlDbType.Int);
+                        objParams[15].Direction = ParameterDirection.Output;
 
                         //if (objSQLHelper.ExecuteNonQuerySP("PKG_SESSION_SP_INS_SESSIONMASTER", objParams, true) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
