@@ -10609,6 +10609,37 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                //Added by Sonal Banode on 12-03-2024
+                public DataSet GetBiometricSummaryDataForExcel(int collegeno, int stno, int deptno, DateTime FDATE, DateTime TDATE, int idno )
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objparams = null;
+                        objparams = new SqlParameter[6];
+                        objparams[0] = new SqlParameter("@P_FROMDATE", FDATE);
+                        objparams[1] = new SqlParameter("@P_TODATE", TDATE);
+                        objparams[2] = new SqlParameter("@P_DEPTNO", deptno);
+                        objparams[3] = new SqlParameter("@P_STNO", stno);
+                        objparams[4] = new SqlParameter("@P_COLLEGE_NO", collegeno);
+                        objparams[5] = new SqlParameter("@P_IDNO", idno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_BIOMETRIC_SUMMARY_DETAIL_REPORT_MONTH_WISE", objparams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeavesController.GetLeavesStatus->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                //
             }
         }
     }

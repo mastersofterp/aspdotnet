@@ -45,116 +45,117 @@
         }
 
     </script>
-
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-12">
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">BIOMETRIC DETAILS SUMMARY REPORT</h3>
-                </div>
-
-                <div class="box-body">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="sub-heading">
-                                    <h5>Biometric Details Summary Report</h5>
-                                </div>
-                            </div>
+<%--    <asp:UpdatePanel ID="updAll" runat="server">
+        <ContentTemplate>--%>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">BIOMETRIC DETAILS SUMMARY REPORT</h3>
                         </div>
-                    </div>
-                    <asp:UpdatePanel ID="updAdd" runat="server">
-                        <ContentTemplate>
-                            <asp:Panel ID="pnlAdd" runat="server">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div2" runat="server" visible="true">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <label>College name</label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlcollege" runat="server" AppendDataBoundItems="true" TabIndex="1" ToolTip="Select Department" data-select2-enable="true"
-                                                CssClass="form-control" AutoPostBack="True" >
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RFVdept" runat="server" ControlToValidate="ddlCollege"
-                                                Display="None" ErrorMessage="Please Select College" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0">
-                                            </asp:RequiredFieldValidator>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <label>Staff Type</label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlStaffType" runat="server" AppendDataBoundItems="true" TabIndex="2" ToolTip="Select Staff Type" data-select2-enable="true"
-                                                CssClass="form-control" AutoPostBack="True"
-                                                OnSelectedIndexChanged="ddlStaffType_SelectedIndexChanged">
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlStaffType"
-                                                Display="None" ErrorMessage="Please Select Staff Type" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0">
-                                            </asp:RequiredFieldValidator>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12" id="trddldept" runat="server" visible="true">
-                                            <div class="label-dynamic">
-                                                <label>Department</label>
-                                            </div>
-                                            <asp:DropDownList ID="ddldept" runat="server" AppendDataBoundItems="true" TabIndex="3" ToolTip="Select Department" data-select2-enable="true"
-                                                CssClass="form-control" AutoPostBack="True"
-                                                OnSelectedIndexChanged="ddldept_SelectedIndexChanged">
-                                            </asp:DropDownList>
-                                            <%-- <asp:RequiredFieldValidator ID="RFVdept" runat="server" ControlToValidate="ddldept"
-                                                        Display="None" ErrorMessage="Please Select Department" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0">
-                                                    </asp:RequiredFieldValidator>--%>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12" id="trchkdept" runat="server" style="padding-top: 12px" visible="false">
-                                            <div class="label-dynamic">
-                                                <label>
-                                                    <asp:CheckBox ID="chkDept" Text="Department wise " runat="server"
-                                                        OnCheckedChanged="chkDept_CheckedChanged" AutoPostBack="True" Visible="true" TabIndex="4" ToolTip="Select Department wise" /></label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <asp:RadioButtonList ID="rblAllParticular" runat="server" TabIndex="5" ToolTip="Employees"
-                                                    RepeatDirection="Horizontal"
-                                                    OnSelectedIndexChanged="rblAllParticular_SelectedIndexChanged" AutoPostBack="true">
-                                                    <asp:ListItem Enabled="true" Selected="True" Text="All Employees" Value="0"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true" Text="Particular Employee" Value="1"></asp:ListItem>
-                                                </asp:RadioButtonList>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12" id="tremp" runat="server">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <label>Select Employee</label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlEmp" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="6" ToolTip="Select Employees" data-select2-enable="true">
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvEmp" runat="server" ControlToValidate="ddlEmp"
-                                                Display="None" ErrorMessage="Please select Employee" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0"></asp:RequiredFieldValidator>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <label>Month/Year</label>
-                                            </div>
-                                            <div class="input-group date">
-                                                <asp:TextBox ID="txtMonthYear" runat="server" onblur="return checkdate(this);" TabIndex="7"
-                                                    CssClass="form-control"></asp:TextBox>
-                                               <div class="input-group-addon">
-                                                <i id="imgMonthYear" runat="server" class="fa fa-calendar text-blue"></i>
-                                            </div>
 
-                                                <ajaxToolKit:CalendarExtender ID="ceMonthYear" runat="server" Enabled="true" EnableViewState="true"
-                                                    Format="MM/yyyy" PopupButtonID="imgMonthYear" TargetControlID="txtMonthYear">
-                                                </ajaxToolKit:CalendarExtender>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtMonthYear"
-                                                    Display="None" ErrorMessage="Please Enter Month & Year in (MM/YYYY Format)" SetFocusOnError="True"
-                                                    ValidationGroup="Leaveapp">
-                                                </asp:RequiredFieldValidator>
-                                            </div>
+                        <div class="box-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="sub-heading">
+                                            <h5>Biometric Details Summary Report</h5>
                                         </div>
                                     </div>
                                 </div>
-                                <%-- <div class="form-group col-md-4">
+                            </div>
+                            <asp:UpdatePanel ID="updAdd" runat="server">
+                                <ContentTemplate>
+                                    <asp:Panel ID="pnlAdd" runat="server">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="Div2" runat="server" visible="true">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>College name</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlcollege" runat="server" AppendDataBoundItems="true" TabIndex="1" ToolTip="Select Department" data-select2-enable="true"
+                                                        CssClass="form-control" AutoPostBack="True">
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RFVdept" runat="server" ControlToValidate="ddlCollege"
+                                                        Display="None" ErrorMessage="Please Select College" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Staff Type</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlStaffType" runat="server" AppendDataBoundItems="true" TabIndex="2" ToolTip="Select Staff Type" data-select2-enable="true"
+                                                        CssClass="form-control" AutoPostBack="True"
+                                                        OnSelectedIndexChanged="ddlStaffType_SelectedIndexChanged">
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlStaffType"
+                                                        Display="None" ErrorMessage="Please Select Staff Type" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="trddldept" runat="server" visible="true">
+                                                    <div class="label-dynamic">
+                                                        <label>Department</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddldept" runat="server" AppendDataBoundItems="true" TabIndex="3" ToolTip="Select Department" data-select2-enable="true"
+                                                        CssClass="form-control" AutoPostBack="True"
+                                                        OnSelectedIndexChanged="ddldept_SelectedIndexChanged">
+                                                    </asp:DropDownList>
+                                                    <%-- <asp:RequiredFieldValidator ID="RFVdept" runat="server" ControlToValidate="ddldept"
+                                                        Display="None" ErrorMessage="Please Select Department" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>--%>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="trchkdept" runat="server" style="padding-top: 12px" visible="false">
+                                                    <div class="label-dynamic">
+                                                        <label>
+                                                            <asp:CheckBox ID="chkDept" Text="Department wise " runat="server"
+                                                                OnCheckedChanged="chkDept_CheckedChanged" AutoPostBack="True" Visible="true" TabIndex="4" ToolTip="Select Department wise" /></label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <asp:RadioButtonList ID="rblAllParticular" runat="server" TabIndex="5" ToolTip="Employees"
+                                                            RepeatDirection="Horizontal"
+                                                            OnSelectedIndexChanged="rblAllParticular_SelectedIndexChanged" AutoPostBack="true">
+                                                            <asp:ListItem Enabled="true" Selected="True" Text="All Employees" Value="0"></asp:ListItem>
+                                                            <asp:ListItem Enabled="true" Text="Particular Employee" Value="1"></asp:ListItem>
+                                                        </asp:RadioButtonList>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="tremp" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Select Employee</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlEmp" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="6" ToolTip="Select Employees" data-select2-enable="true">
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="rfvEmp" runat="server" ControlToValidate="ddlEmp"
+                                                        Display="None" ErrorMessage="Please select Employee" SetFocusOnError="true" ValidationGroup="Leaveapp" InitialValue="0"></asp:RequiredFieldValidator>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Month/Year</label>
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <asp:TextBox ID="txtMonthYear" runat="server" onblur="return checkdate(this);" TabIndex="7"
+                                                            CssClass="form-control"></asp:TextBox>
+                                                        <div class="input-group-addon">
+                                                            <i id="imgMonthYear" runat="server" class="fa fa-calendar text-blue"></i>
+                                                        </div>
+
+                                                        <ajaxToolKit:CalendarExtender ID="ceMonthYear" runat="server" Enabled="true" EnableViewState="true"
+                                                            Format="MM/yyyy" PopupButtonID="imgMonthYear" TargetControlID="txtMonthYear">
+                                                        </ajaxToolKit:CalendarExtender>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtMonthYear"
+                                                            Display="None" ErrorMessage="Please Enter Month & Year in (MM/YYYY Format)" SetFocusOnError="True"
+                                                            ValidationGroup="Leaveapp">
+                                                        </asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%-- <div class="form-group col-md-4">
                                                     <label>From Date :<span style="color: Red">*</span></label>
                                                     <div class="input-group">
                                                         <asp:TextBox ID="txtMonthYear" runat="server" TabIndex="7" ToolTip="Enter From Date" Style="z-index: 0;" AutoPostBack="true" onblur="return checkdate(this);"
@@ -176,7 +177,7 @@
                                                         </asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>--%>
-                                <%-- <div class="form-group col-md-4">
+                                        <%-- <div class="form-group col-md-4">
                                                     <label>To Date :<span style="color: Red">*</span></label>
                                                     <div class="input-group">
                                                         <asp:TextBox ID="txtTodt" runat="server" AutoPostBack="true" MaxLength="10" TabIndex="8" ToolTip="Enter To Date" Style="z-index: 0;"
@@ -195,35 +196,44 @@
                                                             MessageValidatorTip="true" TargetControlID="txtTodt" />
                                                     </div>
                                                 </div>--%>
-                                <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnReport" runat="server" Text="Report" ValidationGroup="Leaveapp" TabIndex="9" ToolTip="Click to show the Report"
-                                        CssClass="btn btn-info" OnClick="btnReport_Click" />
-                                   <%-- <asp:Button ID="btnCombinreRpt" runat="server" Text="Combine Report" ValidationGroup="Leaveapp" TabIndex="10" ToolTip="Click to Combine Report"
+                                        <div class="col-12 btn-footer">
+                                            <asp:Button ID="btnReport" runat="server" Text="Report" ValidationGroup="Leaveapp" TabIndex="9" ToolTip="Click to show the Report"
+                                                CssClass="btn btn-info" OnClick="btnReport_Click" />
+                                            <%-- <asp:Button ID="btnCombinreRpt" runat="server" Text="Combine Report" ValidationGroup="Leaveapp" TabIndex="10" ToolTip="Click to Combine Report"
                                         CssClass="btn btn-info" OnClick="btnCombinreRpt_Click" Visible="true" />
                                     <asp:Button ID="btnReport_Format2" runat="server" Text="Format2 Report" ValidationGroup="Leaveapp"
                                         CssClass="btn btn-info" OnClick="btnReport_Format2_Click" TabIndex="11" ToolTip="Click to Monthly Attendance Format2 Report" />--%>
-                                    <%-- <asp:Button ID="btnExport" runat="server" Text="Export" ValidationGroup="Leaveapp"
+                                            <%-- <asp:Button ID="btnExport" runat="server" Text="Export" ValidationGroup="Leaveapp"
                                                                 CssClass="btn btn-info" TabIndex="9" ToolTip="Click to Monthly Attendance Format2 in excel " OnClick="btnExport_Click" />--%>
-                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="12" ToolTip="Click To Reset"
-                                        CssClass="btn btn-warning" OnClick="btnCancel_Click" />
-                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Leaveapp"
-                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                                    <div class="col-md-12">
-                                    </div>
-                                </div>
-                            </asp:Panel>
-                        </ContentTemplate>
-                        <Triggers>
-                            <asp:PostBackTrigger ControlID="btnReport" />
-                        </Triggers>
-                    </asp:UpdatePanel>
+                                            <asp:Button ID="btnExcel" runat="server" Text="Excel" ValidationGroup="Leaveapp" TabIndex="9" ToolTip="Click to show the Report"
+                                                CssClass="btn btn-info" OnClick="btnExcel_Click" />
+                                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="12" ToolTip="Click To Reset"
+                                                CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+                                            <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Leaveapp"
+                                                ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                                            <div class="col-md-12">
+                                            </div>
+                                        </div>
+                                    </asp:Panel>
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:PostBackTrigger ControlID="btnReport" />
+                                    <asp:PostBackTrigger ControlID="btnExcel" />
+                                </Triggers>
+                            </asp:UpdatePanel>
 
 
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div id="divMsg" runat="server">
-    </div>
+            <div id="divMsg" runat="server">
+            </div>
+        <%--</ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnShowReport" />
+            <asp:PostBackTrigger ControlID="btnExport" />
+        </Triggers>
+    </asp:UpdatePanel>--%>
 
 </asp:Content>
