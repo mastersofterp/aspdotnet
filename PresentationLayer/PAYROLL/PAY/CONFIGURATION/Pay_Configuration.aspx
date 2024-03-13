@@ -797,7 +797,7 @@
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                  <label>
-                                                  <asp:CheckBox ID="chkretirmentdatecalculate" runat="server"  TabIndex="66" />&nbsp;&nbsp;Retirement Date Calculation on Joining Date</label>
+                                                  <asp:CheckBox ID="chkretirmentdatecalculate" runat="server"  TabIndex="66" />&nbsp;&nbsp;Retirement Date Calculation on Birth Date</label>
                                                 </div>
                                             </div>
                                         </div>
