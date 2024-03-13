@@ -661,7 +661,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 if (chismaster.Checked==true)
                 {
 
-                 SheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                 SheetName = dtExcelSchema.Rows[1]["TABLE_NAME"].ToString();
                 }
                 else{
                       SheetName = dtExcelSchema.Rows[4]["TABLE_NAME"].ToString();
@@ -806,6 +806,177 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         IsErrorInUpload = true;
                         //}
                     }
+
+                    //--------------start---12-03-2024-----------
+
+                    //for (int j = i; j < lvEmployee.Items.Count;j++ )
+                    //{
+                    //    int empcount = 0;
+                    //    // Get the ListViewItem at the current index
+                    //    ListViewItem item = lvEmployee.Items[j];
+
+                    //    // Get the subitems of the ListViewItem
+                    //    ListViewDataItem dataItem = (ListViewDataItem)item;
+                    //    Label lblEmpId = (Label)dataItem.FindControl("Employee Id");
+
+                    //    foreach (ListViewDataItem dataitem in lvEmployee.Items)
+                    //    {
+                    //        Label Label1 = dataitem.FindControl("Employee Id") as Label;
+                    //        string SrNo = Label1.Text;
+                    //        if (SrNo == lblEmpId.Text)
+                    //        {
+                    //            empcount++;
+                    //        }
+                    //    }
+                    //    if (empcount > 1)
+                    //    {
+                    //        message = "<span style='color:Red'><b> Employee Id Duplicat In Excel Sheet.</b></span>";
+                    //        messageexp = " Employee Id Duplicat In Excel Sheet.";
+                    //        ErrorString = ErrorString + message + " | ";
+                    //        ErrorString1 = ErrorString1 + messageexp + " | ";
+                    //        IsErrorInUpload = true;
+                    //    }
+
+                    //}
+
+                    int empcount = 0;
+                    while ( i < dtNew.Rows.Count)
+                    {
+                        DataRow dremp = dtNew.Rows[i];
+                        string columnValue = dremp["Employee Id"].ToString();
+
+                        // Check for duplicate value
+                        for (int j = 0 ; j < dtNew.Rows.Count; j++)
+                        {
+                            DataRow drCompare = dtNew.Rows[j];
+                            if (drCompare["Employee Id"].ToString() == columnValue)
+                            {
+                                empcount++;
+                            }
+                        }
+                        break;
+                    }
+
+                    if (empcount > 1)
+                    {
+                        message = "<span style='color:Red'><b> Employee Id Duplicat In Excel Sheet.</b></span>";
+                        messageexp = " Employee Id Duplicat In Excel Sheet.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+
+                    int rfidcount = 0;
+                    while (i < dtNew.Rows.Count)
+                    {
+                        DataRow dremp = dtNew.Rows[i];
+                        string columnValue = dremp["RFIDNO"].ToString();
+
+                        // Check for duplicate value
+                        for (int j = 0; j < dtNew.Rows.Count; j++)
+                        {
+                            DataRow drCompare = dtNew.Rows[j];
+                            if (drCompare["RFIDNO"].ToString() == columnValue)
+                            {
+                                rfidcount++;
+                            }
+                        }
+                        break;
+                    }
+
+                    if (rfidcount > 1)
+                    {
+                        message = "<span style='color:Red'><b> RFIDNO Duplicat In Excel Sheet.</b></span>";
+                        messageexp = " RFIDNO Duplicat In Excel Sheet.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+
+                    int mobilecount = 0;
+                    while (i < dtNew.Rows.Count)
+                    {
+                        DataRow dremp = dtNew.Rows[i];
+                        string columnValue = dremp["Mobile No"].ToString();
+
+                        // Check for duplicate value
+                        for (int j = 0; j < dtNew.Rows.Count; j++)
+                        {
+                            DataRow drCompare = dtNew.Rows[j];
+                            if (drCompare["Mobile No"].ToString() == columnValue)
+                            {
+                                mobilecount++;
+                            }
+                        }
+                        break;
+                    }
+
+                    if (mobilecount > 1)
+                    {
+                        message = "<span style='color:Red'><b> Mobile No Duplicat In Excel Sheet.</b></span>";
+                        messageexp = " Mobile No Duplicat In Excel Sheet.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+                    int emailcount = 0;
+                    while (i < dtNew.Rows.Count)
+                    {
+                        DataRow dremp = dtNew.Rows[i];
+                        string columnValue = dremp["E-mail ID"].ToString();
+
+                        // Check for duplicate value
+                        for (int j = 0; j < dtNew.Rows.Count; j++)
+                        {
+                            DataRow drCompare = dtNew.Rows[j];
+                            if (drCompare["E-mail ID"].ToString() == columnValue)
+                            {
+                                emailcount++;
+                            }
+                        }
+                        break;
+                    }
+
+                    if (emailcount > 1)
+                    {
+                        message = "<span style='color:Red'><b> Email Id Duplicat In Excel Sheet.</b></span>";
+                        messageexp = " Email Id Duplicat In Excel Sheet.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+
+                    int uidnocount = 0;
+                    while (i < dtNew.Rows.Count)
+                    {
+                        DataRow dremp = dtNew.Rows[i];
+                        string columnValue = dremp["UID No"].ToString();
+
+                        // Check for duplicate value
+                        for (int j = 0; j < dtNew.Rows.Count; j++)
+                        {
+                            DataRow drCompare = dtNew.Rows[j];
+                            if (drCompare["UID No"].ToString() == columnValue)
+                            {
+                                uidnocount++;
+                            }
+                        }
+                        break;
+                    }
+
+                    if (uidnocount > 1)
+                    {
+                        message = "<span style='color:Red'><b> UID No Duplicat In Excel Sheet.</b></span>";
+                        messageexp = " UID No Duplicat In Excel Sheet.";
+                        ErrorString = ErrorString + message + " | ";
+                        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        IsErrorInUpload = true;
+                    }
+                    //--------------End---12-03-2024-----------
+
                     string SchoolName = dtNew.Rows[i]["College Name"].ToString();
                     ds1 = objCommon.FillDropDown("ACD_COLLEGE_MASTER", "*", "COLLEGE_NAME", "COLLEGE_NAME='" + SchoolName + "'", "");
 
@@ -2378,7 +2549,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 if (chismaster.Checked==true)
                 {
                 ds.Tables[0].TableName = "Employee_Data_Migration_Format";
-               // ds.Tables[1].TableName = "College Name";
+                ds.Tables[1].TableName = "College Name";
                 string status = string.Empty;
 
                 //foreach (System.Data.DataTable dt in ds.Tables[0].Rows)
@@ -2389,11 +2560,19 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                 //    }
                 //}
-                foreach (System.Data.DataRow dr in ds.Tables[0].Rows)
+                //foreach (System.Data.DataRow dr in ds.Tables[0].Rows)
+                //{
+                //    if (dr.ItemArray.Length == 0)
+                //    {
+                //        status += dr.Table.TableName + ",";
+                //    }
+                //}
+                foreach (System.Data.DataTable dt in ds.Tables)
                 {
-                    if (dr.ItemArray.Length == 0)
+                    if (dt.Rows.Count == 0)
                     {
-                        status += dr.Table.TableName + ",";
+                        status += dt.TableName + ",";
+
                     }
                 }
 
@@ -2404,8 +2583,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     return;
                 }
 
-                //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[1].Rows.Count > 0 && ds.Tables[2].Rows.Count > 0)
-                //{
+                if (ds.Tables[0].Rows.Count > 0 && ds.Tables[1].Rows.Count > 0 )
+                {
                     using (XLWorkbook wb = new XLWorkbook())
                     {
                         foreach (System.Data.DataTable dt in ds.Tables)
@@ -2445,7 +2624,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             Response.Flush();
                             Response.End();
                         }
-                    //}
+                    }
                 }
                 }
                 else
