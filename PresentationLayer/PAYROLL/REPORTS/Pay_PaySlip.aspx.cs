@@ -526,8 +526,8 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
         DateTime StartDate = Convert.ToDateTime(objCommon.LookUp("Payroll_pay_ref", "EmpPayslipShowFromDate",""));
         try
         {
-            objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID=" + collegeNo, "COLLEGE_ID ASC");            
-
+           // objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID=" + collegeNo, "COLLEGE_ID ASC");            
+            objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "COLLEGE_ID ASC");
             //FILL MONTH YEAR 
            // objCommon.FillDropDownList(ddlMonthYear, "PAYROLL_SALFILE", "distinct(convert(datetime,monyear,103)) as mon", "MONYEAR", "SALNO>0", "convert(datetime,monyear,103)");
             objCommon.FillDropDownList(ddlMonthYear, "PAYROLL_SALFILE", "distinct(convert(datetime,monyear,103)) as mon", "MONYEAR", "SALNO>0 AND SALLOCK = 1 and Cast(monyear as date) >=cast('" + StartDate + "' as date) ", "convert(datetime,monyear,103) DESC");
