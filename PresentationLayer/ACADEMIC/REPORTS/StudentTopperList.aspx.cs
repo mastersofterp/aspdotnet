@@ -238,6 +238,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         {
             if (Convert.ToInt32(rdoPurpose.SelectedValue) == 1)
             {
+                // Coded by Shubham on 140324 TID 56424
                 if (rdoReportType.SelectedValue == "pdf")
                 {
                     ShowReportPdf(rdoReportType.SelectedValue, "rptBranchwiseTopperList.rpt");
@@ -253,6 +254,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 2)
             {
                 //MeritShowReport(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
+                // Coded by Shubham on 140324 TID 56424
                 if (rdoReportType.SelectedValue == "pdf")
                 {
                     MeritShowReport1(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
@@ -266,6 +268,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             }
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 3)
             {
+                // Coded by Shubham on 140324 TID 56424
                 if (rdoReportType.SelectedValue == "pdf")
                 {
                     BranchMeritShowReportPdf(rdoReportType.SelectedValue, "rptBranchTopperMeritList.rpt");
@@ -439,7 +442,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
     }
 
     //Method for Show Merit topper list Report 
-    // added by shubham on 02-03-2024
+    // added by shubham on 14-03-2024 TID 56424
     private void MeritShowReport1(string reportTitle, string rptFileName)
     {
         try
@@ -752,7 +755,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
 
     }
 
-    //added by shubham On 17-04-23
+    //added by shubham On 14-03-23 TID 56424
     private void ShowReportExcel(string exporttype, string rptFileName)
     {
         //try
@@ -813,7 +816,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         //}
     }
 
-    //added by shubham On 17-04-23
+    //added by shubham On 14-03-23 TID 56424
     private void ShowReportWord(string exporttype, string rptFileName)
     {
     //    try
