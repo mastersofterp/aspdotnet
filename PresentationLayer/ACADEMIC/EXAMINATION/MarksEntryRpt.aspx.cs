@@ -321,14 +321,15 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
             UANO = objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue));
             if (UANO == "")
             {
-                objCommon.DisplayMessage(updpnl,"Data Not Found !!", this.Page);
+                objCommon.DisplayMessage(updpnl, "Data Not Found !!", this.Page);
                 return;
-            }else
+            }
+            else
             {
                 UA_NO = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue)));
                 ShowReport("SubjectWiseMarksEntryReport", "rptMarksCoursewise.rpt", UA_NO);
             }
-            
+
         }
         else
         {
@@ -431,7 +432,7 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
 
     protected void BtnExcelReport_Click(object sender, EventArgs e)
     {
-        try 
+        try
         {
             GridView dg = new GridView();
             string SP_Name = "PKG_GET_INTERNAL_MARK_DETAILS_NOT_DONE_DATA";
@@ -461,14 +462,242 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                     objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
                 }
             }
-            else 
+            else
             {
                 objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
             }
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUCommon.ShowError(Page, "BtnExcelReport_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+
+    // added by shubham for excel data on 20-02-2024
+    protected void btnIntExcel_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int UA_NO;
+            string UANO;
+            DataSet ds1;
+            GridView dg = new GridView();
+            string SP_Name;
+            string SP_Parameters;
+            string Call_Values;
+            if (Session["usertype"].ToString().Equals("1"))
+            {
+                UANO = objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue));
+                if (UANO == "")
+                {
+                    objCommon.DisplayMessage(updpnl, "Data Not Found !!", this.Page);
+                    return;
+                }
+                else
+                {
+                    UA_NO = Convert.ToInt32(Session["userno"].ToString());
+                    SP_Name = "PKG_GET_INTERNAL_MARK_DATA_COURSEWISE_EXCEL";
+                    SP_Parameters = "@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_UA_NO";
+
+                    Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(UA_NO);
+                    ds1 = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+                    if (ds1.Tables.Count > 0)
+                    {
+                        if (ds1.Tables[0].Rows.Count > 0)
+                        {
+                            dg.DataSource = ds1.Tables[0];
+                            dg.DataBind();
+                            //AddReportHeader(dg);
+                            string attachment = "attachment; filename=" + "INTERNAL_MARK_DETAILS " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                            Response.ClearContent();
+                            Response.AddHeader("content-disposition", attachment);
+                            Response.ContentType = "application/" + "ms-excel";
+                            StringWriter sw = new StringWriter();
+                            HtmlTextWriter htw = new HtmlTextWriter(sw);
+                            dg.HeaderStyle.Font.Bold = true;
+                            dg.RenderControl(htw);
+                            Response.Write(sw.ToString());
+                            Response.End();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                    }
+                }
+            }
+            else
+            {
+                UANO = objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue));
+                if (UANO == "")
+                {
+                    objCommon.DisplayMessage(updpnl, "Data Not Found !!", this.Page);
+                    return;
+                }
+                else
+                {
+                    UA_NO = Convert.ToInt32(Session["userno"].ToString());
+                    SP_Name = "PKG_GET_INTERNAL_MARK_DATA_COURSEWISE_EXCEL";
+                    SP_Parameters = "@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_UA_NO";
+
+                    Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(UA_NO);
+                    ds1 = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+                    if (ds1.Tables.Count > 0)
+                    {
+                        if (ds1.Tables[0].Rows.Count > 0)
+                        {
+                            dg.DataSource = ds1.Tables[0];
+                            dg.DataBind();
+                            //AddReportHeader(dg);
+                            string attachment = "attachment; filename=" + "INTERNAL_MARK_DETAILS " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                            Response.ClearContent();
+                            Response.AddHeader("content-disposition", attachment);
+                            Response.ContentType = "application/" + "ms-excel";
+                            StringWriter sw = new StringWriter();
+                            HtmlTextWriter htw = new HtmlTextWriter(sw);
+                            dg.HeaderStyle.Font.Bold = true;
+                            dg.RenderControl(htw);
+                            Response.Write(sw.ToString());
+                            Response.End();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                    }
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "btnIntExcel_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    protected void BtnExcelCW_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int UA_NO;
+            string UANO;
+            DataSet ds1;
+            GridView dg = new GridView();
+            string SP_Name;
+            string SP_Parameters;
+            string Call_Values;
+            if (Session["usertype"].ToString().Equals("1"))
+            {
+                UANO = objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue));
+                if (UANO == "")
+                {
+                    objCommon.DisplayMessage(updpnl, "Data Not Found !!", this.Page);
+                    return;
+                }
+                else
+                {
+                    UA_NO = Convert.ToInt32(Session["userno"].ToString());
+                    SP_Name = "PKG_CIA_MARK_REPORT_WITH_WEIGHTAGE_FOR_EXCEL_HITS";
+                    SP_Parameters = "@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_UA_NO,@P_SCHEMENO,@P_COLLEGE_ID";
+
+                    //Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(UA_NO);
+                    Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(UA_NO) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ViewState["college_id"]);
+                    ds1 = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+                    if (ds1.Tables.Count > 0)
+                    {
+                        if (ds1.Tables[0].Rows.Count > 0)
+                        {
+                            dg.DataSource = ds1.Tables[0];
+                            dg.DataBind();
+                            //AddReportHeader(dg);
+                            string attachment = "attachment; filename=" + "INTERNAL_MARK_DETAILS " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                            Response.ClearContent();
+                            Response.AddHeader("content-disposition", attachment);
+                            Response.ContentType = "application/" + "ms-excel";
+                            StringWriter sw = new StringWriter();
+                            HtmlTextWriter htw = new HtmlTextWriter(sw);
+                            dg.HeaderStyle.Font.Bold = true;
+                            dg.RenderControl(htw);
+                            Response.Write(sw.ToString());
+                            Response.End();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                    }
+                }
+            }
+            else
+            {
+                UANO = objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue));
+                if (UANO == "")
+                {
+                    objCommon.DisplayMessage(updpnl, "Data Not Found !!", this.Page);
+                    return;
+                }
+                else
+                {
+                    UA_NO = Convert.ToInt32(Session["userno"].ToString());
+                    SP_Name = "PKG_CIA_MARK_REPORT_WITH_WEIGHTAGE_FOR_EXCEL_HITS";
+                    SP_Parameters = "@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_UA_NO,@P_SCHEMENO,@P_COLLEGE_ID";
+
+                    Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(UA_NO) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ViewState["college_id"]);
+                    ds1 = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+                    if (ds1.Tables.Count > 0)
+                    {
+                        if (ds1.Tables[0].Rows.Count > 0)
+                        {
+                            dg.DataSource = ds1.Tables[0];
+                            dg.DataBind();
+                            //AddReportHeader(dg);
+                            string attachment = "attachment; filename=" + "INTERNAL_MARK_DETAILS " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                            Response.ClearContent();
+                            Response.AddHeader("content-disposition", attachment);
+                            Response.ContentType = "application/" + "ms-excel";
+                            StringWriter sw = new StringWriter();
+                            HtmlTextWriter htw = new HtmlTextWriter(sw);
+                            dg.HeaderStyle.Font.Bold = true;
+                            dg.RenderControl(htw);
+                            Response.Write(sw.ToString());
+                            Response.End();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                    }
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "BtnExcelCW_Click() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
