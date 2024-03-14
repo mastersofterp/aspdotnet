@@ -177,8 +177,12 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             // prev_status = 0;
             //ds = studCont.GetStudentListForAdmitCard(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue), Convert.ToInt32(ddlExamname.SelectedValue), OrgID, Convert.ToInt32(ddlSection.SelectedValue)); // added on 06-03-2020 by Vaishali
 
-            ds = studCont.GetStudentListForAdmitCard(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlExamname.SelectedValue), OrgID, Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ViewState["schemeno"])); // added on 13122022 by AMEY
+            //ds = studCont.GetStudentListForAdmitCard(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlExamname.SelectedValue), OrgID, Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ViewState["schemeno"])); // added on 13122022 by AMEY
 
+            string pro_ = "PKG_STUDENT_SEARCH_ADMIT_CARD";
+            string para = "@P_DEGREENO,@P_BRANCHNO,@P_SEMESTERNO,@P_PREV_STATUS,@P_SESSIONNO,@P_COLLEGE_ID,@P_EXAMNO,@P_OrgID,@P_SECTIONNO,@P_SCHEMENO,@P_EXAMTYPE";
+            string value = "" + Convert.ToInt32(ddlDegree.SelectedValue) + "," + Convert.ToInt32(ddlBranch.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + prev_status + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32(ddlExamname.SelectedValue) + "," + OrgID + "," + Convert.ToInt32(ddlSection.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlexamtype.SelectedValue);
+            ds = objCommon.DynamicSPCall_Select(pro_, para, value);
 
             //ds = studCont.GetStudentListForAdmitCard(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue), Convert.ToInt32(ddlExamname.SelectedValue), OrgID, Convert.ToInt32(ddlSection.SelectedValue)); // added on 13122022
 
@@ -574,7 +578,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 2) //CRESCENT
                 {
-                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_CRESCENT.rpt");
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_CRESCENT.rpt");
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by gaurav 28_02_2023
                 {
@@ -642,6 +646,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         lvStudentRecords.DataBind();
         txtDateofissue.Text = string.Empty;
         txtRemark.Text = string.Empty;
+        ddlexamtype.SelectedIndex = 0;
         //  ddlExamname.SelectedIndex = 1;
 
         if (ddlColg.SelectedIndex > 0)
@@ -896,7 +901,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         lvStudentRecords.DataBind();
         txtDateofissue.Text = string.Empty;
         txtRemark.Text = string.Empty;
-
+        ddlexamtype.SelectedIndex = 0;
         //objCommon.FillDropDownList(ddlExamname, " ACD_SCHEME S WITH (NOLOCK) INNER JOIN ACD_EXAM_NAME ED WITH (NOLOCK) ON(ED.PATTERNNO=S.PATTERNNO)", " DISTINCT EXAMNO", "EXAMNAME", " EXAMNAME<>'' AND S.BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND S.DEGREENO= " + ddlDegree.SelectedValue, "EXAMNAME");
 
         //   int schemeno=Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND SCHEMENO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])));
@@ -951,16 +956,20 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         lvStudentRecords.DataSource = null;
         lvStudentRecords.DataBind();
         lvStudentRecords.Visible = false;
-
+        ddlexamtype.SelectedIndex = 0;
         btnShow.Focus();
     }
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
         ddlSemester.SelectedIndex = 0;
+        ddlexamtype.SelectedIndex = 0;
         txtDateofissue.Text = string.Empty;
         txtRemark.Text = string.Empty;
         //ddlExamname.SelectedIndex = 1;
+        ddlExamname.Items.Clear();
+        ddlExamname.Items.Add("Please Select");
+        ddlExamname.SelectedItem.Value = "0";
         if (ddlSession.SelectedIndex > 0)
         {
             ddlSemester.Items.Clear();
@@ -1142,4 +1151,9 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
 
     }
 
+    protected void ddlexamtype_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        lvStudentRecords.DataSource = null;
+        lvStudentRecords.DataBind();
+    }
 }

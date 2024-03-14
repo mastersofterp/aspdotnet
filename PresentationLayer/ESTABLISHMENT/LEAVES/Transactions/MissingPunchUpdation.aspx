@@ -52,13 +52,17 @@
                                         <sup>*</sup>
                                         <label>In Time</label>
                                     </div>
-                                    <asp:TextBox ID="txtInTime" runat="server" ToolTip="Enter In Time in 24hrs format only"
+                                    <asp:TextBox ID="txtInTime" runat="server" ToolTip="Enter In Time in 24hrs format only"  CausesValidation="True"
                                         CssClass="form-control" TabIndex="2" AutoPostBack="true" OnTextChanged="txtInTime_TextChanged"></asp:TextBox>
-                                    <ajaxToolKit:MaskedEditExtender ID="meeIn" runat="server" TargetControlID="txtInTime"
-                                        Mask="99:99:99" MaskType="Time" AcceptAMPM="false" ErrorTooltipEnabled="True"
-                                        CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder="" CultureDateFormat="" UserTimeFormat="TwentyFourHour"
-                                        CultureDatePlaceholder="" CultureDecimalPlaceholder="" CultureThousandsPlaceholder=""
-                                        CultureTimePlaceholder="" Enabled="True" />
+                                    <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender2" runat="server" TargetControlID="txtInTime"
+                                     Mask="99:99:99" MaskType="Time" AcceptAMPM="false" ErrorTooltipEnabled="True"
+                                     CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder="" CultureDateFormat="" UserTimeFormat="TwentyFourHour"
+                                     CultureDatePlaceholder="" CultureDecimalPlaceholder="" CultureThousandsPlaceholder=""
+                                     CultureTimePlaceholder="" Enabled="True" />
+
+                                   <asp:RangeValidator ID="RangeValidator2" runat="server" ControlToValidate="txtInTime"
+                                     MaximumValue="23:59:59" ErrorMessage="Invalid time" SetFocusOnError="True"/>
+                                
                                     <asp:RequiredFieldValidator ID="rfvInTime" runat="server" ControlToValidate="txtInTime"
                                         Display="None" ErrorMessage="Please Enter In Time" ValidationGroup="Holiday"
                                         SetFocusOnError="True">
@@ -69,13 +73,17 @@
                                         <sup>*</sup>
                                         <label>Out Time</label>
                                     </div>
-                                    <asp:TextBox ID="txtOutTime" runat="server" ToolTip="Enter Out Time in 24hrs format only"
+                                    <asp:TextBox ID="txtOutTime" runat="server" ToolTip="Enter Out Time in 24hrs format only" CausesValidation="True"
                                         CssClass="form-control" TabIndex="3" AutoPostBack="true" OnTextChanged="txtOutTime_TextChanged"></asp:TextBox>
                                     <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" TargetControlID="txtOutTime"
-                                        Mask="99:99:99" MaskType="Time" AcceptAMPM="false" ErrorTooltipEnabled="True"
-                                        CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder="" CultureDateFormat="" UserTimeFormat="TwentyFourHour"
-                                        CultureDatePlaceholder="" CultureDecimalPlaceholder="" CultureThousandsPlaceholder=""
-                                        CultureTimePlaceholder="" Enabled="True" />
+                                     Mask="99:99:99" MaskType="Time" AcceptAMPM="false" ErrorTooltipEnabled="True"
+                                     CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder="" CultureDateFormat="" UserTimeFormat="TwentyFourHour"
+                                     CultureDatePlaceholder="" CultureDecimalPlaceholder="" CultureThousandsPlaceholder=""
+                                     CultureTimePlaceholder="" Enabled="True" />
+
+                                     <asp:RangeValidator ID="RangeValidator1" runat="server" ControlToValidate="txtOutTime"
+                                         MaximumValue="23:59:59" ErrorMessage="Invalid time" SetFocusOnError="True"/>
+                                    
 
                                     <asp:RequiredFieldValidator ID="rfvOutTime" runat="server" ControlToValidate="txtOutTime"
                                         Display="None" ErrorMessage="Please Enter Out Time" ValidationGroup="Holiday"
@@ -87,7 +95,7 @@
                                     <sup>* </sup>
                                     <label>Reason</label>
                                 </div>
-                                <asp:TextBox ID="txtReason" runat="server" CssClass="form-control" TextMode="MultiLine" TabIndex="4" />
+                                <asp:TextBox ID="txtReason" runat="server" CssClass="form-control" TextMode="MultiLine" TabIndex="4" ToolTip="Enter Reason"/>
                                 <asp:RequiredFieldValidator ID="RFVReason" runat="server" ControlToValidate="txtReason"
                                     Display="None" ErrorMessage="Please Enter Valid Reason" ValidationGroup="Holiday"
                                     SetFocusOnError="true"></asp:RequiredFieldValidator>
