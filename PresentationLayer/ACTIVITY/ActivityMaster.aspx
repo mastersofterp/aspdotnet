@@ -220,10 +220,10 @@
                                 </ajaxToolKit:FilteredTextBoxExtender>
                             </div>
 
-                                   <%-- ddlassign added on 28-2-23 by Injamam--%>
+                            <%-- ddlassign added on 28-2-23 by Injamam--%>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
-                                     <sup>* </sup>
+                                    <sup>* </sup>
                                     <label>Assign To</label>
                                 </div>
                                 <asp:DropDownList ID="ddlassign" runat="server" AppendDataBoundItems="true" data-select2-enable="true" TabIndex="3"
@@ -232,7 +232,7 @@
                                     <asp:ListItem Value="0">Academic</asp:ListItem>
                                     <asp:ListItem Value="1">Examination</asp:ListItem>
                                 </asp:DropDownList>
-                               <asp:RequiredFieldValidator ID="RequiredFieldValidator1" Display="None" runat="server" ErrorMessage="Please Select Assign to" ControlToValidate="ddlassign"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" Display="None" runat="server" ErrorMessage="Please Select Assign to" ControlToValidate="ddlassign"></asp:RequiredFieldValidator>
                             </div>
                             <div class="form-group col-lg-12 col-md-12 col-12">
                                 <asp:UpdatePanel ID="updActivity" runat="server">
@@ -350,7 +350,7 @@
                     <div class="col-12 btn-footer">
                         <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="Submit"
                             OnClick="btnSubmit_Click" TabIndex="9" CssClass="btn btn-primary" OnClientClick="return validate();" />
-                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="10" OnClick="btnCancel_Click" 
+                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="10" OnClick="btnCancel_Click"
                             CssClass="btn btn-warning" />
                         <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
                             ShowSummary="false" ValidationGroup="Submit" />
