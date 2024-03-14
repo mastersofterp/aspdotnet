@@ -403,7 +403,18 @@
                                             </div>
                                         </li>
 
+                                         <%--  Added by kajal jaiswal for showing event calender 11-03-024--%>
 
+                                        <li class="column" draggable="true">
+                                            <div class="option">
+                                                <a href='<%= ResolveUrl("~/ADMINISTRATION/EventCalendar.aspx") %>' target="_blank">
+                                                    <div class="icon">
+                                                        <asp:Image ID="imgCalendar" runat="server" ImageUrl="~/Images/icons/EventCalenderIcon.png" />
+                                                    </div>
+                                                    <span class="text">Event Calendar</span>
+                                                </a>
+                                            </div>
+                                        </li>
 
                                         <%--<li class="column" draggable="true">
                                             <div class="option" data-toggle="modal" data-target="#calculator-modal">
