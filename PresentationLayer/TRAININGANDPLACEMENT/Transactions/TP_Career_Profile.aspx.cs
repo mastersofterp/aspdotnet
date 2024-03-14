@@ -1594,17 +1594,25 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     {
         try
         {
-
-
-
-
-
             if (ViewState["action"].ToString().Equals("add"))
             {
                 int id = 0;
                 objTPT.language =Convert.ToInt32( ddlLauguage.SelectedValue);
                 objTPT.Proficiency =Convert.ToInt32( ddlProficiencyLanguage.SelectedValue);
                 objTPT.ReleventDocument3 = RelevantDocLanguage.Text;
+                //added by amit pandey
+                if (chkReadLang.Checked)
+                {
+                    objTPT.Read = 1;
+                }
+                if (chkWriteLang.Checked)
+                {
+                    objTPT.Write = 1;
+                }
+                if (chkSpeakLang.Checked)
+                {
+                    objTPT.Speak = 1;
+                }
 
                // int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
@@ -1630,6 +1638,20 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.language = Convert.ToInt32(ddlLauguage.SelectedValue);
                     objTPT.Proficiency = Convert.ToInt32(ddlProficiencyLanguage.SelectedValue);
                     objTPT.ReleventDocument3 = RelevantDocLanguage.Text;
+                    //added by amit pandey
+                    if (chkReadLang.Checked)
+                    {
+                        objTPT.Read = 1;
+                    }
+                    if (chkWriteLang.Checked)
+                    {
+                        objTPT.Write = 1;
+                    }
+                    if (chkSpeakLang.Checked)
+                    {
+                        objTPT.Speak = 1;
+                    }
+
                     int IDNO = 0;
                    // IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
@@ -1661,6 +1683,9 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         ddlLauguage.SelectedValue = "0";
         ddlProficiencyLanguage.SelectedValue = "0";
         RelevantDocLanguage.Text = string.Empty;
+        chkReadLang.Checked = false;
+        chkSpeakLang.Checked = false;
+        chkWriteLang.Checked = false;
     }
     protected void BindLanguageDetails(int idno)
     {
@@ -1688,6 +1713,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         try
         {
             ImageButton btnEdit = sender as ImageButton;
+            clearLang();
             int Language = int.Parse(btnEdit.CommandArgument);
             ViewState["Language"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
@@ -1713,12 +1739,22 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             if (ds.Tables[0].Rows.Count > 0)
             {
 
-
-
                 ddlLauguage.SelectedValue = ds.Tables[0].Rows[0]["LAUGUAGE"].ToString();
                 ddlProficiencyLanguage.SelectedValue = ds.Tables[0].Rows[0]["Proficiency"].ToString();
                 RelevantDocLanguage.Text = ds.Tables[0].Rows[0]["UPLOAD_RELEVANT_DOCUMENT"].ToString();
-
+                //added by amit pandey
+                if (ds.Tables[0].Rows[0]["Read"].ToString() == "True")
+                {
+                    chkReadLang.Checked = true;
+                }
+                if (ds.Tables[0].Rows[0]["Write"].ToString() == "True")
+                {
+                    chkWriteLang.Checked = true;
+                }
+                if (ds.Tables[0].Rows[0]["Speak"].ToString() == "True")
+                {
+                    chkSpeakLang.Checked = true;
+                }
 
 
             }

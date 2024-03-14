@@ -529,8 +529,12 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
 
            // ,'width=600,height=400,addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');
 
+            int page_no = Convert.ToInt32(objCommon.LookUp("ACCESS_LINK", "AL_No", "AL_Link='TPCareer Profile'"));
+            var url = "TP_Career_Profile.aspx?studentId=" + studentId + "&pageno=" + page_no;
+
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + "TP_Career_Profile.aspx?studentId=" + studentId + "','mywindow', 'width=1000,height=1000,fullscreen=yes, scrollbars=auto');";
+           // divMsg.InnerHtml += " window.open('" + "TP_Career_Profile.aspx?studentId=" + studentId + "','mywindow', 'width=1000,height=1000,fullscreen=yes, scrollbars=auto');";
+            divMsg.InnerHtml += " window.open('" + url + "' ,'mywindow', 'width=1000,height=1000,fullscreen=yes, scrollbars=auto');";
             divMsg.InnerHtml += " </script>";
             //hfValue.Value = "1";
             // TRAININGANDPLACEMENT/Transactions/

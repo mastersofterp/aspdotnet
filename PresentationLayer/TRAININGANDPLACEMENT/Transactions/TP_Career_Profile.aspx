@@ -1712,7 +1712,9 @@
                                                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                                                         <div class="label-dynamic">
                                                                             <sup>* </sup>
-                                                                            <label>Language</label>
+                                                                            <!--added by amit pandey -->
+                                                                            <label>Spoken Language</label>
+                                                                            <!-- end-->
                                                                         </div>
                                                                         <asp:DropDownList ID="ddlLauguage" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true">
                                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -1740,6 +1742,13 @@
                                                                         </div>
                                                                         <asp:TextBox ID="RelevantDocLanguage" runat="server" type="file" />
                                                                     </div>
+                                                                    <!-- added by amit pandey -->
+                                                                    <div class="form-group col-lg-4 col-md-6 col-12">
+                                                                        <asp:CheckBox ID="chkReadLang" runat="server" Text="Read" /> &nbsp;&nbsp;
+                                                                        <asp:CheckBox ID="chkWriteLang" runat="server" Text="Write" /> &nbsp;&nbsp;
+                                                                        <asp:CheckBox ID="chkSpeakLang" runat="server" Text="Speak" /> &nbsp;&nbsp;
+                                                                    </div>
+                                                                    <!-- end-->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1765,6 +1774,9 @@
                                                                                 <th>Edit</th>
                                                                                 <th>Language</th>
                                                                                 <th>Proficiency</th>
+                                                                                <th>Read</th>
+                                                                                <th>Write></th>
+                                                                                <th>Speak</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -1780,6 +1792,9 @@
                                                                             <asp:ImageButton ID="btnEditLanguage" runat="server" ImageUrl="~/Images/edit.png" CssClass="fa fa-pencil-square-o" ToolTip="Edit Record" CommandArgument='<%# Eval("L_ID") %>' OnClick="btnEditLanguage_Click"></asp:ImageButton></td>
                                                                         <td><%# Eval("LANGUAGES")%></td>
                                                                         <td><%# Eval("PROFICIENCY")%></td>
+                                                                        <td><%# Eval("Read")%></td>
+                                                                        <td><%# Eval("Write")%></td>
+                                                                        <td><%# Eval("Speak")%></td>
                                                                     </tr>
                                                                 </ItemTemplate>
                                                                 <AlternatingItemTemplate>
@@ -1788,6 +1803,9 @@
                                                                             <asp:ImageButton ID="btnEditLanguage" runat="server" ImageUrl="~/Images/edit.png" CssClass="fa fa-pencil-square-o" ToolTip="Edit Record" CommandArgument='<%# Eval("L_ID") %>' OnClick="btnEditLanguage_Click"></asp:ImageButton></td>
                                                                         <td><%# Eval("LANGUAGES")%></td>
                                                                         <td><%# Eval("PROFICIENCY")%></td>
+                                                                        <td><%# Eval("Read")%></td>
+                                                                        <td><%# Eval("Write")%></td>
+                                                                        <td><%# Eval("Speak")%></td>
 
                                                                     </tr>
                                                                 </AlternatingItemTemplate>

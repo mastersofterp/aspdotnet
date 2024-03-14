@@ -9621,7 +9621,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[8];
+                        objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_LANGUAGE", objTPT.language);
@@ -9629,8 +9629,11 @@ namespace IITMS
                         objParams[4] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument3);
                         objParams[5] = new SqlParameter("@P_OrganizationId", org);
                         objParams[6] = new SqlParameter("@P_IsAdmin", IsAdmin);
-                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[7].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_Read", objTPT.Read);
+                        objParams[8] = new SqlParameter("@P_Write", objTPT.Write);
+                        objParams[9] = new SqlParameter("@P_Speak", objTPT.Speak);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_LANGUAGE", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
@@ -9705,7 +9708,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[8];
+                        objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_ID", id);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_LANGUAGE", objTPT.language);
@@ -9713,8 +9716,11 @@ namespace IITMS
                         objParams[4] = new SqlParameter("@P_UPLOAD_RELEVANT_DOCUMENT1", objTPT.ReleventDocument3);
                         objParams[5] = new SqlParameter("@P_OrganizationId", org);
                         objParams[6] = new SqlParameter("@P_IsAdmin", IsAdmin);
-                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[7].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_Read", objTPT.Read);
+                        objParams[8] = new SqlParameter("@P_Write", objTPT.Write);
+                        objParams[9] = new SqlParameter("@P_Speak", objTPT.Speak);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_TP_LANGUAGE", objParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
