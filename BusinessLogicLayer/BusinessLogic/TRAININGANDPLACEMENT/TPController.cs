@@ -6054,7 +6054,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[23];
+                        objParams = new SqlParameter[29];
                         objParams[0] = new SqlParameter("@P_COMPID", objTP.COMPID);
                         objParams[1] = new SqlParameter("@P_JOBTYPE", objTP.JOBTYPE);
                         objParams[2] = new SqlParameter("@P_JOBROLE", objTP.JobRole);
@@ -6067,25 +6067,33 @@ namespace IITMS
                         objParams[9] = new SqlParameter("@P_SCHLASTDATE", objTP.LASTDATE);
                         objParams[10] = new SqlParameter("@P_JOBDISCRIPTION", objTP.JobDiscription);
                         objParams[11] = new SqlParameter("@P_ELIGIBILTY", objTP.CRITERIA);
-                        objParams[12] = new SqlParameter("@P_AMOUNT", objTP.Amount);
-                        objParams[13] = new SqlParameter("@P_MINAMOUNT", objTP.MinAmount);
-                        objParams[14] = new SqlParameter("@P_MAXAMOUNT", objTP.MaxAmount);
-                        objParams[15] = new SqlParameter("@P_ADD_DETAILS", objTP.SalDetails);
-                        objParams[16] = new SqlParameter("@P_CURRENCY", objTP.Currency);
-                        objParams[17] = new SqlParameter("@P_INTERVAL", objTP.Interval);
-                        //objParams[18] = new SqlParameter("@P_ROUNDNO", objTP.SELECTNO);
-                        objParams[18] = new SqlParameter("@P_ROUNDDISCRIPTON", objTP.RoundDiscription);
-                       // objParams[19] = new SqlParameter("@P_FACULTY", objTP.Faculty);
-                       // objParams[20] = new SqlParameter("@P_STUDYLEVEL", objTP.StudyLevel);
-                       // objParams[21] = new SqlParameter("@P_PROGRAM", objTP.Program); //16-11-2022
-                       // objParams[22] = new SqlParameter("@P_SEMNO", objTP.Semester);
-                       // objParams[23] = new SqlParameter("@P_BRANCHNO", objTP.BRANCHNO); //16-11-2022
-                       //objParams[24] = new SqlParameter("@P_DEGREENO", objTP.DEGREE);   //16-11-2022
-                       objParams[19] = new SqlParameter("@P_TP_ROUND_TBL", objTP.TP_ROUND_TBL);   //07-12-2022
-                       objParams[20] = new SqlParameter("@P_TP_ANNOUNCE_FOR_TBL", objTP.TP_ANNOUNCE_FOR_TBL);
-                       objParams[21] = new SqlParameter("@P_OrgId", org);
-                        objParams[22] = new SqlParameter("@P_SCHEDULENO", SqlDbType.Int);
-                        objParams[22].Direction = ParameterDirection.Output;
+                        //added by amit 
+                        objParams[12] = new SqlParameter("@P_SSC", objTP.SSCPER);
+                        objParams[13] = new SqlParameter("@P_HSC", objTP.HSCPER);
+                        objParams[14] = new SqlParameter("@P_DIPLOMA", objTP.DIPLOMAPER);
+                        objParams[15] = new SqlParameter("@P_UG", objTP.UGPER);
+                        objParams[16] = new SqlParameter("@P_PG", objTP.PGPER);
+
+                        objParams[17] = new SqlParameter("@P_AMOUNT", objTP.Amount);
+                        objParams[18] = new SqlParameter("@P_MINAMOUNT", objTP.MinAmount);
+                        objParams[19] = new SqlParameter("@P_MAXAMOUNT", objTP.MaxAmount);
+                        objParams[20] = new SqlParameter("@P_ADD_DETAILS", objTP.SalDetails);
+                        objParams[21] = new SqlParameter("@P_CURRENCY", objTP.Currency);
+                        objParams[22] = new SqlParameter("@P_INTERVAL", objTP.Interval);
+                        //objParams[23] = new SqlParameter("@P_ROUNDNO", objTP.SELECTNO);
+                        objParams[23] = new SqlParameter("@P_ROUNDDISCRIPTON", objTP.RoundDiscription);
+                        // objParams[19] = new SqlParameter("@P_FACULTY", objTP.Faculty);
+                        // objParams[20] = new SqlParameter("@P_STUDYLEVEL", objTP.StudyLevel);
+                        // objParams[21] = new SqlParameter("@P_PROGRAM", objTP.Program); //16-11-2022
+                        // objParams[22] = new SqlParameter("@P_SEMNO", objTP.Semester);
+                        // objParams[23] = new SqlParameter("@P_BRANCHNO", objTP.BRANCHNO); //16-11-2022
+                        //objParams[24] = new SqlParameter("@P_DEGREENO", objTP.DEGREE);   //16-11-2022
+                        objParams[24] = new SqlParameter("@P_TP_ROUND_TBL", objTP.TP_ROUND_TBL);   //07-12-2022
+                        objParams[25] = new SqlParameter("@P_TP_ANNOUNCE_FOR_TBL", objTP.TP_ANNOUNCE_FOR_TBL);
+                        objParams[26] = new SqlParameter("@P_OrgId", org);
+                        objParams[27] = new SqlParameter("@P_FileName", objTP.FileName);
+                        objParams[28] = new SqlParameter("@P_SCHEDULENO", SqlDbType.Int);
+                        objParams[28].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_TP_JOB_ANNOUNCEMENT", objParams, true);
                         if (Convert.ToInt32(ret) == -99)
                             retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
@@ -6108,7 +6116,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[25];
+                        objParams = new SqlParameter[31];
                         objParams[0] = new SqlParameter("@P_COMPID", objTP.COMPID);
                         objParams[1] = new SqlParameter("@P_JOBTYPE", objTP.JOBTYPE);
                         objParams[2] = new SqlParameter("@P_JOBROLE", objTP.JobRole);
@@ -6121,29 +6129,38 @@ namespace IITMS
                         objParams[9] = new SqlParameter("@P_SCHLASTDATE", objTP.LASTDATE);
                         objParams[10] = new SqlParameter("@P_JOBDISCRIPTION", objTP.JobDiscription);
                         objParams[11] = new SqlParameter("@P_ELIGIBILTY", objTP.CRITERIA);
-                        objParams[12] = new SqlParameter("@P_AMOUNT", objTP.Amount);
-                        objParams[13] = new SqlParameter("@P_MINAMOUNT", objTP.MinAmount);
-                        objParams[14] = new SqlParameter("@P_MAXAMOUNT", objTP.MaxAmount);
-                        objParams[15] = new SqlParameter("@P_ADD_DETAILS", objTP.SalDetails);
-                        objParams[16] = new SqlParameter("@P_CURRENCY", objTP.Currency);
-                        objParams[17] = new SqlParameter("@P_INTERVAL", objTP.Interval);
+
+                        //added by amit 
+                        objParams[12] = new SqlParameter("@P_SSC", objTP.SSCPER);
+                        objParams[13] = new SqlParameter("@P_HSC", objTP.HSCPER);
+                        objParams[14] = new SqlParameter("@P_DIPLOMA", objTP.DIPLOMAPER);
+                        objParams[15] = new SqlParameter("@P_UG", objTP.UGPER);
+                        objParams[16] = new SqlParameter("@P_PG", objTP.PGPER);
+
+                        objParams[17] = new SqlParameter("@P_AMOUNT", objTP.Amount);
+                        objParams[18] = new SqlParameter("@P_MINAMOUNT", objTP.MinAmount);
+                        objParams[19] = new SqlParameter("@P_MAXAMOUNT", objTP.MaxAmount);
+                        objParams[20] = new SqlParameter("@P_ADD_DETAILS", objTP.SalDetails);
+                        objParams[21] = new SqlParameter("@P_CURRENCY", objTP.Currency);
+                        objParams[22] = new SqlParameter("@P_INTERVAL", objTP.Interval);
                         //objParams[16] = new SqlParameter("@P_ROUNDNO", objTP.SELECTNO);
-                        objParams[18] = new SqlParameter("@P_TP_ROUND_TBL", objTP.TP_ROUND_TBL);
-                        objParams[19] = new SqlParameter("@P_ROUNDDISCRIPTON", objTP.RoundDiscription);
-                        objParams[20] = new SqlParameter("@P_TP_ANNOUNCE_FOR_TBL", objTP.TP_ANNOUNCE_FOR_TBL);
+                        objParams[23] = new SqlParameter("@P_TP_ROUND_TBL", objTP.TP_ROUND_TBL);
+                        objParams[24] = new SqlParameter("@P_ROUNDDISCRIPTON", objTP.RoundDiscription);
+                        objParams[25] = new SqlParameter("@P_TP_ANNOUNCE_FOR_TBL", objTP.TP_ANNOUNCE_FOR_TBL);
                         //objParams[20] = new SqlParameter("@P_FACULTY", objTP.Faculty);
                         //objParams[21] = new SqlParameter("@P_STUDYLEVEL", objTP.StudyLevel);
                         //objParams[22] = new SqlParameter("@P_PROGRAM", objTP.Program);
                         //objParams[23] = new SqlParameter("@P_SEMNO", objTP.Semester);
-                        objParams[21] = new SqlParameter("@P_OrgId", org);
-                        objParams[22] = new SqlParameter("@P_SCHEDULENO", objTP.SCHEDULENO);
-                        objParams[23] = new SqlParameter("@P_ACOMSCHNO", objTP.ACOMSCHNO);
-                        objParams[24] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[24].Direction = ParameterDirection.Output;
+                        objParams[26] = new SqlParameter("@P_OrgId", org);
+                        objParams[27] = new SqlParameter("@P_SCHEDULENO", objTP.SCHEDULENO);
+                        objParams[28] = new SqlParameter("@P_ACOMSCHNO", objTP.ACOMSCHNO);
+                        objParams[29] = new SqlParameter("@P_FileName", objTP.FileName);
+                        objParams[30] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[30].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("ACD_TP_JOB_ANNOUCEMENT_UPDATE", objParams, true);
                         if (Convert.ToInt32(ret) == -99)
                             retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
-                        if(Convert.ToInt32(ret) == 2)
+                        if (Convert.ToInt32(ret) == 2)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                         //     
                     }

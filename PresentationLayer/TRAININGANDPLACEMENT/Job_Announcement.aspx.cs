@@ -15,6 +15,10 @@ using BusinessLogicLayer.BusinessLogic;
 using System.IO;
 using System.Text;
 using System.Web.UI.HtmlControls;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage;
+using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
 
 public partial class Job_Announcement : System.Web.UI.Page
 {
@@ -22,6 +26,7 @@ public partial class Job_Announcement : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     TPController objCompany = new TPController();
     TrainingPlacement objTP = new TrainingPlacement();
+    BlobController objBlob = new BlobController();
     Panel panelfordropdown;
 
     protected void Page_PreInit(object sender, EventArgs e)
@@ -38,6 +43,7 @@ public partial class Job_Announcement : System.Web.UI.Page
         {
             if (!Page.IsPostBack)
             {
+                FileUploadCompany.Enabled = false;
                 //Check Session
                 if (Session["userno"] == null || Session["username"] == null ||
                     Session["usertype"] == null || Session["userfullname"] == null)
@@ -79,13 +85,21 @@ public partial class Job_Announcement : System.Web.UI.Page
                   //  objCommon.FillListBox(lstbxProgramName, "ACD_BRANCH A inner join ACD_DEGREE B on (A.COLLEGE_CODE=B.COLLEGE_CODE) ", "DEGREENO", "CONCAT(LONGNAME,' ',DEGREENAME) as PROGRAME  ", "", "PROGRAME");
                     btnSpecifyRange.Text = "SPECIFY RANGE";
                   //  Session["announcement"] = null;
-                    
+                    BlobDetails();//Added by Parag
+    
                 }
                 BindListViewAddCompany();
                 pnlmin.Visible = false;
                 pnlmax.Visible = false;
                 Session["announcement"] = null;
                 Session["TblRound"] = null;
+
+                txtSSC.Text = "0.00";
+                txtHSC.Text = "0.00";
+                txtDiploma.Text = "0.00";
+                txtUG.Text = "0.00";
+                txtPG.Text = "0.00";
+
                 upnlAnnouncedFor.Visible = true;
                 divbtn.Visible = true;
                 lvJobAnnouncement.Visible = true;
@@ -278,6 +292,36 @@ public partial class Job_Announcement : System.Web.UI.Page
                 objTP.JobDiscription = "" + Convert.ToString(hfdTemplate.Value).Replace(",", "^") +  "";
 
                 objTP.CRITERIA = "" + Convert.ToString(hfdEligibility.Value).Replace(",", "^") + "";
+
+                //added by AMIT PANDEY
+                objTP.SSCPER = Convert.ToDecimal(txtSSC.Text);
+                if (txtHSC.Text == "0.00" && txtDiploma.Text != "0.00")
+                {
+                    objTP.HSCPER = Convert.ToDecimal(0.0);
+                    objTP.DIPLOMAPER = Convert.ToDecimal(txtDiploma.Text);
+                }
+                else if (txtHSC.Text != "0.00" && txtDiploma.Text == "0.00")
+                {
+                    objTP.HSCPER = Convert.ToDecimal(txtHSC.Text);
+                    objTP.DIPLOMAPER = Convert.ToDecimal(0.0);
+                }
+                if(txtHSC.Text == string.Empty && txtDiploma.Text == string.Empty)
+                {
+                    objCommon.DisplayMessage("Please Enter HSC Percentage or Diploma Percentage", this.Page);
+                }
+                 
+                objTP.UGPER = Convert.ToDecimal(txtUG.Text);
+                if (txtPG.Text == string.Empty)
+                {
+                    objTP.PGPER = Convert.ToDecimal(0.0);
+                }
+                else
+                {
+                    objTP.PGPER = Convert.ToDecimal(txtPG.Text);
+                }
+                
+                //end
+
                 objTP.Amount = string.IsNullOrEmpty(txtAmount.Text.Trim()) ? 0 : Convert.ToDouble(txtAmount.Text);
                 objTP.MinAmount = string.IsNullOrEmpty(txtMinAmount.Text.Trim()) ? 0 : Convert.ToDouble(txtMinAmount.Text);
                 objTP.MaxAmount = string.IsNullOrEmpty(txtMaxAmount.Text.Trim()) ? 0 : Convert.ToDouble(txtMaxAmount.Text);
@@ -360,7 +404,7 @@ public partial class Job_Announcement : System.Web.UI.Page
             //if (ds.Tables[0].Rows.Count > 0)
             //{
                 //string Program = lstbxProgramName.SelectedValue;
-                string Program = ViewState["ProgramName"].ToString();
+                //string Program = ViewState["ProgramName"].ToString();
             //    if (Program!=string.Empty)
             //    {
             //    string[] subs = Program.Split(',');
@@ -371,6 +415,88 @@ public partial class Job_Announcement : System.Web.UI.Page
             //objTP.BRANCHNO=Convert.ToInt32(ViewState["Branchno"]);
             //objTP.DEGREE = Convert.ToInt32(ViewState["Degreeno"]);
             //    }
+
+
+                //Blob File Upload Code
+                string file = string.Empty;
+                if (FileUploadCompany.HasFile)
+                {
+                    if (FileTypeValid(System.IO.Path.GetExtension(FileUploadCompany.FileName)))
+                    {
+                        if (FileUploadCompany.HasFile)
+                        {
+                            if (FileUploadCompany.FileContent.Length >= 1024 * 500)
+                            {
+
+                                objCommon.DisplayMessage(this.upnlsalary, "File Size Should Not Be Greater Than 500 kb", this.Page);
+                                FileUploadCompany.Dispose();
+                                FileUploadCompany.Focus();
+                                return;
+                            }
+                        }
+
+                        if (lblBlobConnectiontring.Text == "")
+                        {
+                            objTP.ISBLOB = 0;
+                        }
+                        else
+                        {
+                            objTP.ISBLOB = 1;
+                        }
+                        if (objTP.ISBLOB == 1)
+                        {
+                            string filename = string.Empty;
+                            string FilePath = string.Empty;
+                            // string IdNo = _idnoEmp.ToString();
+                            if (FileUploadCompany.HasFile)
+                            {
+                                string contentType = contentType = FileUploadCompany.PostedFile.ContentType;
+                                string ext = System.IO.Path.GetExtension(FileUploadCompany.PostedFile.FileName);
+                                string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                                string[] split = FileUploadCompany.FileName.Split('.');
+                                string firstfilename = string.Join(".", split.Take(split.Length - 1));
+                                string lastfilename = split.Last();
+                                file = firstfilename + "_" + time + "." + lastfilename;
+                                if (FileUploadCompany.FileContent.Length <= 1024 * 10000)
+                                {
+                                    string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                                    string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                                    bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                                    if (result == true)
+                                    {
+
+                                        int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, firstfilename + "_" + time + "." + lastfilename, FileUploadCompany);
+                                        if (retval == 0)
+                                        {
+                                            ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            objTP.FileName = file;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                        FileUploadCompany.Focus();
+                    }
+
+                }
+                else
+                {
+                    objTP.FileName = "";
+                }
+               
+
+                //
+
 
                 if (ViewState["action"] != null)
                 {
@@ -553,6 +679,7 @@ public partial class Job_Announcement : System.Web.UI.Page
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlCompanyName.SelectedValue = ds.Tables[0].Rows[0]["COMPID"].ToString();
+                ddlCompanyName.Enabled = false;
                 ddlJobType.SelectedValue = ds.Tables[0].Rows[0]["JOBTYPE"].ToString();
                 objCommon.FillDropDownList(ddlJobRole, "ACD_TP_JOB_ROLE", "ROLENO", "JOBROLETYPE", "STATUS=1", "JOBROLETYPE");
                 ddlJobRole.SelectedValue = ds.Tables[0].Rows[0]["JOBROLE"].ToString();
@@ -681,6 +808,13 @@ public partial class Job_Announcement : System.Web.UI.Page
 
                 //hdnDate.Value = ds.Tables[0].Rows[0]["INTERVIEWFROM"] != DBNull.Value ? Convert.ToDateTime(ds.Tables[0].Rows[0]["INTERVIEWFROM"].ToString()).ToString("dd MMM, yyyy") + " - " + Convert.ToDateTime(ds.Tables[0].Rows[0]["INTERVIEWTO"].ToString()).ToString("dd MMM, yyyy") : Convert.ToDateTime(DateTime.Now).ToString("MMM dd, yyyy") + " - " + Convert.ToDateTime(DateTime.Now).ToString("dd MMM, yyyy");
 
+                //added by AMIT PANDEY
+                txtSSC.Text = ds.Tables[0].Rows[0]["SSCPER"].ToString();
+                txtHSC.Text = ds.Tables[0].Rows[0]["HSCPER"].ToString();
+                txtDiploma.Text = ds.Tables[0].Rows[0]["DIPLOMAPER"].ToString();
+                txtUG.Text = ds.Tables[0].Rows[0]["UGPER"].ToString();
+                txtPG.Text = ds.Tables[0].Rows[0]["PGPER"].ToString();
+
                 templateEditor.Text = ds.Tables[0].Rows[0]["JOBDISCRIPTION"].ToString();
                 txtAmount.Text = ds.Tables[0].Rows[0]["AMOUNT"].ToString();
                 txtMinAmount.Text = ds.Tables[0].Rows[0]["MINAMOUNT"].ToString();
@@ -718,7 +852,8 @@ public partial class Job_Announcement : System.Web.UI.Page
 
               
 
-                lvannouncefor.DataSource = ds;
+                lvannouncefor.Visible = true;
+                lvannouncefor.DataSource = ds.Tables[2];
                 Session["announcement"] = ds.Tables[2];
                 lvannouncefor.DataBind();
 
@@ -726,7 +861,14 @@ public partial class Job_Announcement : System.Web.UI.Page
                 lvRoundDetail.DataBind();
                 ViewState["Round"] = ds.Tables[1];
 
-
+                FileUploadCompany.Enabled = true;
+                //string fileName = ds.Tables[0].Rows[0]["FileName"].ToString();
+                //if (!string.IsNullOrEmpty(fileName))
+                //{
+                //    lblfileName.Visible = true;
+                //    lblfileName.Text = fileName;
+                //}
+                
                 //ScriptManager.RegisterClientScriptBlock(upnlMain, upnlMain.GetType(), "Src", "Setdate('" + hdnDate.Value + "');", true);
                 //ScriptManager.RegisterClientScriptBlock(upnlMain, upnlMain.GetType(), "Src", "Setdate('" + hdnDate.Value + "');", true);
 
@@ -763,6 +905,9 @@ public partial class Job_Announcement : System.Web.UI.Page
         dta.Columns.Add(new DataColumn("SEMESTERNO", typeof(string)));
         dta.Columns.Add(new DataColumn("BRANCH", typeof(string)));
         dta.Columns.Add(new DataColumn("DEGREE", typeof(string)));
+
+        dta.Columns.Add(new DataColumn("ProgramFullName", typeof(string)));
+        dta.Columns.Add(new DataColumn("Semester", typeof(string)));
         return dta;
     }
 
@@ -773,15 +918,67 @@ public partial class Job_Announcement : System.Web.UI.Page
         try
         {
 
-          
+            FileUploadCompany.Enabled = true;
             if (Session["announcement"] != null && ((DataTable)Session["announcement"]) != null)
             {
+
+
+                string programname = "";
+                foreach (ListViewDataItem dataitem in lvannouncefor.Items)
+                {
+                    Label Label2 = dataitem.FindControl("lblfName") as Label;
+                    Label Label3 = dataitem.FindControl("lblslevel") as Label;
+                    Label Label4 = dataitem.FindControl("lblpname") as Label;
+                    Label Label5 = dataitem.FindControl("lblsno") as Label;
+
+
+                    string s1 = Label2.Text;
+                    string s2 = Label3.Text;
+                    string s3 = Label4.Text;
+                    string s4 = Label5.Text;
+
+                    string program1 = "";
+                    string Branchno1 = "";
+                    string Degreeno1 = "";
+
+                    foreach (ListItem items in lstbxProgramName.Items)
+                    {
+                        if (items.Selected == true)
+                        {
+                            //strSplitAry = ddlSchedule.SelectedItem.Text.Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                            program1 += items.Value + ',';
+                            programname += items.Text + ',';
+                            if (program1 != string.Empty)
+                            {
+                                string[] subs = items.Value.Split(',');
+                                ViewState["Branchno"] = Convert.ToInt32(subs[0]);
+                                ViewState["Degreeno"] = Convert.ToInt32(subs[1]);
+
+                                Branchno1 += ViewState["Branchno"].ToString() + ',';
+                                Degreeno1 += ViewState["Degreeno"].ToString() + ',';
+                            }
+                        }
+                    }
+                    program1 = program1.Remove(program1.Length - 1);
+                    programname = programname.Remove(programname.Length - 1);
+
+                    if (s1 == ddlFaculty.SelectedItem.Text.Trim() && s2 == ddlStudyLevel.SelectedItem.Text.Trim() && s3 == program1) // && s4 == lstbxSemester.SelectedValue
+                    {
+
+                        objCommon.DisplayMessage(this.Page, "This Announce already Exist!", this.Page);  // shaikh juned 17-10-2023
+                        return;
+                    }
+                }
+
                 //if (this.lvannouncefor.Items.Count > 0)
                 //{
                 //    objCommon.DisplayMessage(this.Page,"Please Remove Already Added Job Announcement.And Add New !", this.Page);
                 //    return;
                 //}
                 DataTable dt = (DataTable)Session["announcement"];
+
+
+
                 DataRow dr = dt.NewRow();
                 dr["SCHEDULENO"] = Convert.ToInt32(ViewState["TSno"]) + 1;
                 dr["Faculty Name"] = ddlFaculty.SelectedItem.Text.Trim() == null ? string.Empty : Convert.ToString(ddlFaculty.SelectedItem.Text.Trim());
@@ -792,19 +989,21 @@ public partial class Job_Announcement : System.Web.UI.Page
                 string program = "";
                 string Branchno = "";
                 string Degreeno = "";
+                string semester = "";
                 foreach (ListItem items in lstbxProgramName.Items)
                 {
                     if (items.Selected == true)
                     {
                         //strSplitAry = ddlSchedule.SelectedItem.Text.Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries);
-                        program += items.Value + ',';
 
+                        program += items.Value + ',';
+                        programname += items.Text + ',';
                         if (program != string.Empty)
                         {
                             string[] subs = items.Value.Split(',');
                             ViewState["Branchno"] = Convert.ToInt32(subs[0]);
                             ViewState["Degreeno"] = Convert.ToInt32(subs[1]);
-                           
+
                             Branchno += ViewState["Branchno"].ToString() + ',';
                             Degreeno += ViewState["Degreeno"].ToString() + ',';
                         }
@@ -813,11 +1012,13 @@ public partial class Job_Announcement : System.Web.UI.Page
                 program = program.Remove(program.Length - 1);
                 Branchno = Branchno.Remove(Branchno.Length - 1);
                 Degreeno = Degreeno.Remove(Degreeno.Length - 1);
+                programname = programname.Remove(programname.Length - 1);
 
                 dr["Program Name"] = program;
                 dr["BRANCH"] = Branchno;
                 dr["DEGREE"] = Degreeno;
-               // dr["Program Name"] = lstbxProgramName.SelectedItem == null ? string.Empty : Convert.ToString(lstbxProgramName.SelectedItem.Value);
+                dr["ProgramFullName"] = programname;
+                // dr["Program Name"] = lstbxProgramName.SelectedItem == null ? string.Empty : Convert.ToString(lstbxProgramName.SelectedItem.Value);
                 string sem = "";
 
                 foreach (ListItem items in lstbxSemester.Items)
@@ -826,19 +1027,21 @@ public partial class Job_Announcement : System.Web.UI.Page
                     {
                         //strSplitAry = ddlSchedule.SelectedItem.Text.Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries);
                         sem += items.Value + ',';
+                        semester += items.Text + ',';
                     }
                 }
                 sem = sem.Remove(sem.Length - 1);
+                semester = semester.Remove(semester.Length - 1);
 
                 dr["SEMESTERNO"] = sem;
-
+                dr["Semester"] = semester;
                 //dr["SEMESTERNO"] = lstbxSemester.SelectedItem.Text.Trim() == null ? string.Empty : sem;
 
                 dt.Rows.Add(dr);
                 Session["announcement"] = dt;
                 lvannouncefor.DataSource = dt;
                 lvannouncefor.DataBind();
-               // clear_Project();
+                // clear_Project();
                 lvannouncefor.Visible = true;
                 ViewState["PSno"] = Convert.ToInt32(ViewState["PSno"]) + 1;
                 ViewState["ProgramName"] = lstbxProgramName.SelectedValue;
@@ -854,23 +1057,28 @@ public partial class Job_Announcement : System.Web.UI.Page
             {
                 DataTable dt = this.CreateTable_AnnounceFor();
                 DataRow dr = dt.NewRow();
+
+
                 dr["SCHEDULENO"] = Convert.ToInt32(ViewState["TSno"]) + 1;
                 dr["Faculty Name"] = ddlFaculty.SelectedItem.Text.Trim() == null ? string.Empty : Convert.ToString(ddlFaculty.SelectedItem.Text.Trim());
                 dr["Faculty"] = ddlFaculty.Text.Trim() == null ? string.Empty : Convert.ToString(ddlFaculty.Text.Trim());
                 dr["Study Level"] = ddlStudyLevel.SelectedItem.Text.Trim() == null ? string.Empty : Convert.ToString(ddlStudyLevel.SelectedItem.Text.Trim());
                 dr["Program Name"] = lstbxProgramName.SelectedItem.Text.Trim() == null ? string.Empty : Convert.ToString(lstbxProgramName.SelectedItem.Text.Trim());
-               // dr["SEMESTERNO"] = lstbxSemester.SelectedItem.Text.Trim() == null ? string.Empty : Convert.ToString(lstbxSemester.SelectedItem.Text.Trim());
+                // dr["SEMESTERNO"] = lstbxSemester.SelectedItem.Text.Trim() == null ? string.Empty : Convert.ToString(lstbxSemester.SelectedItem.Text.Trim());
 
 
                 string program = "";
                 string Branchno = "";
                 string Degreeno = "";
+                string programname = "";
+                string semester = "";
                 foreach (ListItem items in lstbxProgramName.Items)
                 {
                     if (items.Selected == true)
                     {
                         //strSplitAry = ddlSchedule.SelectedItem.Text.Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries);
                         program += items.Value + ',';
+                        programname += items.Text + ',';
                         if (program != string.Empty)
                         {
                             string[] subs = items.Value.Split(',');
@@ -884,16 +1092,18 @@ public partial class Job_Announcement : System.Web.UI.Page
                 if (program.Length > 0)
                 {
                     program = program.Remove(program.Length - 1);
+                    programname = programname.Remove(programname.Length - 1);
                 }
                 Branchno = Branchno.Remove(Branchno.Length - 1);
                 Degreeno = Degreeno.Remove(Degreeno.Length - 1);
 
-               
-                
+
+
 
                 dr["Program Name"] = program;
                 dr["BRANCH"] = Branchno;
                 dr["DEGREE"] = Degreeno;
+                dr["ProgramFullName"] = programname;
 
                 //dr["Program Name"] = lstbxProgramName.SelectedItem == null ? string.Empty : Convert.ToString(lstbxProgramName.SelectedItem.Value);
 
@@ -905,18 +1115,21 @@ public partial class Job_Announcement : System.Web.UI.Page
                     {
                         //strSplitAry = ddlSchedule.SelectedItem.Text.Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries);
                         sem += items.Value + ',';
+                        semester += items.Text + ',';
                     }
                 }
                 if (sem.Length > 0)
                 {
                     sem = sem.Remove(sem.Length - 1);
+                    semester = semester.Remove(semester.Length - 1);
                 }
 
                 dr["SEMESTERNO"] = sem;
+                dr["Semester"] = semester;
 
                 //dr["SEMESTERNO"] = lstbxSemester.SelectedItem.Text.Trim() == null ? string.Empty : sem;
-                
-                
+
+
                 ViewState["PSno"] = Convert.ToInt32(ViewState["PSno"]) + 1;
 
                 dt.Rows.Add(dr);
@@ -927,12 +1140,14 @@ public partial class Job_Announcement : System.Web.UI.Page
                 ViewState["ProgramName"] = lstbxProgramName.SelectedValue;
                 ddlFaculty.SelectedValue = "0";
                 ddlStudyLevel.SelectedValue = "0";
-               lstbxProgramName.Items.Clear();
+                lstbxProgramName.Items.Clear();
                 lstbxSemester.Items.Clear();
-               
+
                 lstbxProgramName.SelectedValue = "0";
                 lstbxSemester.SelectedValue = "0";
-               
+
+
+
             }
         }
         catch (Exception ex)
@@ -1072,6 +1287,7 @@ public partial class Job_Announcement : System.Web.UI.Page
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        ddlCompanyName.Enabled = true;
     }
     private void Clear()
     {
@@ -1094,6 +1310,11 @@ public partial class Job_Announcement : System.Web.UI.Page
         txtMinAmount.Text = string.Empty;
         txtVenue.Text = string.Empty;
         txtEligibility.Text = string.Empty;
+        txtSSC.Text = "0.00";
+        txtHSC.Text = "0.00";
+        txtDiploma.Text = "0.00";
+        txtUG.Text = "0.00";
+        txtPG.Text = "0.00";
         lstbxCity.ClearSelection();
         lstbxProgramName.ClearSelection();
         lstbxSemester.ClearSelection();
@@ -1174,6 +1395,7 @@ public partial class Job_Announcement : System.Web.UI.Page
         {
 
             objCommon.FillDropDownList(ddlStudyLevel, "ACD_UA_SECTION A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B on (A.UA_SECTION=B.UGPGOT)", "DISTINCT (UA_SECTION)", "A.UA_SECTIONNAME", "B.COLLEGE_ID=" + ddlFaculty.SelectedValue, "(UA_SECTION)");
+            FileUploadCompany.Enabled = false;
         }
    }
     
@@ -1186,7 +1408,8 @@ public partial class Job_Announcement : System.Web.UI.Page
            // objCommon.FillListBox(lstbxProgramName, "ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B on (A.DEGREENO=B.DEGREENO)", "DISTINCT (A.DEGREENO)", "A.DEGREENAME", "B.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND B.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");
         objCommon.FillListBox(lstbxProgramName, "ACD_COLLEGE_DEGREE_BRANCH A INNER JOIN ACD_BRANCH B ON (A.BRANCHNO=B.BRANCHNO) INNER JOIN ACD_DEGREE C ON (C.DEGREENO=A.DEGREENO) ", "CONCAT(B.BRANCHNO,',',A.DEGREENO)", "CONCAT(LONGNAME,'- ',DEGREENAME) as PROGRAME", "A.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");  //15-11-2022
          //   objCommon.FillListBox(lstbxProgramName, "ACD_AFFILIATED_UNIVERSITY", "AFFILIATED_NO", "AFFILIATED_LONGNAME", "", "AFFILIATED_NO");  //15-11-2022
-        objCommon.FillListBox(lstbxSemester, "ACD_SEMESTER ", "SEMESTERNO", "SEMESTERNAME ", "SEMESTERNO>0", "SEMESTERNAME ");
+        objCommon.FillListBox(lstbxSemester, "ACD_SEMESTER ", "SEMESTERNO", "SEMESTERNAME ", "SEMESTERNO>0", "SEMESTERNO ");
+        FileUploadCompany.Enabled = false;
         }   
     }
     protected void btnr4_Click(object sender, EventArgs e)
@@ -1519,4 +1742,98 @@ public partial class Job_Announcement : System.Web.UI.Page
         }
         return dataRow;
     }
+
+
+    //Added by Parag//29-02-2024
+    
+    protected void imgdownloadComDetails_Click(object sender, ImageClickEventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    private void BlobDetails()
+    {
+        try
+        {
+            string Commandtype = "ContainerNametandpdoctest";
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
+                string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
+                string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
+                // Session["blob_ConStr"] = blob_ConStr;
+                // Session["blob_ContainerName"] = blob_ContainerName;
+                hdnBlobCon.Value = blob_ConStr;
+                hdnBlobContainer.Value = blob_ContainerName;
+                lblBlobConnectiontring.Text = Convert.ToString(hdnBlobCon.Value);
+                lblBlobContainer.Text = Convert.ToString(hdnBlobContainer.Value);
+            }
+            else
+            {
+                hdnBlobCon.Value = string.Empty;
+                hdnBlobContainer.Value = string.Empty;
+                lblBlobConnectiontring.Text = string.Empty;
+                lblBlobContainer.Text = string.Empty;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    private bool FileTypeValid(string FileExtention)
+    {
+        bool retVal = false;
+        string[] Ext = {".pdf", ".PDF"};
+        foreach (string ValidExt in Ext)
+        {
+            if (FileExtention == ValidExt)
+            {
+                retVal = true;
+            }
+        }
+        return retVal;
+    }
+
+    //Added by Parag//29-02-2024
+
 }
