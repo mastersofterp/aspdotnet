@@ -30,8 +30,8 @@ stages:
             -devPublishProfile "$publishProfilesPath/FolderProfile_DEV_RFCDEV.pubxml"
             -devMachineName "RFC-DEVAPP" 
             -testBranchName $testBranchName
-            -testPublishProfile "$publishProfilesPath/FolderProfile_TEST_RFCTEST.pubxml"
-            -testMachineName "RFC-DEVAPP"
+            -testPublishProfile "$publishProfilesPath/FolderProfile_TEST_RFCTEST.pubxml,$publishProfilesPath/FolderProfile_TEST_RFCAUTOMATIONTEST.pubxml"
+            -testMachineName "RFC-DEVAPP,RFC-DEVAPP"
             -restorePreviousWebConfig "true" 
             -minutesForDeployment 50
             -applicationType "ASP"
