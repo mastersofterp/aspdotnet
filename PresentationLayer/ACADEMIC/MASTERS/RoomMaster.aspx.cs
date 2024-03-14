@@ -195,6 +195,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         {
             objCommon.DisplayMessage(this.updRoom, "Please Select Block!", this.Page);
         }
+
         else
         {
 
@@ -245,7 +246,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                         {
                             objexam.ActiveStatus = Convert.ToBoolean(1);
                         }
-                        else if (cs.Equals(CustomStatus.TransactionFailed))
+                        else
                         {
                             objexam.ActiveStatus = Convert.ToBoolean(0);
                             return;
@@ -411,6 +412,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
     }
     #endregion
+
 
 
     #region BindRoom Show Deatils

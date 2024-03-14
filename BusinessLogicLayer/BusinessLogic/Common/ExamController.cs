@@ -8332,6 +8332,50 @@ namespace IITMS
                 }
 
                 #endregion
+
+
+                #region excel upload TimeTable Added by Injamam Ansari on 04_01_2024
+                public int ExamTimeTableUploadByExcel(DataTable dt, int sessionid, int patternno, int examno, int subid, int ua_no, string ipadress)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[8];
+
+                        objParams[0] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[1] = new SqlParameter("@P_SESSIONID", sessionid);
+                        objParams[2] = new SqlParameter("@P_PATTERNNO", patternno);
+                        objParams[3] = new SqlParameter("@P_EXAMNO", examno);
+                        objParams[4] = new SqlParameter("@P_SUBID", subid);
+                        objParams[5] = new SqlParameter("@P_IPPADRESS", ipadress);
+                        objParams[6] = new SqlParameter("@tbltimetableexcel", dt);
+                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
+
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_UPLOAD_EXAM_TIME_TABLE_BY_EXCEL", objParams, true);
+
+                        if (Convert.ToInt32(obj) == 1 || Convert.ToInt32(obj) == 2)
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else if (Convert.ToInt32(obj) == 5)
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordNotFound);
+                        }
+                        else
+                        {
+                            status = Convert.ToInt32(CustomStatus.Error);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.ExamTimeTableUploadByExcel()-> " + ex.ToString());
+                    }
+                    return status;
+                }
+                #endregion
             }
         }
     }

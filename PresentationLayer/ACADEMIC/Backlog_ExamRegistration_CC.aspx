@@ -429,7 +429,10 @@
                 <div class="box box-primary">
                     <div id="div1" runat="server"></div>
                     <div class="box-header with-border">
-                        <h3 class="box-title">BACKLOG EXAM REGISTRATION</h3>
+                        <h3 class="box-title">
+                         <asp:Label ID="lblDynamicPageTitle" runat="server" style="text-transform: uppercase;"></asp:Label>
+
+                    </h3>
                     </div>
 
                     <div id="pnlSearch" runat="server" visible="false">
@@ -540,7 +543,11 @@
                                                         <asp:Label ID="FinalTotal" runat="server" Font-Bold="true" /></a>
                                                       <asp:HiddenField ID="hdfCreditTotal" runat="server" />
                                                 </li>
-
+                                                <li class="list-group-item"><b>Paid Fee :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="PaidTotal" runat="server" Font-Bold="true" /></a>
+                                                <asp:HiddenField ID="hdfPaidFee" runat="server" />
+                                            </li>
 
                                             </ul>
                                         </div>

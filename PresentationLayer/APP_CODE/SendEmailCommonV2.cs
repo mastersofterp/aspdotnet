@@ -55,9 +55,9 @@ namespace BusinessLogicLayer.BusinessLogic
 
         //Added by Nikhil L. on 02/08/2023
 
-        #region Send Dynamically
 
-        #region Email
+
+
         public int SendEmail_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails, DataSet ds, string attachmentfilename, byte[] bytefile, string type)
         {
             try
@@ -653,8 +653,8 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-       
-        private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails,DataRow dsCred)
+
+        private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails, DataRow dsCred)
         {
 
             int ret = 0;
@@ -869,7 +869,7 @@ namespace BusinessLogicLayer.BusinessLogic
             return ret;
         }
 
-        #region  Outlook Email With Attachment
+
         private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails, string attachmentfilename, byte[] bytefile, string type, DataRow dsCred)
         {
             int ret = 0;
@@ -928,10 +928,10 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
-        #endregion
-        #endregion
 
-        #region SMS
+
+
+
         public DataSet SendSMS_New(string pageNo, string mobileNo, string templateName, string templateId, string template)
         {
             try
@@ -1105,9 +1105,9 @@ namespace BusinessLogicLayer.BusinessLogic
                 sr.Close();
             }
         }
-        #endregion
 
-        #region WhatsApp
+
+
         public void SendWhatsApp_New(string mobileNo, string pageNo, string bodys, DataSet dsCheck)
         {
 
@@ -1208,67 +1208,8 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
-        #endregion
-        //Added by jay t. on 09/02/20234
-        #region  Outlook Email With Attachment 
-        private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails, string attachmentfilename, byte[] bytefile, string type, DataRow dsCred)
-        {
-            int ret = 0;
-            try
-            {
-                DataSet dsconfig = null;
-                Common objCommon = new Common();
-                dsconfig = objCommon.FillDropDown("REFF", "EMAILSVCID,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
-                string ReffEmail = Convert.ToString(dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString());
-                string ReffPassword = Convert.ToString(dsconfig.Tables[0].Rows[0]["EMAILSVCPWD"].ToString());
-                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                MailMessage msg = new MailMessage();
-                msg.To.Add(new System.Net.Mail.MailAddress(toEmailId));
-                //Add CC and BCC Email Id 
-                if (ccemails != "")
-                {
-                    msg.CC.Add(ccemails);
-                    //oMail.Cc = ccemails;
-                }
-                if (bccemails != "")
-                {
-                    msg.Bcc.Add(bccemails);
-                }
-                msg.From = new System.Net.Mail.MailAddress(ReffEmail);
-                msg.Subject = sub;
-                StringBuilder sb = new StringBuilder();
-                msg.Body = Message;
-                System.Net.Mail.Attachment attachment;
-                attachment = new System.Net.Mail.Attachment(new MemoryStream(bytefile), ""+attachmentfilename+".pdf");
-                msg.Attachments.Add(attachment);
-                msg.BodyEncoding = Encoding.UTF8;
-                msg.IsBodyHtml = true;
-                System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
-                client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential(ReffEmail, ReffPassword);
-                client.Port = 587; // You can use Port 25 if 587 is blocked (mine is)
-                client.Host = "smtp-mail.outlook.com"; // "smtp.live.com";
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.EnableSsl = true;
-                try
-                {
-                    client.Send(msg);
-                    //lblText.Text = "Message Sent Succesfully";
-                }
-                catch (Exception ex)
-                {
 
-                }
-                ret = 1;
-            }
-            catch (Exception ep)
-            {
-                Console.WriteLine("failed to send email with the following error:");
-                Console.WriteLine(ep.Message);
-                ret = 0;
-            }
-            return ret;
-        }
-        #endregion
+
+
     }
 }
