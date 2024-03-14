@@ -8440,8 +8440,8 @@ namespace IITMS
                     return ds;
                 }
 
-                // add by hemant on 28-12-2018
-                public int UpdateStudentCourseWiseSection(int sessiono, int college_id, int degreeno, int branchno, int schemeno, int semesterno, int courseno, string studids, string sectionnos, int userno, string batchnos, string tutbatchnos)
+                // modify by vipul t on date 16-02-2024
+                public int UpdateStudentCourseWiseSection(int sessiono, int college_id, int degreeno, int branchno, string schemeno, string semesterno, int courseno, string studids, string sectionnos, int userno, string batchnos, string tutbatchnos)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
