@@ -210,6 +210,9 @@
                             <div id="divMsg" runat="Server">
                             </div>
                         </ContentTemplate>
+                        <Triggers>
+                            <asp:PostBackTrigger ControlID="btnreport"/>
+                        </Triggers>
                     </asp:UpdatePanel>
                 </div>
             </div>
