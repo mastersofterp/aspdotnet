@@ -15,7 +15,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
-using System.IO;
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
@@ -30,25 +29,26 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        Session["college_nos"] = "14,2,3,4,5,15,6,7,8,9,10,11,12,13";
         if (!Page.IsPostBack)
         {
-            if (Session["userno"] == null || Session["username"] == null ||
-                Session["usertype"] == null || Session["userfullname"] == null)
-            {
-                Response.Redirect("~/default.aspx");
-            }
-            else
-            {
-                Page.Title = Session["coll_name"].ToString();
+            //if (Session["userno"] == null || Session["username"] == null ||
+            //    Session["usertype"] == null || Session["userfullname"] == null)
+            //{
+            //    Response.Redirect("~/default.aspx");
+            //}
+            //else
+            //{
+            //    Page.Title = Session["coll_name"].ToString();
 
-                if (Request.QueryString["pageno"] != null)
-                {
-                    //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
-                }
-                this.PopulateDropDown();
-                divMsg.InnerHtml = string.Empty;
-                ViewState["ipadress"] = Request.ServerVariables["REMOTE_ADDR"];
-            }
+            //    if (Request.QueryString["pageno"] != null)
+            //    {
+            //        //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
+            //    }
+            this.PopulateDropDown();
+            //    divMsg.InnerHtml = string.Empty;
+            ViewState["ipadress"] = Request.ServerVariables["REMOTE_ADDR"];
+            //}
         }
     }
 
@@ -176,10 +176,6 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
     {
         try
         {
-            pnlcommonapply.Visible = false;
-            txtrowFrom.Text = string.Empty;
-            txtrowTo.Text = string.Empty;
-            ddlcourseslot.SelectedIndex = 0;
             getCourses();
         }
         catch (Exception ex)
@@ -215,10 +211,6 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
                         ddlCourseSlot.SelectedValue = hdf_slotno.Value;
                     }
                 }
-            }
-            else
-            {
-                objCommon.DisplayMessage(updcourseslot, "No Record Found", this.Page);
             }
         }
         catch (Exception ex)
@@ -362,51 +354,14 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
 
     protected void btnreport_Click(object sender, EventArgs e)
     {
-        string filename = ddlSession.SelectedItem.Text + "_" + "Course Slot Data" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-        DataSet ds = new DataSet();
-        string pro_ = "PKG_GET_COURSESLOT_MAPPING_EXCEL_REPORT";
-        string para = "@P_SESSIONID,@P_SCHEMENO,@P_SEMESTERNO,@P_SUBID";
-        string value = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlScheme.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlSubjecttype.SelectedValue);
-        ds = objCommon.DynamicSPCall_Select(pro_, para, value);
-        GridView gv = new GridView();
-        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-        {
-            gv.DataSource = ds;
-            gv.DataBind();
-            string attachment = "attachment ; filename=" + filename;
-            Response.ClearContent();
-            Response.AddHeader("content-disposition", attachment);
-            Response.ContentType = "application/ms-excel";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            gv.RenderControl(htw);
-            Response.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-
-        }
-        else
-        {
-            gv.DataSource = null;
-            gv.DataBind();
-            objCommon.DisplayMessage(updcourseslot, "No Records Found", this.Page);
-        }
 
     }
     protected void btnapply_Click(object sender, EventArgs e)
     {
         if (ddlcourseslot.SelectedIndex > 0)
         {
-            int from = 0;
-            if (!string.IsNullOrEmpty(txtrowFrom.Text.ToString()))
-            {
-                from = (Convert.ToInt32(txtrowFrom.Text.ToString()) == 0) ? 1 : (Convert.ToInt32(txtrowFrom.Text.ToString()));
-            }
-            int to = 0;
-            if (!string.IsNullOrEmpty(txtrowTo.Text.ToString()))
-            {
-                to = (Convert.ToInt32(txtrowTo.Text.ToString()) >= lvcourse.Items.Count) ? lvcourse.Items.Count : Convert.ToInt32(txtrowTo.Text.ToString());
-            }
+            int from = (Convert.ToInt32(txtrowFrom.Text.ToString()) == 0) ? 1 : (Convert.ToInt32(txtrowFrom.Text.ToString()));
+            int to = (Convert.ToInt32(txtrowTo.Text.ToString()) >= lvcourse.Items.Count) ? lvcourse.Items.Count : Convert.ToInt32(txtrowTo.Text.ToString());
             if (from <= to && to <= lvcourse.Items.Count)
             {
                 for (int i = 0; i < lvcourse.Items.Count; i++)
