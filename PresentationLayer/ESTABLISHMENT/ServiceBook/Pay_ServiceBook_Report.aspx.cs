@@ -124,7 +124,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             //url += "&path=~,Reports,PayRoll," + rptFileName;
             url += "&path=~,Reports,Establishment,ServiceBook," + rptFileName;
-            url += "&param=username=" + Session["userfullname"].ToString() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",IP=" + IP + ",@pfileNo=" + pfileNo +",@idno=" + Convert.ToInt32(ddlEmployee.SelectedValue)+ "," + param;
+            url += "&param=username=" + Session["userfullname"].ToString() + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",IP=" + IP + ",@pfileNo=" + pfileNo + ",@idno=" + Convert.ToInt32(ddlEmployee.SelectedValue) + "," + param;
             //url += "&param=collegename=" + Session["coll_name"].ToString() + ",username=" + Session["userfullname"].ToString() + "," + param;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'> ";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
