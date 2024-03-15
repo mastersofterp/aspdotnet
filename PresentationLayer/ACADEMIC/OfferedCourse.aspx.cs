@@ -68,7 +68,7 @@ public partial class ACADEMIC_OfferedCourse : System.Web.UI.Page
                     }
                     PopulateDropDownList1();
                     PopulateDropDownList();
-                    objCommon.FillDropDownList(ddlSessionIntake, "ACD_SESSION", "SESSIONID", "SESSION_NAME", " SESSIONID > 0 AND ISNULL(IS_ACTIVE,0)= 1 ", "SESSIONID DESC");
+                    objCommon.FillDropDownList(ddlSessionIntake, "ACD_SESSION", "SESSIONID", "SESSION_PNAME", " SESSIONID > 0 AND ISNULL(IS_ACTIVE,0)= 1 ", "SESSIONID DESC");
                                       
                     btnPrint.Visible = false;
                     btnAd.Visible = false;
@@ -531,7 +531,7 @@ public partial class ACADEMIC_OfferedCourse : System.Web.UI.Page
                 ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                 ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
 
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
                 ddlSession.Focus();
             }
         }
@@ -977,7 +977,7 @@ public partial class ACADEMIC_OfferedCourse : System.Web.UI.Page
                 ViewState["college_idCopyOfferCrs"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                 ViewState["schemenoCopyOfferCrs"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
 
-                objCommon.FillDropDownList(ddlSessionCopyCrs, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_idCopyOfferCrs"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
+                objCommon.FillDropDownList(ddlSessionCopyCrs, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_idCopyOfferCrs"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
                
                 ddlSession.Focus();
             }
@@ -1027,7 +1027,7 @@ public partial class ACADEMIC_OfferedCourse : System.Web.UI.Page
                 objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvCopyOfferCourse);//Set label - 
                 pnlCopyOfferedCourse.Visible = true;
                 hfOfferedCrs.Value = dscourses.Tables[0].Rows.Count.ToString();
-                objCommon.FillDropDownList(ddlSessionCopyCrsTo, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME",
+                objCommon.FillDropDownList(ddlSessionCopyCrsTo, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME",
                     "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_idCopyOfferCrs"])
                     + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
                    // + " AND SESSIONNO!=" + Convert.ToInt32(ddlSessionCopyCrs.SelectedValue), "SESSIONNO DESC");

@@ -696,7 +696,7 @@
                                                         <thead class="bg-light-blue">
                                                             <tr id="trRow">
                                                                 <th>
-                                                                    <asp:CheckBox ID="cbHead" Text="Select All" runat="server"  ToolTip="Select/Select all" />
+                                                                    <asp:CheckBox ID="cbHead" Text="Select All" runat="server"  ToolTip="Select/Select all" onclick="return SelectAll(this)" />
                                                                 </th>
                                                                 <th>
                                                                     <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>

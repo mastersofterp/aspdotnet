@@ -353,8 +353,8 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
 
             DataSet dsfee = null;
 
-            if (Convert.ToInt32(Session["OrgId"]) == 2)
-            {
+            if (Convert.ToInt32(Session["OrgId"]) == 2) 
+            {             
                 dsfee = objCommon.GetAdmRegisteredCountForEXCEL_Crescent(Convert.ToInt32(ddlAdmbatch.SelectedValue), Convert.ToInt32(ddlClg.SelectedValue), Convert.ToInt32(ddlDepartment.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(Session["userno"]));
             }
             else
@@ -363,21 +363,34 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
             }
             //DataSet dsfee = objCommon.GetAdmRegisteredCountForEXCEL(Convert.ToInt32(ddlAdmbatch.SelectedValue), Convert.ToInt32(ddlClg.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(Session["userno"]));
 
+            // Added By Vipul Tichakule on date 14-02-2024
             if (dsfee != null && dsfee.Tables[0].Rows.Count > 0)
             {
-                GV.DataSource = dsfee;
-                GV.DataBind();
-                string attachment = "attachment; filename=AdmissionRegisterStudents_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-                Response.ClearContent();
-                Response.AddHeader("content-disposition", attachment);
-                Response.ContentType = "application/vnd.MS-excel";
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                GV.RenderControl(htw);
-                Response.Write(sw.ToString());
-                Response.End();
-
-
+                dsfee.Tables[0].TableName = "AdmissionRegisterStudents";
+                dsfee.Tables[1].TableName = "BranchWiseData ";
+        
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    foreach (System.Data.DataTable dt in dsfee.Tables)
+                    {
+                        //Add System.Data.DataTable as Worksheet.
+                        if (dt != null && dt.Rows.Count > 0)
+                            wb.Worksheets.Add(dt);
+                    }
+                    //Export the Excel file.
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename= AdmissionRegisterStudents_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        wb.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                    }
+                }    
 
             }
             else

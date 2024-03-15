@@ -3,7 +3,7 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    
+
     <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.js")%>"></script>
 
@@ -55,7 +55,6 @@
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
-
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -65,26 +64,43 @@
                                             CssClass="form-control multi-select-demo" SelectionMode="multiple" AutoPostBack="true"></asp:ListBox>
                                     </div>
 
+                                         
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+									        <label>Convocation Type</label> 
+                                             
+								        </div>
+                                        <asp:DropDownList ID="ddlConvocationNo" runat="server" AutoPostBack="True" AppendDataBoundItems="true" ToolTip="Please Select Convocation Type"
+                                            TabIndex="2" data-select2-enable="true" ValidationGroup="configure">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlConvocationNo"
+                                            Display="None" ErrorMessage="Please Select Convocation Type" InitialValue="0" SetFocusOnError="true"
+                                            ValidationGroup="configure"></asp:RequiredFieldValidator>--%>
+							        </div>
                                 </div>
                             </div>
 
                             <div class="col-12 btn-footer" style="text-align: center;">
-                                <asp:Button ID="btnConvocationExcelReport" Text="Convocation Excel Report" runat="server" TabIndex="2" Visible="false" CssClass="btn btn-info" CausesValidation="false" OnClick="btnConvocationExcelReport_Click1" />
-                                <asp:Button ID="btnPassStudList" Text="Passout Student Excel Report" runat="server" TabIndex="3" Visible="false" CssClass="btn btn-info" OnClientClick="return validateField();" CausesValidation="false" OnClick="btnConvocationEligible_Click" />
-
-                            </div>
-
-                        </div>
-                    </div>
+                                <asp:Button ID="btnConvocationExcelReport" Text="Convocation Excel Report" runat="server" TabIndex="3" Visible="false" CssClass="btn btn-info" CausesValidation="false" OnClick="btnConvocationExcelReport_Click1" OnClientClick="return validateField2();" /> 
+                                 <asp:Button ID="btnPassStudList" Text="Passout Student Excel Report" runat="server" TabIndex="4" Visible="false" CssClass="btn btn-info" OnClientClick="return validateField();" CausesValidation="false" OnClick="btnConvocationEligible_Click" />
+                                
+                           </div>
+                            <div class="col-12 btn-footer" style="text-align: center;">
+                                 <asp:Button ID="btnCount" Text="Result Analysis Report" runat="server" TabIndex="6" Visible="false" CssClass="btn btn-info" ValidationGroup="GradeCard" />
+                             </div>
+            </div>
+            </div>
                 </div>
             </div>
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnConvocationExcelReport" />
-            <asp:PostBackTrigger ControlID="btnPassStudList" />
+            <asp:PostBackTrigger ControlID="btnPassStudList" /> 
         </Triggers>
     </asp:UpdatePanel>
-        
+
     <!-- MultiSelect Script -->
     <script type="text/javascript">
         $(document).ready(function () {
@@ -156,7 +172,40 @@
             else {
                 return "";
             }
-        }  
+        }
+        </script>
+
+    <script language="javascript" type="text/javascript">
+
+        function validateField2() {
+
+            debugger;
+
+            var summary = "";
+            summary += isvalidConvType()
+
+
+            if (summary != "") {
+                alert(summary);
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        function isvalidConvType() {
+            debugger;
+            var uid;
+            var temp = document.getElementById("<%=ddlConvocationNo.ClientID %>");
+            uid = temp.value;
+            if (uid == 0) {
+                return ("Please Select Convocation type" + "\n");
+            }
+            else {
+                return "";
+            }
+        }
+      
     </script>
 
 </asp:Content>

@@ -883,7 +883,7 @@
                                 <asp:Button ID="btnGrace" runat="server" TabIndex="31" CssClass="btn btn-info" Text="Grace Students" ValidationGroup="Show" OnClick="btnGrace_Click" />
 
                                 <asp:Button ID="btncoursegrade" Text="FORMAT - II Report" runat="server" CssClass="btn btn-info" TabIndex="1" ValidationGroup="TrExcel" OnClick="btncoursegrade_Click" />
-                                <asp:Button ID="btnCIAExcel" Text="CIA Result Analysis Excel" runat="server" TabIndex="1" Visible="false" CssClass="btn btn-info" OnClick="btnCIAExcel_Click" ValidationGroup="TRGradeReg" />
+                                <asp:Button ID="btnCIAExcel" Text="CIA Result Analysis Excel" runat="server" TabIndex="1" Visible ="false" CssClass="btn btn-info" OnClick="btnCIAExcel_Click" ValidationGroup="TRGradeReg"/>
                                 <br>
 
                                 <asp:Button ID="btngraderange" Text="Grade Range Report" runat="server" CssClass="btn btn-info" CausesValidation="false" TabIndex="1" OnClick="btngraderange_Click" />
@@ -911,6 +911,8 @@
                                 <asp:Button ID="BtnGazette" Text="Gazette Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false"
                                     ValidationGroup="TRGradeReg" OnClick="BtnGazette_Click" />
                                 <asp:Button runat="server" ID="btnpassingcrft" CssClass="btn btn-info" OnClick="btnpassingcrft_Click" Text="Passing Certificate" ValidationGroup="passingCrft" Visible="false" />
+                                <asp:Button runat="server" ID="btnTabulationReport" CssClass="btn btn-info" Text="Tabulation report" TabIndex="33" OnClick="btnTabulationReport_Click"  ValidationGroup="TRReport" Visible="false" />
+                                <asp:Button runat="server" ID="btnTabulationReportDept" CssClass="btn btn-info" Text="Tabulation report Dept" TabIndex="34" OnClick="btnTabulationReportDept_Click" ValidationGroup="TRReport" Visible="false" />
                                 <asp:ValidationSummary ID="ValidationSummary16" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="CPD" />
                                 <asp:ValidationSummary ID="ValidationSummary15" runat="server" DisplayMode="List"
@@ -1059,7 +1061,7 @@
             <asp:PostBackTrigger ControlID="btnGradeCardIssueRegister" />
             <asp:PostBackTrigger ControlID="btnElibilityReport" />
             <asp:PostBackTrigger ControlID="btnCertificate" />
-
+            <asp:PostBackTrigger ControlID="btnCIAExcel" />
             <%--Added By Praful on 20_01_2023--%>
         </Triggers>
     </asp:UpdatePanel>

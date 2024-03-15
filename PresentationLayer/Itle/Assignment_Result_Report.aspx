@@ -36,7 +36,7 @@
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="tr2" runat="server">
                                             <div class="label-dynamic">
                                                 <sup></sup>
-                                                <label>Select Report Type</label>
+                                                <label>Select Report Type</label> 
                                             </div>
                                             <asp:RadioButtonList ID="rbtnReportType" runat="server" AutoPostBack="true"
                                                 OnSelectedIndexChanged="rbtnReportType_SelectedIndexChanged" Font-Bold="true">
@@ -62,7 +62,7 @@
                                             </asp:DropDownList>
 
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddCourse" InitialValue="0"
-                                                ErrorMessage="Select course." ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                ErrorMessage="Select course." ValidationGroup="submit" Display="None"></asp:RequiredFieldValidator>
 
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="trAssignment" runat="server" visible="false">
@@ -74,7 +74,7 @@
                                                 AppendDataBoundItems="true" AutoPostBack="true" ToolTip="Select Assignment">
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlAssignment" InitialValue="0"
-                                                ErrorMessage="Select assignment." ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                ErrorMessage="Select assignment." ValidationGroup="submit" Display="None"></asp:RequiredFieldValidator>
 
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="trStudent" runat="server" visible="false">
@@ -87,14 +87,17 @@
                                                 TabIndex="3" ToolTip="Select Student">
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlStudent" InitialValue="0"
-                                                ErrorMessage="Select student." ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                ErrorMessage="Select student." ValidationGroup="submit" Display="None"></asp:RequiredFieldValidator>
 
                                         </div>
                                     </div>
                                     <div class="col-12 btn-footer">
                                         <asp:Button ID="btnShowReport" runat="server" Text="Show Report" ValidationGroup="submit" TabIndex="4"
                                             OnClick="btnShowReport_Click" CssClass="btn btn-primary" ToolTip="Click here to Show Report" />
-
+                                           <%--[Start Block] [Parag.O][16-02-2024][53141] JECRC || RFC || Need Excel Report of Assignment Result--%>
+                                        <asp:Button ID="btnExport" runat="server" Text="Export To Excel" ValidationGroup="submit" 
+                                            CssClass="btn btn-info" ToolTip="Click here to Show Excel Report" OnClick="btnExport_Click" />
+                                        <%--[End Block] [Parag.O][16-02-2024][53141] JECRC || RFC || Need Excel Report of Assignment Result--%>
                                         <asp:Button ID="btnreset" runat="server" Text="Reset" TabIndex="5" ToolTip="Click here to Reset"
                                             OnClick="btnreset_Click" CssClass="btn btn-warning" />
                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true"
@@ -102,12 +105,56 @@
                                     </div>
 
                                 </asp:Panel>
+                                   <asp:Panel ID="Panel1" runat="server">
+                                        <div class="row">
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="Div2" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Select Session</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlSession" CssClass="form-control" data-select2-enable="true" runat="server" TabIndex="1"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged"
+                                                    AppendDataBoundItems="true" AutoPostBack="true" ToolTip="Select Session" >
+                                                </asp:DropDownList>
+
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSession" InitialValue="0"
+                                                    ErrorMessage="Select Session." ValidationGroup="submitdata" Display="None"></asp:RequiredFieldValidator>
+
+                                            </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="Div4" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Select Course</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlCourse" CssClass="form-control" data-select2-enable="true" runat="server" TabIndex="2"
+                                                    AppendDataBoundItems="true" AutoPostBack="true" ToolTip="Select Course">
+                                                </asp:DropDownList>
+                                           
+
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlCourse" InitialValue="0"
+                                                    ErrorMessage="Select course." ValidationGroup="submitdata" Display="None"></asp:RequiredFieldValidator>
+
+                                            </div>
+                                             <div class="col-12 btn-footer">
+                                              <asp:Button ID="btnExcelReport" runat="server" Text="Export To Excel" ValidationGroup="submitdata" TabIndex="3"
+                                            CssClass="btn btn-info" ToolTip="Click here to Show Excel Report" OnClick="btnExport_Click" />
+                                                 <asp:Button ID="btnCancel" runat="server" Text="Reset" TabIndex="4" ToolTip="Click here to Reset"
+                                                     CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+                                                 </div>
+                                              <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true"
+                                            ShowSummary="false"  DisplayMode="List" ValidationGroup="submitdata" />
+                                        </div>
+                                    </asp:Panel>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </ContentTemplate>
+         <Triggers>
+            <asp:PostBackTrigger ControlID="btnExport" />
+             <asp:PostBackTrigger ControlID="btnExcelReport" />
+        </Triggers>
     </asp:UpdatePanel>
 
     <ajaxToolKit:ModalPopupExtender ID="ModalPopupExtender1" BehaviorID="mdlPopupDel"

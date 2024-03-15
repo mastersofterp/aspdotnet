@@ -834,7 +834,6 @@
                                                                 ErrorMessage="Please Enter Custom password" ValidationGroup="report" Display="None"></asp:RequiredFieldValidator>
                                                         </div>
 
-
                                                     </div>
                                                 </div>
 
@@ -897,6 +896,8 @@
                                                                     <tr>
                                                                         <td>
                                                                             <asp:CheckBox ID="chkRow" runat="server" Checked='<%# (Convert.ToInt32(Eval("LOGIN_STATUS") )== 0 ?  false : true )%>' Font-Bold="true" ForeColor="Green" onclick="CountSelection();" Text='<%# (Convert.ToInt32(Eval("LOGIN_STATUS") )== 1 ?  "CREATED" : "" )%>' />
+                                                                        <%--    <asp:CheckBox  ID="chkRow"  runat="server"  Font-Bold="true"  ForeColor="Green"  onclick="CountSelection();"  />--%>
+
                                                                             <asp:HiddenField ID="hidStudentId" runat="server" Value='<%# Eval("IDNO")%>' />
                                                                         </td>
                                                                         <td>
@@ -1024,16 +1025,7 @@
                                                         </div>
 
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <%--<div class="label-dynamic">
-                                                        <label></label>
-                                                    </div>
-                                                            --%>
-                                                            <%-- <asp:RadioButtonList ID="rdobtn"  OnSelectedIndexChanged="rdobtn_SelectedIndexChanged" runat="server" RepeatDirection="Horizontal">
-                                                        <asp:ListItem Value="1" Text=" "> Password Same As Registration Number &nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                                        <asp:ListItem Value="2"> Genarate Random Password &nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                                        <asp:ListItem Value="3"> Custom Password </asp:ListItem>
-                                                    </asp:RadioButtonList>  --%>
-                                                            <asp:RadioButton ID="rdoParentRegpd" GroupName="Parent" runat="server" AutoPostBack="true" OnCheckedChanged="rdoParentRegpd_CheckedChanged" Text="Password Same As Registration No." Checked="true" />
+                                                          <asp:RadioButton ID="rdoParentRegpd" GroupName="Parent" runat="server" AutoPostBack="true" OnCheckedChanged="rdoParentRegpd_CheckedChanged" Text="Password Same As Registration No." Checked="true" />
                                                             <br />
                                                             <asp:RadioButton ID="rdoParentGeneratepd" GroupName="Parent" runat="server" AutoPostBack="true" OnCheckedChanged="rdoParentGeneratepd_CheckedChanged" Text=" Generate Random Password" /><br />
                                                             <asp:RadioButton ID="rdoParentCustompd" GroupName="Parent" runat="server" AutoPostBack="true" OnCheckedChanged="rdoParentCustompd_CheckedChanged" Text=" Custom Password" />
@@ -1074,11 +1066,6 @@
                                                     <asp:ValidationSummary ID="ValidationSummary3" runat="server" ValidationGroup="PLogin"
                                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                                 </div>
-
-
-                                                <%-- <div>
-                                                 <span style="font-size: small; color: green;">(Note :Record saving Parent mobile number are Displayed)</span>
-                                                 </div>--%>
                                                 <div class="col-12">
                                                     <div id="Div4">
                                                         <asp:Panel ID="Panel2" runat="server">
@@ -1105,12 +1092,6 @@
                                                                                     <th>Father Name</th>
                                                                                     <th>Father Email ID</th>
                                                                                     <th>Father Mobile No</th>
-                                                                                    <%--<th>Mobile No </th>
-                                                                                    <th>Email ID </th>
-                                                                                    <th>Branch</th>
-                                                                                    <th>Semester</th>--%>
-                                                                                    <%--   <th>DOB </th>
-                                                                                    --%>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -1147,21 +1128,6 @@
                                                                         <td>
                                                                             <asp:Label ID="lblFatherMobile" runat="server" Text='<%# Eval("FATHERMOBILE")%>' ToolTip='<%# Eval("FATHERMOBILE")%>'></asp:Label>
                                                                         </td>
-                                                                        <%--<td>
-                                                                            <asp:Label ID="lblMobileNo" runat="server" Text='<%# Eval("STUDENTMOBILE")%>' ToolTip='<%# Eval("STUDENTMOBILE")%>'></asp:Label>
-                                                                        </td>
-                                                                        <td>
-                                                                            <asp:Label ID="lblEmailId" runat="server" Text='<%# Eval("EMAILID")%>' ToolTip='<%# Eval("EMAILID")%>'></asp:Label>
-                                                                        </td>
-                                                                        <td>
-                                                                            <asp:Label ID="lblBranch" runat="server" Text='<%# Eval("BRANCHNAME")%>' ToolTip='<%# Eval("BRANCHNAME")%>'></asp:Label>
-                                                                        </td>
-                                                                        <td>
-                                                                            <asp:Label ID="lblSemester" runat="server" Text='<%# Eval("SEMESTERNAME")%>' ToolTip='<%# Eval("SEMESTERNAME")%>'></asp:Label>
-                                                                        </td>--%>
-                                                                        <%--   <td>
-                                                                    <asp:Label ID="lblDob" runat="server" Text='<%# Eval("DOB")%>' ToolTip='<%# Eval("DOB")%>'></asp:Label>
-                                                                </td>--%>
                                                                     </tr>
                                                                 </ItemTemplate>
                                                             </asp:ListView>

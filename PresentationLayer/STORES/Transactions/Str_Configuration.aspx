@@ -186,15 +186,14 @@
 
                                                 </div>
 
-                                                <%--<div class="form-group col-lg-3 col-md-6 col-12">
+                                               <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <label><span style="color: red"></span>GSTNO :</label>
+                                                    <asp:TextBox ID="txtGSTNO" runat="server" CssClass="form-control" MaxLength="90" ></asp:TextBox>
+                                                    <%--<asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtEmail"
+                                                        Display="None" ErrorMessage="Enter Email Id Correctly" SetFocusOnError="True"
+                                                        ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" ValidationGroup="Store"></asp:RegularExpressionValidator>--%>
 
-                                                    <label>Is Authority Show On Quot Entry:</label>
-                                                    <asp:RadioButtonList ID="rdbAuthoritynQuotation" runat="server" Repeatedirection="Horizontal">
-                                                        <asp:ListItem Value="Y">Yes&nbsp;&nbsp;</asp:ListItem>
-                                                        <asp:ListItem Selected="True" Value="N">No</asp:ListItem>
-                                                    </asp:RadioButtonList>
-
-                                                </div>--%>
+                                                </div>
 
                                             </div>
                                         </div>

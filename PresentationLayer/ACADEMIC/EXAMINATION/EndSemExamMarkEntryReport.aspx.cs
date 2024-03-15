@@ -1113,15 +1113,11 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty)
                     {
                         gvStudent.Columns[6].Visible = true;
-                        //btnSave.Enabled = false;
-                        //btnLock.Enabled = false;
+                      
                         btnUnlock.Enabled = false;
-                        //btnSave.Visible = false;
-                        //btnLock.Visible = false;
-                        //btnGrade.Enabled = false;
-                        //btnGrade.Visible = false;
-                       // btnMarksModifyReport.Visible = true;
-                       // btnfinalmarkentry.Visible = true;
+                       
+                       btnMarksModifyReport.Visible = true;
+                       btnfinalmarkentry.Visible = true;
                        // btnmarkexcel.Visible = true;
 
                     }
@@ -1136,7 +1132,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         //btnGrade.Enabled = true;
                         //btnGrade.Visible = true;
                       //  btnMarksModifyReport.Visible = true;
-                      //  btnfinalmarkentry.Visible = false;
+                      btnfinalmarkentry.Visible = false;
                       //  btnmarkexcel.Visible = false;
                     }
 
@@ -1625,7 +1621,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     else
                     {
                         gvStudent.Columns[6].Visible = false;
-                        btnfinalmarkentry.Visible = false;
+                        btnfinalmarkentry.Visible = true;
                         btnmarkexcel.Visible = false;
                     }
 
@@ -1633,6 +1629,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     btnReport.Visible = true;
                     btnReport.Enabled = true;
                     lblStudents.Visible = true;
+                    //btnfinalmarkentry.Visible = false;
                 }
                 else
                 {

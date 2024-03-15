@@ -92,94 +92,142 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                         schemeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + idno));
                         if (CheckActivityCollege(cid))
                         {
-                            #region check  ACD_EXAM_CONFIGURATION ACADEMIC FEES 
-                            int CheckAcademicActivity = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(FEES_COLLECTION,0)", ""));
-
-
-                            if (CheckAcademicActivity == 1)
+                            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)//ADDED BY GAURAV 29_02_2024
                             {
-                                DataSet ds = sc.AdmfessDues(Convert.ToInt32(Session["idno"]), Convert.ToInt32(semesterno));
 
-                                if (ds.Tables.Count == 0 || ds.Tables.Count == null)
+                                #region Check STUDENT ADMISSION APPROVAL OR NOT 01_11_2023
+
+                                int ADMSTATUS = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ADMISSION_STATUS,0)", ""));
+
+
+                                if (ADMSTATUS == 1)
                                 {
-                                    objCommon.DisplayMessage("Academic Fees Not Paid Please contact to Admin!", this.Page);
+
+
+                                    int CHECKAPPROVAL = Convert.ToInt32(objCommon.LookUp("ACD_ADMISSION_STATUS_LOG", "ISNULL(STATUS,0) ", "IDNO=" + idno + " UNION ALL SELECT 0 AS STATUS"));
+                                    if (CHECKAPPROVAL == 0 || CHECKAPPROVAL == 2)
+                                    {
+                                        objCommon.DisplayMessage(updatepnl, "YOU HAVE NOT COMPLETED STUDENT INFORMATION. PLEASE COMPLETE IMMEDIATELY AND CONTACT TO STUDENT SECTION FOR APPROVAL.", this.Page);
+                                        divbtn.Visible = false;
+                                        //  return;
+
+                                    }
+
+
+                                }
+                                #endregion
+
+                                #region
+                                int CheckExamRegApprovalAdmin1 = Convert.ToInt32(objCommon.LookUp("ACD_ADMIN_DISCIPLINE_LOG", "ISNULL(STATUS,0) STATUS ", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNO=" + semesterno + " UNION ALL SELECT 0 AS STATUS"));
+
+
+                                if (CheckExamRegApprovalAdmin1 == 0)
+                                {
+
+                                    objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page);
+                                    this.ShowDetails();
+                                    bindcourses();
                                     divbtn.Visible = false;
                                     return;
+
+
+
                                 }
-
-
+                                #endregion
                             }
-                            #endregion
-                            #region Check attendance
-                          
-                               int Attendance = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ATTENDANCE,0)", ""));
+                            else
+                            {
+                              
+                                #region check  ACD_EXAM_CONFIGURATION ACADEMIC FEES
+                                int CheckAcademicActivity = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(FEES_COLLECTION,0)", ""));
 
 
-                               if (Attendance == 1)
-                               {
+                                if (CheckAcademicActivity == 1)
+                                {
+                                    DataSet ds = sc.AdmfessDues(Convert.ToInt32(Session["idno"]), Convert.ToInt32(semesterno));
 
-                                   int Attendanceper = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ATTENDANCE_PERCENTAGE,0)", ""));
-
-                                   DataSet ds1 = sc.GetStudentAttPerDashboard(Convert.ToInt32(Session["idno"]));
-                                  //if (ds1.Tables[0].Rows[0]["PER"] == null)
-                                  //{ ds1.Tables[0].Rows[0]["PER"] = 0; }
-                                   if (ds1.Tables[0].Rows.Count > 0)
-                                   {
-                                       if (Convert.ToInt32(ds1.Tables[0].Rows[0]["PER"]) < Attendanceper)
-                                       {
-
-                                        
-                                               objCommon.DisplayMessage(updatepnl, "Dear Student," + "\\r\\n" + "Please note your attendance is low. You are not eligible to register for the final exam till such a time that you meet your advisor or admin and submit the explanation for low attendance.", this.Page);
-                                               divbtn.Visible = false;
-                                      
-
-                                       }
-
-                                 
-                               }
-                                   else{
-                                    objCommon.DisplayMessage(updatepnl, "Dear Student," + "\\r\\n" + "Please note your attendance is low. You are not eligible to register for the final exam till such a time that you meet your advisor or admin and submit the explanation for low attendance.", this.Page);
-                                    divbtn.Visible = false;
-                                   }
-                                   }
-                            #endregion
-                            #region Check STUDENT ADMISSION APPROVAL OR NOT 01_11_2023
-
-                               int ADMSTATUS = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ADMISSION_STATUS,0)", ""));
+                                    if (ds.Tables.Count == 0 || ds.Tables.Count == null)
+                                    {
+                                        objCommon.DisplayMessage("Academic Fees Not Paid Please contact to Admin!", this.Page);
+                                        divbtn.Visible = false;
+                                        return;
+                                    }
 
 
-                               if (ADMSTATUS == 1)
-                               {
-                                 
-                                
-                                   int CHECKAPPROVAL = Convert.ToInt32(objCommon.LookUp("ACD_ADMISSION_STATUS_LOG", "ISNULL(STATUS,0) ", "IDNO=" + idno + " UNION ALL SELECT 0 AS STATUS"));
-                                   if (CHECKAPPROVAL == 0 || CHECKAPPROVAL == 2)
-                                   {
-                                       objCommon.DisplayMessage(updatepnl, "YOU HAVE NOT COMPLETED STUDENT INFORMATION. PLEASE COMPLETE IMMEDIATELY AND CONTACT TO STUDENT SECTION FOR APPROVAL.", this.Page); 
-                                       divbtn.Visible = false;
-                                     //  return;
-                                  
-                                   }
-                                  
-                               
-                               }
-                               #endregion
-                            #region CHECK FOR EXAM REG APPROVAL_04_12_2023
-                               int CheckExamRegApprovalAdmin = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ADMIN_EX_APPROVAL,0)", ""));
+                                }
+                                #endregion
+                                #region Check attendance
+
+                                int Attendance = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ATTENDANCE,0)", ""));
 
 
-                               if (CheckExamRegApprovalAdmin == 0)
-                               {
+                                if (Attendance == 1)
+                                {
 
-                                   objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page); 
-                                   divbtn.Visible = false;
-                                   return;
+                                    int Attendanceper = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ATTENDANCE_PERCENTAGE,0)", ""));
+
+                                    DataSet ds1 = sc.GetStudentAttPerDashboard(Convert.ToInt32(Session["idno"]));
+                                    //if (ds1.Tables[0].Rows[0]["PER"] == null)
+                                    //{ ds1.Tables[0].Rows[0]["PER"] = 0; }
+                                    if (ds1.Tables[0].Rows.Count > 0)
+                                    {
+                                        if (Convert.ToInt32(ds1.Tables[0].Rows[0]["PER"]) < Attendanceper)
+                                        {
+
+
+                                            objCommon.DisplayMessage(updatepnl, "Dear Student," + "\\r\\n" + "Please note your attendance is low. You are not eligible to register for the final exam till such a time that you meet your advisor or admin and submit the explanation for low attendance.", this.Page);
+                                            divbtn.Visible = false;
+
+
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+                                        objCommon.DisplayMessage(updatepnl, "Dear Student," + "\\r\\n" + "Please note your attendance is low. You are not eligible to register for the final exam till such a time that you meet your advisor or admin and submit the explanation for low attendance.", this.Page);
+                                        divbtn.Visible = false;
+                                    }
+                                }
+                                #endregion
+                                #region Check STUDENT ADMISSION APPROVAL OR NOT 01_11_2023
+
+                                int ADMSTATUS = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ADMISSION_STATUS,0)", ""));
+
+
+                                if (ADMSTATUS == 1)
+                                {
+
+
+                                    int CHECKAPPROVAL = Convert.ToInt32(objCommon.LookUp("ACD_ADMISSION_STATUS_LOG", "ISNULL(STATUS,0) ", "IDNO=" + idno + " UNION ALL SELECT 0 AS STATUS"));
+                                    if (CHECKAPPROVAL == 0 || CHECKAPPROVAL == 2)
+                                    {
+                                        objCommon.DisplayMessage(updatepnl, "YOU HAVE NOT COMPLETED STUDENT INFORMATION. PLEASE COMPLETE IMMEDIATELY AND CONTACT TO STUDENT SECTION FOR APPROVAL.", this.Page);
+                                        divbtn.Visible = false;
+                                        //  return;
+
+                                    }
+
+
+                                }
+                                #endregion
+                                #region CHECK FOR EXAM REG APPROVAL_04_12_2023 not in USE
+                                //   int CheckExamRegApprovalAdmin = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ADMIN_EX_APPROVAL,0)", ""));
+
+
+                                //   if (CheckExamRegApprovalAdmin == 0)
+                                //   {
+
+                                //       objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page); 
+                                //       divbtn.Visible = false;
+                                //       return;
 
 
 
-                               }
-                               #endregion
-                            this.ShowDetails();
+                                //   }
+                                #endregion
+                            }
+                               this.ShowDetails();
                             bindcourses();                               
 
                         }                                               

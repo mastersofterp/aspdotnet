@@ -486,6 +486,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
             objJVEnt.TO_DEPT = Convert.ToInt32(ddlToDept.SelectedValue);
             objJVEnt.TO_EMPLOYEE = Convert.ToInt32(ddlToEmployee.SelectedValue);
             objJVEnt.LOCATIONNO = Convert.ToInt32(ddlLocation.SelectedValue);            //---31/10/2022
+            objJVEnt.StudentIdno = 0;          //used in issue item to student entry form
 
 
             if (ddlTranType.SelectedValue == "3")
@@ -752,9 +753,9 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
 
         objJVEnt.REQTRNO = Convert.ToInt32(ddlReq.SelectedValue);
         if (rdbDirectIssue.Checked == true)
-            objJVEnt.ISSUE_TYPE = 'D';
+            objJVEnt.ISSUE_TYPE = "Direct";
         if (rdbRequisition.Checked == true)
-            objJVEnt.ISSUE_TYPE = 'R';
+            objJVEnt.ISSUE_TYPE = "Req";
     }
 
     private DataTable CreateJVItemTable()

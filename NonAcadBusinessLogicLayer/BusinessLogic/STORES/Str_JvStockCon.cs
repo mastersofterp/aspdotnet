@@ -90,7 +90,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
 
-                        objParams = new SqlParameter[21];
+                        objParams = new SqlParameter[22];
                         objParams[0] = new SqlParameter("@P_JVTRAN_ID", objJvEnt.JVTRAN_ID);
                         objParams[1] = new SqlParameter("@P_JVTRAN_SLIP_NO", objJvEnt.JVTRAN_SLIP_NO);
                         objParams[2] = new SqlParameter("@P_TRAN_DATE", objJvEnt.TRAN_DATE);
@@ -112,8 +112,9 @@ namespace IITMS
                         objParams[17] = new SqlParameter("@P_MODIFIED_BY", objJvEnt.MODIFIED_BY);
                         objParams[18] = new SqlParameter("@P_COLLEGE_CODE", objJvEnt.COLLEGE_CODE);
                         objParams[19] = new SqlParameter("@P_LOCATIONNO", objJvEnt.LOCATIONNO);              //---31/10/2022
-                        objParams[20] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[20].Direction = ParameterDirection.Output;
+                        objParams[20] = new SqlParameter("@P_StudentIdno", objJvEnt.StudentIdno);              //---31/10/2022
+                        objParams[21] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[21].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STR_JVSTCOK_INS_UPD", objParams, true);
                         if (Convert.ToInt32(ret) == -99)

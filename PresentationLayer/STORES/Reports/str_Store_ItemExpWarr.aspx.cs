@@ -104,6 +104,7 @@ public partial class STORES_Reports_str_Store_ItemExpWarr : System.Web.UI.Page
         txtFromDate.Text = string.Empty;
         txtToDate.Text = string.Empty;
         ddlItem.SelectedIndex = 0;
+
     }
 
     //Generate the report
@@ -158,23 +159,5 @@ public partial class STORES_Reports_str_Store_ItemExpWarr : System.Web.UI.Page
         txtFromDate.Text = string.Empty;
         txtToDate.Text = string.Empty;
         ddlItem.SelectedIndex = 0;
-    }
-    protected void txtToDate_TextChanged(object sender, EventArgs e)
-    {
-        DateTime frmdate, todate;
-        if (txtToDate.Text == null || txtToDate.Text == "" || txtFromDate.Text == "" || txtFromDate.Text == null)
-        {
-
-        }
-        else
-        {
-            frmdate = Convert.ToDateTime(txtFromDate.Text);
-            todate = Convert.ToDateTime(txtToDate.Text);
-            if (frmdate > todate)
-            {
-                txtToDate.Text = string.Empty;
-                objCommon.DisplayUserMessage(updpanel, "To Date Must be Greter then From Date ", this.Page);
-            }
-        }
     }
 }

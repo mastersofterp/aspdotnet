@@ -718,6 +718,67 @@ namespace IITMS
                     return retStatus;
                 }
 
+                public DataSet GetParticularinfoForSem(int Admyear, int degreeno)
+                {
+                    DataSet ds = null;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_ACADEMICID", Admyear);
+                        objParams[1] = new SqlParameter("@P_DEGREENO", degreeno);
+
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_PARTICULAR_EXPENDITURE_SEMESTERWISE", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.CertificateMasterController.GetParticularinfoForSem-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public int InsertExpeForSem(string Head, decimal firstAmount, int AcdYear, int OrgId, string IpAddress, int UaNO, int insert, int degreeno)
+                {
+
+                    int status = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[9];
+                        objParams[0] = new SqlParameter("@P_HEAD", Head);
+                        objParams[1] = new SqlParameter("@P_FIRSTYEAR", firstAmount);
+                        objParams[2] = new SqlParameter("@P_ACDYEAR", AcdYear);
+                        objParams[3] = new SqlParameter("@P_ORGID", OrgId);
+                        objParams[4] = new SqlParameter("@P_IP", IpAddress);
+                        objParams[5] = new SqlParameter("@P_UANO", UaNO);
+                        objParams[6] = new SqlParameter("@P_INS", insert);
+                        objParams[7] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[8].Direction = System.Data.ParameterDirection.Output;
+
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_ISERT_EBC_CERTIFICATE_DAIICT", objParams, true);
+
+                        if (obj != null && obj.ToString() == "1")
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (obj != null && obj.ToString() == "2627")
+                            status = Convert.ToInt32(CustomStatus.RecordExist);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.SessionActivityController.AddSessionActivity() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+
+                }
+
 
             }
         }

@@ -655,11 +655,11 @@ public partial class ACADEMIC_CancelCourseReg : System.Web.UI.Page
                 //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
                 if (Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "8")
                 {
-                    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER M INNER JOIN ACD_STUDENT_RESULT R ON(M.SESSIONNO=R.SESSIONNO)", "DISTINCT R.SESSIONNO", "SESSION_NAME", "M.SESSIONNO >0 AND IS_ACTIVE=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND M.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSION_NAME DESC");
+                    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER M INNER JOIN ACD_STUDENT_RESULT R ON(M.SESSIONNO=R.SESSIONNO)", "DISTINCT R.SESSIONNO", "SESSION_PNAME", "M.SESSIONNO >0 AND IS_ACTIVE=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND M.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "R.SESSIONNO DESC");
                 }
                 else if (Session["usertype"].ToString() == "3")
                 {
-                    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER M INNER JOIN ACD_STUDENT_RESULT R ON(M.SESSIONNO=R.SESSIONNO)", "DISTINCT R.SESSIONNO", "SESSION_NAME", "M.SESSIONNO >0 AND IS_ACTIVE=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND M.OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + "AND (R.UA_NO =" + Convert.ToInt32(Session["userno"]) + " OR R.UA_NO_PRAC=" + Convert.ToInt32(Session["userno"]) + ")", "SESSION_NAME DESC");
+                    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER M INNER JOIN ACD_STUDENT_RESULT R ON(M.SESSIONNO=R.SESSIONNO)", "DISTINCT R.SESSIONNO", "SESSION_PNAME", "M.SESSIONNO >0 AND IS_ACTIVE=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND M.OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + "AND (R.UA_NO =" + Convert.ToInt32(Session["userno"]) + " OR R.UA_NO_PRAC=" + Convert.ToInt32(Session["userno"]) + ")", "R.SESSIONNO DESC");
                 }
                 else
                 {

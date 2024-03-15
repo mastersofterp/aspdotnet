@@ -18,7 +18,8 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-
+using System.Text;
+using System.IO;
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
@@ -60,7 +61,7 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
             else
             {
                 //Page Authorization
-                CheckPageAuthorization();
+                //CheckPageAuthorization();
                 this.PopulateDropDown();
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
@@ -428,4 +429,48 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
         }
     }
 
+    protected void BtnExcelReport_Click(object sender, EventArgs e)
+    {
+        try 
+        {
+            GridView dg = new GridView();
+            string SP_Name = "PKG_GET_INTERNAL_MARK_DETAILS_NOT_DONE_DATA";
+            string SP_Parameters = "@P_SESSIONNO,@P_SEMESTERNO";
+            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue);
+            DataSet ds1 = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+            if (ds1.Tables.Count > 0)
+            {
+                if (ds1.Tables[0].Rows.Count > 0)
+                {
+                    dg.DataSource = ds1.Tables[0];
+                    dg.DataBind();
+                    //AddReportHeader(dg);
+                    string attachment = "attachment; filename=" + "INTERNAL_MARK_DETAILS " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                    Response.ClearContent();
+                    Response.AddHeader("content-disposition", attachment);
+                    Response.ContentType = "application/" + "ms-excel";
+                    StringWriter sw = new StringWriter();
+                    HtmlTextWriter htw = new HtmlTextWriter(sw);
+                    dg.HeaderStyle.Font.Bold = true;
+                    dg.RenderControl(htw);
+                    Response.Write(sw.ToString());
+                    Response.End();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+                }
+            }
+            else 
+            {
+                objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+            }
+        }catch(Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "BtnExcelReport_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 }

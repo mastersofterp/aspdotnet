@@ -8196,13 +8196,13 @@ namespace IITMS
                 #endregion
 
                 #region Added By Injamam on date 02_01_2024
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, string subjecttype)
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, int remark, string subjecttype,string userforrange,int subexamwise)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[41];
+                        SqlParameter[] objParam = new SqlParameter[44];
                         objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
                         objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
                         objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
@@ -8243,7 +8243,10 @@ namespace IITMS
                         objParam[37] = new SqlParameter("@P_EXCELTIMETABLE", exceltimetable);
                         objParam[38] = new SqlParameter("@P_INTMARKPUBLISH", intmarkpublish);
                         objParam[39] = new SqlParameter("@P_COMPWISEEXCEL", compwiseexcel);
-                        objParam[40] = new SqlParameter("@P_SUBJETTYPE", subjecttype);                 //added by prafull on dt:16012024
+                        objParam[40] = new SqlParameter("@P_REMARK", remark);
+                        objParam[41] = new SqlParameter("@P_SUBJETTYPE", subjecttype);
+                        objParam[42] = new SqlParameter("@P_USERFORRANGE", userforrange);
+                        objParam[43] = new SqlParameter("@P_INTERNALSUBEXAMWISE", subexamwise);
 
                         //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -8262,6 +8265,7 @@ namespace IITMS
                     }
                     return status;
                 }
+
                 #endregion
 
 
@@ -8328,52 +8332,7 @@ namespace IITMS
                 }
 
                 #endregion
-                #region summerimprovmentdemand
 
-
-                public int AddSummerImprovement_Demand(StudentRegist objSR, string Amt, string order_id)
-                {
-                    int retStatus = Convert.ToInt32(CustomStatus.Others);
-
-                    try
-                    {
-                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParams = null;
-
-                        //Add New eXAM Registered Subject Details
-
-                        objParams = new SqlParameter[12];
-
-                        objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
-                        objParams[1] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
-                        objParams[2] = new SqlParameter("@P_SEMESTERNO", objSR.SEMESTERNOS);
-                        objParams[3] = new SqlParameter("@P_COURSENOS", objSR.COURSENOS);
-                        objParams[4] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
-                        objParams[5] = new SqlParameter("@P_IDNOS", objSR.IDNO);
-                        objParams[6] = new SqlParameter("@P_REGNO", objSR.REGNO);
-                        objParams[7] = new SqlParameter("@P_UA_NO", objSR.UA_NO);
-                        objParams[8] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
-                        objParams[9] = new SqlParameter("@P_EXAM_FEES", Amt);
-                        objParams[10] = new SqlParameter("@P_ORDER_ID", order_id);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
-
-                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SUMMER_IMPROVEMENT_DEMAND", objParams, true);
-
-                        if (Convert.ToInt32(ret) == -99)
-                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
-                        else
-                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
-                    }
-                    catch (Exception ex)
-                    {
-                        retStatus = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
-                    }
-
-                    return retStatus;
-                }
-                #endregion
 
                 #region excel upload TimeTable Added by Injamam Ansari on 04_01_2024
                 public int ExamTimeTableUploadByExcel(DataTable dt, int sessionid, int patternno, int examno, int subid, int ua_no, string ipadress)

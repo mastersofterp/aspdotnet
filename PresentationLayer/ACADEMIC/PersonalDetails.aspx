@@ -650,6 +650,20 @@
                                                         placeholder="Enter Student Permanent Account Number" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
                                                 </div>
 
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divEWS" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supEWS" runat="server">* </sup>
+                                                        <label>Economically Weaker Section</label>
+                                                        <asp:DropDownList ID="ddlEWS" CssClass="form-control" data-select2-enable="true" runat="server" AppendDataBoundItems="True"
+                                                            ToolTip="Please Select Economically Weaker Section" TabIndex="30">
+                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                            <asp:ListItem Value="2">No</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                    </div>
+
+                                                </div>
+
                                             </div>
 
                                             <div class="row">

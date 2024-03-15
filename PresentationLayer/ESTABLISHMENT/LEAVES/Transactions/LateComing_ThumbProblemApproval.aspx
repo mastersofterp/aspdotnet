@@ -182,6 +182,14 @@
                                         AppendDataBoundItems="true" ToolTip="Select Designation">
                                     </asp:DropDownList>
                                 </div>
+                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="label-dynamic">
+                                        <sup></sup>
+                                        <label>Default Allow/Not Allow</label>
+                                    </div>
+                                    <asp:RadioButton ID="rbAllow" Checked="true" runat="server" Text="Allow" onclick="AllowAll('A')" />
+                                    <asp:RadioButton ID="rbNotAllow" runat="server" Text="Not Allow" onclick="AllowAll('N')" />
+                                </div>
 
                             </div>
                         </div>
@@ -323,7 +331,7 @@
                                                 <asp:DropDownList ID="ddlAllow" runat="server" AppendDataBoundItems="true"
                                                     TabIndex="21" ToolTip="Select Allow or Not Allow">
                                                     <asp:ListItem Enabled="true" Text="Please Select" Value="0"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true"  Text="Allow" Value="A"></asp:ListItem>
+                                                    <asp:ListItem Enabled="true" Text="Allow" Value="A"></asp:ListItem>
                                                     <asp:ListItem Enabled="true" Selected="True" Text="Not Allow" Value="N"></asp:ListItem>
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidStatus" Value='<%# Eval("STATUS")%>' runat="server" />
@@ -443,7 +451,7 @@
                                                 <asp:DropDownList ID="ddlAllow" runat="server" AppendDataBoundItems="true"
                                                     CssClass="form-control" TabIndex="31" ToolTip="Select Allow/Not Allow">
                                                     <asp:ListItem Enabled="true" Text="Please Select" Value="0"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true"  Text="Allow" Value="A"></asp:ListItem>
+                                                    <asp:ListItem Enabled="true" Text="Allow" Value="A"></asp:ListItem>
                                                     <asp:ListItem Enabled="true" Selected="True" Text="Not Allow" Value="N"></asp:ListItem>
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidStatus" Value='<%# Eval("STATUS")%>' runat="server" />
@@ -556,7 +564,7 @@
                                                 <asp:DropDownList ID="ddlAllow" runat="server" AppendDataBoundItems="true"
                                                     CssClass="form-control" ToolTip="Select Allow/Not Allow" TabIndex="41">
                                                     <asp:ListItem Enabled="true" Text="Please Select" Value="0"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true"  Text="Allow" Value="A"></asp:ListItem>
+                                                    <asp:ListItem Enabled="true" Text="Allow" Value="A"></asp:ListItem>
                                                     <asp:ListItem Enabled="true" Selected="True" Text="Not Allow" Value="N"></asp:ListItem>
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidStatus" Value='<%# Eval("STATUS")%>' runat="server" />
@@ -605,7 +613,7 @@
                                                     </th>
                                                     <th>OutTime
                                                     </th>
-                                                   
+
                                                     <th>Allow/NotAllow
                                                     </th>
                                                     <th>Reason
@@ -644,7 +652,7 @@
                                                     TabIndex="47" ToolTip="Out Time"></asp:Label>
                                                 <%-- <%# Eval("OUTTIME")%>--%>
                                             </td>
-                                          
+
                                             <td>
                                                 <asp:DropDownList ID="ddlAllow" runat="server" AppendDataBoundItems="true"
                                                     CssClass="form-control" ToolTip="Select Allow or Not Allow" TabIndex="49">
@@ -671,7 +679,7 @@
             </div>
         </div>
     </div>
-       
+
     <script type="text/javascript">
         //  keeps track of the delete button for the row
         //  that is going to be removed
@@ -721,6 +729,16 @@
         //    else
         //        document.getElementById("ctl00_ctp_chkPhoto").disabled = false;
         //}
+
+        function AllowAll(val) {
+            if (val == "A") {
+                document.getElementById('ctl00_ContentPlaceHolder1_rbNotAllow').checked = false;
+            }
+            else {
+                document.getElementById('ctl00_ContentPlaceHolder1_rbAllow').checked = false;
+            }
+
+        }
     </script>
 
     <div id="divMsg" runat="server">

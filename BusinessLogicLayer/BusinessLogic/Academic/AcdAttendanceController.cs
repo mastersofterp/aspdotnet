@@ -5003,6 +5003,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return dr;
         }
 
+
         /// <summary>
         /// Added By Rishabh on 08/09/2022
         /// </summary>
@@ -5012,7 +5013,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="att_status"></param>
         /// <param name="topic_desc"></param>
         /// <returns></returns>
-        public int CopyAttendacnce(int slotno, int att_no, int class_type, int att_status, string topic_desc, int Tpno)
+        public int CopyAttendacnce(int slotno, int att_no, int class_type, int att_status, string topic_desc, string Tpno)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -5048,8 +5049,6 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return retStatus;
         }
-
-
 
 
         public DataSet GetStudentFacultywiseAttendanceModified(int session, int uano, int courseno, DateTime date, int schemetype, int schemeno, int sem, int sectionno, int batchno, int slotno, int altCourseNo, string College_id, int OrgId, int is_Tutorial)
@@ -6584,14 +6583,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         #endregion
 
         // Added By Vipul Tichakule on Dated 22-12-2023
-        public DataSet GetFacultyLectureCount(int Session)
+        //Modify By Jay T. On Dated 28-02-2024
+        public DataSet GetFacultyLectureCount(int Session, DateTime Date)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                SqlParameter[] objParams = new SqlParameter[1];
+                SqlParameter[] objParams = new SqlParameter[2];
                 objParams[0] = new SqlParameter("@P_SESSIONNO", Session);
+                objParams[1] = new SqlParameter("@P_Date", Date);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_FACULTY_LECTURE_COUNT_REPORT", objParams);
             }
             catch (Exception ex)
@@ -6600,6 +6601,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
 
         //Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
         public DataSet GetAllLeaveForApproval_HOD(int uaType, int uano, int college_ID, int sessionno)

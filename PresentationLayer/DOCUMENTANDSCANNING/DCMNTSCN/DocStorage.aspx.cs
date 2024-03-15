@@ -127,10 +127,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             else
             {
                 objCommon.DisplayMessage("Please select a file to attach.", this);
-                // Clear();
+                lvCompAttach.DataSource = null;
+                lvCompAttach.DataBind();
                 return;
             }
-
 
             if (lblBlobConnectiontring.Text == "")
             {
@@ -367,9 +367,6 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         divTDate.Visible = false;
         //  divDoctypedatas.Visible = false;
         //lvDocStorage.Visible = false;
-        Clear();
-        lvDocStorage.DataSource = string.Empty;
-        lvDocStorage.DataBind();
         Clear();
         lvDocStorage.DataSource = string.Empty;
         lvDocStorage.DataBind();
@@ -641,101 +638,6 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
     }
 
 
-    //protected void ddldoctype_SelectedIndexChanged(object sender, EventArgs e)
-
-    //{
-    //    BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
-    //    string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
-    //    if (selectedDocumentTypeName == "Sale Deed" || selectedDocumentTypeName == "Settlement Deed" || selectedDocumentTypeName == "Sale Agreement" || selectedDocumentTypeName == "Gift Deed" || selectedDocumentTypeName == "Partition Deed" || selectedDocumentTypeName == "Power Of Attorney")
-    //    {
-    //        Divdate.Visible = true;
-    //        divDocNo.Visible = true;
-    //        divAddress.Visible = true;
-    //        divDistrict.Visible = true;
-    //        DivSurveyNo.Visible = true;
-    //        divDivisionNo.Visible = true;
-    //        divArea.Visible = true;
-    //        divEast.Visible = true;
-    //        divWest.Visible = true;
-    //        divsouth.Visible = true;
-    //        divnorth.Visible = true;
-    //        divAttach.Visible = true;
-    //        divbtnAdd.Visible = true;
-    //        divEcNo.Visible = false;
-    //        divFDate.Visible = false;
-    //        divTDate.Visible = false;
-    //        divDoctypedatas.Visible = false;
-    //        ClearData();
-    //        return;
-    //    }
-    //    else if (selectedDocumentTypeName == "Patta" || selectedDocumentTypeName == "Chitta" || selectedDocumentTypeName == "Adangal" || selectedDocumentTypeName == "Property Tax Receipt" )
-    //    {
-    //        Divdate.Visible = true;
-    //        divDocNo.Visible = true;
-    //        divAddress.Visible = true;
-    //        divDistrict.Visible = true;
-    //        DivSurveyNo.Visible = true;
-    //        divDivisionNo.Visible = true;
-    //        divAttach.Visible = true;
-    //        divbtnAdd.Visible = true;
-    //        divArea.Visible = false;
-    //        divEcNo.Visible = false;
-    //        divFDate.Visible = false;
-    //        divTDate.Visible = false;
-    //        divDoctypedatas.Visible = false;
-    //        divEast.Visible = false;
-    //        divWest.Visible = false;
-    //        divsouth.Visible = false;
-    //        divnorth.Visible = false;
-    //        ClearData();
-    //        return;
-    //    }
-    //    else if (selectedDocumentTypeName == "Encumbarence")
-    //    {
-    //        divEcNo.Visible = true;
-    //        divFDate.Visible = true;
-    //        divTDate.Visible = true;
-    //        divAddress.Visible = true;
-    //        divAttach.Visible = true;
-    //        divbtnAdd.Visible = true;
-    //        Divdate.Visible = false;
-    //        divDocNo.Visible = false;
-    //        divDistrict.Visible = false;
-    //        DivSurveyNo.Visible = false;
-    //        divDivisionNo.Visible = false;
-    //        divDoctypedatas.Visible = false;
-    //        divEast.Visible = false;
-    //        divWest.Visible = false;
-    //        divsouth.Visible = false;
-    //        divnorth.Visible = false;
-    //        ClearData();
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        divDoctypedatas.Visible = true;
-    //        Divdate.Visible = true;
-    //        divDocNo.Visible = true;
-    //        divDistrict.Visible = true;
-    //        DivSurveyNo.Visible = true;
-    //        divDivisionNo.Visible = true;
-    //        divAttach.Visible = true;
-    //        divbtnAdd.Visible = true;
-    //        divEcNo.Visible = false;
-    //        divFDate.Visible = false;
-    //        divTDate.Visible = false;
-    //        divAddress.Visible = false;
-    //        divEast.Visible = false;
-    //        divWest.Visible = false;
-    //        divsouth.Visible = false;
-    //        divnorth.Visible = false;
-    //        ClearData();
-    //        return;
-    //    }
-
-    //}
-
-
     protected void ddldoctype_SelectedIndexChanged(object sender, EventArgs e)
     {
 
@@ -769,9 +671,9 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             return;
         }
         else if (string.Equals(selectedDocumentTypeName, "Patta", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(selectedDocumentTypeName, "Chitta", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(selectedDocumentTypeName, "Adangal", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(selectedDocumentTypeName, "Property Tax Receipt", StringComparison.OrdinalIgnoreCase))
+         string.Equals(selectedDocumentTypeName, "Chitta", StringComparison.OrdinalIgnoreCase) ||
+         string.Equals(selectedDocumentTypeName, "Adangal", StringComparison.OrdinalIgnoreCase) ||
+         string.Equals(selectedDocumentTypeName, "Property Tax Receipt", StringComparison.OrdinalIgnoreCase))
         {
             Divdate.Visible = true;
             divDocNo.Visible = true;
@@ -819,7 +721,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         }
         else
         {
-            //  divDoctypedatas.Visible = true;
+            //divDoctypedatas.Visible = true;
             Divdate.Visible = true;
             divDocNo.Visible = true;
             divDistrict.Visible = true;
@@ -1287,10 +1189,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
             {
 
-                string count = objCommon.LookUp("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID,ATTACH_ID", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
+                string count = objCommon.LookUp("ADMN_DC_ASSESTS_FIEESTORAGE", "DOCID,SR_NO", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND SR_NO=" + fileId);
                 if (count != "")
                 {
-                    //  int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
+                    int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSESTS_FIEESTORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND SR_NO=" + fileId);
                 }
             }
 

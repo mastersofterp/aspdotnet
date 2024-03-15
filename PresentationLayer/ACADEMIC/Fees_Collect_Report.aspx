@@ -621,7 +621,7 @@
                                                     ControlToValidate="txtToDate" EmptyValueMessage="Please Enter To Date"
                                                     InvalidValueMessage="To Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
                                                     TooltipMessage="Please Enter To Date" EmptyValueBlurredText="Empty"
-                                                    InvalidValueBlurredMessage="Invalid Date" ValidationGroup="Show" SetFocusOnError="True" />
+                                               InvalidValueBlurredMessage="Invalid Date" ValidationGroup="Show" SetFocusOnError="True" />
                                             </div>
                                         </div>
 

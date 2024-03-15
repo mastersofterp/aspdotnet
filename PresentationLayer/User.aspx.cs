@@ -281,8 +281,12 @@ public partial class User : System.Web.UI.Page
 
         try
         {
+          
+
             if (Convert.ToInt32(Session["usertype"]) == 1)
             {
+
+              
 
                 DataSet ds = objCommon.FillDropDown("PAYROLL_EMP_PHOTO", "IDNO", "PHOTO", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
                 byte[] imgData = (byte[])ds.Tables[0].Rows[0]["PHOTO"];
@@ -299,13 +303,14 @@ public partial class User : System.Web.UI.Page
             }
             else
             {
-
-
+               
                 DataTableReader dtr = null;
                 string type = "";
                 if (Convert.ToInt32(Session["usertype"]) == 2)
                     type = "STUDENT";
                 else if (Convert.ToInt32(Session["usertype"]) == 3)
+                    type = "EMP";
+                else if (Convert.ToInt32(Session["usertype"]) != 1 || Convert.ToInt32(Session["usertype"]) != 2 || Convert.ToInt32(Session["usertype"]) != 3)
                     type = "EMP";
                 dtr = objECC.getUserProfileImage(Session["idno"].ToString(), type);
 

@@ -39,9 +39,9 @@
                                         <%-- <sup>* </sup>
                                                                             <label></label>--%>
                                     </div>
-                                    <asp:RadioButtonList ID="rdotcpartfull" runat="server" CssClass="col-4" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdotcpartfull_SelectedIndexChanged" AutoPostBack="true">
+                                    <asp:RadioButtonList ID="rdotcpartfull" runat="server" CssClass="col-6" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdotcpartfull_SelectedIndexChanged" AutoPostBack="true">
                                         <asp:ListItem Value="1">&nbsp;Faculty Feedback Report</asp:ListItem>
-                                        <asp:ListItem Value="2">&nbsp;All Feedback Report</asp:ListItem>
+                                        <asp:ListItem Value="2">&nbsp;Course Teacher Feedback Report</asp:ListItem>
 
                                     </asp:RadioButtonList>
                                 </div>

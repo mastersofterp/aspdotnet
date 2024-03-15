@@ -299,7 +299,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
         lvStudent.DataBind();
         objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label -
         objCommon.FillDropDownList(ddlAcdYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ACTIVE_STATUS=1", "ACADEMIC_YEAR_ID DESC");
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER SM ", "DISTINCT (SM.SESSIONNO)", "SM.SESSION_NAME", "SM.SESSIONNO > 0 AND SM.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + " AND SM.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SM.SESSIONNO");
+        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER SM ", "DISTINCT (SM.SESSIONNO)", "SM.SESSION_PNAME", "SM.SESSIONNO > 0 AND SM.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + " AND SM.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SM.SESSIONNO");
 
     }
 

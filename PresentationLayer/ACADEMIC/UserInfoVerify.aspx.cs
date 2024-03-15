@@ -1316,10 +1316,18 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
                 DataTable dt = (ds1.Tables[0].DefaultView).ToTable();
                 string path = dt.Rows[0]["PHOTOGRAPH"].ToString();
                 string SIGNPATH = dt.Rows[0]["SIGNATURE"].ToString();
-                byte[] data = webClient.DownloadData(path);
-                byte[] signdata = webClient.DownloadData(SIGNPATH);
-
-               
+                byte[] data = null;
+                byte[] signdata = null;
+                try
+                {
+                    data = webClient.DownloadData(path);
+                    signdata = webClient.DownloadData(SIGNPATH);
+                }
+                catch (Exception Ex)
+                {
+                    objCommon.DisplayMessage(this.Page, "Either the document has been Expired or not available at source. You can still proceed for the Admission.", this.Page);
+                    return;
+                }
                 objstud.IdNo = userno;
 
                 //Photo Conversion
@@ -1327,7 +1335,15 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
                 double kilobytes = bytes / 1024.0;
                 if (kilobytes > 150)
                 {
-                    data = ImageCompression.CompressImage(data, 150);
+                    try
+                    {
+                        data = ImageCompression.CompressImage(data, 150);
+                    }
+                    catch
+                    {
+                        objCommon.DisplayMessage(this.Page, "Document related Error has been Occured. You can still proceed for the Admission.", this.Page);
+                        return;
+                    }
                     //data = ResizePhoto(data);
                     int fileSize2 = data.Length;
                 }
@@ -1338,7 +1354,15 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
                 double kilobytessign = bytes / 1024.0;
                 if (kilobytessign > 150)
                 {
-                    signdata = ImageCompression.CompressImage(signdata, 150);
+                    try
+                    {
+                        signdata = ImageCompression.CompressImage(signdata, 150);
+                    }
+                    catch
+                    {
+                        objCommon.DisplayMessage(this.Page, "Document related Error has been Occured. You can still proceed for the Admission.", this.Page);
+                        return;
+                    }
                     //signdata = ResizePhoto(signdata);
                     int fileSize2 = signdata.Length;
                 }
@@ -2004,7 +2028,7 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            
+
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.Properties.ContentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
@@ -2058,7 +2082,7 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
             //string file = dt.Rows[0]["DOCUMENTS"].ToString();
             string username = dt.Rows[0]["USERNAME"].ToString();
             string ext = string.Empty;
-                //file.Split('.').Last();
+            //file.Split('.').Last();
             ext = Path.GetExtension(new Uri(file).AbsolutePath);
             byte[] data;
             using (WebClient webClient = new WebClient())
@@ -2105,7 +2129,7 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
             string username = dt.Rows[0]["USERNAME"].ToString();
             string ext = string.Empty;
             ext = Path.GetExtension(new Uri(file).AbsolutePath);
-                //file.Split('.').Last();
+            //file.Split('.').Last();
             byte[] data;
             using (WebClient webClient = new WebClient())
             {

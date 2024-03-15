@@ -644,7 +644,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                 
 
-                string SheetName = dtExcelSchema.Rows[3]["TABLE_NAME"].ToString();
+                string SheetName = dtExcelSchema.Rows[4]["TABLE_NAME"].ToString();
                 connExcel.Close();
 
                 //Read Data from First Sheet
@@ -858,11 +858,36 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                          IsErrorInUpload = true;
                      }
 
+
+
+
                      string Fname = dtNew.Rows[i]["First Name"].ToString();
                      string Lname = dtNew.Rows[i]["Last Name"].ToString();
 
                    
                     //------------start-----------
+
+
+                     if (!(dtNew.Rows[i]["RFIDNO"]).ToString().Equals(string.Empty))
+                     {
+                         string UID_No = Convert.ToString(dtNew.Rows[i]["RFIDNO"]);
+                         int numericValue;
+                         bool isNumber = int.TryParse(UID_No, out numericValue);
+
+                         if (isNumber == false)
+                         {
+                             message = "<span style='color:Red'><b>Please enter RFIDNO In Eight Digit Numbers Format</b> </span>";
+                             messageexp = "Please enter RFIDNO In Eight Digit Numbers Foramt ";
+                             ErrorString = ErrorString + message + " | ";
+                             ErrorString1 = ErrorString1 + messageexp + " | ";
+                             IsErrorInUpload = true;
+
+                         }
+
+                     }
+
+
+
                     
                      //    string DOB = string.Empty;
                      //    string DOB1 = dtNew.Rows[i]["Date of Birth"].ToString();
@@ -1353,23 +1378,23 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         //    IsErrorInUpload = true;
                         //}
 
-                        if (!(dtNew.Rows[i]["UID No"]).ToString().Equals(string.Empty))
-                        {
-                            string UID_No = Convert.ToString(dtNew.Rows[i]["UID No"]);
-                            int numericValue;
-                            bool isNumber = int.TryParse(UID_No, out numericValue);
+                        //if (!(dtNew.Rows[i]["UID No"]).ToString().Equals(string.Empty))
+                        //{
+                        //    string UID_No = Convert.ToString(dtNew.Rows[i]["UID No"]);
+                        //    int numericValue;
+                        //    bool isNumber = int.TryParse(UID_No, out numericValue);
 
-                            if (isNumber==false)
-                            {
-                                message = "<span style='color:Red'><b>Please enter UID No In Number Foramt</b> </span>";
-                                messageexp = "Please enter UID No In Number Foramt ";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
+                        //    if (isNumber==false)
+                        //    {
+                        //        message = "<span style='color:Red'><b>Please enter UID No In Number Format</b> </span>";
+                        //        messageexp = "Please enter UID No In Number Foramt ";
+                        //        ErrorString = ErrorString + message + " | ";
+                        //        ErrorString1 = ErrorString1 + messageexp + " | ";
+                        //        IsErrorInUpload = true;
    
-                            }
+                        //    }
                            
-                        }
+                        //}
 
                         if (!(dtNew.Rows[i]["Actual Basic"]).ToString().Equals(string.Empty))
                         {
@@ -1617,7 +1642,36 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                         }
 
-                      
+
+
+                        if (!(dtNew.Rows[i]["Employee Type"]).ToString().Equals(string.Empty))
+                        {
+                            //objPayMas.RegNo = dtNew.Rows[i]["Employee Type"].ToString();
+                            string employeetype=dtNew.Rows[i]["Employee Type"].ToString();
+                            ds1 = objCommon.FillDropDown("[dbo].[PAYROLL_EMPLOYEETYPE]", "*", "EMPLOYEETYPE", "EMPLOYEETYPE='" + employeetype + "'", "");
+
+                            //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
+                            if (ds1.Tables[0].Rows.Count == 0)
+                            {
+                                //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
+                                //if (empId1 == empId)
+                                //{
+                                message = " <span style='color:Red'><b>Employee Type is Not Correct. Please check Master Data.</span>";
+                                messageexp = "Employee Type is Not Correct. Please check Master Data.";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                //}
+                            }
+                        }
+                        else
+                        {
+                            message = "<span style='color:Red'><b>Please enter Employee Type</b></span> ";
+                            messageexp = "Please enter Employee Id";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
 
 
                         if (IsErrorInUpload == false)
@@ -1733,7 +1787,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
             System.Data.DataTable dtemployeedata = new System.Data.DataTable();
             dtemployeedata.Columns.Add(new DataColumn("Society Name", typeof(string)));
             dtemployeedata.Columns.Add(new DataColumn("College Name", typeof(string)));
-            dtemployeedata.Columns.Add(new DataColumn("Employee Id", typeof(int)));
+            dtemployeedata.Columns.Add(new DataColumn("Employee Id", typeof(string)));  // Convert int to string
             dtemployeedata.Columns.Add(new DataColumn("RFIDNO", typeof(int)));
             dtemployeedata.Columns.Add(new DataColumn("Title", typeof(string)));
             dtemployeedata.Columns.Add(new DataColumn("First Name", typeof(string)));
@@ -1748,7 +1802,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
             dtemployeedata.Columns.Add(new DataColumn("Date of Joining", typeof(DateTime)));
             dtemployeedata.Columns.Add(new DataColumn("Date of Retirement", typeof(DateTime)));
             dtemployeedata.Columns.Add(new DataColumn("Date of Increment", typeof(DateTime)));
-            dtemployeedata.Columns.Add(new DataColumn("UID No", typeof(int)));
+            dtemployeedata.Columns.Add(new DataColumn("UID No", typeof(string)));
             dtemployeedata.Columns.Add(new DataColumn("Actual Basic", typeof(double)));
 
             dtemployeedata.Columns.Add(new DataColumn("Grade Pay", typeof(double)));
@@ -1767,6 +1821,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
             dtemployeedata.Columns.Add(new DataColumn("DesignationID", typeof(int)));
             dtemployeedata.Columns.Add(new DataColumn("StaffID", typeof(int)));
             dtemployeedata.Columns.Add(new DataColumn("IDNO", typeof(int)));
+            dtemployeedata.Columns.Add(new DataColumn("Employee Type", typeof(string)));
 
 
 
@@ -1804,6 +1859,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 System.Web.UI.WebControls.Label lblPayScale = (System.Web.UI.WebControls.Label)ii.FindControl("lblPayScale");
                 System.Web.UI.WebControls.Label lblNATUREOFAPPONIMENT = (System.Web.UI.WebControls.Label)ii.FindControl("lblNATUREOFAPPONIMENT");
                 System.Web.UI.WebControls.Label lblCONSOLIDATEDEMPLOYEEAMOUNT = (System.Web.UI.WebControls.Label)ii.FindControl("lblCONSOLIDATEDEMPLOYEEAMOUNT");
+                System.Web.UI.WebControls.Label lblEmployeeType = (System.Web.UI.WebControls.Label)ii.FindControl("lblEmployeeType");
 
 
                 dr1 = dtemployeedata.NewRow();
@@ -1943,6 +1999,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 dr1["DesignationID"] = 0;
                 dr1["StaffID"] = 0;
                 dr1["IDNO"] = 0;
+                dr1["Employee Type"] = lblEmployeeType.Text;
 
                 dtemployeedata.Rows.Add(dr1);
 
@@ -2276,6 +2333,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 ds.Tables[6].TableName = "Staff Name";
                 ds.Tables[7].TableName = "Pay rule";
                 ds.Tables[8].TableName = "NATURE OF APPONIMENT";
+                ds.Tables[9].TableName = "Employee Type";
                 string status = string.Empty;
                 //// added by kajal jaiswal on 16-02-2023 for checking table is blank 
                 //foreach (System.Data.DataTable dt in ds.Tables)
@@ -2347,7 +2405,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                                 // var temp = ds.Tables[0].Columns[j];
 
-                                if ("College Name" == ds.Tables[0].Columns[i].ToString() || "Employee Id" == ds.Tables[0].Columns[i].ToString() || "Title" == ds.Tables[0].Columns[i].ToString() || "First Name" == ds.Tables[0].Columns[i].ToString() || "Last Name" == ds.Tables[0].Columns[i].ToString() || "Gender" == ds.Tables[0].Columns[i].ToString() || "Date of Birth" == ds.Tables[0].Columns[i].ToString() || "Date of Joining" == ds.Tables[0].Columns[i].ToString() || "Department" == ds.Tables[0].Columns[i].ToString() || "Designation" == ds.Tables[0].Columns[i].ToString() || "Staff Name" == ds.Tables[0].Columns[i].ToString() || "Mobile No" == ds.Tables[0].Columns[i].ToString() || "E-mail ID" == ds.Tables[0].Columns[i].ToString())
+                                if ("College Name" == ds.Tables[0].Columns[i].ToString() || "Employee Id" == ds.Tables[0].Columns[i].ToString() || "Title" == ds.Tables[0].Columns[i].ToString() || "First Name" == ds.Tables[0].Columns[i].ToString() || "Last Name" == ds.Tables[0].Columns[i].ToString() || "Gender" == ds.Tables[0].Columns[i].ToString() || "Date of Birth" == ds.Tables[0].Columns[i].ToString() || "Date of Joining" == ds.Tables[0].Columns[i].ToString() || "Department" == ds.Tables[0].Columns[i].ToString() || "Designation" == ds.Tables[0].Columns[i].ToString() || "Staff Name" == ds.Tables[0].Columns[i].ToString() || "Mobile No" == ds.Tables[0].Columns[i].ToString() || "E-mail ID" == ds.Tables[0].Columns[i].ToString() || "Employee Type" == ds.Tables[0].Columns[i].ToString())
                                 {
 
                                     ws.Cell(1, j).Style.Fill.BackgroundColor = XLColor.FromArgb(255, 64, 0); //All columns of second row

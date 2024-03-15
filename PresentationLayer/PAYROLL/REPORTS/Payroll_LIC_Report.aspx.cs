@@ -496,4 +496,80 @@ public partial class PayRoll_Payroll_LIC_Report : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+    protected void btnPTExcel_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            GridView GVDayWiseAtt = new GridView();
+            string ContentType = string.Empty;
+            string monyear = ddlMonth.SelectedItem.Text;
+            int collegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
+            int staffno = Convert.ToInt32(ddlStaffNo.SelectedValue);
+
+            DataSet ds = objpay.PTExportExcel(monyear, collegeNo, staffno);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+
+                string collename = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
+                //string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+                string Month = objCommon.LookUp(monyear, "(CAST( DATENAME(month, MON) AS nvarchar(50) ))", "MON='" + monyear + "'");
+                string Year = objCommon.LookUp(monyear, "cast (YEAR( MON) AS nvarchar(50 )) ", "MON='" + monyear + "'");
+
+                GVDayWiseAtt.DataSource = ds;
+                GVDayWiseAtt.DataBind();
+
+                // Header Row 1
+                GridViewRow HeaderGridRow = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Insert);
+                TableCell HeaderCell = new TableCell();
+                HeaderCell = new TableCell();
+                HeaderCell.Text = collename;
+                HeaderCell.ColumnSpan = 9;
+                //HeaderCell.BackColor = System.Drawing.Color.Navy;
+                //HeaderCell.ForeColor = System.Drawing.Color.White;
+                HeaderCell.Font.Bold = true;
+                HeaderCell.Font.Size = 16;
+                HeaderCell.Attributes.Add("style", "text-align:center !important;");
+                HeaderGridRow.Cells.Add(HeaderCell);
+                GVDayWiseAtt.Controls[0].Controls.AddAt(0, HeaderGridRow);
+
+
+                // Header Row 2
+                GridViewRow HeaderGridRow1 = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Insert);
+                TableCell HeaderCell1 = new TableCell();
+                HeaderCell1.Text = "  P.Tax Salary Details of " + Month + "    " + Year + "    ";
+                HeaderCell1.ColumnSpan = 9;
+                //HeaderCell1.BackColor = System.Drawing.Color.Navy;
+                //HeaderCell1.ForeColor = System.Drawing.Color.White;
+                HeaderCell1.Font.Bold = true;
+                HeaderCell1.Font.Size = 14;
+                HeaderCell1.Attributes.Add("style", "text-align:center !important;");
+                HeaderGridRow1.Cells.Add(HeaderCell1);
+                GVDayWiseAtt.Controls[0].Controls.AddAt(1, HeaderGridRow1);
+
+
+
+                string attachment = "attachment; filename=PTExcelExport.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/vnd.MS-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                GVDayWiseAtt.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                ShowMessage("No data found for current selection");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Payroll_LIC_Report.btnLICExcel_Click()-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
 }

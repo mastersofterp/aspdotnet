@@ -100,8 +100,7 @@ namespace IITMS
 
                           objParams[16] = new SqlParameter("@P_ATTACHTABLE", objDocType.AttachTable);
                           objParams[17] = new SqlParameter("@P_ISBLOB", objDocType.ISBLOB);
-                          objParams[18] = new SqlParameter("@P_UANO", objDocType.UA_NO);
-                       //   objParams[18] = new SqlParameter("@P_OTHER_DOCTYPE", objDocType.OTHERDOCTYPE);
+                          objParams[18] = new SqlParameter("@P_OTHER_DOCTYPE", objDocType.OTHERDOCTYPE);
                           objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
                           objParams[19].Direction = ParameterDirection.Output;
                           object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_DC_ASSEST_DOCUMENT_STORAGE_INSERT", objParams, true);

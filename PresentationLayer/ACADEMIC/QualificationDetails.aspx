@@ -1399,7 +1399,7 @@
                                                             <label>Seat No.</label>
                                                         </div>
 
-                                                        <asp:TextBox ID="txtQExamRollNo" runat="server" placeholder=" Enter Seat No." CssClass="form-control" MaxLength="10"
+                                                        <asp:TextBox ID="txtQExamRollNo" runat="server" placeholder=" Enter Seat No." CssClass="form-control" MaxLength="16"
                                                             ToolTip="Please Enter Qualifying Seat No" TabIndex="176"></asp:TextBox>
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divYearOfExam" runat="server">

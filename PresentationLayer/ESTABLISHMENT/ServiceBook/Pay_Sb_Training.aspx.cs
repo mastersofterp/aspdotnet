@@ -350,11 +350,12 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Training : System.Web.UI.P
 
             if (txtAcadYear.Text != string.Empty)
             {
-                objSevBook.YEAR = Convert.ToInt32(txtAcadYear.Text);
+                //objSevBook.YEAR = Convert.ToInt32(txtAcadYear.Text);
+                objSevBook.PASSYEAR = txtAcadYear.Text;
             }
             else
             {
-                objSevBook.YEAR = null;
+                objSevBook.PASSYEAR = null;
             }
 
             //Check whether to add or update

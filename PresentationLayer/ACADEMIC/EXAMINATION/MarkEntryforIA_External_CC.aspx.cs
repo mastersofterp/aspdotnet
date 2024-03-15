@@ -1161,7 +1161,7 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                             {
                                 DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
                                 objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
-                                ddlgrade.Items.Add(new ListItem("Please select", "0"));
+                             // ddlgrade.Items.Add(new ListItem("Please select", "0")); //Commented by lalit regarding ticket no 55536
                                 ddlgrade.SelectedIndex = 0;
                             }
                         }

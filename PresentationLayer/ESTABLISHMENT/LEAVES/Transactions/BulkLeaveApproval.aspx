@@ -101,6 +101,8 @@
                                             <td>
                                                 <asp:CheckBox ID="chkSelect" runat="server" ToolTip='<%# Eval("LETRNO") %>' />
                                                 <asp:HiddenField ID="hidEmployeeNo" runat="server" Value='<%# Eval("LETRNO") %>' />
+                                                <asp:HiddenField ID="hdnEmpno" runat="server" Value='<%# Eval("EMPNO") %>' />
+                                                <asp:HiddenField ID="hdnLeaveno" runat="server" Value='<%# Eval("LEAVENO") %>' />
                                             </td>
                                             <td>
                                                 <%# Eval("sno")%>
@@ -121,7 +123,7 @@
                                                 <%# Eval("TO_DATE") %>
                                             </td>
                                             <td>
-                                                <%# Eval("NO_OF_DAYS") %>
+                                                <asp:Label ID="noOfDays" runat="server" Text='<%# Eval("NO_OF_DAYS") %>' ></asp:Label>
                                             </td>
                                             <td>
                                                 <%# Eval("JOINDT") %>

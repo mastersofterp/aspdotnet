@@ -17,6 +17,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessEntities
         private int _COMP_STMNT_AUTH_UANO;
         private string _PHONE;
         private string _EMAIL;
+        private string _GSTNO;
         private int _PO_APPROVAL;
         private int _DSR_CREATION;
         private int _DEPT_WISE_ITEM;
@@ -109,6 +110,13 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessEntities
             get { return _EMAIL; }
             set { _EMAIL = value; }
         }
+
+        public string GSTNO
+        {
+            get { return _GSTNO; }
+            set { _GSTNO = value; }
+        }
+
         public string PRE_DSR_YEAR
         {
             get { return _PRE_DSR_YEAR; }

@@ -58,7 +58,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
             }
             //
         }
-       
+        divMsg.InnerHtml = string.Empty;
         //btnSave.Attributes.Add("onClick", "ReceiveServerData(0);");
 
     }
@@ -127,7 +127,8 @@ public partial class Leave_Cancel : System.Web.UI.Page
        // pnlEmpList.Visible = false;
         lvEmployees.Visible = false;
         txtFromdt.Text = string.Empty;
-       
+        btnRestore.Enabled = true;
+        btnShowRpt.Enabled = true;
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
@@ -154,7 +155,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
         //function will call here
        // btnSave.Attributes.Add("onClick", "ReceiveServerData(0);");
         FillUser();
-
+        BindListView();
     }
 
     
@@ -223,12 +224,16 @@ public partial class Leave_Cancel : System.Web.UI.Page
 
     protected void BindListView()      
     {
-        if ( ddlEmp.SelectedIndex > 0 && ddlStafftype.SelectedIndex > 0 && txtFromdt.Text != string.Empty)
+        if (ddlEmp.SelectedIndex >= 0 && ddlStafftype.SelectedIndex > 0 && txtFromdt.Text != string.Empty && ddlCollege.SelectedIndex > 0)
         {
             objLeaveMaster.EMPNO = Convert.ToInt32(ddlEmp.SelectedValue);
             objLeaveMaster.DEPTNO = Convert.ToInt32(ddldept.SelectedValue);
             
             objLeaveMaster.FROMDT = Convert.ToDateTime(txtFromdt.Text.ToString());
+
+            objLeaveMaster.COLLEGE_NO = Convert.ToInt32(ddlCollege.SelectedValue);
+
+            objLeaveMaster.STNO = Convert.ToInt32(ddlStafftype.SelectedValue);
 
             DataSet ds = objLeave.GetAllLeavesByEmp(objLeaveMaster);
 
@@ -238,7 +243,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
                 lvEmployees.DataBind();
                 lvEmployees.Visible = true;
                 btnRestore.Enabled = true;
-
+                //btnShowRpt.Enabled = true;
             }
             else
             {
@@ -246,6 +251,8 @@ public partial class Leave_Cancel : System.Web.UI.Page
                 lvEmployees.DataSource = null;
                 lvEmployees.DataBind();
                 btnRestore.Enabled = false;
+                //btnShowRpt.Enabled = false;
+                ViewState["StatusReport"] = "NoRecords";
                 return;
             }
         }
@@ -271,6 +278,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         FillUser();
+        BindListView();
     }
 
     protected void btnRestore_Click(object sender, EventArgs e)
@@ -339,6 +347,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
         }
         Clear();
         btnRestore.Enabled = true;
+        btnShowRpt.Enabled = true;
     }
 
     protected void ddldept_SelectedIndexChanged(object sender, EventArgs e)
@@ -356,8 +365,42 @@ public partial class Leave_Cancel : System.Web.UI.Page
     {
       
         ddlEmp.SelectedIndex = 0;
-        lvEmployees.DataSource = null;
-        lvEmployees.DataBind();
-       
+        //lvEmployees.DataSource = null;
+        //lvEmployees.DataBind();
+        BindListView();
+    }
+    protected void btnShowRpt_Click(object sender, EventArgs e)
+    {
+        try
+        {
+          ShowReport("Shift Report", "ESTB_LeaveCancelReport.rpt"); 
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private void ShowReport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ESTABLISHMENT")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + GetStudentIDs() + ",UserName=" + Session["username"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(Session["currentsession"]);@P_IDNO
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_PREVSTATUS=" + Convert.ToInt32(ddlExamType.SelectedValue);
+            url += "&param=@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + "," + "@P_STNO=" + Convert.ToInt32(ddlStafftype.SelectedValue) + "," + "@P_DTFROM=" + Convert.ToDateTime(txtFromdt.Text) + "," + "@P_EMPNO=" + Convert.ToInt32(ddlEmp.SelectedValue) + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue);
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Comparative.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
     }
 }

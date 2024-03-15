@@ -39,7 +39,7 @@ public partial class PAYROLL_REPORTS_PTDeductionReport : System.Web.UI.Page
         int IDNO = Convert.ToInt32(Session["idno"]);
         int ua_type = Convert.ToInt32(Session["usertype"]);
         try
-        {          
+        {
             if (!Page.IsPostBack)
             {
                 //Check Session
@@ -65,9 +65,9 @@ public partial class PAYROLL_REPORTS_PTDeductionReport : System.Web.UI.Page
                 FillDropdown();
                 if (ua_type != 1)
                 {
-                   
+
                     //ddlEmployeeNo.SelectedIndex = 1;
-                }              
+                }
                 if (ViewState["action"] == null)
                     ViewState["action"] = "add";
             }
@@ -100,17 +100,19 @@ public partial class PAYROLL_REPORTS_PTDeductionReport : System.Web.UI.Page
         //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_NAME", "COLLEGE_NO", "COLLEGE_NAME", "COLLEGE_NO IN(" + Session["college_nos"] + ")", "COLLEGE_NO ASC");            
         objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID>0", "COLLEGE_ID ASC");
         objCommon.FillDropDownList(ddlStaff, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
-        objCommon.FillDropDownList(ddlPayHead, "payroll_PayHead", "PAYHEAD", "PAYSHORT", "Payhead like '%D%' and PAYSHORT is not null","");
+        objCommon.FillDropDownList(ddlPayHead, "payroll_PayHead", "PAYHEAD", "PAYSHORT", "Payhead like '%D%' and PAYSHORT is not null", "");
 
     }
     public void MessageBox(string msg)
     {
         ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
     }
-    
+
     protected void btnReport_Click(object sender, EventArgs e)
     {
         
+        string Type = "PTDeductionReport";
+        string ReportName = objCommon.LookUp("PayReportConfiguration", "IDCardReportName", "IDCardType='" + Type + "' AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]));
 
         if (!string.IsNullOrEmpty(txtFromDt.Text) && !string.IsNullOrEmpty(txtToDt.Text))
         {
@@ -125,8 +127,15 @@ public partial class PAYROLL_REPORTS_PTDeductionReport : System.Web.UI.Page
                 if (TotalMonths <= 12)
                 {
                     //MessageBox("Check");
+                    if (ReportName != "")
+                    {
 
-                    ShowReport("PTDeductionReport", "PTDeductionReports.rpt");
+                        ShowReport("PTDeductionReport", ReportName);
+                    }
+                    else
+                    {
+                        ShowReport("PTDeductionReport", "PTDeductionReports_RCPIT.rpt");
+                    }
                 }
                 else
                 {
@@ -150,14 +159,14 @@ public partial class PAYROLL_REPORTS_PTDeductionReport : System.Web.UI.Page
     {
         try
         {
-           
+
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
 
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_FROM_DATE=" + txtFromDt.Text+ ",@P_TO_DATE=" + txtToDt.Text+ ",@P_PT_HEAD=" +ddlPayHead.SelectedValue + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaff.SelectedValue);
-       
+            url += "&param=@P_FROM_DATE=" + txtFromDt.Text + ",@P_TO_DATE=" + txtToDt.Text + ",@P_PT_HEAD=" + ddlPayHead.SelectedValue + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaff.SelectedValue);
+
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -171,5 +180,5 @@ public partial class PAYROLL_REPORTS_PTDeductionReport : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-   
+
 }

@@ -1,14 +1,16 @@
 ﻿//======================================================================================
-// PROJECT NAME  : UAIMS                                                                
+// PROJECT NAME  : RF-Common Code                                                                
 // MODULE NAME   : ACADEMIC                                                             
 // PAGE NAME     : STUDENT FEES RELATED REPORT                                 
 // CREATION DATE : 02-JULY-2013                                                       
 // CREATED BY    : ASHISH DHAKATE                                                           
 // MODIFIED DATE : 24-SEPT-2019
 // MODIFIED BY   : Rita Munde                                                  
-// MODIFIED DESC : Add Radio button for Excess Amount.....                                                                   
+// MODIFIED DESC : Add Radio button for Excess Amount.....  
+// MODIFIED DATE : 28-02-2024
+// MODIFIED BY   : Vipul Tichkule   
+// MODIFIED DESC : Added Fliter Reciept Type in Tally Integration Report (TkNo.52451)                                                                 
 //======================================================================================
-
 
 using System;
 using System.Collections;
@@ -224,6 +226,39 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         {
             throw;
         }
+    }
+
+    private void Show_Summary_Report_Balance_fees(string reportTitle, string rptFileName)
+    {
+        string rectype = this.GetRecTypeReport();
+
+        //if (string.IsNullOrEmpty(rectype))//GetDegreeNew()
+        //{
+        //    objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+        //    return;
+        //}
+
+        //DateTime fromDate = Convert.ToDateTime(TextBox1.Text).ToString("yyyy-MM-dd"); 
+        //DateTime toDate = Convert.ToDateTime(TextBox2.Text).ToString("yyyy-MM-dd"); 
+       // string paymode = ddlPaymentMode.SelectedValue == "0" ? "" : ddlPaymentMode.SelectedValue;
+        //int Semesterno = ddlSemester.SelectedIndex > 0 ? Convert.ToInt32(ddlSemester.SelectedValue) : 0;
+        //int Branchno = ddlBranch.SelectedIndex > 0 ? Convert.ToInt32(ddlBranch.SelectedValue) : 0;
+        //int Degreeno = ddlDegree.SelectedIndex > 0 ? Convert.ToInt32(ddlDegree.SelectedValue) : 0;
+        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        url += "Reports/CommonReport.aspx?";
+        url += "pagetitle=" + reportTitle;
+        url += "&path=~,Reports,Academic," + rptFileName;
+        url += "&param=@P_COLLEGE_CODE= 0,@P_FROM_DATE=" + Convert.ToDateTime(TextBox1.Text).ToString("yyyy-MM-dd") + ",@P_TO_DATE=" + Convert.ToDateTime(TextBox1.Text).ToString("yyyy-MM-dd") + ",@P_RECIEPT_CODE=" + rectype;
+        //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+        //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+        //divMsg.InnerHtml += " </script>";
+
+        //To open new window from Updatepanel
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+        sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+        ScriptManager.RegisterClientScriptBlock(this.updFeeTable, this.GetType(), "controlJSScript", sb.ToString(), true);
     }
 
     //private void ShowReportFees(string reportTitle, string rptFileName)
@@ -2080,14 +2115,14 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     private void EXCEL_REPORT_TALLY_INTEGRATION()
     {
-        //string rectype = this.GetRecType();
+        string rectype = this.GetRecType();
 
-        //if (string.IsNullOrEmpty(rectype))
-        //{
-        //    objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
-        //    return;
-        //}
-        //rectype = rectype.Substring(0, rectype.Length - 1);
+        if (string.IsNullOrEmpty(rectype))
+        {
+            objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+            return;
+        }
+        rectype = rectype.Substring(0, rectype.Length - 1);
 
         int semesterNo = semesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
         int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
@@ -2097,10 +2132,10 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         int year = Convert.ToInt32(ddlYear.SelectedValue);
         //int admstatus = Convert.ToInt32(ddlAdmStatus.SelectedValue);
 
-     
-        DataSet dsfeestud = feeCntrl.Get_Tally_Integration_Reports_Excel( FromDate, ToDate, degreeno, branchno, Convert.ToInt32(ddlAcdYear.SelectedValue),semesterNo,year);
+        // ( rectype ) added by vipul t on date 29-02-2024 as per TNo:-52451
+        DataSet dsfeestud = feeCntrl.Get_Tally_Integration_Reports_Excel(FromDate, ToDate, degreeno, branchno, Convert.ToInt32(ddlAcdYear.SelectedValue), semesterNo, year, rectype);
 
-        if (dsfeestud != null && dsfeestud.Tables.Count > 0)
+        if (dsfeestud != null && dsfeestud.Tables[0].Rows.Count > 0)
         {
             dsfeestud.Tables[0].TableName = "TallyIntegrationReportDetails";
             
@@ -2531,6 +2566,20 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             }
             Show_Summary_Report("Cancelled_Receipt_Summary_Report", "Canceled_receipt_summary_report.rpt");
         }
+        else if (ddlReport.SelectedValue == "20")
+        {
+            if (TextBox1.Text == String.Empty)
+            {
+                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                return;
+            }
+            if (TextBox2.Text == String.Empty)
+            {
+                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                return;
+            }
+            Show_Summary_Report_Balance_fees("Fees_Payment_Summery_Report", "rptFeespaymentsummeryreport.rpt");
+        }
 
     }
 
@@ -2795,6 +2844,14 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             btnReport.Visible = false;
             btnShow.Visible = true;
            
+        }
+        else if (ddlReport.SelectedValue == "20")
+        {
+            
+            fromDSpan.Visible = true;
+            toDSpan.Visible = true;     
+            reciptd.Visible = true;
+            btnShow.Visible = false;
         }
         else if (ddlReport.SelectedValue == "0")
         {

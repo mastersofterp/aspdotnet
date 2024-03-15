@@ -1489,7 +1489,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 }
                 else
                 {
-                    objCommon.FillDropDownList(ddlSubExamPrint, "ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExamPrint.SelectedValue) + "", "");
+                    objCommon.FillDropDownList(ddlSubExamPrint, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExamPrint.SelectedValue) + "", "");
                     ddlSubExamPrint.Enabled = true;
                 }
                

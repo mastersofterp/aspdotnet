@@ -315,13 +315,29 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
             chkRelies.Checked = true;
         if (dr["SDPER"].ToString() == "1")
             chkSD.Checked = true;
-        if (dr["SIGN"].ToString().Trim() == "Director")
+        //if (dr["SIGN"].ToString().Trim() == "Director" || dr["SIGN"].ToString().Trim() == "Vice Chancellor" || dr["SIGN"].ToString().Trim() == "Chancellor")
+        //{
+        //    rdDirector.Checked = true;
+        //}
+        //else if (dr["SIGN"].ToString().Trim() == "For Director" || dr["SIGN"].ToString().Trim() == "For Vice Chancellor" || dr["SIGN"].ToString().Trim() == "Pro Chancellor")
+        //{
+        //    rdforDirector.Checked = true;
+        //}
+        //else 
+        //{
+        //    rdspcloffcr.Checked = true;
+        //}      //---------------------------01032024--------------------------
+        if (dr["SigningAuthorityid"].ToString() == "1") 
         {
-            rdDirector.Checked = true;
+            rdblSignatureAuthority.SelectedValue = "1";
+        }
+        else if (dr["SigningAuthorityid"].ToString() == "2")
+        {
+            rdblSignatureAuthority.SelectedValue = "2";
         }
         else
         {
-            rdforDirector.Checked = true;
+            rdblSignatureAuthority.SelectedValue = "3";
         }
         BindQuotation();
 
@@ -391,7 +407,7 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         chkRelies.Checked = false;
         chkSD.Checked = false;
         //rdDirector.Checked = false;
-        rdforDirector.Checked = false;
+      //  rdforDirector.Checked = false;
         BindVendorByQuotation(lstQtNo.SelectedValue);
         grdPOitems.DataSource = null;
         grdPOitems.DataBind();
@@ -551,7 +567,10 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         objPO.AGREEMENT = chkAgreement.Checked ? '1' : '0';
         objPO.RELISHED = chkLC.Checked ? '1' : '0';
         objPO.RELIES = chkRelies.Checked ? '1' : '0';
-        objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+        objPO.SIGN = rdblSignatureAuthority.SelectedItem.Text;  ///01032024
+        objPO.SigningAuthorityid = Convert.ToInt32(rdblSignatureAuthority.SelectedValue);                                                        ///010032024
+        //objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Checked ? rdforDirector.Text : rdspcloffcr.Text;  ///07/02/2024
+        //objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
         objPO.ED = chkEDexempt.Checked ? '1' : '0';
         objPO.CST = chkCSTExempt.Checked ? '1' : '0';
         objPO.FLAG = '0';
@@ -602,7 +621,12 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         objPO.AGREEMENT = chkAgreement.Checked ? '1' : '0';
         objPO.RELISHED = chkLC.Checked ? '1' : '0';
         objPO.RELIES = chkRelies.Checked ? '1' : '0';
-        objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+
+        objPO.SIGN = rdblSignatureAuthority.SelectedItem.Text;  ///01032024
+        objPO.SigningAuthorityid = Convert.ToInt32(rdblSignatureAuthority.SelectedValue); 
+       // objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+        //  objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Checked ? rdforDirector.Text : rdspcloffcr.Text;  ///07/02/2024
+        
         objPO.ED = chkEDexempt.Checked ? '1' : '0';
         objPO.CST = chkCSTExempt.Checked ? '1' : '0';
         objPO.FLAG = '0';
@@ -648,7 +672,12 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         objPO.AGREEMENT = chkAgreement.Checked ? '1' : '0';
         objPO.RELISHED = chkLC.Checked ? '1' : '0';
         objPO.RELIES = chkRelies.Checked ? '1' : '0';
-        objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+        objPO.SIGN = rdblSignatureAuthority.SelectedItem.Text;  ///01032024
+        objPO.SigningAuthorityid = Convert.ToInt32(rdblSignatureAuthority.SelectedValue); 
+       // objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Checked ? rdforDirector.Text : rdspcloffcr.Text;  ///07/02/2024
+        //objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+
+       
         objPO.ED = chkEDexempt.Checked ? '1' : '0';
         objPO.CST = chkCSTExempt.Checked ? '1' : '0';
         objPO.FLAG = '0';
@@ -700,7 +729,10 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         objPO.AGREEMENT = chkAgreement.Checked ? '1' : '0';
         objPO.RELISHED = chkLC.Checked ? '1' : '0';
         objPO.RELIES = chkRelies.Checked ? '1' : '0';
-        objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+        objPO.SIGN = rdblSignatureAuthority.SelectedItem.Text;  ///01032024
+        objPO.SigningAuthorityid = Convert.ToInt32(rdblSignatureAuthority.SelectedValue);  
+       // objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Checked ? rdforDirector.Text : rdspcloffcr.Text;  ///07/02/2024
+        //objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
         objPO.ED = chkEDexempt.Checked ? '1' : '0';
         objPO.CST = chkCSTExempt.Checked ? '1' : '0';
         objPO.FLAG = '0';
@@ -757,7 +789,10 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
             objPO.AGREEMENT = chkAgreement.Checked ? '1' : '0';
             objPO.RELISHED = chkLC.Checked ? '1' : '0';
             objPO.RELIES = chkRelies.Checked ? '1' : '0';
-            objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+            objPO.SIGN = rdblSignatureAuthority.SelectedItem.Text;  ///01032024
+            objPO.SigningAuthorityid = Convert.ToInt32(rdblSignatureAuthority.SelectedValue);  
+           // objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Checked ? rdforDirector.Text : rdspcloffcr.Text;  ///07/02/2024
+            //objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
             objPO.ED = chkEDexempt.Checked ? '1' : '0';
             objPO.CST = chkCSTExempt.Checked ? '1' : '0';
             objPO.FLAG = '0';
@@ -820,7 +855,10 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         objPO.AGREEMENT = chkAgreement.Checked ? '1' : '0';
         objPO.RELISHED = chkLC.Checked ? '1' : '0';
         objPO.RELIES = chkRelies.Checked ? '1' : '0';
-        objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+       // objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Text;
+       // objPO.SIGN = rdDirector.Checked ? rdDirector.Text : rdforDirector.Checked ? rdforDirector.Text : rdspcloffcr.Text;  ///07/02/2024
+        objPO.SIGN = rdblSignatureAuthority.SelectedItem.Text;  ///01032024
+        objPO.SigningAuthorityid = Convert.ToInt32(rdblSignatureAuthority.SelectedValue); 
         objPO.ED = chkEDexempt.Checked ? '1' : '0';
         objPO.CST = chkCSTExempt.Checked ? '1' : '0';
         objPO.FLAG = '0';
@@ -1614,6 +1652,29 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         }
     }
 
+    protected void btnPOReportFormat2_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (lstPO.SelectedValue == "")
+            {
+                DisplayMessage("Please Select Atleast One Purchase Order");
+            }
+            else
+            {
+                DataSet ds = objstrPO.GetSinglePONO(Convert.ToInt32(lstPO.SelectedValue));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    ShowPOSvceReport("Purchase Order", "Str_PO_Report_SVCE_Format2.rpt");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Transaction Failed");
+        }
+    }
+
     //To Show Purchase Order report
     private void ShowPOSvceReport(string reportTitle, string rptFileName)
     {
@@ -2285,4 +2346,5 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
 
     #endregion
 
+   
 }

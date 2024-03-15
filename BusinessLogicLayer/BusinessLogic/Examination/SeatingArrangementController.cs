@@ -2142,7 +2142,64 @@ namespace IITMS
                 }
                 return ds;
             }
-        }
+
+                //Added for Invigilator Entry on Room on 18/01/24
+                public int InsertReqInvigilator(int collegeid, int floorno, int blockno, int roomno, int REQD_INVIGILATORS, int RomCpt)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[7];
+                        objParams[0] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+                        objParams[1] = new SqlParameter("@P_FLOOR_NO", floorno);
+                        objParams[2] = new SqlParameter("@P_BLOCK_NO", blockno);
+                        objParams[3] = new SqlParameter("@P_ROOM_NO", roomno);
+                        objParams[4] = new SqlParameter("@P_ROOM_CAPACITY", RomCpt);
+                        objParams[5] = new SqlParameter("@P_REQD_INVIGILATORS", REQD_INVIGILATORS);
+                        objParams[6] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SUBMIT_SP_ROOMS_INVIGILATOR", objParams, true);
+
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else if (Convert.ToInt32(ret) == -1001)
+                            retStatus = Convert.ToInt32(CustomStatus.DuplicateRecord);
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.EndSemAttenSheet-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet GetAllRooms(int collegeid, int deptno, int floorno, int blockno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+                        objParams[1] = new SqlParameter("@P_DEPT_NO", deptno);
+                        objParams[2] = new SqlParameter("@P_FLOOR_NO", floorno);
+                        objParams[3] = new SqlParameter("@P_BLOCK_NO", blockno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_SP_ROOMS_INVIGILATOR", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.SessionController.GetAllSession-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+            }
     }
 
    }

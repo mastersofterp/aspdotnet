@@ -509,6 +509,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
             HiddenField hdnPordno = i.FindControl("hdnPordno") as HiddenField;
             HiddenField hdnGrnId = i.FindControl("hdnGrnId") as HiddenField;
             HiddenField hdnIsTax = i.FindControl("hdnIsTax") as HiddenField;
+            HiddenField hdnIsTaxInclusive = i.FindControl("hdnIsTaxInclusive") as HiddenField;          //30/12/2023
             HiddenField hdnTechSpec = i.FindControl("hdnTechSpec") as HiddenField;
             HiddenField hdnQualityQtySpec = i.FindControl("hdnQualityQtySpec") as HiddenField;
             HiddenField hdnOthItemRemark = i.FindControl("hdnOthItemRemark") as HiddenField;
@@ -562,6 +563,8 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
             datarow["PORDNO"] = hdnPordno.Value;
             datarow["GRNID"] = hdnGrnId.Value;
             datarow["IS_TAX"] = hdnIsTax.Value;
+            
+            datarow["IsTaxInclusive"] = hdnIsTaxInclusive.Value;                 // //30/12/2023
             datarow["TECH_SPEC"] = hdnTechSpec.Value;
             datarow["QUALITY_QTY_SPEC"] = hdnOthItemRemark.Value;
 

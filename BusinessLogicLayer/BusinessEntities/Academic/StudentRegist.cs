@@ -10,1700 +10,1717 @@ namespace IITMS
         {
             public class StudentRegist
             {
-                    #region Private Memebers
-                    private System.Nullable<int> _IDNO;
+                #region Private Memebers
+                private System.Nullable<int> _IDNO;
 
-                    private string _REGNO;
+                private string _REGNO;
 
-                    private string _ROLLNO;
+                private string _ROLLNO;
 
-                    private System.Nullable<int> _USERTTYPE;
+                private System.Nullable<int> _USERTTYPE;
 
-                    private System.Nullable<int> _EXAM_REGISTERED;
+                private System.Nullable<int> _EXAM_REGISTERED;
 
-                    private System.Nullable<int> _DEC;                    
+                private System.Nullable<int> _DEC;
 
-                    private System.Nullable<int> _ROLL_NO;
+                private System.Nullable<int> _ROLL_NO;
 
-                    private System.Nullable<int> _SECTIONNO;
+                private System.Nullable<int> _SECTIONNO;
 
-                    private System.Nullable<int> _BATCHNO;
+                private System.Nullable<int> _BATCHNO;
 
-                    private System.Nullable<int> _SEMESTERNO;
+                private System.Nullable<int> _SEMESTERNO;
 
-                    private System.Nullable<int> _SESSIONNO;
+                private System.Nullable<int> _SubEquivalence;
 
-                    private System.Nullable<int> _ABSORPTION_STATUS = 0;
+                private System.Nullable<int> _SESSIONNO;
 
-                    private System.Nullable<int> _SCHEMENO;
+                private System.Nullable<int> _ABSORPTION_STATUS = 0;
 
-                    private System.Nullable<int> _UA_NO;
+                private System.Nullable<int> _SCHEMENO;
 
-                    private System.Nullable<int> _COURSENO;
+                private System.Nullable<int> _UA_NO;
 
-                    private string _COURSENAME;
+                private System.Nullable<int> _COURSENO;
 
-                    private System.Nullable<int> _SUBID;
+                private string _COURSENAME;
 
-                    private string _CCODE;
+                private System.Nullable<int> _SUBID;
 
-                    private System.Nullable<int> _SRNO;
+                private string _CCODE;
 
-                    private System.Nullable<bool> _PREV_STATUS;
+                private System.Nullable<int> _SRNO;
 
-                    private string _GRADE;
+                private System.Nullable<bool> _PREV_STATUS;
 
-                    private string _ATTENDANCE;
+                private string _GRADE;
 
-                    private System.Nullable<decimal> _INTERMARK;
+                private string _ATTENDANCE;
 
-                    private System.Nullable<decimal> _EXTERMARK;
+                private System.Nullable<decimal> _INTERMARK;
 
-                    private System.Nullable<bool> _LOCKI;
+                private System.Nullable<decimal> _EXTERMARK;
 
-                    private System.Nullable<bool> _LOCKE;
+                private System.Nullable<bool> _LOCKI;
 
-                    private System.Nullable<decimal> _MARKTOT;
+                private System.Nullable<bool> _LOCKE;
 
-                    private System.Nullable<decimal> _S1MARK;
+                private System.Nullable<decimal> _MARKTOT;
 
-                    private System.Nullable<decimal> _S2MARK;
+                private System.Nullable<decimal> _S1MARK;
 
-                    private System.Nullable<decimal> _S3MARK;
+                private System.Nullable<decimal> _S2MARK;
 
-                    private System.Nullable<decimal> _S4MARK;
+                private System.Nullable<decimal> _S3MARK;
 
-                    private System.Nullable<decimal> _S5MARK;
+                private System.Nullable<decimal> _S4MARK;
 
-                    private System.Nullable<decimal> _S6MARK;
+                private System.Nullable<decimal> _S5MARK;
 
-                    private System.Nullable<decimal> _S7MARK;
+                private System.Nullable<decimal> _S6MARK;
 
-                    private System.Nullable<decimal> _S8MARK;
+                private System.Nullable<decimal> _S7MARK;
 
-                    private System.Nullable<decimal> _S9MARK;
+                private System.Nullable<decimal> _S8MARK;
 
-                    private System.Nullable<decimal> _S10MARK;
+                private System.Nullable<decimal> _S9MARK;
 
-                    private System.Nullable<decimal> _ASSIGNMARK;
+                private System.Nullable<decimal> _S10MARK;
 
-                    private System.Nullable<bool> _LOCKS1 = false;
+                private System.Nullable<decimal> _ASSIGNMARK;
 
-                    private System.Nullable<bool> _LOCKS2 = false;
+                private System.Nullable<bool> _LOCKS1 = false;
 
-                    private System.Nullable<bool> _LOCKS3 = false;
+                private System.Nullable<bool> _LOCKS2 = false;
 
-                    private System.Nullable<bool> _LOCKS4 = false;
+                private System.Nullable<bool> _LOCKS3 = false;
 
-                    private System.Nullable<bool> _LOCKS5 = false;
+                private System.Nullable<bool> _LOCKS4 = false;
 
-                    private System.Nullable<bool> _LOCKS6 = false;
+                private System.Nullable<bool> _LOCKS5 = false;
 
-                    private System.Nullable<bool> _LOCKS7 = false;
+                private System.Nullable<bool> _LOCKS6 = false;
 
-                    private System.Nullable<bool> _LOCKS8 = false;
+                private System.Nullable<bool> _LOCKS7 = false;
 
-                    private System.Nullable<bool> _LOCKS9 = false;
+                private System.Nullable<bool> _LOCKS8 = false;
 
-                    private System.Nullable<bool> _LOCKS10 = false;
+                private System.Nullable<bool> _LOCKS9 = false;
 
-                    private System.Nullable<bool> _LOCKASSIGN = false;
+                private System.Nullable<bool> _LOCKS10 = false;
 
-                    private System.Nullable<System.DateTime> _LCDATEI = DateTime.MinValue;
+                private System.Nullable<bool> _LOCKASSIGN = false;
 
-                    private System.Nullable<System.DateTime> _LCDATEE = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATEI = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE1 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATEE = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE2 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE1 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE3 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE2 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE4 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE3 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE5 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE4 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE6 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE5 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE7 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE6 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE8 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE7 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE9 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE8 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATE10 = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE9 = DateTime.MinValue;
 
-                    private System.Nullable<System.DateTime> _LCDATEASS = DateTime.MinValue;
+                private System.Nullable<System.DateTime> _LCDATE10 = DateTime.MinValue;
 
-                    private System.Nullable<int> _PROGRESS_ST;
+                private System.Nullable<System.DateTime> _LCDATEASS = DateTime.MinValue;
 
-                    private System.Nullable<bool> _OPASS;
+                private System.Nullable<int> _PROGRESS_ST;
 
-                    private System.Nullable<int> _OLDSESNO;
+                private System.Nullable<bool> _OPASS;
 
-                    private string _OLDSESNAME;
+                private System.Nullable<int> _OLDSESNO;
 
-                    private string _IPADDRESS;
+                private string _OLDSESNAME;
 
-                    private System.Nullable<int> _CREDITS;
+                private string _IPADDRESS;
 
-                    private System.Nullable<int> _ATTEMPT;
+                private System.Nullable<int> _CREDITS;
 
-                    private System.Nullable<int> _ACCEPTED;
+                private System.Nullable<int> _ATTEMPT;
 
-                    private System.Nullable<int> _REGISTERED;
+                private System.Nullable<int> _ACCEPTED;
 
-                    private Decimal _GDPOINT;
+                private System.Nullable<int> _REGISTERED;
 
-                    private string _COURSENOS;
-                    private string _ELECTIVE_COURSE;
+                private Decimal _GDPOINT;
 
-                    private string _EXTERMARKS;
-                    private string _VALUER1_MKS;
-                    private string _VALUER2_MKS;
-                       
-                    private string _IDNOS;
+                private string _COURSENOS;
+                private string _ELECTIVE_COURSE;
 
+                private string _EXTERMARKS;
+                private string _VALUER1_MKS;
+                private string _VALUER2_MKS;
 
-                   
-                    private string _COURSENAMES;                    
+                private string _IDNOS;
 
-                    private string _SUBIDS;                    
 
-                    private string _CCODES;                    
 
-                    private string _CSRNO;
-                    
-                    private string _CCREDITS;
-                    
-                    private string _BATCHNOS;                    
+                private string _COURSENAMES;
 
-                    private string _SECTIONNOS;
+                private string _SUBIDS;
 
-                    private string _ACEEPTSUB;                   
+                private string _CCODES;
 
-                    private string _FAC_REMARK = string.Empty;
+                private string _CSRNO;
 
-                    private string _FACREMARKS = string.Empty;
+                private string _CCREDITS;
 
+                private string _BATCHNOS;
 
-                    private string _S1IND = string.Empty;
+                private string _SECTIONNOS;
 
-                    private string _S2IND = string.Empty;
+                private string _ACEEPTSUB;
 
-                    private string _S3IND = string.Empty;
+                private string _FAC_REMARK = string.Empty;
 
-                    private string _S4IND = string.Empty;
+                private string _FACREMARKS = string.Empty;
 
 
+                private string _S1IND = string.Empty;
 
-                    private System.Nullable<int> _CONTROLSHEET_NO = 0;
+                private string _S2IND = string.Empty;
 
-                    private string _COLLEGE_CODE;
-                    
+                private string _S3IND = string.Empty;
+
+                private string _S4IND = string.Empty;
+
+
+
+                private System.Nullable<int> _CONTROLSHEET_NO = 0;
+
+                private string _COLLEGE_CODE;
+
                 // FOR CONTROLSHEET NO
-                    private int _START_NO = 0;
-                    private int _RECORD = 0;
-                    private string _ELECTIVE;
-                    private string _MARKDIFFS = string.Empty;
-                    private string _NEWMARKS = string.Empty;
+                private int _START_NO = 0;
+                private int _RECORD = 0;
+                private string _ELECTIVE;
+                private string _MARKDIFFS = string.Empty;
+                private string _NEWMARKS = string.Empty;
+
+                // BRANCH CHANGE
+                private int _BRANCHNO = 0;
+                private string _BRANCH_REF = string.Empty;
+                private int _SELECT_COURSE;
+                private string _Backlog_course = string.Empty;
+                private string _Audit_course = string.Empty;
+                private int _DEGREENO = 0;
+                private int _COLLEGEID = 0;
+                private string _STUDNAME = string.Empty;
+                private int _CORSUBID = 0;
+                private string _Re_Appeared = string.Empty;
+
+                // DROUP COURSE
+
+                //ADDED BY: M. REHBAR SHEIKH
+                private string _receiptFlag = string.Empty;
+
+                private decimal _totalFee = 0;
+
+                private decimal _Backlogfees = 0;
+
+                private decimal _courseFee = 0;
+
+                private decimal _lateFine = 0;
+
+                private decimal _commanFee = 0;
+
+                //private string _REGNO;
+
+                //private string _ROLLNO;
+                //*********************************
+                //Added for Detention Cancellation
+                private DateTime _date = DateTime.Today;
+                private string _provDetend = string.Empty;
+                private string _finalDetend = string.Empty;
+                // Add for Exam Rule on 01/01/2022
+                private string _Rule22;
+                private string _Rule11;
+                private string _COURSENNO;
+                private string _CATEGORY3;
+                private string _SEMESTERNOS;
+
+                private string _ExamType;
+                #endregion
+
+
+                #region Public Properties
+
+                // Addeb By Sneha G on 01/01/2022
+                public string SEMESTERNOS
+                {
+                    get { return _SEMESTERNOS; }
+                    set { _SEMESTERNOS = value; }
+                }
+                public string Rule11
+                {
+                    get { return _Rule11; }
+                    set { _Rule11 = value; }
+                }
+
+                public string Rule22
+                {
+                    get { return _Rule22; }
+                    set { _Rule22 = value; }
+                }
+
+                public string COURSENNO
+                {
+                    get { return _COURSENNO; }
+                    set { _COURSENNO = value; }
+                }
+                public string CATEGORY3
+                {
+                    get { return _CATEGORY3; }
+                    set { _CATEGORY3 = value; }
+                }
+                private string EXT_TH;
 
-                    // BRANCH CHANGE
-                    private int _BRANCHNO = 0;
-                    private string _BRANCH_REF = string.Empty;
-                    private int _SELECT_COURSE;
-                    private string _Backlog_course = string.Empty;
-                    private string _Audit_course = string.Empty;
-                    private int _DEGREENO = 0;
-                    private int _COLLEGEID = 0;
-                    private string _STUDNAME = string.Empty;
-                    private int _CORSUBID = 0;
-                    private string _Re_Appeared = string.Empty;
-                
-                  // DROUP COURSE
+                public string EXT_TH1
+                {
+                    get { return EXT_TH; }
+                    set { EXT_TH = value; }
+                }
 
-                    //ADDED BY: M. REHBAR SHEIKH
-                    private string _receiptFlag = string.Empty;
+                private string EXT_PR;
 
-                    private decimal _totalFee = 0;
+                public string EXT_PR1
+                {
+                    get { return EXT_PR; }
+                    set { EXT_PR = value; }
+                }
 
-                    private decimal _Backlogfees = 0;
-
-                    private decimal _courseFee = 0;
-
-                    private decimal _lateFine = 0;
-
-                    private decimal _commanFee = 0;
-
-                    //private string _REGNO;
-
-                    //private string _ROLLNO;
-                    //*********************************
-                    //Added for Detention Cancellation
-                    private DateTime _date = DateTime.Today;
-                    private string _provDetend = string.Empty;
-                    private string _finalDetend = string.Empty;
-                    // Add for Exam Rule on 01/01/2022
-                    private string _Rule22;
-                    private string _Rule11;
-                    private string _COURSENNO;
-                    private string _CATEGORY3;
-                    private string _SEMESTERNOS;
-
-                    private string _ExamType;
-                    #endregion
-
-
-                    #region Public Properties
-
-                    // Addeb By Sneha G on 01/01/2022
-                    public string SEMESTERNOS
+                public int DEGREENO
+                {
+                    get { return _DEGREENO; }
+                    set { _DEGREENO = value; }
+                }
+                public int COLLEGEID
+                {
+                    get { return _COLLEGEID; }
+                    set { _COLLEGEID = value; }
+                }
+                public string STUDNAME
+                {
+                    get { return _STUDNAME; }
+                    set { _STUDNAME = value; }
+                }
+                public int CORSUBID
+                {
+                    get { return _CORSUBID; }
+                    set { _CORSUBID = value; }
+                }
+                public System.Nullable<int> IDNO
+                {
+                    get
                     {
-                        get { return _SEMESTERNOS; }
-                        set { _SEMESTERNOS = value; }
+                        return this._IDNO;
                     }
-                    public string Rule11
+                    set
                     {
-                        get { return _Rule11; }
-                        set { _Rule11 = value; }
+                        if ((this._IDNO != value))
+                        {
+                            this._IDNO = value;
+                        }
                     }
-
-                    public string Rule22
+                }
+                public string Audit_course
+                {
+                    get
                     {
-                        get { return _Rule22; }
-                        set { _Rule22 = value; }
+                        return this._Audit_course;
                     }
-
-                    public string COURSENNO
+                    set
                     {
-                        get { return _COURSENNO; }
-                        set { _COURSENNO = value; }
+                        if ((this._Audit_course != value))
+                        {
+                            this._Audit_course = value;
+                        }
                     }
-                    public string CATEGORY3
+                }
+                public string Backlog_course
+                {
+                    get
                     {
-                        get { return _CATEGORY3; }
-                        set { _CATEGORY3 = value; }
+                        return this._Backlog_course;
                     }
-                    private string EXT_TH;
-
-                    public string EXT_TH1
+                    set
                     {
-                        get { return EXT_TH; }
-                        set { EXT_TH = value; }
+                        if ((this._Backlog_course != value))
+                        {
+                            this._Backlog_course = value;
+                        }
                     }
-
-                    private string EXT_PR;
-
-                    public string EXT_PR1
+                }
+                public System.Nullable<int> EXAM_REGISTERED
+                {
+                    get
                     {
-                        get { return EXT_PR; }
-                        set { EXT_PR = value; }
+                        return this._EXAM_REGISTERED;
                     }
-
-                    public int DEGREENO
+                    set
                     {
-                        get { return _DEGREENO; }
-                        set { _DEGREENO = value; }
+                        if ((this._EXAM_REGISTERED != value))
+                        {
+                            this._EXAM_REGISTERED = value;
+                        }
                     }
-                    public int COLLEGEID
+                }
+
+
+
+                public string REGNO
+                {
+                    get
                     {
-                        get { return _COLLEGEID; }
-                        set { _COLLEGEID = value; }
+                        return this._REGNO;
                     }
-                    public string STUDNAME
+                    set
                     {
-                        get { return _STUDNAME; }
-                        set { _STUDNAME = value; }
+                        if ((this._REGNO != value))
+                        {
+                            this._REGNO = value;
+                        }
                     }
-                    public int CORSUBID
+                }
+
+                public string ROLLNO
+                {
+                    get
                     {
-                        get { return _CORSUBID; }
-                        set { _CORSUBID = value; }
+                        return this._ROLLNO;
                     }
-                    public System.Nullable<int> IDNO
+                    set
                     {
-                        get
-                        {
-                            return this._IDNO;
-                        }
-                        set
+                        if ((this._ROLLNO != value))
                         {
-                            if ((this._IDNO != value))
-                            {
-                                this._IDNO = value;
-                            }
+                            this._ROLLNO = value;
                         }
                     }
-                    public string Audit_course
+                }
+
+                public System.Nullable<int> USERTTYPE
+                {
+                    get { return _USERTTYPE; }
+                    set { _USERTTYPE = value; }
+                }
+
+                public System.Nullable<int> DEC
+                {
+                    get { return _DEC; }
+                    set { _DEC = value; }
+                }
+
+                public System.Nullable<int> ROLL_NO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._Audit_course;
-                        }
-                        set
-                        {
-                            if ((this._Audit_course != value))
-                            {
-                                this._Audit_course = value;
-                            }
-                        }
+                        return this._ROLL_NO;
                     }
-                    public string Backlog_course
+                    set
                     {
-                        get
-                        {
-                            return this._Backlog_course;
-                        }
-                        set
+                        if ((this._ROLL_NO != value))
                         {
-                            if ((this._Backlog_course != value))
-                            {
-                                this._Backlog_course = value;
-                            }
+                            this._ROLL_NO = value;
                         }
                     }
-                    public System.Nullable<int> EXAM_REGISTERED
+                }
+
+                public System.Nullable<int> SECTIONNO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._EXAM_REGISTERED;
-                        }
-                        set
+                        return this._SECTIONNO;
+                    }
+                    set
+                    {
+                        if ((this._SECTIONNO != value))
                         {
-                            if ((this._EXAM_REGISTERED != value))
-                            {
-                                this._EXAM_REGISTERED = value;
-                            }
+                            this._SECTIONNO = value;
                         }
                     }
-                  
+                }
 
-                  
-                    public string REGNO
+                public System.Nullable<int> BATCHNO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._REGNO;
-                        }
-                        set
+                        return this._BATCHNO;
+                    }
+                    set
+                    {
+                        if ((this._BATCHNO != value))
                         {
-                            if ((this._REGNO != value))
-                            {
-                                this._REGNO = value;
-                            }
+                            this._BATCHNO = value;
                         }
                     }
+                }
 
-                    public string ROLLNO
+                public System.Nullable<int> SEMESTERNO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._ROLLNO;
-                        }
-                        set
+                        return this._SEMESTERNO;
+                    }
+                    set
+                    {
+                        if ((this._SEMESTERNO != value))
                         {
-                            if ((this._ROLLNO != value))
-                            {
-                                this._ROLLNO = value;
-                            }
+                            this._SEMESTERNO = value;
                         }
                     }
+                }
 
-                    public System.Nullable<int> USERTTYPE
+                public System.Nullable<int> SESSIONNO
+                {
+                    get
                     {
-                        get { return _USERTTYPE; }
-                        set { _USERTTYPE = value; }
+                        return this._SESSIONNO;
                     }
-
-                    public System.Nullable<int> DEC
-                    {
-                        get { return _DEC; }
-                        set { _DEC = value; }
-                    } 
-                   
-                    public System.Nullable<int> ROLL_NO
+                    set
                     {
-                        get
+                        if ((this._SESSIONNO != value))
                         {
-                            return this._ROLL_NO;
+                            this._SESSIONNO = value;
                         }
-                        set
-                        {
-                            if ((this._ROLL_NO != value))
-                            {
-                                this._ROLL_NO = value;
-                            }
-                        }
                     }
-                   
-                    public System.Nullable<int> SECTIONNO
+                }
+                public System.Nullable<int> ABSORPTION_STATUS
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._SECTIONNO;
-                        }
-                        set
-                        {
-                            if ((this._SECTIONNO != value))
-                            {
-                                this._SECTIONNO = value;
-                            }
-                        }
+                        return this._ABSORPTION_STATUS;
                     }
-                   
-                    public System.Nullable<int> BATCHNO
+                    set
                     {
-                        get
+                        if ((this._ABSORPTION_STATUS != value))
                         {
-                            return this._BATCHNO;
+                            this._ABSORPTION_STATUS = value;
                         }
-                        set
-                        {
-                            if ((this._BATCHNO != value))
-                            {
-                                this._BATCHNO = value;
-                            }
-                        }
                     }
-                   
-                    public System.Nullable<int> SEMESTERNO
+                }
+
+                public System.Nullable<int> SCHEMENO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._SEMESTERNO;
-                        }
-                        set
-                        {
-                            if ((this._SEMESTERNO != value))
-                            {
-                                this._SEMESTERNO = value;
-                            }
-                        }
+                        return this._SCHEMENO;
                     }
-                   
-                    public System.Nullable<int> SESSIONNO
+                    set
                     {
-                        get
-                        {
-                            return this._SESSIONNO;
-                        }
-                        set
+                        if ((this._SCHEMENO != value))
                         {
-                            if ((this._SESSIONNO != value))
-                            {
-                                this._SESSIONNO = value;
-                            }
+                            this._SCHEMENO = value;
                         }
                     }
-                    public System.Nullable<int> ABSORPTION_STATUS
+                }
+
+                public System.Nullable<int> UA_NO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._ABSORPTION_STATUS;
-                        }
-                        set
-                        {
-                            if ((this._ABSORPTION_STATUS != value))
-                            {
-                                this._ABSORPTION_STATUS = value;
-                            }
-                        }
+                        return this._UA_NO;
                     }
-                   
-                    public System.Nullable<int> SCHEMENO
+                    set
                     {
-                        get
-                        {
-                            return this._SCHEMENO;
-                        }
-                        set
+                        if ((this._UA_NO != value))
                         {
-                            if ((this._SCHEMENO != value))
-                            {
-                                this._SCHEMENO = value;
-                            }
+                            this._UA_NO = value;
                         }
                     }
-                    
-                    public System.Nullable<int> UA_NO
+                }
+
+                public System.Nullable<int> COURSENO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._UA_NO;
-                        }
-                        set
-                        {
-                            if ((this._UA_NO != value))
-                            {
-                                this._UA_NO = value;
-                            }
-                        }
+                        return this._COURSENO;
                     }
-                    
-                    public System.Nullable<int> COURSENO
+                    set
                     {
-                        get
-                        {
-                            return this._COURSENO;
-                        }
-                        set
+                        if ((this._COURSENO != value))
                         {
-                            if ((this._COURSENO != value))
-                            {
-                                this._COURSENO = value;
-                            }
+                            this._COURSENO = value;
                         }
                     }
-                    
-                    public string COURSENAME
+                }
+
+                public string COURSENAME
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._COURSENAME;
-                        }
-                        set
-                        {
-                            if ((this._COURSENAME != value))
-                            {
-                                this._COURSENAME = value;
-                            }
-                        }
+                        return this._COURSENAME;
                     }
-                    
-                    public System.Nullable<int> SUBID
+                    set
                     {
-                        get
+                        if ((this._COURSENAME != value))
                         {
-                            return this._SUBID;
+                            this._COURSENAME = value;
                         }
-                        set
-                        {
-                            if ((this._SUBID != value))
-                            {
-                                this._SUBID = value;
-                            }
-                        }
                     }
-                    
-                    public string CCODE
+                }
+
+                public System.Nullable<int> SUBID
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._CCODE;
-                        }
-                        set
-                        {
-                            if ((this._CCODE != value))
-                            {
-                                this._CCODE = value;
-                            }
-                        }
+                        return this._SUBID;
                     }
-                    
-                    public System.Nullable<int> SRNO
+                    set
                     {
-                        get
-                        {
-                            return this._SRNO;
-                        }
-                        set
+                        if ((this._SUBID != value))
                         {
-                            if ((this._SRNO != value))
-                            {
-                                this._SRNO = value;
-                            }
+                            this._SUBID = value;
                         }
                     }
-                    
-                    public System.Nullable<bool> PREV_STATUS
+                }
+
+                public string CCODE
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._PREV_STATUS;
-                        }
-                        set
-                        {
-                            if ((this._PREV_STATUS != value))
-                            {
-                                this._PREV_STATUS = value;
-                            }
-                        }
+                        return this._CCODE;
                     }
-                    
-                    public string GRADE
+                    set
                     {
-                        get
-                        {
-                            return this._GRADE;
-                        }
-                        set
+                        if ((this._CCODE != value))
                         {
-                            if ((this._GRADE != value))
-                            {
-                                this._GRADE = value;
-                            }
+                            this._CCODE = value;
                         }
                     }
-                    
-                    public string ATTENDANCE
+                }
+
+                public System.Nullable<int> SRNO
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._ATTENDANCE;
-                        }
-                        set
-                        {
-                            if ((this._ATTENDANCE != value))
-                            {
-                                this._ATTENDANCE = value;
-                            }
-                        }
+                        return this._SRNO;
                     }
-                   
-                    public System.Nullable<decimal> INTERMARK
+                    set
                     {
-                        get
-                        {
-                            return this._INTERMARK;
-                        }
-                        set
+                        if ((this._SRNO != value))
                         {
-                            if ((this._INTERMARK != value))
-                            {
-                                this._INTERMARK = value;
-                            }
+                            this._SRNO = value;
                         }
                     }
-                   
-                    public System.Nullable<decimal> EXTERMARK
+                }
+
+                public System.Nullable<bool> PREV_STATUS
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._EXTERMARK;
-                        }
-                        set
-                        {
-                            if ((this._EXTERMARK != value))
-                            {
-                                this._EXTERMARK = value;
-                            }
-                        }
+                        return this._PREV_STATUS;
                     }
-                   
-                    public System.Nullable<bool> LOCKI
+                    set
                     {
-                        get
+                        if ((this._PREV_STATUS != value))
                         {
-                            return this._LOCKI;
+                            this._PREV_STATUS = value;
                         }
-                        set
-                        {
-                            if ((this._LOCKI != value))
-                            {
-                                this._LOCKI = value;
-                            }
-                        }
                     }
-                    
-                    public System.Nullable<bool> LOCKE
+                }
+
+                public string GRADE
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LOCKE;
-                        }
-                        set
-                        {
-                            if ((this._LOCKE != value))
-                            {
-                                this._LOCKE = value;
-                            }
-                        }
+                        return this._GRADE;
                     }
-                   
-                    public System.Nullable<decimal> MARKTOT
+                    set
                     {
-                        get
+                        if ((this._GRADE != value))
                         {
-                            return this._MARKTOT;
+                            this._GRADE = value;
                         }
-                        set
-                        {
-                            if ((this._MARKTOT != value))
-                            {
-                                this._MARKTOT = value;
-                            }
-                        }
                     }
-                    
-                    public System.Nullable<decimal> S1MARK
+                }
+
+                public string ATTENDANCE
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._S1MARK;
-                        }
-                        set
-                        {
-                            if ((this._S1MARK != value))
-                            {
-                                this._S1MARK = value;
-                            }
-                        }
+                        return this._ATTENDANCE;
                     }
-                    
-                    public System.Nullable<decimal> S2MARK
+                    set
                     {
-                        get
-                        {
-                            return this._S2MARK;
-                        }
-                        set
+                        if ((this._ATTENDANCE != value))
                         {
-                            if ((this._S2MARK != value))
-                            {
-                                this._S2MARK = value;
-                            }
+                            this._ATTENDANCE = value;
                         }
                     }
-                   
-                    public System.Nullable<decimal> S3MARK
+                }
+
+                public System.Nullable<decimal> INTERMARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._S3MARK;
-                        }
-                        set
-                        {
-                            if ((this._S3MARK != value))
-                            {
-                                this._S3MARK = value;
-                            }
-                        }
+                        return this._INTERMARK;
                     }
-                   
-                    public System.Nullable<decimal> S4MARK
+                    set
                     {
-                        get
-                        {
-                            return this._S4MARK;
-                        }
-                        set
+                        if ((this._INTERMARK != value))
                         {
-                            if ((this._S4MARK != value))
-                            {
-                                this._S4MARK = value;
-                            }
+                            this._INTERMARK = value;
                         }
                     }
-                   
-                    public System.Nullable<decimal> S5MARK
+                }
+
+                public System.Nullable<decimal> EXTERMARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._S5MARK;
-                        }
-                        set
-                        {
-                            if ((this._S5MARK != value))
-                            {
-                                this._S5MARK = value;
-                            }
-                        }
+                        return this._EXTERMARK;
                     }
-                   
-                    public System.Nullable<decimal> S6MARK
+                    set
                     {
-                        get
+                        if ((this._EXTERMARK != value))
                         {
-                            return this._S6MARK;
+                            this._EXTERMARK = value;
                         }
-                        set
-                        {
-                            if ((this._S6MARK != value))
-                            {
-                                this._S6MARK = value;
-                            }
-                        }
                     }
-                   
-                    public System.Nullable<decimal> S7MARK
+                }
+
+                public System.Nullable<bool> LOCKI
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._S7MARK;
-                        }
-                        set
-                        {
-                            if ((this._S7MARK != value))
-                            {
-                                this._S7MARK = value;
-                            }
-                        }
+                        return this._LOCKI;
                     }
-                    
-                    public System.Nullable<decimal> S8MARK
+                    set
                     {
-                        get
+                        if ((this._LOCKI != value))
                         {
-                            return this._S8MARK;
+                            this._LOCKI = value;
                         }
-                        set
-                        {
-                            if ((this._S8MARK != value))
-                            {
-                                this._S8MARK = value;
-                            }
-                        }
                     }
-                    
-                    public System.Nullable<decimal> S9MARK
+                }
+
+                public System.Nullable<bool> LOCKE
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._S9MARK;
-                        }
-                        set
-                        {
-                            if ((this._S9MARK != value))
-                            {
-                                this._S9MARK = value;
-                            }
-                        }
+                        return this._LOCKE;
                     }
-                   
-                    public System.Nullable<decimal> S10MARK
+                    set
                     {
-                        get
-                        {
-                            return this._S10MARK;
-                        }
-                        set
+                        if ((this._LOCKE != value))
                         {
-                            if ((this._S10MARK != value))
-                            {
-                                this._S10MARK = value;
-                            }
+                            this._LOCKE = value;
                         }
                     }
-                   
-                    public System.Nullable<decimal> ASSIGNMARK
+                }
+
+                public System.Nullable<decimal> MARKTOT
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._ASSIGNMARK;
-                        }
-                        set
-                        {
-                            if ((this._ASSIGNMARK != value))
-                            {
-                                this._ASSIGNMARK = value;
-                            }
-                        }
+                        return this._MARKTOT;
                     }
-                    
-                    public System.Nullable<bool> LOCKS1
+                    set
                     {
-                        get
-                        {
-                            return this._LOCKS1;
-                        }
-                        set
+                        if ((this._MARKTOT != value))
                         {
-                            if ((this._LOCKS1 != value))
-                            {
-                                this._LOCKS1 = value;
-                            }
+                            this._MARKTOT = value;
                         }
                     }
-                   
-                    public System.Nullable<bool> LOCKS2
+                }
+
+                public System.Nullable<decimal> S1MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LOCKS2;
-                        }
-                        set
-                        {
-                            if ((this._LOCKS2 != value))
-                            {
-                                this._LOCKS2 = value;
-                            }
-                        }
+                        return this._S1MARK;
                     }
-                    
-                    public System.Nullable<bool> LOCKS3
+                    set
                     {
-                        get
-                        {
-                            return this._LOCKS3;
-                        }
-                        set
+                        if ((this._S1MARK != value))
                         {
-                            if ((this._LOCKS3 != value))
-                            {
-                                this._LOCKS3 = value;
-                            }
+                            this._S1MARK = value;
                         }
                     }
-                   
-                    public System.Nullable<bool> LOCKS4
+                }
+
+                public System.Nullable<decimal> S2MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LOCKS4;
-                        }
-                        set
-                        {
-                            if ((this._LOCKS4 != value))
-                            {
-                                this._LOCKS4 = value;
-                            }
-                        }
+                        return this._S2MARK;
                     }
-                    
-                    public System.Nullable<bool> LOCKS5
+                    set
                     {
-                        get
+                        if ((this._S2MARK != value))
                         {
-                            return this._LOCKS5;
+                            this._S2MARK = value;
                         }
-                        set
-                        {
-                            if ((this._LOCKS5 != value))
-                            {
-                                this._LOCKS5 = value;
-                            }
-                        }
                     }
-                    
-                    public System.Nullable<bool> LOCKS6
+                }
+
+                public System.Nullable<decimal> S3MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LOCKS6;
-                        }
-                        set
-                        {
-                            if ((this._LOCKS6 != value))
-                            {
-                                this._LOCKS6 = value;
-                            }
-                        }
+                        return this._S3MARK;
                     }
-                   
-                    public System.Nullable<bool> LOCKS7
+                    set
                     {
-                        get
-                        {
-                            return this._LOCKS7;
-                        }
-                        set
+                        if ((this._S3MARK != value))
                         {
-                            if ((this._LOCKS7 != value))
-                            {
-                                this._LOCKS7 = value;
-                            }
+                            this._S3MARK = value;
                         }
                     }
-                   
-                    public System.Nullable<bool> LOCKS8
+                }
+
+                public System.Nullable<decimal> S4MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LOCKS8;
-                        }
-                        set
-                        {
-                            if ((this._LOCKS8 != value))
-                            {
-                                this._LOCKS8 = value;
-                            }
-                        }
+                        return this._S4MARK;
                     }
-                    
-                    public System.Nullable<bool> LOCKS9
+                    set
                     {
-                        get
-                        {
-                            return this._LOCKS9;
-                        }
-                        set
+                        if ((this._S4MARK != value))
                         {
-                            if ((this._LOCKS9 != value))
-                            {
-                                this._LOCKS9 = value;
-                            }
+                            this._S4MARK = value;
                         }
                     }
-                    
-                    public System.Nullable<bool> LOCKS10
+                }
+
+                public System.Nullable<decimal> S5MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LOCKS10;
-                        }
-                        set
-                        {
-                            if ((this._LOCKS10 != value))
-                            {
-                                this._LOCKS10 = value;
-                            }
-                        }
+                        return this._S5MARK;
                     }
-                    
-                    public System.Nullable<bool> LOCKASSIGN
+                    set
                     {
-                        get
-                        {
-                            return this._LOCKASSIGN;
-                        }
-                        set
+                        if ((this._S5MARK != value))
                         {
-                            if ((this._LOCKASSIGN != value))
-                            {
-                                this._LOCKASSIGN = value;
-                            }
+                            this._S5MARK = value;
                         }
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATEI
+                }
+
+                public System.Nullable<decimal> S6MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATEI;
-                        }
-                        set
-                        {
-                            if ((this._LCDATEI != value))
-                            {
-                                this._LCDATEI = value;
-                            }
-                        }
+                        return this._S6MARK;
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATEE
+                    set
                     {
-                        get
+                        if ((this._S6MARK != value))
                         {
-                            return this._LCDATEE;
+                            this._S6MARK = value;
                         }
-                        set
-                        {
-                            if ((this._LCDATEE != value))
-                            {
-                                this._LCDATEE = value;
-                            }
-                        }
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATE1
+                }
+
+                public System.Nullable<decimal> S7MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATE1;
-                        }
-                        set
-                        {
-                            if ((this._LCDATE1 != value))
-                            {
-                                this._LCDATE1 = value;
-                            }
-                        }
+                        return this._S7MARK;
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATE2
+                    set
                     {
-                        get
-                        {
-                            return this._LCDATE2;
-                        }
-                        set
+                        if ((this._S7MARK != value))
                         {
-                            if ((this._LCDATE2 != value))
-                            {
-                                this._LCDATE2 = value;
-                            }
+                            this._S7MARK = value;
                         }
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATE3
+                }
+
+                public System.Nullable<decimal> S8MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATE3;
-                        }
-                        set
-                        {
-                            if ((this._LCDATE3 != value))
-                            {
-                                this._LCDATE3 = value;
-                            }
-                        }
+                        return this._S8MARK;
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATE4
+                    set
                     {
-                        get
-                        {
-                            return this._LCDATE4;
-                        }
-                        set
+                        if ((this._S8MARK != value))
                         {
-                            if ((this._LCDATE4 != value))
-                            {
-                                this._LCDATE4 = value;
-                            }
+                            this._S8MARK = value;
                         }
                     }
-                   
-                    public System.Nullable<System.DateTime> LCDATE5
+                }
+
+                public System.Nullable<decimal> S9MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATE5;
-                        }
-                        set
-                        {
-                            if ((this._LCDATE5 != value))
-                            {
-                                this._LCDATE5 = value;
-                            }
-                        }
+                        return this._S9MARK;
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATE6
+                    set
                     {
-                        get
-                        {
-                            return this._LCDATE6;
-                        }
-                        set
+                        if ((this._S9MARK != value))
                         {
-                            if ((this._LCDATE6 != value))
-                            {
-                                this._LCDATE6 = value;
-                            }
+                            this._S9MARK = value;
                         }
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATE7
+                }
+
+                public System.Nullable<decimal> S10MARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATE7;
-                        }
-                        set
-                        {
-                            if ((this._LCDATE7 != value))
-                            {
-                                this._LCDATE7 = value;
-                            }
-                        }
+                        return this._S10MARK;
                     }
-                    
-                    public System.Nullable<System.DateTime> LCDATE8
+                    set
                     {
-                        get
+                        if ((this._S10MARK != value))
                         {
-                            return this._LCDATE8;
+                            this._S10MARK = value;
                         }
-                        set
-                        {
-                            if ((this._LCDATE8 != value))
-                            {
-                                this._LCDATE8 = value;
-                            }
-                        }
                     }
+                }
 
-                    public System.Nullable<System.DateTime> LCDATE9
+                public System.Nullable<decimal> ASSIGNMARK
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATE9;
-                        }
-                        set
+                        return this._ASSIGNMARK;
+                    }
+                    set
+                    {
+                        if ((this._ASSIGNMARK != value))
                         {
-                            if ((this._LCDATE9 != value))
-                            {
-                                this._LCDATE9 = value;
-                            }
+                            this._ASSIGNMARK = value;
                         }
                     }
+                }
 
-                    public System.Nullable<System.DateTime> LCDATE10
+                public System.Nullable<bool> LOCKS1
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATE10;
-                        }
-                        set
+                        return this._LOCKS1;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS1 != value))
                         {
-                            if ((this._LCDATE10 != value))
-                            {
-                                this._LCDATE10 = value;
-                            }
+                            this._LOCKS1 = value;
                         }
                     }
+                }
 
-                    public System.Nullable<System.DateTime> LCDATEASS
+                public System.Nullable<bool> LOCKS2
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._LCDATEASS;
-                        }
-                        set
+                        return this._LOCKS2;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS2 != value))
                         {
-                            if ((this._LCDATEASS != value))
-                            {
-                                this._LCDATEASS = value;
-                            }
+                            this._LOCKS2 = value;
                         }
                     }
+                }
 
-                    public System.Nullable<int> PROGRESS_ST
+                public System.Nullable<bool> LOCKS3
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._PROGRESS_ST;
-                        }
-                        set
+                        return this._LOCKS3;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS3 != value))
                         {
-                            if ((this._PROGRESS_ST != value))
-                            {
-                                this._PROGRESS_ST = value;
-                            }
+                            this._LOCKS3 = value;
                         }
                     }
+                }
 
-                    public System.Nullable<bool> OPASS
+                public System.Nullable<bool> LOCKS4
+                {
+                    get
                     {
-                        get
-                        {
-                            return this._OPASS;
-                        }
-                        set
+                        return this._LOCKS4;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS4 != value))
                         {
-                            if ((this._OPASS != value))
-                            {
-                                this._OPASS = value;
-                            }
+                            this._LOCKS4 = value;
                         }
                     }
+                }
 
-                    public System.Nullable<int> OLDSESNO
+                public System.Nullable<bool> LOCKS5
+                {
+                    get
                     {
-                        get
+                        return this._LOCKS5;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS5 != value))
                         {
-                            return this._OLDSESNO;
+                            this._LOCKS5 = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<bool> LOCKS6
+                {
+                    get
+                    {
+                        return this._LOCKS6;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS6 != value))
                         {
-                            if ((this._OLDSESNO != value))
-                            {
-                                this._OLDSESNO = value;
-                            }
+                            this._LOCKS6 = value;
                         }
                     }
+                }
 
-                    public string OLDSESNAME
+                public System.Nullable<bool> LOCKS7
+                {
+                    get
+                    {
+                        return this._LOCKS7;
+                    }
+                    set
                     {
-                        get
+                        if ((this._LOCKS7 != value))
                         {
-                            return this._OLDSESNAME;
+                            this._LOCKS7 = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<bool> LOCKS8
+                {
+                    get
+                    {
+                        return this._LOCKS8;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS8 != value))
                         {
-                            if ((this._OLDSESNAME != value))
-                            {
-                                this._OLDSESNAME = value;
-                            }
+                            this._LOCKS8 = value;
                         }
                     }
+                }
 
-                    public string IPADDRESS
+                public System.Nullable<bool> LOCKS9
+                {
+                    get
+                    {
+                        return this._LOCKS9;
+                    }
+                    set
                     {
-                        get
+                        if ((this._LOCKS9 != value))
                         {
-                            return this._IPADDRESS;
+                            this._LOCKS9 = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<bool> LOCKS10
+                {
+                    get
+                    {
+                        return this._LOCKS10;
+                    }
+                    set
+                    {
+                        if ((this._LOCKS10 != value))
                         {
-                            if ((this._IPADDRESS != value))
-                            {
-                                this._IPADDRESS = value;
-                            }
+                            this._LOCKS10 = value;
                         }
                     }
+                }
 
-                    public System.Nullable<int> CREDITS
+                public System.Nullable<bool> LOCKASSIGN
+                {
+                    get
+                    {
+                        return this._LOCKASSIGN;
+                    }
+                    set
                     {
-                        get
+                        if ((this._LOCKASSIGN != value))
                         {
-                            return this._CREDITS;
+                            this._LOCKASSIGN = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<System.DateTime> LCDATEI
+                {
+                    get
+                    {
+                        return this._LCDATEI;
+                    }
+                    set
+                    {
+                        if ((this._LCDATEI != value))
                         {
-                            if ((this._CREDITS != value))
-                            {
-                                this._CREDITS = value;
-                            }
+                            this._LCDATEI = value;
                         }
                     }
+                }
 
-                    public System.Nullable<int> ATTEMPT
+                public System.Nullable<System.DateTime> LCDATEE
+                {
+                    get
                     {
-                        get
+                        return this._LCDATEE;
+                    }
+                    set
+                    {
+                        if ((this._LCDATEE != value))
                         {
-                            return this._ATTEMPT;
+                            this._LCDATEE = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<System.DateTime> LCDATE1
+                {
+                    get
+                    {
+                        return this._LCDATE1;
+                    }
+                    set
+                    {
+                        if ((this._LCDATE1 != value))
                         {
-                            if ((this._ATTEMPT != value))
-                            {
-                                this._ATTEMPT = value;
-                            }
+                            this._LCDATE1 = value;
                         }
                     }
+                }
 
-                    public System.Nullable<int> ACCEPTED
+                public System.Nullable<System.DateTime> LCDATE2
+                {
+                    get
+                    {
+                        return this._LCDATE2;
+                    }
+                    set
                     {
-                        get
+                        if ((this._LCDATE2 != value))
                         {
-                            return this._ACCEPTED;
+                            this._LCDATE2 = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<System.DateTime> LCDATE3
+                {
+                    get
+                    {
+                        return this._LCDATE3;
+                    }
+                    set
+                    {
+                        if ((this._LCDATE3 != value))
                         {
-                            if ((this._ACCEPTED != value))
-                            {
-                                this._ACCEPTED = value;
-                            }
+                            this._LCDATE3 = value;
                         }
                     }
+                }
 
-                    public System.Nullable<int> REGISTERED
+                public System.Nullable<System.DateTime> LCDATE4
+                {
+                    get
+                    {
+                        return this._LCDATE4;
+                    }
+                    set
                     {
-                        get
+                        if ((this._LCDATE4 != value))
                         {
-                            return this._REGISTERED;
+                            this._LCDATE4 = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<System.DateTime> LCDATE5
+                {
+                    get
+                    {
+                        return this._LCDATE5;
+                    }
+                    set
+                    {
+                        if ((this._LCDATE5 != value))
                         {
-                            if ((this._REGISTERED != value))
-                            {
-                                this._REGISTERED = value;
-                            }
+                            this._LCDATE5 = value;
                         }
                     }
+                }
 
-                    public Decimal GDPOINT
+                public System.Nullable<System.DateTime> LCDATE6
+                {
+                    get
+                    {
+                        return this._LCDATE6;
+                    }
+                    set
                     {
-                        get
+                        if ((this._LCDATE6 != value))
                         {
-                            return this._GDPOINT;
+                            this._LCDATE6 = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<System.DateTime> LCDATE7
+                {
+                    get
+                    {
+                        return this._LCDATE7;
+                    }
+                    set
+                    {
+                        if ((this._LCDATE7 != value))
                         {
-                            if ((this._GDPOINT != value))
-                            {
-                                this._GDPOINT = value;
-                            }
+                            this._LCDATE7 = value;
                         }
                     }
+                }
 
-                    public string COURSENOS
+                public System.Nullable<System.DateTime> LCDATE8
+                {
+                    get
                     {
-                        get { return _COURSENOS; }
-                        set { _COURSENOS = value; }
+                        return this._LCDATE8;
                     }
-
-                    public string ELECTIVE_COURSE
+                    set
                     {
-                        get { return _ELECTIVE_COURSE; }
-                        set { _ELECTIVE_COURSE = value; }
+                        if ((this._LCDATE8 != value))
+                        {
+                            this._LCDATE8 = value;
+                        }
                     }
+                }
 
-                    public string COURSENAMES
+                public System.Nullable<System.DateTime> LCDATE9
+                {
+                    get
                     {
-                        get { return _COURSENAMES; }
-                        set { _COURSENAMES = value; }
+                        return this._LCDATE9;
                     }
-
-                    public string SUBIDS
+                    set
                     {
-                        get { return _SUBIDS; }
-                        set { _SUBIDS = value; }
+                        if ((this._LCDATE9 != value))
+                        {
+                            this._LCDATE9 = value;
+                        }
                     }
+                }
 
-                    public string CCODES
+                public System.Nullable<System.DateTime> LCDATE10
+                {
+                    get
                     {
-                        get { return _CCODES; }
-                        set { _CCODES = value; }
+                        return this._LCDATE10;
                     }
-
-                    public string CSRNO
+                    set
                     {
-                        get { return _CSRNO; }
-                        set { _CSRNO = value; }
+                        if ((this._LCDATE10 != value))
+                        {
+                            this._LCDATE10 = value;
+                        }
                     }
+                }
 
-                    public string CCREDITS
+                public System.Nullable<System.DateTime> LCDATEASS
+                {
+                    get
                     {
-                        get { return _CCREDITS; }
-                        set { _CCREDITS = value; }
+                        return this._LCDATEASS;
                     }
-
-                    public string BATCHNOS
+                    set
                     {
-                        get { return _BATCHNOS; }
-                        set { _BATCHNOS = value; }
+                        if ((this._LCDATEASS != value))
+                        {
+                            this._LCDATEASS = value;
+                        }
                     }
+                }
 
-                    public string SECTIONNOS
+                public System.Nullable<int> PROGRESS_ST
+                {
+                    get
                     {
-                        get { return _SECTIONNOS; }
-                        set { _SECTIONNOS = value; }
+                        return this._PROGRESS_ST;
                     }
-
-                    public string ACEEPTSUB
+                    set
                     {
-                        get { return _ACEEPTSUB; }
-                        set { _ACEEPTSUB = value; }
+                        if ((this._PROGRESS_ST != value))
+                        {
+                            this._PROGRESS_ST = value;
+                        }
                     }
+                }
 
-                    public string FACREMARKS
+                public System.Nullable<bool> OPASS
+                {
+                    get
                     {
-                        get { return _FACREMARKS; }
-                        set { _FACREMARKS = value; }
+                        return this._OPASS;
                     }
-
-                    public string FAC_REMARK
+                    set
                     {
-                        get { return _FAC_REMARK; }
-                        set { _FAC_REMARK = value; }
+                        if ((this._OPASS != value))
+                        {
+                            this._OPASS = value;
+                        }
                     }
+                }
 
-                    public string EXTERMARKS
+                public System.Nullable<int> OLDSESNO
+                {
+                    get
+                    {
+                        return this._OLDSESNO;
+                    }
+                    set
                     {
-                        get { return _EXTERMARKS; }
-                        set { _EXTERMARKS = value; }
+                        if ((this._OLDSESNO != value))
+                        {
+                            this._OLDSESNO = value;
+                        }
                     }
+                }
 
-                    public string VALUER1_MKS
+                public string OLDSESNAME
+                {
+                    get
                     {
-                        get { return _VALUER1_MKS; }
-                        set { _VALUER1_MKS = value; }
+                        return this._OLDSESNAME;
                     }
-                    public string VALUER2_MKS
+                    set
                     {
-                        get { return _VALUER2_MKS; }
-                        set { _VALUER2_MKS = value; }
+                        if ((this._OLDSESNAME != value))
+                        {
+                            this._OLDSESNAME = value;
+                        }
                     }
+                }
 
-                    public string MARKDIFFS
+                public string IPADDRESS
+                {
+                    get
                     {
-                        get { return _MARKDIFFS; }
-                        set { _MARKDIFFS = value; }
+                        return this._IPADDRESS;
                     }
-
-                    public string NEWMARKS
+                    set
                     {
-                        get { return _NEWMARKS; }
-                        set { _NEWMARKS = value; }
+                        if ((this._IPADDRESS != value))
+                        {
+                            this._IPADDRESS = value;
+                        }
                     }
+                }
 
-                    public string IDNOS
+                public System.Nullable<int> CREDITS
+                {
+                    get
                     {
-                        get { return _IDNOS; }
-                        set { _IDNOS = value; }
+                        return this._CREDITS;
                     }
-
-                    public System.Nullable<int> CONTROLSHEET_NO
+                    set
                     {
-                        get
+                        if ((this._CREDITS != value))
                         {
-                            return this._CONTROLSHEET_NO;
+                            this._CREDITS = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<int> ATTEMPT
+                {
+                    get
+                    {
+                        return this._ATTEMPT;
+                    }
+                    set
+                    {
+                        if ((this._ATTEMPT != value))
                         {
-                            if ((this._CONTROLSHEET_NO != value))
-                            {
-                                this._CONTROLSHEET_NO = value;
-                            }
+                            this._ATTEMPT = value;
                         }
                     }
+                }
 
-                    public string COLLEGE_CODE
+                public System.Nullable<int> ACCEPTED
+                {
+                    get
+                    {
+                        return this._ACCEPTED;
+                    }
+                    set
                     {
-                        get
+                        if ((this._ACCEPTED != value))
                         {
-                            return this._COLLEGE_CODE;
+                            this._ACCEPTED = value;
                         }
-                        set
+                    }
+                }
+
+                public System.Nullable<int> REGISTERED
+                {
+                    get
+                    {
+                        return this._REGISTERED;
+                    }
+                    set
+                    {
+                        if ((this._REGISTERED != value))
                         {
-                            if ((this._COLLEGE_CODE != value))
-                            {
-                                this._COLLEGE_CODE = value;
-                            }
+                            this._REGISTERED = value;
                         }
                     }
-
-                   
+                }
 
-                    public int START_NO
+                public Decimal GDPOINT
+                {
+                    get
                     {
-                        get { return _START_NO; }
-                        set { _START_NO = value; }
+                        return this._GDPOINT;
                     }
-
-                    public int RECORD
+                    set
                     {
-                        get { return _RECORD; }
-                        set { _RECORD = value; }
+                        if ((this._GDPOINT != value))
+                        {
+                            this._GDPOINT = value;
+                        }
                     }
+                }
 
+                public string COURSENOS
+                {
+                    get { return _COURSENOS; }
+                    set { _COURSENOS = value; }
+                }
 
+                public string ELECTIVE_COURSE
+                {
+                    get { return _ELECTIVE_COURSE; }
+                    set { _ELECTIVE_COURSE = value; }
+                }
 
+                public string COURSENAMES
+                {
+                    get { return _COURSENAMES; }
+                    set { _COURSENAMES = value; }
+                }
 
-                    public string S1IND
-                    {
-                        get { return _S1IND; }
-                        set { _S1IND = value; }
-                    }
+                public string SUBIDS
+                {
+                    get { return _SUBIDS; }
+                    set { _SUBIDS = value; }
+                }
 
+                public string CCODES
+                {
+                    get { return _CCODES; }
+                    set { _CCODES = value; }
+                }
 
-                    public string S2IND
-                    {
-                        get { return _S2IND; }
-                        set { _S2IND = value; }
-                    }
+                public string CSRNO
+                {
+                    get { return _CSRNO; }
+                    set { _CSRNO = value; }
+                }
 
+                public string CCREDITS
+                {
+                    get { return _CCREDITS; }
+                    set { _CCREDITS = value; }
+                }
 
-                    public string S3IND
-                    {
-                        get { return _S3IND; }
-                        set { _S3IND = value; }
-                    }
+                public string BATCHNOS
+                {
+                    get { return _BATCHNOS; }
+                    set { _BATCHNOS = value; }
+                }
+
+                public string SECTIONNOS
+                {
+                    get { return _SECTIONNOS; }
+                    set { _SECTIONNOS = value; }
+                }
+
+                public string ACEEPTSUB
+                {
+                    get { return _ACEEPTSUB; }
+                    set { _ACEEPTSUB = value; }
+                }
+
+                public string FACREMARKS
+                {
+                    get { return _FACREMARKS; }
+                    set { _FACREMARKS = value; }
+                }
 
+                public string FAC_REMARK
+                {
+                    get { return _FAC_REMARK; }
+                    set { _FAC_REMARK = value; }
+                }
 
+                public string EXTERMARKS
+                {
+                    get { return _EXTERMARKS; }
+                    set { _EXTERMARKS = value; }
+                }
 
-                    public string S4IND
+                public string VALUER1_MKS
+                {
+                    get { return _VALUER1_MKS; }
+                    set { _VALUER1_MKS = value; }
+                }
+                public string VALUER2_MKS
+                {
+                    get { return _VALUER2_MKS; }
+                    set { _VALUER2_MKS = value; }
+                }
+
+                public string MARKDIFFS
+                {
+                    get { return _MARKDIFFS; }
+                    set { _MARKDIFFS = value; }
+                }
+
+                public string NEWMARKS
+                {
+                    get { return _NEWMARKS; }
+                    set { _NEWMARKS = value; }
+                }
+
+                public string IDNOS
+                {
+                    get { return _IDNOS; }
+                    set { _IDNOS = value; }
+                }
+
+                public System.Nullable<int> CONTROLSHEET_NO
+                {
+                    get
                     {
-                        get { return _S4IND; }
-                        set { _S4IND = value; }
+                        return this._CONTROLSHEET_NO;
                     }
-
-                    public string ELECTIVE
+                    set
                     {
-                        get { return _ELECTIVE; }
-                        set { _ELECTIVE = value; }
+                        if ((this._CONTROLSHEET_NO != value))
+                        {
+                            this._CONTROLSHEET_NO = value;
+                        }
                     }
+                }
 
-                    public int BRANCHNO
+                public string COLLEGE_CODE
+                {
+                    get
                     {
-                        get { return _BRANCHNO; }
-                        set { _BRANCHNO = value; }
+                        return this._COLLEGE_CODE;
                     }
-
-                    public string BRANCH_REF
+                    set
                     {
-                        get { return _BRANCH_REF; }
-                        set { _BRANCH_REF = value; }
+                        if ((this._COLLEGE_CODE != value))
+                        {
+                            this._COLLEGE_CODE = value;
+                        }
                     }
+                }
+
+
+
+                public int START_NO
+                {
+                    get { return _START_NO; }
+                    set { _START_NO = value; }
+                }
+
+                public int RECORD
+                {
+                    get { return _RECORD; }
+                    set { _RECORD = value; }
+                }
+
+
+
+
+                public string S1IND
+                {
+                    get { return _S1IND; }
+                    set { _S1IND = value; }
+                }
+
 
-                    public int SELECT_COURSE
+                public string S2IND
+                {
+                    get { return _S2IND; }
+                    set { _S2IND = value; }
+                }
+
+
+                public string S3IND
+                {
+                    get { return _S3IND; }
+                    set { _S3IND = value; }
+                }
+
+
+
+                public string S4IND
+                {
+                    get { return _S4IND; }
+                    set { _S4IND = value; }
+                }
+
+                public string ELECTIVE
+                {
+                    get { return _ELECTIVE; }
+                    set { _ELECTIVE = value; }
+                }
+
+                public int BRANCHNO
+                {
+                    get { return _BRANCHNO; }
+                    set { _BRANCHNO = value; }
+                }
+
+                public string BRANCH_REF
+                {
+                    get { return _BRANCH_REF; }
+                    set { _BRANCH_REF = value; }
+                }
+
+                public int SELECT_COURSE
+                {
+                    get { return _SELECT_COURSE; }
+                    set { _SELECT_COURSE = value; }
+                }
+
+                public string Re_Appeared
+                {
+                    get
                     {
-                        get { return _SELECT_COURSE; }
-                        set { _SELECT_COURSE = value; }
+                        return this._Re_Appeared;
                     }
-
-                    public string Re_Appeared
+                    set
                     {
-                        get
-                        {
-                            return this._Re_Appeared;
-                        }
-                        set
+                        if ((this._Re_Appeared != value))
                         {
-                            if ((this._Re_Appeared != value))
-                            {
-                                this._Re_Appeared = value;
-                            }
+                            this._Re_Appeared = value;
                         }
                     }
+                }
 
                 //Added By Rehbar
-                    public string ReceiptFlag
+                public string ReceiptFlag
+                {
+                    get { return _receiptFlag; }
+                    set { _receiptFlag = value; }
+                }
+
+                public decimal TotalFee
+                {
+                    get { return _totalFee; }
+                    set { _totalFee = value; }
+                }
+
+                public decimal Backlogfees
+                {
+                    get { return _Backlogfees; }
+                    set { _Backlogfees = value; }
+                }
+
+                public decimal CommanFee
+                {
+                    get { return _commanFee; }
+                    set { _commanFee = value; }
+                }
+
+                public decimal LateFine
+                {
+                    get { return _lateFine; }
+                    set { _lateFine = value; }
+                }
+                public decimal CourseFee
+                {
+                    get { return _courseFee; }
+                    set { _courseFee = value; }
+                }
+
+                public DateTime Date
+                {
+                    get { return _date; }
+                    set { _date = value; }
+                }
+
+                public string PROV_DETEND
+                {
+                    get { return _provDetend; }
+                    set { _provDetend = value; }
+                }
+
+                public string FINAL_DETEND
+                {
+                    get { return _finalDetend; }
+                    set { _finalDetend = value; }
+                }
+
+
+
+                public string ExamType
+                {
+                    get
                     {
-                        get { return _receiptFlag; }
-                        set { _receiptFlag = value; }
+                        return this._ExamType;
                     }
-
-                    public decimal TotalFee
+                    set
                     {
-                        get { return _totalFee; }
-                        set { _totalFee = value; }
-                    }
-
-                    public decimal Backlogfees
-                    {
-                        get { return _Backlogfees; }
-                        set { _Backlogfees = value; }
-                    }
-
-                    public decimal CommanFee
-                    {
-                        get { return _commanFee; }
-                        set { _commanFee = value; }
-                    }
-
-                    public decimal LateFine
-                    {
-                        get { return _lateFine; }
-                        set { _lateFine = value; }
-                    }
-                    public decimal CourseFee
-                    {
-                        get { return _courseFee; }
-                        set { _courseFee = value; }
-                    }
-
-                    public DateTime Date
-                    {
-                        get { return _date; }
-                        set { _date = value; }
-                    }
-
-                    public string PROV_DETEND
-                    {
-                        get { return _provDetend; }
-                        set { _provDetend = value; }
-                    }
-
-                    public string FINAL_DETEND
-                    {
-                        get { return _finalDetend; }
-                        set { _finalDetend = value; }
-                    }
-
-
-
-                    public string ExamType
+                        if ((this._ExamType != value))
                         {
-                        get
-                            {
-                            return this._ExamType;
-                            }
-                        set
-                            {
-                            if ((this._ExamType != value))
-                                {
-                                this._ExamType = value;
-                                }
-                            }
+                            this._ExamType = value;
                         }
+                    }
+                }
 
-                    #endregion
-                
+                public System.Nullable<int> SubEquivalence
+                {
+                    get
+                    {
+                        return this._SubEquivalence;
+                    }
+                    set
+                    {
+                        if ((this._SubEquivalence != value))
+                        {
+                            this._SubEquivalence = value;
+                        }
+                    }
+                }
+
+                #endregion
+
             }
         }
     }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+//MDIFY DATE : 07-08-2024
+//---------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -51,25 +54,33 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
                     {
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
-                    // Load drop down lists
-                    //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO desc");
-                    //  this.objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "");
-                    //BindCheckList_ForDegree();
+
                     this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "", "");
-
-
-                    //objCommon.FillDropDownList(ddlReceiptType, "ACD_EXAM_TYPE WITH (NOLOCK)", "EXAM_TYPENO", "EXAM_TYPE", "EXAM_TYPENO>=0", "");
-
-
-
-                    //this.objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER WITH (NOLOCK)", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
-
-                    objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND DB.DEPTNO IN(" + Session["userdeptno"].ToString() + ")", "");
+                  
+                    objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "ActiveStatus=1", "COLLEGE_ID DESC");
                     ViewState["action"] = "add";
                     chkDegree.Enabled = false;
                     SetInitialRow();
-                    FillLateFeesDetails();
+                    //FillLateFeesDetails();
                     this.objCommon.FillListBox(lstSemester, "ACd_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
+
+
+                    //ds = lateFeeController.GET__LATE_FEES_DETAILS_EXAM(Convert.ToInt32(ddlSession.SelectedValue));
+
+                    DataSet ds = objCommon.FillDropDown("ACD_LATE_FEE_EXAM LF INNER JOIN ACD_MASTER_LATE_FEE_EXAM MLF ON (MLF.LATE_FEE_NO = LF.LATE_FEE_NO) INNER JOIN ACD_DEGREE D ON (LF.DEGREENO = D.DEGREENO)", " DISTINCT LF.DEGREENO,D.DEGREENAME,(SELECT COLLEGE_NAME FROM ACD_COLLEGE_MASTER WHERE COLLEGE_ID = LF.COLLEGE_ID) AS COLLEGE_NAME", "LF.LATE_FEE_NO,RECEIPT_TYPE,LAST_DATE,COMMON_NO", "LF.LATE_FEE_NO > 0", "LF.LATE_FEE_NO DESC");
+                    if (ds.Tables.Count > 0 && ds.Tables != null)
+                    {
+                        lvLateFeesDEtails.DataSource = ds;
+                        lvLateFeesDEtails.DataBind();
+                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvLateFeesDEtails);//Set label 
+                        //   pnllst.Visible = truessssssssss;
+                        ddlReceiptType.Focus();
+                    }
+                    else
+                    {
+                        lvLateFeesDEtails.DataSource = null;
+                        lvLateFeesDEtails.DataBind();
+                    }
                 }
             }
             ScriptManager.RegisterStartupScript(this, GetType(), "Reg", "ShowReactivationControls();", true);
@@ -184,7 +195,7 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
         {
             DataTable dtCurrentTable = (DataTable)ViewState["CurrentTable"];
             DataRow drCurrentRow = null;
-            if (dtCurrentTable.Rows.Count > 0 && dtCurrentTable.Rows.Count < 5)
+            if (dtCurrentTable.Rows.Count > 0 && dtCurrentTable.Rows.Count < 10)
             {
                 DataTable dtNewTable = new DataTable();
                 dtNewTable.Columns.Add(new DataColumn("RowNumber", typeof(string)));
@@ -244,7 +255,7 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
     private void BindCheckList_ForDegree(int clgID)
     {
         DataSet ds = objCommon.FillDropDown("ACD_COLLEGE_DEGREE CD INNER JOIN ACD_DEGREE D ON CD.DEGREENO=D.DEGREENO", "D.DEGREENO", "D.DEGREENAME", "D.DEGREENO>0 and CD.COLLEGE_ID=" + clgID + " AND D.ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"]), "DEGREENAME");
-        if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows[0] != null && ds.Tables[0].Rows.Count > 0)
+        if (ds != null && ds.Tables[0] != null)
         {
             chkDegree.Enabled = true;
             chkDegrees.DataSource = ds;
@@ -314,6 +325,14 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
             int a = Convert.ToInt32(ViewState["Late_Fee_NO"]);
             DataSet ds = lateFeeController.GET__LATE_FEES_DETAILS_FOR_EDIT_EXAM(Convert.ToInt32(ViewState["Late_Fee_NO"]));
 
+            
+            objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "ActiveStatus=1", "COLLEGE_ID DESC");
+            ddlCollege.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_ID"] == null ? "0" : ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
+            ddlCollege_SelectedIndexChanged(new object(), new EventArgs());
+
+            //this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
+            ddlSession.SelectedValue = ds.Tables[0].Rows[0]["SESSIONNO"] == null ? "0" : ds.Tables[0].Rows[0]["SESSIONNO"].ToString();
+            ddlSession_SelectedIndexChanged(new object(), new EventArgs());
 
             if (ds != null)
             {
@@ -871,6 +890,8 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
             if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
             {
                 //Edit 
+                //DateTime dt = Convert.ToDateTime(txtToDate.Text);
+                //string formattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
                 CustomStatus cs = (CustomStatus)lateFeeController.UpdateLate_New_FeesDetails_EXAM(Convert.ToDateTime(txtToDate.Text), DegreeId,
                     Convert.ToInt32(ViewState["Late_Fee_NO"]), ddlFeeItems.SelectedValue, ddlReceiptType.SelectedValue,
                     Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), Convert.ToInt32(ViewState["college_id"]), ReAdmissionFlag, ReAdmAmt,semesternos);//Late_Fees_NO, hdnID, s,DayFrom, DayTo, TotFees,
@@ -1001,20 +1022,20 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
     {
         if (ddlCollege.SelectedIndex > 0)
         {
-            DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlCollege.SelectedValue));
+            //DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlCollege.SelectedValue));
 
-            if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
-            {
-                ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-                ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
-                // FILL DROPDOWN  ddlSession_SelectedIndexChanged
-            }
-
-
+            //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            //{
+            //    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+            //    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+            //    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+            //    ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            //    // FILL DROPDOWN  ddlSession_SelectedIndexChanged
+            //}
 
 
+
+            ViewState["college_id"] = ddlCollege.SelectedValue;
 
             // BindCheckList_ForDegree(Convert.ToInt32(ddlCollege.SelectedValue));
             BindCheckList_ForDegree(Convert.ToInt32(ViewState["college_id"]));

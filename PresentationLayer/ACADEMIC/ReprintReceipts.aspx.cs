@@ -54,7 +54,7 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
 
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
-                   // divreason.Visible = false;
+                    // divreason.Visible = false;
                     divfooter.Visible = false;
                     pnlmain.Visible = false;
                     //Load Page Help
@@ -69,7 +69,7 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
 
                     DataSet dssearch = objCommon.FillDropDown("ACD_SEARCH_CRITERIA", "ID", "CRITERIANAME,SRNO,ISNULL(IS_FEE_RELATED,0) IS_FEE_RELATED", "ID > 0 AND ISNULL(IS_FEE_RELATED,0)=0 UNION ALL select ID,CRITERIANAME,SRNO,ISNULL(IS_FEE_RELATED,0) IS_FEE_RELATED FROM ACD_SEARCH_CRITERIA WHERE ID=13", "SRNO");
 
-                    
+
                     ViewState["dssearch"] = dssearch;
                     ddlSearch.DataSource = dssearch;
                     ddlSearch.DataTextField = dssearch.Tables[0].Columns[1].ToString();
@@ -209,30 +209,30 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             //        }
             //    else
             //        {
-                    Session["CAN_REC"]= 0;
-                    //}
+            Session["CAN_REC"] = 0;
+            //}
             if (this.GetRecieptData(ref dcr))
             {
                 if (Session["OrgId"].ToString().Equals("2"))
                 {
-                this.ShowReport_ForCash("FeeCollectionReceiptForCash_crescent.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
+                    this.ShowReport_ForCash("FeeCollectionReceiptForCash_crescent.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
                     return;
                 }
                 else if (Session["OrgId"].ToString().Equals("3") || Session["OrgId"].ToString().Equals("4"))
                 {
-                this.ShowReport_ForCash("FeeCollectionReceiptForCash_cpukota.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
+                    this.ShowReport_ForCash("FeeCollectionReceiptForCash_cpukota.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
                     return;
                 }
                 else if (Session["OrgId"].ToString().Equals("8"))
-                        {
+                {
 
-                        //this.ShowReport("Fee Receipt", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Convert.ToString(Session["UAFULLNAME"]));
-                        this.ShowReport_MIT("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Session["UAFULLNAME"].ToString());
-                        }
+                    //this.ShowReport("Fee Receipt", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Convert.ToString(Session["UAFULLNAME"]));
+                    this.ShowReport_MIT("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Session["UAFULLNAME"].ToString());
+                }
                 else if (Session["OrgId"].ToString().Equals("5"))
-                    {
+                {
                     if (ReportFlag == 1)
-                        {
+                    {
                         //// Below Code added by Rohit M. on dated 29.05.2023 
                         //string url = Request.Url.ToString();
                         //url = Request.ApplicationPath + "/Reports/Academic/Fees/FeeReceipt.html";
@@ -250,57 +250,61 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
 
                         //  // Above Code added by ROHIT M. on dated 01.06.2023 
 
-                        }
-                    else
-                        {
-                        this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
-                        }
                     }
+                    else
+                    {
+                        this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
+                    }
+                }
 
                 if (dcr.PaymentModeCode == "C")
                 {
                     if (Session["OrgId"].ToString().Equals("2"))
                     {
-                    this.ShowReport_ForCash("FeeCollectionReceiptForCash_crescent.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
+                        this.ShowReport_ForCash("FeeCollectionReceiptForCash_crescent.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
                     }
                     if (Session["OrgId"].ToString().Equals("8"))
-                        {
+                    {
 
                         //this.ShowReport("Fee Receipt", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Convert.ToString(Session["UAFULLNAME"]));
-                           this.ShowReport_MIT("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Session["UAFULLNAME"].ToString());
+                        this.ShowReport_MIT("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Session["UAFULLNAME"].ToString());
+                    }
+                    if (Session["OrgId"].ToString().Equals("5"))
+                    {
+                        if (ReportFlag == 1)
+                        {
+                            // Below Code added by Rohit M. on dated 29.05.2023 
+                            //string url = Request.Url.ToString();
+                            //url = Request.ApplicationPath + "/Reports/Academic/Fees/FeeReceipt.html";
+                            //// Response.Redirect(url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["username"].ToString() +"&Idno=" + Int32.Parse(GetViewStateItem("StudentId")) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]));
+                            //string urlForReceipt = string.Empty;
+                            //urlForReceipt = url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                            //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + urlForReceipt + "');", true);
+                            // // Below Code added by ROHIT M. on dated 01.06.2023 
+                            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                            url += "Reports/Academic/Fees/FeeReceipt.html?";
+                            url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
+
+                            //  // Above Code added by ROHIT M. on dated 01.06.2023
+
                         }
-                     if(Session["OrgId"].ToString().Equals("5"))
-                       {
-                       if (ReportFlag == 1)
-                           {
-                           // Below Code added by Rohit M. on dated 29.05.2023 
-                           //string url = Request.Url.ToString();
-                           //url = Request.ApplicationPath + "/Reports/Academic/Fees/FeeReceipt.html";
-                           //// Response.Redirect(url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["username"].ToString() +"&Idno=" + Int32.Parse(GetViewStateItem("StudentId")) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]));
-                           //string urlForReceipt = string.Empty;
-                           //urlForReceipt = url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
-                           //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + urlForReceipt + "');", true);
-                           // // Below Code added by ROHIT M. on dated 01.06.2023 
-                           string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-                           url += "Reports/Academic/Fees/FeeReceipt.html?";
-                           url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
-                           ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
-
-                           //  // Above Code added by ROHIT M. on dated 01.06.2023
-
-                           }
-                       else
-                           {
-                           this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
-                           }
-                       }
-                     else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
-                         {
-                         this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                         } 
+                        else
+                        {
+                            this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
+                        }
+                    }
+                    else if (Session["OrgId"].ToString().Equals("18"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                    {
+                        this.ShowReport_ForCash_HITS("rpt_Feecollection_HITS.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
+                    else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                    {
+                        this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
                     else
                     {
-                    this.ShowReport_ForCash("FeeCollectionReceiptForCash.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]),Convert.ToInt32(Session["CAN_RECP"]));
+                        this.ShowReport_ForCash("FeeCollectionReceiptForCash.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_RECP"]));
                     }
                 }
                 else if (dcr.PaymentModeCode == "O")
@@ -308,44 +312,48 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                     if (Session["OrgId"].ToString().Equals("8"))
                     {
 
-                   // this.ShowReport("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Convert.ToString(Session["UAFULLNAME"]));
-                    this.ShowReport_MIT("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Session["UAFULLNAME"].ToString());
+                        // this.ShowReport("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Convert.ToString(Session["UAFULLNAME"]));
+                        this.ShowReport_MIT("Semester Registration", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Session["UAFULLNAME"].ToString());
                     }
-                  if(Session["OrgId"].ToString().Equals("5"))
+                    if (Session["OrgId"].ToString().Equals("5"))
                     {
-                    if (ReportFlag == 1)
+                        if (ReportFlag == 1)
                         {
-                        //// Below Code added by Rohit M. on dated 25.05.2023 
-                        //string url = Request.Url.ToString();
-                        //url = Request.ApplicationPath + "/Reports/Academic/Fees/FeeReceipt.html";
-                        //// Response.Redirect(url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["username"].ToString() +"&Idno=" + Int32.Parse(GetViewStateItem("StudentId")) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]));
-                        //string urlForReceipt = string.Empty;
-                        //urlForReceipt = url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
-                        //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + urlForReceipt + "');", true);
-                        // // Below Code added by ROHIT M. on dated 01.06.2023 
-                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-                        url += "Reports/Academic/Fees/FeeReceipt.html?";
-                        url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
-                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
+                            //// Below Code added by Rohit M. on dated 25.05.2023 
+                            //string url = Request.Url.ToString();
+                            //url = Request.ApplicationPath + "/Reports/Academic/Fees/FeeReceipt.html";
+                            //// Response.Redirect(url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["username"].ToString() +"&Idno=" + Int32.Parse(GetViewStateItem("StudentId")) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]));
+                            //string urlForReceipt = string.Empty;
+                            //urlForReceipt = url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                            //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + urlForReceipt + "');", true);
+                            // // Below Code added by ROHIT M. on dated 01.06.2023 
+                            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                            url += "Reports/Academic/Fees/FeeReceipt.html?";
+                            url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(dcr.StudentId) + "&DcrNo=" + Convert.ToInt32(dcr.DcrNo) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
 
-                        //  // Above Code added by ROHIT M. on dated 01.06.2023
+                            //  // Above Code added by ROHIT M. on dated 01.06.2023
                         }
-                    else
+                        else
                         {
-                        this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
+                            this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
                         }
                     }
-                  else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
-                      {
-                      this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                      } 
+                    else if (Session["OrgId"].ToString().Equals("18"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                    {
+                        this.ShowReport_ForCash_HITS("rpt_Feecollection_HITS.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
+                    else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                    {
+                        this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
                     else
                     {
-                    this.ShowReport_ForCash("FeeCollectionReceiptForCash.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
+                        this.ShowReport_ForCash("FeeCollectionReceiptForCash.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
                     }
                 }
 
-                    //this.ShowReport("FeeCollectionReceipt_crescent.rpt", dcr.DcrNo, dcr.StudentId, "2");
+                //this.ShowReport("FeeCollectionReceipt_crescent.rpt", dcr.DcrNo, dcr.StudentId, "2");
                 // this.ShowReport("FeeCollectionReceipt.rpt", dcr.DcrNo, dcr.StudentId, "1");
             }
         }
@@ -438,7 +446,7 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                     string strIdNo = (item.FindControl("hidIdNo") as HiddenField).Value;
                     dcr.PaymentModeCode = (item.FindControl("hidPaymodecode") as HiddenField).Value;
                     dcr.StudentId = ((strIdNo != null && strIdNo != string.Empty) ? int.Parse(strIdNo) : 0);
-                   // Session["CAN_RECP"] = (item.FindControl("hidcan") as HiddenField).Value;
+                    // Session["CAN_RECP"] = (item.FindControl("hidcan") as HiddenField).Value;
                     dcr.UserNo = int.Parse(Session["userno"].ToString());
                     dcr.Remark = "This receipt has been canceled by " + Session["userfullname"].ToString() + " on " + DateTime.Now + ". ";
                     dcr.Remark += txtRemark.Text.Trim();
@@ -488,7 +496,7 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
     //    }
     //}
 
-    private void ShowReport(string rptName, int dcrNo, int studentNo, string copyNo,string username)
+    private void ShowReport(string rptName, int dcrNo, int studentNo, string copyNo, string username)
     {
         try
         {
@@ -498,7 +506,7 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             url += "pagetitle=Fee_Collection_Receipt";
             url += "&path=~,Reports,Academic," + rptName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + this.GetReportParameters(dcrNo, studentNo, copyNo);
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["username"].ToString() +","+ "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(dcrNo, studentNo, copyNo);
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["username"].ToString() + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(dcrNo, studentNo, copyNo);
             divMsg.InnerHtml += " <script type='text/javascript' language='javascript'> try{ ";
             divMsg.InnerHtml += " window.open('" + url + "','Fee_Collection_Receipt','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " }catch(e){ alert('Error: ' + e.description);}</script>";
@@ -553,15 +561,15 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
     //}
 
 
-    private void ShowReport_ForCash(string rptName, int dcrNo, int studentNo, string copyNo, string Username,int Cancel)
-        {
+    private void ShowReport_ForCash(string rptName, int dcrNo, int studentNo, string copyNo, string Username, int Cancel)
+    {
         try
-            {
+        {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=Fee_Collection_Receipt";
             url += "&path=~,Reports,Academic," + rptName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["username"].ToString() +","+ "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) +
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["username"].ToString() + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) +
          "," + this.GetReportParameters(dcrNo, studentNo, copyNo);
 
             //url += "&param=@P_COLLEGE_CODE=35,@P_IDNO=" + studentNo + ",@P_DCRNO=" + Convert.ToInt32(dcrNo);
@@ -576,12 +584,12 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
 
     //private string GetReportParameters(int dcrNo, int studentNo, string copyNo)
@@ -1013,7 +1021,7 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             int Organizationid = Convert.ToInt32(Session["OrgId"]);
             //HiddenField hdfcrno = lnk.Parent.FindControl("hdfcrno") as HiddenField;
             //Session["DRCNO"] = hdfcrno.Value;
-            
+
 
             string fieldName = string.Empty;
             ////string searchText = "'" + txtSearchText.Text.Trim() + "'";
@@ -1036,7 +1044,7 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                 lvStudent.Visible = false;
                 pnlmain.Visible = true;
                 divfooter.Visible = true;
-               // pnldetails.Visible = true;
+                // pnldetails.Visible = true;
                 //panelEditing.Visible = true;
             }
             else
@@ -1060,23 +1068,23 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-    private void ShowReport(string reportTitle, string rptFileName,string Username)
-        {
+    private void ShowReport(string reportTitle, string rptFileName, string Username)
+    {
         try
-            {
+        {
 
             int dcrno = 0;
             foreach (ListViewDataItem dataitem in lvPaidReceipts.Items)
-                {
+            {
                 HiddenField hfdcrno = dataitem.FindControl("hidDcrNo") as HiddenField;
                 RadioButton rdb = dataitem.FindControl("rdoSelectRecord") as RadioButton;
                 //if (rdb.Checked == true)
                 //    {
-                    dcrno = Convert.ToInt32(hfdcrno.Value);
-                    //}
-                }
+                dcrno = Convert.ToInt32(hfdcrno.Value);
+                //}
+            }
             int SemesterNo = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"])));
-            int DCRNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]) + " AND SEMESTERNO="+ Convert.ToInt32(SemesterNo+1)));
+            int DCRNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]) + " AND SEMESTERNO=" + Convert.ToInt32(SemesterNo + 1)));
 
             // SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
@@ -1085,10 +1093,10 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             url += "&path=~,Reports,Academic," + rptFileName;
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + Session["stuinfoidno"] + ",@P_DCRNO=" + dcrno + "@P_UA_NAME=" + Session["username"].ToString();
 
-         //   url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["username"].ToString() +
-         //"," + this.GetReportParameters(dcrNo, studentNo, copyNo);
+            //   url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["username"].ToString() +
+            //"," + this.GetReportParameters(dcrNo, studentNo, copyNo);
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + this.GetReportParameters(dcrNo, studentNo, "");
-            
+
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";
@@ -1097,29 +1105,29 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void ShowReport_MIT(string reportTitle, string rptFileName, string UANAME)
-        {
+    {
         try
-            {
-            
+        {
+
 
             int dcrno = 0;
             foreach (ListViewDataItem dataitem in lvPaidReceipts.Items)
-                {
+            {
                 HiddenField hfdcrno = dataitem.FindControl("hidDcrNo") as HiddenField;
                 RadioButton rdb = dataitem.FindControl("rdoSelectRecord") as RadioButton;
                 //if (rdb.Checked == true)
                 //    {
                 dcrno = Convert.ToInt32(hfdcrno.Value);
                 //}
-                }
+            }
             //int SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
@@ -1134,27 +1142,27 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void ShowReport_ForCash_PCEN(string rptName, int dcrNo, int studentNo, string copyNo, string UA_FULLNAME, int Cancel)
-        {
+    {
         try
-            {
+        {
             int dcrno = 0;
             foreach (ListViewDataItem dataitem in lvPaidReceipts.Items)
-                {
+            {
                 HiddenField hfdcrno = dataitem.FindControl("hidDcrNo") as HiddenField;
                 RadioButton rdb = dataitem.FindControl("rdoSelectRecord") as RadioButton;
                 //if (rdb.Checked == true)
                 //    {
                 dcrno = Convert.ToInt32(hfdcrno.Value);
                 //}
-                }
+            }
             int SemesterNo = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"])));
             //int DCRNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]) + " AND SEMESTERNO=" + Convert.ToInt32(SemesterNo + 1)));
 
@@ -1179,15 +1187,52 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
 
-            }
+        }
         catch (Exception ex)
-            {
+        {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUaimsCommon.ShowError(Page, "Academic_FeeCollection.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
-            }
         }
+    }
+
+    private void ShowReport_ForCash_HITS(string rptName, int dcrNo, int studentNo, string copyNo, string UA_FULLNAME, int Cancel)
+    {
+        try
+        {
+            //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("Academic")));
+            int college_id = 0;
+            college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(studentNo)));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=Fee_Collection_Receipt";
+            url += "&path=~,Reports,Academic," + rptName;
+            url += "&param=@P_COLLEGE_CODE=" + college_id.ToString() + ",@P_IDNO=" + studentNo + ",@P_DCRNO=" + dcrNo + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]);
+
+
+
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["UAFULLNAME"].ToString() +
+            //"," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(Session["IDNO"].ToString(), studentNo, "0");
+            //divMsg.InnerHtml += " <script type='text/javascript' language='javascript'> try{ ";
+            //divMsg.InnerHtml += " window.open('" + url + "','Fee_Collection_Receipt','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " }catch(e){ alert('Error: ' + e.description);}</script>";
+
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //ScriptManager.RegisterClientScriptBlock(this.updEdit, this.updEdit.GetType(), "controlJSScript", sb.ToString(), true);
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "Academic_FeeCollection.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 }
 
 

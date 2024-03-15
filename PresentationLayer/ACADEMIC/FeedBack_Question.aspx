@@ -736,7 +736,12 @@
                                                                 </div>
                                                                 <asp:CheckBox ID="chkActiveStatus" runat="server" TextAlign="Left" Checked="true" />
                                                             </div>
-
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
+                                                                    <label>Check for Mandatory</label>
+                                                                </div>
+                                                                <asp:CheckBox ID="chkMandatory" runat="server" TextAlign="Left" Checked="true" />
+                                                            </div>
                                                             <div class="form-group col-lg-4 col-md-12 col-12">
                                                                 <div class=" note-div">
                                                                     <h5 class="heading">Note </h5>
@@ -782,6 +787,7 @@
                                                                             </th>
                                                                             <th>Course Type</th>
                                                                             <th>Choice For</th>
+                                                                            <th>Mandatory</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -832,6 +838,9 @@
                                                                     </td>
                                                                     <td>
                                                                         <%# Eval("CHOISE_FOR")%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%# Eval("IS_MANDATORY")%>
                                                                     </td>
                                                                 </tr>
                                                             </ItemTemplate>

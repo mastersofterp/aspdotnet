@@ -3,6 +3,11 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <style>
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updtime"
             DynamicLayout="true" DisplayAfter="0">
@@ -171,11 +176,21 @@
                                             <sup>*</sup>
                                             <label>Exam Name</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlExamname" runat="server" data-select2-enable="true" AppendDataBoundItems="True" ToolTip="Please Select Semester" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlExamname_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlExamname" runat="server" data-select2-enable="true" AppendDataBoundItems="True" ToolTip="Please Select Exam Name" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlExamname_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvExamName" runat="server" ControlToValidate="ddlExamname" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-12 form-group">
+                                        <div class="label-dynamic">
+                                            <label>Exam Type</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlexamtype" runat="server" data-select2-enable="true" AppendDataBoundItems="True" ToolTip="Please Select Exam Type" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlexamtype_SelectedIndexChanged">
+                                            <asp:ListItem Value="-1">Please Select</asp:ListItem>
+                                            <asp:ListItem Value="0">Regular Student</asp:ListItem>
+                                            <asp:ListItem Value="1">BackLog Student</asp:ListItem>
+                                        </asp:DropDownList>
                                     </div>
                                 </div>
                             </div>
@@ -188,11 +203,11 @@
                                     ToolTip="Shows Students under Selected Criteria." ValidationGroup="show" CssClass="btn btn-primary" />
 
                                 <asp:Button ID="btnPrintReport" runat="server" Text="Admit Card" TabIndex="1" CssClass="btn btn-info"
-                                    OnClick="btnPrintReport_Click" ToolTip="Print Card under Selected Criteria." Enabled="false" ValidationGroup="Report"/>
-                                <asp:Button ID="btnAttendance" runat="server" Text="Attendance Report" TabIndex="5" CssClass="btn btn-info"
-                                    ToolTip="Print Card under Selected Criteria." Visible="true" OnClick="btnAttendance_Click" ValidationGroup="Report"/>
+                                    OnClick="btnPrintReport_Click" ToolTip="Print Card under Selected Criteria." Enabled="false" ValidationGroup="Report" />
+                                <asp:Button ID="btnAttendance" runat="server" Text="Attendance Report" TabIndex="1" CssClass="btn btn-info"
+                                    ToolTip="Print Card under Selected Criteria." Visible="true" OnClick="btnAttendance_Click" ValidationGroup="Report" />
 
-                                <asp:Button ID="btnSendEmail" runat="server" Text="Send To Email" TabIndex="999" CssClass="btn btn-info"
+                                <asp:Button ID="btnSendEmail" runat="server" Text="Send To Email" TabIndex="1" CssClass="btn btn-info"
                                     OnClick="btnSendEmail_Click1" ToolTip="Send Card By Email" ValidationGroup="show" Visible="false" />
 
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" TabIndex="1"
@@ -220,25 +235,29 @@
                                             <div class="sub-heading">
                                                 <h5>Search Results</h5>
                                             </div>
-                                            <div class="table-responsive" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">
-                                                <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="tblStudents">
-                                                    <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; background: #fff !important; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
-                                                        <tr>
+                                            <%--<div class="table-responsive" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">--%>
+                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%;" id="tblStudents">
+                                                <%--<thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; background: #fff !important; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
+                                                --%>
+                                                <thead>
+                                                    <tr>
 
-                                                            <th>
-                                                                <asp:CheckBox ID="chkIdentityCard" runat="server" onClick="SelectAll(this);" ToolTip="Select or Deselect All Records" />
-                                                            </th>
-                                                            <th>Reg. No. </th>
-                                                            <th>Student Name </th>
-                                                            <th style="display: none">Student Email </th>
-                                                            <th>Semester </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                        <th>
+                                                            <asp:CheckBox ID="chkIdentityCard" runat="server" onClick="SelectAll(this);" ToolTip="Select or Deselect All Records" />
+                                                        </th>
+                                                        <th>Reg. No. </th>
+                                                        <th>Student Name </th>
+                                                        <th style="display: none">Student Email </th>
+                                                        <th>Exam Reg. Date</th>
+                                                        <th>Payment Status</th>
+                                                        <th>Semester </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                            <%--</div>--%>
                                         </LayoutTemplate>
                                         <ItemTemplate>
                                             <tr>
@@ -252,6 +271,10 @@
                                                 </td>
                                                 <td style="display: none"><%# Eval("EMAILID_INS")%>
                                                     <asp:HiddenField ID="Hdfemail" runat="server" Value='<%# Eval("EMAILID_INS") %>' />
+                                                </td>
+                                                <td><%#(Eval("EXREGDATE").ToString() != string.Empty) ? (Eval("EXREGDATE","{0:dd-MMM-yyyy}")) : Eval("EXREGDATE" ,"{0:dd-MMM-yyyy}")%> </td>
+                                                <td>
+                                                    <asp:Label ID="lblpaymentstatus" runat="server" Text=' <%# Eval("PAYMENT_STATUS")%>' ForeColor='<%#(Eval("PAYMENT_STATUS").ToString() == "DONE") ? System.Drawing.Color.Green:System.Drawing.Color.Red%>'></asp:Label>
                                                 </td>
                                                 <td><%# Eval("SEMESTERNAME")%></td>
                                             </tr>

@@ -241,7 +241,7 @@ $(document).ready(function(){
 
                                         <div class="form-group col-lg-4 col-md-6 col-12 mt-3">
                                             <div class="label-dynamic">
-                                                <label>Attachment</label>
+                                                <label>View Assignment</label>
                                             </div>
                                             <asp:ListView ID="lvAttachments" runat="server" Style="overflow: auto">
                                                 <LayoutTemplate>

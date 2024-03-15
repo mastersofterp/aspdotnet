@@ -8607,6 +8607,174 @@ new SqlParameter("@P_OP", SqlDbType.Int)
                 }
 
 
+                #region---------------------------------Added by Rohit.D on 01-01-2024-----------------------------
+
+                public DataSet GetStudentsForMarkEntry_Remajor(int sessiono, int ua_no, string ccode, int sectionno, int subid, string Exam, int schemeno, string SubExam, string SubExamName, int College_ID, int semesterno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[11];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessiono);
+                        objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[2] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[4] = new SqlParameter("@P_SUBID", subid);
+                        objParams[5] = new SqlParameter("@P_EXAM", Exam);
+                        objParams[6] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        //Added Mahesh on Dated 24/06/2021
+                        objParams[7] = new SqlParameter("@P_SUBEXAM", SubExam);
+                        objParams[8] = new SqlParameter("@P_SUBEXAMNAME", SubExamName);
+                        objParams[9] = new SqlParameter("@P_COLLEGE_ID", College_ID);
+                        objParams[10] = new SqlParameter("@P_SEMESTERNO", semesterno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_STUD_FOR_MARKENTRY_REMAJOR_CC", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.GetStudentsForMarkEntry-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+                #endregion
+                #region End Sem Markentry Admin_CC
+                public int InsertMarkEntryRemajor(int sessionno, int Courseno, string ccode, string idnos, string marks, int lock_status, string exam, int th_pr, int ua_no, string ipaddress, string examtype, int Semesterno, int Schemeno, int Sectionno, string SubExam, int Examno, string subexamcomponetname)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[]
+                        {
+                             //Parameters for MARKS
+                             new SqlParameter("@P_SESSIONNO", sessionno),
+                             new SqlParameter("@P_COURSENO", Courseno),
+                             new SqlParameter("@P_CCODE", ccode),
+                             new SqlParameter("@P_STUDIDS", idnos),
+                             //Mark Fields
+                             new SqlParameter("@P_MARKS", marks),
+                             //Parameters for Final Lock
+                             new SqlParameter("@P_LOCK", lock_status),
+                             new SqlParameter("@P_EXAM", exam),
+                             //new SqlParameter("@P_SUB_EXAM", subexam),
+                             new SqlParameter("@P_TH_PR", th_pr),
+                             new SqlParameter("@P_UA_NO", ua_no),
+                             new SqlParameter("@P_IPADDRESS", ipaddress),
+                             new SqlParameter("@P_EXAMTYPE", examtype),
+                             //added Mahesh on Dated 24/06/2021
+                             new SqlParameter("@P_SEMESTERNO", Semesterno),
+                             new SqlParameter("@P_SCHEMENO", Schemeno),
+                             new SqlParameter("@P_SUBEXAM", SubExam),
+                             new SqlParameter("@P_SECTIONNO",Sectionno),
+                             new SqlParameter("@P_EXAMNO", Examno),
+                             new SqlParameter("@P_SUBEXAMNAME", subexamcomponetname),
+                             new SqlParameter("@P_OP", SqlDbType.Int)
+                              };
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        //object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EXTERNAL_MARK_BY_ADMIN", objParams, true);
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EXTERNAL_MARK_REMAJOR", objParams, true);
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.UpdateMarkEntry --> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                #endregion
+
+
+                #region Revaluation Mark Entry 
+                public int RevalGradeGeneration_CC(int sessionno, int Courseno, string idnos, int th_pr, int ua_no, string ipaddress, int Schemeno, int Semesterno)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[]
+                        {
+                        //Parameters for MARKS
+                        new SqlParameter("@P_SESSIONNO", sessionno),
+                        new SqlParameter("@P_COURSENO", Courseno),
+                        new SqlParameter("@P_STUDIDS", idnos),
+                        new SqlParameter("@P_TH_PR", th_pr),
+                        new SqlParameter("@P_UA_NO", ua_no),
+                        new SqlParameter("@P_IPADDRESS", ipaddress),
+                        new SqlParameter("@P_SEMESTERNO", Semesterno),
+                        new SqlParameter("@P_SCHEMENO", Schemeno),
+                        new SqlParameter("@P_OP", SqlDbType.Int)
+                        };
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_GRADE_ALLOTMENT_REVAL_CC", objParams, true);
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.UpdateMarkEntry --> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int InsertRevaluationMarkEntrybyAdmin_CC(int sessionno, int Courseno, int Schemeno, int Semesterno, int Degreeno, int Branchno, string idnos, string marks, int lock_status, int ua_no, string ipaddress, int Orgid)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[]
+                        {
+                            //Parameters for MARKS
+                            new SqlParameter("@P_SESSIONNO", sessionno),
+                            new SqlParameter("@P_SCHEMENO", Schemeno),
+                            new SqlParameter("@P_SEMESTERNO", Semesterno),
+                            new SqlParameter("@P_COURSENO", Courseno),
+                            new SqlParameter("@P_DEGREENO", Degreeno),
+                            new SqlParameter("@P_BRANCHNO", Branchno),
+                            new SqlParameter("@P_STUDIDS", idnos),
+                            new SqlParameter("@P_MARKS", marks),
+                            new SqlParameter("@P_LOCK", lock_status),
+                            new SqlParameter("@P_UANO", ua_no),
+                            new SqlParameter("@P_IPADDRESS", ipaddress),
+                            new SqlParameter("@P_ORGID", Orgid),
+                            new SqlParameter("@P_OUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_REVAL_MARK_ENTRY_CC", objParams, true);
+
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.UpdateMarkEntry --> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                #endregion
+
             }
 
         }

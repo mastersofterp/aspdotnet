@@ -15,6 +15,8 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 
+using System.Collections.Generic;
+
 public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -46,13 +48,13 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             else
             {
                 //This checks the authorization of the user.
-              //  CheckPageAuthorization();
+                //  CheckPageAuthorization();
 
                 Page.Title = Session["coll_name"].ToString();
 
                 if (Request.QueryString["pageno"] != null)
                 {
-                   // lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
+                    // lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
 
                 // Set form mode equals to -1(New Mode).
@@ -62,14 +64,14 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                 divMsg.InnerHtml = string.Empty;
                 ViewState["roomname"] = string.Empty;
                 this.BindRooms();
-                
+
             }
             //int collegecode = Convert.ToInt16(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -
             //objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));//Header
         }
 
-      
+
     }
     private void SetInitialRow()
     {
@@ -79,19 +81,20 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         dt.Columns.Add(new DataColumn("txtRoomName", typeof(string)));
         dt.Columns.Add(new DataColumn("txtRoomCapacity", typeof(string)));
         dt.Columns.Add(new DataColumn("chkStatus", typeof(string)));
-     
+
 
         dr = dt.NewRow();
         dr["txtRoomName"] = string.Empty;
         dr["txtRoomCapacity"] = string.Empty;
         dr["chkStatus"] = string.Empty;
-       
+
 
         dt.Rows.Add(dr);
         ViewState["CurrentTable"] = dt;
 
         lvAssessment.DataSource = dt;
         lvAssessment.DataBind();
+        ClearControls();
     }
 
     private void PopulateDropDown()
@@ -102,10 +105,10 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             //Degree Name
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME AS COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_NAME ASC");
 
-           //For filling the Number of Floors
-           //objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR", "FLOORNO", "FLOORNAME", "FLOORNO > 0", "FLOORNO DESC");
+            //For filling the Number of Floors
+            //objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR", "FLOORNO", "FLOORNAME", "FLOORNO > 0", "FLOORNO DESC");
             ddlCollege.Focus();
-           
+
             //}
         }
         catch (Exception ex)
@@ -136,12 +139,46 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
     #endregion
 
+    public Boolean checklistview()
+    {
+
+        foreach (ListViewDataItem item in lvAssessment.Items)
+        {
+            HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
+            TextBox txtGradeReleaseName = item.FindControl("txtRoomName") as TextBox;
+            TextBox txtOutOfMarks = item.FindControl("txtRoomCapacity") as TextBox;
+            CheckBox chkactive = item.FindControl("chkStatus") as CheckBox;
+            if (txtGradeReleaseName.Text == "")
+            {
+                objCommon.DisplayMessage(this.updRoom, "Please Enter the Room Name !", this.Page);
+                BindRooms();
+                return false;
+
+            }
+            else if (txtOutOfMarks.Text == "")
+            {
+                objCommon.DisplayMessage(this.updRoom, "Please Enter the Room Capacity !", this.Page);
+                BindRooms();
+                return false;
+
+            }
+            else if (chkactive.Checked == false)
+            {
+
+                objCommon.DisplayMessage(this.updRoom, "Please select the Active status!", this.Page);
+                BindRooms();
+                return false;
+            }
+        }
+        return true ;
+    }
+
     #region Submit
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+        DataTable dt = new DataTable();
         if (ddlCollege.SelectedIndex == 0)
         {
-
             objCommon.DisplayMessage(this.updRoom, "Please Select College/School!", this.Page);
         }
         else if (ddlDept.SelectedIndex == 0)
@@ -149,88 +186,218 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             objCommon.DisplayMessage(this.updRoom, "Please Select Department!", this.Page);
 
         }
-        else if (ddlFloorNo.SelectedIndex==0)
+        else if (ddlFloorNo.SelectedIndex == 0)
         {
             objCommon.DisplayMessage(this.updRoom, "Please Select Floor!", this.Page);
 
         }
-        else if(ddlBlockNo.SelectedIndex==0)
+        else if (ddlBlockNo.SelectedIndex == 0)
         {
             objCommon.DisplayMessage(this.updRoom, "Please Select Block!", this.Page);
         }
-     
+
         else
         {
+
             try
             {
-              
+
 
                 Exam objexam = new Exam();
                 objexam.department = Convert.ToInt32(ddlDept.SelectedValue);
                 objexam.collegeid = Convert.ToInt32(ddlCollege.SelectedValue);
-              
+
                 objexam.FloorNo = Convert.ToInt32(ddlFloorNo.SelectedValue);
                 objexam.Blockno = Convert.ToInt32(ddlBlockNo.SelectedValue);
                 objexam.collegecode = Convert.ToInt32(ViewState["CollegeCode"]);
+
                 foreach (ListViewDataItem item in lvAssessment.Items)
                 {
                     HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
                     TextBox txtGradeReleaseName = item.FindControl("txtRoomName") as TextBox;
+                    TextBox txtRoomCapacity = item.FindControl("txtRoomCapacity") as TextBox;
+                    
                     TextBox txtOutOfMarks = item.FindControl("txtRoomCapacity") as TextBox;
                     CheckBox chkactive = item.FindControl("chkStatus") as CheckBox;
-                    objexam.Roomname = txtGradeReleaseName.Text;
-                    objexam.RoomCapacity = Convert.ToInt32(txtOutOfMarks.Text);
-                    if (chkactive.Checked)
-                    {
-                        objexam.ActiveStatus = Convert.ToBoolean(1);
-                    }
-                    else
-                    {
-                        objexam.ActiveStatus = Convert.ToBoolean(0);
-                    }
-                  
-                    if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
-                    {
-                        SeatingArrangementController objSC = new SeatingArrangementController();
 
-                        //Edit 
-                        objexam.Roomno = Convert.ToInt32(ViewState["roomno"]);
-                        CustomStatus cs = (CustomStatus)objSC.UpdateRoom(objexam);
-                        if (cs.Equals(CustomStatus.RecordUpdated))
+                   
+
+
+
+
+                    //if (txtGradeReleaseName.Text == "")
+                    //{
+                    //    objCommon.DisplayMessage(this.updRoom, "Please Enter the Room Name !", this.Page);
+                    //    BindRooms();
+                    //    return;
+
+                    //}
+                    //else if (txtOutOfMarks.Text == "")
+                    //{
+                    //    objCommon.DisplayMessage(this.updRoom, "Please Enter the Room Capacity !", this.Page);
+                    //    BindRooms();
+                    //    return;
+
+
+                    //}
+                    if (checklistview() == true)
+                    {
+                        if (chkactive.Checked)
                         {
-
-
-                            objCommon.DisplayMessage(this.updRoom, "Room Updated Successfully!", this.Page);
-                            btnSubmit.Text = "Submit";
-                           
+                            objexam.ActiveStatus = Convert.ToBoolean(1);
                         }
-                    }
-                    else
-                    {
-                        CustomStatus cs;
-                        SeatingArrangementController objSC = new SeatingArrangementController();
-
-                        //Add New
-                        cs = (CustomStatus)objSC.AddRoom(objexam);
-
-                        if (cs.Equals(CustomStatus.RecordSaved))
+                        else
                         {
-
-                            objCommon.DisplayMessage(this.updRoom, "Room Saved Successfully!", this.Page);
-                           
-                            
-                        }
-                        else if (cs.Equals(CustomStatus.TransactionFailed))
-                        {
-                            objCommon.DisplayMessage(this.updRoom, "Transaction Failed!", this.Page);
+                            objexam.ActiveStatus = Convert.ToBoolean(0);
                             return;
                         }
+                        if (btnSubmit.Text == "Update")
+                        {
+                            int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "ROOMCAPACITY='" + txtRoomCapacity.Text + "' and ROOMNAME LIKE '" + txtGradeReleaseName.Text.Trim() + "'"));
+                            if (cnt > 0)
+                            {
+                                objCommon.DisplayMessage(this.updRoom, "Room Entry with the name [" + txtGradeReleaseName.Text.Trim() + "] already exists!!", this.Page);
+                                return;
+                            }
+                            else
+                            {
+                                objexam.Roomname = txtGradeReleaseName.Text;
+                                objexam.RoomCapacity = Convert.ToInt32(txtOutOfMarks.Text);
+                                if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
+                                {
+                                    SeatingArrangementController objSC = new SeatingArrangementController();
+
+                                    //Edit 
+                                    objexam.Roomno = Convert.ToInt32(ViewState["roomno"]);
+                                    CustomStatus cs = (CustomStatus)objSC.UpdateRoom(objexam);
+                                    if (cs.Equals(CustomStatus.RecordUpdated))
+                                    {
+
+
+                                        objCommon.DisplayMessage(this.updRoom, "Room Updated Successfully!", this.Page);
+                                        BindRooms();
+                                        btnSubmit.Text = "Submit";
+                                        btnadd.Visible = true;
+                                        ClearControls();
+                                    }
+                                }
+                                else
+                                {
+                                    CustomStatus cs;
+                                    SeatingArrangementController objSC = new SeatingArrangementController();
+
+                                    //Add New
+                                    cs = (CustomStatus)objSC.AddRoom(objexam);
+
+                                    if (cs.Equals(CustomStatus.RecordSaved))
+                                    {
+
+                                        objCommon.DisplayMessage(this.updRoom, "Room Saved Successfully!", this.Page);
+
+                                        
+
+
+                                    }
+                                    else if (cs.Equals(CustomStatus.TransactionFailed))
+                                    {
+                                        objCommon.DisplayMessage(this.updRoom, "Transaction Failed!", this.Page);
+                                        return;
+                                    }
+                                    //ClearControls();
+                                    //SetInitialRow();
+                                    
+                                }
+
+
+                            }
+
+
+
+                        }
+                        else
+                        {
+                            int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "ROOMNAME LIKE '" + txtGradeReleaseName.Text.Trim() + "'"));
+                            if (cnt > 0)
+                            {
+                                    objCommon.DisplayMessage(this.updRoom, "Room Entry with the name [" + txtGradeReleaseName.Text.Trim() + "] already exists!!", this.Page);
+                                    return;
+                            }
+                            else
+                            {
+                                objexam.Roomname = txtGradeReleaseName.Text;
+                                objexam.RoomCapacity = Convert.ToInt32(txtOutOfMarks.Text);
+                                if (ViewState["action"] != null && ViewState["action"].ToString().Equals("submit"))
+                                {
+                                    SeatingArrangementController objSC = new SeatingArrangementController();
+
+                                    //Edit 
+                                    objexam.Roomno = Convert.ToInt32(ViewState["roomno"]);
+                                    CustomStatus cs = (CustomStatus)objSC.UpdateRoom(objexam);
+                                    if (cs.Equals(CustomStatus.RecordUpdated))
+                                    {
+
+
+                                        objCommon.DisplayMessage(this.updRoom, "Room Updated Successfully!", this.Page);
+                                        btnSubmit.Text = "Submit";
+
+                                    }
+                                }
+                                else
+                                {
+                                    CustomStatus cs;
+                                    SeatingArrangementController objSC = new SeatingArrangementController();
+
+                                    //Add New
+                                    cs = (CustomStatus)objSC.AddRoom(objexam);
+
+                                    if (cs.Equals(CustomStatus.RecordSaved))
+                                    {
+
+                                        objCommon.DisplayMessage(this.updRoom, "Room Saved Successfully!", this.Page);
+                                        ViewState["Room"] = "Room";
+                                      // this.BindRooms();
+                                       // SetInitialRow();
+                                 
+                                        
+                                      
+
+                                    }
+                                    else if (cs.Equals(CustomStatus.TransactionFailed))
+                                    {
+                                        objCommon.DisplayMessage(this.updRoom, "Transaction Failed!", this.Page);
+                                        //ClearControls();
+                                        //SetInitialRow();
+                                        //return;
+                                    }
+                                }
+                               
+                            }
+                        }
+                        //Added by lalit
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this.updRoom, "Please Filled the listview All Column", this.Page);
+                        //this.BindRooms();
+                        //ClearControls();
+                        //SetInitialRow();
+                        return;
+
                     }
 
-                    
                 }
                 this.BindRooms();
-                ClearControls();
+                if (ViewState["Room"]==null)
+                {
+                    
+                    this.BindRooms();
+                }
+                else
+                {
+                    SetInitialRow();
+                }
+                //ClearControls();
+                
             }
             catch (Exception ex)
             {
@@ -240,59 +407,13 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                     objCommon.DisplayMessage("Server UnAvailable", this.Page);
             }
 
-
+            
         }
-     
+
     }
     #endregion
 
-    //#region Duplicate Entry Check
-    //private bool CheckDuplicateRoom()
-    //{
-    //    foreach (ListViewDataItem item in lvAssessment.Items)
-    //    {
-    //        HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
-    //        TextBox txtGradeReleaseName = item.FindControl("txtRoomName") as TextBox;
-    //        TextBox txtOutOfMarks = item.FindControl("txtRoomCapacity") as TextBox;
-    //        CheckBox chkactive = item.FindControl("chkStatus") as CheckBox;
 
-    //        if (ViewState["roomname"].ToString() == txtGradeReleaseName.Text)
-    //        {
-               
-    //            return false;
-    //        }
-
-    //        int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "ROOMNAME LIKE '" + txtGradeReleaseName.Text.Trim() + "'"));
-    //        if (cnt > 0)
-    //            return true;
-    //        else
-    //            return false;
-    //    }
-    //}
-    //private bool CheckDuplicateSequence()
-    //{
-
-    //    SeatingArrangementController objSC = new SeatingArrangementController();
-    //    //SqlDataReader dr = objSC.GetSingleRoom(ROOMNO);
-    //    //this.ShowDetails(ROOMNO);
-    //    //int sequence = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "Sequenceno", "Sequenceno =" + txtSequence.Text.Trim()));
-      
-    //    ////Check Room Name is duplicate entry or not
-    //    //if (ViewState["SequenceNo"].ToString() == txtSequence.Text)
-    //    //{
-    //    //    //Room name not changed while editing
-    //    //    return false;
-    //    //}
-
-
-    //    //COMMENTED ON 01052022
-    //    //int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "Sequenceno =" + txtSequence.Text.Trim()));
-    //    //if (cnt > 0)
-    //    //    return true;
-    //    //else
-    //        return false;
-    //}
-    //#endregion
 
     #region BindRoom Show Deatils
 
@@ -301,7 +422,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         try
         {
             SeatingArrangementController objSC = new SeatingArrangementController();
-            DataSet ds = objSC.GetAllRoom(Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlDept.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlDept.SelectedValue),Convert.ToInt32(ddlFloorNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlFloorNo.SelectedValue),Convert.ToInt32(ddlBlockNo.SelectedValue)==0?0:Convert.ToInt32(ddlFloorNo.SelectedValue));
+            DataSet ds = objSC.GetAllRoom(Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlDept.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlDept.SelectedValue), Convert.ToInt32(ddlFloorNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlFloorNo.SelectedValue), Convert.ToInt32(ddlBlockNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlBlockNo.SelectedValue));
             lvRoomMaster.DataSource = ds;
             lvRoomMaster.DataBind();
         }
@@ -332,15 +453,14 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                         CheckBox chkactive = item.FindControl("chkStatus") as CheckBox;
                         txtGradeReleaseName.Text = dr["ROOMNAME"] == null ? string.Empty : dr["ROOMNAME"].ToString();
                         ViewState["roomname"] = txtGradeReleaseName.Text.Trim();
-                        objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNAME ASC");
-       
+                       objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNAME ASC");
                         ddlFloorNo.SelectedValue = dr["FLOORNO"].ToString();
                         //   int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
                         objCommon.FillDropDownList(ddlBlockNo, "ACD_BLOCK ", "BLOCKNO", "BLOCKNAME", "BLOCKNO > 0 AND ACTIVESTATUS=1", "BLOCKNAME ASC");
                         ddlBlockNo.SelectedValue = dr["BLOCKNO"].ToString();
                         ddlCollege.SelectedValue = dr["COLLEGE_ID"].ToString();
 
-                      
+
                         objCommon.FillDropDownList(ddlDept, "ACD_DEPARTMENT D, ACD_COLLEGE_DEPT C ", "D.DEPTNO", "D.DEPTNAME", "D.DEPTNO=C.DEPTNO AND C.DEPTNO >0 AND C.COLLEGE_ID=" + ddlCollege.SelectedValue + "", "DEPTNAME ASC");
                         ddlDept.SelectedValue = dr["DEPTNO"].ToString();
                         txtGradeReleaseName.Text = dr["ROOMNAME"].ToString();
@@ -354,9 +474,9 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                         {
                             chkactive.Checked = false;
                         }
-                       // txtSequence.Text = dr["SequenceNo"].ToString();
-                       //int seq = Convert.ToInt32(dr["SequenceNo"].ToString());
-                       //seq = Convert.ToInt32(ViewState["SequenceNo"]);
+                        // txtSequence.Text = dr["SequenceNo"].ToString();
+                        //int seq = Convert.ToInt32(dr["SequenceNo"].ToString());
+                        //seq = Convert.ToInt32(ViewState["SequenceNo"]);
                     }
                 }
                 if (dr != null) dr.Close();
@@ -376,7 +496,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
     #region Degree
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
-        
+
     }
     #endregion
 
@@ -392,8 +512,8 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
             //Delete 
             CustomStatus cs = (CustomStatus)objSC.DeleteRoom(Convert.ToInt32(btnDelete.ToolTip));
-            
-           // objCommon.DisplayMessage("Room Deleted Succesfully !!", this.Page);
+
+            // objCommon.DisplayMessage("Room Deleted Succesfully !!", this.Page);
             objCommon.DisplayMessage(this, "Room Deleted Succesfully !!", this);
             //aayushi
             BindRooms();
@@ -416,11 +536,41 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         try
         {
             ImageButton btnEdit = sender as ImageButton;
-            int ROOMNO = int.Parse(btnEdit.CommandArgument);
+            int ROOMNAME = int.Parse(btnEdit.CommandArgument);
+
+            bool recordExists = false;
+            foreach (ListViewDataItem item in lvAssessment.Items)
+            {
+                HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
+                int existingROOMNAME = int.Parse(hfdValue.Value);
+
+                if (existingROOMNAME == ROOMNAME)
+                 {
+                    recordExists = true;
+                    break;
+                }
+            }
+            if (!recordExists)
+            {
+                // Proceed with updating the record
+                ViewState["roomno"] = ROOMNAME;
+                ViewState["action"] = "edit";
+                btnSubmit.Text = "Update";
+                //this.ShowDetails(ROOMNAME);
+                btnadd.Visible = false;
+            }
+            else
+            {
+                // The record is already in the ListView, you may display a message or take other actions.
+                // For example:
+                objCommon.DisplayMessage(this.updRoom, "The selected room is already being edited.", this.Page);
+            }
+
             ViewState["roomno"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             btnSubmit.Text = "Update";
-            this.ShowDetails(ROOMNO);
+            this.ShowDetails(ROOMNAME);
+            btnadd.Visible = false;
         }
         catch (Exception ex)
         {
@@ -445,8 +595,8 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         ddlDept.SelectedIndex = 0;
         ddlFloorNo.SelectedIndex = 0;
         ddlBlockNo.SelectedIndex = 0;
-       
-      
+
+    
         foreach (ListViewDataItem item in lvAssessment.Items)
         {
             HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
@@ -459,7 +609,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             ViewState["action"] = null;
             ViewState["roomno"] = null;
             ViewState["roomname"] = string.Empty;
-        }
+        } 
     }
     #endregion
 
@@ -473,12 +623,12 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
     {
         try
         {
-            
+
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/Commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue)  + "";
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + "";
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";
@@ -501,12 +651,13 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
     protected void ddlDept_SelectedIndexChanged(object sender, EventArgs e)
     {
-        int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
+        int dept = Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue);
+        int collegecode = (Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt16(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + dept)));
         ViewState["CollegeCode"] = collegecode;
-        objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ","FLOORNAME ASC");
+        objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNO ASC");
         this.BindRooms();
         ddlFloorNo.Focus();
-       // objCommon.FillDropDownList(ddlRoom, "ACD_ROOM R INNER JOIN ACD_BLOCK B ON B.BLOCKNO=R.BLOCKNO INNER JOIN ACD_DEPARTMENT D ON R.DEPTNO=D.DEPTNO", "R.ROOMNO", "CONCAT(ROOMNAME,'-',DEPTCODE)", "R.ROOMNO > 0 AND  R.BLOCKNO=" + ddlBlockNo.SelectedValue + "", "ROOMNAME ASC");
+        // objCommon.FillDropDownList(ddlRoom, "ACD_ROOM R INNER JOIN ACD_BLOCK B ON B.BLOCKNO=R.BLOCKNO INNER JOIN ACD_DEPARTMENT D ON R.DEPTNO=D.DEPTNO", "R.ROOMNO", "CONCAT(ROOMNAME,'-',DEPTCODE)", "R.ROOMNO > 0 AND  R.BLOCKNO=" + ddlBlockNo.SelectedValue + "", "ROOMNAME ASC");
 
     }
     #endregion
@@ -517,21 +668,23 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
     }
     protected void ddlFloorNo_SelectedIndexChanged(object sender, EventArgs e)
     {
-        int collegecode = Convert.ToInt16(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
-        objCommon.FillDropDownList(ddlBlockNo, "ACD_BLOCK ", "BLOCKNO", "BLOCKNAME", "BLOCKNO > 0 AND ACTIVESTATUS=1","BLOCKNAME ASC");
+        int dept = Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue);
+        int collegecode = (Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt16(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + dept)));
+        objCommon.FillDropDownList(ddlBlockNo, "ACD_BLOCK ", "BLOCKNO", "BLOCKNAME", "BLOCKNO > 0 AND ACTIVESTATUS=1", "BLOCKNAME ASC");
         this.BindRooms();
         ddlBlockNo.Focus();
     }
     protected void lvRoomMaster_ItemDataBound(object sender, ListViewItemEventArgs e)
     {
-         
+        BindRooms();
+
         
     }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         // Branch Name
         objCommon.FillDropDownList(ddlDept, "ACD_DEPARTMENT D, ACD_COLLEGE_DEPT C ", "D.DEPTNO", "D.DEPTNAME", "D.DEPTNO=C.DEPTNO AND C.DEPTNO >0 AND C.COLLEGE_ID=" + ddlCollege.SelectedValue + "", "DEPTNAME");
-         this.BindRooms();
+        this.BindRooms();
         ddlDept.Focus();
     }
     protected void ddlBlockNo_SelectedIndexChanged(object sender, EventArgs e)
@@ -546,7 +699,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             if (ViewState["CurrentTable"] != null)
             {
 
-                if (ddlCollege.SelectedIndex == 0 && ddlDept.SelectedIndex == 0 && ddlFloorNo.SelectedIndex== 0 && ddlBlockNo.SelectedIndex==0)
+                if (ddlCollege.SelectedIndex == 0 && ddlDept.SelectedIndex == 0 && ddlFloorNo.SelectedIndex == 0 && ddlBlockNo.SelectedIndex == 0)
                 {
                     objCommon.DisplayMessage(updRoom, "Please Select  College, Department and Floor and Block", this.Page);
                 }
@@ -587,7 +740,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                                 objCommon.DisplayMessage(updRoom, "Please Enter Room Capacity", this.Page);
                                 return;
                             }
-                            else if(cnt>0)
+                            else if (cnt > 0)
                             {
                                 objCommon.DisplayMessage(this.updRoom, "Room Entry with the name [" + box1.Text.Trim() + "] already exists!!", this.Page);
                                 return;
@@ -653,7 +806,6 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         }
         SetPreviousDataGrades();
     }
-
     private void SetPreviousDataGrades()
     {
         int rowIndex = 0;
@@ -662,9 +814,9 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             DataTable dt = (DataTable)ViewState["CurrentTable"];
             if (dt.Rows.Count > 0)
             {
-                
-            
-              
+
+
+
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     HiddenField hdfid = (HiddenField)lvAssessment.Items[rowIndex].FindControl("hfdValue");
@@ -674,25 +826,25 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
 
                     string status = Convert.ToString(dt.Rows[i]["chkStatus"].ToString());
-                    if (status=="True")
+                    if (status == "True")
                     {
-                        box3.Checked=true;
+                        box3.Checked = true;
                     }
                     else
                     {
                         box3.Checked = false;
                     }
-                    
+
                     box1.Text = dt.Rows[i]["txtRoomName"].ToString();
                     box2.Text = dt.Rows[i]["txtRoomCapacity"].ToString();
                     //box3.Checked = Convert.ToBoolean(dt.Rows[i]["chkStatus"].ToString());
-                  
+
 
                     rowIndex++;
-                   
+
 
                 }
-              
+
             }
 
         }
@@ -702,4 +854,273 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             SetInitialRow();
         }
     }
+    private void SetPreviousData()
+    {
+        int rowIndex = 0;
+
+        if (ViewState["CurrentTable"] != null)
+        {
+            DataTable dt = (DataTable)ViewState["CurrentTable"];
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++) // Change i=1 to i=0
+                {
+                    // Find the ListViewItem at the specified index
+                    ListViewDataItem lvItem = lvAssessment.Items[i];
+
+                    // Find controls inside the ListViewItem
+                    TextBox box1 = (TextBox)lvItem.FindControl("txtRoomName");
+                    TextBox box2 = (TextBox)lvItem.FindControl("txtRoomCapacity");
+                    CheckBox box3 = (CheckBox)lvAssessment.Items[i].FindControl("chkStatus");
+
+                    // Set values from DataTable to TextBoxes
+                    box1.Text = dt.Rows[i]["txtRoomName"].ToString();
+                    box2.Text = dt.Rows[i]["txtRoomCapacity"].ToString();
+
+                    //Have to change this for delete operations
+                    if (dt.Rows[i]["chkStatus"] == "")
+                        box3.Checked = false;
+                    else if (dt.Rows[i]["chkStatus"] ==null)
+                        box3.Checked = false;
+                    else
+                        box3.Checked = Convert.ToBoolean(dt.Rows[i]["chkStatus"]);
+
+                    rowIndex++;
+                }
+            }
+        }
+    }
+    protected void lnkRemove_Click(object sender, ImageClickEventArgs e)
+    {
+        ImageButton lb = (ImageButton)sender;
+        ListViewDataItem lvItem = (ListViewDataItem)lb.NamingContainer;
+        int rowID = lvItem.DisplayIndex;
+
+
+
+        if (ViewState["CurrentTable"] != null)
+        {
+            DataTable dt = (DataTable)ViewState["CurrentTable"];
+
+            if (dt.Rows.Count > 1 && rowID < dt.Rows.Count)
+            {
+                // Remove the Selected Row data
+                dt.Rows.RemoveAt(rowID);
+                // Rebind the ListView for the updated data 
+                lvAssessment.DataSource = dt;
+                lvAssessment.DataBind();
+
+                // Store the current data in ViewState for future reference
+                ViewState["CurrentTable"] = dt;
+            }
+            
+        }
+
+        // Set Previous Data on Postbacks
+        SetPreviousData();
+    }
+
+
+    //protected void lvAssessment_RowCreated(object sender, GridViewRowEventArgs e)
+    //{
+    //    if (e.Row.RowType == DataControlRowType.DataRow)
+    //    {
+    //        DataTable dt = (DataTable)ViewState["CurrentTable"];
+    //        // LinkButton lb = (LinkButton)e.Row.FindControl("lnkRemove");
+    //        ImageButton lb = (ImageButton)e.Row.FindControl("lnkRemove");
+
+
+    //        if (lb != null)
+    //        {
+    //            if (dt.Rows.Count > 1)
+    //            {
+    //                if (e.Row.RowIndex == dt.Rows.Count - 1)
+    //                {
+    //                    lb.Visible = false;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                lb.Visible = false;
+    //            }
+    //        }
+    //    }
+    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //private void SetPreviousData()
+    //{
+    //    int rowIndex = 0;
+
+    //    if (ViewState["CurrentTable"] != null)
+    //    {
+    //        DataTable dt = (DataTable)ViewState["CurrentTable"];
+    //        if (dt.Rows.Count > 0)
+    //        {
+    //            for (int i = 1; i < dt.Rows.Count; i++)
+    //            {
+    //                // Find the ListViewItem at the specified index
+    //                ListViewDataItem lvItem = lvAssessment.Items[i];
+
+    //                // Find controls inside the ListViewItem
+    //                TextBox box1 = (TextBox)lvItem.FindControl("txtRoomName");
+    //                TextBox box2 = (TextBox)lvItem.FindControl("txtRoomCapacity");
+    //                CheckBox box3 = (CheckBox)lvAssessment.Items[rowIndex].FindControl("chkStatus");
+
+
+    //                // Set values from DataTable to TextBoxes
+    //                box1.Text = dt.Rows[i]["Column1"].ToString();
+    //                box2.Text = dt.Rows[i]["Column2"].ToString();
+    //                box3.Checked = Convert.ToBoolean(dt.Rows[i]["Column3"]);
+
+    //                //box3.Checked = dt.RowDeleted[i]["Column3"].ToString();
+    //                //box3.Checked["chkStatus"] = box3.Checked;
+
+
+
+
+    //                rowIndex++;
+
+
+
+    //            }
+    //        }
+    //    }
+    //}
+
+    //protected void lnkRemove_Click(object sender, ImageClickEventArgs e)
+    //{
+
+    //    //LinkButton lb = (LinkButton)sender;
+    //    ImageButton lb = (ImageButton)sender;
+    //    //ListView lvRow = (ListView)lb.NamingContainer;
+    //    ListViewDataItem lvItem = (ListViewDataItem)lb.NamingContainer;
+    //    int rowID = lvItem.DisplayIndex+1;
+
+
+    //    //int rowID = lvRow.RowIndex + 1;
+
+    //    //int rowID = lvItem.DisplayIndex;
+
+    //    if (ViewState["CurrentTable"] != null)
+    //    {
+    //        DataTable dt = (DataTable)ViewState["CurrentTable"];
+
+    //        if (dt.Rows.Count > 0 && rowID < dt.Rows.Count)
+    //        {
+    //            // Remove the Selected Row data
+    //            dt.Rows.RemoveAt(rowID);
+    //        }
+    //        if (dt.Rows.Count > 1)
+    //        {
+    //            //if (gvRow.RowIndex < dt.Rows.Count )
+    //            //if (gvRow.RowIndex < dt.Rows.Count - 1)
+    //            if (rowID < dt.Rows.Count)
+    //            {
+    //                //Remove the Selected Row data
+    //                dt.Rows.Remove(dt.Rows[rowID]);
+    //            }
+    //        }
+    //        //Store the current data in ViewState for future reference
+    //        ViewState["CurrentTable"] = dt;
+    //        //Re bind the ListView for the updated data 
+    //        lvAssessment.DataSource = dt;
+    //        lvAssessment.DataBind();
+    //     }
+
+    //    //Set Previous Data on Postbacks
+    //    SetPreviousData();
+    //}
+
+    protected void lvAssessment_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListViewItemType.DataItem)
+        {
+            DataTable dt = (DataTable)ViewState["CurrentTable"];
+
+            ImageButton lb = (ImageButton)e.Item.FindControl("lnkRemove");
+            CheckBox box3 = (CheckBox)e.Item.FindControl("chkStatus");
+
+            if (lb != null && box3 != null)
+            {
+                if (dt.Rows.Count > 1 && box3.Checked)
+                {
+                    lb.Visible = false;
+                }
+                else
+                {
+                    lb.Visible = true;
+                }
+            }
+        }
+       
+    }
+
+    //protected void lvAssessment_ItemDataBound(object sender, ListViewItemEventArgs e)
+    //{
+    //    if (e.Item.ItemType == ListViewItemType.DataItem)
+    //    {
+    //        DataTable dt = (DataTable)ViewState["CurrentTable"];
+
+    //        ImageButton lb = (ImageButton)e.Item.FindControl("lnkRemove");
+
+    //        if (lb != null)
+    //        {
+    //            if (dt.Rows.Count > 1)
+    //            {
+    //                if (e.Item.DisplayIndex == dt.Rows.Count - 1)
+    //                {
+    //                    lb.Visible = false;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                lb.Visible = false;
+    //            }
+    //        }
+    //    }
+    //}
+
+
+
+
+
+
+
+
+    //    if (e.Row.RowType == DataControlRowType.DataRow)
+    //    {
+    //        DataTable dt = (DataTable)ViewState["CurrentTable"];
+    //        // LinkButton lb = (LinkButton)e.Row.FindControl("lnkRemove");
+    //        ImageButton lb = (ImageButton)e.Row.FindControl("lnkRemove");
+
+
+    //        if (lb != null)
+    //        {
+    //            if (dt.Rows.Count > 1)
+    //            {
+    //                if (e.Row.RowIndex == dt.Rows.Count - 1)
+    //                {
+    //                    lb.Visible = false;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                lb.Visible = false;
+    //            }
+    //        }
+    //    }
+    //}
 }

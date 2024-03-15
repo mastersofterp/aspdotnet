@@ -3280,6 +3280,27 @@ namespace IITMS
                     return ds;
                 }
 
+
+                public DataSet PTExportExcel(string MonthYear, int collegeNo, int staffNo)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_TABNAME", MonthYear);
+                        objParams[1] = new SqlParameter("@P_COLLEGNO", collegeNo);
+                        objParams[2] = new SqlParameter("@P_STAFF_NO", staffNo);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_PT_EXPORT_EXCEL_CRESCENT_REPORT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.PayController.LICExportExcel-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
                 public DataSet EPFStatementExcel(string MonthYear, int collegeNo, int staffNo)
                 {
                     DataSet ds = null;

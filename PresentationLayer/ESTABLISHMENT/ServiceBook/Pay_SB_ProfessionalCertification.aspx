@@ -59,6 +59,7 @@
                                                 <asp:ListItem Value="6">NPTEL</asp:ListItem>
                                                 <asp:ListItem Value="7">Orientation Program</asp:ListItem>
                                                 <asp:ListItem Value="8">Refresher Course</asp:ListItem>
+                                                <asp:ListItem Value="9">Certification Course</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvProgramtype" runat="server" ControlToValidate="ddlProgramType"
                                                 Display="None" ErrorMessage="Please Select Program Type" ValidationGroup="ServiceBook"
@@ -87,12 +88,11 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <label>Academic Year : </label>
-                                            <asp:TextBox ID="txtAcadYear" runat="server" CssClass="form-control" MaxLength="5" TabIndex="20"
-                                                ToolTip="Enter Academic Year" autocomplete="off"
-                                                onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
-                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftbAcadYear" runat="server" TargetControlID="txtAcadYear"
-                                                ValidChars="0123456789" Enabled="True">
-                                            </ajaxToolKit:FilteredTextBoxExtender>
+                                            <asp:TextBox ID="txtAcadYear" runat="server" CssClass="form-control" MaxLength="50" TabIndex="20"
+                                                ToolTip="Enter Academic Year" autocomplete="off"></asp:TextBox>
+                                            <%--<ajaxToolKit:FilteredTextBoxExtender ID="ftbAcadYear" runat="server" TargetControlID="txtAcadYear"
+                                                ValidChars="" Enabled="True">
+                                            </ajaxToolKit:FilteredTextBoxExtender>--%>
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -411,19 +411,18 @@
                                         </asp:UpdatePanel>
                                     </div>
                                 </div>
+                                <div class="col-12 btn-footer">
+                                    <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="23"
+                                        CssClass="btn btn-primary" ToolTip="Click here to Submit" OnClick="btnSubmit_Click" />
+                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="24"
+                                        CssClass="btn btn-warning" ToolTip="Click here to Reset" OnClick="btnCancel_Click" />
+                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="ServiceBook"
+                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                 </div>
-                                                <div class="col-12 btn-footer">
-                                                    <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="23"
-                                                        CssClass="btn btn-primary" ToolTip="Click here to Submit" OnClick="btnSubmit_Click" />
-                                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="24"
-                                                        CssClass="btn btn-warning" ToolTip="Click here to Reset" OnClick="btnCancel_Click" />
-                                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="ServiceBook"
-                                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                                                </div>
                             </ContentTemplate>
                             <Triggers>
                                 <%--<asp:PostBackTrigger ControlID="btnUpload" />--%>
-
+                                <asp:PostBackTrigger ControlID="btnCancel" />
                                 <asp:PostBackTrigger ControlID="btnSubmit" />
                             </Triggers>
                         </asp:UpdatePanel>

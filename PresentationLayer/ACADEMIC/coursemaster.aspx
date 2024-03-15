@@ -157,8 +157,8 @@
                                                             <div class="col-12 btn-footer">
                                                                 <asp:Button ID="ModifyCourse" runat="server" OnClick="btnModifyCourse_Click" Text="Modify Existing Course"
                                                                     ValidationGroup="modify" CssClass="btn btn-primary" />
-                                                                <asp:Button ID="btnCheckListReport" runat="server" Text="Check List Report" CssClass="btn btn-info"
-                                                                    OnClick="btnCheckListReport_Click" Visible="false" />
+                                                                <asp:Button ID="btnCheckListReport" runat="server" Text="Course List Report" CssClass="btn btn-info"
+                                                                    OnClick="btnCheckListReport_Click" />
                                                                 <asp:Button ID="btnreportnew" runat="server" CausesValidation="false" OnClick="btnreportnew_Click"
                                                                     Text="Report (Excel)" CssClass="btn btn-info" />
                                                                 <asp:Button ID="btnReset" runat="server" CausesValidation="false" OnClick="btnReset_Click"

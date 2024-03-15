@@ -179,13 +179,19 @@
                                                                                 <table class="tablestyle">
                                                                                     <tr>
                                                                                         <th>
-                                                                                            <span style="color: #247dfd;"><%# Eval("COURSENAME")%>  </span></th>
+                                                                                            <span style="color: #247dfd;"><%# Eval("COURSENAME")%>  </span> <span><%# Eval("SECTIONNAME")%> </span></th>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <th>Type:<span>  <%# Eval("SUBNAME")%> </span>
+                                                                                        <th>Type:<span>  <%# Eval("SUBNAME")%> </span> 
                                                                                         </th>
 
                                                                                     </tr>
+                                                                                    <tr>
+                                                                                        <th> <span><%# Eval("UA_FULLNAME")%> </span>
+                                                                                        </th>
+
+                                                                                    </tr>
+                                                                                    
 
                                                                                 </table>
                                                                             </div>

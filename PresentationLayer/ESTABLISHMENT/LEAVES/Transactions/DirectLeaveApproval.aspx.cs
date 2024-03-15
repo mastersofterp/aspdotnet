@@ -208,19 +208,33 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
                 lblFromdt.Text = ds.Tables[0].Rows[0]["From_date"].ToString();
                 lblTodt.Text = ds.Tables[0].Rows[0]["TO_DATE"].ToString();
                 lblNodays.Text = ds.Tables[0].Rows[0]["NO_OF_DAYS"].ToString();
+                ViewState["No_of_days"] = Convert.ToDouble(ds.Tables[0].Rows[0]["NO_OF_DAYS"].ToString());
                 lblJoindt.Text = ds.Tables[0].Rows[0]["JOINDT"].ToString();
                 lblNoon.Text = ds.Tables[0].Rows[0]["NOON"].ToString();
                 lblReason.Text = ds.Tables[0].Rows[0]["REASON"].ToString();
                 lblAltrArng.Text = ds.Tables[0].Rows[0]["CHARGE_HANDED"].ToString();
                 int lno = Convert.ToInt32(ds.Tables[0].Rows[0]["LNO"]);
                 int idno = Convert.ToInt32(ds.Tables[0].Rows[0]["EMPNO"]);
-                int YR = DateTime.Now.Year;
+                int RNO = 0;
+                RNO = Convert.ToInt32(ds.Tables[0].Rows[0]["RNO"].ToString());
+
+                int YR = 0;// DateTime.Now.Year;
+                if (RNO == 0)
+                {
+                    YR = Convert.ToInt32(ds.Tables[0].Rows[0]["YEAR"].ToString());
+                }
+                else
+                {
+                    YR = Convert.ToInt32(objCommon.LookUp("Payroll_leavetran", "isnull(YEAR,0)", "st=2 and Rno=" + RNO));
+                }   
+
                 DataSet ds1 = objApp.GetLeavesStatus(idno, YR, lno);//Session["idno"]
                 if (ds1.Tables[0].Rows.Count > 0)
                 {
 
                     double total = Convert.ToDouble(ds1.Tables[0].Rows[0]["TOTAL"]);
                     double Bal = Convert.ToDouble(ds1.Tables[0].Rows[0]["bal"]);
+                    ViewState["LeaveBalance"] = Bal;
                     // DataSet dsbal = objCommon.FillDropDown("PAYROLL_LEAVE_APP_ENTRY", "SUM(NO_OF_DAYS) as LEAVES", "", "STATUS IN('A','T') and EMPNO=" + idno + "AND LNO=" + lno, "");
                     double leaves = Convert.ToDouble(objCommon.LookUp("PAYROLL_LEAVE_APP_ENTRY", "ISNULL(SUM(NO_OF_DAYS),0) as LEAVES", "STATUS IN('A','T') and EMPNO=" + idno + "AND LNO=" + lno));
                     // double leaves = Convert.ToDouble(dsbal.Tables [0].Rows [0]["LEAVES"]);
@@ -268,20 +282,31 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
             {
                 if (ViewState["action"].ToString().Equals("edit"))
                 {
-                    CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntryDirectApprvl(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
-                    //cs = Convert.ToInt32(objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0));
-                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    //Added by Piyush Thakre on 23-02-2024
+                    if (Convert.ToDouble(ViewState["LeaveBalance"]) >= Convert.ToDouble(ViewState["No_of_days"]) || Status.Equals("R"))
                     {
-                        lvPendingList.Visible = true;
-                        pnlAdd.Visible = true;
-                        pnlApprove.Visible = false;
-                        ViewState["action"] = null;
-                        objCommon.DisplayMessage("Record Updated Successfully", this);
-                        BindLVLeaveApplPendingList();
-                        clear();
-                        btnShow.Visible = true;
-                        btnCancelAdd.Visible = true;
-                        btnBulkApprove.Visible = true;
+                        CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntryDirectApprvl(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
+                        //cs = Convert.ToInt32(objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0));
+                        if (cs.Equals(CustomStatus.RecordUpdated))
+                        {
+                            lvPendingList.Visible = true;
+                            pnlAdd.Visible = true;
+                            pnlApprove.Visible = false;
+                            ViewState["action"] = null;
+                            objCommon.DisplayMessage("Record Updated Successfully", this);
+                            BindLVLeaveApplPendingList();
+                            clear();
+                            btnShow.Visible = true;
+                            btnCancelAdd.Visible = true;
+                            btnBulkApprove.Visible = true;
+                            ViewState["LeaveBalance"] = null;
+                            ViewState["No_of_days"] = null;
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage("Leave can not Approved!! Applicant have Insufficient Leave Balance.", this);
+                        return;
                     }
                 }
             }
@@ -312,6 +337,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
     {
         txtRemarks.Text = string.Empty;
         ddlSelect.SelectedIndex = 0;
+        lblbal.Text = string.Empty;
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
@@ -328,6 +354,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
         btnShow.Visible = true;
         btnCancelAdd.Visible = true;
         btnBulkApprove.Visible = true;
+        ViewState["LeaveBalance"] = null;
+        ViewState["No_of_days"] = null;
     }
 
     protected void ddlLeaveType_SelectedIndexChanged(object sender, EventArgs e)
@@ -388,21 +416,34 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
             foreach (ListViewDataItem items in lvPendingList.Items)
             {
                 CheckBox chkSelect = items.FindControl("chkSelect") as CheckBox;
+                HiddenField idno = items.FindControl("hdnEmpno") as HiddenField;
+                HiddenField leaveno = items.FindControl("hdnLeaveno") as HiddenField;
+                Label NoOfDays = items.FindControl("noOfDays") as Label;
+
+
+                int IDNO = Convert.ToInt32(idno.Value);
+                int LeaveNo = Convert.ToInt32(leaveno.Value);
+                double noOfDays = Convert.ToDouble(NoOfDays.Text);
 
                 int UA_NO = Convert.ToInt32(Session["userno"]);
                 string Status;
                 Status = Status = "A".ToString().Trim(); //txtRemarks.Text.ToString();
                 //lvPendingList.FindControl 
                 DateTime Aprdate = Convert.ToDateTime(DateTime.Now.Date);
-
                 Remarks = "Approved";
 
                 if (chkSelect.Checked && chkSelect != null)
                 {
                     checkcount = checkcount + 1;
                     LETRNO = Convert.ToInt32(chkSelect.ToolTip);
-                   // cs = Convert.ToInt32(objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0));
-                    CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntryDirectApprvl(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
+                    DataSet ds = objApp.GetBalanceforDirectLeaveApproval(LETRNO, IDNO, LeaveNo);
+                    double bal = Convert.ToDouble(ds.Tables[0].Rows[0]["CLBal"].ToString());
+
+                    if (bal >= noOfDays || Status.Equals("R"))
+                    {
+                        // cs = Convert.ToInt32(objApp.UpdateAppPassEntry(LETRNO, UA_NO, Status, Remarks, Aprdate, 0));
+                        CustomStatus cs = (CustomStatus)objApp.UpdateAppPassEntryDirectApprvl(LETRNO, UA_NO, Status, Remarks, Aprdate, 0);
+                    }
                 }
             }
             if (checkcount == 0)

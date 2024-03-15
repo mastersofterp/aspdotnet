@@ -63,7 +63,7 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
-                                               <%-- <label>Staff</label>--%>
+                                                <%-- <label>Staff</label>--%>
                                                 <label>Employee Type</label>
                                             </div>
                                             <asp:DropDownList ID="ddlEmployeeType" AppendDataBoundItems="true" runat="server" CssClass="form-control" TabIndex="4" data-select2-enable="true"
@@ -95,7 +95,177 @@
                                                 <asp:ListItem Value="4">Name</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Attach Excel File</label>
+                                            </div>
+                                            <asp:FileUpload ID="FileUpload2" runat="server" ToolTip="Select file to upload" TabIndex="2" />
+
+
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+
+                                              <asp:ImageButton ID="imgExportCSV" runat="server" ToolTip="Export to excel"
+                                                ImageUrl="~/Images/ExportCsv.jpg" Height="45px" Width="45px"
+                                                OnClick="imgExportCSV_Click" />
+
+                                            <asp:ImageButton ID="imgbutExporttoexcel" runat="server" ToolTip="Import from excel"
+                                                ImageUrl="~/Images/importcsv.png" Height="45px" Width="45px"
+                                                OnClick="imgbutExporttoexcel_Click" />
+
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Import only exported sheet</label>
+                                            </div>
+
+                                            <asp:Button ID="btnDownlaod" runat="server" Text="Download Attendance Data of Grid" CssClass="btn btn-primary" OnClick="btnDownlaod_Click" TabIndex="3"/>
+                                        </div>
+
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divgrd" runat="server" visible="false">
+                                            <asp:ListView ID="grdSelectFieldReport" runat="server">
+                                                <EmptyDataTemplate>
+                                                    <br />
+                                                    <asp:Label ID="lblerr" SkinID="Errorlbl" runat="server" Text="Click Add New To Enter Earnings And Deducations" />
+                                                </EmptyDataTemplate>
+                                                <LayoutTemplate>
+                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%!important">
+                                                        <thead class="bg-light-blue">
+                                                            <tr>
+                                                                <th>Employee Name</th>
+
+                                                                <th>Employee Code</th>
+
+                                                                <th>Absent Days</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+
+                                                        <td>
+                                                            <%# Eval("EMPNAME")%>
+                                                        </td>
+
+                                                        <td>
+                                                            <%# Eval("PFILENO")%>
+                                                        </td>
+
+                                                        <td>
+                                                            <%# Eval("PAYDAYS")%>
+                                                        </td>
+
+
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </div>
+
+
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <asp:LinkButton ID="btnUpload" runat="server" ValidationGroup="report" CssClass="btn btn-warning" TabIndex="4"
+                                                Text="Upload Excel Sheet" Visible="false" ToolTip="Click to Upload" Enabled="true" AutoPostBack="false" OnClick="btnImport_Click">Upload Attendance Excel</asp:LinkButton>
+
+
+
+                                            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="True">
+                                            </asp:GridView>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <asp:Button ID="btnExport" runat="server" Text="Export to Excel" CssClass="btn btn-primary"
+                                                ToolTip="Click to Export" Visible="false" OnClick="btnExport_Click" />
+
+
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="divRecords" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Already Saved Records</label>
+                                            </div>
+                                            <asp:Label ID="lblValue" runat="server"></asp:Label>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-6 col-12" runat="server" id="divCount" visible="false">
+                                            <ul class="list-group list-group-unbordered">
+                                                <li class="list-group-item" id="divrecexist" runat="server" visible="false"><b>Total Record Already Exist :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblTotalAlreadyExistsCount" runat="server" Text="" Font-Bold="true"></asp:Label></a>
+                                                </li>
+
+                                                <li class="list-group-item" id="divrecupload" runat="server" visible="false"><b>Total Record Uploaded :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblTotalRecordUploadCount" runat="server" Text="" Font-Bold="true"></asp:Label></a>
+                                                </li>
+
+                                                <li class="list-group-item" id="divRecwitherror" runat="server" visible="false"><b>Total Record With Error :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblTotalRecordErrorCount" runat="server" Text="" Font-Bold="true"></asp:Label></a>
+                                                </li>
+
+                                                <li class="list-group-item" id="divtotcount" runat="server" visible="false"><b>TotalCount :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblTotalRecordCount" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                    </a>
+                                                </li>
+                                                <li class="list-group-item" id="divErrorNote" runat="server" visible="false"><b>Note :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblErrorNote" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+
                                     </div>
+                                </div>
+                                <div class="form-group col-12 text-center" id="divNote" runat="server" visible="false">
+                                    <label><span style="color: red">Note: Excel Sheet Data is not imported, Please correct following data and upload the Excel again.</span></label>
+                                </div>
+                                <div class="col-12">
+                                    <asp:ListView ID="LvDescription" runat="server">
+                                        <LayoutTemplate>
+                                            <div class="sub-heading">
+                                                <h5>Data Import Log</h5>
+                                            </div>
+                                            <div class="" style="height: 200px; overflow: scroll;">
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                    <thead class="bg-light-blue">
+                                                        <tr>
+                                                            <th>Row No</th>
+                                                            <th>Description</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </LayoutTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td style="text-align: center">
+                                                    <%# Container.DataItemIndex + 1 %>
+                                                    <%--<asp:HiddenField ID="hfdvalue" runat="server" Value='<%# Eval("RowId") %>' />--%>
+                                                    <%--<%# Eval("RowId") %>--%>
+                                                </td>
+                                                <td>
+                                                    <%--<asp: ID="txtGradeName" runat="server" CssClass="form-control" MaxLength="25" Text='<%# Eval("Column1") %>' ToolTip="Please Enter Grade Name" placeholder="Grade Name"></asp:>--%>
+                                                    <%# Eval("Description") %>
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:ListView>
+                                </div>
+                                <div class="col-12 btn-footer mt-2">
                                 </div>
                                 <asp:Label ID="lblerror" SkinID="Errorlbl" runat="server"></asp:Label>
                                 <asp:Label ID="lblmsg" runat="server" SkinID="lblmsg"></asp:Label>
@@ -125,8 +295,8 @@
                                             <div class="sub-heading">
                                                 <h5>Enter Attendance</h5>
                                             </div>
-                                          <%--  class="table table-striped table-bordered nowrap display"--%>
-                                            <table  style="width: 100%" id="">
+                                            <%--  class="table table-striped table-bordered nowrap display"--%>
+                                            <table style="width: 100%" id="">
                                                 <thead class="bg-light-blue">
                                                     <tr>
                                                         <th>Srno
@@ -218,6 +388,15 @@
             </div>
 
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnExport" />
+            <asp:PostBackTrigger ControlID="btnUpload" />
+            <asp:PostBackTrigger ControlID="imgbutExporttoexcel" />
+            <asp:PostBackTrigger ControlID="imgExportCSV" />
+              <asp:PostBackTrigger ControlID="btnDownlaod" />
+            
+
+        </Triggers>
     </asp:UpdatePanel>
 
     <script type="text/javascript" language="javascript">

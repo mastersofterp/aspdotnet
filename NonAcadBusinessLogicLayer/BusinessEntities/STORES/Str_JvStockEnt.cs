@@ -25,10 +25,11 @@ namespace IITMS
                 public string REMARK { get; set; }
                 public string STORE_USER_TYPE { get; set; }
                 public int REQTRNO { get; set; }
-                public char ISSUE_TYPE { get; set; }
+                public string ISSUE_TYPE { get; set; }
                 public int CREATED_BY { get; set; }
                 public int MODIFIED_BY { get; set; }
                 public int LOCATIONNO { get; set; }              //----31/10/2022
+                public int StudentIdno { get; set; }
                 
 
                 public string COLLEGE_CODE { get; set; }

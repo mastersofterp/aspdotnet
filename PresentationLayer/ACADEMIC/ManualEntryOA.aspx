@@ -90,13 +90,24 @@
                                 </div>
                             </div>
                             <div class="col-12 btn-footer">
-                                <asp:Button ID="btnSubmit" runat="server" Visible="false" Text="Click to Manual Entry" CssClass="btn btn-primary" OnClick="btnSubmit_Click" OnClientClick="return confirm('Click OK to make manual payment entry.');" />
-                                <asp:Button ID="btnCancel" runat="server" Visible="false" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+                                <asp:Button ID="btnSubmit" runat="server" Visible="false" Text="Manual Entry Payment" CssClass="btn btn-primary" OnClick="btnSubmit_Click" OnClientClick="return confirm('Click OK to make manual payment entry.');" />
+                                 <asp:Button ID="btnreceipt" runat="server"  Text="Recipt" CssClass="btn btn-primary" OnClick="btnreceipt_Click" Visible="false" />
+                                  <asp:Button ID="btnCancel" runat="server" Visible="false" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+             <div id="divMsg" runat="server"></div>
+
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnreceipt" />
+            <asp:PostBackTrigger ControlID="btnSubmit" />
+           
+        </Triggers>
     </asp:UpdatePanel>
+   
 </asp:Content>

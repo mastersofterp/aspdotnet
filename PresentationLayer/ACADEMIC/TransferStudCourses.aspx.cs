@@ -17,8 +17,6 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 
-
-
 public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -61,14 +59,14 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
                 if (Request.QueryString["pageno"] != null)
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                 btnSubmit.Enabled = false;
-                txtStudent.Focus();
+                ddlEquivalence.Focus();
+                //txtStudent.Focus();
                 //StoreCurrentData();
+
+                objCommon.FillDropDownList(ddlEquivalence, "ACD_IDTYPE", "DISTINCT IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "IDTYPENO");
 
                 ViewState["Org_Id"] = Convert.ToInt32(Session["OrgId"]);
             }
-
-
-
         }
 
         divMsg.InnerHtml = string.Empty;
@@ -128,11 +126,22 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
             DropDownList ddlNewGrade = dataitem.FindControl("ddlNewGrade") as DropDownList;
             //objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ViewState["SEMESTERNO"].ToString()) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()), "COURSE");
             // objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()), "COURSE");
-            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2)", "COURSE");
+
+            if (ddlEquivalence.SelectedItem.Text.ToString() != "ELECTIVE")
+            {
+                objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2)", "COURSE");
+            }
+            else
+            {
+                //ddlEquivalence.SelectedItem.Text.StartsWith("E");
+
+                objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND ISNULL(C.ELECT,0)=1", "COURSE");
+            }
+
             Session["ddlNewCourseCount"] = Convert.ToString((ddlNewCourse.Items.Count) - 1);
             // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO>0", "SESSIONNO DESC");
 
-            ViewState["UGPGOT"] = objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "UGPGOT", "COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND BRANCHNO=" + Convert.ToInt32(ViewState["BRANCHNO"].ToString()) + " AND ISNULL(ACTIVESTATUS,0)=0");
+            ViewState["UGPGOT"] = objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "UGPGOT", "COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND BRANCHNO=" + Convert.ToInt32(ViewState["BRANCHNO"].ToString()) + " AND ISNULL(ACTIVESTATUS,0)=1");
 
             //objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_GRADE", "DISTINCT GRADENO", "GRADE", "DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND GRADE_TYPE=" + Convert.ToInt32(ViewState["SCHEMETYPE"].ToString()), "GRADENO"); //ViewState["COLLEGE_ID"]
             //objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_COURSE C INNER JOIN ACD_GRADE A ON C.SUBID=A.SUBID", "DISTINCT A.GRADENO", "A.GRADE", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND A.SUBID = (SELECT SUBID FROM ACD_COURSE WHERE COURSENO=" + Convert.ToInt32(ddlNewCourse.SelectedValue) + ") AND A.UGPGOT=" + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "", "GRADENO");
@@ -234,11 +243,27 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
 
                     if (coursenos == "" || coursenos == string.Empty)
                     {
-                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2)", "COURSE");
+                        if (ddlEquivalence.SelectedItem.Text.ToString() != "ELECTIVE")
+                        {
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2)", "COURSE");
+                        }
+                        else
+                        {
+                            //ddlEquivalence.SelectedItem.Text.StartsWith("E");
+
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND ISNULL(C.ELECT,0)=1", "COURSE");
+                        }
                     }
                     else
                     {
-                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+                        if (ddlEquivalence.SelectedItem.Text.ToString() != "ELECTIVE")
+                        {
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+                        }
+                        else
+                        {
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ") AND ISNULL(C.ELECT,0)=1", "COURSE");
+                        }
                     }
 
                     //objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_GRADE", "DISTINCT GRADENO", "GRADE", "DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND GRADE_TYPE=" + Convert.ToInt32(ViewState["SCHEMETYPE"].ToString()), "GRADENO");
@@ -250,7 +275,20 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
 
                     if (!string.IsNullOrEmpty(ViewState["UGPGOT"].ToString()))
                     {
-                        objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_COURSE C INNER JOIN ACD_GRADE A ON C.SUBID=A.SUBID", "DISTINCT A.GRADENO", "A.GRADE", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND A.SUBID = (SELECT SUBID FROM ACD_COURSE WHERE COURSENO=" + Convert.ToInt32(ViewState["Course"].ToString()) + ") AND A.UGPGOT=" + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "", "GRADENO");
+                        //objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_COURSE C INNER JOIN ACD_GRADE A ON C.SUBID=A.SUBID", "DISTINCT A.GRADENO", "A.GRADE", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND A.SUBID = (SELECT SUBID FROM ACD_COURSE WHERE COURSENO=" + Convert.ToInt32(ViewState["Course"].ToString()) + ") AND A.UGPGOT=" + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "", "GRADENO");
+
+                        string proc_name = "PKG_ACD_GRADE_FOR_SUBJECT_EQUIVALENCE";
+                        string param = "@COLLEGE_ID,@COURSENO,@UGPGOT";
+                        string call_values = "" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + "," + Convert.ToInt32(ViewState["NewCourse"].ToString()) + "," + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "";
+                        DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);         //DataGrid dg = new DataGrid();
+
+                        if (ds.Tables.Count > 0)
+                        {
+                            ddlNewGrade.DataSource = ds;
+                            ddlNewGrade.DataTextField = "GRADE";
+                            ddlNewGrade.DataValueField = "GRADENO";
+                            ddlNewGrade.DataBind();
+                        }
                     }
 
                     //}
@@ -389,12 +427,28 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
 
                     if (coursenos == "" || coursenos == string.Empty)
                     {
-                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2)", "COURSE");
+                        if (ddlEquivalence.SelectedItem.Text.ToString() != "ELECTIVE")
+                        {
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2)", "COURSE");
+                        }
+                        else
+                        {
+                            //ddlEquivalence.SelectedItem.Text.StartsWith("E");
+
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND ISNULL(C.ELECT,0)=1", "COURSE");
+                        }
                     }
                     else
                     {
-                        // objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
-                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+                        if (ddlEquivalence.SelectedItem.Text.ToString() != "ELECTIVE")
+                        {
+                            // objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+                        }
+                        else
+                        {
+                            objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ") AND ISNULL(C.ELECT,0)=1", "COURSE");
+                        }
                     }
 
                     //if (ddlNewCourse.SelectedIndex > 0)
@@ -404,7 +458,20 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
 
                     if (!string.IsNullOrEmpty(ViewState["UGPGOT"].ToString()))
                     {
-                        objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_COURSE C INNER JOIN ACD_GRADE A ON C.SUBID=A.SUBID", "DISTINCT A.GRADENO", "A.GRADE", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND A.SUBID = (SELECT SUBID FROM ACD_COURSE WHERE COURSENO=" + Convert.ToInt32(ViewState["NewCourse"].ToString()) + ") AND A.UGPGOT=" + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "", "GRADENO");
+                        //objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_COURSE C INNER JOIN ACD_GRADE A ON C.SUBID=A.SUBID", "DISTINCT A.GRADENO", "A.GRADE", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND A.SUBID = (SELECT SUBID FROM ACD_COURSE WHERE COURSENO=" + Convert.ToInt32(ViewState["NewCourse"].ToString()) + ") AND A.UGPGOT=" + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "", "GRADENO");
+
+                        string proc_name = "PKG_ACD_GRADE_FOR_SUBJECT_EQUIVALENCE";
+                        string param = "@COLLEGE_ID,@COURSENO,@UGPGOT";
+                        string call_values = "" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + "," + Convert.ToInt32(ViewState["NewCourse"].ToString()) + "," + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "";
+                        DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);         //DataGrid dg = new DataGrid();
+
+                        if (ds.Tables.Count > 0)
+                        {
+                            ddlNewGrade.DataSource = ds;
+                            ddlNewGrade.DataTextField = "GRADE";
+                            ddlNewGrade.DataValueField = "GRADENO";
+                            ddlNewGrade.DataBind();
+                        }
                     }
                 }
             }
@@ -489,17 +556,51 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
 
                 if (coursenos == "" || coursenos == string.Empty)
                 {
-                    objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()), "COURSE");
+                    if (ddlEquivalence.SelectedItem.Text.ToString() != "ELECTIVE")
+                    {
+                        //objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()), "COURSE");
+
+                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2)", "COURSE");
+                    }
+                    else
+                    {
+                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND ISNULL(C.ELECT,0)=1", "COURSE");
+                    }
                 }
                 else
                 {
-                    objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+                    if (ddlEquivalence.SelectedItem.Text.ToString() != "ELECTIVE")
+                    {
+                        //objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO AND OC.COURSENO=CT.COURSENO AND CT.SCHEMENO=OC.SCHEMENO AND CT.SEMESTERNO=OC.SEMESTERNO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "ISNULL(CT.CANCEL,0)=0 AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND CT.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+
+                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ")", "COURSE");
+                    }
+                    else
+                    {
+                        objCommon.FillDropDownList(ddlNewCourse, "ACD_COURSE C INNER JOIN ACD_OFFERED_COURSE OC ON (OC.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "(C.CCODE+' - '+C.COURSE_NAME) AS COURSE", "OC.SCHEMENO=" + Convert.ToInt32(ViewState["SCHEMENO"].ToString()) + " AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND OC.DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND OC.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.SUBID IN(1,2) AND C.COURSENO NOT IN(" + coursenos + ") AND ISNULL(C.ELECT,0)=1", "COURSE");
+                    }
                 }
 
                 //objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_GRADE", "DISTINCT GRADENO", "GRADE", "DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"].ToString()) + " AND GRADE_TYPE=" + Convert.ToInt32(ViewState["SCHEMETYPE"].ToString()), "GRADENO");
+
+                if (!string.IsNullOrEmpty(ViewState["UGPGOT"].ToString()))
+                {
+                    //objCommon.FillDropDownList("Please Select", ddlNewGrade, "ACD_COURSE C INNER JOIN ACD_GRADE A ON C.SUBID=A.SUBID", "DISTINCT A.GRADENO", "A.GRADE", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + " AND A.SUBID = (SELECT SUBID FROM ACD_COURSE WHERE COURSENO=" + Convert.ToInt32(ViewState["NewCourse"].ToString()) + ") AND A.UGPGOT=" + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "", "GRADENO");
+
+                    string proc_name = "PKG_ACD_GRADE_FOR_SUBJECT_EQUIVALENCE";
+                    string param = "@COLLEGE_ID,@COURSENO,@UGPGOT";
+                    string call_values = "" + Convert.ToInt32(ViewState["COLLEGE_ID"].ToString()) + "," + Convert.ToInt32(ViewState["NewCourse"].ToString()) + "," + Convert.ToInt32(ViewState["UGPGOT"].ToString()) + "";
+                    DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);         //DataGrid dg = new DataGrid();
+
+                    if (ds.Tables.Count > 0)
+                    {
+                        ddlNewGrade.DataSource = ds;
+                        ddlNewGrade.DataTextField = "GRADE";
+                        ddlNewGrade.DataValueField = "GRADENO";
+                        ddlNewGrade.DataBind();
+                    }
+                }
             }
-
-
 
             int h = Convert.ToInt32(Session["ddlNewCourseCount"].ToString());
             if (dt.Rows.Count < Convert.ToInt32(Session["ddlNewCourseCount"].ToString()))
@@ -554,13 +655,14 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
     private void Clear()
     {
         ddlSemester.SelectedIndex = 0;
+        ddlEquivalence.SelectedIndex = 0;
         txtStudent.Text = string.Empty;
         divlv.Visible = false;
         divdata.Visible = false;
         lvCourse.DataSource = null;
         lvCourse.DataBind();
         btnSubmit.Enabled = false;
-        txtStudent.Focus();
+        ddlEquivalence.Focus();
         btnReport.Enabled = false;
     }
 
@@ -582,13 +684,14 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
             StudentController objSC = new StudentController();
             string idno = "0";
 
-            idno = Convert.ToString(objCommon.LookUp("ACD_STUDENT", "IDNO", "(REGNO='" + txtStudent.Text.Trim() + "' OR ENROLLNO='" + txtStudent.Text.Trim() + "') AND IDTYPE=3 AND ISNULL(ADMCAN,0)=" + 0));
+            //idno = Convert.ToString(objCommon.LookUp("ACD_STUDENT", "IDNO", "(REGNO='" + txtStudent.Text.Trim() + "' OR ENROLLNO='" + txtStudent.Text.Trim() + "') AND IDTYPE=3 AND ISNULL(ADMCAN,0)=" + 0));
+            idno = Convert.ToString(objCommon.LookUp("ACD_STUDENT", "IDNO", "(REGNO='" + txtStudent.Text.Trim() + "' OR ENROLLNO='" + txtStudent.Text.Trim() + "') AND IDTYPE='" + ViewState["IDTYPENO"] + "' AND ISNULL(ADMCAN,0)=" + 0));
 
             if (idno == string.Empty)
             {
                 btnSubmit.Enabled = false;
                 divdata.Visible = false;
-                objCommon.DisplayMessage(UpdatePanel1, "No Transfered Student Found Having Univ. Reg. No. / Admission No. is " + txtStudent.Text, this.Page);
+                objCommon.DisplayMessage(UpdatePanel1, "No Student Found Having Univ. Reg. No. / Admission No. is " + txtStudent.Text, this.Page);
             }
             else
             {
@@ -719,6 +822,7 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
             objSR.REGNO = ViewState["REGNO"].ToString();
             objSR.ROLLNO = ViewState["ROLLNO"].ToString();
             objSR.SEMESTERNO = Convert.ToInt32(ddlSemester.SelectedValue);
+            objSR.SubEquivalence = Convert.ToInt32(ddlEquivalence.SelectedValue);
             objSR.SCHEMENO = Convert.ToInt32(ViewState["SCHEMENO"].ToString());
             objSR.COURSENOS = objSR.COURSENOS + ddlNewCourse.SelectedValue + ",";
             objSR.SECTIONNOS = "";
@@ -809,27 +913,33 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
     {
         try
         {
-            //string procedure = "PKG_ACD_GET_TRANSFER_COURSE_EQUI_DETAILS";
-            //string parameter = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO";
-            //string values = "" + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "";
-            //DataSet ds = objCommon.DynamicSPCall_Select(procedure, parameter, values);
-            //return;
+            string procedure = "PKG_ACD_GET_TRANSFER_COURSE_EQUI_DETAILS";
+            string parameter = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_SUB_EQUI";
+            string values = "" + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlEquivalence.SelectedValue) + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(procedure, parameter, values);
 
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-
-            if (reportno == 1)
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+
+                if (reportno == 1)
+                {
+                    url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SUB_EQUI=" + Convert.ToInt32(ddlEquivalence.SelectedValue) + "";
+                }
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "controlJSScript", sb.ToString(), true);
             }
-
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            sb.Append(@"window.open('" + url + "','','" + features + "');");
-
-            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "controlJSScript", sb.ToString(), true);
+            else
+            {
+                objCommon.DisplayMessage(this.UpdatePanel1, "No Data Found for this selection.", this.Page);
+            }
         }
         catch (Exception ex)
         {
@@ -848,5 +958,18 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
     protected void ddlExamType_SelectedIndexChanged(object sender, EventArgs e)
     {
         StoreCurrentData();
+    }
+
+    protected void ddlEquivalence_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlEquivalence.SelectedIndex > 0)
+        {
+            divlv.Visible = false;
+            divdata.Visible = false;
+
+            txtStudent.Text = "";
+            txtStudent.Focus();
+            ViewState["IDTYPENO"] = ddlEquivalence.SelectedValue;
+        }
     }
 }

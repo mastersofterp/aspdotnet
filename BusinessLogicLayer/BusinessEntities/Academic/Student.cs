@@ -437,6 +437,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         private string _motherpanno = string.Empty;
         private string _fatherpanno = string.Empty;
 
+        // Added By Shrikant W. on 29022024
+        private int _ews = 0;
         //methods
 
         #region Public Property Fields
@@ -2512,6 +2514,12 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
          {
              get { return _motherpanno; }
              set { _motherpanno = value; }
+         }
+
+         public int EWS
+         {
+             get { return _ews; }
+             set { _ews = value; }
          }
 
 

@@ -1429,6 +1429,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
             HiddenField hdnExtraClass = item.FindControl("hdnExtraClass") as HiddenField;
             HiddenField hdnAttendanceNo = item.FindControl("hdnAttendanceNo") as HiddenField;
             HiddenField hdnTopicCoveredStatus = item.FindControl("hdnTopicCoveredStatus") as HiddenField;
+            HiddenField hdnAttendanceStatus = item.FindControl("hdnAttendanceStatus") as HiddenField;
             schemeno = Convert.ToInt32(hdnScheme.Value);
             sem = Convert.ToInt32(hfvSem.Value);
             sectionno = Convert.ToInt32(hfvSection.Value);
@@ -1503,8 +1504,9 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                         ddlTopicCovered.Visible = true;
                         divTopicCoveredStatus.Visible = true;
                         this.BindTopicCovered();
-                       // ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString();
+                        // ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString();
                         ddltopicstatus.SelectedValue = hdnTopicCoveredStatus.Value == null || hdnTopicCoveredStatus.Value == "" || hdnTopicCoveredStatus.Value == "0" ? "1" : hdnTopicCoveredStatus.Value.ToString();
+                        ddlStatus.SelectedValue = hdnAttendanceStatus.Value == null || hdnAttendanceStatus.Value == "" || hdnAttendanceStatus.Value == "0" ? "1" : hdnAttendanceStatus.Value.ToString();
                         txtTopcDesc.Visible = false;
                         //txtTopcDesc.Text = objCommon.LookUp("ACD_COURSE_TEACHER T INNER JOIN ACD_TEACHINGPLAN TP ON (T.SESSIONNO = TP.SESSIONNO AND T.SEMESTERNO = TP.TERM AND (T.CCODE  = TP.CCODE AND T.COURSENO = TP.COURSENO) AND T.UA_NO = TP.UA_NO)", "DISTINCT TP.TOPIC_COVERED", "(T.UA_NO=" + uano + " OR T.ADTEACHER =" + uano + ") AND T.COURSENO =" + courseno + "  AND (T.BATCHNO =" + batchno + " OR T.BATCHNO =" + batchno + ") AND ISNULL(T.CANCEL,0)=0 AND T.SESSIONNO =" + sessionno + "  AND CAST(TP.[DATE] AS DATE) = CAST(CONVERT(DATE,'" + date.ToString("dd/MM/yyyy") + "',103) AS DATE)");
                         ddlClassType.SelectedValue = TranType.ToString();
@@ -1647,9 +1649,9 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             {
                                 //txtTopcDesc.Text = Convert.ToString(ds1.Tables[0].Rows[0]["TOPIC_COVERED"]);//stored uano of faculty who has been submitted att.
                                 ddlClassType.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["CLASS_TYPE"]) == null ? "0" : Convert.ToString(ds1.Tables[0].Rows[0]["CLASS_TYPE"]);
-                                ddlStatus.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["ATTENDANCE_STATUS"]) == null ? "1" : Convert.ToString(ds1.Tables[0].Rows[0]["ATTENDANCE_STATUS"]);
+                                ddlStatus.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["ATTENDANCE_STATUS"]) == null ? "1" : Convert.ToString(ds1.Tables[0].Rows[0]["ATTENDANCE_STATUS"]); //Added by Rishabh on 29/02/2024 for binding selected value as attendance status
                                 ddlCONumber.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["CO_NUM"]) == null ? "0" : Convert.ToString(ds1.Tables[0].Rows[0]["CO_NUM"]);
-                                ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
+                                //ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
                                 ddltopicstatus.SelectedValue = Convert.ToString(ds1.Tables[0].Rows[0]["TC_STATUS"]) == null || Convert.ToString(ds1.Tables[0].Rows[0]["TC_STATUS"]) == "0" ? "1" : Convert.ToString(ds1.Tables[0].Rows[0]["TC_STATUS"]); //Added by rishabh on 05/05/23 - topic covered status
                                 txtTopcDesc.Visible = false;
                                 ddlTopicCovered.Visible = true;
@@ -1677,7 +1679,23 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             txtTopcDesc.Visible = false;
                             ddlTopicCovered.Visible = true;
                             divTopicCoveredStatus.Visible = true;
-                            ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
+                            ddltopicstatus.SelectedValue = hdnTopicCoveredStatus.Value == null || hdnTopicCoveredStatus.Value == "" || hdnTopicCoveredStatus.Value == "0" ? "1" : hdnTopicCoveredStatus.Value.ToString();
+                            //ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString(); //Added by Rishabh on 28/02/2023 for alternate attendance with teaching plan
+                        }
+                        if (string.IsNullOrEmpty(hdnAttendanceNo.Value))
+                            ddlTopicCovered.DataValueField = "0";
+                        else
+                        {
+                            if (ddlTopicCovered.Items.Count > 0)
+                            {
+                                foreach (ListItem itm in ddlTopicCovered.Items)
+                                {
+                                    if (hdnAttendanceNo.Value.Contains(itm.Value))
+                                        itm.Selected = true;
+                                }
+                            }
+                            else
+                                return;
                         }
                     }
                     else
@@ -2010,7 +2028,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                     }
                 }
 
-                if (string.IsNullOrEmpty(objAttModel.TpNos))
+                if (string.IsNullOrEmpty(objAttModel.TpNos) && (Convert.ToInt32(ddlStatus.SelectedValue) == 1 || Convert.ToInt32(ddlStatus.SelectedValue) == 2))
                 {
                     objCommon.DisplayMessage(updTeachingPlan, "Please select Atleast one Topic.", this.Page);
                     return;
@@ -2773,7 +2791,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static int CopyAttendance(int slotno, int att_no, int class_type, int att_status, string topic_desc, int Tpno)
+    public static int CopyAttendance(int slotno, int att_no, int class_type, int att_status, string topic_desc, string Tpno)
     {
         AcdAttendanceController objAttController = new AcdAttendanceController();
         int outval = 0;

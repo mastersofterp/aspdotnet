@@ -25,12 +25,26 @@
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
-                            <h3 class="box-title">Transfered Student Subject Equivalence</h3>
+                            <h3 class="box-title">Student Subject Equivalence</h3>
                         </div>
 
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Equivalence</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlEquivalence" runat="server" AppendDataBoundItems="True"
+                                            CssClass="form-control" AutoPostBack="true"
+                                            TabIndex="1" data-select2-enable="true" OnSelectedIndexChanged="ddlEquivalence_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="ddlEquivalence"
+                                            Display="None" ErrorMessage="Please Select Equivalence" InitialValue="0" ValidationGroup="search"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                    </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>

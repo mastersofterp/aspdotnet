@@ -813,13 +813,14 @@
                                                                 <h5>Term & Conditions</h5>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <%--<div class="form-group col-lg-3 col-md-6 col-12">--%>
+                                                          <div class="col-6">
                                                             <div class="label-dynamic">
                                                                 <sup></sup>
                                                                 <label>Note/Matter/Terms & Conditions</label>
                                                             </div>
                                                             <asp:TextBox ID="txtFooter" runat="server" CssClass="form-control" TextMode="MultiLine" Height="50px"
-                                                                onkeyDown="checkTextAreaMaxLength(this,event,'500');" onkeyup="textCounter(this, this.form.remLen, 500);"></asp:TextBox>
+                                                                ></asp:TextBox><%--onkeyDown="checkTextAreaMaxLength(this,event,'500');" onkeyup="textCounter(this, this.form.remLen, 500);"--%>
 
                                                         </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -889,8 +890,17 @@
                                                         <sup></sup>
                                                         <label>Signature Authority.</label>
                                                     </div>
-                                                    <asp:RadioButton runat="server" ID="rdDirector" Text="Vice Chancellor" GroupName="g1" Checked="True" />
-                                                    <asp:RadioButton runat="server" ID="rdforDirector" Text="For Vice Chancellor" GroupName="g1" />
+
+                                                    <asp:RadioButtonList ID="rdblSignatureAuthority" runat="server" GroupName="g1" AppendDataBoundItems="true" RepeatDirection="Horizontal">
+                                                        <asp:ListItem Value="1" Text="Chancellor" Selected="True" ></asp:ListItem>
+                                                        <asp:ListItem Value="2" Text="Pro Chancellor"></asp:ListItem>
+                                                        <asp:ListItem Value="3" Text="Special Officer"></asp:ListItem></asp:RadioButtonList>
+
+                                                 
+
+                                                    <%--<asp:RadioButton runat="server" ID="rdDirector" Text="Chancellor" GroupName="g1" Checked="True" />
+                                                    <asp:RadioButton runat="server" ID="rdforDirector" Text="Pro Chancellor" GroupName="g1" />
+                                                     <asp:RadioButton runat="server" ID="rdspcloffcr" Text="Special Officer" GroupName="g1" />--%>
                                                 </div>
 
                                             </asp:Panel>
@@ -1132,6 +1142,7 @@
                                 <div class="col-12 btn-footer">
                                     <asp:Button runat="server" ID="btnRpt" Text="View Purchase Order for Tender" CssClass="btn btn-primary" OnClick="btnRpt_Click" />
                                     <asp:Button runat="server" ID="btnPOReport" Text="Show Report" CssClass="btn btn-info" OnClick="btnPOReport_Click" ValidationGroup="POReport" />
+                                    <asp:Button runat="server" ID="btnPOReportFormat2" Text="Show Report Format2" CssClass="btn btn-info" OnClick="btnPOReportFormat2_Click" ValidationGroup="POReport" />
                                     <asp:Button runat="server" ID="btnQuoRept" Text="PO Report" CssClass="btn btn-info" OnClick="btnQuoRept_Click" Visible="false" />
                                     <asp:Button runat="server" ID="btnPOApprovalRpt" Text="PO Approval Report" Visible="false" CssClass="btn btn-info" OnClick="btnPOApprovalRpt_Click1" />
                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ValidationGroup="POReport" ShowMessageBox="true" ShowSummary="false" />

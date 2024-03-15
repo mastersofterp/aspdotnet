@@ -2379,6 +2379,78 @@ namespace IITMS
                     }
                 }
 
+                // Added on 03-02-2024 Employee Transfer
+                private int _EMPLOYEETRANSFERID;
+                public int EMPLOYEETRANSFERID
+                {
+                    set
+                    {
+                        _EMPLOYEETRANSFERID = value;
+                    }
+                    get
+                    {
+                        return _EMPLOYEETRANSFERID;
+                    }
+                }
+
+                private System.Nullable<System.DateTime> _EMPTRANSFERDATE = DateTime.MinValue;
+
+                public System.Nullable<System.DateTime> EMPTRANSFERDATE
+                {
+                    get { return _EMPTRANSFERDATE; }
+                    set { _EMPTRANSFERDATE = value; }
+                }
+
+                private string _EMPTRANSFERRESASON;
+
+                public string EMPTRANSFERRESASON
+                {
+                    get { return _EMPTRANSFERRESASON; }
+                    set { _EMPTRANSFERRESASON = value; }
+                }
+
+                private int _OLDEMPCOLLEGENO;
+                private int _NEWEMPCOLLEGENO;
+
+                public int OLDEMPCOLLEGENO
+                {
+                    set
+                    {
+                        _OLDEMPCOLLEGENO = value;
+                    }
+                    get
+                    {
+                        return _OLDEMPCOLLEGENO;
+                    }
+
+                }
+
+                public int NEWEMPCOLLEGENO
+                {
+                    set
+                    {
+                        _NEWEMPCOLLEGENO = value;
+                    }
+                    get
+                    {
+                        return _NEWEMPCOLLEGENO;
+                    }
+                }
+
+                private int _EMPTRANSFERIDNO;
+                public int EMPTRANSFERIDNO
+                {
+
+                    set
+                    {
+                        _EMPTRANSFERIDNO = value;
+                    }
+                    get
+                    {
+                        return _EMPTRANSFERIDNO;
+                    }
+                }
+
             }
 
 

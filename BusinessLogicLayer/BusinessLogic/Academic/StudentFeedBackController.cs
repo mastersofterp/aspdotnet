@@ -360,14 +360,14 @@ namespace IITMS
                     return ds;
                 }
 
-                public int AddFeedbackQuestion(StudentFeedBack SFB, int calcstatus, string ansoptiontype, int seqno, int queheader, int coursetype, int choisefor)
+                public int AddFeedbackQuestion(StudentFeedBack SFB, int calcstatus, string ansoptiontype, int seqno, int queheader, int coursetype, int choisefor, int ismandatory)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[15];
+                        objParams = new SqlParameter[16];
                         //objParams[0] = new SqlParameter("@P_SUBID", SFB.SubId);
                         objParams[0] = (SFB.SubId != 0) ? new SqlParameter("@P_SUBID", SFB.SubId) : new SqlParameter("@P_SUBID", DBNull.Value);
                         objParams[1] = new SqlParameter("@P_CTID", SFB.CTID);
@@ -383,8 +383,9 @@ namespace IITMS
                         objParams[11] = new SqlParameter("@P_QUESTION_HEADER", queheader);  //added by nehal on 26062023
                         objParams[12] = new SqlParameter("@P_COURSETYPE", coursetype);  //Added by Nehal N 25/08/2023
                         objParams[13] = new SqlParameter("@P_CHOISEFOR", choisefor);  //Added by Nehal N 25/08/2023
-                        objParams[14] = new SqlParameter("@P_OUT", SFB.Out);
-                        objParams[14].Direction = ParameterDirection.Output;
+                        objParams[14] = new SqlParameter("@P_ISMANDATORY", ismandatory); 
+                        objParams[15] = new SqlParameter("@P_OUT", SFB.Out);
+                        objParams[15].Direction = ParameterDirection.Output;
                         object ret = (objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_FEEDBACK_QUESTION", objParams, true));
                         if (ret.ToString() == "1" && ret != null)
                         {
@@ -408,7 +409,7 @@ namespace IITMS
                 }
 
 
-                public int UpdateFeedbackQuestion(StudentFeedBack SFB, int calculationstatus, string ansoptiontype, int seqno, int queheader, int coursetype, int choisefor)
+                public int UpdateFeedbackQuestion(StudentFeedBack SFB, int calculationstatus, string ansoptiontype, int seqno, int queheader, int coursetype, int choisefor,int ismandatory)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
 
@@ -418,7 +419,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
                         //update
-                        objParams = new SqlParameter[15];
+                        objParams = new SqlParameter[16];
                         objParams[0] = new SqlParameter("@P_QUESTIONID", SFB.QuestionId);
                         //objParams[1] = new SqlParameter("@P_SUBID", SFB.SubId);
                         objParams[1] = (SFB.SubId != 0) ? new SqlParameter("@P_SUBID", SFB.SubId) : new SqlParameter("@P_SUBID", DBNull.Value);
@@ -434,8 +435,9 @@ namespace IITMS
                         objParams[11] = new SqlParameter("@P_QUESTION_HEADER", queheader);  //added by nehal on 26062023
                         objParams[12] = new SqlParameter("@P_COURSETYPE", coursetype);  //Added by Nehal N 25/08/2023
                         objParams[13] = new SqlParameter("@P_CHOISEFOR", choisefor);  //Added by Nehal N 25/08/2023
-                        objParams[14] = new SqlParameter("@P_OUT", SFB.Out);
-                        objParams[14].Direction = ParameterDirection.Output;
+                        objParams[14] = new SqlParameter("@P_ISMANDATORY", ismandatory);
+                        objParams[15] = new SqlParameter("@P_OUT", SFB.Out);
+                        objParams[15].Direction = ParameterDirection.Output;
 
                         object ret = (objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_FEEDBACK_UPD_QUESTION", objParams, true));
                         if (ret.ToString() == "2" && ret != null)

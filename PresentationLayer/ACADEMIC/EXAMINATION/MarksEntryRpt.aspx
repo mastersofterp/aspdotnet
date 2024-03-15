@@ -38,8 +38,8 @@
                                                 AutoPostBack="True" OnSelectedIndexChanged="ddlcollege_SelectedIndexChanged">
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvcollege" runat="server" ControlToValidate="ddlcollege"
-                                        Display="None" ErrorMessage="Please Select College Scheme." InitialValue="0" SetFocusOnError="True"
-                                        ValidationGroup="show"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select College Scheme." InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="show"></asp:RequiredFieldValidator>
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12 form-group">
                                             <div class="label-dynamic">
@@ -51,8 +51,12 @@
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
-                                        Display="None" ErrorMessage="Please Select Session." InitialValue="0" SetFocusOnError="True"
-                                        ValidationGroup="show"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select Session." InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="show"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSession"
+                                                Display="None" ErrorMessage="Please Select Session." InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="Excel"></asp:RequiredFieldValidator>
+
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12 form-group">
                                             <div class="label-dynamic">
@@ -64,8 +68,11 @@
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvsemester" runat="server" ControlToValidate="ddlsemester"
-                                        Display="None" ErrorMessage="Please Select Semester." InitialValue="0" SetFocusOnError="True"
-                                        ValidationGroup="show"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select Semester." InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="show"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlsemester"
+                                                Display="None" ErrorMessage="Please Select Semester." InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="Excel"></asp:RequiredFieldValidator>
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12 form-group">
                                             <div class="label-dynamic">
@@ -78,9 +85,9 @@
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvSubjectType" runat="server" ControlToValidate="ddlSubjectType"
-                                        Display="None" ErrorMessage="Please Select Subject Type." InitialValue="0" SetFocusOnError="true"
-                                        ValidationGroup="show">
-                                    </asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select Subject Type." InitialValue="0" SetFocusOnError="true"
+                                                ValidationGroup="show">
+                                            </asp:RequiredFieldValidator>
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12 form-group">
                                             <div class="label-dynamic">
@@ -92,8 +99,8 @@
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvCourse" runat="server" ControlToValidate="ddlCourse"
-                                        Display="None" ErrorMessage="Please Select Course Name." InitialValue="0" SetFocusOnError="True"
-                                        ValidationGroup="show"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select Course Name." InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="show"></asp:RequiredFieldValidator>
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12 form-group d-none">
                                             <div class="label-dynamic">
@@ -115,9 +122,13 @@
                                         Text=" Internal Mark In PDF(Course Wise)" CssClass="btn btn-info" OnClick="btnInMrkPDF_Click" Visible="true" />
                                     <asp:Button ID="btnWeightarpt" TabIndex="20" runat="server" ValidationGroup="show"
                                         Text="Internal Weightagewise Report" CssClass="btn btn-info" OnClick="btnWeightarpt_Click" Visible="true" />
-                                    <asp:Button ID="btnCancel2" runat="server" TabIndex="23" OnClick="btnCancel2_Click"
+                                    <asp:Button ID="BtnExcelReport" TabIndex="1" runat="server" Text="Internal Mark Details" 
+                                        CssClass="btn btn-info" OnClick="BtnExcelReport_Click" ValidationGroup="Excel"  />
+                                    <asp:Button ID="btnCancel2" runat="server" TabIndex="1" OnClick="btnCancel2_Click"
                                         Text="Cancel" CssClass="btn btn-warning" />
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary1" ValidationGroup="show" DisplayMode="List"
+                                        ShowSummary="false" ShowMessageBox="true" />
+                                    <asp:ValidationSummary runat="server" ID="ValidationSummary2" ValidationGroup="Excel" DisplayMode="List"
                                         ShowSummary="false" ShowMessageBox="true" />
                                 </div>
                             </asp:Panel>
@@ -128,6 +139,8 @@
             <div id="divMsg" runat="server">
             </div>
         </ContentTemplate>
-
+        <Triggers>
+            <asp:PostBackTrigger ControlID="BtnExcelReport" />
+        </Triggers>
     </asp:UpdatePanel>
 </asp:Content>

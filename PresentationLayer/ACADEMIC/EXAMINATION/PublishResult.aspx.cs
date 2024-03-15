@@ -17,6 +17,12 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 using System.Globalization;
+using System.Threading.Tasks;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Text;
+using System.Web.Script.Serialization;
+using System.Collections.Generic;
 
 public partial class ACADEMIC_PublishResult : System.Web.UI.Page
 {
@@ -312,6 +318,8 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
                 }
             }
             string ids = string.Empty;
+            string stuids = string.Empty;
+            
             ids = GetStudentID();
             if (ids != "0")
             {
@@ -333,10 +341,35 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
                 //    result = objResult.AddPublishResult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlScheme.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlStatus.SelectedValue), GetStudentID(), 1, Session["IPADDRESS"].ToString(), txtRemark.Text, "EXTERMARK", Convert.ToInt32(Session["userno"].ToString()));
 
                 //}
+                foreach (ListViewDataItem item in lvStudent.Items)
+                {
+                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                    HiddenField hdfuserno = item.FindControl("hidIdNo") as HiddenField;
+                    if (chk.Checked == true)
+                    {
+                       // ids += ((item.FindControl("lblStudname")) as HiddenField).Value + ",";
+                        stuids += hdfuserno.Value + ",";
+                    }
+                }
+
+                stuids = stuids.TrimEnd(',');
+
                 if (result == 1)
                 {
                     objCommon.DisplayMessage(updUpdate, "Result Publish Successfully!!!", this.Page);
                     BindListView();
+                   string title=("Result Publish");
+                   string Sessionname = objCommon.LookUp("ACD_SESSION_MASTER", "SESSION_PNAME", "SESSIONNO="+Convert.ToInt32(ddlSession.SelectedValue)+"");
+                   string msg = ("Dear Student , your result of examination " + Sessionname + " has been published.");
+
+                   //string ua_nos = ids;
+                   string ua_nos = stuids;
+                   Task<string> task = DecryptPass(ua_nos, title, msg);
+                   var status = task;
+
+                   //string task = DecryptPass(ua_nos, title, msg);
+                
+
                 }
 
                 else
@@ -357,6 +390,112 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         }
 
     }
+
+    public static async Task<string> DecryptPass(string Uanos, string Title, string msg)
+    {
+        try
+        {
+            Common objcommon = new Common();
+            string sitename = objcommon.LookUp("APP_DETAILS", "APP_API_URL", "ID >0 ");
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls;
+            string URL = "" + sitename + "/api/v2/Notification/SendNotification";
+           // string URL = "sitename/api/v2/Notification/SendNotification";
+            var formData = new Dictionary<string, string>
+           {
+              { "uaNos", Uanos },
+              { "Message", msg}  ,    
+              { "Title", Title}  
+           };
+
+            using (var client = new HttpClient())
+            {
+
+                var content = new FormUrlEncodedContent(formData);
+
+                //var jsonContent = new StringContent(JsonConvert.SerializeObject(new
+                //{
+                //    uaNos = ,
+                //    Message = msg,
+                //    Title = Title
+
+                //}), Encoding.UTF8, "application/json");
+
+
+                var result = await client.PostAsync(URL, content);
+
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    throw new ArgumentException("something bad happended");
+                }
+               
+                string res = await result.Content.ReadAsStringAsync();
+
+                JavaScriptSerializer serializer1 = new JavaScriptSerializer();
+                MyObj obje = serializer1.Deserialize<MyObj>(res);
+
+                return obje.DecryptedString;
+            }
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
+
+    }
+    class MyObj
+    {
+        public string DecryptedString { get; set; }
+
+    }
+    //public static string DecryptPass(string Uanos,string Title,string msg)
+    //{
+
+    //    string URL = "https://androidapipcentest.mastersofterp.in/api/v2//Notification/SendNotification";
+    //   //var token = "671326ff-a69c-4b5a-88f2-cfe076301c01";
+    //    using (var client = new HttpClient())
+    //    {
+    //        var jsonContent = new StringContent(JsonConvert.SerializeObject(new
+    //        {
+     
+    //            uaNos =Uanos,
+    //            Message=msg,
+    //            Title = Title
+
+
+    //        }), Encoding.UTF8, "application/json");
+
+
+    //        //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+
+
+    //        var result = client.PostAsync(URL, jsonContent);
+
+
+    //        //if (!result.IsSuccessStatusCode)
+    //        //{
+    //        //    throw new ArgumentException("something bad happended");
+    //        //}
+    //        //string json = client.result();
+
+    //            //var res = result;
+         
+
+    //        JavaScriptSerializer serializer1 = new JavaScriptSerializer();
+    //        MyObj obje = serializer1.Deserialize<MyObj>(result.ToString());
+    //       // var object1 = serializer1.Deserialize<MyObj>(res);
+
+
+
+    //        return result.ToString();
+    //    }
+
+    //}
+   //public class MyObj
+   // {
+   //     public string Decrypted { get; set; }
+
+   // }
 
     private void ClearControl()
     {
@@ -495,7 +634,15 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
             //dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlScheme.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlExamName.SelectedValue), Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue));
             //dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlExamName.SelectedValue), Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
             //dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue),  Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
-            dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue));
+
+            string sp_procedure = "PKG_ACAD_GET_STUDENT_FOR_PUBLISHRESULT";
+            string sp_parameters = "@P_SESSIONNO,@P_DEGREENO,@P_SEMESTERNO,@P_PREV_STATUS,@P_COLLEGE_ID,@P_OUT";
+            string sp_callValues = "" + (Convert.ToInt32(ddlSession.SelectedValue))+ "," + Convert.ToInt32(ddlDegree.SelectedValue) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlExamType.SelectedValue) + ","+Convert.ToInt32(ddlClgname.SelectedValue)+","+0+"";
+
+               dsShowData = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+            
+            
+           // dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue));
 
 
             if (dsShowData.Tables[0].Rows.Count > 0)

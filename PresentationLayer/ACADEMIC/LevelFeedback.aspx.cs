@@ -1,4 +1,5 @@
 ﻿using IITMS;
+using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
@@ -22,6 +23,7 @@ public partial class LevelFeedback : System.Web.UI.Page
     string branchno = string.Empty;
     string sessionno = string.Empty;
     string collegeid = string.Empty;
+    string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -496,7 +498,8 @@ public partial class LevelFeedback : System.Web.UI.Page
         {
             if (true)
             {
-                DataSet ds = objSFBC.GetFeedBackQuestionForMaster(objSEB);
+                //DataSet ds = objSFBC.GetFeedBackQuestionForMaster(objSEB);
+                DataSet ds = GetFeedBackQuestionForMaster(objSEB);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     lblcrse.Visible = true;
@@ -632,6 +635,28 @@ public partial class LevelFeedback : System.Web.UI.Page
         }
     }
 
+    public DataSet GetFeedBackQuestionForMaster(StudentFeedBack SFB)
+    {
+        DataSet ds = null;
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(connectionString);
+            SqlParameter[] objParams = null;
+            objParams = new SqlParameter[6];
+            objParams[0] = new SqlParameter("@P_CTID", SFB.CTID);
+            objParams[1] = new SqlParameter("@P_SUBID", SFB.SubId);
+            objParams[2] = new SqlParameter("@P_SEMESTERNO", SFB.SemesterNo);
+            objParams[3] = new SqlParameter("@P_IDNO", SFB.Idno);
+            objParams[4] = new SqlParameter("@P_UA_NO", SFB.UA_NO);
+            objParams[5] = new SqlParameter("@P_COURSENO", SFB.CourseNo);
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_GET_FEEDBACK_QUESTION_LIST", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentRegistration.GetFeedBackQuestion-> " + ex.ToString());
+        }
+        return ds;
+    }
     //to check page is authorized or not
     private void CheckPageAuthorization()
     {
@@ -741,6 +766,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     Label lblCourse = dataitem.FindControl("lblCourse") as Label;
                     TextBox txtcourse = dataitem.FindControl("txtcourse") as TextBox;
                     HiddenField hfOPTION_TYPE = dataitem.FindControl("hfOPTION_TYPE") as HiddenField;
+                    HiddenField hdnIsMandatory = dataitem.FindControl("hdnIsMandatory") as HiddenField;
 
                     int dataItemIndex = 0;
                     //int index = lvCourse.Items.IndexOf(dataitem.rblCourse);
@@ -751,24 +777,27 @@ public partial class LevelFeedback : System.Web.UI.Page
 
                     }
 
-                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true) || (txtcourse.Text == "" && txtcourse.Visible == true))
+                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true && Convert.ToInt32(hdnIsMandatory.Value) == 1) || (txtcourse.Text == "" && txtcourse.Visible == true && Convert.ToInt32(hdnIsMandatory.Value) == 1))
                     {
                         objCommon.DisplayMessage("You must have to answer all the questions", this.Page);
                         return;
                     }
                     else
                     {
-                        if (hfOPTION_TYPE.Value == "R")
+                        if (Convert.ToInt32(hdnIsMandatory.Value) == 1)
                         {
-                            //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
-                            //objSEB.QuestionIds += lblCourse.Text + ",";
-                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
-                        }
-                        else if (hfOPTION_TYPE.Value == "T")
-                        {
-                            //objSEB.AnswerIds += txtcourse.Text + ",";
-                            //objSEB.QuestionIds += lblCourse.Text + ",";
-                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
+                            if (hfOPTION_TYPE.Value == "R")
+                            {
+                                //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
+                                //objSEB.QuestionIds += lblCourse.Text + ",";
+                                dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
+                            }
+                            else if (hfOPTION_TYPE.Value == "T")
+                            {
+                                //objSEB.AnswerIds += txtcourse.Text + ",";
+                                //objSEB.QuestionIds += lblCourse.Text + ",";
+                                dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
+                            }
                         }
                     }
                 }
@@ -1778,6 +1807,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     Label lblCourse = dataitem.FindControl("lblCourse") as Label;
                     TextBox txtcourse = dataitem.FindControl("txtcourse") as TextBox;
                     HiddenField hfOPTION_TYPE = dataitem.FindControl("hfOPTION_TYPE") as HiddenField;
+                    HiddenField hdnIsMandatory = dataitem.FindControl("hdnIsMandatory") as HiddenField;
 
                     int dataItemIndex = 0;
                     //int index = lvCourse.Items.IndexOf(dataitem.rblCourse);
@@ -1788,24 +1818,27 @@ public partial class LevelFeedback : System.Web.UI.Page
 
                     }
 
-                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true) || (txtcourse.Text == "" && txtcourse.Visible == true))
+                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true && Convert.ToInt32( hdnIsMandatory.Value) == 1) || (txtcourse.Text == "" && txtcourse.Visible == true && Convert.ToInt32( hdnIsMandatory.Value) == 1))
                     {
                         objCommon.DisplayMessage("You must have to answer all the questions", this.Page);
                         return;
                     }
                     else
                     {
-                        if (hfOPTION_TYPE.Value == "R")
+                        if (Convert.ToInt32(hdnIsMandatory.Value) == 1)
                         {
-                            //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
-                            //objSEB.QuestionIds += lblCourse.Text + ",";
-                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
-                        }
-                        else if (hfOPTION_TYPE.Value == "T")
-                        {
-                            //objSEB.AnswerIds += txtcourse.Text + ",";
-                            //objSEB.QuestionIds += lblCourse.Text + ",";
-                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
+                            if (hfOPTION_TYPE.Value == "R")
+                            {
+                                //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
+                                //objSEB.QuestionIds += lblCourse.Text + ",";
+                                dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
+                            }
+                            else if (hfOPTION_TYPE.Value == "T")
+                            {
+                                //objSEB.AnswerIds += txtcourse.Text + ",";
+                                //objSEB.QuestionIds += lblCourse.Text + ",";
+                                dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
+                            }
                         }
                     }
                 }

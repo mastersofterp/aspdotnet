@@ -91,7 +91,7 @@ public partial class Administration_courseMaster : System.Web.UI.Page
 
                 //Populate the DropDownList 
                 PopulateDropDown();
-                btnCheckListReport.Visible = false;
+                //btnCheckListReport.Visible = false;
                 lvCourseMaterial.DataSource = null;
                 lvCourseMaterial.DataBind();
                 ViewState["action"] = "add";
@@ -783,6 +783,7 @@ public partial class Administration_courseMaster : System.Web.UI.Page
             objc.OrgId = Convert.ToInt32(Session["OrgId"]);//Added by Dileep Kare on 11.03.2022
 
             int ret = objCourse.UpdateExamMarks(objc);
+
             if (ret == Convert.ToInt16(CustomStatus.RecordSaved))
             {
                 objCommon.DisplayMessage(this.UPDCOURSE, "Marks Updated SuccessFully...!", this);
@@ -1290,7 +1291,8 @@ public partial class Administration_courseMaster : System.Web.UI.Page
             if (chkExit > 0)
             {
                 string[] sno = ddlScheme.SelectedValue.Split('-');
-                ShowReport("Check_List", "rptSubjectCourseListSchemewise.rpt", 2, Convert.ToInt32(sno[0]));
+               // ShowReport("Check_List", "rptSubjectCourseListSchemewise.rpt", 2, Convert.ToInt32(sno[0]));
+                ShowReportNewChecklist("Check_List", "rptSubjectCourseListSchemewise_New.rpt", 2, Convert.ToInt32(sno[0]));
             }
             else
             {
@@ -1315,7 +1317,7 @@ public partial class Administration_courseMaster : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
 
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SCHEMENO=" + schemeno.ToString();
+            url += "&param=@P_COLLEGE_CODE=0" + ",@P_SCHEMENO=" + schemeno.ToString();
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -1335,6 +1337,36 @@ public partial class Administration_courseMaster : System.Web.UI.Page
         }
     }
 
+
+
+    private void ShowReportNewChecklist(string reportTitle, string rptFileName, int type, int schemeno)
+    {
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+
+            url += "&param=@P_COLLEGE_CODE= 0 ,@P_SCHEMENO=" + schemeno.ToString() + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue);
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " window.close();";
+            //divMsg.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.UPDCOURSE, this.UPDCOURSE.GetType(), "controlJSScript", sb.ToString(), true);
+
+        }
+        catch
+        {
+            throw;
+        }
+    }
     #endregion
 
     private void BindListView()

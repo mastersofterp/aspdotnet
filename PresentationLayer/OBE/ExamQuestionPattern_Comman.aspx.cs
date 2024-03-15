@@ -237,7 +237,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
                 int txtoutof = txtOutOfQuestion.Text == string.Empty ? 0 : Convert.ToInt32(txtOutOfQuestion.Text);
                 if (txtmin > txtoutof)
                 {
-                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Alert", "alert('Attempt Minimum(" + txtmin + ")Should not greater than out of (" + txtoutof + ")questions')", true);
+                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Alert", "alert('Attempt Minimum(" + txtmin + ")Should not be greater than out of (" + txtoutof + ")questions')", true);
                     return;
                 }
                 if (txtAttemptMinimum.Text == string.Empty)
@@ -302,13 +302,13 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
                 if (Count == NO_of_question)
                 {
                     //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Alert", "alert('Questions Should not more than Out of questions');", true);
-                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Alert", "alert('Only (" + NO_of_question + ") Questions Should Allowed');", true);
+                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Alert", "alert('Only (" + NO_of_question + ") Questions are Allowed');", true);
                     return;
 
                 }
                 if (QMarks > PARENT_QUESTION_MARKS)
                 {
-                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Alert", "alert('Question Marks (" + QMarks + " )Should not more than of Parent question Marks(" + PARENT_QUESTION_MARKS + ")');", true);
+                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "Alert", "alert('Question Marks (" + QMarks + " )Should not be more than of Parent question Marks(" + PARENT_QUESTION_MARKS + ")');", true);
                     return;
 
                 }
@@ -809,7 +809,6 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
                 {
                     
                     decimal A = PARENT_QUESTION_MARK / Convert.ToDecimal(Solve_NO_of_questions);
-
                     txtQuestionMarks.Text = A.ToString();
                     //txtQuestionMarks.Enabled = false; comment on 12022024
                 }

@@ -324,7 +324,7 @@
                             <div class="form-group col-lg-10 col-md-12 col-12">
                                 <div class=" note-div">
                                     <h5 class="heading">Note</h5>
-                                    <p runat="server" id="spanNote"><i class="fa fa-star" aria-hidden="true"></i><span>Consolidated Attendance Report Format-I(Excel),Consolidated Attendance Report Format-II(Excel) only Session Selection is Required</span></p>
+                                    <p runat="server" id="spanNote"><i class="fa fa-star" aria-hidden="true"></i><span>Consolidated Attendance Report Format-I(Excel),Consolidated Attendance Report Format-II(Excel) only "College & Scheme" and "Session" Selection is Required</span></p>
 
                                 </div>
                             </div>

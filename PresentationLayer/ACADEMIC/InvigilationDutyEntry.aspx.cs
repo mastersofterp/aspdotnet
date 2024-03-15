@@ -102,6 +102,9 @@ public partial class ACADEMIC_InvigilationDutyEntry : System.Web.UI.Page
         ddlDate.Items.Add(new ListItem("Please Select", "0"));
         ddlSlot.Items.Clear();
         ddlSlot.Items.Add(new ListItem("Please Select", "0"));
+        lvRoomDetails.DataSource = null;
+        lvRoomDetails.DataBind();
+        lvRoomDetails.Visible = false;
         txtExtraInv.Text = "0";
         int patternno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "PATTERNNO", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ""));
         if (patternno > 0)
@@ -230,6 +233,7 @@ public partial class ACADEMIC_InvigilationDutyEntry : System.Web.UI.Page
     {
         Response.Redirect(Request.Url.ToString());
     }
+
     protected void btnReport_Click(object sender, EventArgs e)
     {
         if (ddlSession.SelectedValue != "0" || ddlExTTType.SelectedValue != "0")
@@ -268,7 +272,7 @@ public partial class ACADEMIC_InvigilationDutyEntry : System.Web.UI.Page
             url += "exporttype=" + exporttype;
             url += "&filename=" + ddlExTTType.SelectedItem.Text + "_" + ddlSession.SelectedItem.Text + "." + rdoReportType.SelectedValue;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_SESSIONNO=" + SessionNo + ",@P_EXAM_NO=" + ddlExTTType.SelectedValue + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            url += "&param=@P_SESSIONNO=" + SessionNo + ",@P_EXAM_NO=" + ddlExTTType.SelectedValue + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " window.close();";
@@ -347,7 +351,7 @@ public partial class ACADEMIC_InvigilationDutyEntry : System.Web.UI.Page
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
-                url += "&param=@P_SESSIONNO=" + SessionNo + ",@P_EXAM_NO=" + ddlExTTType.SelectedValue + ",@P_EXAM_DATE=" + EXAMDATE + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                url += "&param=@P_SESSIONNO=" + SessionNo + ",@P_EXAM_NO=" + ddlExTTType.SelectedValue + ",@P_EXAM_DATE=" + EXAMDATE + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
 
                 //To open new window from Updatepanel
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -421,12 +425,16 @@ public partial class ACADEMIC_InvigilationDutyEntry : System.Web.UI.Page
         ddlSlot.Items.Clear();
         ddlSlot.Items.Add(new ListItem("Please Select", "0"));
         txtExtraInv.Text = "0";
+        lvRoomDetails.DataSource = null;
+        lvRoomDetails.DataBind();
+        lvRoomDetails.Visible = false;
         if (ddlExTTType.SelectedValue != "0")
         {
-            int count = Convert.ToInt32(objCommon.LookUp("ACD_SEATING_ARRANGEMENT SA INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = SA.SESSIONNO)", "COUNT(1)", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + ""));
+            int count = Convert.ToInt32(objCommon.LookUp("ACD_SEATING_ARRANGEMENT SA INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = SA.SESSIONNO)", "COUNT(1)", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND SA.EXAMNO =" + Convert.ToInt32(ddlExTTType.SelectedValue) + ""));
+           // int count = 1;
             if (count > 0)
             {
-                objCommon.FillDropDownList(ddlDate, "ACD_EXAM_DATE E INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT CONVERT(NVARCHAR,E.EXAMDATE,103)DATE", "CONVERT(NVARCHAR,E.EXAMDATE,103)EXAMDATE", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "DATE");
+                objCommon.FillDropDownList(ddlDate, "ACD_EXAM_DATE E INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT CONVERT(NVARCHAR,E.EXAMDATE,103)DATE", "CONVERT(NVARCHAR,E.EXAMDATE,103)EXAMDATE", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.STATUS=1 AND  E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "DATE");
             }
             else
             {
@@ -486,26 +494,89 @@ public partial class ACADEMIC_InvigilationDutyEntry : System.Web.UI.Page
     //added by shubham On 17-04-23
     protected void ddlDate_SelectedIndexChanged(object sender, EventArgs e)
     {
-        string EXAMDAT = Convert.ToString(ddlDate.SelectedItem);
-        string EXAMDATE = (Convert.ToDateTime(EXAMDAT)).ToString("dd/MM/yyyy");
-        ddlSlot.Items.Clear();
-        ddlSlot.Items.Add(new ListItem("Please Select", "0"));
-        txtExtraInv.Text = "0";
-
-        //  string EXAMDATE = (Convert.ToDateTime(ddlExamdate.Text)).ToString("yyyy-MM-dd");
-
-        string a = objCommon.LookUp(" ACD_EXAM_DATE", "COUNT(1)", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + EXAMDATE + "'");
-
-        if (a.ToString() == "0")
+        if (ddlDate.SelectedIndex > 0)
         {
-            objCommon.DisplayUserMessage(updInvigDuty, "No Exams Are Conducted on Selected Date", this.Page);
-            ddlSlot.SelectedValue = "0";
+            string EXAMDAT = Convert.ToString(ddlDate.SelectedItem);
+            string EXAMDATE = (Convert.ToDateTime(EXAMDAT)).ToString("dd/MM/yyyy");
+            ddlSlot.Items.Clear();
+            ddlSlot.Items.Add(new ListItem("Please Select", "0"));
+            txtExtraInv.Text = "0";
 
+            //  string EXAMDATE = (Convert.ToDateTime(ddlExamdate.Text)).ToString("yyyy-MM-dd");
+
+            string a = objCommon.LookUp(" ACD_EXAM_DATE", "COUNT(1)", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + EXAMDATE + "'");
+
+            if (a.ToString() == "0")
+            {
+                objCommon.DisplayUserMessage(updInvigDuty, "No Exams Are Conducted on Selected Date", this.Page);
+                ddlSlot.SelectedValue = "0";
+
+            }
+            else
+            {
+                // added by Shubham on 22022024
+                //string RoomNos = objCommon.LookUp("", "DBO.SPLIT(,',')", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND ET.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND SA.EXAMNO =" + Convert.ToInt32(ddlExTTType.SelectedValue) + " AND SA.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)");
+                DataSet ds = objCommon.FillDropDown("ACD_SEATING_ARRANGEMENT SA INNER JOIN ACD_EXAM_DATE ET ON (SA.SESSIONNO = ET.SESSIONNO AND ET.EXAM_TT_TYPE = SA.EXAMNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = SA.SESSIONNO)", " DISTINCT SA.ROOMNO", "SA.ROOMNO AS RNO", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND ET.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND SA.EXAMNO =" + Convert.ToInt32(ddlExTTType.SelectedValue) + " AND SA.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "SA.ROOMNO");
+                if (ds.Tables.Count > 0)
+                {
+                    int RoomCount = Convert.ToInt32(ds.Tables[0].Rows.Count);
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        int InvRCount = Convert.ToInt32(objCommon.LookUp("ACD_ROOM", "Count(*)", "ISNULL(REQD_INVIGILATORS,0) > 0 and ROOMNO IN (SELECT  DISTINCT SA.ROOMNO FROM ACD_SEATING_ARRANGEMENT SA INNER JOIN ACD_EXAM_DATE ET ON (SA.SESSIONNO = ET.SESSIONNO AND ET.EXAM_TT_TYPE = SA.EXAMNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = SA.SESSIONNO) WHERE SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND ET.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND SA.EXAMNO =" + Convert.ToInt32(ddlExTTType.SelectedValue) + " AND SA.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103))"));
+                        if (RoomCount == InvRCount)
+                        {
+                            //objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_DATE AED INNER JOIN ACD_EXAM_TT_SLOT AEIS ON AEIS.SLOTNO=AED.SLOTNO", "distinct aed.SLOTNO", "SLOTNAME", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + EXAMDATE + "'", "SLOTNO ASC");
+                            objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_TT_SLOT ES INNER JOIN ACD_EXAM_DATE E ON (E.SLOTNO = ES.SLOTNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT ES.SLOTNO", "ES.SLOTNAME", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND E.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "ES.SLOTNO");
+                            ddlSlot.Focus();
+                            btnGenerate.Enabled = true;
+                        }
+                        else
+                        {
+                            DataSet dsRInvg = objCommon.FillDropDown("ACD_ROOM", " DISTINCT ROOMNO", "ROOMNAME", "ISNULL(REQD_INVIGILATORS,0) = 0 and ROOMNO IN (SELECT  DISTINCT SA.ROOMNO FROM ACD_SEATING_ARRANGEMENT SA INNER JOIN ACD_EXAM_DATE ET ON (SA.SESSIONNO = ET.SESSIONNO AND ET.EXAM_TT_TYPE = SA.EXAMNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = SA.SESSIONNO) WHERE SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND ET.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND SA.EXAMNO =" + Convert.ToInt32(ddlExTTType.SelectedValue) + " AND SA.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103))", "ROOMNO");
+                            lvRoomDetails.DataSource = dsRInvg;
+                            lvRoomDetails.DataBind();
+                            lvRoomDetails.Visible = true;
+                            btnGenerate.Enabled = false;
+
+                            objCommon.DisplayMessage(updInvigDuty, "Required Invigilator Entry Not Done for Rooms.", this.Page);
+                            //Response.Redirect("http://localhost:61091/PresentationLayer/ACADEMIC/SEATINGARRANGEMENT/RoomInvigilator.aspx?pageno=3011");
+                           
+                        }
+                    }
+                    else
+                    {
+                        lvRoomDetails.DataSource = null;
+                        lvRoomDetails.DataBind();
+                        lvRoomDetails.Visible = false;
+                        btnGenerate.Enabled = false;
+                        objCommon.DisplayMessage(updInvigDuty, "Seating Arrangement Not Done for " + EXAMDATE + "!.", this.Page);
+                    }
+                }
+                else
+                {
+                    lvRoomDetails.DataSource = null;
+                    lvRoomDetails.DataBind();
+                    lvRoomDetails.Visible = false;
+                    btnGenerate.Enabled = false;
+                    objCommon.DisplayMessage(updInvigDuty, "Seating Arrangement Not Done for " + EXAMDATE + "!.", this.Page);
+                }
+                //objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_DATE AED INNER JOIN ACD_EXAM_TT_SLOT AEIS ON AEIS.SLOTNO=AED.SLOTNO", "distinct aed.SLOTNO", "SLOTNAME", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + EXAMDATE + "'", "SLOTNO ASC");
+                //objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_TT_SLOT ES INNER JOIN ACD_EXAM_DATE E ON (E.SLOTNO = ES.SLOTNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT ES.SLOTNO", "ES.SLOTNAME", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND E.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "ES.SLOTNO");
+            }
         }
-        else
+        else 
         {
-            //objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_DATE AED INNER JOIN ACD_EXAM_TT_SLOT AEIS ON AEIS.SLOTNO=AED.SLOTNO", "distinct aed.SLOTNO", "SLOTNAME", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + EXAMDATE + "'", "SLOTNO ASC");
-            objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_TT_SLOT ES INNER JOIN ACD_EXAM_DATE E ON (E.SLOTNO = ES.SLOTNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT ES.SLOTNO", "ES.SLOTNAME", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND E.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "ES.SLOTNO");
+            ddlSlot.Items.Clear();
+            ddlSlot.Items.Add(new ListItem("Please Select", "0"));
+            //ddlSlot.Items.Clear();
+            //ddlSlot.Items.Add(new ListItem("Please Select", "0"));
+            //ddlExTTType.Items.Clear();
+            //ddlExTTType.Items.Add(new ListItem("Please Select", "0"));
+            //txtExtraInv.Text = "0";
+            lvRoomDetails.DataSource = null;
+            lvRoomDetails.DataBind();
+            lvRoomDetails.Visible = false;
+            
         }
     }
 

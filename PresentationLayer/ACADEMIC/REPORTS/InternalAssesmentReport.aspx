@@ -94,9 +94,7 @@
                                 <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" TabIndex="1" Text="Cancel" ToolTip="Click to cancel" OnClick="btnCancel_Click" />
                                 <asp:ValidationSummary ID="valSummary" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Show" />
-
                             </div>
-
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,14 @@
-﻿using System;
+﻿//==============================================================================
+//PROJECT NAME : RF-Common Code
+//MODULE NAME : EXAMINATION
+//PAGE NAME : 
+//CREATION DATE : 
+//CREATED BY : SHUBHAM BARKE
+//MODIFIED DATE : 
+//MODIFIED DESC : 
+//==============================================================================
+
+using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -60,11 +70,11 @@ public partial class ACADEMIC_REPORTS_InternalAssesmentReport : System.Web.UI.Pa
                     deptno = "0";
                 else
                     deptno = Session["userdeptno"].ToString();
-                // ENDS HERE BY NARESH BEERLA ON DT 28042022 AS PER THE ISSUE RELATED TO UA_DEPTNO
+
 
                 if (Session["usertype"].ToString() != "1")
                     objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE '" + deptno + "' WHEN '0' THEN 0 ELSE CAST(DB.DEPTNO AS VARCHAR) END) IN (" + deptno + ")", "");
-                //AND (DB.DEPTNO = ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0) OR ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0)=0)", "");
+
                 else
 
                     objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
@@ -154,41 +164,54 @@ public partial class ACADEMIC_REPORTS_InternalAssesmentReport : System.Web.UI.Pa
         {
             if (Convert.ToInt32(ViewState["Deptno"]) == 6)
             {
-                //string SP_Name = "PKG_INTERNAL_ASSESSMENT_FORMATS_B_M_TECH_FOR_RCPIT_AND_RCPIPER";
-                //string SP_Parameters = "@P_SCHEMENO,@P_SESSIONNO,@P_COURSENO";
-                //string Call_Values = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "";
+                string SP_Name = "PKG_INTERNAL_ASSESSMENT_FORMATS_B_M_TECH_FOR_RCPIT_AND_RCPIPER";
+                string SP_Parameters = "@P_SCHEMENO,@P_SESSIONNO,@P_COURSENO";
+                string Call_Values = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "";
 
-                //DataSet ds = null;
-                //ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
-                //if (ds.Tables[0].Rows.Count > 0)
-                //{
+                DataSet ds = null;
+                ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
                     ShowReportPharm("Internal Marks Assessment Report", "rptIntAsmentReportBTECH_RCPIPER.rpt");
-                //}
-                //else
-                //{
-                //    objCommon.DisplayMessage(updpaper, "No Data Found for current selection.", this.Page);
-                //}
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updpaper, "No Data Found for current selection.", this.Page);
+                }
             }
             else if (Convert.ToInt32(ViewState["Deptno"]) == 8)
             {
-                ShowReportPharm("Internal Marks Assessment Report", "rptIntAsmentReportMBA_RCPIPER.rpt");
+                string SP_Name = "PKG_INTERNAL_ASSESSMENT_FORMATS_MBA_FOR_RCPIT_AND_RCPIPER";
+                string SP_Parameters = "@P_SCHEMENO,@P_SESSIONNO,@P_COURSENO";
+                string Call_Values = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "";
+
+                DataSet ds = null;
+                ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    ShowReportPharm("Internal Marks Assessment Report", "rptIntAsmentReportMBA_RCPIPER.rpt");
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updpaper, "No Data Found for current selection.", this.Page);
+                }
             }
             else
             {
-                //string SP_Name = "PKG_INTERNAL_ASSESSMENT_FORMATS_FOR_RCPIT_AND_RCPIPER";
-                //string SP_Parameters = "@P_SCHEMENO,@P_SESSIONNO,@P_COURSENO";
-                //string Call_Values = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "";
+                string SP_Name = "PKG_INTERNAL_ASSESSMENT_FORMATS_FOR_RCPIT_AND_RCPIPER";
+                string SP_Parameters = "@P_SCHEMENO,@P_SESSIONNO,@P_COURSENO";
+                string Call_Values = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "";
 
-                //DataSet ds = null;
-                //ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
-                //if (ds.Tables[0].Rows.Count > 0)
-                //{
+                DataSet ds = null;
+                ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
                     ShowReportPharm("Internal Marks Assessment Report", "rptItnalAsmentReport_RCPIPER.rpt");
-                //}
-                //else
-                //{
-                //    objCommon.DisplayMessage(updpaper, "No Data Found for current selection.", this.Page);
-                //}
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updpaper, "No Data Found for current selection.", this.Page);
+                }
             }
         }
         catch (Exception ex)

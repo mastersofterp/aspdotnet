@@ -139,7 +139,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New BUDGETHEAD
-                        objParams = new SqlParameter[37];
+                        objParams = new SqlParameter[38];
                         objParams[0] = new SqlParameter("@P_PORDNO ", SqlDbType.Int);
                         objParams[0].Direction = ParameterDirection.Output;
                         objParams[1] = new SqlParameter("@P_QUOTNO", objPO.QUOTNO );
@@ -197,7 +197,7 @@ namespace IITMS
                         objParams[34] = new SqlParameter("@P_ITEMNOS", ItemNos);
                         objParams[35] = new SqlParameter("@P_NatureOfWork", objPO.NatureOfWork);  //----16-03-2023
                         objParams[36] = new SqlParameter("@P_OurReferenceNo", objPO.OurReferenceNo); //----16-03-2023
-
+                        objParams[37] = new SqlParameter("@P_SigningAuthorityid", objPO.SigningAuthorityid); //----16-03-2023
                         if (objSQLHelper.ExecuteNonQuerySP("STR_PORDER_INSERT", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
@@ -317,7 +317,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New BUDGETHEAD
-                        objParams = new SqlParameter[36];
+                        objParams = new SqlParameter[37];
                         objParams[0] = new SqlParameter("@P_PORDNO ", objPO.PORDNO );
                         objParams[1] = new SqlParameter("@P_QUOTNO", objPO.QUOTNO);
                         objParams[2] = new SqlParameter("@P_REFNO", objPO.REFNO);
@@ -371,7 +371,7 @@ namespace IITMS
                         objParams[33] = new SqlParameter("@P_BANK_REMARK", objPO.BANK_REMARK);
                         objParams[34] = new SqlParameter("@P_NatureOfWork", objPO.NatureOfWork);  //----16-03-2023
                         objParams[35] = new SqlParameter("@P_OurReferenceNo", objPO.OurReferenceNo); //----16-03-2023
-
+                        objParams[36] = new SqlParameter("@P_SigningAuthorityid", objPO.SigningAuthorityid); //----16-03-2023
                         if (objSQLHelper.ExecuteNonQuerySP("STR_PORDER_UPDATE", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
@@ -544,7 +544,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New BUDGETHEAD
-                        objParams = new SqlParameter[36];
+                        objParams = new SqlParameter[37];
                         objParams[0] = new SqlParameter("@P_PORDNO ", SqlDbType.Int);
                         objParams[0].Direction = ParameterDirection.Output;
                         objParams[1] = new SqlParameter("@P_TENDERNO", objPO.TENDERNO);
@@ -582,7 +582,7 @@ namespace IITMS
                         objParams[33] = new SqlParameter("@P_BANK_REMARK", objPO.BANK_REMARK);
                         objParams[34] = new SqlParameter("@P_NatureOfWork", objPO.NatureOfWork);  //----16-03-2023
                         objParams[35] = new SqlParameter("@P_OurReferenceNo", objPO.OurReferenceNo); //----16-03-2023
-
+                        objParams[36] = new SqlParameter("@P_SigningAuthorityid", objPO.SigningAuthorityid); //----16-03-2023
                         if (objSQLHelper.ExecuteNonQuerySP("STR_PORDER_TENDER_INSERT", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
@@ -603,7 +603,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New BUDGETHEAD
-                        objParams = new SqlParameter[36];
+                        objParams = new SqlParameter[37];
                         objParams[0] = new SqlParameter("@P_PORDNO ", objPO.PORDNO);
                         objParams[1] = new SqlParameter("@P_TENDERNO", objPO.TENDERNO);
                         objParams[2] = new SqlParameter("@P_REFNO", objPO.REFNO);
@@ -640,7 +640,7 @@ namespace IITMS
                         objParams[33] = new SqlParameter("@P_BANK_REMARK", objPO.BANK_REMARK);
                         objParams[34] = new SqlParameter("@P_NatureOfWork", objPO.NatureOfWork);  //----16-03-2023
                         objParams[35] = new SqlParameter("@P_OurReferenceNo", objPO.OurReferenceNo); //----16-03-2023
-
+                        objParams[36] = new SqlParameter("@P_SigningAuthorityid", objPO.SigningAuthorityid); //----16-03-2023
                         if (objSQLHelper.ExecuteNonQuerySP("STR_PORDER_TENDER_UPDATE", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                     }
@@ -698,7 +698,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New BUDGETHEAD
-                        objParams = new SqlParameter[38];
+                        objParams = new SqlParameter[39];
                         objParams[0] = new SqlParameter("@P_PORDNO ", SqlDbType.Int);
                         objParams[0].Direction = ParameterDirection.Output;
                         objParams[1] = new SqlParameter("@P_INDENTNO", objPO.INDENTNO);
@@ -739,7 +739,7 @@ namespace IITMS
                         objParams[35] = new SqlParameter("@P_DPO_TAX_TBL", objPO.DPO_TAX_TBL);
                         objParams[36] = new SqlParameter("@P_NatureOfWork", objPO.NatureOfWork);  //----16-03-2023
                         objParams[37] = new SqlParameter("@P_OurReferenceNo", objPO.OurReferenceNo); //----16-03-2023
-                        
+                        objParams[38] = new SqlParameter("@P_SigningAuthorityid", objPO.SigningAuthorityid); //----16-03-2023
                         if (objSQLHelper.ExecuteNonQuerySP("STR_PORDER_DPO_INSERT", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
                     }
@@ -759,7 +759,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New BUDGETHEAD
-                        objParams = new SqlParameter[38];
+                        objParams = new SqlParameter[39];
                         objParams[0] = new SqlParameter("@P_PORDNO ", objPO.PORDNO);
                         objParams[1] = new SqlParameter("@P_INDENTNO", objPO.INDENTNO);
                         objParams[2] = new SqlParameter("@P_REFNO", objPO.REFNO);
@@ -794,11 +794,11 @@ namespace IITMS
                         objParams[31] = new SqlParameter("@P_BANKGTY", objPO.BANKGTY);
                         objParams[32] = new SqlParameter("@P_AMOUNT", objPO.AMOUNT);
                         objParams[33] = new SqlParameter("@P_BANK_REMARK", objPO.BANK_REMARK);
-
                         objParams[34] = new SqlParameter("@P_DPO_ITEM_TBL", objPO.DPO_ITEM_TBL);
                         objParams[35] = new SqlParameter("@P_DPO_TAX_TBL", objPO.DPO_TAX_TBL);
                         objParams[36] = new SqlParameter("@P_NatureOfWork", objPO.NatureOfWork);  //----16-03-2023
                         objParams[37] = new SqlParameter("@P_OurReferenceNo", objPO.OurReferenceNo); //----16-03-2023
+                        objParams[38] = new SqlParameter("@P_SigningAuthorityid", objPO.SigningAuthorityid); //----16-03-2023
                         if (objSQLHelper.ExecuteNonQuerySP("STR_PORDER_DPO_UPDATE", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
