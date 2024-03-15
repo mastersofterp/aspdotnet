@@ -3331,47 +3331,47 @@
 
         <script type="text/javascript">
 
-            //$(document).ready(function () {
-            //    var getSystemOS = getMobileOperatingSystem();
-            //    if (getSystemOS !== "iOS") {
-            //        console.log('Is DevTools open:', window.devtools.isOpen);
-            //        console.log('DevTools orientation:', window.devtools.orientation);
-            //        if (window.devtools.isOpen == true && window.devtools.orientation != undefined) {
-            //            alert("Please Close The Inspector Window.");
-            //            location.reload();
-            //        }
-            //        // Get notified when it's opened/closed or orientation changes
-            //        window.addEventListener('devtoolschange', function (event) {
-            //            // window.addEventListener('devtoolschange', event => {
-            //            console.log('Is DevTools open:', event.detail.isOpen);
-            //            console.log('DevTools orientation:', event.detail.orientation);
-            //            console.log(event);
-            //            if (event.detail.isOpen == true && event.detail.orientation != undefined) {
-            //                alert("Please Close The Inspector Window.");
-            //                location.reload();
-            //            }
-            //        });
-            //    }
-            //    function getMobileOperatingSystem() {
-            //        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            $(document).ready(function () {
+                var getSystemOS = getMobileOperatingSystem();
+                if (getSystemOS !== "iOS") {
+                    console.log('Is DevTools open:', window.devtools.isOpen);
+                    console.log('DevTools orientation:', window.devtools.orientation);
+                    if (window.devtools.isOpen == true && window.devtools.orientation != undefined) {
+                        alert("Please Close The Inspector Window.");
+                        location.reload();
+                    }
+                    // Get notified when it's opened/closed or orientation changes
+                    window.addEventListener('devtoolschange', function (event) {
+                        // window.addEventListener('devtoolschange', event => {
+                        console.log('Is DevTools open:', event.detail.isOpen);
+                        console.log('DevTools orientation:', event.detail.orientation);
+                        console.log(event);
+                        if (event.detail.isOpen == true && event.detail.orientation != undefined) {
+                            alert("Please Close The Inspector Window.");
+                            location.reload();
+                        }
+                    });
+                }
+                function getMobileOperatingSystem() {
+                    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            //        // Windows Phone must come first because its UA also contains "Android"
-            //        if (/windows phone/i.test(userAgent)) {
-            //            return "Windows Phone";
-            //        }
+                    // Windows Phone must come first because its UA also contains "Android"
+                    if (/windows phone/i.test(userAgent)) {
+                        return "Windows Phone";
+                    }
 
-            //        if (/android/i.test(userAgent)) {
-            //            return "Android";
-            //        }
+                    if (/android/i.test(userAgent)) {
+                        return "Android";
+                    }
 
-            //        // iOS detection from: https://stackoverflow.com/a/9039885/177710
-            //        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-            //            return "iOS";
-            //        }
+                    // iOS detection from: https://stackoverflow.com/a/9039885/177710
+                    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                        return "iOS";
+                    }
 
-            //        return "unknown";
-            //    }
-            //});
+                    return "unknown";
+                }
+            });
 
             $(document).ready(function () {
 
