@@ -360,7 +360,7 @@
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_5" onclick="return Checktabid(this)">Course Registered</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_6" onclick="return Checktabid(this)">Attendance Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_6" onclick="return Checktabid(this)" runat="server" ID="btnAttendanceDetails">Attendance Details</a>
                                                             </li>
                                                             <li class="nav-item d-none">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_7" onclick="return Checktabid(this)">Internal Marks Details</a>
@@ -1259,25 +1259,24 @@
                                                         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                                             <ContentTemplate>
                                                                 <div class="col-12">
-                                                                  <div class="row mb-1">
-                                                                    <div class="sub-heading">
-                                                                        <h5>Course Details</h5>
+                                                                    <div class="row mb-1">
+                                                                        <div class="sub-heading">
+                                                                            <h5>Course Details</h5>
+                                                                        </div>
+                                                                        <div class="col-lg-2 col-md-6 offset-lg-10 mb-2">
+                                                                            <asp:Button ID="btnPrintRegSlip" runat="server" Text="Registration Slip" OnClick="btnPrintRegSlip_Click" Enabled="true" CssClass="btn btn-info" Visible="false" />
+                                                                        </div>
                                                                     </div>
-                                                                     <div class="col-lg-2 col-md-6 offset-lg-10 mb-2">
-                                                                         <asp:Button ID="btnPrintRegSlip" runat="server" Text="Registration Slip" OnClick="btnPrintRegSlip_Click" Enabled="true" CssClass="btn btn-info" Visible="false" />
-                                                                     </div>
-                                                                   </div>
                                                                 </div>
                                                                 <div id="divcourse" class="col-12">
-                                                                     
+
                                                                     <asp:ListView ID="lvCourseReg" runat="server">
                                                                         <LayoutTemplate>
                                                                             <div class="table-responsive" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">
                                                                                 <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="">
                                                                                     <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
                                                                                         <tr>
-                                                                                            <th>Sr No.
-                                                                                            </th>
+                                                                                            
                                                                                             <th>Semester
                                                                                             </th>
                                                                                             <th>CCode
@@ -1289,7 +1288,7 @@
                                                                                             <th>Credits</th>
                                                                                             <th>Course Registration Status</th>
                                                                                             <th>Exam Registration Status</th>
-                                                                                             <th>Registration Type</th>
+                                                                                            <th>Registration Type</th>
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody>
@@ -1306,22 +1305,21 @@
                                                                         <ItemTemplate>
                                                                             <tr>
                                                                                 <td>
-                                                                                    <%# Container.DataItemIndex +1 %>
+                                                                                
+                                                                                    <asp:LinkButton ID="lnkCcodepup" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO") %>' runat="server" OnClick="lnkCcodepup_Click" ></asp:LinkButton>
+                                                                                
                                                                                 </td>
                                                                                 <td>
                                                                                     <%# Eval("SEMESTER") %>
+                                                                                    <asp:Label ID="lblsemesterno" runat="server" Text='<%# Eval("SEMESTERNO") %>' Visible="false"></asp:Label>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <%# Eval("CCODE") %>
-                                                                                    <%--<asp:LinkButton ID="lnkccode" runat="server" Text='<%# Eval("CCODE") %>'
-                                                                                        OnClick="lnkccode_Click" CommandArgument='<%# Eval("COURSENO") %>'
-                                                                                        ToolTip='<%# Eval("COURSENO") %>'></asp:LinkButton>--%>
-                                                                                </td>
+
                                                                                 <td>
                                                                                     <%# Eval("COURSENAME") %>
                                                                                 </td>
                                                                                 <td>
                                                                                     <%# Eval("SUBJECTTYPE") %>
+                                                                                    <asp:Label ID="lblSubid" runat="server" Text='<%# Eval("SUBID") %>' Visible="false"></asp:Label>
                                                                                 </td>
                                                                                 <td>
                                                                                     <%# Eval("CREDITS") %>
@@ -1332,7 +1330,7 @@
                                                                                 <td>
                                                                                     <%# Eval("EXAM_REGISTERED") %> 
                                                                                 </td>
-                                                                                  <td>
+                                                                                <td>
                                                                                     <%# Eval("REGTYPE") %> 
                                                                                 </td>
                                                                             </tr>
@@ -1351,6 +1349,7 @@
                                                                         <div class="sub-heading">
                                                                             <h5>Attendance Details</h5>
                                                                         </div>
+                                                                          <asp:Label ID="lblStatus" runat="server"  Visible="false"></asp:Label>
                                                                         <asp:ListView ID="lvAttendanceDetails" class="" runat="server" Style="display: block;">
                                                                             <LayoutTemplate>
                                                                                 <div class="table-responsive" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">
@@ -1860,11 +1859,11 @@
                                                                                     </table>
                                                                                 </div>
                                                                             </LayoutTemplate>
-                                                                            <EmptyDataTemplate>
-                                                                                <%--<div style="text-align: center; font-family: Arial; font-size: medium">
-                                                                                No Record Found
-                                                                            </div>--%>
-                                                                            </EmptyDataTemplate>
+                                                                           <EmptyDataTemplate>
+                                                                                           <%-- <div style="text-align: center; font-family: Arial; font-size: medium">
+                                                                                                No Record Found
+                                                                                            </div>--%>
+                                                                           </EmptyDataTemplate>
                                                                             <ItemTemplate>
                                                                                 <tr>
                                                                                     <td>
@@ -2933,7 +2932,35 @@
     <script>
         function Checktabid(tabid) {
             $("#ctl00_ContentPlaceHolder1_hdfDyanamicTabId").val($(tabid).attr("href").replace('#', ''));
+         
         }
+
+
+        function SaveUpdateStudentConfig() {
+            debugger;
+          //  var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}'
+            //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("Comprehensive_Stud_Report.aspx/GetAttendanceDetails") %>',
+                data: JData,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                  //  var Jdata = data.d;
+                    alert(Jdata);
+                },
+                failure: function (response) {
+                    alert("failure");
+                },
+                error: function (response) {
+                    //debugger
+                    alert("error");
+                    alert(response.responseText);
+                }
+            });
+        }       
     </script>
 
     <script type="text/javascript">

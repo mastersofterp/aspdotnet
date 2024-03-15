@@ -293,8 +293,9 @@
                                 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divAttach" runat="server" visible="false">
                                         <div class="label-dynamic">
-                                            <sup>*</sup><label>Attach</label>
-                              
+                                            <label><sup>*</sup>Attachment <small style="color: blue;">(Max.Size
+                                        <asp:Label ID="lblFileSize" runat="server" Font-Bold="true"> 10MB</asp:Label>)  (File Ext.
+                                          <asp:Label ID="lblExtension" runat="server" Font-Bold="true"></asp:Label>)</small></label>      
                                         </div>
                                         <asp:FileUpload ID="FileUpload1" runat="server" TabIndex="16" />
                                         <asp:Label ID="lblFileName" runat="server" Text="" Visible="false"></asp:Label>
@@ -470,28 +471,9 @@
                                          <td id="tdSurNo" runat="server">
                                             <asp:Label ID="lblsno" runat="server" Text=' <%# Eval("SURVEYNO")%>' ></asp:Label>
                                         </td>
-                                         <td>
-                                            <%# Eval("SURVEYNO")%>
-                                        </td>
-                                        <td>
-                                            <%# Eval("FILE_PATH")%>
-                                        </td>
-                                       
-                                             <td style="text-align: center" id="tdBlob1" runat="server" visible="false">
-                                                        <asp:UpdatePanel ID="updPreview" runat="server">
-                                                            <ContentTemplate>
-                                                                <asp:ImageButton ID="imgbtnPreview1" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
-                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
-
-                                                            </ContentTemplate>
-                                                            <Triggers>
-                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview1" EventName="Click" />
-                                                            </Triggers>
-                                                        </asp:UpdatePanel>
-
-                                                    </td>
-                                                   
-                  
+                                         <td id="tdECNo" runat="server"   >
+                                         <%# Eval("ECNO") %>
+                                       </td>
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>

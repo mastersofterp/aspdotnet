@@ -26,6 +26,9 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.IO;
+using System.Web.Services;
+using System.Collections.Generic;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 
 public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 {
@@ -90,7 +93,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
 
                 //CHECK THE STUDENT LOGIN
-                Internalflag_subexam = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "SubExam_Internal_mark_Student", ""));
+                Internalflag_subexam = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(SubExam_Internal_mark_Student,0)", ""));
                 ViewState["Internalflag_subexam"] = Internalflag_subexam;
                 string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_IDNO=" + Convert.ToInt32(Session["idno"]) + " and ua_no=" + Convert.ToInt32(Session["userno"]));
                 ViewState["usertype"] = ua_type;
@@ -223,8 +226,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
                         lblfixStdName.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();
                         lblfixRRN.Text = dtr["REGNO"].ToString();
-                        lblfixdegreeBranch.Text =( dtr["DEGREE"] == null ? string.Empty : dtr["DEGREE"].ToString() )+" - " + branchname;
-                        lblName.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();                    
+                        lblfixdegreeBranch.Text = (dtr["DEGREE"] == null ? string.Empty : dtr["DEGREE"].ToString()) + " - " + branchname;
+                        lblName.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();
                         //lblGender.Text = dtr["SEX"] == null ? string.Empty : dtr["SEX"].ToString();
                         //lblGender.Text = (dtr["SEX"].ToString() == "M" && dtr["SEX"] != null) ? "Male" : "Female";
 
@@ -579,14 +582,14 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                             lvCourseReg.DataSource = dsCourse;
                             lvCourseReg.DataBind();
                             btnPrintRegSlip.Visible = true;
-                          
+
                         }
                         else
                         {
                             lvCourseReg.DataSource = null;
                             lvCourseReg.DataBind();
                             btnPrintRegSlip.Visible = false;
-                          
+
                         }
 
                         // End of Course Registered
@@ -605,8 +608,13 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         }
                         // End of Internal Marks
                         // Attendance Details
+
+                        // Added By Vipul T on date 28-02-2024
+
                         DataSet dsAttendanceDetails = objSC.GetDetailsOfAttendanceByIdno(idno, Convert.ToInt32(sessionno));
-                        if (dsAttendanceDetails != null && dsAttendanceDetails.Tables.Count > 0 && dsAttendanceDetails.Tables[0].Rows.Count > 0)
+                        DataSet dsAttend = objCommon.FillDropDown("ACD_ATTENDANCE_DASH_ONOFF  MC INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONID IN (SELECT Value FROM DBO.SPLIT(MC.SESSIONID,',')))", "MC.SESSIONID", "MC.COLLEGEID", "SESSIONNO=" + ddlSession.SelectedValue, "");
+
+                        if (dsAttend != null && dsAttend.Tables[0].Rows.Count > 0)
                         {
                             string session = dsAttend.Tables[0].Rows[0]["SESSIONID"].ToString();
                             string college = dsAttend.Tables[0].Rows[0]["COLLEGEID"].ToString();
@@ -644,6 +652,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                             lblStatus.ForeColor = System.Drawing.Color.Red;
                             lblStatus.Text = "Activity disabled by admin !!";
                         }
+                        //end
+
                         if (Convert.ToInt32(Session["OrgId"]) == 1)
                         {
                             DataSet dsStudentPro = objSC.Getpromotionstatus(idno);
@@ -651,13 +661,13 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                             {
                                 lvProt.DataSource = dsStudentPro;
                                 lvProt.DataBind();//added by lalit 
-
+                              
                             }
                             else
                             {
                                 lvProt.DataSource = null;
                                 lvProt.DataBind();
-
+                               
                             }
                         }
 
@@ -877,7 +887,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             }
             StudentController objSC = new StudentController();
             int idno = 0;
-            Internalflag_subexam = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "SubExam_Internal_mark_Student", ""));
+            Internalflag_subexam = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(SubExam_Internal_mark_Student,0)", ""));
             if (ViewState["usertype"].ToString() == "2")
             {
                 idno = Convert.ToInt32(Session["idno"]);
@@ -932,7 +942,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
 
             }
-
+          
             DataSet dsCourse = objSC.RetrieveRegDetailsByIdnoAndSession(idno, Convert.ToInt32(ddlSession.SelectedValue));
             if (dsCourse != null && dsCourse.Tables.Count > 0 && dsCourse.Tables[0].Rows.Count > 0)
             {
@@ -2877,62 +2887,59 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             //if (ds.Tables[1].Rows.Count > 0)
             //{
 
+            //    string sessionValue = ds.Tables[1].Rows[0]["SESSION_VALUE"].ToString();
+            //    string collegeValue = ds.Tables[1].Rows[0]["COLLEGE_VALUE"].ToString();
 
-            if (ds.Tables[1].Rows.Count > 0)
-            {
+            //    if (sessionValue != "" && collegeValue != "")
+            //    {
+            //        if (ds.Tables[2].Rows.Count > 0)
+            //        {
+            //            int studcolg = Convert.ToInt32(ds.Tables[2].Rows[0]["STUDENT_COLLEGE"]);
 
-                string sessionValue = ds.Tables[1].Rows[0]["SESSION_VALUE"].ToString();
-                string collegeValue = ds.Tables[1].Rows[0]["COLLEGE_VALUE"].ToString();
+            //            string att_collegeids = ds.Tables[2].Rows[0]["ATT_COLLEGEIDS"].ToString();
+            //            string att_sessionos = ds.Tables[2].Rows[0]["SESSIONNO"].ToString();
+            //            int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
 
-                if (sessionValue != "" && collegeValue != "")
-                {
-                    if (ds.Tables[2].Rows.Count > 0)
-                    {
-                        int studcolg = Convert.ToInt32(ds.Tables[2].Rows[0]["STUDENT_COLLEGE"]);
+            //            if (att_collegeids.Contains(studcolg.ToString()) && att_sessionos.Contains(sessionno.ToString()))
+            //            {
+            //                //if (ds.Tables[0].Rows.Count > 0)
+            //                //{
+            //                //    lvCourseAtt.DataSource = ds;
+            //                //    lvCourseAtt.DataBind();
+            //                //    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
+            //                //}
+            //                //else
+            //                //{
+            //                //    objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+            //                //}
+            //            }
+            //            else
+            //            {
+            //                objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (ds.Tables[0].Rows.Count > 0)
+            //        {
+            //            lvCourseAtt.DataSource = ds;
+            //            lvCourseAtt.DataBind();
+            //            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
+            //        }
+            //        else
+            //        {
+            //            objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+            //        }
 
-                        string att_collegeids = ds.Tables[2].Rows[0]["ATT_COLLEGEIDS"].ToString();
-                        string att_sessionos = ds.Tables[2].Rows[0]["SESSIONNO"].ToString();
-                        int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+            //    }
 
-                        if (att_collegeids.Contains(studcolg.ToString()) && att_sessionos.Contains(sessionno.ToString()))
-                        {
-                            if (ds.Tables[0].Rows.Count > 0)
-                            {
-                                lvCourseAtt.DataSource = ds;
-                                lvCourseAtt.DataBind();
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
-                            }
-                            else
-                            {
-                                objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
-                            }
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
-                        }
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
-                    }
-                }
-                else
-                {
-                    if (ds.Tables[0].Rows.Count > 0)
-                    {
-                        lvCourseAtt.DataSource = ds;
-                        lvCourseAtt.DataBind();
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
-                    }
-
-                }
-
-            }
+            //  }
+            #endregion
         }
     }
     protected void RadioButtonList1_SelectedIndexChanged(object sender, EventArgs e)

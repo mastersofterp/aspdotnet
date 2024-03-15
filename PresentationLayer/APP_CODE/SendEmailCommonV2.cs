@@ -55,9 +55,9 @@ namespace BusinessLogicLayer.BusinessLogic
 
         //Added by Nikhil L. on 02/08/2023
 
+        #region Send Dynamically
 
-
-
+        #region Email
         public int SendEmail_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails, DataSet ds, string attachmentfilename, byte[] bytefile, string type)
         {
             try
@@ -869,7 +869,7 @@ namespace BusinessLogicLayer.BusinessLogic
             return ret;
         }
 
-
+        #region  Outlook Email With Attachment
         private int OutLook(string Message, string toEmailId, string sub, string ccemails, string bccemails, string attachmentfilename, byte[] bytefile, string type, DataRow dsCred)
         {
             int ret = 0;
@@ -928,10 +928,10 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
+        #endregion
+        #endregion
 
-
-
-
+        #region SMS
         public DataSet SendSMS_New(string pageNo, string mobileNo, string templateName, string templateId, string template)
         {
             try
@@ -1105,9 +1105,9 @@ namespace BusinessLogicLayer.BusinessLogic
                 sr.Close();
             }
         }
+        #endregion
 
-
-
+        #region WhatsApp
         public void SendWhatsApp_New(string mobileNo, string pageNo, string bodys, DataSet dsCheck)
         {
 
@@ -1208,7 +1208,9 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
+        #endregion
 
+        #endregion
 
 
     }

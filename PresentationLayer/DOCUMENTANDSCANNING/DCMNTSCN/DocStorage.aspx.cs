@@ -122,12 +122,13 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         {
             if (lvCompAttach.Items.Count > 0)
             {
-                
+
             }
             else
             {
                 objCommon.DisplayMessage("Please select a file to attach.", this);
-                Clear();
+                lvCompAttach.DataSource = null;
+                lvCompAttach.DataBind();
                 return;
             }
 
@@ -314,7 +315,6 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                         objCommon.DisplayMessage("Record Save Successfully.", this.Page);
 
                         ViewState["action"] = "add";
-                        lvDocStorage.Visible = false;
                         BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
                         Clear();
 
@@ -365,7 +365,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         divEcNo.Visible = false;
         divFDate.Visible = false;
         divTDate.Visible = false;
-      //  divDoctypedatas.Visible = false;
+        //  divDoctypedatas.Visible = false;
         //lvDocStorage.Visible = false;
         Clear();
         lvDocStorage.DataSource = string.Empty;
@@ -389,13 +389,13 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         txtFromDate.Text = null;
         txttodate.Text = null;
         lblFileName.Text = null;
-      //  txtdoctype.Text = null;
+        //  txtdoctype.Text = null;
         txtarea.Text = null;
         lvCompAttach.DataSource = string.Empty;
         lvCompAttach.DataBind();
         Session["Attachments"] = null;
         ViewState["action"] = "add";
-       
+
     }
 
 
@@ -416,7 +416,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         txtFromDate.Text = null;
         txttodate.Text = null;
         lblFileName.Text = null;
-       // txtdoctype.Text = null;
+        // txtdoctype.Text = null;
         txtarea.Text = null;
         lvCompAttach.DataSource = string.Empty;
         lvCompAttach.DataBind();
@@ -429,7 +429,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         try
         {
             objDocType.DOCTYPE = ddldoctype.SelectedValue;
-           // DataSet ds = objCommon.FillDropDown("ADMN_DC_ASSEST_DOCUMENT_STORAGE DC INNER JOIN DOCUMENT_TYPE DT ON (DT.DOC_ID=DC.DOCID)", "DOCID,DT.DOCUMENT_TYPE,DNO,DISTRICT,SURVEYNO,FILE_NAME", "FILE_PATH", "DC.DOCTYPE="+DOC_TYPE, "DOCID");
+            // DataSet ds = objCommon.FillDropDown("ADMN_DC_ASSEST_DOCUMENT_STORAGE DC INNER JOIN DOCUMENT_TYPE DT ON (DT.DOC_ID=DC.DOCID)", "DOCID,DT.DOCUMENT_TYPE,DNO,DISTRICT,SURVEYNO,FILE_NAME", "FILE_PATH", "DC.DOCTYPE="+DOC_TYPE, "DOCID");
             DataSet ds = objDocC.GetData(objDocType);
             lvDocStorage.DataSource = ds;
             lvDocStorage.DataBind();
@@ -520,14 +520,14 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                         ckblob.Visible = true;
                 }
             }
-            
+
         }
         catch (Exception ex)
         {
             throw;
 
-        } 
-      
+        }
+
     }
 
 
@@ -640,10 +640,15 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
 
     protected void ddldoctype_SelectedIndexChanged(object sender, EventArgs e)
     {
-        
+
         BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
         string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
-        if (selectedDocumentTypeName == "Sale Deed" || selectedDocumentTypeName == "Settlement Deed" || selectedDocumentTypeName == "Sale Agreement" || selectedDocumentTypeName == "Gift Deed" || selectedDocumentTypeName == "Partition Deed" || selectedDocumentTypeName == "Power Of Attorney")
+        if (string.Equals(selectedDocumentTypeName, "Sale Deed", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(selectedDocumentTypeName, "Settlement Deed", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(selectedDocumentTypeName, "Sale Agreement", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(selectedDocumentTypeName, "Gift Deed", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(selectedDocumentTypeName, "Partition Deed", StringComparison.OrdinalIgnoreCase) ||
+    string.Equals(selectedDocumentTypeName, "Power Of Attorney", StringComparison.OrdinalIgnoreCase))
         {
             Divdate.Visible = true;
             divDocNo.Visible = true;
@@ -682,7 +687,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             divEcNo.Visible = false;
             divFDate.Visible = false;
             divTDate.Visible = false;
-           // divDoctypedatas.Visible = false;
+            // divDoctypedatas.Visible = false;
             divEast.Visible = false;
             divWest.Visible = false;
             divsouth.Visible = false;
@@ -690,7 +695,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             ClearData();
             return;
         }
-        else if (selectedDocumentTypeName == "Encumbarence")
+        else if (string.Equals(selectedDocumentTypeName, "Encumbarence Certificate", StringComparison.OrdinalIgnoreCase))
         {
             divEcNo.Visible = true;
             divFDate.Visible = true;
@@ -710,7 +715,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             divnorth.Visible = false;
             divArea.Visible = false;
             ClearData();
-           
+
             return;
 
         }
@@ -736,10 +741,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             ClearData();
             return;
         }
-        
+
     }
 
-   
+
     protected void btnEditDoc_Click(object sender, ImageClickEventArgs e)
     {
         ViewState["FILE1"] = null;
@@ -762,11 +767,11 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
 
                 string DOCFOLDER = file_path + "DOCUMENTANDSCANNING";
 
-                if (!System.IO.Directory.Exists(DOCFOLDER))
-                {
-                    System.IO.Directory.CreateDirectory(DOCFOLDER);
+                //if (!System.IO.Directory.Exists(DOCFOLDER))
+                //{
+                //    System.IO.Directory.CreateDirectory(DOCFOLDER);
 
-                }
+                //}
                 string fileName = System.Guid.NewGuid().ToString() + FileUpload1.FileName.Substring(FileUpload1.FileName.IndexOf('.'));
 
                 string contentType = contentType = FileUpload1.PostedFile.ContentType;
@@ -789,7 +794,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 objDocType.FILENAME = filename;
                 objDocType.FILEPTH = FileUpload1.FileName;
 
-                int count = Convert.ToInt32(objCommon.LookUp("ACD_IATTACHMENT_FILE_EXTENTIONS", "COUNT(EXTENTION)", "EXTENTION_DOCSCAN=1 AND EXTENTION='" + ext.ToString() + "'"));
+                int count = Convert.ToInt32(objCommon.LookUp("ACD_IATTACHMENT_FILE_EXTENTIONS", "COUNT(EXTENTION)", "EXTENTION='" + ext.ToString() + "'"));
 
 
                 DataSet dsPURPOSE = new DataSet();
@@ -1008,7 +1013,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                         else
                             Extension = Extension + ", " + dsPURPOSE.Tables[0].Rows[i]["EXTENTION"].ToString();
                     }
-                    objCommon.DisplayMessage("Upload Supported File Format. Please Upload File In "+ Extension, this);
+                    objCommon.DisplayMessage("Upload Supported File Format. Please Upload File In " + Extension, this);
                 }
             }
             else
@@ -1168,17 +1173,26 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 dt = ((DataTable)Session["Attachments"]);
                 dt.Rows.Remove(this.GetDeletableDataRow(dt, Convert.ToString(fileId)));
                 Session["Attachments"] = dt;
-                this.BindListView_Attachments(dt);
+                // this.BindListView_Attachments(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    this.BindListView_Attachments(dt);
+                }
+                else
+                {
+                    lvCompAttach.DataSource = null;
+                    lvCompAttach.DataBind();
+                }
             }
 
             //to permanently delete from database in case of Edit
             if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
             {
 
-                string count = objCommon.LookUp("ADMN_DC_DOCUMENT_UPLOAD", "DOCID,ATTACH_ID", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
+                string count = objCommon.LookUp("ADMN_DC_ASSESTS_FIEESTORAGE", "DOCID,SR_NO", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND SR_NO=" + fileId);
                 if (count != "")
                 {
-                    //  int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
+                    int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSESTS_FIEESTORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND SR_NO=" + fileId);
                 }
             }
 
@@ -1317,12 +1331,12 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             HtmlTableCell thDistrict = (HtmlTableCell)e.Item.FindControl("thDistrict");
             HtmlTableCell thSurNo = (HtmlTableCell)e.Item.FindControl("thSurNo");
             HtmlTableCell tdSurNo = (HtmlTableCell)e.Item.FindControl("tdSurNo");
-            HtmlTableCell tdDistrict=(HtmlTableCell)e.Item.FindControl("tdDistrict");
+            HtmlTableCell tdDistrict = (HtmlTableCell)e.Item.FindControl("tdDistrict");
             HtmlTableCell tdDocNo = (HtmlTableCell)e.Item.FindControl("tdDocNo");
             // Your condition to show or hide the EC No. column
-           string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
-  
-    }
+            string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
+
+        }
     }
 
 
