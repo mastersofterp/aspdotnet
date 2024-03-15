@@ -202,7 +202,7 @@
             </div>
         </section>
 
-        <div class="row equalHMRWrap flex gutters-sm">
+        <div class="row equalHMRWrap flex gutters-sm generalAnalysis">
             <div style="display: none">
                 <div class="col-lg-2 col-md-6 col-12">
                     <div class="x_panel">
@@ -613,7 +613,7 @@
 
         <div class="row equalHMRWrap flex gutters-sm">
             <div class="col-lg-8 col-md-7 col-12">
-                <div class="x_panel in-left a2">
+                <div class="x_panel in-left a2 academicActivities">
                     <div class="x_title">
                         <h2>Academic Activities</h2>
                         <div class="clearfix"></div>
@@ -660,7 +660,7 @@
             </div>
 
             <div class="col-lg-4 col-md-5 col-12">
-                <div class="x_panel in-right a2">
+                <div class="x_panel in-right a2 activeNotice">
                     <div class="x_title">
                         <h2>Active Notice/News</h2>
                         <div class="clearfix"></div>
@@ -731,7 +731,34 @@
             </div>
         </div>
     </div>
+          
+     <script src="<%=Page.ResolveClientUrl("~/plugins/Introjs/intro.js")%>"></script>
+      <script>
+          var userType = '<%=Session["usertype"] %>';
 
+          document.addEventListener('DOMContentLoaded', () => {
+              // setTimeout(function(){ 
+              checkTheIntro(userType);
+          //   }, 4000);
+           
+
+          })
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve the parameter from the URL
+            var urlParams = new URLSearchParams(window.location.search);
+            var executeScript = urlParams.get('executeScript');
+            var uatype = urlParams.get('uatype');
+            debugger;
+            // Check if the parameter indicates to execute the script
+            if (executeScript === 'true') {
+                checkTheIntroWelcome(uatype);
+                // Modify the URL to set executeScript to false
+                history.replaceState({}, '', window.location.pathname + '?executeScript=false');
+            }
+        });
+</script>
     <script>
         var tableOffset = $("#table-1").offset().top;
         var $header = $("#table-1 > thead").clone();
