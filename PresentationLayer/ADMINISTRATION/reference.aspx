@@ -1,5 +1,17 @@
-<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
-    CodeFile="reference.aspx.cs" Inherits="error" Title="" %>
+<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="reference.aspx.cs" Inherits="error" Title="" %>
+
+<%--/*                                  
+---------------------------------------------------------------------------------------------------------------------------                                  
+Created By :                                  
+Created On :                            
+Purpose    :                      
+Version    :                        
+---------------------------------------------------------------------------------------------------------------------------                                  
+Version   Modified On   Modified By      Purpose                                  
+---------------------------------------------------------------------------------------------------------------------------                                  
+1.0.1     12-03-2024    Anurag Baghele   [52380]-Added validation for Error log email
+--------------------------------------------------------------------------------------------------------------------------                                           
+*/ --%>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -512,7 +524,7 @@
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <b>
                                     <asp:Label ID="lblErroLogEmail" Text="Error Log Email" runat="server"></asp:Label></b><br />
-                                <asp:TextBox ID="txtErrorLogEmail" MaxLength="100" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="txtErrorLogEmail" MaxLength="100" runat="server" CssClass="form-control" onblur="validateEmail(this)" />
                             </div>
 
                         </div>
@@ -967,5 +979,18 @@
             }
         }
     </script>
+
+    <%--<1.0.1>--%>
+    <script type="text/javascript">
+        function validateEmail(input) {
+            var email = input.value.trim(); 
+            var regex = /^[^\s@]+@[^\s@]+\.(com)$/i;
+            if (email !== "" && !regex.test(email)) {
+                alert("Please enter a valid email address.");
+                input.value = "";
+            }
+        }
+    </script>
+    <%--</1.0.1>--%>
 
 </asp:Content>
