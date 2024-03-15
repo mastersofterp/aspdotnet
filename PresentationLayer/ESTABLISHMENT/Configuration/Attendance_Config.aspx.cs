@@ -279,7 +279,7 @@ public partial class ESTABLISHMENT_Attendance_Config : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT,SHIFT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString();
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
