@@ -36,7 +36,8 @@
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
                 <div class="box-header with-border">
-                    <h3 class="box-title">EXAM TIME TABLE SLOT</h3>
+                    <h3 class="box-title">
+                        <asp:Label ID="lblDYpageTImeTableSlot" runat="server"></asp:Label></h3>
                 </div>
 
                 <div class="box-body">
@@ -45,7 +46,8 @@
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <sup>*</sup>
-                                    <label>Slot Name</label>
+                                    <label>
+                                        <asp:Label ID="lblDYtxtslotname" runat="server"></asp:Label></label>
                                 </div>
                                 <asp:TextBox ID="txtSlotName" runat="server" TabIndex="2"
                                     ToolTip="Please Enter Slot Name" CssClass="form-control"></asp:TextBox>
@@ -53,12 +55,12 @@
                                     ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Slot Name"
                                     SetFocusOnError="true" />
                                 <%--<ajaxToolKit:FilteredTextBoxExtender ID="fltSlot" runat="server" FilterType="UppercaseLetters,LowercaseLetters,Numbers" TargetControlID="txtSlotName"></ajaxToolKit:FilteredTextBoxExtender>--%>
-
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <sup>*</sup>
-                                    <label>Time From</label>
+                                    <label>
+                                        <asp:Label ID="lblDYtimeform" runat="server"></asp:Label></label>
                                 </div>
                                 <asp:TextBox ID="txtTimeFrom" runat="server" TabIndex="3"
                                     ToolTip="Please Enter From Time Format hh:mm" CssClass="form-control"></asp:TextBox>
@@ -74,7 +76,8 @@
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <sup>*</sup>
-                                    <label>Time To</label>
+                                    <label>
+                                        <asp:Label ID="lblDYtimeto" runat="server"></asp:Label></label>
                                 </div>
                                 <asp:TextBox ID="txtTimeTo" runat="server" TabIndex="4"
                                     ToolTip="Please Enter To Time format hh:mm" CssClass="form-control"></asp:TextBox>
@@ -86,6 +89,18 @@
                                     InvalidValueMessage="To Time is invalid" Display="None" ErrorMessage="Please Enter To Time"
                                     InvalidValueBlurredMessage="*" SetFocusOnError="true" ValidationGroup="Submit" />
 
+                            </div>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <label>
+                                        <asp:Label ID="lblDYcourseslot" runat="server"></asp:Label></label>
+                                </div>
+                                <div class="switch form-inline" tabindex="0">
+                                    <input type="checkbox" id="rdcourseslot" name="switch" />
+                                    <label data-on="Yes" data-off="No" for="rdcourseslot" tabindex="0"></label>
+                                    <asp:HiddenField ID="hfdCourseSlot" runat="server" ClientIDMode="Static" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -114,6 +129,8 @@
                                                 </th>
                                                 <th>Time From - To
                                                 </th>
+                                                <th>Course Slot
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -134,6 +151,7 @@
                                         <td>
                                             <%# Eval("TIMEFROM")%> - <%# Eval("TIMETO")%>
                                         </td>
+                                        <td><%# (Eval("COURSE_SLOT").ToString() == "1") ? "Yes" : "No"%></td>
                                     </tr>
                                 </ItemTemplate>
                                 <FooterTemplate>
@@ -147,5 +165,20 @@
             </div>
         </div>
     </div>
+    <script>
+        $("#rdcourseslot").on("click", function (event) {
+            $('#hfdCourseSlot').val($('#rdcourseslot').prop('checked'));
+        });
 
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_endRequest(function () {
+            $("#rdcourseslot").on("click", function (event) {
+                $('#hfdCourseSlot').val($('#rdcourseslot').prop('checked'));
+            });
+        });
+
+        function SetCourseSlot(val) {
+            $('#rdcourseslot').prop('checked', val);
+        }
+    </script>
 </asp:Content>

@@ -8411,6 +8411,97 @@ namespace IITMS
                     return status;
                 }
                 #endregion
+				
+				#region  new requiremet of Course slot mapping
+                public int AddExamSlot(string slotname, string timefrom, string timeto, string colcode, int courseslot)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[6];
+
+                        objParams[0] = new SqlParameter("@P_SLOTNAME", slotname);
+                        objParams[1] = new SqlParameter("@P_TIMEFROM", timefrom);
+                        objParams[2] = new SqlParameter("@P_TIMETO", timeto);
+                        objParams[3] = new SqlParameter("@P_COLLEGE_CODE", colcode);
+                        objParams[4] = new SqlParameter("@P_COURSESLOT", courseslot);
+                        objParams[5] = new SqlParameter("@P_SLOTNO", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_TT_SLOT_INSERT", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddExamSlot -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                public int UpdateExamSlot(int slotno, string slotname, string timefrom, string timeto, int courseslot)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_SLOTNO", slotno);
+                        objParams[1] = new SqlParameter("@P_SLOTNAME", slotname);
+                        objParams[2] = new SqlParameter("@P_TIMEFROM", timefrom);
+                        objParams[3] = new SqlParameter("@P_TIMETO", timeto);
+                        objParams[4] = new SqlParameter("@P_COURSESLOT", courseslot);
+                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_TT_SLOT_UPDATE", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.UpdateExamSlot -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                public int InsertUpdateCourseSlotMapping(int sessionid, string ccode, int slotno, string ipadress, int ua_no)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionid);
+                        objParams[1] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[2] = new SqlParameter("@P_COURSESLOT", slotno);
+                        objParams[3] = new SqlParameter("@P_IPADRESS", ipadress);
+                        objParams[4] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INSERT_UPDATE_COURSE_SLOT_MAPPING", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.InsertUpdateCourseSlotMapping -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                #endregion
             }
         }
     }
