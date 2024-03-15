@@ -1078,7 +1078,7 @@ public partial class Exam_Registration_Report : System.Web.UI.Page
 
             }
         }
-        else if (rdbReport.SelectedValue == "16")
+        else if (rdbReport.SelectedValue == "16") ///// Added As per the TID-55421
         {
             if (ddlSession.SelectedIndex == 0)
             {
@@ -1096,6 +1096,10 @@ public partial class Exam_Registration_Report : System.Web.UI.Page
             {
                 ExcelReport(ds, "StudentRegisteredbutMarkEntryNotDone");
 
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.UpdatePanel1, "No Record Found.", this.Page);
             }
         }
     }
