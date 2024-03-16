@@ -46,6 +46,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
     bool flag = true;
     decimal Amt = 0;
     decimal CourseAmtt = 0;
+     int rptcnt = 1;
 
 
     protected void Page_PreInit(object sender, EventArgs e)
@@ -346,7 +347,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
         try
         {
 
-
+            rptcnt++;
             int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO='" + Convert.ToInt32(Session["idno"]) + "'"));
             int branchno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO='" + Convert.ToInt32(Session["idno"]) + "'"));
             int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"])));
@@ -357,9 +358,19 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
             //url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + Convert.ToInt32(Session["idno"]) + ",@P_SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]) + ",@P_DEGREENO=" + degreeno + ",@P_BRANCHNO=" + branchno + ",@P_SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip) + ",@P_SEMESTERNO IN (" + Session["Semester"].ToString()+")"; 
             url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + Convert.ToInt32(Session["idno"]) + ",@P_SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]) + ",@P_DEGREENO=" + degreeno + ",@P_BRANCHNO=" + branchno + ",@P_SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip) + ",@P_SEMESTERNO=" + 0;
 
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " </script>";
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+
+
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterStartupScript(this.updatepnl, this.updatepnl.GetType(), "controlJSScript", sb.ToString(), true);
+
+
         }
 
         catch (Exception ex)
@@ -408,14 +419,21 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
 
                 this.ShowDetails();
                 // bindcourses();
+                divbtn.Visible = true;
+               
                 lvFailCourse.Visible = false;
-
+                lblfessapplicable.Text = string.Empty;
+                lblCertificateFee.Text = string.Empty;
+                lblTotalExamFee.Text = "";
+                lblLateFee.Text = "";
+                FinalTotal.Text = "";
 
                 btnPrintRegSlip.Visible = true;
                 btnPrintRegSlip.Enabled = true;
                 btnPay.Visible = false;
                 btnSubmit_WithDemand.Visible = false;
                 btnSubmit.Visible = false;
+
                 //return;
                 ret = false;
                // return ret;
@@ -516,6 +534,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
 
                 if (dsSubjects.Tables[0].Rows.Count > 0)
                 {
+                    divbtn.Visible = true;
                     lvFailCourse.DataSource = dsSubjects;
                     lvFailCourse.DataBind();
                     lvFailCourse.Visible = true;
@@ -529,6 +548,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                 }
                 else
                 {
+                    divbtn.Visible = true;
                     lvFailCourse.DataSource = null;
                     lvFailCourse.DataBind();
                     lvFailCourse.Visible = false;
@@ -615,7 +635,9 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                     btnSubmit_WithDemand.Enabled = false;
                     btnSubmit.Visible = true;
                     btnSubmit.Enabled = true;
+                    btnPrintRegSlip.Enabled = true;
                     btnPrintRegSlip.Visible = true;
+
                     lblfessapplicable.Text = "";
                     lblCertificateFee.Text = "";
                     lblTotalExamFee.Text = "";
@@ -822,44 +844,21 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                         }
                         else
                         {
-                            CalculateTotalCredit();
-                            btnPrintRegSlip.Visible = true;
-                            //btnSubmit.Visible = true;
-                            btnPay.Visible = false;
-                            //btnSubmit_WithDemand.Visible = false;
-                            //btnSubmit_WithDemand.Enabled = false;
-                            lblLateFee.Text = "";
-                            lblfessapplicable.Text = "";
-                            lblCertificateFee.Text = "";
-                            lblTotalExamFee.Text = "";
-                            FinalTotal.Text = "";
-                            PaidTotal.Text = "<b style='color:green;'>PAID AMOUNT: </b> " + ToalPaidAmount.ToString();
-                            //lvFailCourse.Enabled = true;
-
-                            int UnChk = 0;
-                            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-                            {
-                                CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                                if (chk.Enabled == true)
-                                {
-                                    UnChk++;
-                                }
-                            }
-                            if (UnChk >= 1)
-                            {
-                                btnhideshow();
-                                btnPrintRegSlip.Visible = true;
-                            }
-                            else
-                            {
-                                btnPrintRegSlip.Visible = true;
-                                btnSubmit.Visible = false;
-                                btnSubmit.Enabled = false;
-                                btnPay.Visible = false;
-                                btnPay.Enabled = false;
-                                btnSubmit_WithDemand.Enabled = false;
-                                btnSubmit_WithDemand.Visible = false;
-                            }
+                                  CalculateTotalCredit();
+                                   divbtn.Visible = true;
+                                   btnPrintRegSlip.Visible = true;
+                                   btnPrintRegSlip.Enabled = true;
+                                   //btnSubmit.Visible = true;
+                                   btnPay.Visible = false;
+                                   //btnSubmit_WithDemand.Visible = false;
+                                   //btnSubmit_WithDemand.Enabled = false;
+                                   lblLateFee.Text = "";
+                                   lblfessapplicable.Text = "";
+                                   lblCertificateFee.Text = "";
+                                   lblTotalExamFee.Text = "";
+                                   FinalTotal.Text = "";
+                                   PaidTotal.Text = "<b style='color:green;'>PAID AMOUNT: </b> " + ToalPaidAmount.ToString();
+                                   //lvFailCourse.Enabled = true;
 
                         }
 
@@ -1083,13 +1082,28 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
     {
         if (Convert.ToInt32(Session["OrgId"]) == 9)//FOR ATLAS ADDED BY GAURAV 31-3-2023
         {
-            ShowReport("RESIT", "rptRESIT_Reg_ATLAS.rpt");
-            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(7)').hide();});", true);
+
+            if (rptcnt == 1)
+            {
+                ShowReport("RESIT", "rptRESIT_Reg_ATLAS.rpt");
+                ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(7)').hide();});", true);
+            }
+            else {
+
+                rptcnt++;
+            }
         }
         else
         {
+            if (rptcnt == 1)
+            {
+                ShowReport("RESIT", "rptRESIT_Reg_CC.rpt");
+            }
+            else
+            {
 
-            ShowReport("RESIT", "rptRESIT_Reg_CC.rpt");
+                rptcnt++;
+            }
 
         }
 

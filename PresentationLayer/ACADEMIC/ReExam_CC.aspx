@@ -4,7 +4,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <%--<script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
 
@@ -288,7 +288,7 @@
                                   <asp:Button ID="btnSearch" runat="server" Text="Show" CssClass="btn btn-primary" TabIndex="1" OnClick="btnSearch_Click" />
                                 <asp:Button ID="btnClear" runat="server" Text="Clear" TabIndex="1" CssClass="btn btn-warning" OnClick="btnClear_Click" />
                             </div>
-                        </div>
+                   </div>
                 <%--<---------------------------------------------------------------------------------------------------------->--%>
 
                 <div class="box-body">
@@ -670,4 +670,11 @@
             window.history.replaceState('', '', window.location.href) // it prevent page refresh to firing the event again
         })
 </script>
+        <script type="text/javascript">
+    //$(document).ready(function() {
+    //    $('#ctl00_ContentPlaceHolder1_btnPrintRegSlip').click(function (event) {
+    //    event.preventDefault(); // Prevent the default action of the button
+    //});
+    //});
+            </script>
 </asp:Content>
