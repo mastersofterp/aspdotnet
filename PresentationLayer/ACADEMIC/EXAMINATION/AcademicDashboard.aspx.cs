@@ -1331,7 +1331,13 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
             objADEntity.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
             objADEntity.Dashboard_Type = 10;
 
-            dsExamRegistrationDept = objADEController.GetAcademicDashboardDetail(objADEntity);
+            //dsExamRegistrationDept = objADEController.GetAcademicDashboardDetail(objADEntity); // Commented by Sagar Mankar on Date 18032024 with Ticket No 56499
+
+            string SP_Name = "PKG_GET_ACADEMIC_DASHBOARD"; // Added by Sagar Mankar on Date 18032024 with Ticket No 56499
+            string SP_Parameters = "@P_DASHBOARD_TYPE,@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_DEPTNO,@P_SEMESTERNOS,@P_EXAMPROCESSVIEW";
+            string Call_Values = "" + objADEntity.Dashboard_Type + "," + objADEntity.SessionNo + "," + objADEntity.CollegeId + "," + objADEntity.SchemeNo + "," + objADEntity.DeptNo + "," + ViewState["semester"].ToString() + "," + objADEntity.ExamProcessView + "";
+
+            dsExamRegistrationDept = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
         }
     }
 
@@ -1345,9 +1351,14 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
             objADEntity.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
             objADEntity.Dashboard_Type = 11;
 
-            dsExamRegistrationScheme = objADEController.GetAcademicDashboardDetail(objADEntity);
-        }
+            //dsExamRegistrationScheme = objADEController.GetAcademicDashboardDetail(objADEntity); // Commented by Sagar Mankar on Date 18032024 with Ticket No 56499
 
+            string SP_Name = "PKG_GET_ACADEMIC_DASHBOARD"; // Added by Sagar Mankar on Date 18032024 with Ticket No 56499
+            string SP_Parameters = "@P_DASHBOARD_TYPE,@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_DEPTNO,@P_SEMESTERNOS,@P_EXAMPROCESSVIEW";
+            string Call_Values = "" + objADEntity.Dashboard_Type + "," + objADEntity.SessionNo + "," + objADEntity.CollegeId + "," + objADEntity.SchemeNo + "," + objADEntity.DeptNo + "," + ViewState["semester"].ToString() + "," + objADEntity.ExamProcessView + "";
+
+            dsExamRegistrationScheme = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+        }
     }
 
     private void GetExamRegSchmewiseDataAll()
@@ -1358,7 +1369,13 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
             objADEntity.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
             objADEntity.Dashboard_Type = 14;
 
-            dsExamRegistrationAll = objADEController.GetAcademicDashboardDetail(objADEntity);
+            //dsExamRegistrationAll = objADEController.GetAcademicDashboardDetail(objADEntity); // Commented by Sagar Mankar on Date 18032024 with Ticket No 56499
+
+            string SP_Name = "PKG_GET_ACADEMIC_DASHBOARD"; // Added by Sagar Mankar on Date 18032024 with Ticket No 56499
+            string SP_Parameters = "@P_DASHBOARD_TYPE,@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_DEPTNO,@P_SEMESTERNOS,@P_EXAMPROCESSVIEW";
+            string Call_Values = "" + objADEntity.Dashboard_Type + "," + objADEntity.SessionNo + "," + objADEntity.CollegeId + "," + objADEntity.SchemeNo + "," + objADEntity.DeptNo + "," + ViewState["semester"].ToString() + "," + objADEntity.ExamProcessView + "";
+
+            dsExamRegistrationAll = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
         }
     }
 
@@ -1382,7 +1399,15 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
             {
                 ExamRegistrationPendingStatus = 1;
                 objADEntity.Dashboard_Type = 19;
-                dsExamRegistrationPending = objADEController.GetAcademicDashboardDetail(objADEntity);
+
+                //dsExamRegistrationPending = objADEController.GetAcademicDashboardDetail(objADEntity); // Commented by Sagar Mankar on Date 18032024 with Ticket No 56499
+
+                string SP_Name = "PKG_GET_ACADEMIC_DASHBOARD"; // Added by Sagar Mankar on Date 18032024 with Ticket No 56499
+                string SP_Parameters = "@P_DASHBOARD_TYPE,@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_DEPTNO,@P_SEMESTERNOS,@P_EXAMPROCESSVIEW";
+                string Call_Values = "" + objADEntity.Dashboard_Type + "," + objADEntity.SessionNo + "," + objADEntity.CollegeId + "," + objADEntity.SchemeNo + "," + objADEntity.DeptNo + "," + ViewState["semester"].ToString() + "," + objADEntity.ExamProcessView + "";
+
+                dsExamRegistrationPending = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
             }
 
             DataView dv_Exam_Form_FillupStudList = new DataView(dsExamRegistrationPending.Tables[0], "COLLEGE_ID =" + objADEntity.CollegeId + " AND DEPTNO=" + objADEntity.DeptNo + " AND SCHEMENO=" + objADEntity.SchemeNo, "COLLEGE_ID,DEPTNO,SCHEMENO,SEMESTERNO", DataViewRowState.CurrentRows);
@@ -1713,7 +1738,7 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
 
         int Dept = Convert.ToInt32(btn.CommandArgument);
 
-       // DataSet ds = objCommon.FillDropDown("USER_ACC WITH (NOLOCK)", "ISNULL(UA_EMAIL,'') AS UA_EMAIL", "UA_NO", "UA_TYPE=8 AND UA_DEPTNO=" + Dept + "", "UA_NO");
+        // DataSet ds = objCommon.FillDropDown("USER_ACC WITH (NOLOCK)", "ISNULL(UA_EMAIL,'') AS UA_EMAIL", "UA_NO", "UA_TYPE=8 AND UA_DEPTNO=" + Dept + "", "UA_NO");
         DataSet ds = objCommon.FillDropDown("USER_ACC WITH (NOLOCK)", "ISNULL(UA_EMAIL,'') AS UA_EMAIL", "UA_NO", "UA_TYPE=8 AND " + Dept + " IN (SELECT VALUE FROM DBO.SPLIT(UA_DEPTNO,','))", "UA_NO");
 
         foreach (DataRow dr in ds.Tables[0].Rows)
@@ -1746,8 +1771,8 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
 
         int Dept = Convert.ToInt32(btn.CommandArgument);
 
-       // DataSet ds = objCommon.FillDropDown("USER_ACC WITH (NOLOCK)", "ISNULL(UA_EMAIL,'') AS UA_EMAIL", "UA_NO", "UA_TYPE=8 AND UA_DEPTNO=" + Dept + "", "UA_NO");
-        DataSet ds = objCommon.FillDropDown("USER_ACC WITH (NOLOCK)","ISNULL(UA_EMAIL,'') AS UA_EMAIL","UA_NO","UA_TYPE=8 AND " + Dept + " IN (SELECT VALUE FROM DBO.SPLIT(UA_DEPTNO,','))", "UA_NO");
+        // DataSet ds = objCommon.FillDropDown("USER_ACC WITH (NOLOCK)", "ISNULL(UA_EMAIL,'') AS UA_EMAIL", "UA_NO", "UA_TYPE=8 AND UA_DEPTNO=" + Dept + "", "UA_NO");
+        DataSet ds = objCommon.FillDropDown("USER_ACC WITH (NOLOCK)", "ISNULL(UA_EMAIL,'') AS UA_EMAIL", "UA_NO", "UA_TYPE=8 AND " + Dept + " IN (SELECT VALUE FROM DBO.SPLIT(UA_DEPTNO,','))", "UA_NO");
 
         foreach (DataRow dr in ds.Tables[0].Rows)
         {
@@ -2273,7 +2298,7 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
         spName = "PKG_ACD_FILL_SCHOOL";
         spParamaters = "@P_SESSIONID";
         spValue = "" + ddlexamSession.SelectedValue + "";
-        
+
         dscollege = objCommon.DynamicSPCall_Select(spName, spParamaters, spValue);
         if (dscollege.Tables[0].Rows.Count > 0)
         {
@@ -2289,7 +2314,7 @@ public partial class ACADEMIC_EXAMINATION_AcademicDashboard : System.Web.UI.Page
             ddlSession.Items.Clear();
             ddlSession.Items.Add(new ListItem("Please Select", "0"));
         }
-        
+
     }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {

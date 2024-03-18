@@ -516,7 +516,7 @@
                                             placeholder="Please Select School/Institute." runat="server" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged" AutoPostBack="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                      
+
                                         <asp:RequiredFieldValidator ID="rfvddlCollege" ControlToValidate="ddlSession" InitialValue="0"
                                             Display="None" ValidationGroup="Show" runat="server" ErrorMessage="Please select School/Institute."></asp:RequiredFieldValidator>
                                     </div>
@@ -2651,8 +2651,8 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                </div>
                                                             </div>
+                                                        </div>
                                                     </ContentTemplate>
                                                 </ajaxToolKit:TabPanel>
 
