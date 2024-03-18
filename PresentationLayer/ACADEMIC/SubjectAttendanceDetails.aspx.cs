@@ -197,7 +197,6 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
     }
     protected void btnExcel_Click(object sender, EventArgs e)
     {
-        // Added By Jay Takalkhede On dated 18/03/2024 (TkNo.56508)
         ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
         GridView GVDayWiseAtt = new GridView();
         DataSet ds = objAtt.GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);
