@@ -7,6 +7,7 @@
         <asp:UpdateProgress ID="updProg" runat="server" 
             DynamicLayout="true" DisplayAfter="0">
             <ProgressTemplate>
+
                 <div id="preloader">
                     <div id="loader-img">
                         <div id="loader">
