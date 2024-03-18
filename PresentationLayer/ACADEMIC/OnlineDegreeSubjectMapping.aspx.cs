@@ -16,6 +16,9 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic;
+using System.IO;
+using System.Threading.Tasks;
+
 
 
 public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
@@ -56,6 +59,7 @@ public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
+                
             }
             //Populate the Drop Down Lists
             PopulateDropDownList();
@@ -112,11 +116,22 @@ public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
         }
     }
 
+    //protected void NumberDropDown_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    //DataPager2.SetPageProperties(0, DataPager2.PageSize, true);
+    //    //DataPager2.PageSize = Convert.ToInt32(NumberDropDown.SelectedValue);
+    //}
+    //protected void lvBulkDetail_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+    //{
+    //    //DataPager2.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+    //    //BindListView();
+    //}
+
     private void BindListView()
     {
         try
         {
-            DataSet ds = objAdmC.GetAllOnlineMappingdata();
+            DataSet ds =  objAdmC.GetAllOnlineMappingdata();
             if (ds.Tables[0].Rows.Count > 0)
             {
 
@@ -138,6 +153,9 @@ public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+
+    
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -287,10 +305,10 @@ public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
                     if (dr["SPECIALIZE"].ToString() == "0")
                     {
                         chkSpec.Checked = false;
-                        divBranch.Attributes.Add("style", "display:none");                        
+                        divBranch.Attributes.Add("style", "display:none");
                     }
                     else
-                    {                        
+                    {
                         objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH A INNER JOIN ACD_BRANCH B ON(A.BRANCHNO=B.BRANCHNO)", "DISTINCT A.BRANCHNO", "B.LONGNAME", "UGPGOT=" + Convert.ToInt32(ddlprogramt.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "A.BRANCHNO");
                         ddlBranch.SelectedValue = dr["BRANCHNO"] == DBNull.Value ? "0" : dr["BRANCHNO"].ToString();
                         chkSpec.Checked = true;
@@ -345,6 +363,7 @@ public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         ClearField();
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "Datatable();", true);
     }
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
