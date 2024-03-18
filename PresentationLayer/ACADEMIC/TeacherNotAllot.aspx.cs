@@ -336,6 +336,10 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
     }
     protected void ddlReport_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlSession.SelectedIndex = 0;
+        ddlClgScheme.SelectedIndex = 0;
+        ddlSemester.SelectedIndex = 0;
+
         if (Convert.ToInt32(ddlReport.SelectedValue) > 0)
         {
             pnlfooter.Visible = true;
@@ -351,6 +355,7 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
         else
         {
             pnlfooter.Visible = false;
+            pnlHideShow.Visible = false;
         }
     }
 }
