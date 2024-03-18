@@ -658,9 +658,9 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                     if (!txtGoccupationName.Text.Trim().Equals(string.Empty)) objSAddress.GOCCUPATIONNAME = txtGoccupationName.Text.Trim();
                     if (!txtGDesignation.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIANDESIGNATION = txtGDesignation.Text.Trim();
                     if (!txtOtherInfo.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIAN_OTHER_INFO = txtOtherInfo.Text.Trim();
+                    int ua_no = Convert.ToInt32(Session["userno"]);// Added by Kajal J. on 15-03-2024 for maintaining log
 
-
-                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentAddressDetails(objS, objSAddress, Convert.ToInt32(Session["usertype"]));
+                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentAddressDetails(objS, objSAddress, Convert.ToInt32(Session["usertype"]), ua_no);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         ShowStudentDetails();

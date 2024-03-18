@@ -414,7 +414,8 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 objS.DefenceQuota = Convert.ToInt32(ddlDefenceQuota.SelectedValue);
                 objS.MinorityQuota = Convert.ToInt32(ddlMinorityQuota.SelectedValue);
                 objS.AdmroundNo = Convert.ToInt32(ddlAdmRound.SelectedValue);
-                CustomStatus cs = (CustomStatus)objSC.UpdateStudentAdmissionDetails(objS,Convert.ToInt32(Session["usertype"]));
+                int uano = Convert.ToInt32(Session["userno"]);// Added by Kajal J. on 15-03-2024 for maintaining log
+                CustomStatus cs = (CustomStatus)objSC.UpdateStudentAdmissionDetails(objS, Convert.ToInt32(Session["usertype"]), uano);
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
                    // ShowStudentDetails();

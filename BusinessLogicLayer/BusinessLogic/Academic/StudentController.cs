@@ -7851,7 +7851,7 @@ namespace IITMS
                 //    return retStatus;
 
                 //}
-                public int UpdateStudentAdmissionDetails(Student objStudent, int usertype)
+                public int UpdateStudentAdmissionDetails(Student objStudent, int usertype, int uano)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
@@ -7859,7 +7859,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[17];
+                        objParams = new SqlParameter[18];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         //if (objStudent.AdmDate == DateTime.MinValue)
                         //    objParams[1] = new SqlParameter("@P_ADMDATE", DBNull.Value);
@@ -7884,8 +7884,9 @@ namespace IITMS
                         objParams[13] = new SqlParameter("@P_DEFENCEQUOTA", objStudent.DefenceQuota);
                         objParams[14] = new SqlParameter("@P_MINORITYQUOTA", objStudent.MinorityQuota);
                         objParams[15] = new SqlParameter("@P_ADMROUNDNO", objStudent.AdmroundNo);
-                        objParams[16] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[16].Direction = ParameterDirection.Output;
+                        objParams[16] = new SqlParameter("@P_UANO", uano);// Added by Kajal J. on 15-03-2024 for maintaining log
+                        objParams[17] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[17].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_ADMISSION_DETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -7905,6 +7906,7 @@ namespace IITMS
                     return retStatus;
 
                 }
+
                 public int UpdateStudentDASAInformation(Student objStudent, int usertype)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -7994,7 +7996,7 @@ namespace IITMS
 
                 //}
 
-                public int UpdateStudentOtherInformation(Student objStudent, int usertype)
+                public int UpdateStudentOtherInformation(Student objStudent, int usertype, int uano)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
@@ -8002,7 +8004,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[21];
+                        objParams = new SqlParameter[22];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_BIRTH_PLACE", objStudent.BirthPlace);
                         objParams[2] = new SqlParameter("@P_MTOUNGENO", objStudent.MToungeNo);
@@ -8026,8 +8028,9 @@ namespace IITMS
                         objParams[19] = new SqlParameter("@P_ANTI_RAGGING", objStudent.Anti_Ragging);   //Added by sachin on 22-07-2022
 
                         //-------------------------------------------------------------------------
-                        objParams[20] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[20].Direction = ParameterDirection.Output;
+                        objParams[20] = new SqlParameter("@P_UANO", uano);// Added by Kajal J. on 18-03-2024
+                        objParams[21] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[21].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_OTHER_INFORMATION", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -11529,14 +11532,14 @@ namespace IITMS
                     return ds;
                 }
 
-                public int UpdateStudentAdmissionStatus(Student objStudent, int status, string reason, int admstatus)
+                public int UpdateStudentAdmissionStatus(Student objStudent, int status, string reason, int admstatus, int usertype)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[8];
+                        objParams = new SqlParameter[9];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_UANO", objStudent.Uano);
                         objParams[2] = new SqlParameter("@P_IP_ADDRESS", objStudent.IPADDRESS);
@@ -11544,8 +11547,9 @@ namespace IITMS
                         objParams[4] = new SqlParameter("@P_STATUS", status);
                         objParams[5] = new SqlParameter("@P_REASON", reason);
                         objParams[6] = new SqlParameter("@P_ADMSTATUS", admstatus);
-                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[7].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_USER_TYPE", usertype); // ADDED BY KAJAL J. ON 18-03-2024
+                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[8].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUDENT_ADM_STATUS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -13165,15 +13169,16 @@ namespace IITMS
 
                 }
 
-              public int UpdateStudentAddressDetails(Student objStudent, StudentAddress objStudAddress, int usertype)
+                public int UpdateStudentAddressDetails(Student objStudent, StudentAddress objStudAddress, int usertype, int ua_no)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
+
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[33];
+                        objParams = new SqlParameter[34];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_LADDRESS", objStudAddress.LADDRESS);
                         objParams[2] = new SqlParameter("@P_LCOUNTRY", objStudAddress.LCOUNTRY);
@@ -13209,8 +13214,9 @@ namespace IITMS
                         objParams[29] = new SqlParameter("@P_USER_TYPE ", usertype);
                         objParams[30] = new SqlParameter("@P_LTEHSIL", objStudAddress.LTEHSIL);
                         objParams[31] = new SqlParameter("@P_GUARDIAN_OTHER_INFO", objStudAddress.GUARDIAN_OTHER_INFO);
-                        objParams[32] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[32].Direction = ParameterDirection.Output;
+                        objParams[32] = new SqlParameter("@P_UANO", ua_no);// Added by Kajal J. on 15-03-2024 for maintaining log
+                        objParams[33] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[33].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_ADDRESS_DETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -13230,130 +13236,132 @@ namespace IITMS
                     return retStatus;
 
                 }
-              public int UpdateStudentQualifyingExamInformation(Student objStudent, StudentQualExm objStudQExm, int usertype, string Vocational_Sub, int diplomastatus)
-                  {
-                  int retStatus = Convert.ToInt32(CustomStatus.Others);
-                  try
-                      {
-                      SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                      SqlParameter[] objParams = null;
-                      //Update Student Local Address
-                      objParams = new SqlParameter[74];
-                      objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
-                      objParams[1] = new SqlParameter("@P_SCHOOL_COLLEGE_NAMESSC", objStudQExm.SchoolCollegeNameSsc);
-                      objParams[2] = new SqlParameter("@P_BOARDSSC", objStudQExm.BoardSsc);
-                      objParams[3] = new SqlParameter("@P_YEAR_OF_EXAMSSC", objStudQExm.YearOfExamSsc);
-                      objParams[4] = new SqlParameter("@P_SSC_MEDIUM", objStudQExm.SSC_medium);
-                      objParams[5] = new SqlParameter("@P_MARKS_OBTAINEDSSC", objStudQExm.MarksObtainedSsc);
-                      objParams[6] = new SqlParameter("@P_OUT_OF_MRKSSSC", objStudQExm.OutOfMarksSsc);
-                      objParams[7] = new SqlParameter("@P_PERSSC", objStudQExm.PercentageSsc);
-                      objParams[8] = new SqlParameter("@P_QEXMROLLNOSSC", objStudQExm.QEXMROLLNOSSC);
-                      objParams[9] = new SqlParameter("@P_PERCENTILESSC", objStudQExm.PercentileSsc);
-                      objParams[10] = new SqlParameter("@P_GRADESSC", objStudQExm.GradeSsc);
-                      objParams[11] = new SqlParameter("@P_ATTEMPTSSC", objStudQExm.AttemptSsc);
-                      objParams[12] = new SqlParameter("@P_COLLEGE_ADD_SSC", objStudQExm.colg_address_SSC);
 
-                      objParams[13] = new SqlParameter("@P_SCHOOL_COLLEGE_NAMEHSSC", objStudQExm.SCHOOL_COLLEGE_NAME);
-                      objParams[14] = new SqlParameter("@P_BOARDHSSC", objStudQExm.BOARD);
-                      objParams[15] = new SqlParameter("@P_YEAR_OF_EXAMHSSC", objStudQExm.YEAR_OF_EXAMHSSC);
-                      objParams[16] = new SqlParameter("@P_HSSC_MEDIUM", objStudQExm.HSSC_medium);
-                      objParams[17] = new SqlParameter("@P_MARKS_OBTAINEDHSSC", objStudQExm.MARKOBTAINED);
-                      objParams[18] = new SqlParameter("@P_OUT_OF_MRKSHSSC", objStudQExm.OUTOFMARK);
-                      objParams[19] = new SqlParameter("@P_PERHSSC", objStudQExm.PERCENTAGE);
-                      objParams[20] = new SqlParameter("@P_QEXMROLLNOHSSC", objStudQExm.QEXMROLLNOHSSC);
-                      objParams[21] = new SqlParameter("@P_PERCENTILEHSSC", objStudQExm.PercentileHSsc);
-                      objParams[22] = new SqlParameter("@P_GRADEHSSC", objStudQExm.GRADE);
-                      objParams[23] = new SqlParameter("@P_ATTEMPTHSSC", objStudQExm.ATTEMPT);
-                      objParams[24] = new SqlParameter("@P_COLLEGE_ADD_HSSC", objStudQExm.colg_address_HSSC);
 
-                      objParams[25] = new SqlParameter("@P_HSC_CHE", objStudQExm.HSCCHE);
-                      objParams[26] = new SqlParameter("@P_HSC_CHE_MAX", objStudQExm.HSCCHEMAX1);
-                      objParams[27] = new SqlParameter("@P_HSC_PHY", objStudQExm.HSCPHY1);
-                      objParams[28] = new SqlParameter("@P_HSC_PHY_MAX", objStudQExm.HSCPHYMAX1);
-                      objParams[29] = new SqlParameter("@P_HSC_ENG", objStudQExm.ENG);
-                      objParams[30] = new SqlParameter("@P_HSC_ENG_MAX", objStudQExm.HSCENGMAX);
-                      objParams[31] = new SqlParameter("@P_HSC_MAT", objStudQExm.MATHS);
-                      objParams[32] = new SqlParameter("@P_HSC_MAT_MAX", objStudQExm.MATHSMAX);
+                public int UpdateStudentQualifyingExamInformation(Student objStudent, StudentQualExm objStudQExm, int usertype, string Vocational_Sub, int diplomastatus, int ua_no)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Update Student Local Address
+                        objParams = new SqlParameter[75];
+                        objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
+                        objParams[1] = new SqlParameter("@P_SCHOOL_COLLEGE_NAMESSC", objStudQExm.SchoolCollegeNameSsc);
+                        objParams[2] = new SqlParameter("@P_BOARDSSC", objStudQExm.BoardSsc);
+                        objParams[3] = new SqlParameter("@P_YEAR_OF_EXAMSSC", objStudQExm.YearOfExamSsc);
+                        objParams[4] = new SqlParameter("@P_SSC_MEDIUM", objStudQExm.SSC_medium);
+                        objParams[5] = new SqlParameter("@P_MARKS_OBTAINEDSSC", objStudQExm.MarksObtainedSsc);
+                        objParams[6] = new SqlParameter("@P_OUT_OF_MRKSSSC", objStudQExm.OutOfMarksSsc);
+                        objParams[7] = new SqlParameter("@P_PERSSC", objStudQExm.PercentageSsc);
+                        objParams[8] = new SqlParameter("@P_QEXMROLLNOSSC", objStudQExm.QEXMROLLNOSSC);
+                        objParams[9] = new SqlParameter("@P_PERCENTILESSC", objStudQExm.PercentileSsc);
+                        objParams[10] = new SqlParameter("@P_GRADESSC", objStudQExm.GradeSsc);
+                        objParams[11] = new SqlParameter("@P_ATTEMPTSSC", objStudQExm.AttemptSsc);
+                        objParams[12] = new SqlParameter("@P_COLLEGE_ADD_SSC", objStudQExm.colg_address_SSC);
 
-                      objParams[33] = new SqlParameter("@P_QUALIFYNO", objStudQExm.QUALIFYNO);
-                      objParams[34] = new SqlParameter("@P_QEXMROLLNO", objStudent.QexmRollNo);
-                      objParams[35] = new SqlParameter("@P_YEAR_OF_EXAM", objStudent.YearOfExam);
-                      objParams[36] = new SqlParameter("@P_PERCENTAGE", objStudent.Percentage);
-                      objParams[37] = new SqlParameter("@P_PERCENTILE", objStudQExm.PERCENTILE);
-                      objParams[38] = new SqlParameter("@P_ALL_INDIA_RANK", objStudQExm.ALLINDIARANK);
-                      objParams[39] = new SqlParameter("@P_SCORE", objStudent.Score);
+                        objParams[13] = new SqlParameter("@P_SCHOOL_COLLEGE_NAMEHSSC", objStudQExm.SCHOOL_COLLEGE_NAME);
+                        objParams[14] = new SqlParameter("@P_BOARDHSSC", objStudQExm.BOARD);
+                        objParams[15] = new SqlParameter("@P_YEAR_OF_EXAMHSSC", objStudQExm.YEAR_OF_EXAMHSSC);
+                        objParams[16] = new SqlParameter("@P_HSSC_MEDIUM", objStudQExm.HSSC_medium);
+                        objParams[17] = new SqlParameter("@P_MARKS_OBTAINEDHSSC", objStudQExm.MARKOBTAINED);
+                        objParams[18] = new SqlParameter("@P_OUT_OF_MRKSHSSC", objStudQExm.OUTOFMARK);
+                        objParams[19] = new SqlParameter("@P_PERHSSC", objStudQExm.PERCENTAGE);
+                        objParams[20] = new SqlParameter("@P_QEXMROLLNOHSSC", objStudQExm.QEXMROLLNOHSSC);
+                        objParams[21] = new SqlParameter("@P_PERCENTILEHSSC", objStudQExm.PercentileHSsc);
+                        objParams[22] = new SqlParameter("@P_GRADEHSSC", objStudQExm.GRADE);
+                        objParams[23] = new SqlParameter("@P_ATTEMPTHSSC", objStudQExm.ATTEMPT);
+                        objParams[24] = new SqlParameter("@P_COLLEGE_ADD_HSSC", objStudQExm.colg_address_HSSC);
 
-                      objParams[40] = new SqlParameter("@P_OTHERQUALIFYNO", objStudent.PGQUALIFYNO);
-                      objParams[41] = new SqlParameter("@P_OTHERQEXMROLLNO", objStudent.PGENTROLLNO);
-                      objParams[42] = new SqlParameter("@P_OTHER_YEAR_OF_EXAM", objStudent.pgyearOfExam);
-                      objParams[43] = new SqlParameter("@P_OTHERPERCENTAGE", objStudent.pgpercentage);
-                      objParams[44] = new SqlParameter("@P_OTHERPERCENTILE", objStudent.pgpercentile);
-                      objParams[45] = new SqlParameter("@P_OTHER_ALL_INDIA_RANK", objStudent.PGRANK);
-                      objParams[46] = new SqlParameter("@P_OTHER_SCORE", objStudent.pgscore);
+                        objParams[25] = new SqlParameter("@P_HSC_CHE", objStudQExm.HSCCHE);
+                        objParams[26] = new SqlParameter("@P_HSC_CHE_MAX", objStudQExm.HSCCHEMAX1);
+                        objParams[27] = new SqlParameter("@P_HSC_PHY", objStudQExm.HSCPHY1);
+                        objParams[28] = new SqlParameter("@P_HSC_PHY_MAX", objStudQExm.HSCPHYMAX1);
+                        objParams[29] = new SqlParameter("@P_HSC_ENG", objStudQExm.ENG);
+                        objParams[30] = new SqlParameter("@P_HSC_ENG_MAX", objStudQExm.HSCENGMAX);
+                        objParams[31] = new SqlParameter("@P_HSC_MAT", objStudQExm.MATHS);
+                        objParams[32] = new SqlParameter("@P_HSC_MAT_MAX", objStudQExm.MATHSMAX);
 
-                      objParams[47] = new SqlParameter("@P_SCHOOL_COLLEGE_NAME_DIPLOMA", objStudQExm.SchoolCollegeNameDiploma);
-                      objParams[48] = new SqlParameter("@P_BOARDDIPLOMA", objStudQExm.BoardDiploma);
-                      objParams[49] = new SqlParameter("@P_YEAR_OF_EXAMDIPLOMA", objStudQExm.YearOfExamDiploma);
-                      objParams[50] = new SqlParameter("@P_DIPLOMA_MEDIUM", objStudQExm.Diploma_medium);
-                      objParams[51] = new SqlParameter("@P_MARKS_OBTAINEDDIPLOMA", objStudQExm.MarksObtainedDiploma);
-                      objParams[52] = new SqlParameter("@P_OUT_OF_MRKSDIPLOMA", objStudQExm.OutOfMarksDiploma);
-                      objParams[53] = new SqlParameter("@P_PERDIPLOMA", objStudQExm.PercentageDiploma);
-                      objParams[54] = new SqlParameter("@P_QEXMROLLNODIPLOMA", objStudQExm.QEXMROLLNODiploma);
-                      objParams[55] = new SqlParameter("@P_PERCENTILEDIPLOMA", objStudQExm.PercentileDiploma);
-                      objParams[56] = new SqlParameter("@P_GRADEDIPLOMA", objStudQExm.GradeDiploma);
-                      objParams[57] = new SqlParameter("@P_ATTEMPTDIPLOMA", objStudQExm.AttemptDiploma);
-                      objParams[58] = new SqlParameter("@P_COLLEGE_ADD_DIPLOMA", objStudQExm.colg_address_Diploma);
-                      objParams[59] = new SqlParameter("@P_USER_TYPE", usertype);
-                      objParams[60] = new SqlParameter("@P_OTHER_SUB", Vocational_Sub);
-                      objParams[61] = new SqlParameter("@P_HSC_PCM", objStudQExm.HSCPCM);
-                      objParams[62] = new SqlParameter("@P_HSC_PCM_PERCENTAGES", objStudQExm.HSCPCMPercentage);
-                      objParams[63] = new SqlParameter("@P_NATA_MARKS", objStudent.NataMarks);
-                      objParams[64] = new SqlParameter("@P_DIPLOMASTAUS", diplomastatus);
-                      objParams[65] = new SqlParameter("@P_HSC_BIO", objStudQExm.HSCBIO);
-                      objParams[66] = new SqlParameter("@P_HSC_BIO_MAX", objStudQExm.HSCBIOMAX);
-                      objParams[67] = new SqlParameter("@P_DIVISION_SSC", objStudQExm.DivisionSsc);
-                      objParams[68] = new SqlParameter("@P_DIVISION_HSC", objStudQExm.DivisionHsc);
-                      objParams[69] = new SqlParameter("@P_DIVISION_DIPLOMA", objStudQExm.DivisionDiploma);
-                      objParams[70] = new SqlParameter("@P_MARKSHEETNO_SSC", objStudQExm.MarksheetNoSsc);
-                      objParams[71] = new SqlParameter("@P_MARKSHEETNO_HSC", objStudQExm.MarksheetNoHsc);
-                      objParams[72] = new SqlParameter("@P_MARKSHEETNO_DIPLOMA", objStudQExm.MarksheetNoDiploma);
+                        objParams[33] = new SqlParameter("@P_QUALIFYNO", objStudQExm.QUALIFYNO);
+                        objParams[34] = new SqlParameter("@P_QEXMROLLNO", objStudent.QexmRollNo);
+                        objParams[35] = new SqlParameter("@P_YEAR_OF_EXAM", objStudent.YearOfExam);
+                        objParams[36] = new SqlParameter("@P_PERCENTAGE", objStudent.Percentage);
+                        objParams[37] = new SqlParameter("@P_PERCENTILE", objStudQExm.PERCENTILE);
+                        objParams[38] = new SqlParameter("@P_ALL_INDIA_RANK", objStudQExm.ALLINDIARANK);
+                        objParams[39] = new SqlParameter("@P_SCORE", objStudent.Score);
 
-                      objParams[73] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                      objParams[73].Direction = ParameterDirection.Output;
-                      object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_QUALIFYING_EXAM_INFORMATION", objParams, true);
+                        objParams[40] = new SqlParameter("@P_OTHERQUALIFYNO", objStudent.PGQUALIFYNO);
+                        objParams[41] = new SqlParameter("@P_OTHERQEXMROLLNO", objStudent.PGENTROLLNO);
+                        objParams[42] = new SqlParameter("@P_OTHER_YEAR_OF_EXAM", objStudent.pgyearOfExam);
+                        objParams[43] = new SqlParameter("@P_OTHERPERCENTAGE", objStudent.pgpercentage);
+                        objParams[44] = new SqlParameter("@P_OTHERPERCENTILE", objStudent.pgpercentile);
+                        objParams[45] = new SqlParameter("@P_OTHER_ALL_INDIA_RANK", objStudent.PGRANK);
+                        objParams[46] = new SqlParameter("@P_OTHER_SCORE", objStudent.pgscore);
 
-                      if (Convert.ToInt32(ret) == 1)
-                          {
-                          if (objStudent.LastQualifiedExams != null)
-                              {
-                              foreach (QualifiedExam qualExam in objStudent.LastQualifiedExams)
-                                  {
-                                  this.UpdateLastQualExams(qualExam);
-                                  }
-                              }
+                        objParams[47] = new SqlParameter("@P_SCHOOL_COLLEGE_NAME_DIPLOMA", objStudQExm.SchoolCollegeNameDiploma);
+                        objParams[48] = new SqlParameter("@P_BOARDDIPLOMA", objStudQExm.BoardDiploma);
+                        objParams[49] = new SqlParameter("@P_YEAR_OF_EXAMDIPLOMA", objStudQExm.YearOfExamDiploma);
+                        objParams[50] = new SqlParameter("@P_DIPLOMA_MEDIUM", objStudQExm.Diploma_medium);
+                        objParams[51] = new SqlParameter("@P_MARKS_OBTAINEDDIPLOMA", objStudQExm.MarksObtainedDiploma);
+                        objParams[52] = new SqlParameter("@P_OUT_OF_MRKSDIPLOMA", objStudQExm.OutOfMarksDiploma);
+                        objParams[53] = new SqlParameter("@P_PERDIPLOMA", objStudQExm.PercentageDiploma);
+                        objParams[54] = new SqlParameter("@P_QEXMROLLNODIPLOMA", objStudQExm.QEXMROLLNODiploma);
+                        objParams[55] = new SqlParameter("@P_PERCENTILEDIPLOMA", objStudQExm.PercentileDiploma);
+                        objParams[56] = new SqlParameter("@P_GRADEDIPLOMA", objStudQExm.GradeDiploma);
+                        objParams[57] = new SqlParameter("@P_ATTEMPTDIPLOMA", objStudQExm.AttemptDiploma);
+                        objParams[58] = new SqlParameter("@P_COLLEGE_ADD_DIPLOMA", objStudQExm.colg_address_Diploma);
+                        objParams[59] = new SqlParameter("@P_USER_TYPE", usertype);
+                        objParams[60] = new SqlParameter("@P_OTHER_SUB", Vocational_Sub);
+                        objParams[61] = new SqlParameter("@P_HSC_PCM", objStudQExm.HSCPCM);
+                        objParams[62] = new SqlParameter("@P_HSC_PCM_PERCENTAGES", objStudQExm.HSCPCMPercentage);
+                        objParams[63] = new SqlParameter("@P_NATA_MARKS", objStudent.NataMarks);
+                        objParams[64] = new SqlParameter("@P_DIPLOMASTAUS", diplomastatus);
+                        objParams[65] = new SqlParameter("@P_HSC_BIO", objStudQExm.HSCBIO);
+                        objParams[66] = new SqlParameter("@P_HSC_BIO_MAX", objStudQExm.HSCBIOMAX);
+                        objParams[67] = new SqlParameter("@P_DIVISION_SSC", objStudQExm.DivisionSsc);
+                        objParams[68] = new SqlParameter("@P_DIVISION_HSC", objStudQExm.DivisionHsc);
+                        objParams[69] = new SqlParameter("@P_DIVISION_DIPLOMA", objStudQExm.DivisionDiploma);
+                        objParams[70] = new SqlParameter("@P_MARKSHEETNO_SSC", objStudQExm.MarksheetNoSsc);
+                        objParams[71] = new SqlParameter("@P_MARKSHEETNO_HSC", objStudQExm.MarksheetNoHsc);
+                        objParams[72] = new SqlParameter("@P_MARKSHEETNO_DIPLOMA", objStudQExm.MarksheetNoDiploma);
+                        objParams[73] = new SqlParameter("@P_UANO", ua_no);// Added by Kajal J. on 16-03-2024 for maintaining log
+                        objParams[74] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[74].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_QUALIFYING_EXAM_INFORMATION", objParams, true);
 
-                          if (objStudent.EntranceExams != null)
-                              {
-                              foreach (QualifiedExam EntranceExam in objStudent.EntranceExams)
-                                  {
-                                  this.InsertUpdateEntranceExams(EntranceExam);
-                                  }
-                              }
-                          retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
-                          }
-                      else
-                          retStatus = Convert.ToInt32(CustomStatus.Error);
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            if (objStudent.LastQualifiedExams != null)
+                            {
+                                foreach (QualifiedExam qualExam in objStudent.LastQualifiedExams)
+                                {
+                                    this.UpdateLastQualExams(qualExam);
+                                }
+                            }
 
-                      }
-                  catch (Exception ex)
-                      {
-                      retStatus = Convert.ToInt32(CustomStatus.Error);
-                      throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateStudentDASAInformation-> " + ex.ToString());
-                      }
+                            if (objStudent.EntranceExams != null)
+                            {
+                                foreach (QualifiedExam EntranceExam in objStudent.EntranceExams)
+                                {
+                                    this.InsertUpdateEntranceExams(EntranceExam);
+                                }
+                            }
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.Error);
 
-                  return retStatus;
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateStudentDASAInformation-> " + ex.ToString());
+                    }
 
-                  }
+                    return retStatus;
+
+                }
 
 
                 public int UpdateStudentPersonalInformation(Student objStudent, StudentAddress objStudAddress, StudentPhoto objStudPhoto, StudentQualExm objStudQExm, string MotherMobile, string MotherOfficeNo, string IndusEmail, int usertype, int Father_alive)
@@ -13493,15 +13501,15 @@ namespace IITMS
                     //throw new NotImplementedException();
                 }
 
-                public int AddUpdateStudentDocumentsDetailNew(int idno, int hiddtudocno, string extension, string contentType, string filename, string path, string certificateno, string district, string issuedate, string Authority, int COMMAND_TYPE, int userno)
-                    {
+                public int AddUpdateStudentDocumentsDetailNew(int idno, int hiddtudocno, string extension, string contentType, string filename, string path, string certificateno, string district, string issuedate, string Authority, int COMMAND_TYPE, int userno, int user_type)
+                {
 
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
-                        {
+                    {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[13];
+                        objParams = new SqlParameter[14];
                         objParams[0] = new SqlParameter("@P_IDNO", idno);
                         objParams[1] = new SqlParameter("@P_STU_DOC_NO", hiddtudocno);
                         // objParams[2] = new SqlParameter("@P_CHK", chkDocuments);
@@ -13518,27 +13526,28 @@ namespace IITMS
                         objParams[9] = new SqlParameter("@P_AUTHORITY", Authority);
                         objParams[10] = new SqlParameter("@P_COMMAND_TYPE", COMMAND_TYPE);
                         objParams[11] = new SqlParameter("@P_USERNO", userno); // Added by Bhagyashree on 01062023
-                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[12].Direction = ParameterDirection.Output;
+                        objParams[12] = new SqlParameter("@P_USER_TYPE", user_type);// added by Kajal J. on 18-03-2024 for maitaining log
+                        objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_UPDATE_STUDENT_FILE_UPLOAD_DOCUMENT_STUDENT", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
                         else if (Convert.ToInt32(ret) == 2)
-                            {
+                        {
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
-                            }
+                        }
                         else
                             retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
-                        }
+                    }
                     catch (Exception ex)
-                        {
+                    {
                         retStatus = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.AddUpdateStudentDocumentsDetail-> " + ex.ToString());
-                        }
+                    }
                     return retStatus;
                     //throw new NotImplementedException();
-                    }
+                }
 
 
                 //ADDED BY PRANITA A. HIRADKAR ON 06/12/2021 FOR APPROVE BONAFIDE CERTIFICATE
@@ -14078,6 +14087,7 @@ namespace IITMS
 
                 }
                 //------------------------------------------------------------------------------------------------------------------------
+
                 public int UpdateStudentAdmissionDetails_CRESCENT(Student objStudent, int usertype)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
