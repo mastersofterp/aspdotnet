@@ -107,6 +107,8 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
 
     protected void btnShow_Click(object sender, EventArgs e)
     {
+        Panel2.Visible = true;
+        Panel1.Visible = true;
         if (ddlType.SelectedValue == "1")
         {
             if (ddlAttendanceStatus.SelectedValue == "2")
@@ -138,7 +140,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
         {
 
             DataSet ds;
-
+            Panel1.Visible = true;
             DateTime FromDate = txtFromDate.Text == string.Empty ? DateTime.MinValue : Convert.ToDateTime(txtFromDate.Text);
 
             ds = objAttC.GetDatewiseDataForClassScheduleModified(Convert.ToDateTime(FromDate), Convert.ToInt32(ddlAttendanceStatus.SelectedValue));
@@ -223,8 +225,8 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
             }
             else
             {
-
-
+                Panel1.Visible = false;
+                Panel2.Visible = false;
                 lvRoomOccupancy.DataSource = null;
                 lvRoomOccupancy.DataBind();
                 lvClassSchedule.DataSource = null;
@@ -622,5 +624,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
         lvClassSchedule.DataSource = null;
         lvClassSchedule.DataBind();
         btnSendEmail.Visible = false;
+        Panel1.Visible = false;
+        Panel2.Visible = false;
     }
 }
