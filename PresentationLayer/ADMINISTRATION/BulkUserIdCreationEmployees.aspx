@@ -722,7 +722,7 @@
                                                                                                  <div class="form-group col-lg-3 col-md-6 col-12">
                                                                                                     <div class="label-dynamic">
                                                                                                         <sup> </sup>
-                                                                                                        <label>With Master</label>
+                                                                                                        <label>Without Master Data</label>
                                                                                                     </div>
                                                                                                     <asp:CheckBox ID="chismaster" runat="server" ToolTip="Check if no need to master data" TabIndex="3" />
                                                                                                 </div>

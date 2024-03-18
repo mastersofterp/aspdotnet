@@ -1016,6 +1016,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     }
                     else
                     {
+
                         if (ContainsSpace(str))
                         {
                             // Register JavaScript alert if space is found
@@ -1084,8 +1085,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                         if (isNumber == false)
                         {
-                            message = "<span style='color:Red'><b>Please enter RFIDNO In Eight Digit Numbers Format</b> </span>";
-                            messageexp = "Please enter RFIDNO In Eight Digit Numbers Foramt ";
+                            message = "<span style='color:Red'><b>Please enter RFIDNO In Nine Digit Numbers Format</b> </span>";
+                            messageexp = "Please enter RFIDNO In Nine Digit Numbers Foramt ";
                             ErrorString = ErrorString + message + " | ";
                             ErrorString1 = ErrorString1 + messageexp + " | ";
                             IsErrorInUpload = true;
@@ -1130,19 +1131,30 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         DateTime date1;
                         if (DateTime.TryParseExact(datedob, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
                         {
-
-
-                            //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
-                            string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
-                            ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
-                            if (ds1.Tables[0].Rows.Count > 0)
+                            DateTime currentDate = DateTime.Now;
+                            string scurrentDate = currentDate.ToString("yyyy/MM/dd");
+                            DateTime dtDbDate = DateTime.Parse(datedob);
+                            string SDBDate = dtDbDate.ToString("yyyy/MM/dd");
+                            if (Convert.ToDateTime(scurrentDate) < Convert.ToDateTime(SDBDate))
                             {
-                                message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
-                                messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                                message = "<span style='color:Red'><b> Date of Birth should not be greater than current date.</b></span>";
+                                messageexp = "Date of Birth should not be greater than current date.";
                                 ErrorString = ErrorString + message + " | ";
                                 ErrorString1 = ErrorString1 + messageexp + " | ";
                                 IsErrorInUpload = true;
                             }
+
+                            //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
+                            //string DOB = Convert.ToDateTime(datedob).ToString("dd/MM/yyyy");
+                            //ds1 = objCommon.FillDropDown("payroll_empmas", "*", "EmployeeId", "FNAME='" + Fname + "'and LNAME='" + Lname + "' and DOB='" + DOB + "'", "");
+                            //if (ds1.Tables[0].Rows.Count > 0)
+                            //{
+                            //    message = "<span style='color:Red'><b> FName LName and Date Of Birth Is Already Exists.</b></span>";
+                            //    messageexp = "FName LName and Date Of Birth Is Already Exists.";
+                            //    ErrorString = ErrorString + message + " | ";
+                            //    ErrorString1 = ErrorString1 + messageexp + " | ";
+                            //    IsErrorInUpload = true;
+                            //}
                         }
                         //else if (!(dtNew.Rows[i]["Date of Birth"]).ToString().Equals(string.Empty))
                         //{
@@ -1152,7 +1164,18 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         else if (DateTime.TryParseExact(datedob, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
                         {
 
-
+                            DateTime currentDate = DateTime.Now;
+                            string scurrentDate = currentDate.ToString("yyyy/MM/dd");
+                            DateTime dtDbDate = DateTime.Parse(datedob);
+                            string SDBDate = dtDbDate.ToString("yyyy/MM/dd");
+                            if (Convert.ToDateTime(scurrentDate) < Convert.ToDateTime(SDBDate))
+                            {
+                                message = "<span style='color:Red'><b> Date of Birth should not be greater than current date.</b></span>";
+                                messageexp = "Date of Birth should not be greater than current date.";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                            }
 
 
                             //string DOB = Convert.ToDateTime(DOB1).ToString("dd/MM/yyyy");
@@ -1310,6 +1333,15 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     if (!(dtNew.Rows[i]["Employee Id"]).ToString().Equals(string.Empty))
                     {
                         objPayMas.RegNo = dtNew.Rows[i]["Employee Id"].ToString();
+                        string EmployeeId = dtNew.Rows[i]["Employee Id"].ToString();
+                        if (EmployeeId.Length > 15)
+                        {
+                            message = "<span style='color:Red'><b>Employee Id should not be greater than 15 characters.</b></span>";
+                            messageexp = "Employee Id should not be greater than 15 characters. ";
+                            ErrorString = ErrorString + message + " | ";
+                            ErrorString1 = ErrorString1 + messageexp + " | ";
+                            IsErrorInUpload = true;
+                        }
                     }
                     else
                     {
@@ -1533,6 +1565,24 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             {
                                 // not a number
                             }
+
+                            string pattern = "[^a-zA-Z ]";
+                            Regex rgx = new Regex(pattern);
+                            Match match = rgx.Match(FName[j].ToString());
+
+                            if (match.Success)
+                            {
+                                message = "<span style='color:Red'><b>Please enter a valid First Name. Only letters and spaces are allowed.</b></span>";
+                                messageexp = "Please enter a valid First Name. Only letters and spaces are allowed.";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                break;
+                            }
+                            else
+                            {
+                                // not a special character
+                            }
                         }
                     }
                     else
@@ -1565,6 +1615,25 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             {
                                 // not a number
                             }
+
+                            string pattern = "[^a-zA-Z ]";
+                            Regex rgx = new Regex(pattern);
+                            Match match = rgx.Match(MName[j].ToString());
+
+                            if (match.Success)
+                            {
+                                message = "<span style='color:Red'><b>Please enter a valid Middle Name. Only letters and spaces are allowed.</b></span>";
+                                messageexp = "Please enter a valid Middle Name. Only letters and spaces are allowed.";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                break;
+                            }
+                            else
+                            {
+                                // not a special character
+                            }
+
                         }
                     }
                     if (!(dtNew.Rows[i]["Last Name"]).ToString().Equals(string.Empty))
@@ -1587,6 +1656,25 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             else
                             {
                                 // not a number
+                            }
+
+
+                            string pattern = "[^a-zA-Z ]";
+                            Regex rgx = new Regex(pattern);
+                            Match match = rgx.Match(LName[j].ToString());
+
+                            if (match.Success)
+                            {
+                                message = "<span style='color:Red'><b>Please enter a valid Last Name. Only letters and spaces are allowed.</b></span>";
+                                messageexp = "Please enter a valid Last Name. Only letters and spaces are allowed.";
+                                ErrorString = ErrorString + message + " | ";
+                                ErrorString1 = ErrorString1 + messageexp + " | ";
+                                IsErrorInUpload = true;
+                                break;
+                            }
+                            else
+                            {
+                                // not a special character
                             }
                         }
                     }
