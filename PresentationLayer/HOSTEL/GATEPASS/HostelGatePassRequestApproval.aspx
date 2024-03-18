@@ -38,9 +38,8 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-                <div class="box-header with-border">
-                    <%--style="display:flex;--%>
-                    <h3 class="box-title">Hostel Gate Pass Request Approval</h3>
+                <div class="box-header with-border">  <%--lblDynamicPageTitle Added By Himanshu tamrakar 23-02-2024--%>
+                    <h3 class="box-title" style="text-transform:uppercase;" ><asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
 
                 <div class="col-12"  >
@@ -90,7 +89,7 @@
                                     <%# Eval("APPLY_DATE","{0:dd/MM/yyyy hh:mm tt}") %>
                                 </td>
                                 <td>
-                                    <asp:Label ID="lblStatus" runat="server" Text=' <%# Eval("FINAL_STATUS") %>'></asp:Label>
+                                    <asp:Label ID="lblStatus" runat="server" ForeColor='<%# Eval("FINAL_STATUS").Equals("APPROVED")?System.Drawing.Color.Green:Eval("FINAL_STATUS").Equals("REJECTED")?System.Drawing.Color.Red: System.Drawing.Color.Red %>' Text=' <%# Eval("FINAL_STATUS") %>'></asp:Label>
                                 </td>
                                 <td>
                                     <asp:Button ID="btnShow" runat="server" Text="Show" CssClass="btn btn-outline-primary" CommandArgument='<%# Eval("HGP_ID") %>' OnClick="btnShow_Click"   />

@@ -118,7 +118,9 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
 
             if (ViewState["action"] == "checked")
             {
-                int Approve = 0;
+                //int Approve = 0;
+                string Approve = "";
+                string Remark="";
                 int recid = 0;
                 CustomStatus cs = new CustomStatus();
                 foreach (ListViewDataItem item in lvGatePass.Items)
@@ -126,24 +128,27 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                     CheckBox chkApprove = item.FindControl("chkApprove") as CheckBox;
                     HiddenField hidrecid = item.FindControl("hidrecid") as HiddenField;
 
+                    //if (chkApprove.Checked)
+                    //{
+                    //    Approve = 1;
+                    //}
+                    //else
+                    //{
+                    //    Approve = 0;
+                    //}
                     if (chkApprove.Checked)
                     {
-                        Approve = 1;
+                        Remark = txtRemark.Text;
+                        Approve = ddlremark.SelectedValue;
+                        recid = Convert.ToInt16(hidrecid.Value);
+                        cs = (CustomStatus)objAAC.UpdateApproval(recid, Approve, Remark);
                     }
-                    else
-                    {
-                        Approve = 0;
-                    }
-
-                    string Remark = txtRemark.Text;
-
-                    recid = Convert.ToInt16(hidrecid.Value);
-                    cs = (CustomStatus)objAAC.UpdateApproval(recid, Approve, Remark);
+                   
                 }
 
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
-                    objCommon.DisplayMessage("Direct approval for hostel gate pass done successfully.", this.Page);
+                    objCommon.DisplayMessage("Record Saved successfully.", this.Page);
                     this.BindListView(); //Added by Himanshu Tamrakar 24/11/2023 for bug id 169646
                     Clear();
                 }
@@ -179,7 +184,7 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
     private void Clear()
     {
         changeApproval.Visible = false;
-        btnChangeApproval.Visible = true;
+        btnChangeApproval.Visible = false; 
         btnUpdatePath.Visible = false;
         finalAproval.Visible = true;
         txtRemark.Text = string.Empty;
@@ -190,7 +195,7 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
         ddlAA3.SelectedIndex = 0;
         ddlAA4.SelectedIndex = 0;
         btnApprove.Visible = true;
-
+        ddlremark.SelectedIndex = 0;
         foreach (ListViewItem item in lvGatePass.Items)
         {
             CheckBox chkApprove = (CheckBox)item.FindControl("chkApprove");

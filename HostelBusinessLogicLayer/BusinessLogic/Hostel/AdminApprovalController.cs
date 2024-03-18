@@ -37,7 +37,7 @@ namespace IITMS
                     return ds;
                 }
 
-                public int UpdateApproval(int recid, int Approve, string Remark)
+                public int UpdateApproval(int recid, string Approve, string Remark)  //Change int approve to string approve  By himanshu tamrakar 12/03/2024
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try

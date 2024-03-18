@@ -23,9 +23,8 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-                <div class="box-header with-border" style="display: flex;">
-                    <h3 class="box-title">Hostel In/Out Request(s)</h3>
-                    <%--                    <asp:Button ID="btnAddGatepass" runat="server" Text="Add Gate Pass" Height="20%" />--%>
+                <div class="box-header with-border">  <%--lblDynamicPageTitle Added By Himanshu tamrakar 23-02-2024--%>
+                    <h3 class="box-title" style="text-transform:uppercase;" ><asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
 
                 <div class="box-body">
@@ -158,7 +157,7 @@
                             <div class="sub-heading">
                                 <h5>Requests List</h5>
                             </div>
-                            <table class="table table-striped table-bordered nowrap dt-responsive " style="width: 100%">
+                            <table class="table table-striped table-bordered display dt-responsive " style="width: 100%">
                                 <thead class="bg-light-blue">
                                     <tr>
                                         <th style="width: 2%;">
@@ -404,11 +403,11 @@
                     var ThirdApprovalStatus = data.d[i].Thirdapprovalstatus;
                     var FourthApprovalStatus = data.d[i].Fourthapprovalstatus;
 
-                    // Determine the text color based on the status
-                    var ftextColor = (firstApprovalStatus === 'Pending') ? 'red' : 'green';
-                    var stextColor = (SecondApprovalStatus === 'Pending') ? 'red' : 'green';
-                    var ttextColor = (ThirdApprovalStatus === 'Pending') ? 'red' : 'green';
-                    var fotextColor = (FourthApprovalStatus === 'Pending') ? 'red' : 'green';
+                    // Determine the text color based on the status  Cond Added By Himanshu Tmk 12/03/2024
+                    var ftextColor = (firstApprovalStatus === 'Pending') ? 'red' : (firstApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';
+                    var stextColor = (SecondApprovalStatus === 'Pending') ? 'red' : (SecondApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';;
+                    var ttextColor = (ThirdApprovalStatus === 'Pending') ? 'red' : (ThirdApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';
+                    var fotextColor = (FourthApprovalStatus === 'Pending') ? 'red' : (FourthApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';
 
 
 

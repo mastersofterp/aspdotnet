@@ -141,12 +141,20 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (ddlinHourFrom.SelectedValue == "0")
             {
+<<<<<<< HEAD
                 objCommon.DisplayMessage("Please Select In Hour From", this.Page);
+=======
+                objCommon.DisplayMessage("Please Select In Hour From",this.Page);
+>>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                 return;
             }
             if (ddloutHourFrom.SelectedValue == "0")
             {
+<<<<<<< HEAD
                 objCommon.DisplayMessage("Please Select Out Hour From", this.Page);
+=======
+                objCommon.DisplayMessage("Please Select Out Hour From",this.Page);
+>>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                 return;
             }
             if (Convert.ToInt32(Session["usertype"]) == 1)
@@ -648,9 +656,15 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                     {
                         if (Convert.ToInt32(ddlinHourFrom.SelectedValue) <= Convert.ToInt32(ddloutHourFrom.SelectedValue))
                         {
+<<<<<<< HEAD
                             objCommon.DisplayMessage("Hour To should be greater than Hour From", this.Page);
                             ddloutHourFrom.SelectedValue = "11";
                             ddloutMinFrom.SelectedValue = "59";
+=======
+                            objCommon.DisplayMessage("Hour To should be greater than Hour From",this.Page);
+                            ddloutHourFrom.SelectedValue="11";
+                            ddloutMinFrom.SelectedValue="59";
+>>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                             ddlAM_PM2.Focus();
                         }
                     }
@@ -940,13 +954,18 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             else
             {
                 ddloutHourFrom.SelectedValue = "12";
+<<<<<<< HEAD
                 ddloutMinFrom.SelectedValue = "0";
+=======
+                ddloutMinFrom.SelectedValue  = "0";
+>>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
             }
         }
         if (ddlAM_PM1.SelectedValue == "AM")
         {
 
             if (hour < 12)
+<<<<<<< HEAD
             {
                 if (DateTime.Now.Hour > 12)
                 {
@@ -964,6 +983,25 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             {
                 if (ddloutHourFrom.SelectedValue != "0")
                 {
+=======
+            {
+                if (DateTime.Now.Hour > 12)
+                {
+                    //ddloutHourFrom.SelectedValue = Convert.ToString(DateTime.Now.Hour);
+                    ddloutHourFrom.SelectedValue = Convert.ToString(hour);
+                    ddloutMinFrom.SelectedValue = Convert.ToString(minute);
+                }
+                else
+                {
+                    ddloutHourFrom.SelectedValue = "12";
+                    ddloutMinFrom.SelectedValue = "0";
+                }
+            }
+            if(ddlAM_PM2.SelectedValue == "AM")
+            {
+                if (ddloutHourFrom.SelectedValue != "0")
+                {
+>>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                     if (Convert.ToInt32(ddloutHourFrom.SelectedValue) > Convert.ToInt32(ddlinHourFrom.SelectedValue))
                     {
                         objCommon.DisplayMessage("In hour from should be greater than Out hour from.", this.Page);
