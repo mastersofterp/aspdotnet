@@ -227,7 +227,7 @@
                                                     <div class="form-group col-md-12" id="trNewMail" runat="server" style="height: 40px" visible="false">
                                                         <br />
                                                         <div class="box-tools pull-left">
-                                                            <asp:Image ID="imgMail" runat="server" ImageUrl="~/images/NewMail.GIF" Width="40px"
+                                                            <asp:Image ID="imgMail" runat="server" ImageUrl="~/Images/NewMail.GIF" Width="40px"
                                                                 Height="36px" />
                                                             <br />
                                                         </div>
