@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
     CodeFile="FeedbackMaster.aspx.cs" Inherits="ACADEMIC_MASTERS_FeedbackMaster" Title="" %>
-
+<%@ Register Assembly="FreeTextBox" Namespace="FreeTextBoxControls" TagPrefix="FTB" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -69,7 +69,12 @@
                                         </div>
                                         <asp:CheckBox ID="chkActiveStatus" runat="server" TextAlign="Left" Checked="true" />
                                     </div>
-                                    
+                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <%--<asp:Button ID="btnNote" runat="server" Text="Add Note " ToolTip="Add Note" Visible="false" ValidationGroup="submit1"
+                                            TabIndex="2" CssClass="btn btn-primary" OnClick="btnNote_Click" />--%>
+
+                                        <asp:LinkButton ID="btnNote" runat="server" Text="Add Note" CssClass="btn btn-primary"  OnClick="btnNote_Click"></asp:LinkButton>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -166,6 +171,53 @@
             </div>
         </ContentTemplate>
     </asp:UpdatePanel>
+
+   <%-- Added by sakshi M on 14-03-2024--%>
+     <!-- The Modal -->
+    <div class="modal" id="myModalCourse" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="height:500px; width:720px">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">FeedBack Note</h4>
+                    <button type="button" class="close" data-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body" >
+                    <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                        <ContentTemplate>
+                                <asp:Panel ID="Panel1" runat="server" >
+                                            <div class="row">
+                                                    <FTB:FreeTextBox ID="ftbDesc" runat="Server" Height="200px" Width="700px" TabIndex="1" />
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ftbDesc"
+                                                        Display="None" ErrorMessage="Please Enter Feedback Note." ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                            </div>
+                                </asp:Panel>
+                       
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Add</button>
+                </div>
+                <asp:HiddenField ID="hdfDyanamicTabId" runat="server" />
+            </div>
+        </div>
+    </div>
+
+     <script>
+         $(function () {
+             $("#btnNote").click(function () {
+                 showModal();
+             });
+         });
+
+         function showModal() {
+             $("#myModalCourse").modal('show');
+         }
+    </script>
 </asp:Content>
 
 

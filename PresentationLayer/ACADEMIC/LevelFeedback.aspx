@@ -66,7 +66,7 @@
                     <asp:Panel ID="pnlStudInfo" runat="server" Visible="false">
                         <div class="col-12">
                             <div class="row">
-                                <div class="col-lg-5 col-md-6 col-12">
+                                <div class="col-lg-6 col-md-6 col-12">
                                     <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item"><b>Student Name  :</b>
                                             <a class="sub-label">
@@ -79,10 +79,6 @@
                                             <a class="sub-label">
                                                 <asp:Label ID="lblSession" runat="server" Font-Bold="true" Style="color: green"></asp:Label></a>
                                         </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-7 col-md-6 col-12">
-                                    <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item"><b>
                                             <asp:Label ID="lblDYtxtScheme" runat="server" Font-Bold="true"></asp:Label>
                                             :</b>
@@ -98,11 +94,9 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="col-lg-6 col-md-6 col-12">
+                                        <div class="row">
+                                <div class="form-group col-md-6 col-12">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
                                         <label>Session : </label>
@@ -115,7 +109,7 @@
                                         Display="None" ErrorMessage="Please select session." SetFocusOnError="true" ValidationGroup="submit"
                                         InitialValue="0" />
                                 </div>
-                                <div class="form-group col-lg-3 col-md-6 col-12" id="divfeedbacktype" runat="server" visible="false">
+                                <div class="form-group  col-md-6 col-12" id="divfeedbacktype" runat="server" visible="false">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
                                         <label>Feedback Type</label>
@@ -124,10 +118,7 @@
                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 mt-3 mb-3" id="examrow" runat="server" visible="false">
+                        <div class="form-group  col-md-6 col-12" id="examrow" runat="server" visible="false">
                             <div class="row">
                                 <div class="form-group col-lg-3 col-md-6 col-12 mt-2">
                                     <div class="label-dynamic">
@@ -141,6 +132,20 @@
                                 </div>
                             </div>
                         </div>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                        <div class="row">
+                                 <div class="col-12" id="div2" runat="server" visible="false">
+                                  
+                                <asp:Label ID="lblNote" runat="server" Mode="Encode" BorderStyle="Solid" BorderWidth="1px" style="padding:10px; border-color:gray; margin-top:8px" ></asp:Label>
+                                </div>
+                                </div>
+                        </div>
+
+                       
                         <div class="col-12 mt-4">
                             <asp:Panel ID="pnlSubject" runat="server">
                                 <asp:ListView ID="lvSelected" runat="server">

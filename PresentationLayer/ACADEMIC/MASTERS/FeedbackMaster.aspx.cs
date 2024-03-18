@@ -37,6 +37,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
         else
             objCommon.SetMasterPage(Page, "");
     }
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
@@ -68,6 +69,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             //ScriptManager.RegisterStartupScript(this, GetType(), "script", text, true);
         }
     }
+
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -84,7 +86,9 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             Response.Redirect("~/notauthorized.aspx?page=FeedbackMaster.aspx");
         }
     }
+
     #endregion
+
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
@@ -122,7 +126,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
                 if (ViewState["action"].ToString().Equals("add"))
                 {
                     //Add Batch
-                    CustomStatus cs = (CustomStatus)objSFC.AddFeedbackMaster(txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor, Status);
+                    CustomStatus cs = (CustomStatus)objSFC.AddFeedbackMaster(txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor, Status, ftbDesc.Text.Trim());
                     if (cs.Equals(CustomStatus.DuplicateRecord))
                     {
                         objCommon.DisplayMessage(updGrade, "Record already exist", this.Page);
@@ -140,7 +144,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
                 }
                 else
                 {
-                    CustomStatus cs = (CustomStatus)objSFC.UpdateFeedbackMaster(feedbackNo, txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor, Status);
+                    CustomStatus cs = (CustomStatus)objSFC.UpdateFeedbackMaster(feedbackNo, txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor, Status, ftbDesc.Text.Trim());
 
                     if (cs.Equals(CustomStatus.DuplicateRecord))
                     {
@@ -159,13 +163,9 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
                     {
                         objCommon.DisplayMessage(updGrade, "Error Adding Grade Type!", this.Page);
                     }
-
                 }
-
                 BindListView();
-
             }
-
         }
         catch (Exception ex)
         {
@@ -174,10 +174,12 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
-
     }
+
     protected void Clear()
     {
+        btnNote.Text = "Add Note";
+        ftbDesc.Text = string.Empty;
         txtFeedbackName.Text = string.Empty;
         Label1.Text = string.Empty;
         ddlfeedbackmode.SelectedIndex = 0;
@@ -188,6 +190,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
         rdoNone1.Checked = true;
         rdoNone2.Checked = true;
     }
+
     private void BindListView()
     {
         try
@@ -205,6 +208,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
@@ -212,9 +216,9 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
         btnSave.Text = "Submit";
         btnSave.CssClass = "btn btn-primary";
         txtFeedbackName.Focus();
-
         Response.Redirect(Request.Url.ToString());
     }
+
     private void ShowDetail(int feedbackNo)
     {
         SqlDataReader dr = objSFC.GetFeedbackNo(feedbackNo);
@@ -225,6 +229,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             {
                 ViewState["feedbackno"] = feedbackNo.ToString();
                 txtFeedbackName.Text = dr["FEEDBACK_NAME"] == null ? string.Empty : dr["FEEDBACK_NAME"].ToString();
+                ftbDesc.Text = dr["FEEDBACK_NOTE"] == null ? string.Empty : dr["FEEDBACK_NOTE"].ToString();
                 //objCommon.FillDropDownList(ddlfeedbackmode, "ACD_FEEDBACK_MODE", "MODE_ID", "FEEDBACK_MODE_NAME", "", "");
                 ddlfeedbackmode.SelectedValue = dr["MODE_ID"].ToString() == string.Empty ? "0" : dr["MODE_ID"].ToString();
                 if (dr["COURSE_TYPE"].ToString().Equals("1"))
@@ -276,6 +281,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
         }
         if (dr != null) dr.Close();
     }
+
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
         //string MyScript = "$(document).ready(function () { var table = $('#example').DataTable();table.button(0).disable();});";
@@ -292,6 +298,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             btnSave.Text = "Update";
             btnSave.CssClass = "btn btn-primary";
             txtFeedbackName.Focus();
+            btnNote.Text = "View Note";
         }
         catch (Exception ex)
         {
@@ -300,6 +307,14 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
+
+
+    }
+
+    protected void btnNote_Click(object sender, EventArgs e)
+    {
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
+        /// Note.Visible = true;
     }
 }
 
