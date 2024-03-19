@@ -539,6 +539,11 @@
                                                                     ErrorMessage="Please Select Feedback Type" InitialValue="0"
                                                                     SetFocusOnError="True" ValidationGroup="FeedBack">
                                                                 </asp:RequiredFieldValidator>
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server"
+                                                                    ControlToValidate="ddlCT" Display="None"
+                                                                    ErrorMessage="Please Select Feedback Type" InitialValue="0"
+                                                                    SetFocusOnError="True" ValidationGroup="ExcelReport">
+                                                                </asp:RequiredFieldValidator>
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divSubjectType" visible="false">
@@ -579,7 +584,7 @@
                                                                     <label>Feedback Question</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtQuestion" runat="server" TextMode="MultiLine" CssClass="form-control"
-                                                                    placeholder="Please Enter Feedback Question (Max. 125 char) ."
+                                                                    placeholder="Please Enter Feedback Question (Max. 250 char) ."
                                                                     ToolTip="Please Enter Feedback Question">
                                                                 </asp:TextBox>
                                                                 <asp:RequiredFieldValidator ID="rfvQuestion" runat="server"
@@ -755,7 +760,9 @@
                                                     <div class="col-12 btn-footer">
                                                         <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" Text="Submit" ValidationGroup="FeedBack" CssClass="btn btn-primary" />
                                                         <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" CssClass="btn btn-warning" />
+                                                        <asp:Button ID="btnExcel" runat="server" OnClick="btnExcel_Click" Text="Report(Excel)" ValidationGroup="ExcelReport" CssClass="btn btn-info" />
                                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="FeedBack" />
+                                                        <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="ExcelReport" />
                                                     </div>
 
                                                     <div class="col-12" id="ques_test">
@@ -893,6 +900,7 @@
                                     <asp:PostBackTrigger ControlID="ddlSubType" />
                                     <asp:PostBackTrigger ControlID="ddlSemester" />
                                     <asp:PostBackTrigger ControlID="btnSubmit" />
+                                    <asp:PostBackTrigger ControlID="btnExcel" />
                                 </Triggers>
                             </asp:UpdatePanel>
 
@@ -945,7 +953,7 @@
     <script>
         $(document).ready(function () {
             $(<%=txtQuestion.ClientID%>).on('input propertychange', function () {
-                CharLimit(this, 125);
+                CharLimit(this, 250);
             });
         });
 
@@ -953,7 +961,7 @@
             var len = $(input).val().length;
             if (len > maxChar) {
                 $(input).val($(input).val().substring(0, maxChar));
-                alert("Allowed Only Max(125) Char. ");
+                alert("Allowed Only Max(250) Char. ");
             }
         }
     </script>
