@@ -6,18 +6,32 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data;
-
+using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using BusinessLogicLayer.BusinessLogic.PostAdmission;
 using BusinessLogicLayer.BusinessEntities.Academic;
+using System.Globalization;
+/*
+---------------------------------------------------------------------------------------------------------------------------                                                                      
+Created By  :                                                                 
+Created On  :                                                    
+Purpose     :                                      
+Version     :                                                             
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+Version   Modified On   Modified By        Purpose                                                                        
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+1.0.1     14-03-2024    Isha               Added Branch and Start/End Payment Date and Provision Admission Date                                                    
+------------------------------------------- -------------------------------------------------------------------------------                                                                                                                     
+ */
 
 public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 {
     Common objCommon = new Common();
     ADMPFeePaymentConfigController objAFPCEC = new ADMPFeePaymentConfigController();
     ADMPFeePaymentConfigEntity objAFPCEE = new ADMPFeePaymentConfigEntity();
+    ADMPProvisionalAdmissionAprovalController objADMAPPR = new ADMPProvisionalAdmissionAprovalController();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -25,7 +39,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         {
             ViewState["FeePayConfig_ID"] = 0;
             ViewState["action"] = "add";
-
             FillDropDown_ForActvityFor();
             FillDropDown();
             BindListView();
@@ -36,11 +49,7 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     {
         try
         {
-            //objCommon.FillDropDownList(ddlAdmBatch, "ACD_ACHIEVEMENT_ACADMIC_YEAR", "DISTINCT ACADMIC_YEAR_ID", "ACADMIC_YEAR_NAME", "ACADMIC_YEAR_ID > 0 AND ACTIVE_STATUS=1", "ACADMIC_YEAR_ID DESC");
             objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "DISTINCT BATCHNO", "BATCHNAME", "BATCHNO > 0 AND ACTIVESTATUS=1", "BATCHNO DESC");
-            //objCommon.FillDropDownList(ddlProgramType, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION > 0 AND ACTIVESTATUS=1", "UA_SECTION DESC");
-
-            ////objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO >0 AND ACTIVESTATUS=1", "DEGREENO");
         }
         catch (Exception ex)
         {
@@ -57,9 +66,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             {
                 whereData = "'UG','PG'";
             }
-
-
-            //objCommon.FillDropDownList(ddlProgramType, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION > 0 AND ACTIVESTATUS=1 AND UA_SECTIONNAME IN(" + whereData + ")", "UA_SECTION DESC");
             objCommon.FillDropDownList(ddlProgramType, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION > 0 AND ACTIVESTATUS=1 AND UA_SECTION !=3", "UA_SECTION DESC");
         }
         catch (Exception ex)
@@ -152,10 +158,8 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         {
             if (ddlProgramType.SelectedIndex > 0)
             {
-                // objCommon.FillDropDownList(ddlDegree, "ACD_COLLEGE_DEGREE_BRANCH", "DISTINCT BRANCH_CODE", "BRANCH_CODE CODE", "BRANCH_CODE <>'' AND UGPGOT=" + Convert.ToInt32(ddlProgramType.SelectedValue), "BRANCH_CODE");
                 objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "ISNULL(D.ACTIVESTATUS,0)= 1 AND D.DEGREENO > 0 AND UGPGOT=" + ddlProgramType.SelectedValue, "D.DEGREENO");
             }
-            ////ddlDegree.Items.Insert(0, new ListItem("Please Select", "0"));
             ddlDegree.SelectedIndex = 0;
             ddlDegree.Focus();
         }
@@ -222,7 +226,10 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     {
         try
         {
+            DataTable dt;
             DataSet ds = objAFPCEC.GetRetADMPFeePayConfigListData(FeePayConfig_ID);
+            dt = objAFPCEC.GetRetADMPFeePayConfigListData(Convert.ToInt32(FeePayConfig_ID)).Tables[0];
+
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -247,33 +254,42 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                     ddlProgramType.SelectedValue = ds.Tables[0].Rows[0]["PROGRAMTYPE"].ToString();
                 }
 
-                //if (ddlDegree.Items.Count > 1)
-                //{
-                //    ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"].ToString();
-                //}
                 objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "ISNULL(D.ACTIVESTATUS,0)= 1 AND D.DEGREENO > 0 AND UGPGOT=" + ddlProgramType.SelectedValue, "D.DEGREENO");
-
                 ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"].ToString();
 
-                txtStartDate.Text = ds.Tables[0].Rows[0]["STARTDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["STARTDATE"].ToString()).ToString("yyyy-MM-dd");//.ToString("dd/MM/yyyy");
-                txtEndDate.Text = ds.Tables[0].Rows[0]["ENDDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["ENDDATE"].ToString()).ToString("yyyy-MM-dd");//.ToString("dd/MM/yyyy");
+                //<1.0.1>
+                int BranchNo = Convert.ToInt32(ddlDegree.SelectedValue);
+                MultipleBranchBind(BranchNo, 0);
+                char delimiterChars = ',';
+                string degreetype = dt.Rows[0]["BRANCHNO"].ToString();
+                string[] stu = degreetype.Split(delimiterChars);
+                for (int j = 0; j < stu.Length; j++)
+                {
+                    for (int i = 0; i < lstBranch.Items.Count; i++)
+                    {
+                        if (stu[j].Trim() == lstBranch.Items[i].Value.Trim())
+                        {
+                            lstBranch.Items[i].Selected = true;
+                        }
+                    }
+                }
 
+
+
+
+                txtStartDate.Text = ds.Tables[0].Rows[0]["STARTDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["STARTDATE"].ToString()).ToString("yyyy-MM-dd");//.ToString("dd/MM/yyyy");
+                txtEndDate.Text = ds.Tables[0].Rows[0]["ENDDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["ENDDATE"].ToString()).ToString("yyyy-MM-dd");//.ToString("dd/MM/yyyy");        
+                txtOfficeVisitStartDate.Text = ds.Tables[0].Rows[0]["OFFICE_VISIT_START_DATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["OFFICE_VISIT_START_DATE"].ToString()).ToString("yyyy-MM-dd");//.ToString("dd/MM/yyyy");
+                txtOfficeVisitEndDate.Text = ds.Tables[0].Rows[0]["OFFICE_VISIT_End_DATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["OFFICE_VISIT_End_DATE"].ToString()).ToString("yyyy-MM-dd");//.ToString("dd/MM/yyyy");
+                txtProvisionalAdmissionValidDate.Text = ds.Tables[0].Rows[0]["PROVISIONAL_ADMISSION_OFFER_VALID_DATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["PROVISIONAL_ADMISSION_OFFER_VALID_DATE"].ToString()).ToString("yyyy-MM-dd");//.ToString("dd/MM/yyyy");
+
+                //</1.0.1>   
                 if (ddlPaymentCategory.Items.Count > 1)
                 {
                     ddlPaymentCategory.SelectedValue = ds.Tables[0].Rows[0]["PAYMENTCATEGORY"].ToString();
                 }
-
                 setAmountLabels();
                 txtAmount.Text = Convert.ToInt32(ds.Tables[0].Rows[0]["FEEPAYMENT"].ToString()).ToString();
-
-                /*if (ds.Tables[0].Rows[0]["ACTIVITYSTATUS"].ToString() == "True")
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetCreateEvent(true);", true);
-                }
-                else
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetCreateEvent(false);", true);
-                }*/
 
                 if (ds.Tables[0].Rows[0]["ACTIVITYSTATUS"].ToString().Equals("True"))
                 {
@@ -294,66 +310,124 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 
     protected void btnSubmit_Click(object sender, System.EventArgs e)
     {
-        if (ViewState["action"].ToString().Equals("add") || ViewState["action"].ToString().Equals("edit"))
+        try
         {
-            objAFPCEE.ConfigID = Convert.ToInt32(ViewState["FeePayConfig_ID"]);
-            objAFPCEE.Activityfor = Convert.ToInt32(rdoActivityFor.SelectedValue.Equals("1") ? "1" : "2");
-            objAFPCEE.Admbatch = Convert.ToInt32(ddlAdmBatch.SelectedValue);
-            objAFPCEE.Programtype = Convert.ToInt32(ddlProgramType.SelectedValue);
-            objAFPCEE.Degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
-            objAFPCEE.Startdate = Convert.ToDateTime(txtStartDate.Text.ToString().Trim());
-            objAFPCEE.Enddate = Convert.ToDateTime(txtEndDate.Text.ToString().Trim());
-            objAFPCEE.Paymentcategory = Convert.ToInt32(ddlPaymentCategory.SelectedValue);
-            if (ddlPaymentCategory.SelectedValue.ToString().Equals("3"))
+            DateTime enddate = Convert.ToDateTime(txtEndDate.Text.ToString().Trim());
+            DateTime prodate = Convert.ToDateTime(txtProvisionalAdmissionValidDate.Text.ToString().Trim());
+            DateTime OfficeStartDate = Convert.ToDateTime(txtOfficeVisitEndDate.Text);
+            DateTime OfficeEndDate = Convert.ToDateTime(txtStartDate.Text);
+            DateTime OfficeStart = Convert.ToDateTime(txtOfficeVisitStartDate.Text);
+
+            if (DateTime.Today > OfficeStart)
             {
-                objAFPCEE.Feepayment = Convert.ToDouble(0.0);
+                ValidateOfficeVisitStartDate();
             }
-            else
+            else if (prodate < enddate)
             {
-                objAFPCEE.Feepayment = Convert.ToDouble(txtAmount.Text.ToString().Trim());
+                ProvisionalAdmissionValidDate();
+            }
+            else if (OfficeEndDate < OfficeStartDate)
+            {
+                StartDate();
+            }
+            else if (OfficeStartDate < OfficeStart)
+            {
+                ValidateOfficeVisitEndDate();
+
+            }
+            else if (enddate < OfficeEndDate)
+            {
+                EndDate();
             }
 
-            if (hfdActive.Value == "true")
+            if (ViewState["action"].ToString().Equals("add") || ViewState["action"].ToString().Equals("edit"))
             {
-                objAFPCEE.Activitystatus = true;
-            }
-            else
-            {
-                objAFPCEE.Activitystatus = false;
-            }
+                objAFPCEE.ConfigID = Convert.ToInt32(ViewState["FeePayConfig_ID"]);
+                objAFPCEE.Activityfor = Convert.ToInt32(rdoActivityFor.SelectedValue.Equals("1") ? "1" : "2");
+                objAFPCEE.Admbatch = Convert.ToInt32(ddlAdmBatch.SelectedValue);
+                objAFPCEE.Programtype = Convert.ToInt32(ddlProgramType.SelectedValue);
+                objAFPCEE.Degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+                objAFPCEE.Startdate = Convert.ToDateTime(txtStartDate.Text.ToString().Trim());
+                objAFPCEE.Enddate = Convert.ToDateTime(txtEndDate.Text.ToString().Trim());
+                //<1.0.1>
+                objAFPCEE.OfficeVisitStartDate = Convert.ToDateTime(txtOfficeVisitStartDate.Text.ToString().Trim());
+                objAFPCEE.OfficeVisitEndDate = Convert.ToDateTime(txtOfficeVisitEndDate.Text.ToString().Trim());
+                objAFPCEE.ProvisionalAdmissionDate = Convert.ToDateTime(txtProvisionalAdmissionValidDate.Text.ToString().Trim());
+                //</1.0.1>
+                objAFPCEE.Paymentcategory = Convert.ToInt32(ddlPaymentCategory.SelectedValue);
+               
+                if (ddlPaymentCategory.SelectedValue.ToString().Equals("3"))
+                {
+                    objAFPCEE.Feepayment = Convert.ToDouble(0.0);
+                }
+                else
+                {
+                    objAFPCEE.Feepayment = Convert.ToDouble(txtAmount.Text.ToString().Trim());
+                }
 
-            int ret = 0;
-            string displaymsg = "Recored added successfully.";
-            if (ViewState["action"].ToString().Equals("add"))
-            {
-                ret = Convert.ToInt32(objAFPCEC.InsertADMPFeePayConfig(objAFPCEE));
-            }
-            else if (ViewState["action"].ToString().Equals("edit"))
-            {
-                displaymsg = "Recored updated successfully.";
-                ret = Convert.ToInt32(objAFPCEC.UpdateADMPFeePayConfig(objAFPCEE));
-            }
+                if (hfdActive.Value == "true")
+                {
+                    objAFPCEE.Activitystatus = true;
+                }
+                else
+                {
+                    objAFPCEE.Activitystatus = false;
+                }
 
-            if (ret == 2)
-            {
-                displaymsg = "Recored already exist.";
-                objCommon.DisplayMessage(displaymsg, this.Page);
-            }
-            else if (ret > 0)
-            {
-                objCommon.DisplayMessage(displaymsg, this.Page);
-                setDefaultValues();
-            }
-            else
-            {
-                objCommon.DisplayMessage("Error!Please Fill Data again", this.Page);
+                //<1.0.1>
+                string SubjectNo = string.Empty;
+                foreach (ListItem item in lstBranch.Items)
+                {
+                    if (item.Selected == true)
+                    {
+                        SubjectNo += item.Value + ",";
+                    }
+                }
+                if (SubjectNo.Contains(','))
+                {
+                    SubjectNo = SubjectNo.Remove(SubjectNo.Length - 1);
+                }
+                objAFPCEE.Branchno = SubjectNo.ToString();
+                //<1.0.1>
+
+                int ret = 0;
+                string displaymsg = "Recored added successfully.";
+                if (ViewState["action"].ToString().Equals("add"))
+                {
+                    ret = Convert.ToInt32(objAFPCEC.InsertADMPFeePayConfig(objAFPCEE));
+                }
+                else if (ViewState["action"].ToString().Equals("edit"))
+                {
+                        displaymsg = "Recored updated successfully.";
+                        ret = Convert.ToInt32(objAFPCEC.UpdateADMPFeePayConfig(objAFPCEE));
+                }
+                if (ret == 2)
+                {
+                    displaymsg = "Recored already exist.";
+                    objCommon.DisplayMessage(displaymsg, this.Page);
+                }
+                else if (ret > 0)
+                {
+                    objCommon.DisplayMessage(displaymsg, this.Page);
+                    setDefaultValues();
+
+                }
+                else
+                {
+                    objCommon.DisplayMessage("Please Fill Data again", this.Page);
+                }
             }
         }
-
-
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.btnsubmit_Click --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
     }
 
-    protected void btnCancel_Click(object sender, System.EventArgs e)
+    protected void btnCancel_Click(object sender, EventArgs e)
     {
         setDefaultValues();
     }
@@ -366,13 +440,18 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             ddlAdmBatch.ClearSelection();
             ddlProgramType.ClearSelection();
             ddlDegree.ClearSelection();
-            ////ddlDegree.Items.Clear();
+            //<1.0.1>
+            lstBranch.Items.Clear();
+            //</1.0.1>
             divAmount.Visible = false;
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
+
+            txtOfficeVisitStartDate.Text = string.Empty;
+            txtOfficeVisitEndDate.Text = string.Empty;
+            txtProvisionalAdmissionValidDate.Text = string.Empty;
             ddlPaymentCategory.ClearSelection();
             txtAmount.Text = string.Empty;
-
             ViewState["FeePayConfig_ID"] = 0;
             ViewState["action"] = "add";
             ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetParticipation(true);", true);
@@ -386,19 +465,23 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 
     protected void txtEndDate_TextChanged(object sender, EventArgs e)
     {
+        EndDate();
+    }
+
+    protected void EndDate()
+    {
         if (txtStartDate.Text != string.Empty)
         {
             DateTime StartDate = Convert.ToDateTime(txtStartDate.Text);
             DateTime EndDate = Convert.ToDateTime(txtEndDate.Text);
             if (EndDate < StartDate)
             {
-                objCommon.DisplayMessage(updSession, "End Date Should Be Graeter Than Start Date.", this.Page);
-                //txtStartDate.Text = string.Empty;
+                objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date.", this.Page);
                 txtEndDate.Text = string.Empty;
-
             }
         }
     }
+
     protected void txtAmount_TextChanged(object sender, EventArgs e)
     {
         int Per = 0;
@@ -408,8 +491,179 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             if (Per > 100)
             {
                 objCommon.DisplayMessage(updSession, "Percentage Should Not Be Greater Than 100", this.Page);
-                txtAmount.Text="";
+                txtAmount.Text = "";
             }
         }
     }
+
+    //<1.0.1>
+    protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lstBranch.ClearSelection();
+            if (ddlDegree.SelectedIndex > 0)
+            {
+                int BranchNo = Convert.ToInt32(ddlDegree.SelectedValue);
+                MultipleBranchBind(BranchNo, 0);
+            }
+            lstBranch.Focus();
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.DisplayMessage("ADMPFeePaymentConfiguration.ddlDegree_SelectedIndexChanged() --> " + ex.Message + " " + ex.StackTrace, this.Page);
+            else
+                objCommon.DisplayMessage("Server Unavailable.", this.Page);
+        }
+    }
+    //</1.0.1> 
+
+    private void MultipleBranchBind(int Degree, int UGPGOT)
+    {
+        try
+        {
+            DataSet ds = null;
+            ds = objADMAPPR.GetBranch(Degree, UGPGOT);
+
+            lstBranch.Items.Clear();
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                lstBranch.DataSource = ds;
+                lstBranch.DataValueField = ds.Tables[0].Columns[0].ToString();
+                lstBranch.DataTextField = ds.Tables[0].Columns[1].ToString();
+                lstBranch.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.MultipleBranchBind --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    protected void txtOfficeVisitEndDate_TextChanged(object sender, EventArgs e)
+    {
+        ValidateOfficeVisitEndDate();
+    }
+
+    protected void ValidateOfficeVisitEndDate()
+    {
+        try
+        {
+            if (txtOfficeVisitStartDate.Text != string.Empty)
+            {
+                DateTime OfficeStartDate = Convert.ToDateTime(txtOfficeVisitStartDate.Text);
+                DateTime OfficeEndDate = Convert.ToDateTime(txtOfficeVisitEndDate.Text);
+                if (OfficeEndDate < OfficeStartDate)
+                {
+                    objCommon.DisplayMessage(updSession, "Office Report End Date should be greater than or equal to Office Report Start Date", this.Page);
+                    txtOfficeVisitEndDate.Text = string.Empty;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.OfficeVisitEndDate --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+
+    protected void txtOfficeVisitStartDate_TextChanged(object sender, EventArgs e)
+    {
+        ValidateOfficeVisitStartDate();
+    }
+
+    protected void ValidateOfficeVisitStartDate()
+    {
+        try
+        {
+            DateTime selectedDate;
+            if (DateTime.TryParse(txtOfficeVisitStartDate.Text, out selectedDate))
+            {
+                if (selectedDate < DateTime.Today)
+                {
+
+                    objCommon.DisplayMessage(updSession, "Office Report Start Date should be today/future date", this.Page);
+                    txtOfficeVisitStartDate.Text = string.Empty;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.OfficeVisitStartDate --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    protected void txtStartDate_TextChanged(object sender, EventArgs e)
+    {
+        StartDate();
+    }
+
+    protected void StartDate()
+    {
+        try
+        {
+            if (txtOfficeVisitEndDate.Text != string.Empty)
+            {
+                DateTime OfficeStartDate = Convert.ToDateTime(txtOfficeVisitEndDate.Text);
+                DateTime OfficeEndDate = Convert.ToDateTime(txtStartDate.Text);
+                if (OfficeEndDate < OfficeStartDate)
+                {
+                    objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report End Date", this.Page);
+                    txtStartDate.Text = string.Empty;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.StartDate --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    protected void ProvisionalAdmissionValidDate()
+    {
+        try
+        {
+            if (txtEndDate.Text != string.Empty)
+            {
+                DateTime enddate = Convert.ToDateTime(txtEndDate.Text);
+
+                DateTime prodate = Convert.ToDateTime(txtProvisionalAdmissionValidDate.Text);
+
+                if (prodate < enddate)
+                {
+                    objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment End Date", this.Page);
+                    txtProvisionalAdmissionValidDate.Text = string.Empty;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.ProvisionalAdmissionValidDate --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    protected void txtProvisionalAdmissionValidDate_TextChanged1(object sender, EventArgs e)
+    {
+        ProvisionalAdmissionValidDate();
+    }
 }
+
+
+
+

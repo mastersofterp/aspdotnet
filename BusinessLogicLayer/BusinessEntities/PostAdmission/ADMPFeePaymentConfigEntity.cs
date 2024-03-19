@@ -3,6 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
+/*
+---------------------------------------------------------------------------------------------------------------------------                                                                      
+Created By  :                                                                 
+Created On  :                                                    
+Purpose     :                                      
+Version     :                                                             
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+Version   Modified On   Modified By        Purpose                                                                        
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+1.0.1     14-03-2024    Isha               Added branchno,officevisitstartdate,officevisitenddate,provisionaladmissiondate                         
+------------------------------------------- -------------------------------------------------------------------------------                                                                                                                     
+ */
 namespace IITMS
 {
     namespace UAIMS
@@ -30,10 +43,18 @@ namespace IITMS
                 private int admbatch;
                 private int programtype;
                 private int degreeno;
+                //<1.0.1>
+                private string branchno;
+                //</1.0.1>
                 private int paymentcategory;
                 private double feepayment;
                 private DateTime startdate;
                 private DateTime enddate;
+                //<1.0.1>
+                private DateTime officevisitstartdate;
+                private DateTime officevisitenddate;
+                private DateTime provisionaladmissiondate;
+                //</1.0.1>
                 private bool activitystatus;
 
                 #endregion Declared Variable;
@@ -68,7 +89,13 @@ namespace IITMS
                     get { return degreeno; }
                     set { degreeno = value; }
                 }
-
+                //<1.0.1>
+                public string Branchno
+                {
+                    get { return branchno; }
+                    set { branchno = value; }
+                }
+                //</1.0.1>
                 public int Paymentcategory
                 {
                     get { return paymentcategory; }
@@ -89,12 +116,31 @@ namespace IITMS
                     get { return enddate; }
                     set { enddate = value; }
                 }
+                //<1.0.1>
+                public DateTime OfficeVisitStartDate
+                {
+                    get { return officevisitstartdate; }
+                    set { officevisitstartdate = value; }
+                }
+                public DateTime OfficeVisitEndDate
+                { 
+                    get { return officevisitenddate; }
+                    set { officevisitenddate = value; }
+                }
+
+                public DateTime ProvisionalAdmissionDate
+                {
+                    get { return provisionaladmissiondate; }
+                    set { provisionaladmissiondate = value; }
+                }
+                //</1.0.1>
                 public bool Activitystatus
                 {
                     get { return activitystatus; }
                     set { activitystatus = value; }
                 }
 
+            
                 #endregion Assign Value
             }
         }
