@@ -664,6 +664,7 @@
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
+                                                                     <sup>* </sup>
                                                                     <label>Study Pattern</label>
                                                                 </div>
                                                                 <asp:DropDownList ID="ddlStudyPattern" runat="server" AppendDataBoundItems="true" TabIndex="7"
@@ -673,6 +674,9 @@
                                                                     <asp:ListItem Value="2">Trimester</asp:ListItem>
                                                                     <asp:ListItem Value="3">Yearly </asp:ListItem>
                                                                 </asp:DropDownList>
+                                                                  <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlStudyPattern"
+                                                                    Display="None" ErrorMessage="Please Select Study Pattern" InitialValue="0"
+                                                                    ValidationGroup="submit" />
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
