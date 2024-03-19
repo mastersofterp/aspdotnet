@@ -2,6 +2,12 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
+
+<%--//------------------------------------------------------------------------------------------------------------------------------------
+//Version     Modified On          Modified By          Purpose
+//------------------------------------------------------------------------------------------------------------------------------------
+//1.0.1      18-03-2024            Rutuja Dawle        Only change the validation for the college name  .
+//--------------------------------------------- ---------------------------------------------------------------------------------------%>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <style>
         .Tab:focus {
@@ -533,8 +539,10 @@
                                                         <asp:RequiredFieldValidator ID="rfvColgName" runat="server" ControlToValidate="txtColgNameColg"
                                                             Display="None" ErrorMessage="Please Enter College Name" SetFocusOnError="true"
                                                             ValidationGroup="Submit" />
+                                                        <%--<1.0.1 >--%>
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="fteColgname" runat="server" TargetControlID="txtColgNameColg" FilterType="Custom" FilterMode="InvalidChars"
-                                                            InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
+                                                            InvalidChars="~`!@#$%^*()_+=,./:;<>?{}[]\|-&&quot;" />
+                                                       <%--</1.0.1 >--%>
                                                     </div>
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
