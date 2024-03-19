@@ -358,7 +358,6 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         try
         {
 
-
             int checkSeatCapacity = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(CHECK_SEAT_CAPACITY_NEW_STUD,0) CHECK_SEAT_CAPACITY_NEW_STUD", ""));
 
             if (checkSeatCapacity == 1)
@@ -820,14 +819,24 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
     protected void btnReport_Click(object sender, EventArgs e)
     {
 
-        if (Session["OrgId"].ToString().Equals("1") || Session["OrgId"].ToString().Equals("6"))
+        //if (Session["OrgId"].ToString().Equals("1") || Session["OrgId"].ToString().Equals("6"))
+        //{
+        //    this.ShowReport("Admission_Slip_Report", "rptStudAdmSlip_New.rpt", "0");
+        //}
+
+        if (Session["OrgId"].ToString().Equals("5"))
         {
-            this.ShowReport("Admission_Slip_Report", "rptStudAdmSlip_New.rpt", "0");
+            this.ShowReportnew("Admission Offer Letter", "AllotmentOfferLetter.rpt", "0");
+        }
+        else if (Session["OrgId"].ToString().Equals("18"))
+        {
+            this.ShowReportnew("Admission Offer Letter", "AllotmentOfferLetter_HITS.rpt", "0");
         }
         else
         {
-            this.ShowReportnew("Admission_Slip_Report", "AllotmentOfferLetter.rpt", "0");
+            this.ShowReportnew("Admission Offer Letter", "AllotmentOfferLetterNew_CPU.rpt", "0");
         }
+
     }
 
     private string GetNewReceiptNo()
@@ -2618,6 +2627,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             txtStudentfullName.Text = ds.Tables[0].Rows[0]["STUDENT_NAME"] == null ? string.Empty : ds.Tables[0].Rows[0]["STUDENT_NAME"].ToString();
             txtStudEmail.Text = ds.Tables[0].Rows[0]["EMAIL"] == null ? string.Empty : ds.Tables[0].Rows[0]["EMAIL"].ToString();
             txtStudMobile.Text = ds.Tables[0].Rows[0]["MOBILE"] == null ? string.Empty : ds.Tables[0].Rows[0]["MOBILE"].ToString();
+            objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID > 0 AND ActiveStatus=1", "COLLEGE_NAME");
             ddlSchool.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_ID"] == null ? "0" : ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO > 0 AND B.COLLEGE_ID=" + ddlSchool.SelectedValue, "D.DEGREENO");
             ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"] == null ? "0" : ds.Tables[0].Rows[0]["DEGREENO"].ToString();
@@ -2636,8 +2646,16 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlBranch.SelectedValue = ds.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
             }
-            ddlBatch.SelectedValue = ds.Tables[0].Rows[0]["ADMISSION_BATCH"] == null ? "0" : ds.Tables[0].Rows[0]["ADMISSION_BATCH"].ToString();
-
+            objCommon.FillDropDownList(ddlBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0 AND ACTIVESTATUS=1 AND ISNULL(IS_ADMSSION,0)=1 ", "BATCHNO DESC");
+            try
+            {
+                ddlBatch.SelectedValue = ds.Tables[0].Rows[0]["ADMISSION_BATCH"] == null ? "0" : ds.Tables[0].Rows[0]["ADMISSION_BATCH"].ToString();
+            }
+            catch (Exception Ex)
+            {
+                objCommon.DisplayMessage(this.Page, "Search Student Admission Batch is not Configured Please check the Admission batch Configuration.", this.Page);
+                return;
+            }
             objCommon.FillDropDownList(ddlinstallmenttype, "ACD_INSTALLMENT_MASTER", "INSTALLMENT_NO", "INSTALLMENT_TYPE", "INSTALLMENT_NO>0", "INSTALLMENT_NO");
             objCommon.FillDropDownList(ddlstate, "ACD_STATE", "STATENO", "STATENAME", "STATENO >0", "STATENAME");
             objCommon.FillDropDownList(ddladmthrough, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
@@ -3436,7 +3454,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
     {
         try
         {
-            
+
             StudentController objSC = new StudentController();
             UserAcc objUa = new UserAcc();
             Student objS = new Student();
@@ -3469,7 +3487,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             string college = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_COLLEGE_MASTER M ON(S.COLLEGE_ID=M.COLLEGE_ID)", "M.COLLEGE_NAME", "IDNO=" + IDNOnew);
             Username = objCommon.LookUp("USER_ACC", "UA_NAME", " UA_TYPE=2 AND UA_IDNO=" + Convert.ToInt32(IDNOnew));
             Password = objCommon.LookUp("USER_ACC", "UA_PWD", " UA_TYPE=2 AND UA_IDNO=" + Convert.ToInt32(IDNOnew));
-
+            string CollegeName = objCommon.LookUp("REFF", "CODE_STANDARD", "");
 
             Password = clsTripleLvlEncyrpt.ThreeLevelDecrypt(Password.ToString());
             // int TemplateTypeId = 0;
@@ -3510,66 +3528,148 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 // email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
                 Link = ds.Tables[0].Rows[0]["LINK"].ToString();
                 sendmail = Convert.ToInt32(ds.Tables[0].Rows[0]["THIRDPARTY_PAYLINK_MAIL_SEND"].ToString());
-
+                string message = "";
                 if (sendmail == 1)
                 {
-
-                    subject = "Provisional Admission Confirmation Payment Link.";
-                    string message = "";
-                    message = templateText;
-                    message += "<p><b> Dear  " + Name + "</b> </p>";
-                    message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + " (Semester - " + Semester + ").</b> The fee payment should be made within 7 days of receiving this mail/letter.<br><br>You have to pay Registration Fees using the following Link and credentials. </td><p style=font-weight:bold;>ERP Link : " +  MISLink + "<br>Username   : " + Username + " <br/>Password   :  " + Password + "</p><p><b>Registration for Provisional Admission, Fee Details:</b> <br/>B.Tech. Program: 40000/-  <br>All Other UG / PG Program: 25000/-  <br>Hostel Booking: 30000/- If opted (Subject to the availability Hostel Room).<br></p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University. The Registration Fee (at the time of Provisional Admission) paid by you shall be adjusted in the initial fee payable at the time of admission.</p><p><b>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</b></p>";
-                    message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
-                    message += " <tr >";
-                    message += " <td style='border: 1px solid black;'>";
-                    message += "JEE Mains Score Card (Mandetory if appeared/ applicable)</td>";
-                    message += "<td style='border: 1px solid black;'> Migration Certificate</td></tr>";
-                    message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> 10th Marksheet & 12th Marksheet </td> <td style='border: 1px solid black;'> Transfer Certificate & Character Certificate</td> </tr>";
-                    message += "<tr></tr><tr><td style='border: 1px solid black;'>Graduation Final Year Mark-sheet (for PG Admissions)</td>";
-                    message += "<td style='border: 1px solid black;'>Caste Certificate (if applicable)</td></tr>";
-                    message += "<tr><td style='border: 1px solid black;'>Copy of Aadhar Card (UID)</td><td>OBC Non Creamy layer Certificate (if applicable)</td></tr>";
-                    message += "<tr><td style='border: 1px solid black;'>3 Passport Size Photographs</td>";
-                    message += "<td style='border: 1px solid black;'>Printout of application form (if filled online)</td></tr></table>";
-                    message += "<p><b>In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</b></p><p><b>Note:</b></p>";
-                    message += "<p>1.Provisional Admission Registration fee shall be adjusted against the fee payable at the time of admission.<br>";
-                    message += "2.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
-                    message += "3.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
-                    message += "4.In case of addmission withdrawal fee refund will be as per the University's Policy.<br/>";
-                    message += "5.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> <br>Academic Menu-->>Student Related-->>Online Payment.<br/>";
-                    message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>Directorate of Executive Education.</p>";
-
-                    // +MISLink + " Username: " + Username + " Password: " + Password;
-                    //message = "
-                    objS.EmailID = txtStudEmail.Text.ToString();
-                    string BCCEmailID = string.Empty;
-                    string BCCEMAIL = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(BBC_MAIL_NEW_STUD_ENTRY,0) as BBC_MAIL_NEW_STUD_ENTRY", "");
-                    if (BCCEMAIL != "0")
+                    if (Convert.ToInt32(Session["OrgId"]) == 5)
                     {
-                        BCCEmailID = BCCEMAIL;
+                        subject = "Provisional Admission Confirmation Payment Link.";
+                        message = templateText;
+                        message += "<p><b> Dear  " + Name + "</b> </p>";
+                        message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + " (Semester - " + Semester + ").</b> The fee payment should be made within 7 days of receiving this mail/letter.<br><br>You have to pay Registration Fees using the following Link and credentials. </td><p style=font-weight:bold;>ERP Link : " + MISLink + "<br>Username   : " + Username + " <br/>Password   :  " + Password + "</p><p><b>Registration for Provisional Admission, Fee Details:</b> <br/>B.Tech. Program: 40000/-  <br>All Other UG / PG Program: 25000/-  <br>Hostel Booking: 30000/- If opted (Subject to the availability Hostel Room).<br></p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University. The Registration Fee (at the time of Provisional Admission) paid by you shall be adjusted in the initial fee payable at the time of admission.</p><p><b>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</b></p>";
+                        message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
+                        message += " <tr >";
+                        message += " <td style='border: 1px solid black;'>";
+                        message += "JEE Mains Score Card (Mandetory if appeared/ applicable)</td>";
+                        message += "<td style='border: 1px solid black;'> Migration Certificate</td></tr>";
+                        message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> 10th Marksheet & 12th Marksheet </td> <td style='border: 1px solid black;'> Transfer Certificate & Character Certificate</td> </tr>";
+                        message += "<tr></tr><tr><td style='border: 1px solid black;'>Graduation Final Year Mark-sheet (for PG Admissions)</td>";
+                        message += "<td style='border: 1px solid black;'>Caste Certificate (if applicable)</td></tr>";
+                        message += "<tr><td style='border: 1px solid black;'>Copy of Aadhar Card (UID)</td><td>OBC Non Creamy layer Certificate (if applicable)</td></tr>";
+                        message += "<tr><td style='border: 1px solid black;'>3 Passport Size Photographs</td>";
+                        message += "<td style='border: 1px solid black;'>Printout of application form (if filled online)</td></tr></table>";
+                        message += "<p><b>In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</b></p><p><b>Note:</b></p>";
+                        message += "<p>1.Provisional Admission Registration fee shall be adjusted against the fee payable at the time of admission.<br>";
+                        message += "2.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
+                        message += "3.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
+                        message += "4.In case of addmission withdrawal fee refund will be as per the University's Policy.<br/>";
+                        message += "5.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> <br>Academic Menu-->>Student Related-->>Online Payment.<br/>";
+                        message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>" + CollegeName + "</p>";
+
+                        // +MISLink + " Username: " + Username + " Password: " + Password;
+                        //message = "
+                        objS.EmailID = txtStudEmail.Text.ToString();
+                        string BCCEmailID = string.Empty;
+                        string BCCEMAIL = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(BBC_MAIL_NEW_STUD_ENTRY,0) as BBC_MAIL_NEW_STUD_ENTRY", "");
+                        if (BCCEMAIL != "0")
+                        {
+                            BCCEmailID = BCCEMAIL;
+                        }
+                        else
+                        {
+                            BCCEmailID = "abc@gmail.com";
+                        }
+
+                        //------------Code for sending email,It is optional---------------
+                        // int status = sendEmail(message, useremail, subject);
+                        //int reg = TransferToEmail(objS.EmailID, message, subject); //--tempoary Commented
+
+                        //if (email_type == "1" && email_type != "")
+                        //    {
+                        //    int reg = TransferToEmail(objS.EmailID, message, subject);
+                        //    }
+                        //else if (email_type == "2" && email_type != "")
+                        //    {
+                        //    Task<int> task = Execute(message, objS.EmailID, subject, BCCEmailID);
+                        //    status = task.Result;
+                        //    }
+                        //if (email_type == "3" && email_type != "")
+                        //    {
+                        //    OutLook_Email(message, objS.EmailID, subject);
+                        //    }
+
+                    }
+                    else if (Convert.ToInt32(Session["OrgId"]) == 18)
+                    {
+                        subject = "Provisional Admission Confirmation Payment Link.";
+                        message = templateText;
+                        message += "<p><b>Greetings from Hindustan Institute of Technology and Science (HITS), Chennai!</b> </p>";
+                        message += "<p><b>EXPLORE OPPORTUNITIES AND SHAPE YOUR FUTURE WITH HITS!</b></p>";
+                        message += "<p><b> Dear  " + Name + "</b> </p>";
+                        message += "<p></p>On behalf of HITS, we take great pleasure in informing that you have been shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + " (Semester - " + Semester + ").</b> for the academic year 2024-2025. Please note that the fee payment should be made within 7 days of receiving this mail/letter.<br><br>You have to pay the Provisional Admission Fees using the following Link and credentials. </td><p style=font-weight:bold;>ERP Link : " + MISLink + "<br>Username   : " + Username + " <br/>Password   :  " + Password + "</p><p><b>Registration for Provisional Admission, Fee Details:</b> <br/>B.Tech./B.Arch./B.Des. Programmes: Rs.50,000/-  <br>MBA Programmes: Rs.50,000/- <br>All Other UG / PG Programmes: Rs.25,000/-  <br>Hostel Booking: 50,000/- If opted (Subject to availability of Hostel Room)..<br></p><p>Admission for HITS’ programmes shall be confirmed after thorough scrutiny and establishment of your eligibility in the qualifying exam after declaration of the result by the examining Board / University as per the schedule notified by the University.</p><p>The Provisional Fee paid by you shall be adjusted in the initial fee payable at the time of admission.</p><p><b>You will be required to submit 3 self-attested photo copies of the following documents at the time of final admission, once the University calls for the same</b></p>";
+                        message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
+                        message += " <tr >";
+                        message += " <td style='border: 1px solid black;'>";
+                        message += "HITSEEE/HITS CAT Score Card (If Appeared/Applicable)</td>";
+                        message += "<td style='border: 1px solid black;'>Transfer Certificate (Original and 3 Photocopies)</td></tr>";
+                        message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'>NATA Score Card (For B.Arch Students)</td> <td style='border: 1px solid black;'>Copies of Migration Certificate (If Applicable)</td> </tr>";
+                        message += "<tr><td style='border: 1px solid black;'>10th Mark-sheet & 12th/Diploma Mark-sheet (Original and 3 Photocopies)</td>";
+                        message += "<td style='border: 1px solid black;'>Copies of Community Certificate (If Applicable)</td></tr>";
+                        message += "<tr><td style='border: 1px solid black;'>Graduation Final Year Mark-sheet for PG Admissions (Original and 3 Photocopies)</td><td style='border: 1px solid black;'>Printouts of application form</td></tr>";
+                        message += "<tr><td style='border: 1px solid black;'>3 Passport Size Photographs</td>";
+                        message += "<td style='border: 1px solid black;'>Copies of Aadhar Card (UID)</td></tr></table>";
+                        message += "<p><b>In case you are found ineligible for admission in the said program or denied admission by the admission department after verification at any stage, the provisional fee shall be refunded as per University’s norms and admission will be cancelled.</b></p><p><b>Note:</b></p>";
+                        message += "<p>1.Provisional Admission Registration fee shall be adjusted against the fee payable at the time of admission.<br>";
+                        message += "2.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
+                        message += "3.After submission of fees, new user ID will be sent to your registered mail id separately.<br/>";
+                        message += "4.In case of admission withdrawal/Cancellation, fee refund will be as per the University’s Policy.<br/>";
+                        message += "5.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> <br>Academic Menu-->>Student Related-->>Online Payment.<br/>";
+                        message += "6.Payment can be made via Debit Card/Credit Card/UPI/Netbanking.<br/>";
+                        message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>" + CollegeName + "</p>";
+
+                        // +MISLink + " Username: " + Username + " Password: " + Password;
+                        //message = "
+                        objS.EmailID = txtStudEmail.Text.ToString();
+                        string BCCEmailID = string.Empty;
+                        string BCCEMAIL = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(BBC_MAIL_NEW_STUD_ENTRY,0) as BBC_MAIL_NEW_STUD_ENTRY", "");
+                        if (BCCEMAIL != "0")
+                        {
+                            BCCEmailID = BCCEMAIL;
+                        }
+                        else
+                        {
+                            BCCEmailID = "abc@gmail.com";
+                        }
                     }
                     else
                     {
-                        BCCEmailID = "abc@gmail.com";
+                        subject = "Provisional Admission Confirmation Payment Link.";
+                        message = templateText;
+                        message += "<p><b> Dear  " + Name + "</b> </p>";
+                        message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + " (Semester - " + Semester + ").</b> The fee payment should be made within 7 days of receiving this mail/letter.<br><br>You have to pay Registration Fees using the following Link and credentials. </td><p style=font-weight:bold;>ERP Link : " + MISLink + "<br>Username   : " + Username + " <br/>Password   :  " + Password + "</p><p><b>Registration for Provisional Admission, Fee Details:</b> <br/>Payable Amount: Rs. " + DAmount + "<br></p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University. The Registration Fee (at the time of Provisional Admission) paid by you shall be adjusted in the initial fee payable at the time of admission.</p><p><b>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</b></p>";
+                        message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
+                        message += " <tr >";
+                        message += " <td style='border: 1px solid black;'>";
+                        message += "JEE Mains Score Card (Mandetory if appeared/ applicable)</td>";
+                        message += "<td style='border: 1px solid black;'> Migration Certificate</td></tr>";
+                        message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> 10th Marksheet & 12th Marksheet </td> <td style='border: 1px solid black;'> Transfer Certificate & Character Certificate</td> </tr>";
+                        message += "<tr></tr><tr><td style='border: 1px solid black;'>Graduation Final Year Mark-sheet (for PG Admissions)</td>";
+                        message += "<td style='border: 1px solid black;'>Caste Certificate (if applicable)</td></tr>";
+                        message += "<tr><td style='border: 1px solid black;'>Copy of Aadhar Card (UID)</td><td>OBC Non Creamy layer Certificate (if applicable)</td></tr>";
+                        message += "<tr><td style='border: 1px solid black;'>3 Passport Size Photographs</td>";
+                        message += "<td style='border: 1px solid black;'>Printout of application form (if filled online)</td></tr></table>";
+                        message += "<p><b>In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</b></p><p><b>Note:</b></p>";
+                        message += "<p>1.Provisional Admission Registration fee shall be adjusted against the fee payable at the time of admission.<br>";
+                        message += "2.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
+                        message += "3.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
+                        message += "4.In case of addmission withdrawal fee refund will be as per the University's Policy.<br/>";
+                        message += "5.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> <br>Academic Menu-->>Student Related-->>Online Payment.<br/>";
+                        message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>" + CollegeName + "</p>";
+
+                        // +MISLink + " Username: " + Username + " Password: " + Password;
+                        //message = "
+                        objS.EmailID = txtStudEmail.Text.ToString();
+                        string BCCEmailID = string.Empty;
+                        string BCCEMAIL = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(BBC_MAIL_NEW_STUD_ENTRY,0) as BBC_MAIL_NEW_STUD_ENTRY", "");
+                        if (BCCEMAIL != "0")
+                        {
+                            BCCEmailID = BCCEMAIL;
+                        }
+                        else
+                        {
+                            BCCEmailID = "abc@gmail.com";
+                        }
                     }
-
-                    //------------Code for sending email,It is optional---------------
-                    // int status = sendEmail(message, useremail, subject);
-                    //int reg = TransferToEmail(objS.EmailID, message, subject); //--tempoary Commented
-
-                    //if (email_type == "1" && email_type != "")
-                    //    {
-                    //    int reg = TransferToEmail(objS.EmailID, message, subject);
-                    //    }
-                    //else if (email_type == "2" && email_type != "")
-                    //    {
-                    //    Task<int> task = Execute(message, objS.EmailID, subject, BCCEmailID);
-                    //    status = task.Result;
-                    //    }
-                    //if (email_type == "3" && email_type != "")
-                    //    {
-                    //    OutLook_Email(message, objS.EmailID, subject);
-                    //    }
-
 
                     status = objSendEmail.SendEmail(objS.EmailID, message, subject); //Calling Method
                 }
@@ -3630,16 +3730,16 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             string UA_ACC = string.Empty;
             string password = string.Empty;
             int IDNO = 0;
-            if (Convert.ToInt32(Session["OrgId"].ToString()) == 3)
-            {
-                string PasswordName = CommonComponent.GenerateRandomPassword.GenearteFourLengthPassword();
-                Session["UAR_PASS"] = PasswordName;
-                UA_PWD = PasswordName;
-                UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(UA_PWD);
-                UA_ACC = "0,500,76";
-                IDNO = Convert.ToInt32(Session["IDNO"]);
-            }
-            else if (Convert.ToInt32(Session["OrgId"].ToString()) == 5)
+            //if (Convert.ToInt32(Session["OrgId"].ToString()) == 3)
+            //{
+            //    string PasswordName = CommonComponent.GenerateRandomPassword.GenearteFourLengthPassword();
+            //    Session["UAR_PASS"] = PasswordName;
+            //    UA_PWD = PasswordName;
+            //    UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(UA_PWD);
+            //    UA_ACC = "0,500,76";
+            //    IDNO = Convert.ToInt32(Session["IDNO"]);
+            //}
+            if (Convert.ToInt32(Session["OrgId"].ToString()) == 5 || Convert.ToInt32(Session["OrgId"].ToString()) == 3 ||  Convert.ToInt32(Session["OrgId"].ToString()) == 4 ||Convert.ToInt32(Session["OrgId"].ToString()) == 18)
             {
 
                 IDNO = Convert.ToInt32(Session["IDNO"]);
@@ -4169,9 +4269,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //}
             }
 
-            //int Branchno = Convert.ToInt32(ddlBranch.SelectedValue);
-            //int Admbatch = Convert.ToInt32(ddlBatch.SelectedValue);
-
+            //objS.RollNo= objCommon.LookUp("ACD_NPF_DATA_HITS", "TOKEN_FEE", "APPLICATIONID='" + Convert.ToString(txtREGNo.Text) + "'");
 
             string output = objSC.AddNewStudent_JECRC(objS, objStud, IUEmail, objUa, USERNO, HostelType, SchType);
             if (output != "-99")

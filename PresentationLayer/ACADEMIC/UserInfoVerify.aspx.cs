@@ -1310,8 +1310,19 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
             int userno = Convert.ToInt32(objCommon.LookUp("ACD_USER_REGISTRATION", "USERNO", "USERNAME='" + lblNPFApplicationId.Text + "'"));
             using (WebClient webClient = new WebClient())
             {
-                DataSet ds1 = objCommon.FillDropDown("ACD_USER_REGISTRATION UR inner JOIN ACD_NPF_DATA N ON(UR.MOBILENO=N.MOBILE_NUMBER)", "ur.USERNO", "N.FILE_UPLOAD_PASSPORT_SIZE_PHOTOGRAPH[PHOTOGRAPH],N.FILE_UPLOAD_SIGNATURE[SIGNATURE],USERNAME,N.APPLICATION_NO", " N.APPLICATION_NO = '" + npfregno + "'", string.Empty);
-
+                DataSet ds1 = null;
+                if (Session["OrgId"].ToString() == "5")
+                {
+                     ds1 = objCommon.FillDropDown("ACD_USER_REGISTRATION UR inner JOIN ACD_NPF_DATA N ON(UR.MOBILENO=N.MOBILE_NUMBER)", "ur.USERNO", "N.FILE_UPLOAD_PASSPORT_SIZE_PHOTOGRAPH[PHOTOGRAPH],N.FILE_UPLOAD_SIGNATURE[SIGNATURE],USERNAME,N.APPLICATION_NO", " N.APPLICATION_NO = '" + npfregno + "'", string.Empty);
+                }
+                else if (Session["OrgId"].ToString() == "3" || Session["OrgId"].ToString() == "4")
+                {
+                    ds1 = objCommon.FillDropDown("ACD_USER_REGISTRATION UR inner JOIN ACD_NPF_DATA_CPU N ON(UR.MOBILENO=N.MOBILE_NUMBER)", "ur.USERNO", "N.FILE_UPLOAD_PASSPORT_SIZE_PHOTOGRAPH[PHOTOGRAPH],N.FILE_UPLOAD_SIGNATURE[SIGNATURE],USERNAME,N.APPLICATION_NO", " N.APPLICATION_NO = '" + npfregno + "'", string.Empty);
+                }
+                else if (Session["OrgId"].ToString() == "18")
+                {
+                    ds1 = objCommon.FillDropDown("ACD_USER_REGISTRATION UR inner JOIN ACD_NPF_DATA_HITS N ON(UR.MOBILENO=N.MOBILE_NUMBER)", "ur.USERNO", "N.FILE_UPLOAD_PASSPORT_SIZE_PHOTOGRAPH[PHOTOGRAPH],N.FILE_UPLOAD_SIGNATURE[SIGNATURE],USERNAME,N.APPLICATION_NO", " N.APPLICATION_NO = '" + npfregno + "'", string.Empty);
+                }
                 ds1.Tables[0].DefaultView.RowFilter = "USERNO = " + userno;
                 DataTable dt = (ds1.Tables[0].DefaultView).ToTable();
                 string path = dt.Rows[0]["PHOTOGRAPH"].ToString();
