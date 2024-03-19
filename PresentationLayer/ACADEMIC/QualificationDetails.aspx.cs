@@ -747,6 +747,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
 
                     if (!txtNataMarks.Text.Trim().Equals(string.Empty)) objS.NataMarks = Convert.ToDecimal(txtNataMarks.Text.Trim());
 
+
                     QualifiedExam[] qualExams = null;
                     this.BindLastQualifiedExamData(ref qualExams);
                     objS.LastQualifiedExams = qualExams;
@@ -754,8 +755,8 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     QualifiedExam[] EntranceExams = null;
                     this.BindEntranceExamData(ref EntranceExams);
                     objS.EntranceExams = EntranceExams;
-                    int ua_no = Convert.ToInt32(Session["userno"]);// Added by Kajal J. on 16-03-2024 for maintaining log
-                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentQualifyingExamInformation(objS, objSQualExam, Convert.ToInt32(Session["usertype"]), Vocationalsub, diplomastatus, ua_no);
+
+                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentQualifyingExamInformation(objS, objSQualExam, Convert.ToInt32(Session["usertype"]), Vocationalsub, diplomastatus);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         ShowStudentDetails();

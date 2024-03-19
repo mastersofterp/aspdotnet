@@ -15,6 +15,17 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net.Mail;
 
+/*---------------------------------------------------------------------------------------------------------------------------
+Created By :
+Created On :
+Purpose :
+Version :
+-----------------------------------------------------------------------------------------------------------------------------
+Version   Modified On     Modified By             Purpose
+-----------------------------------------------------------------------------------------------------------------------------
+1.0.1     16-03-2024      Anurag Baghele          Added college id to get college banner
+------------------------------------------- ---------------------------------------------------------------------------------*/
+
 public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -38,7 +49,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
                 ViewState["usertype"] = Session["usertype"];
 
                 //this.FillDropDown();
-               // objCommon.FillDropDownList(ddlPayType, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO>0", "PAYTYPENAME");
+                // objCommon.FillDropDownList(ddlPayType, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO>0", "PAYTYPENAME");
                 ShowStudentDetails();
 
                 if (ViewState["usertype"].ToString() == "2")
@@ -47,7 +58,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
                     divAdmissionApproval.Visible = false;
                     // btnGohome.Visible = false;
                     divhome.Visible = false;
-                    divPrintReport.Visible = true; 
+                    divPrintReport.Visible = true;
                 }
                 else if (ViewState["usertype"].ToString() == "8") //HOD
                 {
@@ -67,6 +78,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
 
         }
     }
+
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -83,6 +95,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
             Response.Redirect("~/notauthorized.aspx?page=StudentInfoEntryNew.aspx");
         }
     }
+
     protected void lnkPersonalDetail_Click(object sender, EventArgs e)
     {
         //Server.Transfer("~/academic/PersonalDetails.aspx", false);
@@ -91,12 +104,14 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
 
         // HttpContext.Current.RewritePath("PersonalDetails.aspx");
     }
+
     protected void lnkAddressDetail_Click(object sender, EventArgs e)
     {
         //Server.Transfer("~/academic/AddressDetails.aspx", false);
 
         Response.Redirect("~/academic/AddressDetails.aspx");
     }
+
     protected void lnkAdmissionDetail_Click(object sender, EventArgs e)
     {
         //Server.Transfer("~/academic/AdmissionDetails.aspx", false);
@@ -122,15 +137,18 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
         //Server.Transfer("~/academic/QualificationDetails.aspx", false);
         Response.Redirect("~/academic/QualificationDetails.aspx");
     }
+
     protected void lnkotherinfo_Click(object sender, EventArgs e)
     {
         //Server.Transfer("~/academic/OtherInformation.aspx", false);
         Response.Redirect("~/academic/OtherInformation.aspx");
     }
+
     protected void lnkApproveAdm_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/academic/ApproveAdmission.aspx");
     }
+
     protected void lnkprintapp_Click(object sender, EventArgs e)
     {
         GEC_Student objGecStud = new GEC_Student();
@@ -154,6 +172,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
             }
         }
     }
+
     private void ShowReport(string reportTitle, string rptFileName, string regno)
     {
         try
@@ -182,21 +201,21 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
         }
     }
 
-
     //Added By Ruchika Dhakate on 17.10.2022 Ticket No:33448
-    private void ShowGeneralExportReport(string exporttype, string rptFileName ,int IDNO ,string regno) 
+    private void ShowGeneralExportReport(string exporttype, string rptFileName, int IDNO, string regno)
     {
         try
         {
-            string filename = regno; 
-           string FileStud ="StudP";
+            string collegeid = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"])); //<1.0.1>
+            string filename = regno;
+            string FileStud = "StudP";
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "exporttype=" + exporttype;
-          //url += "&filename=" + filename + "." + exporttype;     
-            url += "&filename="+FileStud + filename + "." + exporttype; 
+            //url += "&filename=" + filename + "." + exporttype;     
+            url += "&filename=" + FileStud + filename + "." + exporttype;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" +(IDNO) + "";
+            url += "&param=@P_COLLEGE_CODE=" + collegeid + ",@P_IDNO=" + (IDNO) + "";
 
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
@@ -281,9 +300,10 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
                     //admstatus = Convert.ToInt32(ddlStatus.SelectedValue);
                 }
                 int status = Convert.ToInt32(ddlAdmStatus.SelectedValue);
-                int usertype = Convert.ToInt32(Session["usertype"]);
+
+
                 //string reason = ddlReason.SelectedItem.Text.Trim();
-                CustomStatus cs = (CustomStatus)objSC.UpdateStudentAdmissionStatus(objS, status, reason, admstatus, usertype);
+                 CustomStatus cs = (CustomStatus)objSC.UpdateStudentAdmissionStatus(objS, status, reason, admstatus);
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
                     int AdStatus = Convert.ToInt32(objCommon.LookUp("ACD_ADMISSION_STATUS_LOG", "STATUS", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"])));
@@ -346,6 +366,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
             //this.ClearControl();
         }
     }
+
     protected void btnGohome_Click(object sender, EventArgs e)
     {
 
@@ -353,6 +374,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
 
         //Response.Redirect("~\\academic\\StudentInfoEntryNew.aspx");
     }
+
     protected void lnkGoHome_Click(object sender, EventArgs e)
     {
         if (ViewState["usertype"].ToString() == "1")
@@ -370,6 +392,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
         Response.Redirect("~/academic/StudentInfoEntry.aspx?pageno=74");
 
     }
+
     private void ShowStudentDetails()
     {
         StudentController objSC = new StudentController();
@@ -445,7 +468,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
                     divReason.Visible = false;
                     divStatus.Visible = true;
 
-                 //   ddlStatus.SelectedValue = dtr["ADM_STATUS"].ToString();
+                    //   ddlStatus.SelectedValue = dtr["ADM_STATUS"].ToString();
 
                 }
                 else
@@ -458,7 +481,7 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
 
 
                 // string paytype = objCommon.LookUp("ACD_STUDENT", "PTYPE", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]));
-              //  ddlPayType.SelectedValue = dtr["PAYTYPENO"] == null ? "0" : dtr["PAYTYPENO"].ToString();
+                //  ddlPayType.SelectedValue = dtr["PAYTYPENO"] == null ? "0" : dtr["PAYTYPENO"].ToString();
                 // ddlPayType.SelectedValue = paytype.ToString();
 
             }
@@ -508,7 +531,6 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
         return ret;
     }
 
-
     protected void lnkCovid_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/academic/CovidVaccinationDetails.aspx");
@@ -516,22 +538,22 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
 
     protected void btnreport_Click(object sender, EventArgs e)
     {
-       
+
         string exportttpe = "pdf";
         GEC_Student objGecStud = new GEC_Student();
         if (ViewState["usertype"].ToString() == "2")
         {
 
             int IDNO = Convert.ToInt32(Session["stuinfoidno"]);               //Added By Ruchika Dhakate on 17.10.2022 Ticket No:33448
-            string RegNo = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + IDNO + ""); 
+            string RegNo = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + IDNO + "");
 
             ShowGeneralExportReport(exportttpe, "Admission_Slip_Confirm_PHD_General.rpt", IDNO, RegNo);
         }
         else
         {
             if (Session["stuinfoidno"] != null)
-            {               
-                int IDNO = Convert.ToInt32(Session["stuinfoidno"]); 
+            {
+                int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
                 string RegNo = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + IDNO + "");
 
                 ShowGeneralExportReport(exportttpe, "Admission_Slip_Confirm_PHD_General.rpt", IDNO, RegNo);
