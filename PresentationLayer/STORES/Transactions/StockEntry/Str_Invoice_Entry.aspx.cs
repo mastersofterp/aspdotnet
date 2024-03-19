@@ -1135,6 +1135,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
         ViewState["FILE1"] = null;
         txtItemExpiryDate.Text = string.Empty;
         txtItemWarrentyDate.Text = string.Empty;
+        ddlInv.SelectedValue = "0";
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
@@ -1802,6 +1803,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
     {
         pnlReport.Visible = false;
         InvPanel.Visible = true;
+        ddlInv.SelectedValue = "0";
     }
     //To Show INVOICE report
     private void ShowReport(string reportTitle, string rptFileName)
