@@ -438,6 +438,7 @@
     <Compile Include="BusinessLogic\PostAdmission\ADMPStudentTransferController.cs" />
     <Compile Include="BusinessLogic\PostAdmission\ADMPTestDetails_Score_Assign_VerifyController.cs" />
     <Compile Include="BusinessLogic\PostAdmission\ADMPUnlockStudentDetailsController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\AdvancePaymentEmailController.cs" />
     <Compile Include="BusinessLogic\PostAdmission\ApplicationProcessController.cs" />
     <Compile Include="BusinessLogic\PostAdmission\ApplicationStagesController.cs" />
     <Compile Include="BusinessLogic\PostAdmission\EmailTemplateController.cs" />
