@@ -59,13 +59,17 @@ public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
-                
+
             }
             //Populate the Drop Down Lists
             PopulateDropDownList();
             BindListView();
             objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "Datatable();", true);
         }
     }
     private void CheckPageAuthorization()
@@ -222,22 +226,26 @@ public partial class ACADEMIC_OnlineDegreeSubjectMapping : System.Web.UI.Page
                 ClearField();
                 objCommon.DisplayMessage(this, "Record saved Successfully", this.Page);
                 this.BindListView();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "Datatable();", true);
             }
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 ClearField();
                 objCommon.DisplayMessage(this, "Record Updated Successfully", this.Page);
                 this.BindListView();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "Datatable();", true);
             }
             else if (cs.Equals(CustomStatus.DuplicateRecord))
             {
                 objCommon.DisplayMessage(this, "Record Already Exists !!", this.Page);
                 ClearField();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "Datatable();", true);
             }
             else if (cs.Equals(CustomStatus.TransactionFailed))
             {
                 objCommon.DisplayMessage(this, "Transaction Failed", this.Page);
                 ClearField();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "Datatable();", true);
             }
         }
 

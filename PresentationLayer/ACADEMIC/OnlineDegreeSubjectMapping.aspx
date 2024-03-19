@@ -11,7 +11,7 @@
     <asp:HiddenField ID="hfdiscutoff" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdisothers" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
-  <%--  <div>
+    <div>
         <asp:UpdateProgress ID="UpdateProgress4" runat="server"
             DynamicLayout="true" DisplayAfter="0">
             <ProgressTemplate>
@@ -24,7 +24,7 @@
                 </div>
             </ProgressTemplate>
         </asp:UpdateProgress>
-    </div>--%>
+    </div>
     <asp:UpdatePanel ID="uponlineMapping" runat="server">
         <ContentTemplate>
             <div class="row">
@@ -399,10 +399,10 @@
                     scrollX: true,
                     scrollCollapse: true,
                     paging: true,
-                    lengthMenu: [
-                     [500, 1000, 2000, 3000, 4000, 5000, 10000],
-                     [500 + " - " + 1000, 1000 + " - " + 2000, 2000 + " - " + 3000, 3000 + " - " + 4000, 4000 + " - " + 5000, 5000 + " - " + 10000, "All"]
-                    ],
+                    //lengthMenu: [
+                    // [500, 1000, 2000, 3000, 4000, 5000, 10000],
+                    // [500 + " - " + 1000, 1000 + " - " + 2000, 2000 + " - " + 3000, 3000 + " - " + 4000, 4000 + " - " + 5000, 5000 + " - " + 10000, "All"]
+                    //],
                     dom: 'lBfrtip',
                     buttons: [
                         {
@@ -565,10 +565,10 @@
                 scrollX: true,
                 scrollCollapse: true,
                 paging: true,
-                lengthMenu: [
-                 [500, 1000, 2000, 3000, 4000, 5000, 10000],
-                 [500 + " - " + 1000, 1000 + " - " + 2000, 2000 + " - " + 3000, 3000 + " - " + 4000, 4000 + " - " + 5000, 5000 + " - " + 10000, "All"]
-                ],
+                //lengthMenu: [
+                // [500, 1000, 2000, 3000, 4000, 5000, 10000],
+                // [500 + " - " + 1000, 1000 + " - " + 2000, 2000 + " - " + 3000, 3000 + " - " + 4000, 4000 + " - " + 5000, 5000 + " - " + 10000, "All"]
+                //],
                 dom: 'lBfrtip',
                 buttons: [
                     {
