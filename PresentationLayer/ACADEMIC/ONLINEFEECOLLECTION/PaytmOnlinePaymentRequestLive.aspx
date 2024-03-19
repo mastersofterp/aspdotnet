@@ -134,21 +134,28 @@
 
 
     <div id="divMsg" runat="server"></div>
+    <script type="text/javascript">
+        var merchentID = '<%=Session["MerchentID"]%>';
+        //alert(merchentID);
 
-    <script type="application/javascript" src="https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/PEOPLE31207336692326.js"></script>
+        var jsElem = window.document.createElement('script');
+        jsElem.src = 'https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/' + merchentID;
+        jsElem.type = 'application/javascript';
+        $('head').append(jsElem);
+    </script>
+
+    <%--<script type="application/javascript" src="https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/PEOPLE92734521187172.js" ></script>--%>
 
     <script type="text/javascript">
 
         //document.getElementById("paytmWithPaytm").addEventListener("click", function () {
         //    onScriptLoad("de5f178fdbe04169aa68e3edd51e3d0c1709555781310", "1709555781296", "1.00");
-        //});
+        //}); 
 
         var TOKEN = '<%=Session["TOKEN"]%>';
         var ORDERID = '<%=Session["ORDERID"]%>';
         var AMOUNT = '<%=Session["AMOUNT"]%>';
         //alert(TOKEN);
-        //alert(ORDERID);
-        //alert(AMOUNT);
 
         function onPayScriptLoad() {
             var config = {

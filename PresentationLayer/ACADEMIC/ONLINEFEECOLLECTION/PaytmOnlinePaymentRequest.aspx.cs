@@ -293,7 +293,7 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
                 var jsonData = JObject.Parse(responseData);
                 var result_Info = jsonData["body"]["resultInfo"].ToString();
                 var status = jsonData["body"]["resultInfo"]["resultCode"].ToString();
-                if (status == "0000")
+                if (status == "0000" || status == "0002")
                 {
                     token = jsonData["body"]["txnToken"].ToString();
                     Session["TOKEN"] = token;
