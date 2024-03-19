@@ -60,6 +60,7 @@
                                                 <asp:ListItem Value="7">Orientation Program</asp:ListItem>
                                                 <asp:ListItem Value="8">Refresher Course</asp:ListItem>
                                                 <asp:ListItem Value="9">Certification Course</asp:ListItem>
+                                                <asp:ListItem Value="10">MOOCs</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvProgramtype" runat="server" ControlToValidate="ddlProgramType"
                                                 Display="None" ErrorMessage="Please Select Program Type" ValidationGroup="ServiceBook"
