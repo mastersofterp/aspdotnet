@@ -119,7 +119,8 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 spValue = "" + appId + "";
                 DataSet dsGet = null;
                 dsGet = objCommon.DynamicSPCall_Select(spName, spParameters, spValue);
-                DataSet ds_degreenamePHD = objCommon.FillDropDown("ACD_college_degree_branch AD INNER JOIN ACD_PHD_REGISTRATION AUR ON (AD.BRANCHNO=AUR.DEPARTMENT_NO)", "AD.DEGREENO", "USERNO", "USERNO=" + Convert.ToInt32(ViewState["USERNO"]) + "AND USERNAME =" + appId + " AND UGPGOT=3", "");
+                int userno = Convert.ToInt32(ViewState["USERNO"]);
+                DataSet ds_degreenamePHD = objCommon.FillDropDown("ACD_college_degree_branch AD INNER JOIN ACD_PHD_REGISTRATION AUR ON (AD.BRANCHNO=AUR.DEPARTMENT_NO)", "AD.DEGREENO", "USERNO", "USERNO=" + userno + "AND USERNAME ='" + appId + "' AND UGPGOT=3", "");
                 if (dsGet != null && dsGet.Tables.Count > 0 && dsGet.Tables[0].Rows.Count > 0)
                 {
                     divDetails.Visible = true;
@@ -138,11 +139,16 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                         lblPayStatus.ForeColor = System.Drawing.Color.Green;
                         btnSubmit.Visible = false;
 
-
-                        if (lblDegree.Text != "Doctor of Philosophy")
+                        //</1.0.1>
+                        if (lblDegree.Text.Trim() != "Doctor of Philosophy")
                         {
                             btnreceipt.Visible = true;
                         }
+                        else
+                        {
+                            btnreceipt.Visible = false;
+                        }
+                        //</1.0.1>
                     }
                     else
                     {
@@ -191,7 +197,6 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             string DegreeName = string.Empty;
             if (ds_degreenameMCA.Tables.Count > 0 && ds_degreenameMCA.Tables[0].Rows.Count > 0)
             {
-                // Check if the "CODE" column value is not DBNull
                 if (ds_degreenameMCA.Tables[0].Rows[0]["CODE"] != DBNull.Value)
                 {
                     DegreeName = ds_degreenameMCA.Tables[0].Rows[0]["CODE"].ToString();
@@ -201,7 +206,6 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             string PHDDegree = string.Empty; 
             if (ds_degreenamePHD.Tables.Count > 0 && ds_degreenamePHD.Tables[0].Rows.Count > 0)
             {
-                // Check if the "CODE" column value is not DBNull
                 if (ds_degreenamePHD.Tables[0].Rows[0]["DEGREENO"] != DBNull.Value)
                 {
                     PHDDegree = ds_degreenamePHD.Tables[0].Rows[0]["DEGREENO"].ToString();
@@ -250,7 +254,6 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                         {
                             Task<int> x = SendMailForAppId_PG();
                         }
-                      //  ShowReport("OnlineFeePayment", "rptOnlineReceipt_Online_Adm.rpt");
 
                         btnreceipt.Visible = true;
                     }
@@ -291,7 +294,6 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
     {
         int ret = 0;
         // int userno = Convert.ToInt32(((UserDetails)(Session["user"])).UserNo);
-
         try
         {
             int userno = Convert.ToInt32(ViewState["USERNO"].ToString());      
@@ -392,18 +394,6 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             byte[] test = (byte[])bytesRpt;
             string FileName = UserName.Trim() + "_APPLICATION";
 
-            //var msg1 = MailHelper.CreateSingleEmail(msg.From, to, msg.Subject, "", msg.HtmlContent);
-            //msg1.Attachments = new List<SendGrid.Helpers.Mail.Attachment>
-            //    {
-            //        new SendGrid.Helpers.Mail.Attachment
-            //        {
-            //            Content = Convert.ToBase64String(test),
-            //            Filename = FileName,
-            //            Type = "application/pdf",
-            //            Disposition = "attachment"
-            //        }
-            //    };
-
             #region  comment
             //byte[] fileBytes = ConvertDataSetToExcel(ds1);
             //var file = Convert.ToBase64String(fileBytes);
@@ -417,13 +407,6 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             #endregion
 
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11;
-            //Console.WriteLine(msg1.Serialize());
-            //var response = await client.SendEmailAsync(msg1).ConfigureAwait(false);
-            ////var response = await client.SendEmailAsync(msg1); ;
-            //string res = Convert.ToString(response.StatusCode);
-            //ret = (res == "Accepted") ? 1 : 0;
-            //objCommon.DisplayMessage(this.Page, ret.ToString(), this.Page);
-            //SendEmailCommon objSendEmailCommon=new SendEmailCommon();
             DataSet ds = getModuleConfig(0);
             string email_type = string.Empty;
             string Link = string.Empty;
