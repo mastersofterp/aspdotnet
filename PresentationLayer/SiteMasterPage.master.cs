@@ -3279,6 +3279,10 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         {
             Response.Redirect("~/studeHome.aspx", false);
         }
+        else if (Session["usertype"].ToString() == "5")
+        {
+            Response.Redirect("~/homeNonFaculty.aspx", false);
+        }
         else
         {
             Response.Redirect("~/principalHome.aspx");
