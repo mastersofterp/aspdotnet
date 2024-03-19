@@ -122,7 +122,7 @@ namespace IITMS
                 private bool _IsRetirmentDateCalculation;
 
 
-
+                private bool _EnableEmpSignonEmpInfoPage;
 
 
 
@@ -1625,6 +1625,18 @@ namespace IITMS
                         _IsRetirmentDateCalculation = value;
                     }
                 }
+                public bool IsEnableEmpSignatureinEmpPage
+                {
+                    set
+                    {
+                        _EnableEmpSignonEmpInfoPage = value;
+                    }
+                    get
+                    {
+                      return  _EnableEmpSignonEmpInfoPage;
+                    }
+                }
+
                 # endregion
             }
         }

@@ -286,6 +286,14 @@ public partial class PAYROLL_PAY_Configuration_Pay_Configuration : System.Web.UI
                 {
                     chkretirmentdatecalculate.Checked = false;
                 }
+                if (Convert.ToBoolean(dtr.Tables[0].Rows[0]["EnableEmpSignonEmpInfoPage"]) == true)
+                {
+                    chkenabledEmpSignature.Checked = true;
+                }
+                else
+                {
+                    chkenabledEmpSignature.Checked=false;
+                }
                 ViewState["imgEmpSign"] = (dtr.Tables[0].Rows[0]["REGISTRAR_SIGN"])as byte[];  
                 imgEmpSign.ImageUrl = "../../../showimage.aspx?id=" + Convert.ToString(Organizationid) + "&type=REGISTRAR_SIGN";
         }
@@ -478,7 +486,7 @@ public partial class PAYROLL_PAY_Configuration_Pay_Configuration : System.Web.UI
             int checkcount = 0;
             colvalues = string.Empty;
             string colval = string.Empty;
-            foreach (ListViewDataItem lvitem in lvStatff.Items)
+            foreach ( ListViewDataItem lvitem in lvStatff.Items)
             {
                 CheckBox chk = lvitem.FindControl("chkStaff") as CheckBox;
 
@@ -523,6 +531,7 @@ public partial class PAYROLL_PAY_Configuration_Pay_Configuration : System.Web.UI
             }
             objPayCon.IsAutoUserCreated = ChkAutoUserCreated.Checked ? true : false;
             objPayCon.IsRetirmentDateCalculation = chkretirmentdatecalculate.Checked ? true : false;
+            objPayCon.IsEnableEmpSignatureinEmpPage = chkenabledEmpSignature.Checked ? true : false;
 
             CustomStatus cs = (CustomStatus)objConfig.UpdateRefTable(objPayCon);
 

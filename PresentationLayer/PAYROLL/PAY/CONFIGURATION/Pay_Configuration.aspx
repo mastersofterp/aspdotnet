@@ -800,6 +800,12 @@
                                                   <asp:CheckBox ID="chkretirmentdatecalculate" runat="server"  TabIndex="66" />&nbsp;&nbsp;Retirement Date Calculation on Birth Date</label>
                                                 </div>
                                             </div>
+                                             <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                 <label>
+                                                  <asp:CheckBox ID="chkenabledEmpSignature" runat="server"  TabIndex="66"  Checked="true"/>&nbsp;&nbsp;Enable Employee Signature in Employee Information Page</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

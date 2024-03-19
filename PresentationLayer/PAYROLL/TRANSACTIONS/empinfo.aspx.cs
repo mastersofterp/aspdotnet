@@ -19,7 +19,7 @@ public partial class payroll_empinfo : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     int OrganizationId;
     bool IsGradepayApplicable;
-    bool IsRetirmentDateCalculation;
+    bool IsRetirmentDateCalculation, IsEnableEmpSignatureinEmpPage;
 
     #region Page Load
 
@@ -86,7 +86,15 @@ public partial class payroll_empinfo : System.Web.UI.Page
                     txtGradePay.Enabled = false;
                 }
                 IsRetirmentDateCalculation = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(IsRetirmentDateCalculation,0) IsRetirmentDateCalculation", string.Empty));
-               
+                IsEnableEmpSignatureinEmpPage = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(EnableEmpSignonEmpInfoPage,1) EnableEmpSignonEmpInfoPage", string.Empty));
+                if (IsEnableEmpSignatureinEmpPage == true)
+                {
+                    divsign.Visible = true;
+                }
+                else
+                {
+                    divsign.Visible = false;
+                }
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 //Populate all the DropDownLists
@@ -1120,19 +1128,19 @@ public partial class payroll_empinfo : System.Web.UI.Page
                         txtRetireDate.Text = Convert.ToString(RetDate);
                     }
                 }
-            }
-            if (!txtBirthDate.Text.Trim().Equals(string.Empty))
-            {
-                DateTime dob = Convert.ToDateTime(txtBirthDate.Text);
-                DateTime PresentYear = DateTime.Now;
-                TimeSpan ts = PresentYear - dob;
-                int Age = ts.Days / 365;
-                txtAge.Text = Age.ToString();
-            }
+            } 
         }
         else if (IsRetirmentDateCalculation == false)
         {
 
+        }
+        if (!txtBirthDate.Text.Trim().Equals(string.Empty))
+        {
+            DateTime dob = Convert.ToDateTime(txtBirthDate.Text);
+            DateTime PresentYear = DateTime.Now;
+            TimeSpan ts = PresentYear - dob;
+            int Age = ts.Days / 365;
+            txtAge.Text = Age.ToString();
         }
     }
 
