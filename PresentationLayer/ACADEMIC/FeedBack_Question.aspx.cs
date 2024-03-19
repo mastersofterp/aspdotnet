@@ -304,7 +304,7 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
         {
             if (txtQuestion.Text.Length > 250)
             {
-                objCommon.DisplayMessage("Maximum characters for feedback question should be less than 125 !", this.Page);
+                objCommon.DisplayMessage("Maximum characters for feedback question should be less than 250 !", this.Page);
                 return;
             }
 
