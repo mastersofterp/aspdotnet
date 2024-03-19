@@ -10640,6 +10640,65 @@ namespace IITMS
                     return ds;
                 }
                 //
+
+                #region Detention Leave Configuration
+
+                public int AddUpdateDetLVConfig(Leaves objLeave, int DLNO)
+                {
+                    int retstatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_DLNO", DLNO);
+                        objParams[1] = new SqlParameter("@P_STNO", objLeave.STNO);
+                        objParams[2] = new SqlParameter("@P_LEAVENO", objLeave.LEAVENO);
+                        objParams[3] = new SqlParameter("@P_UANO", objLeave.UANO);
+                        objParams[4] = new SqlParameter("@P_COLLEGE_CODE", objLeave.COLLEGE_CODE);
+                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+    
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ESTB_DET_LEAVE_CONFIG_INSUPD", objParams, true);
+
+                        if (Convert.ToInt32(ret) == -99)
+                            retstatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else if (Convert.ToInt32(ret) == 2)
+                            retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else if (Convert.ToInt32(ret) == 1)
+                            retstatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                    }
+                    catch (Exception ex)
+                    {
+                        retstatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.AddUpdateDetLVConfig->" + ex.ToString());
+                    }
+                    return retstatus;
+                }
+
+                public DataSet GetDetentionLeaveConfig(int DLNO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_DLNO", DLNO);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_GET_DET_LEAVE_CONFIG", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetDetentionLeaveConfig->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                #endregion
             }
         }
     }
