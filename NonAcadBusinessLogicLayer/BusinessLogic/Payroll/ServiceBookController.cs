@@ -3045,7 +3045,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[43];
+                        objParams = new SqlParameter[45];
                         objParams[0] = new SqlParameter("@P_IDNO", objEmpMas.IDNO);
                         objParams[1] = new SqlParameter("@P_FATHERNAME", objEmpMas.FATHERNAME);
                         // objParams[2] = new SqlParameter("@P_DOB", objEmpMas.DOB);
@@ -3113,6 +3113,8 @@ namespace IITMS
                         objParams[40] = new SqlParameter("@P_MNAME", objEmpMas.MNAME);
                         objParams[41] = new SqlParameter("@P_LNAME", objEmpMas.LNAME);
                         objParams[42] = new SqlParameter("@P_UA_NO", objEmpMas.UA_NO);
+                        objParams[43] = new SqlParameter("@P_COUNTRYNO", objEmpMas.COUNTRYNO);
+                        objParams[44] = new SqlParameter("@P_STATENO", objEmpMas.STATENO);
 
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_PERSONALMEMORADAM", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);

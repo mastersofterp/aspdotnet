@@ -219,6 +219,8 @@ namespace IITMS
                 private string _PINCODE = string.Empty;
                 private string _STATE = string.Empty;
                 private string _COUNTRY = string.Empty;
+                private int _COUNTRYNO;
+                private int _STATENO;
 
                 public int MAINDEPTNO
                 {
@@ -2451,6 +2453,35 @@ namespace IITMS
                     }
                 }
 
+                public int COUNTRYNO
+                {
+                    get
+                    {
+                        return this._COUNTRYNO;
+                    }
+                    set
+                    {
+                        if ((this._COUNTRYNO != value))
+                        {
+                            this._COUNTRYNO = value;
+                        }
+                    }
+                }
+
+                public int STATENO
+                {
+                    get
+                    {
+                        return this._STATENO;
+                    }
+                    set
+                    {
+                        if ((this._STATENO != value))
+                        {
+                            this._STATENO = value;
+                        }
+                    }
+                }
             }
 
 
