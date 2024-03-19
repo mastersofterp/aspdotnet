@@ -29,7 +29,14 @@
  
  
 
+<<<<<<< HEAD
       <script>
+=======
+
+
+
+    <script>
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
         function SetParticipation(val) {
           
             $('#rdActive').prop('checked', val);
@@ -145,7 +152,11 @@
                                             <sup>* </sup>
                                             <label>Office Report  Start Date </label>
                                         </div>
+<<<<<<< HEAD
                                         <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"   ></asp:TextBox>
+=======
+                                        <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"></asp:TextBox>
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtOfficeVisitStartDate"
                                             Display="None" ErrorMessage="Please Select Office Report Start Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -156,7 +167,11 @@
                                             <sup>* </sup>
                                             <label>Office Report End Date</label>
                                         </div>
+<<<<<<< HEAD
                                         <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
+=======
+                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged"></asp:TextBox>
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtOfficeVisitEndDate"
                                             Display="None" ErrorMessage="Please Select Office Report End Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -172,7 +187,11 @@
                                         </div>
                                         <asp:TextBox ID="txtStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtStartDate_TextChanged"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvtxtStartDate" runat="server" ControlToValidate="txtStartDate"
+<<<<<<< HEAD
                                             Display="None" ErrorMessage="Please Select Payment Start Date" SetFocusOnError="True"
+=======
+                                            Display="None" ErrorMessage="Please Select Payment  Start Date" SetFocusOnError="True"
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
 
                                     </div>
@@ -204,6 +223,12 @@
                                             Display="None" ErrorMessage="Please Select Provisional Admission Offer Valid Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
                                     </div>
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -241,8 +266,12 @@
                                             <label>Status </label>
                                         </div>
                                         <div class="switch form-inline">
+<<<<<<< HEAD
                                             <input type="checkbox" id="rdActive" name="Started" checked /> 
 
+=======
+                                            <input type="checkbox" id="rdActive" name="Started" checked />
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
                                             <label data-on="Started" data-off="Stopped" for="rdActive"></label>
                                         </div>
                                     </div>
@@ -272,8 +301,13 @@
                                                         <th>Program Type</th>
                                                         <th>Degree</th>
                                                         <th>Branch</th>
+<<<<<<< HEAD
                                                         <th>Payment Start Date</th>
                                                         <th>Payment End Date</th>
+=======
+                                                        <th>Start Date</th>
+                                                        <th>End Date</th>
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
                                                         <th>Payment Category</th>
                                                         <th>Amount/Percentage</th>
                                                         <th>Status</th>
@@ -407,7 +441,11 @@
                 if (startDate === '') {
                     alert('Please Select Payment Start Date first');
                     $('#<%= txtStartDate.ClientID %>').focus();
+<<<<<<< HEAD
                     $(this).val(''); 
+=======
+                    $(this).val(''); // Clear the value of End Date textbox
+>>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
                 }
             });
 
