@@ -822,6 +822,17 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         ddlSendParentsEmail.SelectedValue = ds.Tables[0].Rows[0]["FEE_RECEIPT_ATTACHMENT_IN_EMAIL"].ToString();
                     }
 
+                    if (ds.Tables[0].Rows[0]["FEEDBACK_NOTE"].ToString() != null && ds.Tables[0].Rows[0]["FEEDBACK_NOTE"].ToString() == "1")
+                    {
+                        hdnAddNoteFeedback.Value = "true";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "AddNoteFeedback", "newAddNoteFeedback(true);", true);
+                    }
+                    else
+                    {
+                        hfStudMandate.Value = "false";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "AddNoteFeedback", "newAddNoteFeedback(false);", true);
+                    }
+
                 }
             }
         }
@@ -1255,6 +1266,12 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 objMod.TOSHOW_FEEREC_STUDLOGIN = true;
             }
 
+            bool AddNote = false;
+            if (hdnAddNoteFeedback.Value == "true")
+            {
+                AddNote = true;
+            }
+
             int studAttendance = Convert.ToInt32(ddlMarkingAttendance.SelectedValue); //Added By Vipul Tichakule on date 24-01-2024
             int RecEmail = Convert.ToInt32(ddlSendParentsEmail.SelectedValue); //Added By Jay Takalkhede on date 17-02-2024
             
@@ -1274,7 +1291,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objMConfig.SaveModuleConfiguration(objMod, UANO, IP_ADDRESS, MAC_ID, Trisemstatus, chkoutstanding, sempromodemandcreation, semadmofflinebtn,
                         semadmbeforepromotion, semadmafterepromotion, studReactvationlarefine, IntakeCapacity, chktimeReport, chkGlobalCTAllotment,
                         BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow, TPSlot, UserLoginNos, usercourselocked,
-                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance, RecEmail, PartPayment, Minamount);
+                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance, RecEmail, PartPayment, Minamount, AddNote);
                     //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
                     //RecEmail Added By Jay Takalkhede on date 17-02-2024
                     if (cs.Equals(CustomStatus.RecordSaved))

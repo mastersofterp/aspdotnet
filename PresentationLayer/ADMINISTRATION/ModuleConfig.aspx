@@ -879,6 +879,23 @@
                                                         </div>
                                                     </div>   <%-- end--%>
 
+                                                    <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to Feedback</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblAddNote" runat="server" Font-Bold="true">Yes,If Allow to add Feedback Note.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="switch form-inline">
+                                                                <input type="checkbox" id="chkAddNoteFeedback" name="chkAddNoteFeedback" />
+                                                                <label data-on="Yes" data-off="No" for="chkAddNoteFeedback"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" OnClientClick="return validate();" TabIndex="6" Text="Submit"
@@ -1413,6 +1430,7 @@
                 <asp:HiddenField ID="hfchkFeeHeadGroup" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hftxtFeeReceiptCopies" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfchkScholarshipConAdj" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hdnAddNoteFeedback" runat="server" ClientIDMode="Static" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -2466,6 +2484,9 @@
         function CheckScholarshipConAdj(val) {
             $('[id*=chkScholarshipConAdj]').prop('checked', val);
         }
+        function newAddNoteFeedback(val) {
+            $('[id*=chkAddNoteFeedback]').prop('checked', val);
+        }
        
         function validate() {
             $('#hfchknewstudentemail').val($('#chknewstudentemail').prop('checked'));
@@ -2506,6 +2527,7 @@
             $('#hfchkOutstandingFeeCollection').val($('#chkOutstandingFeeCollection').prop('checked'));
             $('#hfchkFeeHeadGroup').val($('#chkFessHeadGroup').prop('checked'));
             $('#hfchkScholarshipConAdj').val($('#chkScholarshipConAdj').prop('checked'));
+            $('#hdnAddNoteFeedback').val($('#chkAddNoteFeedback').prop('checked'));
             var numCopies =document.getElementById("<%=txtFeeReceiptCopies.ClientID %>").value;
             if(numCopies > 3 || numCopies == 0)
             {
