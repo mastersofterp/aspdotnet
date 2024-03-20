@@ -274,7 +274,7 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
                 // Modifiy the List view Bind FillDropDown by Vipul T on date 17/02/2024
                 ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO) INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO) LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO) INNER JOIN ACD_SEMESTER S ON (S.SEMESTERNO = SR.SEMESTERNO) INNER JOIN ACD_SCHEME SS ON (SS.SCHEMENO = SR.SCHEMENO)",
                                             "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0) SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO),S.SEMESTERNAME,SS.SCHEMENAME",
-                                            "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND (SR.SCHEMENO IN (SELECT VALUE FROM DBO.SPLIT('" + clgsch + "',',')) OR '' = '') AND (SR.SEMESTERNO IN (SELECT VALUE FROM DBO.SPLIT('" + sem + "',',')) OR '' ='') AND SR.COURSENO =" + ddlCourse.SelectedValue + "  AND SR.SECTIONNO =" + ddlSection.SelectedValue + " AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST.REGNO");
+                                            "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND (SR.SCHEMENO IN (SELECT VALUE FROM DBO.SPLIT('" + clgsch + "',',')) OR '' = '') AND (SR.SEMESTERNO IN (SELECT VALUE FROM DBO.SPLIT('" + sem + "',',')) OR '' ='') AND SR.COURSENO =" + ddlCourse.SelectedValue + " AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST.REGNO");
             }
             else
             {   // Modifiy the List view Bind FillDropDown by Vipul T on date 17/02/2024    
@@ -485,7 +485,7 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
     }
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+        MainDivSection.Visible = false;
         if (ddlCourse.SelectedIndex > 0)
         {
             // objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO) INNER JOIN ACD_COURSE C ON (CT.CCODE = C.CCODE)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "CT.SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ") AND CT.COURSENO=" + ddlCourse.SelectedValue, "SC.COSCHNO");
@@ -648,6 +648,7 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
         pnlStudent.Visible = false;
+        MainDivSection.Visible = false;
         lvStudents.DataSource = null;
         lvStudents.DataBind();
         if (ddlSession.SelectedIndex > 0)
@@ -667,14 +668,34 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
     }
     protected void btnReport_Click(object sender, EventArgs e)
     {
+        string clgsch = string.Empty;
+        string sem = string.Empty;
+
+        foreach (ListItem itm in ddlClgname.Items)
+        {
+            if (itm.Selected != true)
+                continue;
+            clgsch += itm.Value + ",";
+        }
+
+        foreach (ListItem itm in ddlSem.Items)
+        {
+            if (itm.Selected != true)
+                continue;
+            sem += itm.Value + ",";
+        }
+
+        clgsch = clgsch.TrimEnd(',');
+        sem = sem.TrimEnd(',');
+
         StudentController objSC = new StudentController();
         int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-        int Schemeno = Convert.ToInt32(ViewState["schemeno"]);
-        int Semesterno = Convert.ToInt32(ddlSem.SelectedValue);
+        //int Schemeno = Convert.ToInt32(ViewState["schemeno"]);
+        //int Semesterno = Convert.ToInt32(ddlSem.SelectedValue);
         int courseno = Convert.ToInt32(ddlCourse.SelectedValue);
         int OrgId = Convert.ToInt32(Session["OrgId"]);
-        int college_id = Convert.ToInt32(ViewState["college_id"]);
-        DataSet ds = objSC.Get_Coursewise_Section_Allotment_Report(Sessionno, Schemeno, Semesterno, courseno, OrgId, college_id);
+        int college_id = 0;// Convert.ToInt32(ViewState["college_id"]);
+        DataSet ds = objSC.Get_Coursewise_Section_Allotment_Report(Sessionno, clgsch, sem, courseno, OrgId, college_id);
         GridView gv = new GridView();
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
         {
@@ -690,6 +711,11 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
             gv.RenderControl(htw);
             Response.Write(sw.ToString());
             Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage("No Record Found.", this.Page);
+            return;
         }
     }
     protected void ddlSection_SelectedIndexChanged(object sender, EventArgs e)
@@ -718,17 +744,41 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
     {
         DataSet ds = null;
         string Sortby = string.Empty;
+        string clgsch = string.Empty;
+        string sem = string.Empty;
+
+        foreach (ListItem itm in ddlClgname.Items)
+        {
+            if (itm.Selected != true)
+                continue;
+            clgsch += itm.Value + ",";
+        }
+
+        foreach (ListItem itm in ddlSem.Items)
+        {
+            if (itm.Selected != true)
+                continue;
+            sem += itm.Value + ",";
+        }
+
+        clgsch = clgsch.TrimEnd(',');
+        sem = sem.TrimEnd(',');
 
         if (ddlSortBy.SelectedIndex == 1)
         {
             Sortby = "REGNO";
-            ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO)LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO) INNER JOIN ACD_SEMESTER S ON (S.SEMESTERNO = SR.SEMESTERNO) INNER JOIN ACD_SCHEME SS ON (SS.SCHEMENO = SR.SCHEMENO)", "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO),S.SEMESTERNAME,SS.SCHEMENAME", "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND SR.COURSENO =" + ddlCourse.SelectedValue + "AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST." + Sortby);
+            //ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO)LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO) INNER JOIN ACD_SEMESTER S ON (S.SEMESTERNO = SR.SEMESTERNO) INNER JOIN ACD_SCHEME SS ON (SS.SCHEMENO = SR.SCHEMENO)", "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO),S.SEMESTERNAME,SS.SCHEMENAME", "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND SR.COURSENO =" + ddlCourse.SelectedValue + "AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST." + Sortby);
+            ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO) INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO) LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO) INNER JOIN ACD_SEMESTER S ON (S.SEMESTERNO = SR.SEMESTERNO) INNER JOIN ACD_SCHEME SS ON (SS.SCHEMENO = SR.SCHEMENO)",
+                                        "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0) SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO),S.SEMESTERNAME,SS.SCHEMENAME",
+                                        "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND (SR.SCHEMENO IN (SELECT VALUE FROM DBO.SPLIT('" + clgsch + "',',')) OR '' = '') AND (SR.SEMESTERNO IN (SELECT VALUE FROM DBO.SPLIT('" + sem + "',',')) OR '' ='') AND SR.COURSENO =" + ddlCourse.SelectedValue + " AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST." + Sortby);
         }
         else if (ddlSortBy.SelectedIndex == 2)
         {
             Sortby = "STUDNAME";
-            ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO)LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO) INNER JOIN ACD_SEMESTER S ON (S.SEMESTERNO = SR.SEMESTERNO) INNER JOIN ACD_SCHEME SS ON (SS.SCHEMENO = SR.SCHEMENO)", "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO),S.SEMESTERNAME,SS.SCHEMENAME", "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND SR.COURSENO =" + ddlCourse.SelectedValue + " AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST." + Sortby);
-            // ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO) INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO) LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO)", "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO)", "SR.SESSIONNO = (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COLLEGE_ID= " + Convert.ToInt32(ViewState["college_id"]) + ") AND ST.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ST.DEGREENO= " + Convert.ToInt32(ViewState["degreeno"]) + "AND ST.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + "AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST.REGNO");
+            //ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO)LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO) INNER JOIN ACD_SEMESTER S ON (S.SEMESTERNO = SR.SEMESTERNO) INNER JOIN ACD_SCHEME SS ON (SS.SCHEMENO = SR.SCHEMENO)", "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO),S.SEMESTERNAME,SS.SCHEMENAME", "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND SR.COURSENO =" + ddlCourse.SelectedValue + " AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST." + Sortby);
+            ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO) INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO) LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO) INNER JOIN ACD_SEMESTER S ON (S.SEMESTERNO = SR.SEMESTERNO) INNER JOIN ACD_SCHEME SS ON (SS.SCHEMENO = SR.SCHEMENO)",
+                                        "DISTINCT ST.IDNO,ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0) SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO", "SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO, SR.BATCHNO, SR.TH_BATCHNO, BATCHNAME=(SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO=SR.BATCHNO), TH_BATCHNAME = (SELECT BATCHNAME FROM ACD_BATCH WHERE BATCHNO = SR.TH_BATCHNO),S.SEMESTERNAME,SS.SCHEMENAME",
+                                        "SR.SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND (SR.SCHEMENO IN (SELECT VALUE FROM DBO.SPLIT('" + clgsch + "',',')) OR '' = '') AND (SR.SEMESTERNO IN (SELECT VALUE FROM DBO.SPLIT('" + sem + "',',')) OR '' ='') AND SR.COURSENO =" + ddlCourse.SelectedValue + " AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST." + Sortby);
         }
         else
         {

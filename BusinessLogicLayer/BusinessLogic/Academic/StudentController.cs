@@ -14722,7 +14722,7 @@ namespace IITMS
                 /// <param name="semesterno"></param>
                 /// <param name="courseno"></param>
                 /// <returns></returns>
-                public DataSet Get_Coursewise_Section_Allotment_Report(int sessionno, int schemeno, int semesterno, int courseno, int OrgID,int college_id)
+                public DataSet Get_Coursewise_Section_Allotment_Report(int sessionno, string schemeno, string semesterno, int courseno, int OrgID, int college_id)
                 {
                     DataSet ds = null;
 
