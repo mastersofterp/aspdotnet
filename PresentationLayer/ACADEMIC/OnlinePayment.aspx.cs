@@ -1224,7 +1224,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     }
                     else
                     {
-                        ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                        ShowReportPreviousElse("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
                     }
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 6)
@@ -1309,7 +1309,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 }
                 else
                 {
-                    ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    ShowReportPreviousElse("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
 
                 }
             }
@@ -1452,7 +1452,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         }
     }
 
-    private void ShowReportPrevious(string reportTitle, string rptFileName, int dcrNo, int studentNo, string Username, int Cancel)
+    private void ShowReportPreviousElse(string reportTitle, string rptFileName, int dcrNo, int studentNo, string Username, int Cancel)
     {
         try
         {
@@ -1469,6 +1469,43 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
 
             url += "&param=@P_COLLEGE_CODE=" + College_ID.ToString() + "," + "@P_UA_NAME=" + Session["UAFULLNAME"].ToString() +
+            "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(dcrNo, studentNo, "2");
+
+            //url += "&param=@P_COLLEGE_CODE=35,@P_IDNO=" + studentNo + ",@P_DCRNO=" + Convert.ToInt32(dcrNo);
+
+            //divMSG.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMSG.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMSG.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+    private void ShowReportPrevious(string reportTitle, string rptFileName, int dcrNo, int studentNo, string Username, int Cancel)
+    {
+        try
+        {
+
+            int College_ID = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + studentNo));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + this.GetReportParameters(dcrNo, studentNo, "2") + ",username=" + Session["username"].ToString() + ",@P_UA_NAME=" + Session["UAFULLNAME"].ToString();
+
+
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(dcrNo, studentNo, "2") + ",username=" + Session["username"].ToString();
+
+
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["UAFULLNAME"].ToString() +
             "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(dcrNo, studentNo, "2");
 
             //url += "&param=@P_COLLEGE_CODE=35,@P_IDNO=" + studentNo + ",@P_DCRNO=" + Convert.ToInt32(dcrNo);
