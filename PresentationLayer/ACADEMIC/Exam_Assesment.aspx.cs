@@ -1432,7 +1432,6 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                         }
                     }
                 }
-
                 #region   conversion_patch_comment as per tkno:55552 on dt:06/03/2024
 
                 //if (Convert.ToInt32(Session["OrgId"]) != 8 && Convert.ToInt32(Session["OrgId"]) != 10 && ((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5)))
@@ -1570,139 +1569,232 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
 
         try
         {
-            if (ds1.Tables[0].Rows.Count > 0)
+            if (ds1 != null && ds1.Tables.Count > 0)
             {
-                DataRow drs = ds1.Tables[0].Rows[0];
-                ExamMarks = drs["MARKS"].ToString();
+                if (ds1.Tables[0].Rows.Count > 0)
+                {
+                    DataRow drs = ds1.Tables[0].Rows[0];
+                    ExamMarks = drs["MARKS"].ToString();
+                }
             }
         }
         catch
         {
 
         }
-        CustomStatus cs1 = 0;
-        cs1 = (CustomStatus)objexamRemo.CheckEntrydoneornot(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlsubjecttype.SelectedValue), ExamNo, Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ViewState["usertype"]));
-        if(cs1.Equals(CustomStatus.RecordSaved))
-        {
-            objCommon.DisplayMessage(this.updSession, "Mark Entry Done.Exam Component cannot be Remove..  ", this.Page);
-        }
-        else
-        {
-        
-        assessment_count = Convert.ToInt32(objCommon.LookUp("ACD_ASSESSMENT_EXAM_COMPONENT", "count(COURSENO)", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlsubjecttype.SelectedValue) + "AND SUBEXAMNO=" + ExamNo));
 
-        if (assessment_count > 0)
+        //if (assessment_no == 0)
+        //{
+        //    DataTable dtCurrentTable = (DataTable)ViewState["CurrentTable"];
+        //    int row;
+        //    for (int i = 0; i < dtCurrentTable.Rows.Count; i++)
+        //    {
+        //        // your index is in i
+        //        DataRow drCurrentRow = null;
+        //        int assment = Convert.ToInt32(dtCurrentTable.Rows[i]["ASSESS_COMP_NO"]);
+
+        //        if (assment==0)
+        //        {
+        //             row =Convert.ToInt32(dtCurrentTable.Rows[i]);
+        //        }
+
+        //    }
+        //    dtCurrentTable.Rows.Remove(row); 
+        //}
+        CustomStatus cs1 = 0;
+        if (assessment_no != 0)
         {
-            CustomStatus cs = 0;
-            if (ExamMarks.ToString() == "")
+            cs1 = (CustomStatus)objexamRemo.CheckEntrydoneornot(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlsubjecttype.SelectedValue), ExamNo, Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ViewState["usertype"]));
+            if (cs1.Equals(CustomStatus.RecordSaved))
             {
-                cs = (CustomStatus)objexamRemo.CancleExamComponents(Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlsubjecttype.SelectedValue), ExamNo, Convert.ToInt32(Session["userno"].ToString()));
+                objCommon.DisplayMessage(this.updSession, "Mark Entry Done.Exam Component cannot be Remove..  ", this.Page);
             }
             else
             {
-                objCommon.DisplayMessage(this.updSession, "Unable to remove. The mark entry has already been completed for this component.", this.Page);
-                //This Sub Exam Component Already Mark Entry Done,Not Removed..
-                return;
-            }
-            if (cs.Equals(CustomStatus.RecordSaved))
-            {
-                objCommon.DisplayMessage(this.updSession, "Exam Component Remove..", this.Page);
-                ddlsubjecttype_SelectedIndexChanged(new object(), new EventArgs());
-            }
 
+                assessment_count = Convert.ToInt32(objCommon.LookUp("ACD_ASSESSMENT_EXAM_COMPONENT", "count(COURSENO)", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlsubjecttype.SelectedValue) + "AND SUBEXAMNO=" + ExamNo));
 
-        }
-        else
-        {
-            //LinkButton lb = (LinkButton)sender;
-            ImageButton lb = (ImageButton)sender;
-
-            ListViewDataItem gvRow = (ListViewDataItem)lb.NamingContainer;
-            //int rowID = gvRow.RowIndex;
-
-            int rowID = gvRow.DataItemIndex;
-            //int rowID = gvRow.DataItemIndex + 1;
-            if (ViewState["CurrentTable"] != null)
-            {
-                //DataSet ds = (DataSet)ViewState["CurrentTable"];
-                DataTable dt = (DataTable)ViewState["CurrentTable"];
-                //DataSet dtCurrentTable = (DataSet)ViewState["CurrentTable"];
-                //if (dt.Rows.Count > 1)
-                //{
-                //    //if (gvRow.RowIndex < dt.Rows.Count )
-                //    if (gvRow.DataItemIndex < dt.Rows.Count - 1)
-                //    {
-                //        //Remove the Selected Row data
-                //        dt.Rows.Remove(dt.Rows[rowID]);
-                //    }
-                //}
-                if (lblFix.Text != "1")
+                if (assessment_count > 0)
                 {
-
-                    if (dt.Rows.Count == 1)
+                    CustomStatus cs = 0;
+                    if (ExamMarks.ToString() == "")
                     {
-                        //if (dt.Rows.Count == 1)
-                        //{
-                        //    ddlModule_SelectedIndexChanged(this, EventArgs.Empty);
-                        //}
-
-                        //if (gvRow.RowIndex < dt.Rows.Count )
-                        if (gvRow.DataItemIndex <= dt.Rows.Count - 1)
-                        {
-                            //Remove the Selected Row data
-                            dt.Rows.Remove(dt.Rows[rowID]);
-                        }
+                        cs = (CustomStatus)objexamRemo.CancleExamComponents(Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlsubjecttype.SelectedValue), ExamNo, Convert.ToInt32(Session["userno"].ToString()));
                     }
-
-                    if (dt.Rows.Count > 1)
+                    else
                     {
-                        rowID = gvRow.DataItemIndex + 1;
-                        if (gvRow.DataItemIndex < dt.Rows.Count - 1)
-                        {
-                            //Remove the Selected Row data
-                            dt.Rows.Remove(dt.Rows[rowID - 1]);
-                        }
+                        objCommon.DisplayMessage(this.updSession, "Unable to remove. The mark entry has already been completed for this component.", this.Page);
+                        //This Sub Exam Component Already Mark Entry Done,Not Removed..
+                        return;
+                    }
+                    if (cs.Equals(CustomStatus.RecordSaved))
+                    {
+                        objCommon.DisplayMessage(this.updSession, "Exam Component Remove..", this.Page);
+                        ddlsubjecttype_SelectedIndexChanged(new object(), new EventArgs());
                     }
 
 
-                    //if (ddlAssessment.SelectedValue == "0" && box1.Text == "" && box2.Text == "")
-                    //{
-
-                    if (dt.Rows.Count > 1)
-                    {
-                        rowID = gvRow.DataItemIndex;
-                        if (gvRow.DataItemIndex <= dt.Rows.Count - 1)
-                        {
-                            //Remove the Selected Row data
-                            dt.Rows.Remove(dt.Rows[rowID]);
-                        }
-                    }
-                    //}
-                    //Store the current data in ViewState for future reference
-                    ViewState["CurrentTable"] = dt;
-                    //Re bind the GridView for the updated data
-                    lvAssessment.DataSource = dt;
-                    lvAssessment.DataBind();
-
-                    //Set Previous Data on Postbacks
-                    if (rowID == 0)
-                    {
-                        SetInitialRow();
-                        //BindListView();
-                    }
                 }
                 else
                 {
-                    objCommon.DisplayMessage(this.updSession, "Fix Exam Component Not Remove..", this.Page);
-                    return;
+                    //LinkButton lb = (LinkButton)sender;
+                    ImageButton lb = (ImageButton)sender;
+
+                    ListViewDataItem gvRow = (ListViewDataItem)lb.NamingContainer;
+                    //int rowID = gvRow.RowIndex;
+
+                    int rowID = gvRow.DataItemIndex;
+                    //int rowID = gvRow.DataItemIndex + 1;
+                    if (ViewState["CurrentTable"] != null)
+                    {
+                        //DataSet ds = (DataSet)ViewState["CurrentTable"];
+                        DataTable dt = (DataTable)ViewState["CurrentTable"];
+                        //DataSet dtCurrentTable = (DataSet)ViewState["CurrentTable"];
+                        //if (dt.Rows.Count > 1)
+                        //{
+                        //    //if (gvRow.RowIndex < dt.Rows.Count )
+                        //    if (gvRow.DataItemIndex < dt.Rows.Count - 1)
+                        //    {
+                        //        //Remove the Selected Row data
+                        //        dt.Rows.Remove(dt.Rows[rowID]);
+                        //    }
+                        //}
+                        if (lblFix.Text != "1")
+                        {
+
+                            if (dt.Rows.Count == 1)
+                            {
+                                //if (dt.Rows.Count == 1)
+                                //{
+                                //    ddlModule_SelectedIndexChanged(this, EventArgs.Empty);
+                                //}
+
+                                //if (gvRow.RowIndex < dt.Rows.Count )
+                                if (gvRow.DataItemIndex <= dt.Rows.Count - 1)
+                                {
+                                    //Remove the Selected Row data
+                                    dt.Rows.Remove(dt.Rows[rowID]);
+                                }
+                            }
+
+                            if (dt.Rows.Count > 1)
+                            {
+                                rowID = gvRow.DataItemIndex + 1;
+                                if (gvRow.DataItemIndex < dt.Rows.Count - 1)
+                                {
+                                    //Remove the Selected Row data
+                                    dt.Rows.Remove(dt.Rows[rowID - 1]);
+                                }
+                            }
+
+
+                            //if (ddlAssessment.SelectedValue == "0" && box1.Text == "" && box2.Text == "")
+                            //{
+
+                            if (dt.Rows.Count > 1)
+                            {
+                                rowID = gvRow.DataItemIndex;
+                                if (gvRow.DataItemIndex <= dt.Rows.Count - 1)
+                                {
+                                    //Remove the Selected Row data
+                                    dt.Rows.Remove(dt.Rows[rowID]);
+                                }
+                            }
+                            //}
+                            //Store the current data in ViewState for future reference
+                            ViewState["CurrentTable"] = dt;
+                            //Re bind the GridView for the updated data
+                            lvAssessment.DataSource = dt;
+                            lvAssessment.DataBind();
+
+                            //Set Previous Data on Postbacks
+                            if (rowID == 0)
+                            {
+                                SetInitialRow();
+                                //BindListView();
+                            }
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(this.updSession, "Fix Exam Component Not Remove..", this.Page);
+                            return;
+                        }
+                        SetPreviousData();
+                    }
                 }
-                SetPreviousData();
             }
+
+            //Added by Lalit on dated 10062023 as ticket no 42872
+
         }
-      }
+        else
+        { 
+                 ImageButton lb = (ImageButton)sender;
 
-        //Added by Lalit on dated 10062023 as ticket no 42872
+                    ListViewDataItem gvRow = (ListViewDataItem)lb.NamingContainer;
+                    //int rowID = gvRow.RowIndex;
 
+                    int rowID = gvRow.DataItemIndex;
+                    //int rowID = gvRow.DataItemIndex + 1;
+                    if (ViewState["CurrentTable"] != null)
+                    {
+                        //DataSet ds = (DataSet)ViewState["CurrentTable"];
+                        DataTable dt = (DataTable)ViewState["CurrentTable"];
+
+                        if (lblFix.Text != "1")
+                        {
+
+                            if (dt.Rows.Count == 1)
+                            {
+
+                                if (gvRow.DataItemIndex <= dt.Rows.Count - 1)
+                                {
+
+                                    dt.Rows.Remove(dt.Rows[rowID]);
+                                }
+                            }
+
+                            if (dt.Rows.Count > 1)
+                            {
+                                rowID = gvRow.DataItemIndex + 1;
+                                if (gvRow.DataItemIndex < dt.Rows.Count - 1)
+                                {
+                                    //Remove the Selected Row data
+                                    dt.Rows.Remove(dt.Rows[rowID - 1]);
+                                }
+                            }
+
+                            if (dt.Rows.Count > 1)
+                            {
+                                rowID = gvRow.DataItemIndex;
+                                if (gvRow.DataItemIndex <= dt.Rows.Count - 1)
+                                {
+                                    //Remove the Selected Row data
+                                    dt.Rows.Remove(dt.Rows[rowID]);
+                                }
+                            }
+
+                            //Store the current data in ViewState for future reference
+                            ViewState["CurrentTable"] = dt;
+                            //Re bind the GridView for the updated data
+                            lvAssessment.DataSource = dt;
+                            lvAssessment.DataBind();
+
+                            //Set Previous Data on Postbacks
+                            if (rowID == 0)
+                            {
+                                SetInitialRow();
+
+                            }
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(this.updSession, "Fix Exam Component Not Remove..", this.Page);
+                            return;
+                        }
+                        SetPreviousData();
+                    }
+        }
     }
     #endregion End Button Click
 
@@ -1808,7 +1900,6 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
     {
         ShowReport("Exam Component", "rptShowExamComponent.rpt");
     }
-
     private void ShowReport(string reportTitle, string rptFileName)
     {
         //if (ddlClgname.SelectedIndex == 0)
