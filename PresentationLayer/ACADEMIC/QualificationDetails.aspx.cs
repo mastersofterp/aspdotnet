@@ -755,8 +755,8 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     QualifiedExam[] EntranceExams = null;
                     this.BindEntranceExamData(ref EntranceExams);
                     objS.EntranceExams = EntranceExams;
-
-                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentQualifyingExamInformation(objS, objSQualExam, Convert.ToInt32(Session["usertype"]), Vocationalsub, diplomastatus);
+                    int uano = Convert.ToInt32(Session["userno"]); // Added By Kajal J. on 20032024 for maintaining log
+                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentQualifyingExamInformation(objS, objSQualExam, Convert.ToInt32(Session["usertype"]), Vocationalsub, diplomastatus, uano);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         ShowStudentDetails();
