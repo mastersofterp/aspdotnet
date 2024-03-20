@@ -7851,7 +7851,7 @@ namespace IITMS
                 //    return retStatus;
 
                 //}
-                public int UpdateStudentAdmissionDetails(Student objStudent, int usertype)
+                public int UpdateStudentAdmissionDetails(Student objStudent, int usertype, int uano)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
@@ -7859,7 +7859,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[17];
+                        objParams = new SqlParameter[18];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         //if (objStudent.AdmDate == DateTime.MinValue)
                         //    objParams[1] = new SqlParameter("@P_ADMDATE", DBNull.Value);
@@ -7884,8 +7884,9 @@ namespace IITMS
                         objParams[13] = new SqlParameter("@P_DEFENCEQUOTA", objStudent.DefenceQuota);
                         objParams[14] = new SqlParameter("@P_MINORITYQUOTA", objStudent.MinorityQuota);
                         objParams[15] = new SqlParameter("@P_ADMROUNDNO", objStudent.AdmroundNo);
-                        objParams[16] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[16].Direction = ParameterDirection.Output;
+                        objParams[16] = new SqlParameter("@P_UANO", uano); // Added By Kajal J. on 20032024 for maintaining log
+                        objParams[17] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[17].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_ADMISSION_DETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -7995,7 +7996,7 @@ namespace IITMS
 
                 //}
 
-                public int UpdateStudentOtherInformation(Student objStudent, int usertype)
+                public int UpdateStudentOtherInformation(Student objStudent, int usertype, int uano)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
@@ -8003,7 +8004,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[21];
+                        objParams = new SqlParameter[22];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_BIRTH_PLACE", objStudent.BirthPlace);
                         objParams[2] = new SqlParameter("@P_MTOUNGENO", objStudent.MToungeNo);
@@ -8025,11 +8026,10 @@ namespace IITMS
                         objParams[17] = new SqlParameter("@P_IFSC", objStudent.IfscCode);
                         objParams[18] = new SqlParameter("@P_BANKADDRESS", objStudent.BankAddress);
                         objParams[19] = new SqlParameter("@P_ANTI_RAGGING", objStudent.Anti_Ragging);   //Added by sachin on 22-07-2022
-
-
                         //-------------------------------------------------------------------------
-                        objParams[20] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[20].Direction = ParameterDirection.Output;
+                        objParams[20] = new SqlParameter("@P_UANO", uano);
+                        objParams[21] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[21].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_OTHER_INFORMATION", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -10359,7 +10359,7 @@ namespace IITMS
 
                 #region Major and Minor Module 
 
-                //Added By Sakshi m on 26-02-2024
+                //Added By Sakshi m on 19-03-2024   
                 public DataSet GetStudentsForTeacherAllotmentForMinor(int sessionno, int schemeno, int courseno, int sectionno, int semesterno, int thpr, int batchno, int College_ID, int isTutorial)
                 {
                     DataSet ds = null;
@@ -10388,8 +10388,7 @@ namespace IITMS
                     return ds;
                 }
 
-
-                // Added By Sakshi M on 26022024
+                // Added By Sakshi M on 19-03-2024
                 public int UpdateStudent_TeachAllot_Minor(Student_Acd objStudent, int OrgId)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -11599,14 +11598,14 @@ namespace IITMS
                     return ds;
                 }
 
-                public int UpdateStudentAdmissionStatus(Student objStudent, int status, string reason, int admstatus)
+                public int UpdateStudentAdmissionStatus(Student objStudent, int status, string reason, int admstatus, int usertype)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[8];
+                        objParams = new SqlParameter[9];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_UANO", objStudent.Uano);
                         objParams[2] = new SqlParameter("@P_IP_ADDRESS", objStudent.IPADDRESS);
@@ -11614,8 +11613,9 @@ namespace IITMS
                         objParams[4] = new SqlParameter("@P_STATUS", status);
                         objParams[5] = new SqlParameter("@P_REASON", reason);
                         objParams[6] = new SqlParameter("@P_ADMSTATUS", admstatus);
-                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[7].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_USER_TYPE", usertype); // Added By Kajal J. on 20032024 for maintaining log
+                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[8].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUDENT_ADM_STATUS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -13235,7 +13235,7 @@ namespace IITMS
 
                 }
 
-                public int UpdateStudentAddressDetails(Student objStudent, StudentAddress objStudAddress, int usertype)
+                public int UpdateStudentAddressDetails(Student objStudent, StudentAddress objStudAddress, int usertype, int uano)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
@@ -13244,7 +13244,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[33];
+                        objParams = new SqlParameter[34];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_LADDRESS", objStudAddress.LADDRESS);
                         objParams[2] = new SqlParameter("@P_LCOUNTRY", objStudAddress.LCOUNTRY);
@@ -13280,8 +13280,9 @@ namespace IITMS
                         objParams[29] = new SqlParameter("@P_USER_TYPE ", usertype);
                         objParams[30] = new SqlParameter("@P_LTEHSIL", objStudAddress.LTEHSIL);
                         objParams[31] = new SqlParameter("@P_GUARDIAN_OTHER_INFO", objStudAddress.GUARDIAN_OTHER_INFO);
-                        objParams[32] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[32].Direction = ParameterDirection.Output;
+                        objParams[32] = new SqlParameter("@P_UANO", uano); // Added By Kajal J. on 20032024 for maintaining log
+                        objParams[33] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[33].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_ADDRESS_DETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -13303,7 +13304,7 @@ namespace IITMS
                 }
 
 
-                public int UpdateStudentQualifyingExamInformation(Student objStudent, StudentQualExm objStudQExm, int usertype, string Vocational_Sub, int diplomastatus)
+                public int UpdateStudentQualifyingExamInformation(Student objStudent, StudentQualExm objStudQExm, int usertype, string Vocational_Sub, int diplomastatus, int uano)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
@@ -13311,7 +13312,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[74];
+                        objParams = new SqlParameter[75];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_SCHOOL_COLLEGE_NAMESSC", objStudQExm.SchoolCollegeNameSsc);
                         objParams[2] = new SqlParameter("@P_BOARDSSC", objStudQExm.BoardSsc);
@@ -13390,8 +13391,9 @@ namespace IITMS
                         objParams[70] = new SqlParameter("@P_MARKSHEETNO_SSC", objStudQExm.MarksheetNoSsc);
                         objParams[71] = new SqlParameter("@P_MARKSHEETNO_HSC", objStudQExm.MarksheetNoHsc);
                         objParams[72] = new SqlParameter("@P_MARKSHEETNO_DIPLOMA", objStudQExm.MarksheetNoDiploma);
-                        objParams[73] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[73].Direction = ParameterDirection.Output;
+                        objParams[73] = new SqlParameter("@P_UANO", uano);// Added By Kajal J. on 20032024 for maintaining log
+                        objParams[74] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[74].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_QUALIFYING_EXAM_INFORMATION", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -13612,6 +13614,54 @@ namespace IITMS
                     //throw new NotImplementedException();
                 }
 
+                //// Added By Kajal J. on 20032024 for maintaining log (method overloading)
+                public int AddUpdateStudentDocumentsDetailNew(int idno, int hiddtudocno, string extension, string contentType, string filename, string path, string certificateno, string district, string issuedate, string Authority, int COMMAND_TYPE, int userno, int usertype)
+                {
+
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[14];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+                        objParams[1] = new SqlParameter("@P_STU_DOC_NO", hiddtudocno);
+                        // objParams[2] = new SqlParameter("@P_CHK", chkDocuments);
+                        objParams[2] = new SqlParameter("@P_EXTENSION", extension);
+                        objParams[3] = new SqlParameter("@P_CONTENTTYPE", contentType);
+                        // objParams[5] = new SqlParameter("@P_FILEDATA", document);
+                        objParams[4] = new SqlParameter("@P_FILEPATH", path);
+                        objParams[5] = new SqlParameter("@P_FILENAME", filename);
+
+
+                        objParams[6] = new SqlParameter("@P_CERTFICATE_NO", certificateno);
+                        objParams[7] = new SqlParameter("@P_DISTRICT", district);
+                        objParams[8] = new SqlParameter("@P_ISSUEDATE", issuedate);
+                        objParams[9] = new SqlParameter("@P_AUTHORITY", Authority);
+                        objParams[10] = new SqlParameter("@P_COMMAND_TYPE", COMMAND_TYPE);
+                        objParams[11] = new SqlParameter("@P_USERNO", userno); // Added by Bhagyashree on 01062023
+                        objParams[12] = new SqlParameter("@P_USER_TYPE", usertype);// Added By Kajal J. on 20032024 for maintaining log
+                        objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_UPDATE_STUDENT_FILE_UPLOAD_DOCUMENT_STUDENT", objParams, true);
+
+                        if (Convert.ToInt32(ret) == 1)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (Convert.ToInt32(ret) == 2)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.AddUpdateStudentDocumentsDetail-> " + ex.ToString());
+                    }
+                    return retStatus;
+                    //throw new NotImplementedException();
+                }
 
                 //ADDED BY PRANITA A. HIRADKAR ON 06/12/2021 FOR APPROVE BONAFIDE CERTIFICATE
                 //updated by jay takalkhede  on dated 23/03/2023
