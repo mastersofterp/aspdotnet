@@ -660,8 +660,8 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                     if (!txtOtherInfo.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIAN_OTHER_INFO = txtOtherInfo.Text.Trim();
 
 
-                    int uano = Convert.ToInt32(Session["userno"]); // Added By Kajal J. on 20032024 for maintaining log
-                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentAddressDetails(objS, objSAddress, Convert.ToInt32(Session["usertype"]), uano);
+
+                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentAddressDetails(objS, objSAddress, Convert.ToInt32(Session["usertype"]));
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         ShowStudentDetails();

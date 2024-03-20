@@ -301,9 +301,9 @@ public partial class ACADEMIC_ApproveAdmission : System.Web.UI.Page
                 }
                 int status = Convert.ToInt32(ddlAdmStatus.SelectedValue);
 
-                int usertype = Convert.ToInt32(Session["usertype"]);// Added By Kajal J. on 20032024 for maintaining log
+
                 //string reason = ddlReason.SelectedItem.Text.Trim();
-                CustomStatus cs = (CustomStatus)objSC.UpdateStudentAdmissionStatus(objS, status, reason, admstatus, usertype);
+                 CustomStatus cs = (CustomStatus)objSC.UpdateStudentAdmissionStatus(objS, status, reason, admstatus);
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
                     int AdStatus = Convert.ToInt32(objCommon.LookUp("ACD_ADMISSION_STATUS_LOG", "STATUS", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"])));

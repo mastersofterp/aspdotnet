@@ -2115,8 +2115,7 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
         try
         {
             //   return;
-            int usertype = Convert.ToInt32(Session["usertype"]); // Added By Kajal J. on 20032024 for maintaining log
-            CustomStatus cs = (CustomStatus)objstud.AddUpdateStudentDocumentsDetailNew(idno, hiddtudocno, extension, contentType, filename, path, certificateno, district, issuedate, Authority, COMMAND_TYPE, userno, usertype);
+             CustomStatus cs = (CustomStatus)objstud.AddUpdateStudentDocumentsDetailNew(idno, hiddtudocno, extension, contentType, filename, path, certificateno, district, issuedate, Authority, COMMAND_TYPE,userno);
             //fuStudPhoto.PostedFile.SaveAs(folderPath + filename);
             if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
             {

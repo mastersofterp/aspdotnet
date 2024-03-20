@@ -1363,9 +1363,11 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                     if (!txtIFSC.Text.ToUpper().Equals(string.Empty)) objS.IfscCode = txtIFSC.Text.Trim();
                     if (!txtBankAddress.Text.Trim().Equals(string.Empty)) objS.BankAddress = txtBankAddress.Text.Trim();
 
+
+
+
                     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    int uano = Convert.ToInt32(Session["userno"]); // Added By Kajal J. on 20032024 for maintaining log
-                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentOtherInformation(objS, Convert.ToInt32(Session["usertype"]), uano);
+                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentOtherInformation(objS, Convert.ToInt32(Session["usertype"]));
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         ShowStudentDetails();
