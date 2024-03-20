@@ -6,6 +6,21 @@ using IITMS.SQLServer.SQLDAL;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
+/*
+---------------------------------------------------------------------------------------------------------------------------                                                                      
+Created By :                                                                   
+Created On :                                                 
+Purpose    :                                          
+Version    : 1.0.0                                                                 
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+Version   Modified On   Modified By        Purpose                                                                        
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+ 1.0.1    14-03-2024    Ashutosh Dhobe     Changes for added section ,iseditable,isdiplaysectionname                      
+------------------------------------------- -------------------------------------------------------------------------------                                                                                                                     
+*/
+
+
 using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 namespace IITMS
 {
@@ -25,13 +40,47 @@ namespace IITMS
                 /// 
                 /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related) , Rishabh B. (Added student attendance dashboard flag)
                 /// Modified By Jay Takalkhede on date 17-02-2024 (Added parameter RecEmail)
-                public int SaveModuleConfiguration(ModuleConfig objConfig, int UANO, string IPAddress, string Mac_Address, bool trisem, bool chkoutsatnding,
-                bool sempromdemand, bool semadmissionoffbtn, bool semadmbeforesempromotion, bool semadmissionaftersempromotion, bool studReactvationlarefine,
-                bool IntakeCapacity, bool chktimeReport, bool chkGlobalCTAllotment, string BBCMailSENTRY, bool hosteltypeselection, bool chkElectChoiceFor,
-                    bool Seatcapacitynewstud, string Usernos, bool Dashboardoutstanding, string AttendanceUser, string CourseShow, bool Timeslotmandatory,
-                    string UserLoginNos, string CourseLocked, bool DisplayStudLoginDashboard, bool DisplayReceiptInHTMLFormat, bool chkValueAddedCTAllotment,
-                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos, string session_ids,
-                    string college_ids, int studAttendance, int RecEmail, int PartPay, string ParMinAmount, bool AddNote)
+                public int SaveModuleConfiguration(ModuleConfig 
+                    objConfig, 
+                    int UANO,
+                    string IPAddress,
+                    string Mac_Address,
+                    bool trisem,
+                    bool chkoutsatnding,
+                    bool sempromdemand, 
+                    bool semadmissionoffbtn,
+                    bool semadmbeforesempromotion,
+                    bool semadmissionaftersempromotion,
+                    bool studReactvationlarefine,
+                    bool IntakeCapacity, 
+                    bool chktimeReport, 
+                    bool chkGlobalCTAllotment,
+                    string BBCMailSENTRY,
+                    bool hosteltypeselection,
+                    bool chkElectChoiceFor,
+                    bool Seatcapacitynewstud, 
+                    string Usernos,
+                    bool Dashboardoutstanding,
+                    string AttendanceUser,
+                    string CourseShow,
+                    bool Timeslotmandatory,
+                    string UserLoginNos,
+                    string CourseLocked,
+                    bool DisplayStudLoginDashboard,
+                    bool DisplayReceiptInHTMLFormat,
+                    bool chkValueAddedCTAllotment,
+                    bool CreateRegno, 
+                    bool AttTeaching, 
+                    bool createprnt, 
+                    int AllowCurrSemForRedoImprovementCrsReg,
+                    string ModAdmInfoUserNos, 
+                    string session_ids,
+                    string college_ids,
+                    int studAttendance,
+                    int RecEmail,
+                    int PartPay, 
+                    string ParMinAmount, 
+                    bool AddNote)
                 {
                     int status = 0;
                     try
@@ -145,16 +194,19 @@ namespace IITMS
                 /// </summary>
                 /// <returns></returns>
 
-                public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName)
+                public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName, string section)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                        SqlParameter[] objParams = new SqlParameter[3];
+                        SqlParameter[] objParams = new SqlParameter[4];
                         objParams[0] = new SqlParameter("@ORGID", OrgID);
                         objParams[1] = new SqlParameter("@PAGENO", PageNo);
                         objParams[2] = new SqlParameter("@P_PAGENAME", PageName);
+                        //<1.0.1>
+                        objParams[3] = new SqlParameter("@P_SECTION", section);
+                        //</1.0.1>
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GET_STUDENT_CONFIG_DATA", objParams);
                     }
                     catch (Exception ex)
@@ -176,15 +228,21 @@ namespace IITMS
                         foreach (StudentModuleConfig StudentConfig in objStudentConfig)
                         {
                             SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                            SqlParameter[] objParams = new SqlParameter[7];
+                            SqlParameter[] objParams = new SqlParameter[9];
                             objParams[0] = new SqlParameter("@STUDCONFIG_ID", Convert.ToInt32(StudentConfig.STUDCONFIG_ID));
                             objParams[1] = new SqlParameter("@CAPTION_NAME", StudentConfig.CAPTION_NAME);
                             objParams[2] = new SqlParameter("@ISACTIVE", StudentConfig.ISACTIVE);
                             objParams[3] = new SqlParameter("@ISMANDATORY", StudentConfig.ISMANDATORY);
-                            objParams[4] = new SqlParameter("@ORGANIZATION_ID", System.Web.HttpContext.Current.Session["OrgId"]);
-                            objParams[5] = new SqlParameter("@PAGE_NO", StudentConfig.PAGE_NO);
-                            objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                            objParams[6].Direction = ParameterDirection.Output;
+                            //<1.0.1>
+                            objParams[4] = new SqlParameter("@ISEDITABLE", StudentConfig.ISEDITABLE);
+                            //</1.0.1>
+                            objParams[5] = new SqlParameter("@ORGANIZATION_ID", System.Web.HttpContext.Current.Session["OrgId"]);
+                            objParams[6] = new SqlParameter("@PAGE_NO", StudentConfig.PAGE_NO);
+                            //<1.0.1>
+                            objParams[7] = new SqlParameter("@IS_DISPLAY_SECTION_NAME", StudentConfig.DISPLAYSECTION);
+                            //</1.0.1>
+                            objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                            objParams[8].Direction = ParameterDirection.Output;
 
                             object objRef = objSQLHelper.ExecuteNonQuerySP("PKG_SP_STUDENT_CONFIGURATION_INSERT_UPDATE", objParams, true);
                             status = Convert.ToInt32(objRef);
