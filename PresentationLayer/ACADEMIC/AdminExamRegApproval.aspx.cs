@@ -715,7 +715,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         else
         {
             //rdoDegree.Items.FindByValue("0").Attributes.Add("style", "display:none;");
-            rdoDegree.Items.FindByValue("0").Selected = true;
+            //rdoDegree.Items.FindByValue("0").Selected = true;//commenft of
         }
         #endregion
     }
