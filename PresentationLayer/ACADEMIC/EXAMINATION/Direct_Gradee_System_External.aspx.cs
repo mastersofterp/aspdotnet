@@ -20,7 +20,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
-   
+
     ExamController objexam = new ExamController();
     decimal max1;
     decimal min1;
@@ -62,7 +62,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             lvCGPA.Visible = false;
             lvGrade.Visible = false;
             //Session["action"] = null;
-            
+
 
 
         }
@@ -77,14 +77,14 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             string cheme = string.Empty;
             foreach (ListItem items in lstcollege.Items)
             {
-               
+
                 if (items.Selected == true)
                 {
                     cheme += items.Value + ",";
                     //cheme = items.Value;
                 }
             }
-                //= objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(lstcollege.SelectedValue));
+            //= objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(lstcollege.SelectedValue));
             cheme = cheme.TrimEnd(',');
             ds = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID", "COSCHNO in (" + cheme + ")", "");
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
@@ -93,8 +93,8 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                 {
                     //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
                     //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                   // ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                    schemeno +=ds.Tables[0].Rows[i]["SCHEMENO"].ToString()+',';
+                    // ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                    schemeno += ds.Tables[0].Rows[i]["SCHEMENO"].ToString() + ',';
                 }
             }
             schemeno = schemeno.TrimEnd(',');
@@ -131,13 +131,13 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
 
     private void GetID()
     {
-        try   
+        try
         {
             GetDetails();
             ViewState["id"] = string.Empty;
             int LEVEL = Convert.ToInt32(ddlLevel.SelectedValue);
             string SCHEMENO = ViewState["SchemeNo"].ToString();
-            int schmeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COSCHNO="+lstcollege.SelectedValue));
+            int schmeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COSCHNO=" + lstcollege.SelectedValue));
             DataSet ds = objexam.GetIDGRADESYSTEM(LEVEL, schmeno);
 
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
@@ -145,16 +145,16 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                 int LEVELID = Convert.ToInt32(ddlLevel.SelectedValue);
                 if (LEVELID == 1)
                 {
-                   
+
                     lvCGPA.DataSource = ds;
                     lvCGPA.DataBind();
                     lvCGPA.Visible = true;
                     lvGrade.Visible = false;
-                   
+
                 }
-            
-               
-               
+
+
+
             }
         }
         catch (Exception ex)
@@ -208,15 +208,15 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             {
                 objCommon.FillListBox(lstcollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
 
-               //objCommon.FillDropDownList(ddlCollegeScheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
-               // DataSet ds = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
-               // if (ds.Tables[0].Rows.Count > 0)
-               // {
-               //     lstcollege.DataSource = ds;
-               //     lstcollege.DataTextField = ds.Tables[0].Columns["COL_SCHEME_NAME"].ToString();
-               //     lstcollege.DataValueField = ds.Tables[0].Columns["COSCHNO"].ToString();
-               //     lstcollege.DataBind();
-               // }
+                //objCommon.FillDropDownList(ddlCollegeScheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
+                // DataSet ds = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
+                // if (ds.Tables[0].Rows.Count > 0)
+                // {
+                //     lstcollege.DataSource = ds;
+                //     lstcollege.DataTextField = ds.Tables[0].Columns["COL_SCHEME_NAME"].ToString();
+                //     lstcollege.DataValueField = ds.Tables[0].Columns["COSCHNO"].ToString();
+                //     lstcollege.DataBind();
+                // }
             }
             //else
             //{
@@ -280,7 +280,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                 GetID();
                 lvGrade.DataSource = ds;
                 lvGrade.DataBind();
-                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]),lvGrade);//Set label - 
+                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvGrade);//Set label - 
             }
             else
             {
@@ -372,7 +372,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
 
             if (count == 0)
             {
-                objCommon.DisplayMessage(this.updDirectGrade, "Please Enter the College/Scheme.", this.Page); 
+                objCommon.DisplayMessage(this.updDirectGrade, "Please Enter the College/Scheme.", this.Page);
             }
             else if (ddlLevel.SelectedIndex == 0)
             {
@@ -381,7 +381,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             }
             else
             {
-              
+
                 if (ddlLevel.SelectedItem.Text == "CGPA/AGPA")
                 {
 
@@ -439,47 +439,13 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                             }
                             else
                             {
-                                min1 = Convert.ToDecimal(min);
 
                             }
-                            string max = (txtMaxRange.Text).ToString();
-                            if (max == string.Empty || max == "")
-                            {
-                                max1 = 0;
-
-                            }
-                            else
-                            {
-                                max1 = Convert.ToDecimal(max);
-
-                            }
-                            string indi = (txtIndicator.Text).ToString();
-                            int gradepoint = Convert.ToInt32(0);
-                            int ActiveStatus;
-                            if (chkStatus1.Checked==true)
-                            {
-                                ActiveStatus = 1;
-                            }
-                            else
-                            {
-                                ActiveStatus = 0;
-                            }
-                            if (Convert.ToDecimal(txtMaxRange.Text) >= Convert.ToDecimal(txtMinRange.Text))
-                            {
-                                CustomStatus cs = (CustomStatus)objexam.Add_DirectGradeSystem(schemeno, level, id, min1, max1, gradepoint, indi, ActiveStatus);
-                                if (cs.Equals(CustomStatus.RecordSaved))
-                                {
-                                    objCommon.DisplayMessage(this.updDirectGrade, "Insert Sucessfully", this.Page);
-                                }
-                                else 
-                                {
-
-                                }
-                            }
-                            else
-                            {
-                                objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
-                            }
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                        }
                     }
 
                     Clear();
@@ -491,7 +457,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
 
                     foreach (ListViewDataItem item in lvGrade.Items)
                     {
-                      
+
                         HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
                         TextBox txtRangeMin = item.FindControl("txtRangeMin") as TextBox;
                         TextBox txtRangeMax = item.FindControl("txtRangeMax") as TextBox;
@@ -543,49 +509,15 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                             }
                             else
                             {
-                                min2 = Convert.ToInt32(min);
 
                             }
-                            string max = (txtRangeMax.Text).ToString();
-                            if (max == string.Empty || max == "")
-                            {
-                                max2 = 0;
 
-                            }
-                            else
-                            {
-                                max2 = Convert.ToInt32(max);
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                        }
 
-                            }
-                            string indi = (txtGraadePoint.Text).ToString();
-                            if (indi == string.Empty || indi == "")
-                            {
-                                gradepot = 0;
-                            }
-                            else
-                            {
-                                gradepot = Convert.ToInt32(indi);
-                            }
-                            string indicator = ("");
-                            int ActiveStatus = chkStatus.Checked ? 1 : 0;
-                            if (Convert.ToDecimal(txtRangeMax.Text) >= Convert.ToDecimal(txtRangeMin.Text))
-                            {
-                                CustomStatus cs = (CustomStatus)objexam.Add_DirectGradeSystem(schema, level, id, min2, max2, gradepot, indicator, ActiveStatus);
-                                if (cs.Equals(CustomStatus.RecordSaved))
-                                {
-                                    objCommon.DisplayMessage(this.updDirectGrade, "Insert Sucessfully", this.Page);
-                                }
-                                else
-                                {
-
-                                }
-                            
-                            }
-                            else
-                            {
-                                objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
-                            }
-                               
                     }
                     cleartext();
                     //listbox();
@@ -597,11 +529,11 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
 
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
 
         }
-    } 
+    }
 
 
     protected void txtRangeMin_TextChanged(object sender, EventArgs e)
@@ -654,8 +586,8 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
         {
             lvGrade.Visible = false;
             lvCGPA.Visible = false;
-            ddlLevel.SelectedValue="0";
-        
+            ddlLevel.SelectedValue = "0";
+
 
         }
         else
@@ -664,5 +596,5 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
         }
     }
 
-   
+
 }

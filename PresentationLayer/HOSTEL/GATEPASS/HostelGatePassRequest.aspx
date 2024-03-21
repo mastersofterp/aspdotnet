@@ -243,7 +243,7 @@
                                 </asp:DropDownList>
                                 <asp:RequiredFieldValidator ID="rfvoutMinFrom" Display="None" runat="server" ErrorMessage="Please Select Out Minutes From" ControlToValidate="ddloutMinFrom" ValidationGroup="submit"></asp:RequiredFieldValidator>
                             </div>
-                            <div class="form-group col-lg-2 col-md-4 col-12">
+<%--                            <div class="form-group col-lg-2 col-md-4 col-12">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>AM/PM</label>
@@ -254,7 +254,7 @@
                                     <asp:ListItem Value="PM">PM</asp:ListItem>
                                 </asp:DropDownList>
                                 <asp:RequiredFieldValidator ID="rfvDropDownList1" Display="None" runat="server" ErrorMessage="Please Select AM/PM For Out Date" ControlToValidate="ddlAM_PM1" ValidationGroup="submit" InitialValue="0"></asp:RequiredFieldValidator>
-                            </div>
+                            </div>--%>
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -283,6 +283,18 @@
                                 </div>
                             </div>
                             <div class="form-group col-lg-1 col-md-4 col-12">
+                            </div>
+                            <div class="form-group col-lg-2 col-md-4 col-12">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>AM/PM</label>
+                                </div>
+                                <asp:DropDownList ID="ddlAM_PM2" AppendDataBoundItems="true" runat="server" TabIndex="11" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAM_PM2_SelectedIndexChanged">
+                                    <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                    <asp:ListItem Value="AM">AM</asp:ListItem>
+                                    <asp:ListItem Value="PM">PM</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvDropDownList2" Display="None" runat="server" ErrorMessage="Please Select AM/PM For In Date" ControlToValidate="ddlAM_PM2" ValidationGroup="submit" InitialValue="0"></asp:RequiredFieldValidator>
                             </div>
                             <div class="form-group col-lg-2 col-md-4 col-12">
                                 <div class="label-dynamic">
@@ -377,7 +389,7 @@
                                 </asp:DropDownList>
                                 <asp:RequiredFieldValidator ID="rfvinMinFrom" Display="None" runat="server" ErrorMessage="Please Select In Minutes From" ControlToValidate="ddlinMinFrom" ValidationGroup="submit"></asp:RequiredFieldValidator>
                             </div>
-                            <div class="form-group col-lg-2 col-md-4 col-12">
+                            <%--<div class="form-group col-lg-2 col-md-4 col-12">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>AM/PM</label>
@@ -388,7 +400,7 @@
                                     <asp:ListItem Value="PM">PM</asp:ListItem>
                                 </asp:DropDownList>
                                 <asp:RequiredFieldValidator ID="rfvDropDownList2" Display="None" runat="server" ErrorMessage="Please Select AM/PM For In Date" ControlToValidate="ddlAM_PM2" ValidationGroup="submit" InitialValue="0"></asp:RequiredFieldValidator>
-                            </div>
+                            </div>--%>
                         </div>
 
                         <div class="row">
@@ -434,6 +446,7 @@
                     </div>
 
                     <div class="col-12">
+                        <p Style="color:red;font-weight:bold;">NOTE : Only the pending gate pass can be edited.</p>
                         <asp:Repeater ID="lvGatePass" runat="server">
                             <HeaderTemplate>
                                 <div class="sub-heading">
@@ -470,7 +483,7 @@
                                 <tr>
                                     <td>
                                         <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("HGP_ID") %>'
-                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="17" />&nbsp;
+                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="17" Enabled='<%# Eval("STATUS").Equals("APPROVED")?false:Eval("STATUS").Equals("REJECTED")?false: true %>' />&nbsp;
                                     </td>
                                     <td>
                                          <%# Eval("STUDNAME") %>
@@ -496,10 +509,10 @@
                                         <asp:Label ID="lblGatepassnno" runat="server" Text='<%# (Eval("HOSTEL_GATE_PASS_NO").ToString())=="" ? "..." : Eval("HOSTEL_GATE_PASS_NO") %>'></asp:Label>
                                     </td>
                                     <td>
-                                        <asp:Label ID="lblstatus" runat="server" ForeColor='<%# Eval("STATUS").Equals("APPROVED")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("STATUS") %>'></asp:Label>
+                                        <asp:Label ID="lblstatus" runat="server" ForeColor='<%# Eval("STATUS").Equals("APPROVED")?System.Drawing.Color.Green:Eval("STATUS").Equals("REJECTED")?System.Drawing.Color.Red: System.Drawing.Color.Red %>' Text='<%# Eval("STATUS") %>'></asp:Label>   <%--Rejected cond Added By Himanshu Tamrakar 13/03/2024--%>
                                     </td>
                                     <td>
-                                        <asp:Button ID="printGatepass" runat="server" CssClass="btn btn-primary" Text="Print"  CommandArgument='<%# Eval("HOSTEL_GATE_PASS_NO") %>'  OnClick="printGatepass_Click" />
+                                        <asp:Button ID="printGatepass" runat="server" CssClass="btn btn-primary" Text="Print"  CommandArgument='<%# Eval("HOSTEL_GATE_PASS_NO") %>'  OnClick="printGatepass_Click" Enabled='<%# Eval("STATUS").Equals("APPROVED")?true:Eval("STATUS").Equals("REJECTED")?false: false %>' /> <%--Rejected cond Added By Himanshu Tamrakar 13/03/2024--%>
                                     </td>
                                 </tr>
                             </ItemTemplate>
