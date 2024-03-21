@@ -6613,6 +6613,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+<<<<<<< HEAD
 
     protected void btnBranchwiseReport_Click(object sender, EventArgs e)
     {
@@ -6663,4 +6664,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+=======
+>>>>>>> aa1ce92c ( [ENCHACEMENT] [54828] Changes as per BRD)
 }
