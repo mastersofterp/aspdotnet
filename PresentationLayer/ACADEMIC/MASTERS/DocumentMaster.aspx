@@ -6,14 +6,15 @@ Created By  :
 Created On  : 
 Purpose     :  
 Version     : 
----------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
 Version     Modified On     Modified By       Purpose
----------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
 1.0.1       28-02-2024      Anurag Baghele    [53807]-Make two tabs for Document Name and Document Mapping
 ------------------------------------------- ---------------------------------------------------------------------------------
 1.0.2       08-03-2024      Anurag Baghele    [53807]-Change the column name
+------------------------------------------- ---------------------------------------------------------------------------------
+1.0.3       21-03-2024      Anurag Baghele    [53807]-Added the script for show search option
 ------------------------------------------- ---------------------------------------------------------------------------------%>
-
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
@@ -39,6 +40,335 @@ Version     Modified On     Modified By       Purpose
         </asp:UpdateProgress>
     </div>
 
+
+    <%--<1.0.3>--%>
+    <script>
+        $(document).ready(function () {
+            var table = $('.display2').DataTable({
+                responsive: true,
+                lengthChange: true,
+                scrollY: 320,
+                scrollX: true,
+                scrollCollapse: true,
+                paging: false, // Added by Gaurav for Hide pagination
+
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        text: 'Column Visibility',
+                        columns: function (idx, data, node) {
+                            var arr = [0];
+                            if (arr.indexOf(idx) !== -1) {
+                                return false;
+                            } else {
+                                return $('.display2').DataTable().column(idx).visible();
+                            }
+                        }
+                    },
+                    {
+                        extend: 'collection',
+                        text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
+                        buttons: [
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: function (idx, data, node) {
+                                        var arr = [0];
+                                        if (arr.indexOf(idx) !== -1) {
+                                            return false;
+                                        } else {
+                                            return $('.display2').DataTable().column(idx).visible();
+                                        }
+                                    },
+                                    format: {
+                                        body: function (data, column, row, node) {
+                                            var nodereturn;
+                                            if ($(node).find("input:text").length > 0) {
+                                                nodereturn = "";
+                                                nodereturn += $(node).find("input:text").eq(0).val();
+                                            }
+                                            else if ($(node).find("input:checkbox").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:checkbox").each(function () {
+                                                    if ($(this).is(':checked')) {
+                                                        nodereturn += "On";
+                                                    } else {
+                                                        nodereturn += "Off";
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("a").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("a").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                nodereturn = "";
+                                                $(node).find("span").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("select").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("select").each(function () {
+                                                    var thisOption = $(this).find("option:selected").text();
+                                                    if (thisOption !== "Please Select") {
+                                                        nodereturn += thisOption;
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("img").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else if ($(node).find("input:hidden").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else {
+                                                nodereturn = data;
+                                            }
+                                            return nodereturn;
+                                        },
+                                    },
+                                }
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                exportOptions: {
+                                    columns: function (idx, data, node) {
+                                        var arr = [0];
+                                        if (arr.indexOf(idx) !== -1) {
+                                            return false;
+                                        } else {
+                                            return $('.display2').DataTable().column(idx).visible();
+                                        }
+                                    },
+                                    format: {
+                                        body: function (data, column, row, node) {
+                                            var nodereturn;
+                                            if ($(node).find("input:text").length > 0) {
+                                                nodereturn = "";
+                                                nodereturn += $(node).find("input:text").eq(0).val();
+                                            }
+                                            else if ($(node).find("input:checkbox").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:checkbox").each(function () {
+                                                    if ($(this).is(':checked')) {
+                                                        nodereturn += "On";
+                                                    } else {
+                                                        nodereturn += "Off";
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("a").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("a").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                nodereturn = "";
+                                                $(node).find("span").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("select").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("select").each(function () {
+                                                    var thisOption = $(this).find("option:selected").text();
+                                                    if (thisOption !== "Please Select") {
+                                                        nodereturn += thisOption;
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("img").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else if ($(node).find("input:hidden").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else {
+                                                nodereturn = data;
+                                            }
+                                            return nodereturn;
+                                        },
+                                    },
+                                }
+                            },
+
+                        ]
+                    }
+                ],
+                "bDestroy": true,
+            });
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
+            $(document).ready(function () {
+                var table = $('.display2').DataTable({
+                    responsive: true,
+                    lengthChange: true,
+                    scrollY: 320,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: false, // Added by Gaurav for Hide pagination
+
+                    dom: 'lBfrtip',
+                    buttons: [
+                        {
+                            extend: 'colvis',
+                            text: 'Column Visibility',
+                            columns: function (idx, data, node) {
+                                var arr = [0];
+                                if (arr.indexOf(idx) !== -1) {
+                                    return false;
+                                } else {
+                                    return $('.display2').DataTable().column(idx).visible();
+                                }
+                            }
+                        },
+                        {
+                            extend: 'collection',
+                            text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
+                            buttons: [
+                               {
+                                   extend: 'copyHtml5',
+                                   exportOptions: {
+                                       columns: function (idx, data, node) {
+                                           var arr = [0];
+                                           if (arr.indexOf(idx) !== -1) {
+                                               return false;
+                                           } else {
+                                               return $('.display2').DataTable().column(idx).visible();
+                                           }
+                                       },
+                                       format: {
+                                           body: function (data, column, row, node) {
+                                               var nodereturn;
+                                               if ($(node).find("input:text").length > 0) {
+                                                   nodereturn = "";
+                                                   nodereturn += $(node).find("input:text").eq(0).val();
+                                               }
+                                               else if ($(node).find("input:checkbox").length > 0) {
+                                                   nodereturn = "";
+                                                   $(node).find("input:checkbox").each(function () {
+                                                       if ($(this).is(':checked')) {
+                                                           nodereturn += "On";
+                                                       } else {
+                                                           nodereturn += "Off";
+                                                       }
+                                                   });
+                                               }
+                                               else if ($(node).find("a").length > 0) {
+                                                   nodereturn = "";
+                                                   $(node).find("a").each(function () {
+                                                       nodereturn += $(this).text();
+                                                   });
+                                               }
+                                               else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                   nodereturn = "";
+                                                   $(node).find("span").each(function () {
+                                                       nodereturn += $(this).text();
+                                                   });
+                                               }
+                                               else if ($(node).find("select").length > 0) {
+                                                   nodereturn = "";
+                                                   $(node).find("select").each(function () {
+                                                       var thisOption = $(this).find("option:selected").text();
+                                                       if (thisOption !== "Please Select") {
+                                                           nodereturn += thisOption;
+                                                       }
+                                                   });
+                                               }
+                                               else if ($(node).find("img").length > 0) {
+                                                   nodereturn = "";
+                                               }
+                                               else if ($(node).find("input:hidden").length > 0) {
+                                                   nodereturn = "";
+                                               }
+                                               else {
+                                                   nodereturn = data;
+                                               }
+                                               return nodereturn;
+                                           },
+                                       },
+                                   }
+                               },
+                               {
+                                   extend: 'excelHtml5',
+                                   exportOptions: {
+                                       columns: function (idx, data, node) {
+                                           var arr = [0];
+                                           if (arr.indexOf(idx) !== -1) {
+                                               return false;
+                                           } else {
+                                               return $('.display2').DataTable().column(idx).visible();
+                                           }
+                                       },
+                                       format: {
+                                           body: function (data, column, row, node) {
+                                               var nodereturn;
+                                               if ($(node).find("input:text").length > 0) {
+                                                   nodereturn = "";
+                                                   nodereturn += $(node).find("input:text").eq(0).val();
+                                               }
+                                               else if ($(node).find("input:checkbox").length > 0) {
+                                                   nodereturn = "";
+                                                   $(node).find("input:checkbox").each(function () {
+                                                       if ($(this).is(':checked')) {
+                                                           nodereturn += "On";
+                                                       } else {
+                                                           nodereturn += "Off";
+                                                       }
+                                                   });
+                                               }
+                                               else if ($(node).find("a").length > 0) {
+                                                   nodereturn = "";
+                                                   $(node).find("a").each(function () {
+                                                       nodereturn += $(this).text();
+                                                   });
+                                               }
+                                               else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                   nodereturn = "";
+                                                   $(node).find("span").each(function () {
+                                                       nodereturn += $(this).text();
+                                                   });
+                                               }
+                                               else if ($(node).find("select").length > 0) {
+                                                   nodereturn = "";
+                                                   $(node).find("select").each(function () {
+                                                       var thisOption = $(this).find("option:selected").text();
+                                                       if (thisOption !== "Please Select") {
+                                                           nodereturn += thisOption;
+                                                       }
+                                                   });
+                                               }
+                                               else if ($(node).find("img").length > 0) {
+                                                   nodereturn = "";
+                                               }
+                                               else if ($(node).find("input:hidden").length > 0) {
+                                                   nodereturn = "";
+                                               }
+                                               else {
+                                                   nodereturn = data;
+                                               }
+                                               return nodereturn;
+                                           },
+                                       },
+                                   }
+                               },
+
+                            ]
+                        }
+                    ],
+                    "bDestroy": true,
+                });
+            });
+        });
+
+    </script>
+    <%--</1.0.3>--%>
     <style>
         .switch.madtory label {
             width: 140px !important;
@@ -313,7 +643,8 @@ Version     Modified On     Modified By       Purpose
                                                 <div class="sub-heading">
                                                     <h5>Document List</h5>
                                                 </div>
-                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
+
+                                                <table class="table table-striped table-bordered nowrap display2" style="width: 100%" id="">
                                                     <thead class="bg-light-blue">
                                                         <tr>
                                                             <th>Action
@@ -347,7 +678,7 @@ Version     Modified On     Modified By       Purpose
                                                         AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="6" />
                                                 </td>
                                                 <td>
-                                                    <%# Eval("Docname")%>
+                                                    <%# Eval("DOCUMENTNAME")%>
                                                 </td>
                                                 <td>
                                                     <%# Eval("DEGREENAME")%>
@@ -503,25 +834,24 @@ Version     Modified On     Modified By       Purpose
         //Added by Anurag Baghele on 29-02-2024 
         function SelectCountryCategory() {
             var CHK = document.getElementById("<%=chkCountryCategoryList.ClientID%>");
-                var checkbox = CHK.getElementsByTagName("input");
+            var checkbox = CHK.getElementsByTagName("input");
 
-                var chkBranch = document.getElementById('ctl00_ContentPlaceHolder1_chkCountryCategory');
+            var chkBranch = document.getElementById('ctl00_ContentPlaceHolder1_chkCountryCategory');
 
-                for (var i = 0; i < checkbox.length; i++) {
-                    var chk = document.getElementById('ctl00_ContentPlaceHolder1_chkCountryCategoryList_' + i);
-                    if (chkBranch.checked == true) {
-                        chk.checked = true;
-                    } else {
-                        chk.checked = false;
-                    }
+            for (var i = 0; i < checkbox.length; i++) {
+                var chk = document.getElementById('ctl00_ContentPlaceHolder1_chkCountryCategoryList_' + i);
+                if (chkBranch.checked == true) {
+                    chk.checked = true;
+                } else {
+                    chk.checked = false;
                 }
             }
+        }
         //End by Anurag Baghele
     </script>
 
     <script>
-        function TabShow(tabName)
-        {
+        function TabShow(tabName) {
             $('.nav-tabs a[href="#' + tabName + '"]').tab('show');
         }
     </script>

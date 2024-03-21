@@ -29,6 +29,8 @@ Version     Modified On     Modified By       Purpose
 ------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
 1.0.3       08-03-2024      Anurag Baghele    [53807]-Change the massage and remove null condition
 ------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
+1.0.4       21-03-2024      Anurag Baghele    [53807]-Make the degree and document enable false not to submit dublicate value
+------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
 */
 
 public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
@@ -468,6 +470,8 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
             {
                 if (dr.Read())
                 {
+                    ddlDegree.Enabled = false;
+                    ddlDocumentName.Enabled = false;
                     ViewState["documentno"] = documentno.ToString();
                     ddlDegree.Text = dr["DEGREENO"] == null ? string.Empty : dr["DEGREENO"].ToString();
                     ddlAdmType.Text = dr["ID_TYPE"] == null ? string.Empty : dr["ID_TYPE"].ToString();
@@ -561,6 +565,10 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
         chkCategoryList.ClearSelection();
         chkAdmCategoryList.ClearSelection();
         chkCountryCategoryList.ClearSelection();
+        //<1.0.4>
+        ddlDegree.Enabled = true;
+        ddlDocumentName.Enabled = true;
+        //</1.0.4>
     }
 
     private void BindListView()
@@ -690,12 +698,14 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
                 objCommon.DisplayMessage(this.updDocument, "Record Saved Successfully!", this.Page);
                 objCommon.FillDropDownList(ddlDocumentName, "ACD_DOCUMENT_NAME", "ID", "Docname", "ID>0 AND ISNULL(ACTIVE_STATUS,0) = 1", "ID"); //Added By Anurag Baghele on 29-02-2024
                 clear_tab1();
+                BindListView();
             }
             else if (cs == 2)
             {
                 objCommon.DisplayMessage(this.updDocument, "Record Updated Successfully!", this.Page);
                 objCommon.FillDropDownList(ddlDocumentName, "ACD_DOCUMENT_NAME", "ID", "Docname", "ID>0 AND ISNULL(ACTIVE_STATUS,0) = 1", "ID"); //Added By Anurag Baghele on 29-02-2024
                 clear_tab1();
+                BindListView();
             }
             else if (cs == 2627)
             {
