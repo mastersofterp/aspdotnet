@@ -131,6 +131,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
             lvClassSchedule.DataBind();
             lvRoomOccupancy.DataSource = null;
             lvRoomOccupancy.DataBind();
+         
         }
     }
 
@@ -248,11 +249,37 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
         if (ddlType.SelectedValue == "1")
         {
             divAttendanceStatus.Visible = true;
+            lvClassSchedule.DataSource = null;
+            lvClassSchedule.DataBind();
+            lvRoomOccupancy.DataSource = null;
+            lvRoomOccupancy.DataBind();
+            btnSendEmail.Visible = false;
         }
         else
         {
             divAttendanceStatus.Visible = false;
+            btnSendEmail.Visible = false;
         }
+
+        if (ddlType.SelectedValue == "0")
+        {
+            lvClassSchedule.DataSource = null;
+            lvClassSchedule.DataBind();
+            lvRoomOccupancy.DataSource = null;
+            lvRoomOccupancy.DataBind();
+            btnSendEmail.Visible = false;
+          
+        }
+        if (ddlType.SelectedValue == "2")
+        {
+            lvClassSchedule.DataSource = null;
+            lvClassSchedule.DataBind();
+            lvRoomOccupancy.DataSource = null;
+            lvRoomOccupancy.DataBind();
+            btnSendEmail.Visible = false;
+
+        }
+
     }
     protected void btnExcel_Click(object sender, EventArgs e)
     {
