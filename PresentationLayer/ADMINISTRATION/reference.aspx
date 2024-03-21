@@ -983,8 +983,8 @@ Version   Modified On   Modified By      Purpose
     <%--<1.0.1>--%>
     <script type="text/javascript">
         function validateEmail(input) {
-            var email = input.value.trim(); 
-            var regex = /^[^\s@]+@[^\s@]+\.(com)$/i;
+            var email = input.value.trim();
+            var regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; ///^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
             if (email !== "" && !regex.test(email)) {
                 alert("Please enter a valid email address.");
                 input.value = "";
@@ -992,5 +992,4 @@ Version   Modified On   Modified By      Purpose
         }
     </script>
     <%--</1.0.1>--%>
-
 </asp:Content>
