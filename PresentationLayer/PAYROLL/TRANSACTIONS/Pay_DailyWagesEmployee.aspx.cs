@@ -456,6 +456,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_DailyWagesEmployee : System.Web.UI
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
+            //Added college no in Report 
         }
         catch (Exception ex)
         {
