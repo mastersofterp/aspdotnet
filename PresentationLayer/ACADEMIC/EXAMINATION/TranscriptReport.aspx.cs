@@ -145,6 +145,7 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
             btntranscripwithoutheader.Visible = false;
             btnTranscriptWithHeader.Visible = true;
             btnTranscriptWithFormat.Visible = true;
+            
 
 
             // btnConsolgradecard.Visible = true;
@@ -167,6 +168,7 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
             else if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 btnTranscriptWithHeader.Visible = true;
+                btnTransB1.Visible = true;
                 btntranscripwithoutheader.Visible = false;
                 btnReport.Visible = false;
                 txtSpecilization.Visible = false;
@@ -200,6 +202,7 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
                 lblDateofIssue.Visible = true;
                 txtDateofIssue.Visible = true;
                 divdate.Visible = true;
+                btnTransB1.Visible = false;
             }
 
         }
@@ -208,6 +211,7 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
         {
             btntranscripwithoutheader.Visible = false;
             btnTranscriptWithHeader.Visible = false;
+            btnTransB1.Visible = false;
             //btnConsolgradecard.Visible = false;
             // btnConsolegradewithoutheader.Visible = false;
             btnReport.Visible = false;
@@ -784,6 +788,30 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
             else
                 objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
+    }
+    protected void btnTransB1_Click(object sender, EventArgs e)
+    {
+
+        
+        string exporttype = "xls";
+        string rptFileName = "rptGradeCardReportPG_Trans_Excel.rpt";
+
+        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        url += "Reports/CommonReport.aspx?";
+        url += "exporttype=" + exporttype;
+        url += "&filename=TranscriptReport.xls";
+        url += "&path=~,Reports,Academic," + rptFileName;
+        int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
+        url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + ViewState["idno"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue;
+        //url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+
+        //",@P_SUB_TYPE=" + subType +
+        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+        divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+        divMsg.InnerHtml += " window.close();";
+        divMsg.InnerHtml += " </script>";
+
+
     }
 }
 

@@ -52,7 +52,7 @@
                                         </asp:DropDownList>
 
                                         <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
-                                            Display="None" ErrorMessage="Please Select College & " InitialValue="0" ValidationGroup="report">
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="report">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -89,18 +89,7 @@
 
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12 " id="divAdmission" runat="server">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Admission Batch</label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlAdmBatch" runat="server" AppendDataBoundItems="True" data-select2-enable="true">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rvfadmbatch" runat="server" ControlToValidate="ddlAdmBatch"
-                                            Display="None" ErrorMessage="Please Select Admission Batch" InitialValue="0"
-                                            ValidationGroup="report"></asp:RequiredFieldValidator>
-                                    </div>
+                                    
 
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="divDegree" runat="server">
                                         <div class="label-dynamic">
@@ -155,6 +144,20 @@
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="report">
                                         </asp:RequiredFieldValidator>
                                     </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12 " id="divAdmission" runat="server">
+                                        <div class="label-dynamic">
+                                            <%--<sup>* </sup>--%>
+                                            <label>Admission Batch</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlAdmBatch" runat="server" AppendDataBoundItems="True" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                      <%--  <asp:RequiredFieldValidator ID="rvfadmbatch" runat="server" ControlToValidate="ddlAdmBatch"
+                                            Display="None" ErrorMessage="Please Select Admission Batch" InitialValue="0"
+                                            ValidationGroup="report"></asp:RequiredFieldValidator>--%>
+                                    </div>
+
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="div1" runat="server">
                                         <div class="label-dynamic">

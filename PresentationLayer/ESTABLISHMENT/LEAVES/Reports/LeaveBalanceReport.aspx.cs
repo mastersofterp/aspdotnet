@@ -305,24 +305,9 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveBalanceReport : System.We
                 }
             }
             string Script = string.Empty;
-            string collegeno = Session["college_nos"].ToString();
-            string[] values = collegeno.Split(',');
-            if (values.Length > 1)
-            {
-                if (Convert.ToInt32(ddlCollege.SelectedValue) > 0)
-                {
-                    url += "&param=@P_IDNO=" + idno + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_PERIOD=" + periodno + ",@P_LVNO=" + lvno + ",@P_STNO=" + stno + "," + "@P_Deptno=" + deptno + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue);
-                }
-                else
-                {
-                    url += "&param=@P_IDNO=" + idno + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_PERIOD=" + periodno + ",@P_LVNO=" + lvno + ",@P_STNO=" + stno + "," + "@P_Deptno=" + deptno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString();
-                }
-            }
-            else
-            {
-                url += "&param=@P_IDNO=" + idno + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_PERIOD=" + periodno + ",@P_LVNO=" + lvno + ",@P_STNO=" + stno + "," + "@P_Deptno=" + deptno + "," + "@P_COLLEGE_CODE=" + Session["college_nos"].ToString();
-            }
 
+            url += "&param=@P_IDNO=" + idno + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_PERIOD=" + periodno + ",@P_LVNO=" + lvno + ",@P_STNO=" + stno + "," + "@P_Deptno=" + deptno + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue);
+               
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";

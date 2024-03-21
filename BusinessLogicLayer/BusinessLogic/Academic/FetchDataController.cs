@@ -1628,5 +1628,25 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FetchDataController.UpdateRevokeStudStatus()-> " + ex.ToString());
             }
         }
+
+        public DataSet GetApplicantUserNamePassword(string ApplicationNumber, int UaNo)
+        {
+            DataSet ds = new DataSet();
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[2];
+                objParams[0] = new SqlParameter("@P_USERNAME", ApplicationNumber);
+                objParams[1] = new SqlParameter("@P_UA_NO", UaNo);
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_ADMP_GET_APPLICATION_DETAILS", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FetchDataController.GetApplicantUserNamePassword() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
     }
 }

@@ -377,10 +377,13 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin_CPU : System.Web.
 
                         DataTableReader dtr = dsExams.Tables[0].CreateDataReader();
 
+                        int conunt = 0;
+
                         while (dtr.Read())
                         {
                             if (ViewState["examNo"].ToString() == dtr["EXAMNO"].ToString())
                             {
+                                conunt++;
                                 if (dtr["FLDNAME2"] != DBNull.Value)
                                 {
                                     if (ddlSubjectType.SelectedIndex > 0)
@@ -389,15 +392,16 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin_CPU : System.Web.
                                     }
                                 }
                             }
-                            else
-                            {
-                                objCommon.DisplayMessage(this.updpanle1, "The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
-                                return;// added by gaurav 17-01-2024
-
-                            }
+                           
                         }
                         dtr.Close();
+                        if (conunt == 0)
+                        { 
+                             
+                                objCommon.DisplayMessage(this.updpanle1, "The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
+                                return;
 
+                        }
                         if (ddlExam.Items.Count > 0)
                         {
                             pnlSelection.Visible = false;

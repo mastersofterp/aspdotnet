@@ -583,58 +583,58 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Invoice Entry</h3>
                 </div>
+                <asp:Panel runat="server" ID="InvPanel">
+                    <div class="box-body">
+                        <div class="col-12 btn-footer">
+                            <asp:Button ID="btnAddNew" runat="server" Text="Add New" CssClass="btn btn-primary" OnClick="btnAdNew_Click" />
+                        </div>
 
-                <div class="box-body">
-                    <div class="col-12 btn-footer">
-                        <asp:Button ID="btnAddNew" runat="server" Text="Add New" CssClass="btn btn-primary" OnClick="btnAdNew_Click" />
-                    </div>
 
-
-                    <div id="divInvoiceEtry" runat="server" visible="false">
-                        <asp:Panel ID="PnlSecurityPass" runat="server" HorizontalAlign="left" Visible="true">
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class=" col-lg-12 col-md-6 col-12">
-                                        <div class="sub-heading">
-                                            <h5>Add/Edit Invoicing Entry</h5>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divInvNumber" runat="server" visible="false">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Invoice Number</label>
-                                        </div>
-                                        <asp:TextBox ID="txtInvoiceNumber" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Invoice Date</label>
-                                        </div>
-                                        <div class="input-group date">
-                                            <div class="input-group-addon" id="Image12345">
-                                                <i class="fa fa-calendar text-blue"></i>
+                        <div id="divInvoiceEtry" runat="server" visible="false">
+                            <asp:Panel ID="PnlSecurityPass" runat="server" HorizontalAlign="left" Visible="true">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class=" col-lg-12 col-md-6 col-12">
+                                            <div class="sub-heading">
+                                                <h5>Add/Edit Invoicing Entry</h5>
                                             </div>
-                                            <%--  <div class="input-group-addon">
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divInvNumber" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Invoice Number</label>
+                                            </div>
+                                            <asp:TextBox ID="txtInvoiceNumber" runat="server" Enabled="false" CssClass="form-control"></asp:TextBox>
+
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Invoice Date</label>
+                                            </div>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon" id="Image12345">
+                                                    <i class="fa fa-calendar text-blue"></i>
+                                                </div>
+                                                <%--  <div class="input-group-addon">
                                             <asp:Image ID="Image1" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />
                                         </div>--%>
-                                            <asp:TextBox ID="txtInvoiceDate" runat="server" CssClass="form-control"
-                                                ToolTip="Select Date" />
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtInvoiceDate"
-                                                Display="None" ErrorMessage="Please Select Invoice Date" ValidationGroup="Store"></asp:RequiredFieldValidator>
+                                                <asp:TextBox ID="txtInvoiceDate" runat="server" CssClass="form-control"
+                                                    ToolTip="Select Date" />
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtInvoiceDate"
+                                                    Display="None" ErrorMessage="Please Select Invoice Date" ValidationGroup="Store"></asp:RequiredFieldValidator>
 
-                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Enabled="true" EnableViewState="true"
-                                                Format="dd/MM/yyyy" PopupButtonID="Image12345" PopupPosition="BottomLeft" TargetControlID="txtInvoiceDate">
-                                            </ajaxToolKit:CalendarExtender>
-                                            <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" AcceptNegative="Left"
-                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
-                                                MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtInvoiceDate">
-                                            </ajaxToolKit:MaskedEditExtender>
+                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Enabled="true" EnableViewState="true"
+                                                    Format="dd/MM/yyyy" PopupButtonID="Image12345" PopupPosition="BottomLeft" TargetControlID="txtInvoiceDate">
+                                                </ajaxToolKit:CalendarExtender>
+                                                <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" AcceptNegative="Left"
+                                                    DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                    MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtInvoiceDate">
+                                                </ajaxToolKit:MaskedEditExtender>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <%--<div class="form-group col-lg-3 col-md-6 col-12">
+                                        <%--<div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
                                             <label>GRN Date </label>
@@ -643,10 +643,10 @@
                                             <div class="input-group-addon" id="Image2">
                                                 <i class="fa fa-calendar text-blue"></i>
                                             </div>--%>
-                                    <%--   <div class="input-group-addon">
+                                        <%--   <div class="input-group-addon">
                                             <asp:Image ID="Image2" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />
                                         </div>--%>
-                                    <%--<asp:TextBox ID="txtGRNDate" runat="server" CssClass="form-control"
+                                        <%--<asp:TextBox ID="txtGRNDate" runat="server" CssClass="form-control"
                                                 ToolTip="Select Date" />
 
                                             <ajaxToolKit:CalendarExtender ID="cetxtDepDate1" runat="server" Enabled="true" EnableViewState="true"
@@ -662,207 +662,209 @@
                                                 Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator>
                                         </div>
                                     </div>--%>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>GRN Date </label>
-                                        </div>
-
-
-                                        <div class="input-group date">
-                                            <div class="input-group-addon" id="Div3">
-                                                <i class="fa fa-calendar text-blue"></i>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>GRN Date </label>
                                             </div>
-                                            <%--<div class="input-group-addon">
+
+
+                                            <div class="input-group date">
+                                                <div class="input-group-addon" id="Div3">
+                                                    <i class="fa fa-calendar text-blue"></i>
+                                                </div>
+                                                <%--<div class="input-group-addon">
                                                                     <asp:Image ID="Image2" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />
                                                                 </div>--%>
-                                            <%--     <asp:TextBox ID="txtGRNDate" runat="server" CssClass="form-control"
+                                                <%--     <asp:TextBox ID="txtGRNDate" runat="server" CssClass="form-control"
                                                     ToolTip="Select Date" />--%>
 
-                                            <asp:TextBox ID="txtGRNDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
-                                            <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtGRNDate"
+                                                <asp:TextBox ID="txtGRNDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
+                                                <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtGRNDate"
                                                 Display="None" ErrorMessage="Please Select GRN Date" ValidationGroup="Store"></asp:RequiredFieldValidator>--%>  <%--(29/03/2022)--%>
 
-                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Enabled="true" EnableViewState="true"
-                                                Format="dd/MM/yyyy" PopupButtonID="Div3" PopupPosition="BottomLeft" TargetControlID="txtGRNDate">
-                                            </ajaxToolKit:CalendarExtender>
-                                            <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender2" runat="server" AcceptNegative="Left"
-                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
-                                                MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtGRNDate">
-                                            </ajaxToolKit:MaskedEditExtender>
-                                            <%--   <ajaxToolKit:MaskedEditValidator ID="mevDate" runat="server" ControlExtender="MaskedEditExtender2" ControlToValidate="txtGRNDate"
+                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Enabled="true" EnableViewState="true"
+                                                    Format="dd/MM/yyyy" PopupButtonID="Div3" PopupPosition="BottomLeft" TargetControlID="txtGRNDate">
+                                                </ajaxToolKit:CalendarExtender>
+                                                <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender2" runat="server" AcceptNegative="Left"
+                                                    DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                    MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtGRNDate">
+                                                </ajaxToolKit:MaskedEditExtender>
+                                                <%--   <ajaxToolKit:MaskedEditValidator ID="mevDate" runat="server" ControlExtender="MaskedEditExtender2" ControlToValidate="txtGRNDate"
                                                 IsValidEmpty="true" ErrorMessage="Please Enter Valid GRN Date In [dd/MM/yyyy] format" EmptyValueMessage="Please Select GRN Date"
                                                 InvalidValueMessage="GRN Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
                                                 Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator>--%>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>DM Date </label>
-                                        </div>
-                                        <div class="input-group date">
-                                            <div class="input-group-addon" id="Image3">
-                                                <i class="fa fa-calendar text-blue"></i>
                                             </div>
-                                            <%--   <div class="input-group-addon">
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>DM Date </label>
+                                            </div>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon" id="Image3">
+                                                    <i class="fa fa-calendar text-blue"></i>
+                                                </div>
+                                                <%--   <div class="input-group-addon">
                                             <asp:Image ID="Image3" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />
                                         </div>--%>
-                                            <asp:TextBox ID="txtDMDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
+                                                <asp:TextBox ID="txtDMDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
 
-                                            <ajaxToolKit:CalendarExtender ID="cetxtDepDate" runat="server" Enabled="true" EnableViewState="true"
-                                                Format="dd/MM/yyyy" PopupButtonID="Image3" PopupPosition="BottomLeft" TargetControlID="txtDMDate">
-                                            </ajaxToolKit:CalendarExtender>
+                                                <ajaxToolKit:CalendarExtender ID="cetxtDepDate" runat="server" Enabled="true" EnableViewState="true"
+                                                    Format="dd/MM/yyyy" PopupButtonID="Image3" PopupPosition="BottomLeft" TargetControlID="txtDMDate">
+                                                </ajaxToolKit:CalendarExtender>
 
-                                            <ajaxToolKit:MaskedEditExtender ID="metxtDepDate" runat="server" AcceptNegative="Left"
-                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
-                                                MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtDMDate">
-                                            </ajaxToolKit:MaskedEditExtender>
+                                                <ajaxToolKit:MaskedEditExtender ID="metxtDepDate" runat="server" AcceptNegative="Left"
+                                                    DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                    MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtDMDate">
+                                                </ajaxToolKit:MaskedEditExtender>
 
-                                            <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="metxtDepDate" ControlToValidate="txtDMDate"
-                                                IsValidEmpty="false" ErrorMessage="Please Enter Valid GRN Date In [dd/MM/yyyy] format" EmptyValueMessage="Please Select DM Date"
-                                                InvalidValueMessage="DM Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
-                                                Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>DM No. </label>
-                                        </div>
-                                        <asp:TextBox ID="txtDMNo" runat="server" CssClass="form-control" ValidationGroup="stores" MaxLength="95" ToolTip="Enter DM No."></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rfvDmno" runat="server" ControlToValidate="txtDMNo"
-                                            Display="None" ErrorMessage="Please Enter DM No." ValidationGroup="Store"></asp:RequiredFieldValidator>
-                                        <asp:HiddenField ID="hdnListCount" runat="server" />
-                                        <asp:HiddenField ID="hdnTaxableAmt" runat="server" Value="0" />
-                                        <asp:HiddenField ID="hdnPO" runat="server" />
-                                        <asp:HiddenField ID="hdnDiscAmt" runat="server" />
-                                        <asp:HiddenField ID="hdnBillAmt" runat="server" Value="0" />
-                                        <asp:HiddenField ID="hdnTaxAmt" runat="server" Value="0" />
-
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divGRNNum" runat="server" visible="true">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>GRN Number</label>
-                                        </div>
-                                        <asp:ListBox ID="ddlGRNNumber" runat="server" AppendDataBoundItems="true" TabIndex="3" CssClass="form-control multi-select-demo"
-                                            SelectionMode="multiple" AutoPostBack="true" OnSelectedIndexChanged="ddlGRNNumber_SelectedIndexChanged"></asp:ListBox>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="div2" runat="server" visible="true">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Vendor Name </label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlVendor" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"></asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" InitialValue="0" ControlToValidate="ddlVendor"
-                                            Display="None" ErrorMessage="Please Select Vendor Name" ValidationGroup="Store"></asp:RequiredFieldValidator>
-                                        <asp:HiddenField ID="hdnIndex" runat="server" />
-                                        <asp:HiddenField ID="hdnBasicAmt" runat="server" />
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divPO" runat="server" visible="true">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>PO No. </label>
-                                        </div>
-                                        <asp:ListBox ID="ddlPO" runat="server" AppendDataBoundItems="true" TabIndex="3" CssClass="form-control multi-select-demo"
-                                            SelectionMode="multiple" AutoPostBack="true" OnSelectedIndexChanged="ddlPO_SelectedIndexChanged"></asp:ListBox>
-
-                                    </div>
-
-                                    <%--//------------------------------------------------------//--%>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Item Expiry Date </label>
-                                        </div>
-                                        <div class="input-group date">
-                                            <div class="input-group-addon" id="div4">
-                                                <i class="fa fa-calendar text-blue"></i>
+                                                <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="metxtDepDate" ControlToValidate="txtDMDate"
+                                                    IsValidEmpty="false" ErrorMessage="Please Enter Valid GRN Date In [dd/MM/yyyy] format" EmptyValueMessage="Please Select DM Date"
+                                                    InvalidValueMessage="DM Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
+                                                    Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator>
                                             </div>
-                                             
-                                            <asp:TextBox ID="txtItemExpiryDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
-
-                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Enabled="true" EnableViewState="true"
-                                                Format="dd/MM/yyyy" PopupButtonID="div4" PopupPosition="BottomLeft" TargetControlID="txtItemExpiryDate">
-                                            </ajaxToolKit:CalendarExtender>
-
-                                            <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" AcceptNegative="Left"
-                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
-                                                MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtItemExpiryDate">
-                                            </ajaxToolKit:MaskedEditExtender>
-
-                                            <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" ControlExtender="MaskedEditExtender3" ControlToValidate="txtItemExpiryDate"
-                                                 ErrorMessage="Please Enter Valid Item Expiry Date In [dd/MM/yyyy] format" 
-                                                InvalidValueMessage="Item Expiry Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
-                                                Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator> <%--EmptyValueMessage="Please Select Item Expiry Date" IsValidEmpty="true"--%>
                                         </div>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Item Warranty Date </label>
-                                        </div>
-                                        <div class="input-group date">
-                                            <div class="input-group-addon" id="div5">
-                                                <i class="fa fa-calendar text-blue"></i>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>DM No. </label>
                                             </div>
-                                             
-                                            <asp:TextBox ID="txtItemWarrentyDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
+                                            <asp:TextBox ID="txtDMNo" runat="server" CssClass="form-control" ValidationGroup="stores" MaxLength="95" ToolTip="Enter DM No."></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvDmno" runat="server" ControlToValidate="txtDMNo"
+                                                Display="None" ErrorMessage="Please Enter DM No." ValidationGroup="Store"></asp:RequiredFieldValidator>
+                                            <asp:HiddenField ID="hdnListCount" runat="server" />
+                                            <asp:HiddenField ID="hdnTaxableAmt" runat="server" Value="0" />
+                                            <asp:HiddenField ID="hdnPO" runat="server" />
+                                            <asp:HiddenField ID="hdnDiscAmt" runat="server" />
+                                            <asp:HiddenField ID="hdnBillAmt" runat="server" Value="0" />
+                                            <asp:HiddenField ID="hdnTaxAmt" runat="server" Value="0" />
 
-                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender4" runat="server" Enabled="true" EnableViewState="true"
-                                                Format="dd/MM/yyyy" PopupButtonID="div5" PopupPosition="BottomLeft" TargetControlID="txtItemWarrentyDate">
-                                            </ajaxToolKit:CalendarExtender>
-
-                                            <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender4" runat="server" AcceptNegative="Left"
-                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
-                                                MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtItemWarrentyDate">
-                                            </ajaxToolKit:MaskedEditExtender>
-
-                                            <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" ControlExtender="MaskedEditExtender4" ControlToValidate="txtItemExpiryDate"
-                                                IsValidEmpty="true" ErrorMessage="Please Enter Valid Item Warranty Date In [dd/MM/yyyy] format" 
-                                                InvalidValueMessage="Item Warranty Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
-                                                Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator> <%--EmptyValueMessage="Please Select Item Expiry Date"--%>
                                         </div>
-                                    </div>
 
-                                    <%--//--------------------------------------------------------//--%>
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divGRNNum" runat="server" visible="true">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>GRN Number</label>
+                                            </div>
+                                            <asp:ListBox ID="ddlGRNNumber" runat="server" AppendDataBoundItems="true" TabIndex="3" CssClass="form-control multi-select-demo"
+                                                SelectionMode="multiple" AutoPostBack="true" OnSelectedIndexChanged="ddlGRNNumber_SelectedIndexChanged"></asp:ListBox>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Remark</label>
                                         </div>
-                                        <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" TextMode="MultiLine" ToolTip="Enter Remark"></asp:TextBox>
-                                        <asp:HiddenField ID="hdnOthEdit" runat="server" Value="0" />
-                                        <asp:HiddenField ID="hdnrowcount" runat="server" />
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="div2" runat="server" visible="true">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Vendor Name </label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlVendor" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"></asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" InitialValue="0" ControlToValidate="ddlVendor"
+                                                Display="None" ErrorMessage="Please Select Vendor Name" ValidationGroup="Store"></asp:RequiredFieldValidator>
+                                            <asp:HiddenField ID="hdnIndex" runat="server" />
+                                            <asp:HiddenField ID="hdnBasicAmt" runat="server" />
 
-                                    </div>
-
-                                    
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divPONum" runat="server" visible="false">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Selected PO's </label>
                                         </div>
-                                        <asp:TextBox ID="txtPONum" runat="server" CssClass="form-control" TextMode="MultiLine" Enabled="false"></asp:TextBox>
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPO" runat="server" visible="true">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>PO No. </label>
+                                            </div>
+                                            <asp:ListBox ID="ddlPO" runat="server" AppendDataBoundItems="true" TabIndex="3" CssClass="form-control multi-select-demo"
+                                                SelectionMode="multiple" AutoPostBack="true" OnSelectedIndexChanged="ddlPO_SelectedIndexChanged"></asp:ListBox>
 
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divGrnNumtxt" runat="server" visible="false">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Selected GRN Numbers</label>
                                         </div>
-                                        <asp:TextBox ID="txtGrnNumbers" runat="server" CssClass="form-control" TextMode="MultiLine" Enabled="false"></asp:TextBox>
 
-                                    </div>
-                                     <%-- //----start----29-08-2023--%>
-                                    <%--   <div class="col-lg-6 col-md-6 col-12 template-btn-move-up">
+                                        <%--//------------------------------------------------------//--%>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>Item Expiry Date </label>
+                                            </div>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon" id="div4">
+                                                    <i class="fa fa-calendar text-blue"></i>
+                                                </div>
+
+                                                <asp:TextBox ID="txtItemExpiryDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
+
+                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Enabled="true" EnableViewState="true"
+                                                    Format="dd/MM/yyyy" PopupButtonID="div4" PopupPosition="BottomLeft" TargetControlID="txtItemExpiryDate">
+                                                </ajaxToolKit:CalendarExtender>
+
+                                                <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" AcceptNegative="Left"
+                                                    DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                    MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtItemExpiryDate">
+                                                </ajaxToolKit:MaskedEditExtender>
+
+                                                <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" ControlExtender="MaskedEditExtender3" ControlToValidate="txtItemExpiryDate"
+                                                    ErrorMessage="Please Enter Valid Item Expiry Date In [dd/MM/yyyy] format"
+                                                    InvalidValueMessage="Item Expiry Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
+                                                    Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator>
+                                                <%--EmptyValueMessage="Please Select Item Expiry Date" IsValidEmpty="true"--%>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>Item Warranty Date </label>
+                                            </div>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon" id="div5">
+                                                    <i class="fa fa-calendar text-blue"></i>
+                                                </div>
+
+                                                <asp:TextBox ID="txtItemWarrentyDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
+
+                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender4" runat="server" Enabled="true" EnableViewState="true"
+                                                    Format="dd/MM/yyyy" PopupButtonID="div5" PopupPosition="BottomLeft" TargetControlID="txtItemWarrentyDate">
+                                                </ajaxToolKit:CalendarExtender>
+
+                                                <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender4" runat="server" AcceptNegative="Left"
+                                                    DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                    MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtItemWarrentyDate">
+                                                </ajaxToolKit:MaskedEditExtender>
+
+                                                <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" ControlExtender="MaskedEditExtender4" ControlToValidate="txtItemExpiryDate"
+                                                    IsValidEmpty="true" ErrorMessage="Please Enter Valid Item Warranty Date In [dd/MM/yyyy] format"
+                                                    InvalidValueMessage="Item Warranty Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
+                                                    Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator>
+                                                <%--EmptyValueMessage="Please Select Item Expiry Date"--%>
+                                            </div>
+                                        </div>
+
+                                        <%--//--------------------------------------------------------//--%>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>Remark</label>
+                                            </div>
+                                            <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" TextMode="MultiLine" ToolTip="Enter Remark"></asp:TextBox>
+                                            <asp:HiddenField ID="hdnOthEdit" runat="server" Value="0" />
+                                            <asp:HiddenField ID="hdnrowcount" runat="server" />
+
+                                        </div>
+
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPONum" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>Selected PO's </label>
+                                            </div>
+                                            <asp:TextBox ID="txtPONum" runat="server" CssClass="form-control" TextMode="MultiLine" Enabled="false"></asp:TextBox>
+
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divGrnNumtxt" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>Selected GRN Numbers</label>
+                                            </div>
+                                            <asp:TextBox ID="txtGrnNumbers" runat="server" CssClass="form-control" TextMode="MultiLine" Enabled="false"></asp:TextBox>
+
+                                        </div>
+                                        <%-- //----start----29-08-2023--%>
+                                        <%--   <div class="col-lg-6 col-md-6 col-12 template-btn-move-up">
                                                         <div class="form-group">
                                                             <div class="label-dynamic">
                                                                 <sup></sup>
@@ -877,102 +879,502 @@
                                                             </label>
                                                         </div>
                                                     </div>--%>
-                                   
-                                  
-                                   
-                                    <%-- //----end----29-08-2023--%>
-                                </div>
-                               
-
-                            </div>
-                            <div class="col-12 btn-footer" id="divAddItem" runat="server" visible="true">
-
-                                <asp:Button ID="btnAddItem" runat="server" CssClass="btn btn-info" Text="Add Item" CausesValidation="true" OnClick="btnAddItem_Click" />
 
 
 
-                            </div>
-                        </asp:Panel>
-
-                        <asp:Panel ID="PnlItem" runat="server" Visible="false">
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="form-group col-lg-12 col-md-6 col-12">
-                                        <div class="sub-heading">
-                                            <h5>Add/Edit Item Details</h5>
-                                        </div>
+                                        <%-- //----end----29-08-2023--%>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Item Name</label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlItem" runat="server" data-select2-enable="true" CssClass="form-control" AppendDataBoundItems="true"></asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlItem"
-                                            Display="None" ErrorMessage="Please Select Item Name." InitialValue="0" ValidationGroup="AddItem"></asp:RequiredFieldValidator>
 
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Invoice Qty </label>
-                                        </div>
-                                        <asp:TextBox ID="txtItemQty" runat="server" CssClass="form-control" ToolTip="Enter Received Qty" onkeypress="return fnAllowNumeric()"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtItemQty"
-                                            Display="None" ErrorMessage="Please Enter Invoice Qty." ValidationGroup="AddItem"></asp:RequiredFieldValidator>
-                                        <asp:RangeValidator ID="Range1" ControlToValidate="txtItemQty" MinimumValue="1" MaximumValue="2147483647" Type="Integer" runat="server" ValidationGroup="AddItem" ErrorMessage="Invoice Quantity Must Be Greater Than Zero" Display="None" />
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divItemRemark" runat="server" visible="false">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Remark</label>
-                                        </div>
-                                        <asp:TextBox ID="txtItemRemark" runat="server" CssClass="form-control" ToolTip="Enter Remark"></asp:TextBox>
-
-                                    </div>
 
                                 </div>
-                                <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnSaveItem" runat="server" CssClass="btn btn-primary" Text="Save Item" ValidationGroup="AddItem" OnClick="btnSaveItem_Click" />
-                                    <%--OnClientClick="return GetPO()"--%>
-                                    <asp:Button ID="btnCancelItem" runat="server" Visible="false" CssClass="btn btn-warning" Text="Cancel" CausesValidation="true" />
-                                    <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="AddItem" />
-                                </div>
-                            </div>
-                        </asp:Panel>
-                        <div class="col-12 mb-4">
-                            <asp:ListView ID="lvItem" runat="server" Visible="false">
-                                <LayoutTemplate>
-                                    <div>
+                                <div class="col-12 btn-footer" id="divAddItem" runat="server" visible="true">
 
-                                        <div class="sub-heading">
-                                            <h5>Item List</h5>
-                                        </div>
-                                        <div class="form-group col-lg-5 col-md-6 col-12">
-                                            <div class=" note-div">
-                                                <h5 class="heading">Note </h5>
-                                                <p><i class="fa fa-star" aria-hidden="true"></i><span>Enter Rate And Discount Before Adding Tax</span> </p>
+                                    <asp:Button ID="btnAddItem" runat="server" CssClass="btn btn-info" Text="Add Item" CausesValidation="true" OnClick="btnAddItem_Click" />
+
+
+
+                                </div>
+                            </asp:Panel>
+
+                            <asp:Panel ID="PnlItem" runat="server" Visible="false">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="form-group col-lg-12 col-md-6 col-12">
+                                            <div class="sub-heading">
+                                                <h5>Add/Edit Item Details</h5>
                                             </div>
                                         </div>
-                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Item Name</label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlItem" runat="server" data-select2-enable="true" CssClass="form-control" AppendDataBoundItems="true"></asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlItem"
+                                                Display="None" ErrorMessage="Please Select Item Name." InitialValue="0" ValidationGroup="AddItem"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Invoice Qty </label>
+                                            </div>
+                                            <asp:TextBox ID="txtItemQty" runat="server" CssClass="form-control" ToolTip="Enter Received Qty" onkeypress="return fnAllowNumeric()"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtItemQty"
+                                                Display="None" ErrorMessage="Please Enter Invoice Qty." ValidationGroup="AddItem"></asp:RequiredFieldValidator>
+                                            <asp:RangeValidator ID="Range1" ControlToValidate="txtItemQty" MinimumValue="1" MaximumValue="2147483647" Type="Integer" runat="server" ValidationGroup="AddItem" ErrorMessage="Invoice Quantity Must Be Greater Than Zero" Display="None" />
+
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divItemRemark" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>Remark</label>
+                                            </div>
+                                            <asp:TextBox ID="txtItemRemark" runat="server" CssClass="form-control" ToolTip="Enter Remark"></asp:TextBox>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-12 btn-footer">
+                                        <asp:Button ID="btnSaveItem" runat="server" CssClass="btn btn-primary" Text="Save Item" ValidationGroup="AddItem" OnClick="btnSaveItem_Click" />
+                                        <%--OnClientClick="return GetPO()"--%>
+                                        <asp:Button ID="btnCancelItem" runat="server" Visible="false" CssClass="btn btn-warning" Text="Cancel" CausesValidation="true" />
+                                        <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="AddItem" />
+                                    </div>
+                                </div>
+                            </asp:Panel>
+                            <div class="col-12 mb-4">
+                                <asp:ListView ID="lvItem" runat="server" Visible="false">
+                                    <LayoutTemplate>
+                                        <div>
+
+                                            <div class="sub-heading">
+                                                <h5>Item List</h5>
+                                            </div>
+                                            <div class="form-group col-lg-5 col-md-6 col-12">
+                                                <div class=" note-div">
+                                                    <h5 class="heading">Note </h5>
+                                                    <p><i class="fa fa-star" aria-hidden="true"></i><span>Enter Rate And Discount Before Adding Tax</span> </p>
+                                                </div>
+                                            </div>
+                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                <thead>
+                                                    <tr class="bg-light-blue">
+                                                        <th></th>
+                                                        <th>PO Number</th>
+                                                        <th>Item Name</th>
+                                                        <th>PO Qty</th>
+                                                        <th>Rec. Qty</th>
+                                                        <th>Invoice Qty</th>
+                                                        <th>Bal Qty</th>
+                                                        <th>Rate</th>
+                                                        <th>Disc%</th>
+                                                        <th>Disc Amt</th>
+                                                        <th>Taxable Amt</th>
+                                                        <th>Tax Info</th>
+                                                        <th>Tax Amt</th>
+                                                        <th>Bill Amt</th>
+                                                        <th>Oth Info</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td>
+                                                <%--     <asp:ImageButton ID="btnDeleteItem" runat="server" CausesValidation="false" ImageUrl="~/Images/delete.png"
+                                                CommandArgument='<%#Eval("ITEM_SRNO")%>' AlternateText="Delete Record" OnClick="btnDeleteItem_Click" OnClientClick="return Confirm('Are You Sure You Want To Delete this Item?');" />
+                                            <asp:HiddenField ID="hdnItemSrNo" runat="server" Value='<%# Eval("ITEM_SRNO")%>' />--%>
+
+                                                <asp:ImageButton ID="btnDeleteItem" runat="server" CausesValidation="false" ImageUrl="~/images/delete.png"
+                                                    CommandArgument='<%#Eval("ITEM_SRNO")%>' AlternateText="Delete Record" OnClick="btnDeleteItem_Click" OnClientClick="return confirm('Are You Sure You Want To Delete this Item?');" />
+                                                <asp:HiddenField ID="hdnItemSrNo" runat="server" Value='<%# Eval("ITEM_SRNO")%>' />
+
+                                            </td>
+                                            <td>
+                                                <asp:Label ID="lblRefno" runat="server"></asp:Label>
+                                            </td>
+                                            <td>
+                                                <asp:Label ID="lblItemName" runat="server" Text='<%# Eval("ITEM_NAME")%>'></asp:Label>
+                                                <asp:HiddenField ID="hdnPordno" runat="server" Value='<%# Eval("PORDNO")%>' />
+                                                <asp:HiddenField ID="hdnGrnId" runat="server" Value='<%# Eval("GRNID")%>' />
+                                            </td>
+
+
+                                            <td>
+                                                <asp:TextBox ID="lblPOQty" runat="server" CssClass="form-control" Enabled="false" Text='<%# Eval("PO_QTY")%>'></asp:TextBox>
+                                                <asp:HiddenField ID="hdnItemno" runat="server" Value='<%# Eval("ITEM_NO")%>' />
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblReceivedQty" runat="server" CssClass="form-control" Enabled="false" Text='<%# Eval("RECEIVED_QTY")%>'></asp:TextBox>
+
+                                                <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
+                                                            TargetControlID="lblReceivedQty" ValidChars=".RECEIVED_QTY">
+                                                        </ajaxToolKit:FilteredTextBoxExtender>--%>
+
+
+                                                <asp:HiddenField ID="hdnTechSpec" runat="server" />
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblInvoiceQty" runat="server" CssClass="form-control" Text='<%# Eval("INV_QTY")%>' onchange="return readListViewTextBoxes();" onblur="return CalOnGRNQty(this);"></asp:TextBox>
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
+                                                    TargetControlID="lblInvoiceQty" ValidChars=".">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                                <%--  <asp:RequiredFieldValidator ID="rfvInv" runat="server" InitialValue="0" ControlToValidate="lblInvoiceQty"
+                                                            Display="None" ErrorMessage="Please Enter Invoice Quantity." ValidationGroup="Store"></asp:RequiredFieldValidator>--%>
+
+                                                <asp:HiddenField ID="hdnQualityQtySpec" runat="server" />
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblBalQty" runat="server" CssClass="form-control" Enabled="false" Text='<%# Eval("BAL_QTY")%>'></asp:TextBox>
+                                                <asp:HiddenField ID="hdnOthItemRemark" runat="server" />
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblRate" runat="server" CssClass="form-control" Text='<%# Eval("RATE")%>' onblur="return CalOnRate(this);"></asp:TextBox>
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="ftbeRate" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
+                                                    TargetControlID="lblRate" ValidChars=".">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                                <%--   <asp:RequiredFieldValidator ID="rfvRate" runat="server" InitialValue="0" ControlToValidate="lblRate"
+                                                            Display="None" ErrorMessage="Please Enter Rate Amount." ValidationGroup="Store"></asp:RequiredFieldValidator>--%>
+
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblDiscPer" runat="server" CssClass="form-control" Enabled="true" Text='<%# Eval("DISC_PER")%>' onblur="return CalOnDiscPer(this);"></asp:TextBox>
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="ftDiscper" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
+                                                    TargetControlID="lblDiscPer" ValidChars=".">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblDiscAmt" runat="server" CssClass="form-control" Enabled="true" Text='<%# Eval("DISC_AMT")%>' onblur="return CalOnDiscAmount(this);"></asp:TextBox>
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="ftdiscamt" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
+                                                    TargetControlID="lblDiscAmt" ValidChars=".">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblTaxableAmt" runat="server" CssClass="form-control" Text='<%# Eval("TAXABLE_AMT")%>' Enabled="false"></asp:TextBox>
+                                            </td>
+                                            <td>
+                                                <%-- <asp:Button ID="btnAddTax" runat="server" CommandArgument='<%#Eval("ITEM_NO")%>' CssClass="btn btn-primary" Text="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />--%>
+                                                <asp:ImageButton runat="server" ID="btnAddTax" ImageUrl="~/IMAGES/Addblue.PNG" Width="22PX" Height="22PX" CommandArgument='<%#Eval("ITEM_NO")%>' AlternateText="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />
+                                                <asp:HiddenField ID="hdnIsTaxInclusive" runat="server" Value='<%#Eval("IsTaxInclusive") %>' />
+                                                <%--30/12/2023--%>
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblTaxAmount" runat="server" Enabled="false" Text='<%# Eval("TAX_AMT")%>' CssClass="form-control"></asp:TextBox>
+                                                <asp:HiddenField ID="hdnIsTax" runat="server" Value='<%# Eval("IS_TAX")%>' />
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="lblBillAmt" runat="server" Text='<%# Eval("BILL_AMT")%>' Enabled="false" CssClass="form-control"></asp:TextBox>
+                                                <asp:HiddenField ID="hdnItemPOQty" runat="server" Value='<%# Eval("PO_QTY")%>' />
+                                                <asp:HiddenField ID="hdnItemRecQty" runat="server" Value='<%# Eval("RECEIVED_QTY")%>' />
+                                                <asp:HiddenField ID="hdnItemBalQty" runat="server" Value='<%# Eval("BAL_QTY")%>' />
+                                                <asp:HiddenField ID="hdnItemDiscPer" runat="server" Value='<%# Eval("DISC_PER")%>' />
+                                                <asp:HiddenField ID="hdnItemDiscAmt" runat="server" Value='<%# Eval("DISC_AMT")%>' />
+                                                <asp:HiddenField ID="hdnItemTaxableAmt" runat="server" Value='<%# Eval("TAXABLE_AMT")%>' />
+                                                <asp:HiddenField ID="hdnItemTaxAmt" runat="server" Value='<%# Eval("TAX_AMT")%>' />
+                                                <asp:HiddenField ID="hdnItemBillAmt" runat="server" Value='<%# Eval("BILL_AMT")%>' />
+                                            </td>
+                                            <%-- <td>
+                                                        <asp:TextBox ID="lblItemRemark" runat="server" CssClass="form-control" Text='<%# Eval("ITEM_REMARK")%>'></asp:TextBox>
+                                                    </td>--%>
+                                            <td>
+                                                <asp:ImageButton runat="server" ID="btnAddOthInfo" ImageUrl="~/IMAGES/Addblue.PNG" Width="22PX" Height="22PX" CommandArgument='<%#Eval("ITEM_NO")%>' AlternateText="Add Oth Info" OnClientClick="return GetOthInfoIndex(this);" OnClick="btnAddOthInfo_Click" />
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+
+                                </asp:ListView>
+
+                            </div>
+                            <div class="col-12" id="divItemCount" runat="server" visible="false">
+                                <div class="row">
+                                    <%-----11/11/2022 Shaikh Juned - Start--%>
+                                    <div class="col-lg-2 col-md-3 col-6">
+                                        <ul class="list-group list-group-unbordered">
+                                            <li class="list-group-item"><b>Net Amount :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="lblNetAmtCount" runat="server"></asp:Label></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <%-----11/11/2022 Shaikh Juned - end--%>
+
+                                    <div id="divItems" runat="server" visible="false">
+                                        <div class="col-lg-2 col-md-3 col-6">
+                                            <ul class="list-group list-group-unbordered">
+                                                <li class="list-group-item"><b>Number Of Items :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblItemCount" runat="server"></asp:Label></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-6">
+                                            <ul class="list-group list-group-unbordered">
+                                                <li class="list-group-item"><b>Total Invoice Qty  :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblItemQtyCount" runat="server"> </asp:Label></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <sup></sup>
+                                    <label>Attach File</label>
+                                </div>
+                                <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+                                    <ContentTemplate>
+                                        <div class="input-group date">
+                                            <asp:FileUpload ID="Uploadinvoice" runat="server" ValidationGroup="complaint" ToolTip="Select file to upload" TabIndex="9" />
+                                            <div class="input-group-addon">
+                                                <asp:Button ID="btnAdd" runat="server" Text="Add" OnClick="btnAdd_Click"
+                                                    CssClass="btn btn-primary"
+                                                    CausesValidation="False" TabIndex="10" ToolTip="Add Attach File" />
+                                                <asp:Label ID="lblResult" runat="server" Font-Bold="true" ForeColor="Red"></asp:Label>
+                                            </div>
+                                        </div>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                        <asp:PostBackTrigger ControlID="btnAdd" />
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                                <asp:UpdateProgress ID="UpdateProgress" runat="server" AssociatedUpdatePanelID="UpdatePanel3">
+                                    <ProgressTemplate>
+                                        <div class="overlay">
+                                            <div style="z-index: 1000; margin-left: 350px; margin-top: 200px; opacity: 1; -moz-opacity: 1;">
+                                                <img alt="" src="loader.gif" />
+                                            </div>
+                                        </div>
+                                    </ProgressTemplate>
+                                </asp:UpdateProgress>
+                            </div>
+
+                            <div class="form-group col-12">
+                                <div id="divAttch" runat="server">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto" Visible="false">
+                                                <asp:ListView ID="lvCompAttach" runat="server">
+                                                    <LayoutTemplate>
+                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Delete</th>
+                                                                    <th>Attachments  
+                                                                    </th>
+                                                                    <th>Download
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                        </table>
+                                                    </LayoutTemplate>
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td>
+                                                                <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/delete.png"
+                                                                    CommandArgument=' <%#Eval("FILENAME") %>' ToolTip="Delete Record"
+                                                                    OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="ImageButton1_Click" />
+                                                            </td>
+
+                                                            <td>
+                                                                <%# Eval("DisplayFileName")%></a>
+                                                            </td>
+
+                                                            <td style="text-align: center">
+                                                                <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                    <ContentTemplate>
+                                                                        <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                            data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+                                                                    </ContentTemplate>
+                                                                    <Triggers>
+                                                                        <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                    </Triggers>
+                                                                </asp:UpdatePanel>
+
+                                                            </td>
+                                                        </tr>
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </asp:Panel>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 btn-footer mt-3">
+                                <asp:Button ID="btnAddNew2" runat="server" Text="Add New" CssClass="btn btn-primary" OnClick="btnAdNew_Click" />
+                                <%--(29/03/2022) btnsubmit add OnClientClick="return Validate(this);" --%>
+                                <%--                            <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" Text="Submit" ValidationGroup="Store" CausesValidation="true" OnClick="btnSubmit_Click" OnClientClick="return Validate(this);" />--%>
+                                <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" Text="Submit" ValidationGroup="Store" OnClick="btnSubmit_Click" OnClientClick="return Validate(this);" />
+                                <asp:Button ID="btnBack" runat="server" CssClass="btn btn-info" Text="Back" OnClick="btnBack_Click" />
+                                 <asp:Button ID="btnReport" runat="server" CssClass="btn btn-info" TabIndex="47" Text="Report" OnClick="btnReport_Click" />
+                                <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" Text="Cancel" OnClick="btnCancel_Click" />
+                               
+                                <asp:ValidationSummary ID="valiSummary" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Store" />
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+
+                            <ajaxToolKit:ModalPopupExtender ID="MdlTax" runat="server" PopupControlID="pnlTaxDetail" TargetControlID="lblTax"
+                                BackgroundCssClass="modalBackground" BehaviorID="mdlPopupDel" CancelControlID="ImgTax">
+                            </ajaxToolKit:ModalPopupExtender>
+
+                            <asp:Label ID="lblTax" runat="server"></asp:Label>
+
+                            <asp:Panel ID="pnlTaxDetail" runat="server" CssClass="PopupReg" Style="display: none; height: auto; width: 50%; background: #fff; z-index: 333; box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;">
+                                <div class="col-12">
+                                    <div class="sub-heading mt-3 mb-3">
+                                        <h5>Add Details</h5>
+                                        <div class="box-tools pull-right">
+                                            <asp:ImageButton ID="ImgTax" runat="server" ImageUrl="~/IMAGES/delete.png" ToolTip="Close" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" id="divTaxPopup" runat="server" visible="false">
+
+                                        <asp:ListView ID="lvTax" runat="server">
+                                            <LayoutTemplate>
+                                                <div id="lgv1">
+                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                        <thead>
+                                                            <tr class="bg-light-blue">
+
+                                                                <th>Tax Name                                                                              
+                                                                </th>
+                                                                <th>Tax Amount
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <asp:Label ID="lblTaxName" runat="server" Text='<%#Eval("TAX_NAME") %>'></asp:Label>
+                                                        <asp:HiddenField ID="hdnTaxId" runat="server" Value='<%#Eval("TAXID") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox ID="lblTaxAmount" runat="server" CssClass="form-control" Text='<%#Eval("TAX_AMOUNT") %>' onblur="CalTotTaxAmt(this)"></asp:TextBox>
+                                                    </td>
+
+
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+
+                                        <div class="col-12 mt-3">
+                                            <div class="row">
+                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup></sup>
+                                                        <label>Total Tax Amount</label>
+                                                        <asp:TextBox ID="txtTotTaxAmt" runat="server" CssClass="form-control" Enabled="false" />
+                                                    </div>
+
+                                                </div>
+
+
+                                                <%-- //=================================================================30/12/2023--%>
+                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup></sup>
+                                                        <label></label>
+                                                    </div>
+                                                    <asp:CheckBox ID="chkTaxInclusive" runat="server" Checked="false" />
+                                                    <label>Is Tax Inclusive</label>
+                                                </div>
+                                                <%-- //================================================================30/12/2023--%>
+
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup></sup>
+                                                        <label></label>
+                                                    </div>
+                                                    <asp:Button ID="btnTaxSubmit" runat="server" CssClass="btn btn-primary" Text="Save Tax" OnClientClick="return GetTotTaxAmt();" OnClick="btnTaxSubmit_Click" />
+
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-12" id="divOthPopup" runat="server" visible="false">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Technical Specification</label>
+                                                </div>
+                                                <asp:TextBox ID="txtTechSpec" runat="server" CssClass="form-control" TextMode="MultiLine" />
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Quality&Qty Specification</label>
+                                                </div>
+                                                <asp:TextBox ID="txtQualityQtySpec" runat="server" CssClass="form-control" TextMode="MultiLine" />
+
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Item Remark</label>
+                                                </div>
+                                                <asp:TextBox ID="txtItemRemarkOth" runat="server" CssClass="form-control" TextMode="MultiLine" />
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-12 btn-footer">
+                                            <asp:Button ID="btnSaveOthInfo" runat="server" CssClass="btn btn-primary" Text="Add" OnClick="btnSaveOthInfo_Click" OnClientClick="return SaveOthInfo();" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </asp:Panel>
+
+                        </div>
+
+                        <div class="col-12">
+                            <asp:ListView ID="lvInvoiceEntry" runat="server" Visible="false">
+                                <LayoutTemplate>
+                                    <div>
+                                        <div class="sub-heading">
+                                            <h5>Invoice Entry List</h5>
+                                        </div>
+
+                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
                                             <thead>
                                                 <tr class="bg-light-blue">
-                                                    <th></th>
-                                                    <th>PO Number</th>
-                                                    <th>Item Name</th>
-                                                    <th>PO Qty</th>
-                                                    <th>Rec. Qty</th>
-                                                    <th>Invoice Qty</th>
-                                                    <th>Bal Qty</th>
-                                                    <th>Rate</th>
-                                                    <th>Disc%</th>
-                                                    <th>Disc Amt</th>
-                                                    <th>Taxable Amt</th>
-                                                    <th>Tax Info</th>
-                                                    <th>Tax Amt</th>
-                                                    <th>Bill Amt</th>
-                                                    <th>Oth Info</th>
+                                                    <th>Action</th>
+                                                    <th>Invoice Number</th>
+                                                    <th>Invoice Date</th>
+                                                    <th>GRN Date</th>
+                                                    <th>Vendor Name</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -984,434 +1386,66 @@
                                 <ItemTemplate>
                                     <tr>
                                         <td>
-                                            <%--     <asp:ImageButton ID="btnDeleteItem" runat="server" CausesValidation="false" ImageUrl="~/Images/delete.png"
-                                                CommandArgument='<%#Eval("ITEM_SRNO")%>' AlternateText="Delete Record" OnClick="btnDeleteItem_Click" OnClientClick="return Confirm('Are You Sure You Want To Delete this Item?');" />
-                                            <asp:HiddenField ID="hdnItemSrNo" runat="server" Value='<%# Eval("ITEM_SRNO")%>' />--%>
-
-                                            <asp:ImageButton ID="btnDeleteItem" runat="server" CausesValidation="false" ImageUrl="~/images/delete.png"
-                                                CommandArgument='<%#Eval("ITEM_SRNO")%>' AlternateText="Delete Record" OnClick="btnDeleteItem_Click" OnClientClick="return confirm('Are You Sure You Want To Delete this Item?');" />
-                                            <asp:HiddenField ID="hdnItemSrNo" runat="server" Value='<%# Eval("ITEM_SRNO")%>' />
-
+                                            <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/Images/edit.png"
+                                                CommandArgument='<%#Eval("INVTRNO")%>' AlternateText="Edit Record" OnClick="btnEdit_Click" />
                                         </td>
                                         <td>
-                                            <asp:Label ID="lblRefno" runat="server"></asp:Label>
+                                            <%# Eval("INVNO")%>                                                       
                                         </td>
                                         <td>
-                                            <asp:Label ID="lblItemName" runat="server" Text='<%# Eval("ITEM_NAME")%>'></asp:Label>
-                                            <asp:HiddenField ID="hdnPordno" runat="server" Value='<%# Eval("PORDNO")%>' />
-                                            <asp:HiddenField ID="hdnGrnId" runat="server" Value='<%# Eval("GRNID")%>' />
+                                            <%# Eval("INVDATE","{0:dd-MM-yyyy}")%>                                                    
+                                        </td>
+                                        <td>
+                                            <%# Eval("GRNDATE","{0:dd-MM-yyyy}")%>
+                                        </td>
+                                        <td>
+                                            <%# Eval("PNAME")%>
                                         </td>
 
-
-                                        <td>
-                                            <asp:TextBox ID="lblPOQty" runat="server" CssClass="form-control" Enabled="false" Text='<%# Eval("PO_QTY")%>'></asp:TextBox>
-                                            <asp:HiddenField ID="hdnItemno" runat="server" Value='<%# Eval("ITEM_NO")%>' />
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblReceivedQty" runat="server" CssClass="form-control" Enabled="false" Text='<%# Eval("RECEIVED_QTY")%>'></asp:TextBox>
-
-                                            <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
-                                                            TargetControlID="lblReceivedQty" ValidChars=".RECEIVED_QTY">
-                                                        </ajaxToolKit:FilteredTextBoxExtender>--%>
-
-
-                                            <asp:HiddenField ID="hdnTechSpec" runat="server" />
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblInvoiceQty" runat="server" CssClass="form-control" Text='<%# Eval("INV_QTY")%>' onchange="return readListViewTextBoxes();" onblur="return CalOnGRNQty(this);"></asp:TextBox>
-                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
-                                                TargetControlID="lblInvoiceQty" ValidChars=".">
-                                            </ajaxToolKit:FilteredTextBoxExtender>
-                                            <%--  <asp:RequiredFieldValidator ID="rfvInv" runat="server" InitialValue="0" ControlToValidate="lblInvoiceQty"
-                                                            Display="None" ErrorMessage="Please Enter Invoice Quantity." ValidationGroup="Store"></asp:RequiredFieldValidator>--%>
-
-                                            <asp:HiddenField ID="hdnQualityQtySpec" runat="server" />
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblBalQty" runat="server" CssClass="form-control" Enabled="false" Text='<%# Eval("BAL_QTY")%>'></asp:TextBox>
-                                            <asp:HiddenField ID="hdnOthItemRemark" runat="server" />
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblRate" runat="server" CssClass="form-control" Text='<%# Eval("RATE")%>' onblur="return CalOnRate(this);"></asp:TextBox>
-                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftbeRate" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
-                                                TargetControlID="lblRate" ValidChars=".">
-                                            </ajaxToolKit:FilteredTextBoxExtender>
-                                            <%--   <asp:RequiredFieldValidator ID="rfvRate" runat="server" InitialValue="0" ControlToValidate="lblRate"
-                                                            Display="None" ErrorMessage="Please Enter Rate Amount." ValidationGroup="Store"></asp:RequiredFieldValidator>--%>
-
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblDiscPer" runat="server" CssClass="form-control" Enabled="true" Text='<%# Eval("DISC_PER")%>' onblur="return CalOnDiscPer(this);"></asp:TextBox>
-                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftDiscper" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
-                                                TargetControlID="lblDiscPer" ValidChars=".">
-                                            </ajaxToolKit:FilteredTextBoxExtender>
-
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblDiscAmt" runat="server" CssClass="form-control" Enabled="true" Text='<%# Eval("DISC_AMT")%>' onblur="return CalOnDiscAmount(this);"></asp:TextBox>
-                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftdiscamt" runat="server" FilterType="Numbers,Custom" FilterMode="ValidChars"
-                                                TargetControlID="lblDiscAmt" ValidChars=".">
-                                            </ajaxToolKit:FilteredTextBoxExtender>
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblTaxableAmt" runat="server" CssClass="form-control" Text='<%# Eval("TAXABLE_AMT")%>' Enabled="false"></asp:TextBox>
-                                        </td>
-                                        <td>
-                                            <%-- <asp:Button ID="btnAddTax" runat="server" CommandArgument='<%#Eval("ITEM_NO")%>' CssClass="btn btn-primary" Text="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />--%>
-                                            <asp:ImageButton runat="server" ID="btnAddTax" ImageUrl="~/IMAGES/Addblue.PNG" Width="22PX" Height="22PX" CommandArgument='<%#Eval("ITEM_NO")%>' AlternateText="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />
-                                       <asp:HiddenField ID="hdnIsTaxInclusive" runat="server" Value='<%#Eval("IsTaxInclusive") %>' />   <%--30/12/2023--%>
-                                             </td>
-                                        <td>
-                                            <asp:TextBox ID="lblTaxAmount" runat="server" Enabled="false" Text='<%# Eval("TAX_AMT")%>' CssClass="form-control"></asp:TextBox>
-                                            <asp:HiddenField ID="hdnIsTax" runat="server" Value='<%# Eval("IS_TAX")%>' />
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="lblBillAmt" runat="server" Text='<%# Eval("BILL_AMT")%>' Enabled="false" CssClass="form-control"></asp:TextBox>
-                                            <asp:HiddenField ID="hdnItemPOQty" runat="server" Value='<%# Eval("PO_QTY")%>' />
-                                            <asp:HiddenField ID="hdnItemRecQty" runat="server" Value='<%# Eval("RECEIVED_QTY")%>' />
-                                            <asp:HiddenField ID="hdnItemBalQty" runat="server" Value='<%# Eval("BAL_QTY")%>' />
-                                            <asp:HiddenField ID="hdnItemDiscPer" runat="server" Value='<%# Eval("DISC_PER")%>' />
-                                            <asp:HiddenField ID="hdnItemDiscAmt" runat="server" Value='<%# Eval("DISC_AMT")%>' />
-                                            <asp:HiddenField ID="hdnItemTaxableAmt" runat="server" Value='<%# Eval("TAXABLE_AMT")%>' />
-                                            <asp:HiddenField ID="hdnItemTaxAmt" runat="server" Value='<%# Eval("TAX_AMT")%>' />
-                                            <asp:HiddenField ID="hdnItemBillAmt" runat="server" Value='<%# Eval("BILL_AMT")%>' />
-                                        </td>
-                                        <%-- <td>
-                                                        <asp:TextBox ID="lblItemRemark" runat="server" CssClass="form-control" Text='<%# Eval("ITEM_REMARK")%>'></asp:TextBox>
-                                                    </td>--%>
-                                        <td>
-                                            <asp:ImageButton runat="server" ID="btnAddOthInfo" ImageUrl="~/IMAGES/Addblue.PNG" Width="22PX" Height="22PX" CommandArgument='<%#Eval("ITEM_NO")%>' AlternateText="Add Oth Info" OnClientClick="return GetOthInfoIndex(this);" OnClick="btnAddOthInfo_Click" />
-                                        </td>
                                     </tr>
                                 </ItemTemplate>
 
                             </asp:ListView>
 
                         </div>
-                        <div class="col-12" id="divItemCount" runat="server" visible="false">
-                            <div class="row">
-                                <%-----11/11/2022 Shaikh Juned - Start--%>
-                                <div class="col-lg-2 col-md-3 col-6">
-                                    <ul class="list-group list-group-unbordered">
-                                        <li class="list-group-item"><b>Net Amount :</b>
-                                            <a class="sub-label">
-                                                <asp:Label ID="lblNetAmtCount" runat="server"></asp:Label></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <%-----11/11/2022 Shaikh Juned - end--%>
 
-                                <div id="divItems" runat="server" visible="false">
-                                    <div class="col-lg-2 col-md-3 col-6">
-                                        <ul class="list-group list-group-unbordered">
-                                            <li class="list-group-item"><b>Number Of Items :</b>
-                                                <a class="sub-label">
-                                                    <asp:Label ID="lblItemCount" runat="server"></asp:Label></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-2 col-md-3 col-6">
-                                        <ul class="list-group list-group-unbordered">
-                                            <li class="list-group-item"><b>Total Invoice Qty  :</b>
-                                                <a class="sub-label">
-                                                    <asp:Label ID="lblItemQtyCount" runat="server"> </asp:Label></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                          <div class="form-group col-lg-6 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Attach File</label>
-                                        </div>
-                                        <asp:UpdatePanel ID="UpdatePanel3" runat="server">
-                                            <ContentTemplate>
-                                                <div class="input-group date">
-                                                    <asp:FileUpload ID="Uploadinvoice" runat="server" ValidationGroup="complaint" ToolTip="Select file to upload" TabIndex="9" />
-                                                    <div class="input-group-addon">
-                                                        <asp:Button ID="btnAdd" runat="server" Text="Add" OnClick="btnAdd_Click"
-                                                            CssClass="btn btn-primary"
-                                                            CausesValidation="False" TabIndex="10" ToolTip="Add Attach File" />
-                                                        <asp:Label ID="lblResult" runat="server" Font-Bold="true" ForeColor="Red"></asp:Label>
-                                                    </div>
-                                                </div>
-                                            </ContentTemplate>
-                                            <Triggers>
-                                                <asp:PostBackTrigger ControlID="btnAdd" />
-                                            </Triggers>
-                                        </asp:UpdatePanel>
-                                        <asp:UpdateProgress ID="UpdateProgress" runat="server" AssociatedUpdatePanelID="UpdatePanel3">
-                                            <ProgressTemplate>
-                                                <div class="overlay">
-                                                    <div style="z-index: 1000; margin-left: 350px; margin-top: 200px; opacity: 1; -moz-opacity: 1;">
-                                                        <img alt="" src="loader.gif" />
-                                                    </div>
-                                                </div>
-                                            </ProgressTemplate>
-                                        </asp:UpdateProgress>
-                                    </div>
-
-                          <div class="form-group col-12">
-                                        <div id="divAttch" runat="server" >
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto" Visible="false">
-                                                        <asp:ListView ID="lvCompAttach" runat="server">
-                                                            <LayoutTemplate>
-                                                                <table class="table table-striped table-bordered nowrap" style="width: 100%">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Delete</th>
-                                                                            <th >Attachments  
-                                                                            </th>
-                                                                            <th >Download
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr id="itemPlaceholder" runat="server" />
-                                                                    </tbody>
-                                                                </table>
-                                                            </LayoutTemplate>
-                                                            <ItemTemplate>
-                                                                <tr>
-                                                                    <td>
-                                                                        <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/delete.png"
-                                                                            CommandArgument=' <%#Eval("FILENAME") %>' ToolTip="Delete Record"
-                                                                            OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="ImageButton1_Click" />
-                                                                    </td>
-                                   
-                                                                    <td >
-                                                                        <%# Eval("DisplayFileName")%></a>
-                                                                    </td>
-
-                                                                    <td style="text-align: center" >
-                                                                        <asp:UpdatePanel ID="updPreview" runat="server">
-                                                                            <ContentTemplate>
-                                                                                     <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
-                                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
-                                                                            </ContentTemplate>
-                                                                            <Triggers>
-                                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
-                                                                            </Triggers>
-                                                                        </asp:UpdatePanel>
-
-                                                                    </td>
-                                                                </tr>
-                                                            </ItemTemplate>
-                                                        </asp:ListView>
-                                                    </asp:Panel>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                        <div class="col-12 btn-footer mt-3">
-                            <asp:Button ID="btnAddNew2" runat="server" Text="Add New" CssClass="btn btn-primary" OnClick="btnAdNew_Click" />
-                            <%--(29/03/2022) btnsubmit add OnClientClick="return Validate(this);" --%>
-                            <%--                            <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" Text="Submit" ValidationGroup="Store" CausesValidation="true" OnClick="btnSubmit_Click" OnClientClick="return Validate(this);" />--%>
-                            <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" Text="Submit" ValidationGroup="Store" OnClick="btnSubmit_Click" OnClientClick="return Validate(this);" />
-                            <asp:Button ID="btnBack" runat="server" CssClass="btn btn-info" Text="Back" OnClick="btnBack_Click" />
-                            <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" Text="Cancel" OnClick="btnCancel_Click" />
-                            <asp:ValidationSummary ID="valiSummary" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Store" />
+                        <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
                         </div>
                     </div>
+                </asp:Panel>
+                <%--    //------start  08-12-2023--%>
+                <asp:Panel ID="pnlReport" runat="server" Visible="false">
+                    <div class="panel panel-info">
+                        <%--<div class="panel-heading">Delivery Note/ Invoice Number</div>--%>
 
-                    <div class="col-12">
-
-                        <ajaxToolKit:ModalPopupExtender ID="MdlTax" runat="server" PopupControlID="pnlTaxDetail" TargetControlID="lblTax"
-                            BackgroundCssClass="modalBackground" BehaviorID="mdlPopupDel" CancelControlID="ImgTax">
-                        </ajaxToolKit:ModalPopupExtender>
-
-                        <asp:Label ID="lblTax" runat="server"></asp:Label>
-
-                        <asp:Panel ID="pnlTaxDetail" runat="server" CssClass="PopupReg" Style="display: none; height: auto; width: 50%; background: #fff; z-index: 333; box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;">
-                            <div class="col-12">
-                                <div class="sub-heading mt-3 mb-3">
-                                    <h5>Add Details</h5>
-                                    <div class="box-tools pull-right">
-                                        <asp:ImageButton ID="ImgTax" runat="server" ImageUrl="~/IMAGES/delete.png" ToolTip="Close" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12" id="divTaxPopup" runat="server" visible="false">
-
-                                    <asp:ListView ID="lvTax" runat="server">
-                                        <LayoutTemplate>
-                                            <div id="lgv1">
-                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
-                                                    <thead>
-                                                        <tr class="bg-light-blue">
-
-                                                            <th>Tax Name                                                                              
-                                                            </th>
-                                                            <th>Tax Amount
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </LayoutTemplate>
-                                        <ItemTemplate>
-                                            <tr>
-                                                <td>
-                                                    <asp:Label ID="lblTaxName" runat="server" Text='<%#Eval("TAX_NAME") %>'></asp:Label>
-                                                    <asp:HiddenField ID="hdnTaxId" runat="server" Value='<%#Eval("TAXID") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox ID="lblTaxAmount" runat="server" CssClass="form-control" Text='<%#Eval("TAX_AMOUNT") %>' onblur="CalTotTaxAmt(this)"></asp:TextBox>
-                                                </td>
-
-
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:ListView>
-
-                                    <div class="col-12 mt-3">
-                                        <div class="row">
-                                            <div class="form-group col-lg-6 col-md-6 col-12">
-                                                <div class="label-dynamic">
-                                                    <sup></sup>
-                                                    <label>Total Tax Amount</label>
-                                                    <asp:TextBox ID="txtTotTaxAmt" runat="server" CssClass="form-control" Enabled="false" />
-                                                </div>
-
-                                            </div>
-
-
-                                                 <%-- //=================================================================30/12/2023--%>
-                                            <div class="form-group col-lg-6 col-md-6 col-12">
-                                                <div class="label-dynamic">
-                                                    <sup></sup>
-                                                    <label> </label>
-                                                </div>
-                                                <asp:CheckBox ID="chkTaxInclusive" runat="server" checked="false"/>
-                                                        <label>Is Tax Inclusive</label>
-                                            </div>
-                                            <%-- //================================================================30/12/2023--%>
-
-
-                                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                                <div class="label-dynamic">
-                                                    <sup></sup>
-                                                    <label></label>
-                                                </div>
-                                                <asp:Button ID="btnTaxSubmit" runat="server" CssClass="btn btn-primary" Text="Save Tax" OnClientClick="return GetTotTaxAmt();" OnClick="btnTaxSubmit_Click" />
-
-                                            </div>
-
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-12" id="divOthPopup" runat="server" visible="false">
-                                    <div class="row">
-                                        <div class="form-group col-lg-4 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <sup></sup>
-                                                <label>Technical Specification</label>
-                                            </div>
-                                            <asp:TextBox ID="txtTechSpec" runat="server" CssClass="form-control" TextMode="MultiLine" />
-                                        </div>
-                                        <div class="form-group col-lg-4 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <sup></sup>
-                                                <label>Quality&Qty Specification</label>
-                                            </div>
-                                            <asp:TextBox ID="txtQualityQtySpec" runat="server" CssClass="form-control" TextMode="MultiLine" />
-
-                                        </div>
-                                        <div class="form-group col-lg-4 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <sup></sup>
-                                                <label>Item Remark</label>
-                                            </div>
-                                            <asp:TextBox ID="txtItemRemarkOth" runat="server" CssClass="form-control" TextMode="MultiLine" />
-
-                                        </div>
-
-
-                                    </div>
-                                    <div class="col-12 btn-footer">
-                                        <asp:Button ID="btnSaveOthInfo" runat="server" CssClass="btn btn-primary" Text="Add" OnClick="btnSaveOthInfo_Click" OnClientClick="return SaveOthInfo();" />
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </asp:Panel>
-
-                    </div>
-
-                    <div class="col-12">
-                        <asp:ListView ID="lvInvoiceEntry" runat="server" Visible="false">
-                            <LayoutTemplate>
-                                <div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="col-md-5">
                                     <div class="sub-heading">
-                                        <h5>Invoice Entry List</h5>
+                                        <h5>Delivery Note/ Invoice Number</h5>
                                     </div>
-
-                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
-                                        <thead>
-                                            <tr class="bg-light-blue">
-                                                <th>Action</th>
-                                                <th>Invoice Number</th>
-                                                <th>Invoice Date</th>
-                                                <th>GRN Date</th>
-                                                <th>Vendor Name</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr id="itemPlaceholder" runat="server" />
-                                        </tbody>
-                                    </table>
+                                    <br />
+                                    <asp:DropDownList ID="ddlInv" runat="server" TabIndex="48" CssClass="form-control" AppendDataBoundItems="true">
+                                        <%--AutoPostBack="false" OnSelectedIndexChanged="ddlInv_SelectedIndexChanged" --%>
+                                        <asp:ListItem Enabled="true" Selected="True" Value="0" Text="Please Select"></asp:ListItem>
+                                    </asp:DropDownList>
+                                    <asp:RequiredFieldValidator ID="rfvddlInv" runat="server" ControlToValidate="ddlInv"
+                                        Display="None" ErrorMessage="Please Select Invoice" InitialValue="0" ValidationGroup="StoreReport"></asp:RequiredFieldValidator>
                                 </div>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td>
-                                        <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/Images/edit.png"
-                                            CommandArgument='<%#Eval("INVTRNO")%>' AlternateText="Edit Record" OnClick="btnEdit_Click" />
-                                    </td>
-                                    <td>
-                                        <%# Eval("INVNO")%>                                                       
-                                    </td>
-                                    <td>
-                                        <%# Eval("INVDATE","{0:dd-MM-yyyy}")%>                                                    
-                                    </td>
-                                    <td>
-                                        <%# Eval("GRNDATE","{0:dd-MM-yyyy}")%>
-                                    </td>
-                                    <td>
-                                        <%# Eval("PNAME")%>
-                                    </td>
-
-                                </tr>
-                            </ItemTemplate>
-
-                        </asp:ListView>
-
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                    <div class="col-md-12 text-center">
+                        <asp:Button ID="btnRpt" runat="server" Text=" Show Report" TabIndex="49" ToolTip="Click To Show Report" CssClass="btn btn-info" OnClick="btnRpt_Click" ValidationGroup="StoreReport" />
+                        <asp:Button ID="Button1" runat="server" Text="Back" OnClick="Button1_Click" TabIndex="50" ToolTip="Click To Go Back" CssClass="btn btn-warning" />
+                        <asp:ValidationSummary ID="vsReport" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="StoreReport" />
                     </div>
-                </div>
-
+                </asp:Panel>
+                <%--    //------end  08-12-2023--%>
             </div>
         </div>
     </div>
@@ -1657,11 +1691,11 @@
         function GetTotTaxAmt() {
             debugger;
 
-           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
-           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
-           // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
-           // var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value
-           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
+            // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+            // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+            // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+            // var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value
+            // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
 
 
             //===========================30/12/2023==========================//
@@ -1681,18 +1715,18 @@
             else {
                 document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
                 document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
-               // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+                // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
                 var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
                 var TaxableAmt = document.getElementById('<%=hdnBasicAmt.ClientID%>').value - document.getElementById('<%=hdnDiscAmt.ClientID%>').value
 
                 var deductAmt = Number(TaxableAmt) - Number(TotTaxAmt);
-              // alert('TaxableAmt=' + TaxableAmt);
-              // alert('TotTaxAmt=' + TotTaxAmt);
-              // alert('deductAmt=' + deductAmt);
+                // alert('TaxableAmt=' + TaxableAmt);
+                // alert('TotTaxAmt=' + TotTaxAmt);
+                // alert('deductAmt=' + deductAmt);
                 document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value = Number(deductAmt);
                 document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(deductAmt) + Number(TotTaxAmt); //30/12/2023
                 document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value = 1;   //30/12/2023
-              //  alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value);
+                //  alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value);
 
 
 
@@ -1798,8 +1832,7 @@
                 return false;
             }
 
-            if ((document.getElementById('<%= txtItemExpiryDate.ClientID %>').value) == "99/99/9999")
-            {
+            if ((document.getElementById('<%= txtItemExpiryDate.ClientID %>').value) == "99/99/9999") {
                 alert("Item Expiry Date Is Invalid (Enter In [dd/MM/yyyy] Format).");
                 return false;
             }
@@ -1809,23 +1842,23 @@
             }
             if ((document.getElementById('<%= txtItemWarrentyDate.ClientID %>').value) > (document.getElementById('<%= txtItemExpiryDate.ClientID %>').value))
 
-            //var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
-          //  if (!(date_regex.test(document.getElementById('<%= txtItemExpiryDate.ClientID %>').value))) {
-            //    alert("Item Expiry Date Is Invalidddd (Enter In [dd/MM/yyyy] Format).");
-            //    return false;
-            //}
-            //var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
-          //  if (!(date_regex.test(document.getElementById('<%= txtItemWarrentyDate.ClientID %>').value))) {
-            //    alert("Item Warranty Date Is Invalid (Enter In [dd/MM/yyyy] Format).");
-            //    return false;
-            //} 
+                //var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+                //  if (!(date_regex.test(document.getElementById('<%= txtItemExpiryDate.ClientID %>').value))) {
+                //    alert("Item Expiry Date Is Invalidddd (Enter In [dd/MM/yyyy] Format).");
+                //    return false;
+                //}
+                //var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+                //  if (!(date_regex.test(document.getElementById('<%= txtItemWarrentyDate.ClientID %>').value))) {
+                //    alert("Item Warranty Date Is Invalid (Enter In [dd/MM/yyyy] Format).");
+                //    return false;
+                //} 
 
 
 
 
 
 
-            var ItemQtyCount = 0;
+                var ItemQtyCount = 0;
             var ROWS = Number(document.getElementById('<%=hdnrowcount.ClientID%>').value);
             var i = 0;
             for (i = 0; i < ROWS; i++) {

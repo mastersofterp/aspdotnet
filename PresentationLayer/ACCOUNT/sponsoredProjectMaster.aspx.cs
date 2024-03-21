@@ -582,6 +582,10 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
     {
         DataSet ds = objCommon.FillDropDown("Acc_" + Session["comp_code"].ToString() + "_ProjectAllocation", "ProjectId,ProjectSubId,TotAmtReceived", "TotAmtSpent,TotAmtRemain", "ProjectSubHeadAllocationId=" + e.CommandArgument.ToString(), "");
         ddlProjectName.SelectedValue = ds.Tables[0].Rows[0]["ProjectId"].ToString();
+        //[Start Block][Parag.O][23-02-2024][Requirement No.:55456][Ensure Unique Project Heads and Proper Sub-Project Hierarchies.]
+        if (ddlProjectName.SelectedIndex != 0)
+            objCommon.FillDropDownList(ddlProjectSubHead, "Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ProjectSubId", " ProjectSubHeadName+'('+ProjectSubHeadShort+')' as ProjectSubHeadName", "ProjectId='" + ddlProjectName.SelectedValue + "'", "");
+        //[End Block][Parag.O][23-02-2024][Requirement No.:55456][Ensure Unique Project Heads and Proper Sub-Project Hierarchies.]
         ddlProjectSubHead.SelectedValue = ds.Tables[0].Rows[0]["ProjectSubId"].ToString();
         // txtReceived.Text = ds.Tables[0].Rows[0]["TotAmtReceived"].ToString();
         // txttotSpent.Text = ds.Tables[0].Rows[0]["TotAmtSpent"].ToString();
@@ -623,6 +627,12 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
 
             }
         }
+
+        //[Start Block][Parag.O][23-02-2024][Requirement No.:55456][Ensure Unique Project Heads and Proper Sub-Project Hierarchies.]
+        if (ddlProjectName.SelectedIndex != 0)
+            objCommon.FillDropDownList(ddlProjectSubHead, "Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ProjectSubId", " ProjectSubHeadName+'('+ProjectSubHeadShort+')' as ProjectSubHeadName", "ProjectId='" + ddlProjectName.SelectedIndex + "'", "");
+        //[End Block][Parag.O][23-02-2024][Requirement No.:55456][Ensure Unique Project Heads and Proper Sub-Project Hierarchies.]
+    
     }
 
     protected void ddlProjectSubHead_SelectedIndexChanged(object sender, EventArgs e)

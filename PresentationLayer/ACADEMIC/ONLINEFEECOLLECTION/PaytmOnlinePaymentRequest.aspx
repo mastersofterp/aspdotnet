@@ -1,24 +1,24 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="PaytmOnlinePaymentRequest.aspx.cs" Inherits="PaytmOnlinePaymentRequest" %>
 
-
 <!DOCTYPE html >
 <html>
 <head id="Head1" runat="server">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%--<meta name="viewport" content="width=device-width, initial-scale=1">--%>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
     <title>Paytm Payment Request</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="../../plugins/newbootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../../plugins/newbootstrap/fontawesome-free-5.15.4/css/all.min.css" rel="stylesheet" />
     <link href="../../plugins/newbootstrap/css/newcustom.css" rel="stylesheet" />
 
-    <script src="../../plugins/newbootstrap/js/jquery-3.5.1.min.js"></script>
-    <script src="../../plugins/newbootstrap/js/popper.min.js"></script>
-    <script src="../../plugins/newbootstrap/js/bootstrap.min.js"></script>
+     <script type="application/javascript" src="https://business.paytm.com/demo//static/js/jquery.min.js"></script>
+    <%--<script src="../../plugins/newbootstrap/js/jquery-3.5.1.min.js"></script>--%>
+<%--    <script src="../../plugins/newbootstrap/js/popper.min.js"></script>
+    <script src="../../plugins/newbootstrap/js/bootstrap.min.js"></script>--%>
 
     <style>
         .box-header .img-logo {
@@ -46,8 +46,8 @@
 
 <body>
 
-    <form name="f1" id="form1" runat="server" method="post" action="https://securegw-stage.paytm.in/order/process?">
-
+    <form name="f1" id="form1" runat="server">
+          </form>
         <div class="container">
             <div class="row mt-5">
                 <div class="col-lg-8 offset-lg-2 col-md-12 col-sm-12 col-12">
@@ -56,25 +56,7 @@
 
                         <div class="box-header with-border">
                             <div class="row">
-                                <%--<div class="col-sm-2 text-center">
-                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive" runat="server" ImageUrl="~/images/nophoto.jpg" />
-                                </div>
-
-                                <div class="col-sm-8">
-                                    <div class="text-center college-name mt-md-3">
-                                        <h2>
-                                            <asp:Label ID="lblCompAddress" runat="server" Text="Peoples University Bhopal">Peoples University Bhopal</asp:Label>
-                                        </h2>
-                                        <h2>
-                                            <asp:Label ID="lblCollege" runat="server" Text=""></asp:Label></h2>
-                                        <h6>
-                                            <asp:Label ID="lblAddress" runat="server" Text=""></asp:Label></h6>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-2 text-center"></div>--%>
-
-                                  <div class="col-sm-12">
+                                <div class="col-sm-12">
                                     <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive center" runat="server" ImageUrl="~/images/nophoto.jpg" />
                                 </div>
                             </div>
@@ -82,32 +64,7 @@
 
                         <div class="box-body">
                             <div class="col-12">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="hidParams" runat="server">
-                                            <%--<input type='hidden' name='CURRENCY' value='PAYMENT_CURRENCY'>
-                                            <input type='hidden' name='GATEWAYNAME' value='GATEWAY_USED_BY_PAYTM'>
-                                            <input type='hidden' name='RESPMSG' value='PAYTM_RESPONSE_MESSAGE_DESCRIPTION'>
-                                            <input type='hidden' name='BANKNAME' value='BANK_NAME_OF_ISSUING_PAYMENT_MODE'>
-                                            <input type='hidden' name='PAYMENTMODE' value='PAYMENT_MODE_USED_BY_CUSTOMER'>
-                                            <input type='hidden' id="hidMID" name='MID' value='YOUR_MID_HERE'>
-                                            <input type='hidden' name='RESPCODE' value='PAYTM_RESPONSE_CODE'>
-                                            <input type='hidden' name='TXNID' value='PAYTM_TRANSACTION_ID'>
-                                            <input type='hidden' name='TXNAMOUNT' value='ORDER_TRANSACTION_AMOUNT'>
-                                            <input type='hidden' name='ORDERID' value='YOUR_ORDER_ID'>
-                                            <input type='hidden' name='STATUS' value='PAYTM_TRANSACTION_STATUS'>
-                                            <input type='hidden' name='BANKTXNID' value='BANK_TRANSACTION_ID'>
-                                            <input type='hidden' name='TXNDATE' value='TRANSACTION_DATE_TIME'>
-                                             <input type='hidden' name='CUST_ID' value='CUST_ID_VALUE'>
-                                            <input type='hidden' name='EMAIL' value='EMAIL_VALUE'> 
-                                            <input type='hidden' name='MOBILE_NO' value='MOBILE_NO_VALUE'>
-                                            <input type='hidden' id="hidCHECKSUMHASH" name='CHECKSUMHASH' value='PAYTM_GENERATED_CHECKSUM_VALUE'>--%>
-                                            <%-- <input type='hidden' name='CHECKSUMHASH'  id="checksumData" runat="server" value="<%=checksum%>">--%>
-                                        </div>
-                                        <%--   <div id="divPatymData" runat="server">
-                                        </div>--%>
-                                    </div>
-                                </div>
+
 
                                 <div class="row">
                                     <div class="col-12 btn-footer">
@@ -158,7 +115,7 @@
 
                                     <div class="col-12 btn-footer mt-3">
                                         <%--  <asp:Button ID="btnPay" runat="server" Text="Pay" CausesValidation="false" OnClick="btnPay_Click" CssClass="btn btn-primary"/>--%>
-                                        <button type="submit" id="btnPay" class="btn btn-primary">Pay</button>
+                                        <button type="submit" id="btnPay" class="btn btn-primary" onclick="onPayScriptLoad()"; >Pay Now</button>
                                         <%-- <asp:Button ID="btnBack" runat="server" Text="Back" OnClick="btnBack_Click" CausesValidation="false" CssClass="btn btn-warning" />--%>
                                     </div>
 
@@ -175,15 +132,67 @@
             </div>
         </div>
 
-    </form>
 
     <div id="divMsg" runat="server"></div>
+     
 
-    <%--<script type="text/javascript">
-        function Payment() {
-            alert("check");
-            document.forms[0].submit();
+
+    <script type="application/javascript" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/People73378390650054.js"></script>
+
+    <script type="text/javascript">
+
+        //document.getElementById("paytmWithPaytm").addEventListener("click", function () {
+        //    onScriptLoad("de5f178fdbe04169aa68e3edd51e3d0c1709555781310", "1709555781296", "1.00");
+        //});
+
+        var TOKEN = '<%=Session["TOKEN"]%>';
+        var ORDERID = '<%=Session["ORDERID"]%>';
+        var AMOUNT = '<%=Session["AMOUNT"]%>';
+        //alert(TOKEN);
+        //alert(ORDERID);
+        //alert(AMOUNT);
+
+        function onPayScriptLoad() {
+            var config = {
+                "root": "",
+                "flow": "WEBSTAGING",
+                "merchant": {
+                    "name": "Peoples University",
+                    "logo": "https://business.paytm.com/demo//static/images/merchant-logo.png?v=1.4"
+                },
+                "style": {
+                    "headerBackgroundColor": "#8dd8ff",
+                    "headerColor": "#3f3f40"
+                },
+                "data": {
+                    "orderId": ORDERID,
+                    "token": TOKEN,
+                    "tokenType": "TXN_TOKEN",
+                    "amount": AMOUNT
+                },
+                "handler": {
+                    "notifyMerchant": function (eventName, data) {
+                        if (eventName == 'SESSION_EXPIRED') {
+                            alert("Your session has expired!!");
+                            location.reload();
+                        }
+                    }
+                }
+            };
+
+            if (window.Paytm && window.Paytm.CheckoutJS) {
+                // initialze configuration using init method
+                window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+                    console.log('Before JS Checkout invoke');
+                    // after successfully update configuration invoke checkoutjs
+                    window.Paytm.CheckoutJS.invoke();
+                }).catch(function onError(error) {
+                    console.log("Error => ", error);
+                });
+            }
         }
-    </script>--%>
+    </script>
+
+
 </body>
 </html>

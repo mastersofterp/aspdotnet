@@ -384,7 +384,7 @@
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>
-                                                                                    <asp:CheckBox ID="cbHead" runat="server" onclick="return SelectAll(this)" ToolTip="Select/Select all" />
+                                                                                    <asp:CheckBox ID="cbHead" runat="server" onclick="return SelectAllElectIntakeCapacity(this)" ToolTip="Select/Select all" />
                                                                                 </th>
                                                                                 <th>Course Name
                                                                                 </th>
@@ -620,7 +620,7 @@
 
 
     <script type="text/javascript">
-        function SelectAll(chk) {
+        function SelectAllElectIntakeCapacity(chk) {
             var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
 
             var hftot = document.getElementById('<%= hftot.ClientID %>');

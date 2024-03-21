@@ -558,9 +558,14 @@
                                                                 <sup>* </sup>
                                                                 <label>Academic Year</label>
                                                             </div>
-                                                            <asp:TextBox runat="server" AutoComplete="off" ID="txtacadyear" placeholder="Enter Academic Year" ToolTip="Please Enter Academic Year" CssClass="form-control" TabIndex="8" MaxLength="25"></asp:TextBox>
+                                                            <%--<asp:TextBox runat="server" AutoComplete="off" ID="txtacadyear" placeholder="Enter Academic Year" ToolTip="Please Enter Academic Year" CssClass="form-control" TabIndex="8" MaxLength="25"></asp:TextBox>
                                                             <asp:RequiredFieldValidator ID="rfvacadyear" runat="server" ErrorMessage="Please Enter Academic Year"
-                                            ControlToValidate="txtacadyear" Display="None" ValidationGroup="submit" />
+                                            ControlToValidate="txtacadyear" Display="None" ValidationGroup="submit" />--%>
+                                                              <asp:DropDownList ID="ddlAcademicYear" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                                AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Academic Year"
+                                                                ValidationGroup="Academic">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
                                                         </div>
 
                                                         <!--===== Added By Vinay Mishra on Dated 16/06/2023=====-->
@@ -573,6 +578,20 @@
                                                             <asp:RequiredFieldValidator ID="rfvseqno" runat="server" ErrorMessage="Please Enter Sequence Number"
                                             ControlToValidate="txtSeqNo" Display="None" ValidationGroup="submit" />
                                                         </div>
+
+                                                          <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
+                                                                      <sup>* </sup>
+                                                                    <label>Study Pattern</label>
+                                                                </div>
+                                                                <asp:DropDownList ID="ddlStudyPattern" runat="server" AppendDataBoundItems="true" TabIndex="7"
+                                                                    ToolTip="Please Select Study Pattern" CssClass="form-control" data-select2-enable="true">
+                                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                    <asp:ListItem Value="1">Semester</asp:ListItem>
+                                                                    <asp:ListItem Value="2">Trimester</asp:ListItem>
+                                                                    <asp:ListItem Value="3">Yearly </asp:ListItem>
+                                                                </asp:DropDownList>
+                                                            </div>
 
                                                         <!--===== Added By Rishabh on Dated 28/10/2021=====-->
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -640,6 +659,8 @@
                                                                             </th>
                                                                             <th>Academic Year
                                                                             </th>
+                                                                             <th>Study Pattern
+                                                                            </th>
                                                                             <th>Sequence Number
                                                                             </th>
                                                                             <th>Is Active
@@ -682,6 +703,9 @@
                                                                         <%# Eval("ACADEMIC_YEAR")%>
                                                                     </td>
                                                                     <td>
+                                                                        <%# Eval("STUDY_PATTERN")%>
+                                                                    </td>
+                                                                     <td>
                                                                         <%# Eval("SEQUENCE_NO")%>
                                                                     </td>
                                                                     <td>
@@ -1029,12 +1053,23 @@
                 return false;
             }
 
-            var idtxtweb = $("[id$=txtacadyear]").attr("id");
-            var txtweb = document.getElementById(idtxtweb);
-            if (txtweb.value.length == 0) {
-                alert('Please Enter Academic Year', 'Warning!');
-                //$(txtweb).css('border-color', 'red');
-                $(txtweb).focus();
+            //var idtxtweb = $("[id$=txtacadyear]").attr("id");
+            //var txtweb = document.getElementById(idtxtweb);
+            //if (txtweb.value.length == 0) {
+            //    alert('Please Enter Academic Year', 'Warning!');
+            //    //$(txtweb).css('border-color', 'red');
+            //    $(txtweb).focus();
+            //    return false;
+            //}
+           
+            if ($('#ctl00_ContentPlaceHolder1_ddlAcademicYear').val() == '0') {
+                alert('Please Select Academic Year', 'Warning!');
+                $('#ctl00_ContentPlaceHolder1_ddlAcademicYear').focus();
+                return false;
+            }
+            if ($('#ctl00_ContentPlaceHolder1_ddlStudyPattern').val() == '0') {
+                alert('Please Select Study Pattern', 'Warning!');
+                $('#ctl00_ContentPlaceHolder1_ddlStudyPattern').focus();
                 return false;
             }
         }

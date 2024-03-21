@@ -131,26 +131,38 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
     private void ShowReport()
     {
         //Added By Rishabh on 31/12/2021
-        if (rblAllotment.SelectedValue != "1" && rblAllotment.SelectedValue != "2" && rblAllotment.SelectedValue != "3")
-        {
-            objCommon.DisplayMessage(this.Page, "Please select option.", this.Page);
-            return;
-        }
+        //if (rblAllotment.SelectedValue != "1" && rblAllotment.SelectedValue != "2" && rblAllotment.SelectedValue != "3")
+        //{
+        //    objCommon.DisplayMessage(this.Page, "Please select option.", this.Page);
+        //    return;
+        //}
         DataSet ds = null;
-        if (rblAllotment.SelectedValue == "1")
+        string filename = string.Empty;
+        if (ddlReport.SelectedValue == "1")
         {
             ds = objAllot.GetCourseTeachernotAllot(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["colcode"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ddlSemester.SelectedValue));
             ds.Tables[0].TableName = "Course_Teacher_Not_Allot";
+            filename = "Course_Teacher_Not_Allot";
         }
-        else if (rblAllotment.SelectedValue == "2")
+        else if (ddlReport.SelectedValue == "2")
         {
             ds = objAllot.GetTeachernotAllot(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["colcode"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ddlSemester.SelectedValue));
            
             ds.Tables[0].TableName = "Teacher Not Allot";
+            filename = "Teacher Not Allot";
         }
-        else if (rblAllotment.SelectedValue == "3")
+        else if (ddlReport.SelectedValue == "3")
         {
             ds = objAllot.GetCourseTeacherAllotmentDoneExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSemester.SelectedValue));
+            ds.Tables[0].TableName = "Course Teacher Allot";
+            ds.Tables[1].TableName = "Summery Course Teacher Report";
+            filename = "Course Teacher Allot";
+        }
+        else if (ddlReport.SelectedValue == "4")
+        {
+            ds = objAllot.GetFacultyNotTagToCourse();
+            ds.Tables[0].TableName = "Teacher Not Tag";
+            filename = "Teacher Not Alloted to any Course";
         }
         if (ds.Tables[0].Rows.Count < 1)
         {
@@ -160,18 +172,43 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
         GridView gv = new GridView();
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
         {
-            gv.DataSource = ds;
-            gv.DataBind();
-            string attachment = rblAllotment.SelectedValue != "3" ? "attachment ; filename=Teacher_Not_Allot_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls" : "attachment ; filename=Teacher_Alloted_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-            Response.ClearContent();
-            Response.AddHeader("content-disposition", attachment);
-            Response.ContentType = "application/ms-excel";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            gv.RenderControl(htw);
-            Response.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
+            //gv.DataSource = ds;
+            //gv.DataBind();
+            //string attachment = rblAllotment.SelectedValue != "3" ? "attachment ; filename=Teacher_Not_Allot_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls" : "attachment ; filename=Teacher_Alloted_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+            //Response.ClearContent();
+            //Response.AddHeader("content-disposition", attachment);
+            //Response.ContentType = "application/ms-excel";
+            //StringWriter sw = new StringWriter();
+            //HtmlTextWriter htw = new HtmlTextWriter(sw);
+            //gv.RenderControl(htw);
+            //Response.Write(sw.ToString());
+            //Response.Flush();
+            //Response.End();
+            string attachment = "attachment ; filename=" + filename + ".xls";
+
+            //if (rblAllotment.SelectedValue == "3")
+            //{
+            //    ds.Tables[1].TableName = "Summery Course Teacher Report";
+            //}
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                foreach (System.Data.DataTable dt in ds.Tables)
+                    wb.Worksheets.Add(dt);    //Add System.Data.DataTable as Worksheet.
+
+                //Export the Excel file.
+                Response.Clear();
+                Response.Buffer = true;
+                Response.Charset = "";
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", attachment);
+                using (MemoryStream MyMemoryStream = new MemoryStream())
+                {
+                    wb.SaveAs(MyMemoryStream);
+                    MyMemoryStream.WriteTo(Response.OutputStream);
+                    Response.Flush();
+                    Response.End();
+                }
+            }
         }
         //using (XLWorkbook wb = new XLWorkbook())
         //{
@@ -295,6 +332,30 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
         {
             ddlClgScheme.Items.Clear();
             ddlClgScheme.Items.Insert(0,"Please Select");
+        }
+    }
+    protected void ddlReport_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ddlSession.SelectedIndex = 0;
+        ddlClgScheme.SelectedIndex = 0;
+        ddlSemester.SelectedIndex = 0;
+
+        if (Convert.ToInt32(ddlReport.SelectedValue) > 0)
+        {
+            pnlfooter.Visible = true;
+            if (Convert.ToInt32(ddlReport.SelectedValue) == 1 || Convert.ToInt32(ddlReport.SelectedValue) == 2 || Convert.ToInt32(ddlReport.SelectedValue) == 3)
+            {
+                pnlHideShow.Visible = true;
+            }
+            else
+            {
+                pnlHideShow.Visible = false;
+            }
+        }
+        else
+        {
+            pnlfooter.Visible = false;
+            pnlHideShow.Visible = false;
         }
     }
 }

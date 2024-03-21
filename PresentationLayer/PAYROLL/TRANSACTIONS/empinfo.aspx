@@ -231,6 +231,16 @@
                                                     <asp:RequiredFieldValidator ID="rfvRFID" runat="server" ControlToValidate="txtRFIDno" ValidationGroup="emp"
                                                         ErrorMessage="Please Enter BioID./RFID." SetFocusOnError="true" Display="None"></asp:RequiredFieldValidator>
                                                 </div>
+                                                 <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Photo Upload</label>
+                                                    </div>
+                                                    <asp:Image ID="imgEmpPhoto" runat="server" ImageUrl="~/IMAGES/sign11.jpg" Height="115px"
+                                                        Width="115px" /><br />
+                                                    <asp:FileUpload ID="fuplEmpPhoto" runat="server" ToolTip="Please Browse Photo"
+                                                        TabIndex="22" onchange="ShowpImagePreview(this);" />
+                                                </div>
+
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
@@ -242,6 +252,7 @@
                                                     <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlTitle" ValidationGroup="emp"
                                                                                 ErrorMessage="Please select title" SetFocusOnError="true" InitialValue="Please Select" Display="None"></asp:RequiredFieldValidator>--%>
                                                 </div>
+
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
@@ -273,6 +284,15 @@
                                                         FilterMode="ValidChars"
                                                         ValidChars="-_ `">
                                                     </ajaxToolKit:FilteredTextBoxExtender>
+                                                </div>
+                                               <div   id="divsign" class="form-group col-lg-3 col-md-6 col-12" runat="server"  visible="true">
+                                                    <div class="label-dynamic">
+                                                        <label>Signature Upload</label>
+                                                    </div>
+                                                    <asp:Image ID="imgEmpSign" runat="server" ImageUrl="~/IMAGES/sign11.jpg" Height="58px"
+                                                        Width="128px" /><br />
+                                                    <asp:FileUpload ID="fuplEmpSign" runat="server" ToolTip="Please Browse Signature"
+                                                        TabIndex="23" onchange="ShowpSignPreview(this);" />
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -439,30 +459,14 @@
                                                 </div>
                                                 
                                             </div>--%>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <label>Photo Upload</label>
-                                                    </div>
-                                                    <asp:Image ID="imgEmpPhoto" runat="server" ImageUrl="~/IMAGES/sign11.jpg" Height="128px"
-                                                        Width="128px" /><br />
-                                                    <asp:FileUpload ID="fuplEmpPhoto" runat="server" ToolTip="Please Browse Photo"
-                                                        TabIndex="22" onchange="ShowpImagePreview(this);" />
-                                                </div>
+                                               
                                                 <%--<div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <label></label>
                                                 </div>
                                                 
                                             </div>--%>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <label>Signature Upload</label>
-                                                    </div>
-                                                    <asp:Image ID="imgEmpSign" runat="server" ImageUrl="~/IMAGES/sign11.jpg" Height="58px"
-                                                        Width="128px" /><br />
-                                                    <asp:FileUpload ID="fuplEmpSign" runat="server" ToolTip="Please Browse Signature"
-                                                        TabIndex="23" onchange="ShowpSignPreview(this);" />
-                                                </div>
+                                               
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <%-- <label>Husband&#39;s Name :</label>--%>
                                                     <div class="label-dynamic">
@@ -854,8 +858,7 @@
                                                             <div class="input-group-addon">
                                                                 <i id="imgCalJoinDate" runat="server" class="fa fa-calendar text-blue"></i>
                                                             </div>
-                                                            <asp:TextBox ID="txtJoinDate" CssClass="form-control" runat="server" Enabled="true" TabIndex="48"
-                                                                OnTextChanged="txtJoinDate_TextChanged"></asp:TextBox>
+                                                            <asp:TextBox ID="txtJoinDate" CssClass="form-control" runat="server" Enabled="true" TabIndex="48" ></asp:TextBox>
                                                             <ajaxToolKit:CalendarExtender ID="ceJoinDate" runat="server" Format="dd/MM/yyyy"
                                                                 TargetControlID="txtJoinDate" PopupButtonID="imgCalJoinDate" Enabled="true" EnableViewState="true" OnClientDateSelectionChanged="CheckDateEalier">
                                                                 <%--  OnClientDateSelectionChanged="CompareDOJ"--%>

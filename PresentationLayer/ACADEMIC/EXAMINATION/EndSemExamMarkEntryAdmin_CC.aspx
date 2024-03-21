@@ -31,7 +31,9 @@
         #ctl00_ContentPlaceHolder1_gvStudent.table-bordered > tbody > tr > th {
             border-top: 0px solid var(--table-border-color);
         }
-        .btn-info {}
+
+        .btn-info {
+        }
     </style>
 
     <asp:UpdatePanel ID="updpnl" runat="server">
@@ -47,7 +49,7 @@
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><b>EXAM MARK ENTRY BY ADMIN</b></h3>
+                            <h3 class="box-title"><b>EXAM MARK ENTRY</b></h3>
                         </div>
                         <div class="box-body">
                             <asp:Panel ID="pnlMarkEntry" runat="server">
@@ -69,7 +71,7 @@
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlcollege"
                                                         Display="None" ErrorMessage="Please Select Institute Name." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="MarksModifyReport"></asp:RequiredFieldValidator>
-                                                   <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlcollege"
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlcollege"
                                                         Display="None" ErrorMessage="Please Select Institute Name." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="ExternalMark"></asp:RequiredFieldValidator>
                                                 </div>
@@ -80,7 +82,7 @@
                                                     </div>
                                                     <asp:DropDownList ID="ddlSession" TabIndex="2" runat="server" CssClass="form-control" AppendDataBoundItems="true"
                                                         AutoPostBack="True" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" data-select2-enable="true">
-                                                          <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
                                                         Display="None" ErrorMessage="Please Select Session." InitialValue="0" SetFocusOnError="True"
@@ -161,21 +163,21 @@
                                                         Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="true"
                                                         ValidationGroup="show">
                                                     </asp:RequiredFieldValidator>
-                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSubjectType"
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSubjectType"
                                                         Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="true"
-                                                       ValidationGroup="ExternalMark">
+                                                        ValidationGroup="ExternalMark">
                                                     </asp:RequiredFieldValidator>
                                                 </div>
-                                                 <div class="col-lg-4 col-md-6 col-12 form-group" id="divStudentType" runat="server" visible="false">
+                                                <div class="col-lg-4 col-md-6 col-12 form-group" id="divStudentType" runat="server" visible="false">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <label>Student Type</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlStudenttype" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
-                                                        CssClass="form-control" TabIndex="8" >
+                                                        CssClass="form-control" TabIndex="8">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                         <asp:ListItem Value="1">Regular</asp:ListItem>
-                                                         <asp:ListItem Value="2">Backlog</asp:ListItem>
+                                                        <asp:ListItem Value="1">Regular</asp:ListItem>
+                                                        <asp:ListItem Value="2">Backlog</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="rfvStudenttype" runat="server" ControlToValidate="ddlStudenttype"
                                                         Display="None" ErrorMessage="Please Select Student Type" InitialValue="0" SetFocusOnError="True"
@@ -209,7 +211,7 @@
                                                     <asp:RequiredFieldValidator ID="rfvExam" runat="server" ControlToValidate="ddlExam"
                                                         Display="None" ErrorMessage="Please Select Exam Name." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="show"></asp:RequiredFieldValidator>
-                                                      <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlCourse"
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlCourse"
                                                         Display="None" ErrorMessage="Please Select Exam Name." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="ExternalMark"></asp:RequiredFieldValidator>
                                                 </div>
@@ -228,7 +230,7 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-6 col-12 form-group mt-4">
-                                                    <asp:Label ID="lblStudents" runat="server" Font-Bold="true" style="box-shadow: rgb(0 0 0 / 20%) 0px 2px 4px 0px, rgb(0 0 0 / 19%) 0px 3px 10px 0px; padding: 5px;"/>
+                                                    <asp:Label ID="lblStudents" runat="server" Font-Bold="true" Style="box-shadow: rgb(0 0 0 / 20%) 0px 2px 4px 0px, rgb(0 0 0 / 19%) 0px 3px 10px 0px; padding: 5px;" />
                                                 </div>
                                             </div>
                                         </div>
@@ -260,9 +262,9 @@
                                         Text="Show Student" ValidationGroup="show"
                                         CssClass="btn btn-primary" />
                                     <asp:Button ID="lnkExcekImport" runat="server" Visible="false" OnClick="lnkExcekImport_Click"
-                                        Text="Import Mark Entry Excel"  OnClientClick="validateField();" CssClass="btn btn-info" ValidationGroup="show"></asp:Button>
+                                        Text="Import Mark Entry Excel" OnClientClick="validateField();" CssClass="btn btn-info" ValidationGroup="show"></asp:Button>
 
-                                      
+
 
                                     <asp:Button ID="btnSave" runat="server" TabIndex="13" Enabled="false" CausesValidation="false"
                                         OnClick="btnSave_Click" Text="Save" CssClass="btn btn-primary btnSaveEnabled" ValidationGroup="val" />
@@ -278,21 +280,21 @@
                                     <asp:Button ID="btnReGrade" runat="server" TabIndex="16" Enabled="false" Visible="false"
                                         OnClick="btnReGrade_Click" OnClientClick="return showGradeConfirm(this,'val');" Text="ReGenerate Grade"
                                         CssClass="btn btn-success btnSaveEnabled" />
-                                
+
 
                                     <asp:Button ID="btnExcelReport" TabIndex="17" runat="server" Text="Report" CssClass="btn btn-info"
-                                        OnClick="btnExcelReport_Click" Enabled="false" Visible="False"  />
-                                    
-                                     <asp:Button ID="btnPrint" TabIndex="18" runat="server" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click"
-                                        Enabled="false" Visible="False"  />
+                                        OnClick="btnExcelReport_Click" Enabled="false" Visible="False" />
 
-                                     <asp:Button ID="btnEndSemReport" runat="server" TabIndex="19"  Text="Mark Entry Report"
-                                        CssClass="btn btn-info" OnClick="btnEndSemReport_Click" Visible="false"  ValidationGroup="ExternalMark" ></asp:Button>
+                                    <asp:Button ID="btnPrint" TabIndex="18" runat="server" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click"
+                                        Enabled="false" Visible="False" />
+
+                                    <asp:Button ID="btnEndSemReport" runat="server" TabIndex="19" Text="Mark Entry Report"
+                                        CssClass="btn btn-info" OnClick="btnEndSemReport_Click" Visible="false" ValidationGroup="ExternalMark"></asp:Button>
 
                                     <%--<asp:Button ID="btninterreport" TabIndex="15" runat="server" Font-Bold="true" Text="Report" CssClass="btn btn-info"
-                                        OnClick="btninterreport_Click" Enabled="false" Visible="False" />--%>                                
+                                        OnClick="btninterreport_Click" Enabled="false" Visible="False" />--%>
 
-                                    
+
                                     <asp:Button ID="btnCancel2" runat="server" TabIndex="20" Font-Bold="true" OnClick="btnCancel2_Click"
                                         Text="Cancel" CssClass="btn btn-warning" />
 
@@ -319,40 +321,40 @@
                                             <asp:Panel ID="Panel3" runat="server">
 
                                                 <div class="row">
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <label>Excel File</label>
-                                                    </div>
+                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <label>Excel File</label>
+                                                        </div>
 
-                                                    <asp:FileUpload ID="FuBrowse" runat="server" oolTip="Select file to Import" TabIndex="14" />
+                                                        <asp:FileUpload ID="FuBrowse" runat="server" oolTip="Select file to Import" TabIndex="14" />
 
-                                                    <%--  <asp:UpdatePanel runat="server" UpdateMode="Conditional" ID="uplFileUpload">
+                                                        <%--  <asp:UpdatePanel runat="server" UpdateMode="Conditional" ID="uplFileUpload">
                                                     <ContentTemplate>
                                                     <asp:FileUpload ID="FuBrowse" runat="server" ToolTip="Select file to Import" TabIndex="14" />
                                                     </ContentTemplate>                                                       
                                                     </asp:UpdatePanel>--%>
-                                                </div>
+                                                    </div>
 
-                                               <div class="form-group col-lg-6 col-md-6 col-12">
-                                                    <asp:LinkButton ID="btnBlankDownld" runat="server" OnClick="btnBlankDownld_Click" TabIndex="17" CssClass="btn btn-primary" ValidationGroup="show"
-                                                        Text="Blank" ToolTip="Click to download blank excel format file" OnClientClick="validateField();" Enabled="true"> Download Template</asp:LinkButton>
-                                                 
-
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <asp:LinkButton ID="btnBlankDownld" runat="server" OnClick="btnBlankDownld_Click" TabIndex="17" CssClass="btn btn-primary" ValidationGroup="show"
+                                                            Text="Blank" ToolTip="Click to download blank excel format file" OnClientClick="validateField();" Enabled="true"> Download Template</asp:LinkButton>
 
 
 
-                                                    <asp:Button ID="btnUpload" runat="server" CssClass="btn btn-primary" OnClick="btnUpload_Click"
-                                                        TabIndex="16" Text="Upload Excel" ToolTip="Click to Upload" Enabled="true" />
 
 
-                                                    <%--  <asp:Button ID="btnUpload" runat="server" CssClass="btn btn-primary" OnClick="btnUpload_Click" 
+                                                        <asp:Button ID="btnUpload" runat="server" CssClass="btn btn-primary" OnClick="btnUpload_Click"
+                                                            TabIndex="16" Text="Upload Excel" ToolTip="Click to Upload" Enabled="true" />
+
+
+                                                        <%--  <asp:Button ID="btnUpload" runat="server" CssClass="btn btn-primary" OnClick="btnUpload_Click" 
                                                         TabIndex="16" Text="Upload Excel" ToolTip="Click to Upload" Enabled="true"></asp:Button>--%>
 
 
 
-                                                    <asp:Button ID="btnCancel1" runat="server" TabIndex="18" Text="Clear" ToolTip="Click To Clear" CssClass="btn btn-warning" OnClick="btnCancel1_Click" />
-                                                </div>
+                                                        <asp:Button ID="btnCancel1" runat="server" TabIndex="18" Text="Clear" ToolTip="Click To Clear" CssClass="btn btn-warning" OnClick="btnCancel1_Click" />
                                                     </div>
+                                                </div>
                                                 <%-- OnClientClick="return ValidateUpload();"--%>
                                             </asp:Panel>
                                             </fieldset>
@@ -390,13 +392,13 @@
 
                                                     <asp:TemplateField HeaderText="Reg No./Decode No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%" HeaderStyle-CssClass="text-center">
                                                         <ItemTemplate>
-                                                         <%--   <asp:Label ID="lblIDNO" runat="server" Text='<%# Session["OrgId"].ToString()=="8"? Bind("DECODENO"): Bind("REGNO") %>' ToolTip='<%# Bind("IDNO") %>'
+                                                            <%--   <asp:Label ID="lblIDNO" runat="server" Text='<%# Session["OrgId"].ToString()=="8"? Bind("DECODENO"): Bind("REGNO") %>' ToolTip='<%# Bind("IDNO") %>'
                                                                 Font-Size="9pt"  />--%>
 
                                                             <asp:Label ID="lblIDNO" runat="server" Text='<%# Session["OrgId"].ToString()=="8"? DataBinder.Eval(Container.DataItem,"DECODENO"):DataBinder.Eval(Container.DataItem,"REGNO") %>' ToolTip='<%# Bind("IDNO") %>'
-                                                                Font-Size="9pt"  />
+                                                                Font-Size="9pt" />
 
-                                                          <%--  <asp:Label ID="lblDECODENO" runat="server" Text='<%# Bind("DECODENO") %>' ToolTip='<%# Bind("DECODENO") %>'
+                                                            <%--  <asp:Label ID="lblDECODENO" runat="server" Text='<%# Bind("DECODENO") %>' ToolTip='<%# Bind("DECODENO") %>'
                                                                 Font-Size="9pt"  />--%>
                                                         </ItemTemplate>
                                                         <ItemStyle />

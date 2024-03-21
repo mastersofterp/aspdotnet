@@ -119,10 +119,10 @@ namespace IITMS
                 private bool _IsAutoUserCreated;
 
 
+                private bool _IsRetirmentDateCalculation;
 
 
-
-
+                private bool _EnableEmpSignonEmpInfoPage;
 
 
 
@@ -1614,9 +1614,30 @@ namespace IITMS
                     set { _PhotoSign = value; }
                 }
 
+                public bool IsRetirmentDateCalculation
+                {
+                    get
+                    {
+                        return _IsRetirmentDateCalculation;
+                    }
+                    set
+                    {
+                        _IsRetirmentDateCalculation = value;
+                    }
+                }
+                public bool IsEnableEmpSignatureinEmpPage
+                {
+                    set
+                    {
+                        _EnableEmpSignonEmpInfoPage = value;
+                    }
+                    get
+                    {
+                      return  _EnableEmpSignonEmpInfoPage;
+                    }
+                }
 
                 # endregion
-
             }
         }
     }

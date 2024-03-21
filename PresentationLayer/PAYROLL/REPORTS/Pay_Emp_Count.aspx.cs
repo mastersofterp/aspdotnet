@@ -100,8 +100,7 @@ public partial class PAYROLL_REPORTS_Pay_Emp_Count : System.Web.UI.Page
         {
            
             //FILL COLLEGE
-          objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID>0", "COLLEGE_ID");
-
+            objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "COLLEGE_ID ASC");
         }
         catch (Exception ex)
         {

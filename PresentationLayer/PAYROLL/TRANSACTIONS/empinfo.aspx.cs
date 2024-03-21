@@ -19,7 +19,7 @@ public partial class payroll_empinfo : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     int OrganizationId;
     bool IsGradepayApplicable;
-    
+    bool IsRetirmentDateCalculation, IsEnableEmpSignatureinEmpPage;
 
     #region Page Load
 
@@ -84,6 +84,16 @@ public partial class payroll_empinfo : System.Web.UI.Page
                 else
                 {
                     txtGradePay.Enabled = false;
+                }
+                IsRetirmentDateCalculation = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(IsRetirmentDateCalculation,0) IsRetirmentDateCalculation", string.Empty));
+                IsEnableEmpSignatureinEmpPage = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(EnableEmpSignonEmpInfoPage,1) EnableEmpSignonEmpInfoPage", string.Empty));
+                if (IsEnableEmpSignatureinEmpPage == true)
+                {
+                    divsign.Visible = true;
+                }
+                else
+                {
+                    divsign.Visible = false;
                 }
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
@@ -868,10 +878,12 @@ public partial class payroll_empinfo : System.Web.UI.Page
         //}
 
         EmpCreateController objECC = new EmpCreateController();
-
-        DateTime birthdate = DateTime.MinValue;
-        if (!txtBirthDate.Text.Trim().Equals(string.Empty))
-        {
+         IsRetirmentDateCalculation = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(IsRetirmentDateCalculation,0) IsRetirmentDateCalculation", string.Empty));
+         if (IsRetirmentDateCalculation == true)
+         {
+              DateTime birthdate = DateTime.MinValue;
+            if (!txtBirthDate.Text.Trim().Equals(string.Empty))
+            {
             DateTime RetDate = DateTime.MinValue;
             birthdate = Convert.ToDateTime(txtBirthDate.Text);
             RetDate = Convert.ToDateTime(objECC.RetirementDate(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy"));
@@ -885,11 +897,16 @@ public partial class payroll_empinfo : System.Web.UI.Page
             //birthdate = Convert.ToDateTime(txtBirthDate.Text);
             //txtRetireDate.Text = objECC.RetirementDate(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy");
         }
-
-
         //Paylevel_No	Staff_No	Paylevel_Name
-        objCommon.FillDropDownList(ddlPaylevel, "PAYROLL_PAYLEVEL", "Paylevel_No", "Paylevel_Name", "Staff_No=" + Convert.ToInt32(ddlStaff.SelectedValue) + "", "Paylevel_No ASC");
-    }
+         }
+         else  if (IsRetirmentDateCalculation == false)
+         {
+
+         }
+
+         objCommon.FillDropDownList(ddlPaylevel, "PAYROLL_PAYLEVEL", "Paylevel_No", "Paylevel_Name", "Staff_No=" + Convert.ToInt32(ddlStaff.SelectedValue) + "", "Paylevel_No ASC");
+
+      }
 
     private void ShowReport(string reportTitle, string rptFileName)
     {
@@ -1081,8 +1098,6 @@ public partial class payroll_empinfo : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-
-
     protected void txtBirthDate_TextChanged(object sender, EventArgs e)
     {
         EmpCreateController objECC = new EmpCreateController();
@@ -1095,51 +1110,38 @@ public partial class payroll_empinfo : System.Web.UI.Page
             txtBirthDate.Text = string.Empty;
             return;
         }
-
-        if (ddlStaff.SelectedValue != "0")
+        IsRetirmentDateCalculation = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(IsRetirmentDateCalculation,0) IsRetirmentDateCalculation", string.Empty));
+        if (IsRetirmentDateCalculation == true)
         {
-            if (!txtBirthDate.Text.Trim().Equals(string.Empty))
+            if (ddlStaff.SelectedValue != "0")
             {
-                //  DateTime RetDate = DateTime.MinValue;
-                birthdate = Convert.ToDateTime(txtBirthDate.Text);
-                RetDate = Convert.ToDateTime(objECC.RetirementDate(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy"));
-                if (RetDate == Convert.ToDateTime("9999-12-31"))
+                if (!txtBirthDate.Text.Trim().Equals(string.Empty))
                 {
+                    //  DateTime RetDate = DateTime.MinValue;
+                    birthdate = Convert.ToDateTime(txtBirthDate.Text);
+                    RetDate = Convert.ToDateTime(objECC.RetirementDate(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy"));
+                    if (RetDate == Convert.ToDateTime("9999-12-31"))
+                    {
+                    }
+                    else
+                    {
+                        txtRetireDate.Text = Convert.ToString(RetDate);
+                    }
                 }
-                else
-                {
-                    txtRetireDate.Text = Convert.ToString(RetDate);
-                }
-            }
+            } 
         }
+        else if (IsRetirmentDateCalculation == false)
+        {
 
+        }
         if (!txtBirthDate.Text.Trim().Equals(string.Empty))
         {
             DateTime dob = Convert.ToDateTime(txtBirthDate.Text);
             DateTime PresentYear = DateTime.Now;
-
             TimeSpan ts = PresentYear - dob;
             int Age = ts.Days / 365;
-
             txtAge.Text = Age.ToString();
         }
-    }
-
-    protected void txtJoinDate_TextChanged(object sender, EventArgs e)
-    {
-        //if (txtBirthDate.Text != string.Empty)
-        //{
-        //    DateTime dt_dateofBirth = Convert.ToDateTime(txtBirthDate.Text);
-        //    DateTime dt_joiningdt = Convert.ToDateTime(txtJoinDate.Text);
-        //    if (dt_dateofBirth > dt_joiningdt)
-        //    {
-        //        objCommon.DisplayMessage(this.Page, "Joining date should be greater than Birth Date", this.Page);
-        //        txtJoinDate.Text = string.Empty;
-
-        //        return;
-        //    }
-        //}
-
     }
 
     public void MessageBox(string msg)

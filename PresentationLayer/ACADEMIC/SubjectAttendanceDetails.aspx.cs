@@ -1,4 +1,15 @@
-﻿using System;
+﻿//======================================================================================
+// PROJECT NAME  : UAIMS                                                                
+// MODULE NAME   : ACADEMIC
+// PAGE NAME     : Faculty wise Attendance Report
+// CREATION DATE : 06-DECEMBER-2021                                                    
+// CREATED BY    : JAY S. TAKALKHEDE                                                      
+// MODIFIED DATE : 18-March-2024
+// MODIFIED BY   : Jay S. Takalkhede
+// MODIFIED DESC : Version RFC.1.1 1) 1) Add vistate session condition in Excel report 
+//=======================================================================================
+
+using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -109,6 +120,7 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
+        // Added By Jay Takalkhede On dated 18/03/2024 (TkNo.56508)
         ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
 
         DataSet ds = objAtt.GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);
@@ -185,11 +197,11 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
     }
     protected void btnExcel_Click(object sender, EventArgs e)
     {
+        // Added By Jay Takalkhede On dated 18/03/2024 (TkNo.56508)
+        ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
         GridView GVDayWiseAtt = new GridView();
         DataSet ds = objAtt.GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);
-        //string degree = ds.Tables[0].Rows[3].ToString();
-        //string branch = ds.Tables[0].Rows[4].ToString();
-     //   string facuilty = ds.Tables[0].Rows[8].ToString();
+
         if (ds != null && ds.Tables.Count > 0)
         {
             GVDayWiseAtt.DataSource = ds;

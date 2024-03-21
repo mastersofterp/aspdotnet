@@ -1039,7 +1039,8 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
 
             idno = Convert.ToInt32(ddlEmployee.SelectedValue);
 
-            url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
+            url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
+            //url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -1573,7 +1574,8 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             int idno = 0;
             idno = Convert.ToInt32(ddlEmployee.SelectedValue);
 
-            url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + department + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
+            //url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + department + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
+            url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + department + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";

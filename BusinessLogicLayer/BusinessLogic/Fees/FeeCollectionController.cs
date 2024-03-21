@@ -7257,5 +7257,33 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
         }
 
+        //Added by Rohit M  on 15_02_2024
+        public DataSet GetFeeItems_DataFineAllotmentNew(int sessionNo, int studentId, int semesterNo, string receiptType, int examtype, int currency, int payTypeNo, ref int status)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {
+                    new SqlParameter("@P_SESSIONNO", sessionNo),
+                    new SqlParameter("@P_IDNO", studentId),
+                    new SqlParameter("@P_SEMESTERNO", semesterNo),
+                    new SqlParameter("@P_RECEIPT_CODE", receiptType),
+                    new SqlParameter("@P_EXAMTYPE", examtype),
+                    new SqlParameter("@P_CURRENCY",currency),
+                    new SqlParameter("@P_PAYTYPENO",payTypeNo),
+                    new SqlParameter("@P_OUT", status)
+                };
+                sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
+                ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT_FOR_FINE_ALLOTMENT_NEW", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetFeeItems_Data() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
     }
 }

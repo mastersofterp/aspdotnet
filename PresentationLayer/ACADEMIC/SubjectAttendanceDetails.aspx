@@ -18,13 +18,12 @@
         </asp:UpdateProgress>
     </div>
     <style>
-       
         .dataTables_scrollHeadInner {
             width: max-content !important;
         }
     </style>
     <%--===== Data Table Script added by gaurav =====--%>
-         <script>
+    <script>
              $(document).ready(function () {
                  var table = $('#example2').DataTable({
                      responsive: true,
@@ -44,7 +43,7 @@
                                  //if (arr.indexOf(idx) !== -1) {
                                  //    return false;
                                  //} else {
-                                     return $('#example2').DataTable().column(idx).visible();
+                                 return $('#example2').DataTable().column(idx).visible();
                                  //}
                              }
                          },
@@ -60,7 +59,7 @@
                                                  //if (arr.indexOf(idx) !== -1) {
                                                  //    return false;
                                                  //} else {
-                                                     return $('#example2').DataTable().column(idx).visible();
+                                                 return $('#example2').DataTable().column(idx).visible();
                                                  //}
                                              }
                                          }
@@ -73,7 +72,7 @@
                                                  //if (arr.indexOf(idx) !== -1) {
                                                  //    return false;
                                                  //} else {
-                                                     return $('#example2').DataTable().column(idx).visible();
+                                                 return $('#example2').DataTable().column(idx).visible();
                                                  //}
                                              }
                                          }
@@ -86,7 +85,7 @@
                                                  //if (arr.indexOf(idx) !== -1) {
                                                  //    return false;
                                                  //} else {
-                                                     return $('#example2').DataTable().column(idx).visible();
+                                                 return $('#example2').DataTable().column(idx).visible();
                                                  //}
                                              }
                                          }
@@ -97,83 +96,83 @@
                      "bDestroy": true,
                  });
              });
-             var parameter = Sys.WebForms.PageRequestManager.getInstance();
-             parameter.add_endRequest(function () {
-                 $(document).ready(function () {
-                     var table = $('#example2').DataTable({
-                         responsive: true,
-                         lengthChange: true,
-                         scrollY: 320,
-                         scrollX: true,
-                         scrollCollapse: true,
-                         paging: false, // Added by Gaurav for Hide pagination
+          var parameter = Sys.WebForms.PageRequestManager.getInstance();
+          parameter.add_endRequest(function () {
+              $(document).ready(function () {
+                  var table = $('#example2').DataTable({
+                      responsive: true,
+                      lengthChange: true,
+                      scrollY: 320,
+                      scrollX: true,
+                      scrollCollapse: true,
+                      paging: false, // Added by Gaurav for Hide pagination
 
-                         dom: 'lBfrtip',
-                         buttons: [
-                             {
-                                 extend: 'colvis',
-                                 text: 'Column Visibility',
-                                 columns: function (idx, data, node) {
-                                     //var arr = [0];
-                                     //if (arr.indexOf(idx) !== -1) {
-                                     //    return false;
-                                     //} else {
-                                     return $('#example2').DataTable().column(idx).visible();
-                                     //}
-                                 }
-                             },
-                             {
-                                 extend: 'collection',
-                                 text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
-                                 buttons: [
-                                         {
-                                             extend: 'copyHtml5',
-                                             exportOptions: {
-                                                 columns: function (idx, data, node) {
-                                                     //var arr = [0];
-                                                     //if (arr.indexOf(idx) !== -1) {
-                                                     //    return false;
-                                                     //} else {
-                                                     return $('#example2').DataTable().column(idx).visible();
-                                                     //}
-                                                 }
-                                             }
-                                         },
-                                         {
-                                             extend: 'excelHtml5',
-                                             exportOptions: {
-                                                 columns: function (idx, data, node) {
-                                                     //var arr = [0];
-                                                     //if (arr.indexOf(idx) !== -1) {
-                                                     //    return false;
-                                                     //} else {
-                                                     return $('#example2').DataTable().column(idx).visible();
-                                                     //}
-                                                 }
-                                             }
-                                         },
-                                         {
-                                             extend: 'pdfHtml5',
-                                             exportOptions: {
-                                                 columns: function (idx, data, node) {
-                                                     //var arr = [0];
-                                                     //if (arr.indexOf(idx) !== -1) {
-                                                     //    return false;
-                                                     //} else {
-                                                     return $('#example2').DataTable().column(idx).visible();
-                                                     //}
-                                                 }
-                                             }
-                                         },
-                                 ]
-                             }
-                         ],
-                         "bDestroy": true,
-                     });
-                 });
-             });
+                      dom: 'lBfrtip',
+                      buttons: [
+                          {
+                              extend: 'colvis',
+                              text: 'Column Visibility',
+                              columns: function (idx, data, node) {
+                                  //var arr = [0];
+                                  //if (arr.indexOf(idx) !== -1) {
+                                  //    return false;
+                                  //} else {
+                                  return $('#example2').DataTable().column(idx).visible();
+                                  //}
+                              }
+                          },
+                          {
+                              extend: 'collection',
+                              text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
+                              buttons: [
+                                      {
+                                          extend: 'copyHtml5',
+                                          exportOptions: {
+                                              columns: function (idx, data, node) {
+                                                  //var arr = [0];
+                                                  //if (arr.indexOf(idx) !== -1) {
+                                                  //    return false;
+                                                  //} else {
+                                                  return $('#example2').DataTable().column(idx).visible();
+                                                  //}
+                                              }
+                                          }
+                                      },
+                                      {
+                                          extend: 'excelHtml5',
+                                          exportOptions: {
+                                              columns: function (idx, data, node) {
+                                                  //var arr = [0];
+                                                  //if (arr.indexOf(idx) !== -1) {
+                                                  //    return false;
+                                                  //} else {
+                                                  return $('#example2').DataTable().column(idx).visible();
+                                                  //}
+                                              }
+                                          }
+                                      },
+                                      {
+                                          extend: 'pdfHtml5',
+                                          exportOptions: {
+                                              columns: function (idx, data, node) {
+                                                  //var arr = [0];
+                                                  //if (arr.indexOf(idx) !== -1) {
+                                                  //    return false;
+                                                  //} else {
+                                                  return $('#example2').DataTable().column(idx).visible();
+                                                  //}
+                                              }
+                                          }
+                                      },
+                              ]
+                          }
+                      ],
+                      "bDestroy": true,
+                  });
+              });
+          });
 
-    </script>
+          </script>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <div class="row">
@@ -305,39 +304,43 @@
                                 <asp:Button ID="btnReport" runat="server" Text="Show" ValidationGroup="submit"
                                     TabIndex="6" CssClass="btn btn-info" OnClick="btnReport_Click" />
                                 <asp:Button ID="btnExcel" runat="server" Text="Faculty wise Attendance Report" ValidationGroup="submit"
-                                    TabIndex="6" CssClass="btn btn-info" OnClick="btnExcel_Click"/>
+                                    TabIndex="6" CssClass="btn btn-info" OnClick="btnExcel_Click" />
                                 <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click1" Text="Cancel"
                                     TabIndex="7" CssClass="btn btn-warning" />
                                 <asp:ValidationSummary ID="vsStud" runat="server" DisplayMode="List" ShowMessageBox="True"
                                     ShowSummary="False" ValidationGroup="submit" />
                             </div>
                             <div class=" col-12">
-                                    <div class="sub-heading" id="divlvStudentHeading" runat="server" visible="false">
+                                <div class="sub-heading" id="divlvStudentHeading" runat="server" visible="false">
                                     <h5>Student Attendance Details</h5>
                                 </div>
-                                    <asp:ListView ID="lvStudAttendance" runat="server" >
-                                        <LayoutTemplate>
-                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="example2">
-                                                <thead class="bg-light-blue">
-                                                    <tr>
-                                                        <th><asp:Label ID="lblDYRRNo" runat="server" Font-Bold="true"></asp:Label></th>
-                                                        <th>Student Name</th>
-                                                        <th><asp:Label ID="lblDYlvDegree" runat="server" Font-Bold="true"></asp:Label></th>
-                                                        <th><asp:Label ID="lblDYddlBranch" runat="server" Font-Bold="true"></asp:Label></th>
-                                                        <th>Course Code-Course Name</th>
-                                                        <th>Total Calsses</th>
-                                                        <th>Present</th>
-                                                        <th>Absent</th>
-                                                        <th>Percentage</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr id="itemPlaceholder" runat="server" />
-                                                </tbody>
-                                            </table>
-                                        </LayoutTemplate>
-                                        <ItemTemplate>
-                                            <tr>
+                                <asp:ListView ID="lvStudAttendance" runat="server">
+                                    <LayoutTemplate>
+                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="example2">
+                                            <thead class="bg-light-blue">
+                                                <tr>
+                                                    <th>
+                                                        <asp:Label ID="lblDYRRNo" runat="server" Font-Bold="true"></asp:Label></th>
+                                                    <th>Student Name</th>
+                                                    <th>
+                                                        <asp:Label ID="lblDYlvDegree" runat="server" Font-Bold="true"></asp:Label></th>
+                                                    <th>
+                                                        <asp:Label ID="lblDYddlBranch" runat="server" Font-Bold="true"></asp:Label></th>
+                                                    <th>Course Code</th>
+                                                    <th>Course Name</th>
+                                                    <th>Total Calsses</th>
+                                                    <th>Present</th>
+                                                    <th>Absent</th>
+                                                    <th>Percentage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="itemPlaceholder" runat="server" />
+                                            </tbody>
+                                        </table>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+                                        <tr>
                                             <td>
                                                 <%# Eval("REGNO") %>
                                             </td>
@@ -351,7 +354,10 @@
                                                 <%# Eval("BRANCH") %>
                                             </td>
                                              <td>
-                                                 <%# Eval("CODECOURSE") %>
+                                                <%# Eval("CCODE") %>
+                                            </td>
+                                            <td>
+                                                <%# Eval("COURSENAME") %>
                                             </td>
                                             <td>
                                                 <%# Eval("TOTAL_CLASSES") %>
@@ -359,20 +365,20 @@
                                             <td>
                                                 <%# Eval("PRESENT") %>
                                             </td>
-                                             <td>
+                                            <td>
                                                 <%# Eval("ABSENT") %>
                                             </td>
-                                             <td>
+                                            <td>
                                                 <%# Eval("PERCENTAGE") %>
                                             </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                        <EmptyItemTemplate>
-                                            <p>No record found! </p>
-                                        </EmptyItemTemplate>
-                                    </asp:ListView>
+                                        </tr>
+                                    </ItemTemplate>
+                                    <EmptyItemTemplate>
+                                        <p>No record found! </p>
+                                    </EmptyItemTemplate>
+                                </asp:ListView>
 
-                                </div>
+                            </div>
 
                         </div>
                     </div>

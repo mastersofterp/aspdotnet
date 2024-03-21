@@ -423,8 +423,17 @@ public partial class ESTABLISHMENT_LEAVES_Master_Passing_Authority : System.Web.
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT,LEAVES," + rptFileName;
           //  url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@username=" + Session["username"].ToString();
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["username"].ToString();
-          
+           // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["username"].ToString();
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=0," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["username"].ToString();
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["username"].ToString();
+            }
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";

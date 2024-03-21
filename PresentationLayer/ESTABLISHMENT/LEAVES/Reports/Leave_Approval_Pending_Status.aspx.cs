@@ -230,7 +230,8 @@ public partial class ESTABLISHMENT_LEAVES_Reports_Leave_Approval_Pending_Status 
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + ",@P_STATUS=" + status.ToString().Trim() + ",@P_EMPNO=" + empno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+            //url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + ",@P_STATUS=" + status.ToString().Trim() + ",@P_EMPNO=" + empno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+            url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + ",@P_STATUS=" + status.ToString().Trim() + ",@P_EMPNO=" + empno + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + "";
 
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
 
@@ -426,8 +427,8 @@ public partial class ESTABLISHMENT_LEAVES_Reports_Leave_Approval_Pending_Status 
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + ",@P_STATUS=" + status.ToString().Trim() + ",@P_EMPNO=" + empno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
-            url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + ",@P_EMPNO=" + empno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_STATUS=" + status.ToString().Trim() + "";
-
+            //url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + ",@P_EMPNO=" + empno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_STATUS=" + status.ToString().Trim() + "";
+            url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + ",@P_EMPNO=" + empno + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STATUS=" + status.ToString().Trim() + "";
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";

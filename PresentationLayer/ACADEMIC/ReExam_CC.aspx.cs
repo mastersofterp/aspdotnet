@@ -46,6 +46,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
     bool flag = true;
     decimal Amt = 0;
     decimal CourseAmtt = 0;
+    int rptcnt = 1;
 
 
     protected void Page_PreInit(object sender, EventArgs e)
@@ -86,7 +87,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                     schemeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + idno));
                     int paidsession = 0;
 
-
+                    #region
                     int ifPaid = 0;
                     ifPaid = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(DISTINCT 1) PAY_COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + "  AND RECIEPT_CODE = 'REF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0"));
                     Session["ifPaid"] = ifPaid;
@@ -110,28 +111,30 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                         btnPay.Visible = false;
                         btnSubmit_WithDemand.Visible = false;
                         btnSubmit.Visible = false;
-                        return;
+                        //return;
                     }
 
-                    else
+                    #endregion
+                    //  else
+                    //  {
+
+                    if (CheckActivityCollege(cid))
                     {
 
-                        if (CheckActivityCollege(cid))
-                        {
+                        this.ShowDetails();
+                        bindcourses();
 
-                            this.ShowDetails();
-                            bindcourses();
-
-                        }
                     }
+                    //  }                
                 }
                 else
                 {
                     pnlSearch.Visible = true;
-                    btnSubmit.Visible = false;
-                    btnPay.Visible = false;
-                    btnPrintRegSlip.Visible = false;
-                    btnSubmit_WithDemand.Visible = false;
+                    // btnSubmit.Visible = false;
+                    // btnPay.Visible = false;
+                    //// btnPrintRegSlip.Visible = false;
+                    // btnSubmit_WithDemand.Visible = false;
+                    divbtn.Visible = false;
                 }
 
                 ViewState["ipAddress"] = GetUserIPAddress(); //Request.ServerVariables["REMOTE_ADDR"];              
@@ -325,7 +328,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
         try
         {
 
-
+            rptcnt++;
             int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO='" + Convert.ToInt32(Session["idno"]) + "'"));
             int branchno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO='" + Convert.ToInt32(Session["idno"]) + "'"));
             int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"])));
@@ -336,9 +339,19 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
             //url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + Convert.ToInt32(Session["idno"]) + ",@P_SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]) + ",@P_DEGREENO=" + degreeno + ",@P_BRANCHNO=" + branchno + ",@P_SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip) + ",@P_SEMESTERNO IN (" + Session["Semester"].ToString()+")"; 
             url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + Convert.ToInt32(Session["idno"]) + ",@P_SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]) + ",@P_DEGREENO=" + degreeno + ",@P_BRANCHNO=" + branchno + ",@P_SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip) + ",@P_SEMESTERNO=" + 0;
 
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " </script>";
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+
+
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterStartupScript(this.updatepnl, this.updatepnl.GetType(), "controlJSScript", sb.ToString(), true);
+
+
         }
 
         catch (Exception ex)
@@ -366,38 +379,86 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
         lblsessionname.ToolTip = sessionno;
         //sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "SA.SESSION_NO", "SA.SEMESTER like '%" + Convert.ToInt32(ViewState["SEMESTERNO"]) + "%' AND am.PAGE_LINK like '%' +  CAST('" + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + "' AS NVARCHAR(5))  +'%'  AND SA.STARTED = 1 AND COLLEGE_IDS like '%" + Convert.ToInt32(ViewState["COLLEGE_ID"]) + "%' AND SA.DEGREENO like '%" + Convert.ToInt32(ViewState["DEGREENO"]) + "%'  AND SA.BRANCH LIKE '%" + Convert.ToInt32(ViewState["BRANCHNO"]) + "%' UNION ALL SELECT 0 AS SESSION_NO");
 
-        ActivityController objActController = new ActivityController();
-        DataTableReader dtr = objActController.CheckActivity(Convert.ToInt32(sessionno), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
 
-        if (dtr.Read())
+        #region
+        if (Session["sessionnonew"].ToString() == "0")
         {
-            ViewState["ACTIVITY_NO"] = Convert.ToInt32(dtr["ACTIVITY_NO"]);
-
-            if (dtr["STARTED"].ToString().ToLower().Equals("false"))
+            int paidsession = 0;
+            int ifPaid = 0;
+            ifPaid = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(DISTINCT 1) PAY_COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + "  AND RECIEPT_CODE = 'REF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0"));
+            Session["ifPaid"] = ifPaid;
+            if (ifPaid > 0)
             {
-                objCommon.DisplayMessage("This Activity has been Stopped. Contact Admin.!!", this.Page);
+
+                paidsession = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "MAX(SESSIONNO) AS SESSIONNO", "IDNO=" + Convert.ToInt32(Session["idno"]) + "  AND RECIEPT_CODE = 'REF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0"));
+
+                ViewState["sessionnonew"] = paidsession;
+                Session["sessionnonew"] = paidsession;
+                string sessionnonames = objCommon.LookUp("ACD_SESSION_MASTER", "TOP (1)SESSION_NAME", "SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"]));
+                lblsessionname.Text = sessionnonames;
+                lblsessionname.ToolTip = paidsession.ToString();
+
+                this.ShowDetails();
+                // bindcourses();
+                divbtn.Visible = true;
+
+                lvFailCourse.Visible = false;
+                lblfessapplicable.Text = string.Empty;
+                lblCertificateFee.Text = string.Empty;
+                lblTotalExamFee.Text = "";
+                lblLateFee.Text = "";
+                FinalTotal.Text = "";
+
+                btnPrintRegSlip.Visible = true;
+                btnPrintRegSlip.Enabled = true;
+                btnPay.Visible = false;
+                btnSubmit_WithDemand.Visible = false;
+                btnSubmit.Visible = false;
+
+                //return;
                 ret = false;
-                divbtn.Visible = false;
-
+                // return ret;
             }
-            if (dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
-            {
-                objCommon.DisplayMessage("Pre-Requisite Activity for this Page is Not Stopped!!", this.Page);
-                ret = false;
-                divbtn.Visible = false;
-
-            }
-
+            return ret;
         }
+        #endregion
+
         else
         {
-            objCommon.DisplayMessage("Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
 
-            ret = false;
-            divbtn.Visible = false;
+            ActivityController objActController = new ActivityController();
+            DataTableReader dtr = objActController.CheckActivity(Convert.ToInt32(sessionno), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
+
+            if (dtr.Read())
+            {
+                ViewState["ACTIVITY_NO"] = Convert.ToInt32(dtr["ACTIVITY_NO"]);
+
+                if (dtr["STARTED"].ToString().ToLower().Equals("false"))
+                {
+                    objCommon.DisplayMessage("This Activity has been Stopped. Contact Admin.!!", this.Page);
+                    ret = false;
+                    divbtn.Visible = false;
+
+                }
+                if (dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
+                {
+                    objCommon.DisplayMessage("Pre-Requisite Activity for this Page is Not Stopped!!", this.Page);
+                    ret = false;
+                    divbtn.Visible = false;
+
+                }
+
+            }
+            else
+            {
+                objCommon.DisplayMessage("Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
+
+                ret = false;
+                divbtn.Visible = false;
+            }
+            dtr.Close();
+            return ret;
         }
-        dtr.Close();
-        return ret;
     }
     protected void bindcourses()
     {
@@ -454,6 +515,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
 
                 if (dsSubjects.Tables[0].Rows.Count > 0)
                 {
+                    divbtn.Visible = true;
                     lvFailCourse.DataSource = dsSubjects;
                     lvFailCourse.DataBind();
                     lvFailCourse.Visible = true;
@@ -467,6 +529,7 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                 }
                 else
                 {
+                    divbtn.Visible = true;
                     lvFailCourse.DataSource = null;
                     lvFailCourse.DataBind();
                     lvFailCourse.Visible = false;
@@ -553,7 +616,9 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                     btnSubmit_WithDemand.Enabled = false;
                     btnSubmit.Visible = true;
                     btnSubmit.Enabled = true;
+                    btnPrintRegSlip.Enabled = true;
                     btnPrintRegSlip.Visible = true;
+
                     lblfessapplicable.Text = "";
                     lblCertificateFee.Text = "";
                     lblTotalExamFee.Text = "";
@@ -761,7 +826,9 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
                         else
                         {
                             CalculateTotalCredit();
+                            divbtn.Visible = true;
                             btnPrintRegSlip.Visible = true;
+                            btnPrintRegSlip.Enabled = true;
                             //btnSubmit.Visible = true;
                             btnPay.Visible = false;
                             //btnSubmit_WithDemand.Visible = false;
@@ -1021,13 +1088,29 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
     {
         if (Convert.ToInt32(Session["OrgId"]) == 9)//FOR ATLAS ADDED BY GAURAV 31-3-2023
         {
-            ShowReport("RESIT", "rptRESIT_Reg_ATLAS.rpt");
-            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(7)').hide();});", true);
+
+            if (rptcnt == 1)
+            {
+                ShowReport("RESIT", "rptRESIT_Reg_ATLAS.rpt");
+                ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(7)').hide();});", true);
+            }
+            else
+            {
+
+                rptcnt++;
+            }
         }
         else
         {
+            if (rptcnt == 1)
+            {
+                ShowReport("RESIT", "rptRESIT_Reg_CC.rpt");
+            }
+            else
+            {
 
-            ShowReport("RESIT", "rptRESIT_Reg_CC.rpt");
+                rptcnt++;
+            }
 
         }
 
@@ -2790,6 +2873,8 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
+        //Response.Redirect("ReExam_CC.aspx",false);
+        //  Response.Redirect("~/ACADEMIC/Admin.aspx");
 
         try
         {
@@ -2810,59 +2895,60 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
             cid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno));
 
             // added by gaurav 
-            int paidsession = 0;
+            //int paidsession = 0;
 
 
-            int ifPaid = 0;
-            ifPaid = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(DISTINCT 1) PAY_COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + "  AND RECIEPT_CODE = 'REF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0"));
-            if (ifPaid > 0)
+            //int ifPaid = 0;
+            //ifPaid = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(DISTINCT 1) PAY_COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + "  AND RECIEPT_CODE = 'REF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0"));
+            //if (ifPaid > 0)
+            //{
+
+            //    paidsession = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "MAX(SESSIONNO) AS SESSIONNO", "IDNO=" + Convert.ToInt32(Session["idno"]) + "  AND RECIEPT_CODE = 'REF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0"));
+
+            //    ViewState["sessionnonew"] = paidsession;
+            //    Session["sessionnonew"] = paidsession;
+            //    string sessionnoname = objCommon.LookUp("ACD_SESSION_MASTER", "TOP (1)SESSION_NAME", "SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"]));
+            //    lblsessionname.Text = sessionnoname;
+            //    lblsessionname.ToolTip = paidsession.ToString();
+
+            //    this.ShowDetails();
+            //  //  this.ShowDetails();
+            //    // bindcourses();
+            //    divbtn.Visible = true;
+
+            //    btnPrintRegSlip.Visible = true;
+            //    //btnPrintRegSlip.Enabled = true;
+            //    btnPay.Visible = false;
+            //    btnSubmit_WithDemand.Visible = false;
+            //    btnSubmit.Visible = false;
+
+            //}
+            //else
+            //{
+            if (CheckActivityCollege(cid))
             {
 
-                paidsession = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "MAX(SESSIONNO) AS SESSIONNO", "IDNO=" + Convert.ToInt32(Session["idno"]) + "  AND RECIEPT_CODE = 'REF' AND ISNULL(RECON,0) = 1 AND ISNULL(CAN,0)=0"));
-
-                ViewState["sessionnonew"] = paidsession;
-                Session["sessionnonew"] = paidsession;
-                string sessionnoname = objCommon.LookUp("ACD_SESSION_MASTER", "TOP (1)SESSION_NAME", "SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"]));
-                lblsessionname.Text = sessionnoname;
-                lblsessionname.ToolTip = paidsession.ToString();
-
+                lblfessapplicable.Text = string.Empty;
+                lblCertificateFee.Text = string.Empty;
+                lblTotalExamFee.Text = "";
+                lblLateFee.Text = "";
+                FinalTotal.Text = "";
                 this.ShowDetails();
-                //  this.ShowDetails();
-                // bindcourses();
+                bindcourses();
+                divbtn.Visible = true;
+                //btnhideshow();
+
+                //btnSubmit.Visible = true;
+                //btnSubmit.Enabled = true;
+                //btnPrintRegSlip.Visible = true;
+                //btnSubmit_WithDemand.Visible = true;
+                //btnSubmit_WithDemand.Enabled = true;
+                //btnPay.Visible = true;
 
 
-                btnPrintRegSlip.Visible = true;
-                btnPrintRegSlip.Enabled = true;
-                btnPay.Visible = false;
-                btnSubmit_WithDemand.Visible = false;
-                btnSubmit.Visible = false;
-                return;
             }
-            else
-            {
-                if (CheckActivityCollege(cid))
-                {
+            //  }
 
-                    lblfessapplicable.Text = string.Empty;
-                    lblCertificateFee.Text = string.Empty;
-                    lblTotalExamFee.Text = "";
-                    lblLateFee.Text = "";
-                    FinalTotal.Text = "";
-                    this.ShowDetails();
-                    bindcourses();
-                    divbtn.Visible = true;
-                    //btnhideshow();
-
-                    //btnSubmit.Visible = true;
-                    //btnSubmit.Enabled = true;
-                    //btnPrintRegSlip.Visible = true;
-                    //btnSubmit_WithDemand.Visible = true;
-                    //btnSubmit_WithDemand.Enabled = true;
-                    //btnPay.Visible = true;
-
-
-                }
-            }
             //else
             //{
             //
@@ -2893,10 +2979,13 @@ public partial class Academic_ReExam_CC : System.Web.UI.Page
     protected void btnClear_Click(object sender, EventArgs e)
     {
 
-        txtEnrollno.Text = string.Empty;
-        divCourses.Visible = false;
-        lvFailCourse.Visible = false;
-        divbtn.Visible = false;
+        //txtEnrollno.Text = string.Empty;
+        //divCourses.Visible = false;
+        //lvFailCourse.Visible = false;
+        //divbtn.Visible = false;
+        HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Url.AbsoluteUri, true);
+
+
     }
 
 

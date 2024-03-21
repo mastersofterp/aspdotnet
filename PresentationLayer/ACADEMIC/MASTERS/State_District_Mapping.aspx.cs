@@ -132,11 +132,11 @@ public partial class ACADEMIC_MASTERS_State_District_Mapping : System.Web.UI.Pag
         {
 
             string DistrictName = objCommon.LookUp("ACD_DISTRICT", "DISTRICTNAME", "UPPER(DISTRICTNAME)='"+txtDistrict.Text.ToUpper().Trim()+"'");
-            if (DistrictName != string.Empty)
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert(`District already exists.`)", true);
-                return;
-            }
+            //if (DistrictName != string.Empty)
+            //{
+            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert(`District already exists.`)", true);
+            //    return;
+            //}
             
             if (ViewState["add"].ToString().Equals("add"))
             {

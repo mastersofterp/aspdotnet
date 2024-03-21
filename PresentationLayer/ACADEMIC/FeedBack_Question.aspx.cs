@@ -27,6 +27,7 @@ using IITMS.SQLServer.SQLDAL;
 using System.Data.SqlClient;
 using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.IO;
 
 public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
 {
@@ -301,9 +302,9 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
     {
         try
         {
-            if (txtQuestion.Text.Length > 125)
+            if (txtQuestion.Text.Length > 250)
             {
-                objCommon.DisplayMessage("Maximum characters for feedback question should be less than 125 !", this.Page);
+                objCommon.DisplayMessage("Maximum characters for feedback question should be less than 250 !", this.Page);
                 return;
             }
 
@@ -1120,6 +1121,35 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
             {
                 divansoption.Visible = false;
             }
+        }
+    }
+    protected void btnExcel_Click(object sender, EventArgs e)
+    {
+        string SP_Name2 = "PKG_ACD_FEEDBACK_QUESTION_DUMP_DATA";
+        string SP_Parameters2 = "@P_FEEDBACK_TYPE";
+        string Call_Values2 = "" + Convert.ToInt32( ddlCT.SelectedValue) + "";
+        DataSet ds = objCommon.DynamicSPCall_Select(SP_Name2, SP_Parameters2, Call_Values2);
+        DataGrid dg = new DataGrid();
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            string attachment = "attachment; filename= Feedback_Question_Report.xlsx";
+
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/" + "ms-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            dg.DataSource = ds.Tables[0];
+            dg.DataBind();
+            dg.HeaderStyle.Font.Bold = true;
+            dg.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage("Record Not Found!!", this.Page);
+            return;
         }
     }
 }

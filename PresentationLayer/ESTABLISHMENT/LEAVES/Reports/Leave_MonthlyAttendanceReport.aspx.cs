@@ -222,8 +222,9 @@ public partial class ESTABLISHMENT_LEAVES_Reports_Leave_MonthlyAttendanceReport 
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_DEPTNO=" + deptno + ",@P_EMPNO=" + empno + ",@P_FROMDATE=" + Fdate.ToString().Trim()+",@P_TODATE="+Tdate.ToString().Trim()+"";
+            url += "&param=@P_EMPNO=" + empno + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + " ,@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@Month=" + month + ",@Year=" + year + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ddlcollege.SelectedValue) + "";
 
-            url += "&param=@P_EMPNO=" + empno + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + " ,@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@Month=" + month + ",@Year=" + year + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlcollege.SelectedValue) + " ";
+           // url += "&param=@P_EMPNO=" + empno + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + " ,@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@Month=" + month + ",@Year=" + year + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlcollege.SelectedValue) + " ";
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";

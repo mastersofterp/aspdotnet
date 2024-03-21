@@ -218,8 +218,8 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
             objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNO ASC");
 
             ddlFloorNo.Focus();
-            int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
-            ViewState["CollegeCode"] = collegecode;
+            //int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
+            //ViewState["CollegeCode"] = collegecode;
 
         }
         else

@@ -250,8 +250,21 @@ namespace IITMS
                     get { return _projectname; }
                     set { _projectname = value; }
                 }
-         
 
+                //Added by  Shailendra K on dated 13.03.2024 as per T-55537 & 55470
+                private int _academicYearID;
+                public int AcademicYearID
+                {
+                    get { return _academicYearID; }
+                    set { _academicYearID = value; }
+                }
+
+                private int _studyPattern = 0;
+                public int StudyPatternNo
+                {
+                    get { return _studyPattern; }
+                    set { _studyPattern = value; }
+                }
                 #endregion
             }
         }

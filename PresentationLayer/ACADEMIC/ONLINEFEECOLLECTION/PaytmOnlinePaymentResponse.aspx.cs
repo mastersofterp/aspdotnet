@@ -96,8 +96,8 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
             {
 
                 DataSet Orgds = null;
-                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
-                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
+                Orgds = objOrg.GetOrganizationById(Ord_Id);
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -116,6 +116,19 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
                     }
                 }
+
+
+                //SqlDataReader dr = objCommon.GetCommonDetails();
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        //lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        //lblAddress.Text = dr["College_Address"].ToString();
+                //        Session["OrgId"] = dr["OrganizationId"].ToString();
+                //        //imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
 
                 // get fetch paytm response
                 FetchPaytmResponse();
@@ -144,9 +157,11 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
             if (parameters.ContainsKey("CHECKSUMHASH"))
             {
+                Order_ID = parameters["ORDERID"];
                 paytmChecksum = parameters["CHECKSUMHASH"];
                 parameters.Remove("CHECKSUMHASH");
             }
+
             if (parameters.ContainsKey("ORDERID"))
             {
                 Order_ID = parameters["ORDERID"];
@@ -156,10 +171,9 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
             if (CheckSum.verifyCheckSum(merchantKey, parameters, paytmChecksum))
             {
-
                 lblOrderid.Text = parameters["ORDERID"].ToString();
                 lblAmount.Text = parameters["TXNAMOUNT"].ToString();
-                // lblPStatus.Text = parameters["STATUS"].ToString();
+               // lblPStatus.Text = parameters["STATUS"].ToString();
                 //lblTxntype.Text = "Online";
                 //lblGateway.Text = parameters["GATEWAYNAME"].ToString();
                 //lblResCode.Text = parameters["RESPCODE"].ToString();
@@ -177,7 +191,12 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
                
                 ViewState["order_id"] = parameters["ORDERID"].ToString();
                 var Idno = objCommon.LookUp("ACD_DCR_TEMP", "IDNO", "ORDER_ID='" + Order_ID + "'");
-                 
+                var installment_No = objCommon.LookUp("ACD_DCR_TEMP", "sem_reg", "ORDER_ID='" + Order_ID + "'");
+                if (installment_No != "")
+                {
+                    installmentno = Convert.ToInt32(installment_No);
+                }
+
                 ViewState["IDNO"] = Idno;
                 Session["order_id"] = order_id.ToString();
                 Session["idno"] = Idno;
@@ -217,6 +236,8 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
                     string UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
                     string UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO = '" + Convert.ToInt32(UA_IDNO) + "'");
+                    string UA_FULLNAME = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_IDNO = '" + Convert.ToInt32(UA_IDNO) + "'");
+                    Session["UAFULLNAME"] = UA_FULLNAME;
 
                     int result = 0;
                     string PaymentFor = string.Empty, txnMessage = string.Empty, BankReferenceNo = string.Empty;
@@ -232,15 +253,23 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
                     objsem.IPADDRESS = Request.ServerVariables["REMOTE_HOST"];
                     objsem.Date_of_Payment = DateTime.Now.ToString("dd/MM/yyyy");
                     int output = 0;
+                    var DCR_NO = "0"; 
 
                     if (Convert.ToInt32(installmentno) > 0)
                     {
                         output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, rec_code, order_id, transactionId, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
+                        DCR_NO = objCommon.LookUp("ACD_DCR", "ISNULL(DCR_NO,0) AS DCR_NO", "ORDER_ID = '" + order_id + "'");
                     }
                     else
                     {
                         output = objFees.InsertOnlinePayment_DCR(Idno, rec_code, order_id, transactionId, "O", "1", amount, "Success", Regno, "-");
+                        DCR_NO = objCommon.LookUp("ACD_DCR", "ISNULL(DCR_NO,0) AS DCR_NO", "ORDER_ID = '" + order_id + "'");
                     }
+
+                    if (DCR_NO != "")
+                        Session["DCRNO"] = DCR_NO;
+                    else
+                        Session["DCRNO"] = DCR_NO;
 
                     output = objFees.UpdatePAYTMOnlinePaymentlog(Convert.ToInt32(Idno), order_id, tokenID, trackID, feeType, txnStatus, timeStamp);     //trackID =  transactionId
 
@@ -282,8 +311,7 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
     {
     
         string ptype = (objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_PAYMENTTYPE P ON (A.PTYPE=P.PAYTYPENO) ", "PAYTYPENAME", "IDNO=" + Session["idno"].ToString()));
-        var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
-        if (ptype == "Provisional" && OrgId.ToString() == "5")
+        if (ptype == "Provisional" && Session["OrgId"].ToString() == "5")
         {
             //ShowReport("InstallmentOnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
 
@@ -293,6 +321,7 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
         else
         {
             ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            //ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt", Convert.ToInt32(Session["DCRNO"]));
         }
     }
 
@@ -336,6 +365,38 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
         //Response.Redirect(returnpageurl);
         Response.Redirect("~/default.aspx");
     }
+
+    // Added by Gopal M 12032024 Ticket#52905
+    private void ShowReportOnline(string reportTitle, string rptFileName, int DRCNO)
+    {
+        try
+        {
+            int IDNO = Convert.ToInt32(Session["idno"]);
+            int College_ID = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+
+            url += "&param=@P_COLLEGE_CODE=" + College_ID + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DRCNO) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
+
+            //divMSG.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMSG.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMSG.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            // ScriptManager.RegisterClientScriptBlock(this.updPopUP, this.updPopUP.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
     #endregion
 
 

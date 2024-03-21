@@ -298,7 +298,7 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
             url += "&path=~,Reports,Academic," + rptFileName;
 
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGE_ID=" + ddlColg.SelectedValue + ",@P_SCHEMENO=" + ddlScheme.SelectedValue + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_BRANCHNO=" + ViewState["branchno"];
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_BRANCHNO=" + ViewState["branchno"];
 
             //To open new window from Updatepanel
             System.Text.StringBuilder sb = new System.Text.StringBuilder();

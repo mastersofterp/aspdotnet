@@ -19,13 +19,14 @@
         }
         .btn-success {}
     </style>
-
+    <asp:UpdatePanel ID="updmessAppl" runat="server">
+        <ContentTemplate>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
                 <div class="box-header with-border" style="display: flex;">
-                    <h3 class="box-title">HOSTEL GATE PASS DETAILS</h3>
+                    <h3 class="box-title">Hostel Gate Pass Report</h3>
                     <%--                    <asp:Button ID="btnAddGatepass" runat="server" Text="Add Gate Pass" Height="20%" />--%>
                 </div>
 
@@ -146,7 +147,7 @@
                         <div class="row text-center" style="align-items: center;">
                             <div class="col-12">
                                 <asp:Button ID="btnReport" runat="server" Text="Report" CssClass="btn btn-primary" ValidationGroup="submit" OnClick="btnReport_Click" Width="68px" />
-                                <asp:Button ID="btnExcelReport" runat="server" Text="Excel Report" CssClass="btn btn-success" ValidationGroup="submit" Width="110px" OnClick="btnExcelReport_Click" />
+                                <asp:Button ID="btnExcelReport" runat="server" Text="Excel Report" CssClass="btn btn-success" ValidationGroup="submit" Width="100px" OnClick="btnExcelReport_Click" />
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-danger" OnClick="btnCancel_Click" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="submit"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
@@ -171,7 +172,12 @@
     <script src="https://cdn.datatables.net/responsive/2.2.0/js/responsive.bootstrap.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
+            </ContentTemplate>
+        <Triggers>
+          <asp:PostBackTrigger ControlID="btnReport" />
+            <asp:PostBackTrigger ControlID="btnExcelReport" />
+         </Triggers>
+</asp:UpdatePanel>
 </asp:Content>
 
 

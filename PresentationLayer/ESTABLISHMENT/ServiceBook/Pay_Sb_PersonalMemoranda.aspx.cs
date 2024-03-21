@@ -302,23 +302,23 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PersonalMemoranda : System
                 objEmpMas.AICTE_NO = string.Empty;
             }
             //
-            if (txtCountry.Text != string.Empty)
-            {
-                objEmpMas.COUNTRY = txtCountry.Text;
-            }
-            else
-            {
-                objEmpMas.COUNTRY = string.Empty;
-            }
+            //if (txtCountry.Text != string.Empty)
+            //{
+            //    objEmpMas.COUNTRY = txtCountry.Text;
+            //}
+            //else
+            //{
+            //    objEmpMas.COUNTRY = string.Empty;
+            //}
 
-            if (txtState.Text != string.Empty)
-            {
-                objEmpMas.STATE = txtState.Text;
-            }
-            else
-            {
-                objEmpMas.STATE = string.Empty;
-            }
+            //if (txtState.Text != string.Empty)
+            //{
+            //    objEmpMas.STATE = txtState.Text;
+            //}
+            //else
+            //{
+            //    objEmpMas.STATE = string.Empty;
+            //}
 
             if (txtCity.Text != string.Empty)
             {
@@ -359,6 +359,28 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PersonalMemoranda : System
             }
 
             objEmpMas.UA_NO = Convert.ToInt32(Session["userno"].ToString());
+
+            if (ddlCountry.SelectedIndex > 0)
+            {
+                objEmpMas.COUNTRYNO = Convert.ToInt32(ddlCountry.SelectedValue);
+                objEmpMas.COUNTRY = ddlCountry.SelectedItem.Text;
+            }
+            else
+            {
+                objEmpMas.COUNTRYNO = 0;
+                objEmpMas.COUNTRY = string.Empty;
+            }
+
+            if (ddlState.SelectedIndex > 0)
+            {
+                objEmpMas.STATENO = Convert.ToInt32(ddlState.SelectedValue);
+                objEmpMas.STATE = ddlState.SelectedItem.Text;
+            }
+            else
+            {
+                objEmpMas.STATENO = 0;
+                objEmpMas.STATE = string.Empty;
+            }           
 
             CustomStatus cs = (CustomStatus)objServiceBook.UpdatePersonalMemorandam(objEmpMas, mothername);
             if (cs.Equals(CustomStatus.RecordUpdated))
@@ -498,13 +520,14 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PersonalMemoranda : System
                 txtWhats.Text = ds.Tables[0].Rows[0]["AlternateMobileNo"].ToString();
                 txtPassport.Text = ds.Tables[0].Rows[0]["PASSPORTNO"].ToString();
                 txtPersonalEmail.Text = ds.Tables[0].Rows[0]["ALTERNATE_EMAILID"].ToString();
-                txtCountry.Text = ds.Tables[0].Rows[0]["COUNTRY"].ToString();
-                txtState.Text = ds.Tables[0].Rows[0]["STATE"].ToString();
+                //txtCountry.Text = ds.Tables[0].Rows[0]["COUNTRY"].ToString();
+                //txtState.Text = ds.Tables[0].Rows[0]["STATE"].ToString();
                 txtCity.Text = ds.Tables[0].Rows[0]["CITY"].ToString();
                 txtTaluka.Text = ds.Tables[0].Rows[0]["TALUKA"].ToString();
                 txtDistrict.Text = ds.Tables[0].Rows[0]["DISTRICT"].ToString();
-                txtPincode.Text = ds.Tables[0].Rows[0]["PINCODE"].ToString(); 
-               
+                txtPincode.Text = ds.Tables[0].Rows[0]["PINCODE"].ToString();
+                ddlCountry.SelectedValue = ds.Tables[0].Rows[0]["COUNTRYNO"].ToString();
+                ddlState.SelectedValue = ds.Tables[0].Rows[0]["STATENO"].ToString();
             }
         }
         catch (Exception ex)
@@ -561,6 +584,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PersonalMemoranda : System
         txtTaluka.Text = string.Empty;
         txtPincode.Text = string.Empty;
         txtDistrict.Text = string.Empty;
+        ddlCountry.SelectedIndex = 0;
+        ddlState.SelectedIndex = 0;
     }
 
     private void FillDropDown()
@@ -578,7 +603,10 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PersonalMemoranda : System
             objCommon.FillDropDownList(ddlTitle,"PAYROLL_TITLE","TITLENO" , "TITLE" , "TITLENO>0 AND ACTIVESTATUS =" + 1 ,"TITLE");
             objCommon.FillDropDownList(ddlDesignation, "PAYROLL_SUBDESIG", "SUBDESIGNO", "SUBDESIG", "SUBDESIGNO>0", "SUBDESIG");
             objCommon.FillDropDownList(ddlDept, "payroll_subdept", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO>0", "SUBDEPT");
-               
+            //Added by Sonal Banode for Country and State Dropdown
+            objCommon.FillDropDownList(ddlCountry, "ACD_COUNTRY", "COUNTRYNO", "COUNTRYNAME", "COUNTRYNO > 0 AND ACTIVE_STATUS =" + 1, "COUNTRYNAME");
+            objCommon.FillDropDownList(ddlState, "ACD_STATE", "STATENO", "STATENAME", "STATENO > 0 AND ACTIVESTATUS =" + 1, "STATENAME"); 
+            //
         }
         catch (Exception ex)
         {
@@ -592,5 +620,10 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PersonalMemoranda : System
     protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
     {
        
+    }
+
+    protected void ddlCountry_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        objCommon.FillDropDownList(ddlState, "ACD_STATE", "STATENO", "STATENAME", "STATENO > 0 AND COUNTRYNO = " + Convert.ToInt32(ddlCountry.SelectedValue) + "AND ACTIVESTATUS =" + 1, "STATENAME"); 
     }
 }

@@ -179,6 +179,7 @@
                                     <%--<asp:ListItem Value="12">Exam form fill and Exam Registration Status</asp:ListItem>--%>
                                     <asp:ListItem Value="7">Session wise Exam Registration Count</asp:ListItem>
                                     <asp:ListItem Value="8">Session wise Exam Registration Details</asp:ListItem>
+                                    <asp:ListItem Value="16">Student Registered but Mark Entry not Done</asp:ListItem>
                                 </asp:RadioButtonList>
                             </div>
 
@@ -266,6 +267,7 @@
                                                         <th id="BatchTheory1" style="text-align: center">STATUS
                                                                    
                                                         </th>
+                                                        <th>Submission Date & Time</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -293,6 +295,9 @@
                                                 </td>
                                                 <td>
                                                     <asp:Label ID="Label1" runat="server" Text='<%# Eval("STATUS") %>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lbldatetime" runat="server" Text='<%# Eval("REC_DT") %>'></asp:Label>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>

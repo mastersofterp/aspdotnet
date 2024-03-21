@@ -112,6 +112,37 @@ namespace IITMS
                     }
                     return ds;
                 }
+                public int Add_DirectGradeSystem(string Schemano, int level, int Grade, decimal mini, decimal max, int grandpoint, string indicator, int active)
+                {
+                    int status = 0;
+                    try
+                    {
+
+
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParam = new SqlParameter[8];
+
+                        objParam[0] = new SqlParameter("@P_SCHEMANO", Schemano);
+                        objParam[1] = new SqlParameter("@P_LEVELNO", level);
+                        objParam[2] = new SqlParameter("@P_GRADENO", Grade);
+                        objParam[3] = new SqlParameter("@P_MINIRANGE", mini);
+                        objParam[4] = new SqlParameter("@P_MAXIRANGE", max);
+                        objParam[5] = new SqlParameter("@P_GRADEPOINT", grandpoint);
+                        objParam[6] = new SqlParameter("@P_INDICATOR", indicator);
+                        objParam[7] = new SqlParameter("@P_ACTIVESTATUS", active);
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_DIRECT_GRADE_SYSTEM", objParam, true);
+                        if (obj != null)
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
 
                 public DataSet GetStudentIAMarksForSMS(int sessionno, int collegeno, int degreeno, int branchno, int semesterno, string examname)
                 {
@@ -8196,13 +8227,13 @@ namespace IITMS
                 #endregion
 
                 #region Added By Injamam on date 02_01_2024
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, int remark, string subjecttype,string userforrange,int subexamwise)
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel, int remark, string subjecttype, string userforrange, int subexamwise, string multiexternalexam, int publish, int conversion, string url)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[44];
+                        SqlParameter[] objParam = new SqlParameter[48];
                         objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
                         objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
                         objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
@@ -8247,6 +8278,10 @@ namespace IITMS
                         objParam[41] = new SqlParameter("@P_SUBJETTYPE", subjecttype);
                         objParam[42] = new SqlParameter("@P_USERFORRANGE", userforrange);
                         objParam[43] = new SqlParameter("@P_INTERNALSUBEXAMWISE", subexamwise);
+                        objParam[44] = new SqlParameter("@P_MULTI_EXTERNAL_EXAM", multiexternalexam);
+                        objParam[45] = new SqlParameter("@P_PUBLISH_INTERNAL_MARKS_ENTRY", publish);//added on 05-03-2024
+                        objParam[46] = new SqlParameter("@P_CHECK_CONVERSION_ON_COMPONENT", conversion);//added on 05-03-2024
+                        objParam[47] = new SqlParameter("@P_OBE_ERP_URL", url);//added on 06-03-2024
 
                         //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -8374,6 +8409,97 @@ namespace IITMS
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.ExamTimeTableUploadByExcel()-> " + ex.ToString());
                     }
                     return status;
+                }
+                #endregion
+				
+				#region  new requiremet of Course slot mapping
+                public int AddExamSlot(string slotname, string timefrom, string timeto, string colcode, int courseslot)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[6];
+
+                        objParams[0] = new SqlParameter("@P_SLOTNAME", slotname);
+                        objParams[1] = new SqlParameter("@P_TIMEFROM", timefrom);
+                        objParams[2] = new SqlParameter("@P_TIMETO", timeto);
+                        objParams[3] = new SqlParameter("@P_COLLEGE_CODE", colcode);
+                        objParams[4] = new SqlParameter("@P_COURSESLOT", courseslot);
+                        objParams[5] = new SqlParameter("@P_SLOTNO", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_TT_SLOT_INSERT", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddExamSlot -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                public int UpdateExamSlot(int slotno, string slotname, string timefrom, string timeto, int courseslot)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_SLOTNO", slotno);
+                        objParams[1] = new SqlParameter("@P_SLOTNAME", slotname);
+                        objParams[2] = new SqlParameter("@P_TIMEFROM", timefrom);
+                        objParams[3] = new SqlParameter("@P_TIMETO", timeto);
+                        objParams[4] = new SqlParameter("@P_COURSESLOT", courseslot);
+                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_TT_SLOT_UPDATE", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.UpdateExamSlot -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                public int InsertUpdateCourseSlotMapping(int sessionid, string ccode, int slotno, string ipadress, int ua_no)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionid);
+                        objParams[1] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[2] = new SqlParameter("@P_COURSESLOT", slotno);
+                        objParams[3] = new SqlParameter("@P_IPADRESS", ipadress);
+                        objParams[4] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INSERT_UPDATE_COURSE_SLOT_MAPPING", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.InsertUpdateCourseSlotMapping -> " + ex.ToString());
+                    }
+                    return retStatus;
                 }
                 #endregion
             }

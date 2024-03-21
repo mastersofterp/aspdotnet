@@ -169,8 +169,9 @@ public partial class LeaveAllotmentReport : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
 
-            url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_PERIOD=" + Convert.ToInt32(ddlPeriod.SelectedValue) + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_LEAVENO=" + Convert.ToInt32(ddlLeaveName.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + Convert.ToInt32(ddlEmp.SelectedValue);
-             
+            //url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_PERIOD=" + Convert.ToInt32(ddlPeriod.SelectedValue) + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_LEAVENO=" + Convert.ToInt32(ddlLeaveName.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + Convert.ToInt32(ddlEmp.SelectedValue);
+            url += "&param=@P_COLLEGE_NO=" + Collegeno + ",@P_PERIOD=" + Convert.ToInt32(ddlPeriod.SelectedValue) + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_LEAVENO=" + Convert.ToInt32(ddlLeaveName.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(ddlEmp.SelectedValue);
+
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
       

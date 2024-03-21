@@ -23,6 +23,7 @@ using paytm;
 using Paytm;
 using Newtonsoft.Json;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
+using Newtonsoft.Json.Linq;
 
 
 public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
@@ -49,8 +50,8 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
     int degreeno = 0;
     int college_id = 0;
     string OrderId = "";
-   public string merchantKey = "";
-   public string MID = "";
+    public string merchantKey = "";
+    public string MID = "";
     #endregion
 
     protected void Page_Load(object sender, EventArgs e)
@@ -61,8 +62,8 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
             {
 
                 DataSet Orgds = null;
-                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
-                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
+                Orgds = objOrg.GetOrganizationById(Ord_Id);
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -81,7 +82,7 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
 
                     }
                 }
-               
+
                 #region PGConfig Details
 
                 lblRegNo.Text = Session["regno"].ToString();
@@ -93,7 +94,7 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
                 int payId = Convert.ToInt32(Session["paymentId"]);
                 var stud_email = Convert.ToString(Session["studEmail"]);
                 var stud_phone = Convert.ToString(Session["studPhone"]);
-            
+
                 //DataSet ds1 = objFees.GetOnlinePaymentConfigurationAllDetailsV2(ConfigID);
                 DataSet ds1 = objFees.GetOnlinePaymentConfigurationDetails_WithDegree(Convert.ToInt32(Session["OrgId"]), payId, Convert.ToInt32(Session["payactivityno"]), Convert.ToInt32(degreeno), Convert.ToInt32(college_id));
 
@@ -101,14 +102,14 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
                 {
                     string ResponseUrl = ds1.Tables[0].Rows[0]["RESPONSE_URL"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["REQUEST_URL"].ToString();
-                    string MerchentID = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString();            
+                    string MerchentID = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString();
                     string hashsequence = ds1.Tables[0].Rows[0]["HASH_SEQUENCE"].ToString();      // PASS_CODE
                     string saltkey = ds1.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();                   //ENCYPTION_KEY
                     string accesscode = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();               //SECURE_SECRET
                     var ActivityName = ds1.Tables[0].Rows[0]["ACTIVITY_NAME"].ToString();
                     lblActivityName.Text = ActivityName;
 
-                    Session["MerchentID"] = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString(); 
+                    Session["MerchentID"] = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString();
                     Session["SubMerchant_id"] = ds1.Tables[0].Rows[0]["SUBMERCHANT_ID"].ToString();
                     Session["BankFee_Type"] = ds1.Tables[0].Rows[0]["BANKFEE_TYPE"].ToString();    //Bind Value is MERCHANT_CATEGORY_CODE + BANK ID
                     Session["ResponseUrl"] = ResponseUrl;
@@ -192,9 +193,10 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
     public string FetchPaytmPay_Details(string orderId)
     {
         string returnVal = string.Empty;
-        string SECURE_SECRET = Session["accesscode"].ToString(); 
-        string ENCYPTION_KEY = Session["saltkey"].ToString();        
-        string MCC_BANKID = Session["BankFee_Type"].ToString();   
+        string MERCHANT_ID = Session["MerchentID"].ToString();  
+        string SECURE_SECRET = Session["accesscode"].ToString();
+        string MERCHANT_KEY = Session["saltkey"].ToString();  
+        string MCC_BANKID = Session["BankFee_Type"].ToString();
 
         // define message string for errors
         string LINK = string.Empty;
@@ -209,82 +211,122 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
         try
         {
 
+            //if (Convert.ToInt32(Session["Instance"]) == 1)
+            //{
+            //    LINK = Session["RequestUrl"].ToString();   //"--https://securegw-stage.paytm.in/order/process?";   
+            //}
+            //else if (Convert.ToInt32(Session["Instance"]) == 2)
+            //{
+            //    LINK = Session["RequestUrl"].ToString();  //"--https://secure.paytm.in/order/process?";
+            //}
+
+            #region New JS Checkout With Token Creation
+            Dictionary<string, object> body = new Dictionary<string, object>();
+            Dictionary<string, string> head = new Dictionary<string, string>();
+            Dictionary<string, object> requestBody = new Dictionary<string, object>();
+
+            Dictionary<string, string> txnAmount = new Dictionary<string, string>();
+            txnAmount.Add("value", Session["studAmt"].ToString());
+            txnAmount.Add("currency", "INR");
+
+            Dictionary<string, string> userInfo = new Dictionary<string, string>();
+            userInfo.Add("custId", Session["idno"].ToString());
+            body.Add("requestType", "Payment");
+            body.Add("mid", MERCHANT_ID);
+            body.Add("websiteName", WEBSITE);
+            body.Add("orderId", orderId);
+            body.Add("txnAmount", txnAmount);
+            body.Add("userInfo", userInfo);
+            body.Add("callbackUrl", Session["ResponseUrl"].ToString());  //"--http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/Paytm_Checkout_Response.aspx");
+
+            /*
+            * Generate checksum by parameters we have in body
+            * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
+            */
+            string paytmChecksum = Checksum.generateSignature(JsonConvert.SerializeObject(body), MERCHANT_KEY);
+
+            head.Add("signature", paytmChecksum);
+
+            requestBody.Add("body", body);
+            requestBody.Add("head", head);
+
+            string post_data = JsonConvert.SerializeObject(requestBody);
+            string url = string.Empty;
+
+            //For  Staging and  Production 
+            //string url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=" + MERCHANT_ID + "&orderId=" + orderId + "";
+            //string url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid=" + MERCHANT_ID + "&orderId=" + orderId + "";
+
             if (Convert.ToInt32(Session["Instance"]) == 1)
             {
-                LINK = Session["RequestUrl"].ToString();   //"--https://securegw-stage.paytm.in/order/process?";   
+                //For  Staging
+                LINK = Session["RequestUrl"].ToString(); 
+                url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=" + MERCHANT_ID + "&orderId=" + orderId + "";
             }
             else if (Convert.ToInt32(Session["Instance"]) == 2)
             {
-                LINK = Session["RequestUrl"].ToString();  //"--https://secure.paytm.in/order/process?";
+                //For  Production 
+                LINK = Session["RequestUrl"].ToString();
+                url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid=" + MERCHANT_ID + "&orderId=" + orderId + "";
+
             }
-          
-            #region client details bind
-            String merchantKey = Session["saltkey"].ToString();   
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
 
-            parameters.Add("MID", Session["MerchentId"].ToString());
-            parameters.Add("CHANNEL_ID", CHANNEL_ID);                     // "WEB"
-            parameters.Add("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);  // "Retail"
-            parameters.Add("WEBSITE", WEBSITE);                                 // "WEBSTAGING"
-            parameters.Add("EMAIL", "gmjain11@gmail.com");                 //Session["studEmail"].ToString()
-            parameters.Add("MOBILE_NO", "8552960810");                      //Session["studPhone"].ToString()
-            parameters.Add("CUST_ID", Session["idno"].ToString());
-            parameters.Add("ORDER_ID", orderId);
-            parameters.Add("TXN_AMOUNT", Session["studAmt"].ToString());
-            parameters.Add("CALLBACK_URL", Session["ResponseUrl"].ToString());  //--http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PaytmOnlinePaymentResponse.aspx
 
-            string paytmURL = "https://securegw-stage.paytm.in/order/process?";
-            #endregion
+            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
 
-            #region check checksum
-            string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
-            //checksumData.Text = checksum;
-            //string checksum = CheckSumWeb();
-            string outputHTML = "";
+            webRequest.Method = "POST";
+            webRequest.ContentType = "application/json";
+            webRequest.ContentLength = post_data.Length;
 
-            //outputHTML = "<html>";
-            //outputHTML += "<head>";
-            //outputHTML += "<title>Merchant Check Out Page</title>";
-            //outputHTML += "</head>";
-            //outputHTML += "<body>";
-            ////outputHTML += "<center><h1>Please do not refresh this page...</h1></center>";
-            //outputHTML += "<form method='post' action='" + paytmURL + "' name='f1'>";
-            //outputHTML += "<table border='1'>";
-            //outputHTML += "<tbody>";
-
-            foreach (string key in parameters.Keys)
+            using (StreamWriter requestWriter = new StreamWriter(webRequest.GetRequestStream()))
             {
-                outputHTML += "<input type='hidden' name='" + key + "' value='" + parameters[key] + "'>";
+                requestWriter.Write(post_data);
             }
-            outputHTML += "<input type='hidden' name='CHECKSUMHASH' value='" + checksum + "'>";
-            //outputHTML += "</tbody>";
-            //outputHTML += "</table>";
-            ////outputHTML += "<script type='text/javascript'>";
-            ////outputHTML += "document.f1.submit();";
-            ////outputHTML += "</script>";
-            //outputHTML += "</form>";
-            //outputHTML += "</body>";
-            //outputHTML += "</html>";
-            //HttpContext.Current.Response.Write(outputHTML);
 
-            hidParams.InnerHtml = outputHTML;
-          
-            returnVal = "pass";
+            string responseData = string.Empty;
+
+            using (StreamReader responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream()))
+            {
+                var token = string.Empty;
+                responseData = responseReader.ReadToEnd();
+
+                var jsonData = JObject.Parse(responseData);
+                var result_Info = jsonData["body"]["resultInfo"].ToString();
+                var status = jsonData["body"]["resultInfo"]["resultCode"].ToString();
+                if (status == "0000" || status == "0002")
+                {
+                    token = jsonData["body"]["txnToken"].ToString();
+                    Session["TOKEN"] = token;
+                    Session["ORDERID"] = orderId;
+                    Session["AMOUNT"] = Session["studAmt"].ToString();
+                }
+                else { 
+                  var resultMsg = jsonData["body"]["resultInfo"]["resultMsg"].ToString();
+                  Session["TOKEN"] = "";
+                  Session["ORDERID"] = "";
+                  Session["AMOUNT"] = 0;
+                  objUaimsCommon.ShowError(Page, "PaytmOnlinePaymentRequest.FetchPaytmPay_Details() --> " + resultMsg);
+                }
+              
+            }
             #endregion
 
         }
         catch (Exception ex)
         {
-           var message = "(51) Exception encountered. " + ex.Message;
+            var message = "(51) Exception encountered. " + ex.Message;
             if (ex.StackTrace.Length > 0)
-            {           
+            {
                 returnVal = "fail";
             }
 
         }
         return returnVal;
 
+
     }
+          
+
     #endregion
 
     #region  Common method event call
@@ -386,5 +428,11 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
     //    BindAndCheckPayDetails();
     //}
 
+
+
+
+
+
 }
+
 

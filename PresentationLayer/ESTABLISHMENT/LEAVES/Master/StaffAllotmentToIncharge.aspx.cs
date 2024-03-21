@@ -182,7 +182,9 @@ public partial class ESTABLISHMENT_LEAVES_Master_StaffAllotmentToIncharge : Syst
             url += "&path=~,Reports,ESTABLISHMENT,SHIFT," + rptFileName;
 
             //@P_INCHARGEEMPLOYEEIDNO,@P_COLLEGE_NO
-            url += "&param=@P_INCHARGEEMPLOYEEIDNO=" + Convert.ToInt32(ddlIncharge.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
+            //url += "&param=@P_INCHARGEEMPLOYEEIDNO=" + Convert.ToInt32(ddlIncharge.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
+            url += "&param=@P_INCHARGEEMPLOYEEIDNO=" + Convert.ToInt32(ddlIncharge.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue);
+
             // url += "&param=@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_PERIOD=" + Convert.ToInt32(ddlPeriod.SelectedValue) + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_LEAVENO=" + Convert.ToInt32(ddlLeaveName.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";

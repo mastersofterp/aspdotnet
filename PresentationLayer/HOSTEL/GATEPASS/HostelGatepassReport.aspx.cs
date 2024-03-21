@@ -1,4 +1,5 @@
-﻿using IITMS;
+﻿using CrystalDecisions.ReportAppServer.ReportDefModel;
+using IITMS;
 using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
@@ -41,7 +42,7 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
                 else
                 {
                     // Check User Authority 
-                    this.CheckPageAuthorization();
+                   // this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -65,12 +66,11 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
     private void ShowReport(string reportTitle, string rptFileName)
     {
         try
         {
-
-
             string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? "01/01/1999" : Convert.ToString(txtApplyDate.Text);
 
             //string dateFrom =Convert.ToDateTime(txtFromDate.Text.ToString()).ToShortDateString();
@@ -115,12 +115,45 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-        ShowReport("Gate Pass Report", "HostelGatepassDetailsReport.rpt");
+        if (!string.IsNullOrEmpty(txtGatePassCode.Text.Trim()))// below Code Added By Himanshu Tamrakar 17-01-2024
+        {
+            string ret = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "1", "HOSTEL_GATE_PASS_NO = '" + txtGatePassCode.Text.Trim() + "'");
+            if (ret != "1")
+            {
+                objCommon.DisplayMessage("Please Enter Valid Gatepass no.", this);
+                return;
+            }
+        }
+        if (Convert.ToDateTime(txtFromDate.Text) < Convert.ToDateTime(txtToDate.Text))
+        {
+
+            ShowReport("Gate Pass Report", "HostelGatepassDetailsReport.rpt");
+        }
+        else
+        {
+            objCommon.DisplayMessage("From Date Should Not Be Greater Than To date.", this);
+            return;
+        }
+        
     }
     protected void btnExcelReport_Click(object sender, EventArgs e)
     {
         try
         {
+            if (Convert.ToDateTime(txtFromDate.Text) > Convert.ToDateTime(txtToDate.Text))
+            {
+                objCommon.DisplayMessage("From Date Should Not Be Greater Than To date.", this);
+                return;
+            }
+            if (!string.IsNullOrEmpty(txtGatePassCode.Text.Trim()))// below Code Added By Himanshu Tamrakar 17-01-2024
+            {
+                string ret = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "1", "HOSTEL_GATE_PASS_NO = '" + txtGatePassCode.Text.Trim() + "'");
+                if (ret != "1")
+                {
+                    objCommon.DisplayMessage("Please Enter Valid Gatepass no.", this);
+                    return;
+                }
+            }
             //@P_APPLYDATE=" + Applydate + ",@P_PURPOSE=" + Purpose + ",@P_STATUS=" + Status + ",@P_GATEPASSCODE=" + Gatepassno + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
             string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? "01/01/1999" : Convert.ToString(txtApplyDate.Text);
             int Purpose = Convert.ToInt32(ddlPurpose.SelectedValue);
@@ -161,8 +194,7 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
 
             }
             dg.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            dg.HeaderStyle.BackColor = System.Drawing.Color.Yellow;
-            dg.HeaderStyle.ForeColor = System.Drawing.Color.Black;
+            dg.HeaderStyle.BackColor = System.Drawing.Color.DeepSkyBlue;
             dg.HeaderStyle.Font.Bold = true;
             dg.RenderControl(htw);
             Response.Write(sw.ToString());

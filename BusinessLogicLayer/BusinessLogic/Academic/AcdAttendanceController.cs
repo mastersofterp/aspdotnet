@@ -6179,14 +6179,14 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
         //modified by nehal on 14/04/23
-        public DataSet GetDataAttendanceLockUnlockDetails(int collegeid, int sessionno, int uano, int courseno, int scectionno, int semseterno, DateTime startdate, DateTime enddate)
+        public DataSet GetDataAttendanceLockUnlockDetails(int collegeid, int sessionno, int uano, int courseno, int scectionno, int semseterno, DateTime startdate, DateTime enddate,int attflag)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objParams = null;
-                objParams = new SqlParameter[8];
+                objParams = new SqlParameter[9];
                 objParams[0] = new SqlParameter("@P_COLLEGEID", collegeid);
                 objParams[1] = new SqlParameter("@P_SESSIONNO", sessionno);
                 objParams[2] = new SqlParameter("@P_UA_NO", uano);
@@ -6195,6 +6195,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[5] = new SqlParameter("@P_SEMESTERNO", semseterno);
                 objParams[6] = new SqlParameter("@P_START_DATE", startdate);
                 objParams[7] = new SqlParameter("@P_END_DATE", enddate);
+                objParams[8] = new SqlParameter("@P_ATTFLAG", attflag);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GETDATA_ATTENDANCE_LOCKUNLOCK", objParams);
             }
             catch (Exception ex)

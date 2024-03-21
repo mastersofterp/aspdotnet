@@ -144,7 +144,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divCountry" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <label>Country :</label>
                                             <asp:TextBox ID="txtCountry" runat="server" CssClass="form-control" TabIndex="12" MaxLength="80"
@@ -154,9 +154,29 @@
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
+                                            <label>Country :</label>
+                                            <asp:DropDownList ID="ddlCountry" runat="server" AppendDataBoundItems="true" CssClass="form-control" AutoPostBack="true"
+                                                ToolTip="Select Country" TabIndex="1" data-select2-enable="true" OnSelectedIndexChanged="ddlCountry_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divState" runat="server" visible="false">
+                                        <div class="label-dynamic">
                                             <label>State :</label>
                                             <asp:TextBox ID="txtState" runat="server" CssClass="form-control" TabIndex="13" MaxLength="80"
                                                 ToolTip="Enter State Name" onkeyup="validateAlphabet(this);"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <label>State :</label>
+                                            <asp:DropDownList ID="ddlState" runat="server" AppendDataBoundItems="true" CssClass="form-control"
+                                                ToolTip="Select State" TabIndex="1" data-select2-enable="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
                                         </div>
                                     </div>
 
@@ -399,7 +419,7 @@
                                             <div class="input-group-addon">
                                                 <i id="imgCalDateStatus" runat="server" class="fa fa-calendar text-blue"></i>
                                             </div>
-                                            <asp:TextBox ID="txtStatusDT" CssClass="form-control" runat="server" Enabled="true" TabIndex="35" ToolTip="Select Status Date"  />
+                                            <asp:TextBox ID="txtStatusDT" CssClass="form-control" runat="server" Enabled="true" TabIndex="35" ToolTip="Select Status Date" />
                                             <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd/MM/yyyy"
                                                 TargetControlID="txtStatusDT" PopupButtonID="imgCalDateStatus" Enabled="true"
                                                 EnableViewState="true">
@@ -560,7 +580,7 @@
                 return;
             }
         }
-  
+
     </script>
     <script type="text/javascript">
         function CheckDateEalier(sender, args) {

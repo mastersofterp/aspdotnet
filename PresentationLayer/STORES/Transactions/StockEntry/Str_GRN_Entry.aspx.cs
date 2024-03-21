@@ -82,6 +82,9 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
             ViewState["SRNO_TAX"] = null;
             BindListView();
             txtGRNDate.Text = DateTime.Now.ToString();
+
+            objCommon.FillDropDownList(ddlGrn, "STORE_GRN_MAIN", "GRNID", "GRN_NUMBER", "MDNO=" + Convert.ToInt32(Session["strdeptcode"]), "GRN_NUMBER DESC");
+
         }
         //
         divMsg.InnerText = string.Empty;
@@ -1109,5 +1112,47 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         txtQualityQtySpec.Text = string.Empty;
         txtTechSpec.Text = string.Empty;
 
+    }
+    protected void btnReport_Click(object sender, EventArgs e)
+    {
+        pnlReport.Visible = true;
+        GrnPanel.Visible = false;
+        objCommon.FillDropDownList(ddlGrn, "STORE_GRN_MAIN", "GRNID", "GRN_NUMBER", "MDNO=" + Convert.ToInt32(Session["strdeptcode"]), "GRN_NUMBER DESC");
+
+    }
+
+    protected void btnRpt_Click(object sender, EventArgs e)
+    {
+        ShowReport("GRN_REPORT", "Str_GoodReceviedReport.rpt");
+    }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        pnlReport.Visible = false;
+        GrnPanel.Visible = true;
+    }
+    //To Show INVOICE report
+    private void ShowReport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("stores")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,STORES," + rptFileName;
+            url += "&param=@P_GRNID=" + Convert.ToInt32(ddlGrn.SelectedValue) + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]);
+
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Academic_StudentRoolist.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
     }
 }

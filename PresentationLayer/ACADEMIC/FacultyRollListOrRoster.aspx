@@ -73,42 +73,31 @@
 
                                                
                                              
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                             <%--   <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
-                                                        <%--<sup>* </sup>--%>
-                                                        <%--<label>Degree </label>--%>
                                                         <asp:Label ID="lblCourseType" runat="server" Font-Bold="true">Course Type</asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlCourseType" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
                                                         CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlCourseType_SelectedIndexChanged">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                    <%-- <asp:RequiredFieldValidator ID="rfvlblCourseType" runat="server" ControlToValidate="ddlCourseType"
-                                                        Display="None" ErrorMessage="Please Select Course Type" InitialValue="0" ValidationGroup="submit" />--%>
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvlblCourseType" runat="server" ControlToValidate="ddlCourseType"
-                                                        Display="None" ErrorMessage="Please Select Course Type" InitialValue="0" ValidationGroup="show" />--%>
-                                                </div>
+                                                </div>--%>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
-                                                       <%-- <sup>* </sup>--%>
-                                                        <%--<label>Degree </label>--%>
+                                                        <%--<label>Course </label>--%>
                                                         <asp:Label ID="lblCourse" runat="server" Font-Bold="true">Course</asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlCourse" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
                                                         CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlCourse_SelectedIndexChanged">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvddlCourse" runat="server" ControlToValidate="ddlCourse"
-                                                        Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="submit" />--%>
-                                                <%--    <asp:RequiredFieldValidator ID="rfvddlCourse" runat="server" ControlToValidate="ddlCourse"
-                                                        Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="show" />--%>
+                                                 
                                                 </div>
 
                                                
                                                  <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
-                                                        <%--<sup>* </sup>--%>
                                                         <%-- <label>Semester </label>--%>
                                                         <asp:Label ID="lblddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
                                                     </div>
@@ -118,18 +107,12 @@
                                                         CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-
-                                                  <%--  <asp:RequiredFieldValidator ID="ddlSemester1" runat="server" ControlToValidate="ddlSemester"
-                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="submit" />
-                                                    <asp:RequiredFieldValidator ID="ddlSemester2" runat="server" ControlToValidate="ddlSemester"
-                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="show" />--%>
                                                 </div>
 
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
-                                                        <%--<sup>* </sup>--%>
-                                                        <%--<label>Degree </label>--%>
+                                                        <%--<label>Section </label>--%>
                                                         <asp:Label ID="lblSection" runat="server" Font-Bold="true">Section</asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
@@ -141,22 +124,19 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="DivBatch" visible="false">
                                                     <div class="label-dynamic">
-                                                       <%-- <sup>* </sup>--%>
+                                                        <%--<label>Batch</label>--%>
                                                         <asp:Label ID="lblDYddlBatch" runat="server" Font-Bold="true">Batch</asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlBatch" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
                                                         CssClass="form-control" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                  <%--  <asp:RequiredFieldValidator ID="rfvddlBatch" runat="server" ControlToValidate="ddlBatch"
-                                                        Display="None" ErrorMessage="Please Select Batch" InitialValue="0" ValidationGroup="submit" />
-                                                    <asp:RequiredFieldValidator ID="rfvddlBatch1" runat="server" ControlToValidate="ddlBatch"
-                                                        Display="None" ErrorMessage="Please Select Batch" InitialValue="0" ValidationGroup="show" />--%>
+                                                 
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="DivTutorialBatch" visible="false">
                                                     <div class="label-dynamic">
-                                                      <%--  <sup>* </sup>--%>
+                                                      <%--<label>Tutorial Batch</label>--%>
                                                         <asp:Label ID="lblTutorialBatch" runat="server" Font-Bold="true">Tutorial Batch</asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlTutorialBatch" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
@@ -197,6 +177,8 @@
 
                                         <div class="col-12">
                                             <asp:Panel ID="pnlPreCorList" runat="server">
+
+                                                   <div id="Div_lvCourse" runat="server" visible="false">
                                                 <asp:ListView ID="lvCourse" runat="server" OnItemDataBound="lvCourse_ItemDataBound">
                                                     <LayoutTemplate>
                                                         <div class="sub-heading">
@@ -219,7 +201,7 @@
                                                                         <th>REGNO</th>
                                                                         <th>NAME</th>
                                                                          <th>SEMESTER</th>
-                                                                         <th>CCODE - COURSE</th>
+                                                                         <th>COURSE (CCODE)</th>
                                                                          <th>SECTION</th>
                                                                          <th>BATCH</th>
                                                                          <th>TUT BATCH</th>
@@ -254,7 +236,7 @@
                                                                 <asp:Label ID="lblSEMESTERNAME" runat="server" Text='<%# Eval("SEMESTER")%>' />
                                                             </td>
                                                              <td>
-                                                                <asp:Label ID="lblCCODE" runat="server" Text=' <%#  Eval("COURSENAME") +" - "+   Eval("CCODE") %>' />
+                                                                <asp:Label ID="lblCCODE" runat="server" Text=' <%#  Eval("COURSENAME") +" ("+ Eval("CCODE") +")" %>' />
                                                             </td>
                                                              <td>
                                                                 <asp:Label ID="lblSECTION" runat="server" Text='<%# Eval("SECTION")%>' />
@@ -286,9 +268,10 @@
                                                         </tr>
                                                     </ItemTemplate>
                                                 </asp:ListView>
+                                                       </div>
 
                                                 <div id="Div_lvCourseFaculty" runat="server" visible="false">
-                                                <asp:ListView ID="lvCourseFaculty" runat="server" OnItemDataBound="lvCourseFaculty_ItemDataBound">
+                                                <asp:ListView ID="lvCourseFaculty" runat="server">
                                                     <LayoutTemplate>
                                                         <div class="sub-heading">
                                                             <h5>Course Faculty List</h5>
@@ -298,8 +281,8 @@
                                                                 <thead class="bg-light-blue">
                                                                     <tr id="trRow">
                                                                         <th>SR </th>
-                                                                        <th>COURSE NAME</th>
-                                                                       <%-- <th>COURSE CREDIT</th>--%>
+                                                                        <th>COURSE NAME (CCODE)</th>
+                                                                        <th>COURSE CREDIT</th>
                                                                          <th>COURSE TYPE</th>
                                                                          <th>ASSIGNED FACULTY</th>
                                                                     </tr>
@@ -323,9 +306,9 @@
                                                                 <asp:Label ID="lblREGNO" runat="server" Text='<%# Eval("COURSE NAME")%>' />
                                                             </td>
 
-                                                           <%-- <td>
-                                                                <asp:Label ID="lblSTUDNAME" runat="server" Text='<%# Eval("STUDNAME")%>' />   +" ("+ Eval("UA_NAME") +" )"+ 
-                                                            </td>--%>
+                                                            <td>
+                                                                <asp:Label ID="lblSTUDNAME" runat="server" Text='<%# Eval("COURSE CREDIT")%>' />   
+                                                            </td>
                                                              <td>
                                                                 <asp:Label ID="lblSEMESTERNAME" runat="server" Text='<%# Eval("SUBNAME")%>' />
                                                             </td>

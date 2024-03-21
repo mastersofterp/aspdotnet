@@ -361,7 +361,6 @@ public partial class ACADEMIC_Exam_MarkConversion : System.Web.UI.Page
             }
             CheckBox cb = lvStudent.FindControl("cbHead") as CheckBox;
             cb.Checked = false;
-
         }
         else
         {
@@ -478,6 +477,13 @@ public partial class ACADEMIC_Exam_MarkConversion : System.Web.UI.Page
             result = objCommon.DynamicSPCall_IUD(sp_name, param, call_valueHead, true);
         }
         if (Convert.ToInt32(ddlconversion.SelectedValue) == 1 || Convert.ToInt32(ddlconversion.SelectedValue) == 2)
+        {
+            sp_name = "PKG_ACD_EXAM_WISE_MARK_CONVERSION_RCPIPER";
+            param = "@P_SESSIONNO,@P_COURSENO,@P_COLLEGE_ID ,@P_STUDIDS,@P_EXAMNO,@P_IPADD,@P_UANO,@P_CONVERSION_TYPE,@P_OUT ";
+            call_valueHead = "" + ddlSession.SelectedValue + "," + ddlsubjecttype.SelectedValue + "," + Convert.ToInt32(ViewState["college_id"].ToString()) + "," + Ids + "," + ddlExamName.SelectedValue + "," + ipadd + "," + uano + "," + Convert.ToInt32(ddlconversion.SelectedValue) + "," + 0;
+            result = objCommon.DynamicSPCall_IUD(sp_name, param, call_valueHead, true);
+        }
+        else if (Convert.ToInt32(ddlconversion.SelectedValue) > 3)
         {
             sp_name = "PKG_ACD_EXAM_WISE_MARK_CONVERSION_RCPIPER";
             param = "@P_SESSIONNO,@P_COURSENO,@P_COLLEGE_ID ,@P_STUDIDS,@P_EXAMNO,@P_IPADD,@P_UANO,@P_CONVERSION_TYPE,@P_OUT ";

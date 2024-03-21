@@ -240,16 +240,12 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_CC_Avenue_DoubleVerification_N
           //  output = objFees.InsertOnlinePayment_DCR(ViewState["IDNO"].ToString(), "EF", Label_OrderInfo.Text, Label_MerchTxnRef.Text, "O", string.Empty, Label_Amount.Text, "Success", ViewState["EnrollemtID"].ToString(), "");
 
 
-            string idno = objCommon.LookUp("ACD_STUDENT", "IDNO", "REGNO='" + lblEnrollNo.Text+"'");
+            string idno = objCommon.LookUp("ACD_DCR_TEMP", "IDNO", "ORDER_ID='" + Label_OrderInfo.Text+"'");
            // return;
 
             if (status == "Shipped")
-            {
-
-              
+            {   
                 output = objFees.InsertOnlinePayment_DCR(idno, ViewState["RECIEPTCODE"].ToString(), Label_OrderInfo.Text,Label_MerchTxnRef.Text, "O", string.Empty, Label_Amount.Text, "Success", lblEnrollNo.Text.ToString(), "");           
-
-
 
                 if (output == 1 && output != -99)
                 {

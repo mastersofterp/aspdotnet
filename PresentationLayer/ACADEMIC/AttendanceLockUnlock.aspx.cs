@@ -68,8 +68,8 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
         {
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
             // objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
-            objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
-
+            //objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_PNAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID DESC");
             ddlSession.SelectedIndex = 0;
 
 
@@ -85,8 +85,9 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
     {
         try
         {
+            //int collegeid = Convert.ToInt32(ddlClgScheme.SelectedValue);
             int collegeid = Convert.ToInt32(ddlClgScheme.SelectedValue);
-            int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+            int sessionno = Convert.ToInt32(ViewState["Sessionno"]);
             int facultyno = Convert.ToInt32(ddlFaculty.SelectedValue);
             int courseno = Convert.ToInt32(ddlCourse.SelectedValue);
             int sectionno = Convert.ToInt32(ddlSection.SelectedValue);
@@ -116,7 +117,7 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
             string EDate = dtEndDate.ToString("yyyy/MM/dd");
 
 
-            DataSet ds = objAttC.GetDataAttendanceLockUnlockDetails(collegeid, sessionno, facultyno, courseno, sectionno, semesterno, Convert.ToDateTime(SDate), Convert.ToDateTime(EDate));
+            DataSet ds = objAttC.GetDataAttendanceLockUnlockDetails(collegeid, sessionno, facultyno, courseno, sectionno, semesterno, Convert.ToDateTime(SDate), Convert.ToDateTime(EDate), Convert.ToInt32(ddlattstatus.SelectedValue));
 
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -175,7 +176,6 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
         {
             DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgScheme.SelectedValue));
             //ViewState["degreeno"]
-            ddlSession.SelectedIndex = -1;
             ddlFaculty.SelectedIndex = -1;
             ddlCourse.SelectedIndex = -1;
             ddlSection.SelectedIndex = -1;
@@ -189,9 +189,10 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
                 ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
                 ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                 ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
-
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
-                ddlSession.Focus();
+                ViewState["Sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]));
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
+                //ddlSession.Focus();
+                objCommon.FillDropDownList(ddlFaculty, "ACD_COURSE_TEACHER  CT INNER JOIN ACD_TIME_TABLE_CONFIG TM ON (CT.CT_NO=TM.CTNO) INNER JOIN User_Acc  U ON(CT.UA_NO=U.UA_NO) INNER JOIN ACD_SESSION_MASTER SM ON (CT.SESSIONNO=SM.SESSIONNO)", "DISTINCT CT.UA_NO", "U.UA_NAME COLLATE SQL_Latin1_General_CP1_CI_AS+' - '+ UA_FULLNAME COLLATE SQL_Latin1_General_CP1_CI_AS UA_NAME", "CT.UA_NO>0 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]), "CT.UA_NO");
                 ScriptManager.RegisterClientScriptBlock(updattendancelock, updattendancelock.GetType(), "Src", "Setdate('" + hdnDate.Value + "');", true);
             }
         }
@@ -219,8 +220,24 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
         {
             if (ddlSession.SelectedIndex > 0)
             {
-                objCommon.FillDropDownList(ddlFaculty, "ACD_COURSE_TEACHER  CT INNER JOIN ACD_TIME_TABLE_CONFIG TM ON (CT.CT_NO=TM.CTNO) INNER JOIN User_Acc  U ON(CT.UA_NO=U.UA_NO)", "DISTINCT CT.UA_NO", "U.UA_NAME COLLATE SQL_Latin1_General_CP1_CI_AS+' - '+ UA_FULLNAME COLLATE SQL_Latin1_General_CP1_CI_AS UA_NAME", "CT.UA_NO>0 AND CT.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue), "CT.UA_NO");
-                ddlFaculty.Focus();
+                //objCommon.FillDropDownList(ddlFaculty, "ACD_COURSE_TEACHER  CT INNER JOIN ACD_TIME_TABLE_CONFIG TM ON (CT.CT_NO=TM.CTNO) INNER JOIN User_Acc  U ON(CT.UA_NO=U.UA_NO)", "DISTINCT CT.UA_NO", "U.UA_NAME COLLATE SQL_Latin1_General_CP1_CI_AS+' - '+ UA_FULLNAME COLLATE SQL_Latin1_General_CP1_CI_AS UA_NAME", "CT.UA_NO>0 AND CT.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue), "CT.UA_NO");
+                //ddlFaculty.Focus();
+                DataSet resultDataSet = GetDropDowns(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["usertype"]), Session["college_nos"].ToString(), Session["userdeptno"].ToString());
+                if (resultDataSet != null && resultDataSet.Tables[0].Rows.Count > 0)
+                {
+                    ddlClgScheme.Items.Clear();
+                    ddlClgScheme.Items.Add(new ListItem("Please Select", "0"));
+                    ddlClgScheme.DataSource = resultDataSet;
+                    ddlClgScheme.DataTextField = "COL_SCHEME_NAME";
+                    ddlClgScheme.DataValueField = "COSCHNO";
+                    ddlClgScheme.DataBind();
+                    ddlClgScheme.Focus();
+                }
+                else
+                {
+                    ddlClgScheme.Items.Clear();
+                    ddlClgScheme.Items.Add(new ListItem("Please Select", "0"));
+                }
                 lvattendancelockunlock.DataSource = null;
                 lvattendancelockunlock.DataBind();
                 ScriptManager.RegisterClientScriptBlock(updattendancelock, updattendancelock.GetType(), "Src", "Setdate('" + hdnDate.Value + "');", true);
@@ -242,6 +259,18 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
             throw;
         }
 
+    }
+
+    private DataSet GetDropDowns(int sessionno, int ua_type, string collegeids, string deptnos)
+    {
+        string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
+        DataSet ds = new DataSet();
+        SP_Name = "PKG_ACD_ATTENDANCE_LOCK_UNLOCK_SCHEME_DROPDOWN";
+        SP_Parameters = "@P_SESSIONID,@P_UATYPE,@P_DEPTNIOS,@P_COLLEGEIDS";
+        Call_Values = "" + sessionno + "," + ua_type + "," + collegeids + "," + deptnos + "";
+        ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+        return ds;
     }
     protected void ddlFaculty_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -383,7 +412,7 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
                 int degreeno = Convert.ToInt32(ViewState["degreeno"]);
                 int branchno = Convert.ToInt32(ViewState["branchno"]);
                 int schemeno = Convert.ToInt32(ViewState["schemeno"]);
-                int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int sessionno = Convert.ToInt32(ViewState["Sessionno"]);
 
                 string remark = txtRemark.Text;
                 //string stdt = txtStartDate.Text.ToString();
@@ -449,7 +478,7 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
                     // return;
                 }
 
-                this.BindListView();
+                //this.BindListView();
             }
 
         }
@@ -490,7 +519,7 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
                 int degreeno = Convert.ToInt32(ViewState["degreeno"]);
                 int branchno = Convert.ToInt32(ViewState["branchno"]);
                 int schemeno = Convert.ToInt32(ViewState["schemeno"]);
-                int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int sessionno = Convert.ToInt32(ViewState["Sessionno"]);
 
                 string remark = txtRemark.Text;
                 string stdt = Convert.ToDateTime(txtStartDate.Text).ToString("yyyy/MM/dd");
@@ -570,5 +599,9 @@ public partial class AttendanceLockUnlock : System.Web.UI.Page
         ddlSection.Items.Add(new ListItem("Please Select", "0"));
         ddlSem.Items.Clear();
         ddlSem.Items.Add(new ListItem("Please Select", "0"));
+    }
+    protected void ddlattstatus_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        BindListView();
     }
 }

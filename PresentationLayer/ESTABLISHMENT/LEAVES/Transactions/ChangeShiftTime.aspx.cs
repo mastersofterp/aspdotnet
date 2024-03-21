@@ -446,7 +446,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_ChangeShiftTime : System.
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_STNO=" + Convert.ToInt32(ddlStafftype.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_FROM_DATE=" + Convert.ToDateTime(txtFromDt.Text).ToString("yyyy-MM-dd") + ",@P_TO_DATE=" + Convert.ToDateTime(txtToDt.Text).ToString("yyyy-MM-dd");
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_STNO=" + Convert.ToInt32(ddlStafftype.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_FROM_DATE=" + Convert.ToDateTime(txtFromDt.Text).ToString("yyyy-MM-dd") + ",@P_TO_DATE=" + Convert.ToDateTime(txtToDt.Text).ToString("yyyy-MM-dd");
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStafftype.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_FROM_DATE=" + Convert.ToDateTime(txtFromDt.Text).ToString("yyyy-MM-dd") + ",@P_TO_DATE=" + Convert.ToDateTime(txtToDt.Text).ToString("yyyy-MM-dd");
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";

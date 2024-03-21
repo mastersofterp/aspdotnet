@@ -792,7 +792,17 @@ public partial class ESTABLISHMENT_LEAVES_Master_SaturdayWorkingHolidays : Syste
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
 
-            url += "&param=@P_WORKINGDATE=" + Fdate.ToString().Trim() + ",@P_STNO=" + stno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            //url += "&param=@P_WORKINGDATE=" + Fdate.ToString().Trim() + ",@P_STNO=" + stno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_WORKINGDATE=" + Fdate.ToString().Trim() + ",@P_STNO=" + stno + "," + "@P_COLLEGE_CODE=0";
+            }
+            else
+            {
+                url += "&param=@P_WORKINGDATE=" + Fdate.ToString().Trim() + ",@P_STNO=" + stno + "," + "@P_COLLEGE_CODE=" + Session["college_nos"].ToString();
+            }
 
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);

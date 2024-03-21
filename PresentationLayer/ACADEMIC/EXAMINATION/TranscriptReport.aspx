@@ -127,6 +127,10 @@
                                 <asp:Button ID="btntranscripwithoutheader" Visible="false" runat="server" Text="Transcript Report without Header" ValidationGroup="submit" OnClick="btntranscripwithoutheader_Click"
                                     CssClass="btn btn-info" />
                                 <asp:Button ID="btnReport" runat="server" Text="All Result" Visible="false" CssClass="btn btn-info" ValidationGroup="submit" OnClick="btnReport_Click" />
+
+                                
+<asp:Button ID="btnTransB1" runat="server" Text="Transcript Report Format 1(Excel)" ValidationGroup="SubmitTranscript"
+                                     Visible="false" CssClass="btn btn-info" OnClick="btnTransB1_Click" />
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
 
                                 <asp:ValidationSummary ID="VSTranscript" runat="server" DisplayMode="List"
@@ -236,6 +240,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSearch" />
+            <asp:PostBackTrigger ControlID="btnTransB1" />
         </Triggers>
     </asp:UpdatePanel>
 

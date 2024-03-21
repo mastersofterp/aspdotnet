@@ -75,7 +75,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
 
-                        objParams = new SqlParameter[76];
+                        objParams = new SqlParameter[78];
 
 
                         objParams[0] = new SqlParameter("@P_DA", objConfig.DA);
@@ -284,10 +284,10 @@ namespace IITMS
 
                         objParams[73].SqlDbType = SqlDbType.Image;
                         objParams[74] = new SqlParameter("@P_AutoUserCreated", objConfig.IsAutoUserCreated);
-
-
-                        objParams[75] = new SqlParameter("@P_STATUS", SqlDbType.Int);
-                        objParams[75].Direction = ParameterDirection.Output;
+                        objParams[75] = new SqlParameter("@P_IsRetirmentDateCalculation", objConfig.IsRetirmentDateCalculation);
+                        objParams[76] = new SqlParameter("@P_EnableEmpSignonEmpInfoPage", objConfig.IsEnableEmpSignatureinEmpPage);
+                        objParams[77] = new SqlParameter("@P_STATUS", SqlDbType.Int);
+                        objParams[77].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_CONFIGURATION", objParams, true);
                         if (Convert.ToInt32(ret) == -99)

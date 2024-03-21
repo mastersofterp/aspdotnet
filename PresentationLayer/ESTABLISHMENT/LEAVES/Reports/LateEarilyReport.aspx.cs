@@ -1379,7 +1379,7 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LateEarilyReport : System.Web.
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + 
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROMDATE=" + 
                 Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO="
                 + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + stno + " ";
 
@@ -1570,7 +1570,7 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LateEarilyReport : System.Web.
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
 
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
 
@@ -1771,7 +1771,7 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LateEarilyReport : System.Web.
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + stno + ",@P_IDNO=" + 0;
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + stno + ",@P_IDNO=" + 0;
             // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text + " ";
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text +" " ;
 
@@ -1842,7 +1842,7 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LateEarilyReport : System.Web.
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
 
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";

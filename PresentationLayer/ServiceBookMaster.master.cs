@@ -22,6 +22,7 @@ public partial class ServiceBookMaster : System.Web.UI.MasterPage
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     PayController objpay = new PayController();
+    ServiceBookController objServiceBook = new ServiceBookController();
     public static int _idnoEmp; public static int college_id = 0;
 
     protected void Page_Load(object sender, EventArgs e)
@@ -243,8 +244,7 @@ public partial class ServiceBookMaster : System.Web.UI.MasterPage
                 //lblApprove.Text = ViewState["REMARK"].ToString();
 
             }
-
-
+            GetPercentage();
         }   
 
     }
@@ -398,4 +398,39 @@ public partial class ServiceBookMaster : System.Web.UI.MasterPage
         }
     }
 
+    protected void GetPercentage()
+    {
+        //progressBar.Attributes.Add("style", "width:50%");
+        //progressBar.Attributes.Add("aria-valuenow", "50");
+        //lblPercentage.InnerText = "50%";
+        int idno = Convert.ToInt32(Session["serviceIdNo"]);
+        if (ddlEmployee.SelectedIndex > 0)
+        {
+            perBar.Visible = true;
+        }
+        else
+        {
+            perBar.Visible = false;
+        }
+        DataSet ds = null;
+        if (idno != 0)
+        {
+            int emp_UserType = int.Parse(objCommon.LookUp("PAYROLL_EMPMAS", "UA_TYPE", "IDNO = '" + idno + "'"));
+            if (Convert.ToInt32(Session["usertype"]) == 1)
+            {
+                ds = objServiceBook.BindServiceBookStatus(emp_UserType, idno);
+            }
+            else
+            {
+                ds = objServiceBook.BindServiceBookStatus(Convert.ToInt32(Session["usertype"]), idno);
+            }
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string per = ds.Tables[0].Rows[0]["PER"].ToString();
+                progressBar.Attributes.Add("style", "width:" + per + "%");
+                progressBar.Attributes.Add("aria-valuenow", per);
+                lblPercentage.InnerText = per + "%";
+            }
+        }
+    }
 }

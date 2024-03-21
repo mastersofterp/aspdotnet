@@ -90,10 +90,13 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
             BlobDetails();
             ViewState["INV1"] = null;
             ViewState["FILE1"] = null;
+
+            objCommon.FillDropDownList(ddlInv, "STORE_INVOICE", "INVTRNO", "INVNO", "MDNO=" + Convert.ToInt32(Session["strdeptcode"]), "INVTRNO DESC");
         }
         //
         divMsg.InnerText = string.Empty;
       //  NetAmountCalculation();
+
     }
     private void FillDropDownList()
     {
@@ -1132,6 +1135,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
         ViewState["FILE1"] = null;
         txtItemExpiryDate.Text = string.Empty;
         txtItemWarrentyDate.Text = string.Empty;
+        ddlInv.SelectedValue = "0";
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
@@ -1783,6 +1787,47 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
                 objCommon.ShowError(Page, "Complaints_TRANSACTION_Eapplication.btnDeleteNew_Click-> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    protected void btnReport_Click(object sender, EventArgs e)
+    {
+        pnlReport.Visible = true;
+        InvPanel.Visible = false;
+    }
+    protected void btnRpt_Click(object sender, EventArgs e)
+    {
+        ShowReport("INVOICE_REPORT", "Str_InvoiceFormat2.rpt");
+    }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        pnlReport.Visible = false;
+        InvPanel.Visible = true;
+        ddlInv.SelectedValue = "0";
+    }
+    //To Show INVOICE report
+    private void ShowReport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("stores")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,STORES," + rptFileName;
+            url += "&param=@P_INVTRNO=" + Convert.ToInt32(ddlInv.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString();
+
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Academic_StudentRoolist.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
 }
