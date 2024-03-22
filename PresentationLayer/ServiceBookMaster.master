@@ -144,7 +144,7 @@
                                                         ValidationGroup="ServiceBook" InitialValue="0"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-5 col-md-6 col-12 ml-5" runat="server" id="perBar">
-                                                    <h2>Service Book Complition</h2>
+                                                    <h2>Service Book Completion</h2>
                                                     <div class="progress">
                                                         <div runat="server" id="progressBar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                                                             <p id="lblPercentage" runat="server"></p>

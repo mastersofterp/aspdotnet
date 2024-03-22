@@ -641,31 +641,46 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
                 Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
                 Control ctrhead2 = lvCompAttach.FindControl("divattach");
+                Control ctrHead3 = lvCompAttach.FindControl("divDownload");
                 ctrHeader.Visible = true;
                 ctrHead1.Visible = true;
                 ctrhead2.Visible = false;
+                ctrHead3.Visible = false;
 
                 foreach (ListViewItem lvRow in lvCompAttach.Items)
                 {
                     Control ckBox = (Control)lvRow.FindControl("tdBlob");
                     Control ckattach = (Control)lvRow.FindControl("attachfile");
                     Control attachblob = (Control)lvRow.FindControl("attachblob");
+                    Control download = (Control)lvRow.FindControl("tdDownloadLink");
                     ckBox.Visible = true;
                     attachblob.Visible = true;
                     ckattach.Visible = false;
-
+                    download.Visible = false;
                 }
             }
             else
             {
 
-                Control ctrHeader = lvCompAttach.FindControl("divDownload");
+                Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
+                Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
+                Control ctrhead2 = lvCompAttach.FindControl("divattach");
+                Control ctrHead3 = lvCompAttach.FindControl("divDownload");
                 ctrHeader.Visible = false;
+                ctrHead1.Visible = true;
+                ctrhead2.Visible = false;
+                ctrHead3.Visible = true;
 
                 foreach (ListViewItem lvRow in lvCompAttach.Items)
                 {
-                    Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+                    Control ckBox = (Control)lvRow.FindControl("tdBlob");
+                    Control ckattach = (Control)lvRow.FindControl("attachfile");
+                    Control attachblob = (Control)lvRow.FindControl("attachblob");
+                    Control download = (Control)lvRow.FindControl("tdDownloadLink");
                     ckBox.Visible = false;
+                    attachblob.Visible = false;
+                    ckattach.Visible = true;
+                    download.Visible = true;
 
                 }
             }
@@ -1243,6 +1258,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 DataTable dt = (DataTable)ViewState["FILE1"];
                 dt.Rows.Remove(this.GetEditableDatarowBill(dt, fname));
                 ViewState["FILE1"] = dt;
+                BindListView_Attachments(dt);
                 //LVFiles.DataSource = dt;
                 //LVFiles.DataBind();
                 ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('File Deleted Successfully.');", true);

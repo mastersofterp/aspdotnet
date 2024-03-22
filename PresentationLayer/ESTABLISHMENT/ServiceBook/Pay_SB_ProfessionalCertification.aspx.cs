@@ -827,8 +827,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
                 DataTable dt = (DataTable)ViewState["FILE1"];
                 dt.Rows.Remove(this.GetEditableDatarowBill(dt, fname));
                 ViewState["FILE1"] = dt;
-                LVFiles.DataSource = dt;
-                LVFiles.DataBind();
+                BindListView_Attachments(dt);
+                //LVFiles.DataSource = dt;
+                //LVFiles.DataBind();
                 ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('File Deleted Successfully.');", true);
 
                 if (ViewState["DELETE_BILLS"] != null && ((DataTable)ViewState["DELETE_BILLS"]) != null)
@@ -974,31 +975,46 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
                 Control ctrHeader = LVFiles.FindControl("divBlobDownload");
                 Control ctrHead1 = LVFiles.FindControl("divattachblob");
                 Control ctrhead2 = LVFiles.FindControl("divattach");
+                Control ctrHead3 = LVFiles.FindControl("divDownload");
                 ctrHeader.Visible = true;
                 ctrHead1.Visible = true;
                 ctrhead2.Visible = false;
+                ctrHead3.Visible = false;
 
                 foreach (ListViewItem lvRow in LVFiles.Items)
                 {
                     Control ckBox = (Control)lvRow.FindControl("tdBlob");
                     Control ckattach = (Control)lvRow.FindControl("attachfile");
                     Control attachblob = (Control)lvRow.FindControl("attachblob");
+                    Control download = (Control)lvRow.FindControl("tdDownloadLink");
                     ckBox.Visible = true;
                     attachblob.Visible = true;
                     ckattach.Visible = false;
-
+                    download.Visible = false;
                 }
             }
             else
             {
 
-                Control ctrHeader = LVFiles.FindControl("divDownload");
+                Control ctrHeader = LVFiles.FindControl("divBlobDownload");
+                Control ctrHead1 = LVFiles.FindControl("divattachblob");
+                Control ctrhead2 = LVFiles.FindControl("divattach");
+                Control ctrHead3 = LVFiles.FindControl("divDownload");
                 ctrHeader.Visible = false;
+                ctrHead1.Visible = true;
+                ctrhead2.Visible = false;
+                ctrHead3.Visible = true;
 
                 foreach (ListViewItem lvRow in LVFiles.Items)
                 {
-                    Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+                    Control ckBox = (Control)lvRow.FindControl("tdBlob");
+                    Control ckattach = (Control)lvRow.FindControl("attachfile");
+                    Control attachblob = (Control)lvRow.FindControl("attachblob");
+                    Control download = (Control)lvRow.FindControl("tdDownloadLink");
                     ckBox.Visible = false;
+                    attachblob.Visible = false;
+                    ckattach.Visible = true;
+                    download.Visible = true;
 
                 }
             }

@@ -456,18 +456,14 @@
                                                                             OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="btnDelFile_Click" />
                                                                     </td>
                                                                     <td id="attachfile" runat="server">
-                                                                        <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("DisplayFileName") %>&filename=<%# Eval("DisplayFileName")%>">
-                                                                            <%# Eval("DisplayFileName")%></a>
+                                                                        <%# Eval("DisplayFileName")%></a>
                                                                     </td>
                                                                     <td id="attachblob" runat="server" visible="false">
                                                                         <%# Eval("DisplayFileName")%></a>
                                                                     </td>
 
                                                                     <td id="tdDownloadLink" runat="server" visible="false">
-                                                                        <img alt="Attachment" src="../IMAGES/attachment.png" />
-                                                                        <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
-                                                                        --%>      <%# Eval("DisplayFileName")%></a>&nbsp;&nbsp;
-                                                            
+                                                                        <asp:HyperLink ID="HyperLink1" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("GETFILE"),Eval("FUID"),Eval("IDNO"),Eval("FOLDER"),Eval("APPID"))%>'><%# Eval("DisplayFileName")%></asp:HyperLink>
                                                                     </td>
                                                                     <td style="text-align: center" id="tdBlob" runat="server" visible="false">
                                                                         <asp:UpdatePanel ID="updPreview" runat="server">
@@ -817,7 +813,7 @@
         <Triggers>
             <%--<asp:PostBackTrigger ControlID="btnUpload" />--%>
 
-            <asp:PostBackTrigger ControlID="btnSubmit" />
+            <%--<asp:PostBackTrigger ControlID="btnSubmit" />--%>
             <asp:PostBackTrigger ControlID="btnAdd" />
         </Triggers>
     </asp:UpdatePanel>

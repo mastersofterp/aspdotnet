@@ -38,41 +38,41 @@
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvYear" runat="server" ControlToValidate="ddlYear"
-                                            Display="None" ErrorMessage="Please Select Year" ValidationGroup="ServiceBook"
-                                            SetFocusOnError="true" InitialValue="0"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select Year" ValidationGroup="ServiceBook"
+                                                SetFocusOnError="true" InitialValue="0"></asp:RequiredFieldValidator>
                                         </div>
 
                                         <div class="form-group col-lg-4 col-md-6 col-12">
-                                          <div class="label-dynamic">
-                                          <sup>* </sup>
-                                          <label>Revenue Generated Through VAC (INR)</label>
-                                          </div>
-                                          <asp:TextBox ID="txtRGTVAC" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through VAC (INR)" TabIndex="2" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
-                                          <asp:RequiredFieldValidator ID="rfvVAC" runat="server" ControlToValidate="txtRGTVAC"
-                                            Display="None" ErrorMessage="Please Enter Revenue Generated Through VAC (INR)" ValidationGroup="ServiceBook"
-                                            SetFocusOnError="true" ></asp:RequiredFieldValidator>
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Revenue Generated Through VAC (INR)</label>
+                                            </div>
+                                            <asp:TextBox ID="txtRGTVAC" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through VAC (INR)" TabIndex="2" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvVAC" runat="server" ControlToValidate="txtRGTVAC"
+                                                Display="None" ErrorMessage="Please Enter Revenue Generated Through VAC (INR)" ValidationGroup="ServiceBook"
+                                                SetFocusOnError="true"></asp:RequiredFieldValidator>
                                         </div>
 
                                         <div class="form-group col-lg-4 col-md-6 col-12">
-                                          <div class="label-dynamic">
-                                          <sup>*</sup>
-                                          <label>Revenue Generated Through Events / Training</label>
-                                          </div>
-                                          <asp:TextBox ID="txtRGTEvents" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through Conducting Events/Training" TabIndex="3" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
-                                          <asp:RequiredFieldValidator ID="rfvEvents" runat="server" ControlToValidate="txtRGTEvents"
-                                            Display="None" ErrorMessage="Please Enter Revenue Generated Through Conducting Events/Training" ValidationGroup="ServiceBook"
-                                            SetFocusOnError="true" ></asp:RequiredFieldValidator>
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Revenue Generated Through Events / Training</label>
+                                            </div>
+                                            <asp:TextBox ID="txtRGTEvents" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through Conducting Events/Training" TabIndex="3" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvEvents" runat="server" ControlToValidate="txtRGTEvents"
+                                                Display="None" ErrorMessage="Please Enter Revenue Generated Through Conducting Events/Training" ValidationGroup="ServiceBook"
+                                                SetFocusOnError="true"></asp:RequiredFieldValidator>
                                         </div>
 
                                         <div class="form-group col-lg-4 col-md-6 col-12">
-                                          <div class="label-dynamic">
-                                          <sup>* </sup>
-                                          <label>Revenue Generated Through Sponsorship</label>
-                                          </div>
-                                          <asp:TextBox ID="txtRGTSponsor" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through Sponsorship" TabIndex="4" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
-                                          <asp:RequiredFieldValidator ID="rfvSponsor" runat="server" ControlToValidate="txtRGTSponsor"
-                                            Display="None" ErrorMessage="Please Enter Revenue Generated Through Sponsorship" ValidationGroup="ServiceBook"
-                                            SetFocusOnError="true" ></asp:RequiredFieldValidator>
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Revenue Generated Through Sponsorship</label>
+                                            </div>
+                                            <asp:TextBox ID="txtRGTSponsor" runat="server" CssClass="form-control" ToolTip="Enter Revenue Generated Through Sponsorship" TabIndex="4" MaxLength="20" onkeypress="return CheckNumeric(event,this);"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rfvSponsor" runat="server" ControlToValidate="txtRGTSponsor"
+                                                Display="None" ErrorMessage="Please Enter Revenue Generated Through Sponsorship" ValidationGroup="ServiceBook"
+                                                SetFocusOnError="true"></asp:RequiredFieldValidator>
                                         </div>
 
                                         <div class="form-group col-lg-4 col-md-6 col-12">
@@ -82,97 +82,97 @@
                                             </div>
                                             <asp:TextBox ID="txtWebLink" runat="server" CssClass="form-control" ToolTip="Enter Web Link" TabIndex="5" MaxLength="200"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="rfvWebLink" runat="server" ControlToValidate="txtWebLink"
-                                            Display="None" ErrorMessage="Please Enter Web Link" ValidationGroup="ServiceBook" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Enter Web Link" ValidationGroup="ServiceBook" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                             <asp:RegularExpressionValidator ID="revWebLink" runat="server" ControlToValidate="txtWebLink"
                                                 Display="None" ErrorMessage="Invalid Web Link Format" ValidationGroup="ServiceBook"
                                                 ValidationExpression="^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$"></asp:RegularExpressionValidator>
                                         </div>
 
 
-                                         <div class="form-group col-lg-4 col-md-6 col-12">
-                                                <div class="label-dynamic">
-                                                    <label>Upload Files</label>
-                                                    <label>Multiple Files Can Be Attached</label>
-                                                </div>
-                                                <asp:FileUpload ID="flupld" runat="server" TabIndex="21" ToolTip="Upload Multiple Files Here"/><br />
-                                                <asp:Label ID="Label2" runat="server" Text=" Please Select valid Document file(e.g. .pdf,.jpg) upto 5MB" ForeColor="Red"></asp:Label>
-                                                <asp:Button ID="btnAdd" runat="server" Text="Add" TabIndex="22" class="btn btn-primary" OnClick="btnAdd_Click"
-                                                    ToolTip="Click here to uplaod multiple files" />
+                                        <div class="form-group col-lg-4 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <label>Upload Files</label>
+                                                <label>Multiple Files Can Be Attached</label>
+                                            </div>
+                                            <asp:FileUpload ID="flupld" runat="server" TabIndex="21" ToolTip="Upload Multiple Files Here" /><br />
+                                            <asp:Label ID="Label2" runat="server" Text=" Please Select valid Document file(e.g. .pdf,.jpg) upto 5MB" ForeColor="Red"></asp:Label>
+                                            <asp:Button ID="btnAdd" runat="server" Text="Add" TabIndex="22" class="btn btn-primary" OnClick="btnAdd_Click"
+                                                ToolTip="Click here to uplaod multiple files" />
                                         </div>
 
-                                         <div class="form-group col-lg-4 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                        <div class="form-group col-lg-4 col-md-6 col-12" id="divBlob" runat="server" visible="false">
                                             <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
                                             <asp:HiddenField ID="hdnBlobCon" runat="server" />
                                             <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
                                             <asp:HiddenField ID="hdnBlobContainer" runat="server" />
                                         </div>
+                                        <div id="divAttch" class="col-md-12" runat="server" style="display: none">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto">
+                                                        <asp:ListView ID="lvCompAttach" runat="server">
+                                                            <LayoutTemplate>
+                                                                <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Delete</th>
+                                                                            <th id="divattach" runat="server">Attachments  
+                                                                            </th>
+                                                                            <th id="divattachblob" runat="server" visible="false">Attachments
+                                                                            </th>
+                                                                            <th id="divDownload" runat="server" visible="false">Download
+                                                                            </th>
+                                                                            <th id="divBlobDownload" runat="server" visible="false">Download
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </LayoutTemplate>
+                                                            <ItemTemplate>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:ImageButton ID="btnDeleteFile" runat="server" ImageUrl="~/Images/delete.png"
+                                                                            CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
+                                                                            OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="btnDeleteFile_Click" />
+                                                                    </td>
+                                                                    <td id="attachfile" runat="server">
+                                                                        <%# Eval("DisplayFileName")%></a>
+                                                                    </td>
+                                                                    <td id="attachblob" runat="server" visible="false">
+                                                                        <%# Eval("DisplayFileName")%></a>
+                                                                    </td>
+
+                                                                    <td id="tdDownloadLink" runat="server" visible="false">
+                                                                        <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />
+                                                                <%# Eval("DisplayFileName")%></a>&nbsp;&nbsp;--%>
+                                                                         <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePathForMultiple(Eval("GETFILE"),Eval("FUID"),Eval("IDNO"),Eval("FOLDER"),Eval("APPID"))%>'><%# Eval("DisplayFileName")%></asp:HyperLink>
+                                                                    </td>
+                                                                    <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                                        <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                            <ContentTemplate>
+                                                                                <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+
+                                                                            </ContentTemplate>
+                                                                            <Triggers>
+                                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                            </Triggers>
+                                                                        </asp:UpdatePanel>
+
+                                                                    </td>
+                                                                </tr>
+                                                            </ItemTemplate>
+                                                        </asp:ListView>
+                                                    </asp:Panel>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div id="divAttch" runat="server" style="display: none">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto">
-                                            <asp:ListView ID="lvCompAttach" runat="server">
-                                                <LayoutTemplate>
-                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Delete</th>
-                                                                <th id="divattach" runat="server">Attachments  
-                                                                </th>
-                                                                <th id="divattachblob" runat="server" visible="false">Attachments
-                                                                </th>
-                                                                <th id="divDownload" runat="server" visible="false">Download
-                                                                </th>
-                                                                <th id="divBlobDownload" runat="server" visible="false">Download
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr id="itemPlaceholder" runat="server" />
-                                                        </tbody>
-                                                    </table>
-                                                </LayoutTemplate>
-                                                <ItemTemplate>
-                                                    <tr>
-                                                        <td>
-                                                            <asp:ImageButton ID="btnDeleteFile" runat="server" ImageUrl="~/Images/delete.png"
-                                                                CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
-                                                                OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="btnDeleteFile_Click" />
-                                                        </td>
-                                                        <td id="attachfile" runat="server">
-                                                            <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("DisplayFileName") %>&filename=<%# Eval("DisplayFileName")%>">
-                                                                <%# Eval("DisplayFileName")%></a>
-                                                        </td>
-                                                        <td id="attachblob" runat="server" visible="false">
-                                                            <%# Eval("DisplayFileName")%></a>
-                                                        </td>
 
-                                                        <td id="tdDownloadLink" runat="server" visible="false">
-                                                            <img alt="Attachment" src="../IMAGES/attachment.png" />
-                                                            <%# Eval("DisplayFileName")%></a>&nbsp;&nbsp;
-                                                
-                                                        </td>
-                                                        <td style="text-align: center" id="tdBlob" runat="server" visible="false">
-                                                            <asp:UpdatePanel ID="updPreview" runat="server">
-                                                                <ContentTemplate>
-                                                                    <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
-                                                                        data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
-
-                                                                </ContentTemplate>
-                                                                <Triggers>
-                                                                    <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
-                                                                </Triggers>
-                                                            </asp:UpdatePanel>
-
-                                                        </td>
-                                                    </tr>
-                                                </ItemTemplate>
-                                            </asp:ListView>
-                                        </asp:Panel>
-                                    </div>
-                                </div>
-                                </div>
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="5"
                                         OnClick="btnSubmit_Click" CssClass="btn btn-primary" ToolTip="Click here to Submit" />
@@ -222,9 +222,9 @@
                                                 <td>
                                                     <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("RGNO")%>'
                                                         AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" />
-                                                        <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/Images/delete.png" CommandArgument='<%# Eval("RGNO") %>'
-                                                            AlternateText="Delete Record" ToolTip="Delete Record" OnClick="btnDelete_Click"
-                                                            OnClientClick="showConfirmDel(this); return false;" />
+                                                    <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/Images/delete.png" CommandArgument='<%# Eval("RGNO") %>'
+                                                        AlternateText="Delete Record" ToolTip="Delete Record" OnClick="btnDelete_Click"
+                                                        OnClientClick="showConfirmDel(this); return false;" />
                                                 </td>
                                                 <td>
                                                     <%# Eval("YEAR")%>
