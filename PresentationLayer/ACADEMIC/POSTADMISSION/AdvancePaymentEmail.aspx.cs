@@ -14,7 +14,6 @@ using Newtonsoft.Json;
 using BusinessLogicLayer.BusinessLogic;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using System.Web;
-
 /*                                                  
 ---------------------------------------------------------------------------------------------------------------------------                                                          
 Created By : Bhagyashree                                                      
@@ -27,7 +26,6 @@ Version   Modified On   Modified By        Purpose
                                       
 ------------------------------------------- -------------------------------------------------------------------------------                             
 */ 
-
 public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -133,6 +131,8 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
         string EmailStatus = string.Empty; string subject = string.Empty;
         try
         {
+            string loginurladmp = System.Configuration.ConfigurationManager.AppSettings["WebServerADMP"].ToString();
+            string loginurlbtech = System.Configuration.ConfigurationManager.AppSettings["WebServerBTECH"].ToString();
             ds = objAEC.GetStudentDetailsToSendEmail(UsernoXml);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -141,13 +141,15 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     string emailid = ds.Tables[0].Rows[i]["EMAILID"].ToString();
-                    string message = "Dear Mr. " + ds.Tables[0].Rows[i]["STUDETNAME"].ToString() + "<br />";
+                    string message = "Dear " + ds.Tables[0].Rows[i]["STUDETNAME"].ToString() + "<br />";
+                    message += "<br />";
                     message += "Greetings from B.S.A. Crescent Institute of Science and Technology <br />";
+                    message += "<br />";
                     message += "Congratulations! <br />";
                     message += "<br />";
                     message += "<br />";
                     message += "We are pleased to inform you that you are selected for the provisional admission to the following <br />";
-                    message += "programme for the academic year 2023-24. <br />";
+                    message += "programme for the academic year " + ds.Tables[0].Rows[i]["BATCHNAME"].ToString() + ". <br />";
                     message += "<br />";
                     message += "<br />";
                     message += "Application Number: " + ds.Tables[0].Rows[i]["USERNAME"].ToString() + "<br />";
@@ -163,16 +165,19 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                     message += "To confirm the provisional admission to the above programme, you are requested to make the online <br />";
                     message += "payment of advance Rs." + ds.Tables[0].Rows[i]["FEEPAYMENT"].ToString() + " towards the first semester tuition fee using the below Institute <br />";
                     message += "payment link on or before " + ds.Tables[0].Rows[i]["PAYMENT_ENDDATE"].ToString() + " or you can visit the Institute and make the payment in the Admission Office on or before " + ds.Tables[0].Rows[i]["OFFICE_VISIT_END_DATE"].ToString() + ". <br />";
+                    message += "<br />";
                     if (ds.Tables[0].Rows[i]["DEGREENO"].ToString() == "7")
                     {
-                        message += "Institute Online Fee Payment Link: https://crescentbtechadmissionstest.mastersofterp.in <br />";
+                        message += "Institute Online Fee Payment Link: " + loginurlbtech  + " <br />";
                     }
                     else
                     {
-                        message += "Institute Online Fee Payment Link: https://crescentadmissionstest.mastersofterp.in <br />";
+                        message += "Institute Online Fee Payment Link: " + loginurladmp + "  <br />";
                     }
                     message += "Login ID: " + ds.Tables[0].Rows[i]["USERNAME"].ToString() + " <br />";
+                    message += "<br />";
                     message += "After making the online payment, please send the E- receipt as the attachment to the email ids given here to get the confirmation of your provisional admission. <br />";
+                    message += "<br />";
                     message += "admissionoffice@crescent.education <br />";
                     message += "financeofficer@crescent.education <br />";
                     message += "asst.registrar-admissions@crescent.education <br />";
@@ -198,6 +203,7 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                     message += "2. CIEAT ID / Application No. <br />";
                     message += "3. Programme (course) Applied <br />";
                     message += "4. Registered Mobile Number. <br />";
+                    message += "<br />";
                     message += "Wish you all the best. <br />";
                     message += "For any assistance, please call +91-95432 77888 <br />";
                     message += "<br />";
