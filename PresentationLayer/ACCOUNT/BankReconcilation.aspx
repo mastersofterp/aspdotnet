@@ -435,9 +435,9 @@
                                                     <td>
                                                         <%# Eval("CHEQUEAMOUNT") %>
                                                     </td>
-                                                     <td>
+                                                     <%--<td>
                                                         <%# Eval("Ledger") %>
-                                                    </td>
+                                                    </td>--%>
                                                     <td>
                                                         <%--<div class="input-group date">
                                                             <div class="input-group-addon" id="imgCal10">
