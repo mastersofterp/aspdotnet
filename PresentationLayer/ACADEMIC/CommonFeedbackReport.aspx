@@ -297,7 +297,99 @@
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="Report" />
                             </div>
                         </div>
+                        <div class="col-lg-12 col-md-12 col-12" id="divSurveyReport" runat="server" visible="false">
+                            <div class="box-body">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <%--  <label>College & Scheme</label>--%>
+                                                <asp:Label ID="lblDYddlColgScheme_Tab" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlserveycolscheme" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control" TabIndex="1"
+                                                OnSelectedIndexChanged="ddlserveycolscheme_SelectedIndexChanged" data-select2-enable="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlserveycolscheme" SetFocusOnError="true"
+                                                Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="ServeyReport">
+                                            </asp:RequiredFieldValidator>
+                                        </div>
 
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <%--<label>Session</label>--%>
+                                                <asp:Label ID="lblDYddlSession_Tab2" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlServeySession" runat="server" OnSelectedIndexChanged="ddlServeySession_SelectedIndexChanged"
+                                                AppendDataBoundItems="True" TabIndex="1" CssClass="form-control" data-select2-enable="true"
+                                                ToolTip="Please Select Session" AutoPostBack="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlServeySession"
+                                                Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="ServeyReport"></asp:RequiredFieldValidator>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div2" runat="server">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <%--<label>Semester</label>--%>
+                                                <asp:Label ID="lblDYddlSemester_Tab2" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlServeySemester" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                                TabIndex="1" ToolTip="Please Select Semester" OnSelectedIndexChanged="ddlServeySemester_SelectedIndexChanged" AutoPostBack="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlServeySemester"
+                                                Display="None" ErrorMessage="Please Select Semester" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="ServeyReport"></asp:RequiredFieldValidator>
+                                        </div>
+
+                                        <div id="Div1" class="form-group col-lg-3 col-md-6 col-12" runat="server">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <%--<label>Section</label>--%>
+                                                <asp:Label ID="lblDYddlSection_Tab" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlserveySection" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                                AutoPostBack="true" OnSelectedIndexChanged="ddlserveySection_SelectedIndexChanged" TabIndex="1" ToolTip="Please Select Section">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvsection" runat="server" ControlToValidate="ddlserveySection"
+                                                Display="None" ErrorMessage="Please Select Section" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="ServeyReport"></asp:RequiredFieldValidator>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Feedback Type</label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlServeyDBType" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                                TabIndex="1" ToolTip="Please Select Feedback Type" AutoPostBack="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlServeyDBType"
+                                                Display="None" ErrorMessage="Please Select Feedback Type" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="ServeyReport"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 btn-footer">
+                                    <asp:Button ID="btnExportSurvey" runat="server" Text="Show" TabIndex="1" 
+                                        ValidationGroup="ServeyReport" OnClick="btnExportSurvey_Click" CssClass="btn btn-primary" />
+                                     <asp:Button ID="Button1" runat="server" Text="Cancel" TabIndex="1"
+                                        OnClick="btnCancelReport_Click" CssClass="btn btn-warning" />
+                                    <asp:ValidationSummary ID="ValidationSummary4" runat="server" DisplayMode="List"
+                                        ShowMessageBox="True" ShowSummary="False" ValidationGroup="ServeyReport" />
+                                    <div id="div4" runat="server">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
