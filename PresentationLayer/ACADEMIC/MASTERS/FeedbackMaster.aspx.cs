@@ -68,6 +68,18 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             //string text = System.IO.File.ReadAllText(FilePath);
             //ScriptManager.RegisterStartupScript(this, GetType(), "script", text, true);
         }
+
+        int FEEDBACK = Convert.ToInt32( objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(FEEDBACK_NOTE,0) AS FEEDBACK_NOTE", ""));
+        if (FEEDBACK == 1)
+        {
+            btnNote.Visible = true;
+        }
+        else
+        {
+            btnNote.Visible = false;
+        }
+
+        
     }
 
     private void CheckPageAuthorization()

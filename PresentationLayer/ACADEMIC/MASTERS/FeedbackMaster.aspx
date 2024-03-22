@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
     CodeFile="FeedbackMaster.aspx.cs" Inherits="ACADEMIC_MASTERS_FeedbackMaster" Title="" %>
+
 <%@ Register Assembly="FreeTextBox" Namespace="FreeTextBoxControls" TagPrefix="FTB" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
@@ -49,6 +50,9 @@
                                         <asp:RequiredFieldValidator ID="rfvFeedbackName" runat="server" ControlToValidate="txtFeedbackName"
                                             Display="None" ErrorMessage="Please Enter Feedback Type" ValidationGroup="submit"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                       <asp:RequiredFieldValidator ID="rfvFeedbackName1" runat="server" ControlToValidate="txtFeedbackName"
+                                            Display="None" ErrorMessage="Please Enter Feedback Type" ValidationGroup="note"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -59,8 +63,11 @@
                                             data-select2-enable="true">
                                             <%--<asp:ListItem Value="0">Please Select</asp:ListItem>--%>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlfeedbackmode"
+                                        <asp:RequiredFieldValidator ID="rfvFeedbackMode" runat="server" ControlToValidate="ddlfeedbackmode"
                                             Display="None" ErrorMessage="Please Select Feedback Mode" ValidationGroup="submit" InitialValue="0"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="rfvFeedbackMode1" runat="server" ControlToValidate="ddlfeedbackmode"
+                                            Display="None" ErrorMessage="Please Select Feedback Mode" ValidationGroup="note" InitialValue="0"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -69,11 +76,13 @@
                                         </div>
                                         <asp:CheckBox ID="chkActiveStatus" runat="server" TextAlign="Left" Checked="true" />
                                     </div>
-                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
                                         <%--<asp:Button ID="btnNote" runat="server" Text="Add Note " ToolTip="Add Note" Visible="false" ValidationGroup="submit1"
                                             TabIndex="2" CssClass="btn btn-primary" OnClick="btnNote_Click" />--%>
 
-                                        <asp:LinkButton ID="btnNote" runat="server" Text="Add Note" CssClass="btn btn-primary"  OnClick="btnNote_Click"></asp:LinkButton>
+                                        <asp:LinkButton ID="btnNote" runat="server" Text="Add Note" CssClass="btn btn-primary" ValidationGroup="note" OnClick="btnNote_Click"></asp:LinkButton>
+                                        <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="note"
+                                            ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                     </div>
                                 </div>
                                 <div class="row">
@@ -172,11 +181,11 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 
-   <%-- Added by sakshi M on 14-03-2024--%>
-     <!-- The Modal -->
+    <%-- Added by sakshi M on 14-03-2024--%>
+    <!-- The Modal -->
     <div class="modal" id="myModalCourse" role="dialog">
         <div class="modal-dialog">
-            <div class="modal-content" style="height:500px; width:720px">
+            <div class="modal-content" style="height: 500px; width: 720px">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -184,17 +193,17 @@
                     <button type="button" class="close" data-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
-                <div class="modal-body" >
+                <div class="modal-body">
                     <asp:UpdatePanel ID="UpdatePanel2" runat="server">
                         <ContentTemplate>
-                                <asp:Panel ID="Panel1" runat="server" >
-                                            <div class="row">
-                                                    <FTB:FreeTextBox ID="ftbDesc" runat="Server" Height="200px" Width="700px" TabIndex="1" />
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ftbDesc"
-                                                        Display="None" ErrorMessage="Please Enter Feedback Note." ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                            </div>
-                                </asp:Panel>
-                       
+                            <asp:Panel ID="Panel1" runat="server">
+                                <div class="row">
+                                    <FTB:FreeTextBox ID="ftbDesc" runat="Server" Height="200px" Width="700px" TabIndex="1" />
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ftbDesc"
+                                        Display="None" ErrorMessage="Please Enter Feedback Note." ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                </div>
+                            </asp:Panel>
+
                         </ContentTemplate>
                     </asp:UpdatePanel>
                 </div>
@@ -207,16 +216,16 @@
         </div>
     </div>
 
-     <script>
-         $(function () {
-             $("#btnNote").click(function () {
-                 showModal();
-             });
-         });
+    <script>
+        $(function () {
+            $("#btnNote").click(function () {
+                showModal();
+            });
+        });
 
-         function showModal() {
-             $("#myModalCourse").modal('show');
-         }
+        function showModal() {
+            $("#myModalCourse").modal('show');
+        }
     </script>
 </asp:Content>
 
