@@ -93,7 +93,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                 pnlmax.Visible = false;
                 Session["announcement"] = null;
                 Session["TblRound"] = null;
-
+                ViewState["ACOMSCHNO"] = null;
                 txtSSC.Text = "0.00";
                 txtHSC.Text = "0.00";
                 txtDiploma.Text = "0.00";
@@ -507,7 +507,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
                             objCommon.DisplayMessage( "Record Saved Successfully.", this.Page);
-                            ViewState["action"] = null;
+                            ViewState["action"] = "add";
                             //Response.Redirect(Request.Url.ToString());
                             Clear();
                             BindListViewAddCompany();
@@ -531,6 +531,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                                 Clear();
                                 BindListViewAddCompany();
                             }
+                            ViewState["ACOMSCHNO"] = null;
                         }
                     }
                    
@@ -1335,6 +1336,10 @@ public partial class Job_Announcement : System.Web.UI.Page
         lvRoundDetail.DataBind();
         txtSchFromDate.Text = string.Empty;
         txtSchToDate.Text = string.Empty;
+        ViewState["Round"] = null;
+        ViewState["action"] = "add";
+        Session["announcement"] = null;
+        ViewState["ACOMSCHNO"] = null;
     }
     //public void Createddl(string id)
     //{
