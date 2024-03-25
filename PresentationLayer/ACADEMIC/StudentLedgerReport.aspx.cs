@@ -372,10 +372,19 @@ public partial class Academic_StudentLedgerReport : System.Web.UI.Page
             if (Session["OrgId"].ToString() == "3" || Session["OrgId"].ToString() == "4")// For CPUK and CPUH
             {
                 btnShowReportFormat2.Visible = true;
+                btnledgerFormat3.Visible = false;
             }
             else
             {
-                btnShowReportFormat2.Visible = false;
+                if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6" || Session["OrgId"].ToString() == "2")
+                {
+                    btnShowReportFormat2.Visible = false;
+                }
+                else 
+                {
+                    btnShowReportFormat2.Visible = true;
+                }
+                
             }          
             btnCancel.Visible = true;
             pnlLV.Visible = false;
@@ -417,6 +426,46 @@ public partial class Academic_StudentLedgerReport : System.Web.UI.Page
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    private void ShowReportformatIII(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_IDNO=" + ViewState["StudentId"]
+                + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+    protected void btnledgerFormat3_Click(object sender, EventArgs e)
+    {
+        string reportTitle = "Student_Ledger_Report_Format-II";
+        string rptFileName = "rptStudentLedgerReportHIT.rpt";
+        try
+        {
+            this.ShowReportFormatII(reportTitle, rptFileName);
+
         }
         catch (Exception ex)
         {
