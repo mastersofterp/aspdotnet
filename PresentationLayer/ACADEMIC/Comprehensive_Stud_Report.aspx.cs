@@ -103,9 +103,22 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
                 else if (Internalflag_subexam==1)
                 {
+                    //if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
+                    //{
+                        //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "ISNULL(R.CANCEL,0)=0 AND IDNO = " + Convert.ToInt32(Session["idno"]), "R.SESSIONNO DESC");
+                        //if (ddlSession.Items.Count > 1)
+                        //{
+                        //    ddlSession.SelectedIndex = 1;
+                        //}
+                        divInternalMarks1.Visible = true;
+                        getstudentinternalcourse();
+                    //}
+                    //else
+                    //{
 
-                    divInternalMarks1.Visible = true;
-                    getstudentinternalcourse();
+                    //    divInternalMarks1.Visible = true;
+                    //    getstudentinternalcourse();
+                    //}
                     //getinternalmarks1();
                 }
 
@@ -3125,6 +3138,44 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             lvcoursemodelpop.DataBind();
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCoursePop();", true);
         }
+    }
+   public void getstudentinternalcourse()
+    {
+        int idno = 0;
+        if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "14")
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(ViewState["idno"]);
+            //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollmentSearch.Text.Trim());
+            //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + idno, "R.SESSIONNO DESC");                                
+
+        }
+        DataSet ds = null;
+
+        string proc_name = "PKG_GET_STUDENT_DETAILS_STUDENT_LOGIN";
+
+        string para_name = "@P_IDNO,@P_SESSIONNO";
+        string call_values = "" + idno + "," + Int32.Parse(ddlSession.SelectedValue) + "";
+
+        ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+
+
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            lvInter.DataSource = ds;
+            lvInter.DataBind();
+            // ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
+        }
+        else
+        {
+            lvInter.DataSource = null;
+            lvInter.DataBind();
+        }
+
+
     }
     private void ShowReport_ForCash_HITS(string rptName, int dcrNo, int studentNo, string copyNo, string UA_FULLNAME, int Cancel)
     {
