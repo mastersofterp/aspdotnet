@@ -403,6 +403,7 @@ public partial class Activity_Exam_Activity : System.Web.UI.Page
     {
         try
         {
+            getcollegename(2);
             branches = string.Empty; semester = string.Empty; degrees = string.Empty; UserTypes = string.Empty;
             int flg = 1;
             DataSet ds = new DataSet();
@@ -448,6 +449,8 @@ public partial class Activity_Exam_Activity : System.Web.UI.Page
             CustomStatus css = CustomStatus.Others;
             string CollegeIds = GetSelectedCollegeIds();
             string existingCollgeName = string.Empty;
+            int exam_type = ddlexamtype.SelectedValue == "-1" ? 0 : Convert.ToInt32(ddlexamtype.SelectedValue);
+
             ViewState["dsSessionData"] = objCommon.FillDropDown("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_CODE,IS_ACTIVE,ORGANIZATIONID,COLLEGE_ID", "OrganizationId = " + Session["OrgId"].ToString(), "");
             ViewState["dsClgDegBrn"] = objCommon.FillDropDown("ACD_COLLEGE_DEGREE_BRANCH", "CDBNO", "COLLEGE_ID,DEGREENO,BRANCHNO,OrganizationId", "OrganizationId = " + Session["OrgId"].ToString(), "");
             if (ViewState["sessionactivityno"].ToString() != string.Empty && ViewState["sessionactivityno"].ToString() == "0")
@@ -462,8 +465,18 @@ public partial class Activity_Exam_Activity : System.Web.UI.Page
                         Boolean IsvalidForInsert = PreparingForInsertRecord(sessionActivityItem, ref branches, ref semester, ref degrees, ref UserTypes, CollegeId);
                         if (IsvalidForInsert)
                         {
-                            DataSet ds1 = activityController.AddSessionActivity(sessionActivityItem, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg);
-
+                            int session_activity_no = 0;
+                            //DataSet ds1 = activityController.AddSessionActivity(sessionActivityItem, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg);
+                            DataSet ds1 = new DataSet();
+                            int stat = Convert.ToInt32(activityController.AddUpdateSessionActivity(sessionActivityItem, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg, exam_type, session_activity_no));
+                            if (stat == 1)
+                            {
+                                isSaved++;
+                            }
+                            else if (stat == 4)
+                            {
+                                existingCollgeName += getcollegename(CollegeId) + ",";
+                            }
                             if (ds1.Tables.Count > 0)
                             {
                                 for (int i = 0; i < ds1.Tables.Count; i++)
@@ -532,7 +545,9 @@ public partial class Activity_Exam_Activity : System.Web.UI.Page
                         sessionActivity = sessionActivityList[i];
                     }
                 }
-                cs = (CustomStatus)activityController.UpdateSessionActivity(sessionActivity, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg);
+                int session_activity_no = sessionActivity.SessionActivityNo;
+                //cs = (CustomStatus)activityController.UpdateSessionActivity(sessionActivity, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg);
+                cs = (CustomStatus)activityController.AddUpdateSessionActivity(sessionActivity, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg, exam_type, session_activity_no);
                 this.LoadDefinedSessionActivities();
             }
             List<NotificationEntity> RegID = this.GetFCM_forAndroid();
@@ -563,6 +578,18 @@ public partial class Activity_Exam_Activity : System.Web.UI.Page
         }
     }
 
+    protected string getcollegename(int id)
+    {
+        string collegename = "";
+        foreach (ListItem ddl in ddlCollege.Items)
+        {
+            if (ddl.Value.Split('-')[0] == id.ToString())
+            {
+                collegename = ddl.Text;
+            }
+        }
+        return collegename;
+    }
 
     private bool ContainColumn(string columnName, DataTable table)
     {
