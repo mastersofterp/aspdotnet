@@ -102,7 +102,7 @@
                             <div class="col-12 btn-footer">
                                 <asp:Button ID="btnSubmit" runat="server" Visible="false" Text="Manual Entry Payment" CssClass="btn btn-primary" OnClick="btnSubmit_Click" OnClientClick="return confirm('Click OK to make manual payment entry.');" />
                               <%--   <1.0.1>--%>
-                                <asp:Button ID="btnreceipt" runat="server"  Text="Reciept" CssClass="btn btn-primary" Visible="false" />
+                                <asp:Button ID="btnreceipt" runat="server"  Text="Receipt" CssClass="btn btn-primary" OnClick="btnreciept_Click" Visible="false" />
                              <%--   </1.0.1>--%>
                                   <asp:Button ID="btnCancel" runat="server" Visible="false" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
 
