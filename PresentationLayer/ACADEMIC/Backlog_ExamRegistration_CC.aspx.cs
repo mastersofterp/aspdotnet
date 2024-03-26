@@ -558,10 +558,10 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
         Session["sessionnonew"] = sessionno;
         string sessionnoname = string.Empty;
 
-        sessionnoname = objCommon.LookUp("ACD_SESSION_MASTER", "TOP (1)SESSION_NAME", "SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]));
-
-        //  Session["sessionnonew"]
-        //  sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "ISNULL(SA.SESSION_NO,0)", "AM.ACTIVITY_CODE = 'EXAPP' AND SA.STARTED = 1");
+        sessionnoname = objCommon.LookUp("ACD_SESSION_MASTER", "TOP (1)SESSION_NAME","SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]));
+        btnPrintRegSlip_Click
+      //  Session["sessionnonew"]
+      //  sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "ISNULL(SA.SESSION_NO,0)", "AM.ACTIVITY_CODE = 'EXAPP' AND SA.STARTED = 1");
         lblsessionno.Text = sessionnoname;
         lblsessionno.ToolTip = Session["sessionnonew"].ToString();
         ActivityController objActController = new ActivityController();
@@ -731,14 +731,14 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 //}
                 CalculateTotalCredit();
 
-                int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND TRANSACTIONSTATUS='Success' AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + "  AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
 
                 //HideClmAdmin(); commented by rohit 03012024 
 
                 if (paysuccess > 0)
                 {
                     //decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "TOP 1 AD.TOTAL_AMT", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND TRANSACTIONSTATUS='Success' AND AD.RECIEPT_CODE='AEF' and  AD.IDNO=" + Convert.ToInt32(Session["idno"])));
-                    decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO = AD.IDNO AND D.SESSIONNO = AD.SESSIONNO  AND AD.RECIEPT_CODE=D.RECIEPT_CODE AND AD.SEMESTERNO=D.SEMESTERNO)", "SUM( AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                    decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO = AD.IDNO AND D.SESSIONNO = AD.SESSIONNO  AND AD.RECIEPT_CODE=D.RECIEPT_CODE AND AD.SEMESTERNO=D.SEMESTERNO)", "SUM( AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + "  AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
                     if (ViewState["usertype"].ToString() == "2")
                     {
                         btnPrintRegSlip.Visible = true;
@@ -827,11 +827,11 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 if (CheckExamfeesApplicableOrNot >= 1)
                 {
 
-                    int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                    int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
                     if (paysuccess > 0)
                     {
                         //decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "TOP 1 AD.TOTAL_AMT", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND TRANSACTIONSTATUS='Success' AND AD.RECIEPT_CODE='AEF' and  AD.IDNO=" + Convert.ToInt32(Session["idno"])));
-                        decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO = AD.IDNO AND D.SESSIONNO = AD.SESSIONNO  AND AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                        decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO = AD.IDNO AND D.SESSIONNO = AD.SESSIONNO  AND AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
                         if (ViewState["usertype"].ToString() == "2")
                         {
                             btnPrintRegSlip.Visible = true;
@@ -942,14 +942,14 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 HideClm();
                 //HideClmAdmin();  commented by rohit-3 03012024
 
-                int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                int paysuccess = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "COUNT(AD.idno)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(ddlBackLogSem.SelectedValue) + "  AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
                 if (paysuccess > 0)
                 {
 
 
 
                     //decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "TOP 1 AD.TOTAL_AMT", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(ddlBackLogSem.SelectedValue) + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
-                    decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO = AD.IDNO AND D.SESSIONNO = AD.SESSIONNO  AND AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
+                    decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO = AD.IDNO AND D.SESSIONNO = AD.SESSIONNO  AND AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND ad.SEMESTERNO =" + ddlBackLogSem.SelectedValue + " AND AD.RECIEPT_CODE='AEF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
                     if (ViewState["usertype"].ToString() == "2")
                     {
                         btnPrintRegSlip.Visible = true;
@@ -2081,7 +2081,7 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 else
                 {
                     int IfDemandCreated = 0;
-                    IfDemandCreated = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND", "COUNT(DISTINCT 1) _COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO =" + Convert.ToInt32(ViewState["sessionnonew"]) + " AND RECIEPT_CODE = 'AEF' AND ISNULL(CAN,0)=0 and SEMESTERNO=" + Convert.ToInt32(Session["semesterNO"])));
+                    IfDemandCreated = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND", "COUNT(DISTINCT 1) _COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO =" + Convert.ToInt32(ViewState["sessionnonew"]) + " AND RECIEPT_CODE = 'AEF' AND ISNULL(CAN,0)=0 and SEMESTERNO=" + Convert.ToInt32(ddlBackLogSem.SelectedValue)));
 
                     if (IfDemandCreated > 0)
                     {
@@ -3118,7 +3118,7 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
 
 
 
-            DataSet ds = objCommon.FillDropDown("ACD_LATE_FEE_EXAM", "CAST(ISNULL(LAST_DATE,0) as date) AS DATE", "DEGREENO", "SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + Session["semesterNO"] + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND  ISNULL(ISACTIVE,0)=0 AND RECEIPT_TYPE='AEF' and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]), "");
+            DataSet ds = objCommon.FillDropDown("ACD_LATE_FEE_EXAM", "CAST(ISNULL(LAST_DATE,0) as date) AS DATE", "DEGREENO", "SESSIONNO= " + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + ddlBackLogSem.SelectedValue + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND  ISNULL(ISACTIVE,0)=0 AND RECEIPT_TYPE='AEF' and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]), "");
             if (ds.Tables[0].Rows.Count > 0)
             {
                 date = Convert.ToString(ds.Tables[0].Rows[0]["DATE"]);
