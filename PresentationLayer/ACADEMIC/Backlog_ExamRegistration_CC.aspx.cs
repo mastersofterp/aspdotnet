@@ -559,7 +559,7 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
         string sessionnoname = string.Empty;
 
         sessionnoname = objCommon.LookUp("ACD_SESSION_MASTER", "TOP (1)SESSION_NAME","SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]));
-        btnPrintRegSlip_Click
+        //btnPrintRegSlip_Click
       //  Session["sessionnonew"]
       //  sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "ISNULL(SA.SESSION_NO,0)", "AM.ACTIVITY_CODE = 'EXAPP' AND SA.STARTED = 1");
         lblsessionno.Text = sessionnoname;
