@@ -286,7 +286,8 @@ public partial class ACADEMIC_FacultyDiary : System.Web.UI.Page
                 + ",@P_COLLEGEID=" + collegeId
                 + ",@P_SCHEMENO=" + schemeno
                 + ",@P_SESSIONNO=" + ddlSession.SelectedValue
-                + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue;
+                + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue
+                + ",@P_UANO=" + Session["userno"].ToString();
 
 
 
