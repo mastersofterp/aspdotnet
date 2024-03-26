@@ -7804,7 +7804,53 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
         }
 
-     
+        public DataSet GetImprovementCourseRegistrationList(int sessionno, int schemeno)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = new SqlParameter[2];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                objParams[1] = new SqlParameter("@P_SCHEMENO", schemeno);
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_IMPROVEMENT_REGISTERED_COURSES", objParams);
+            }
+            catch (Exception ex)
+            {
+                return ds;
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.GetImprovementCourseRegistrationList-> " + ex.ToString());
+            }
+            return ds;
+        }
 
+        public int SaveImprovementCourseTeacherAllot(int techerUA_No, int course, int sem, int colgid, int sessionno, int schemeno, string ccode)
+        {
+            int status = 0;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] sqlParams = null;
+                sqlParams = new SqlParameter[10];
+
+                sqlParams[0] = new SqlParameter("@P_COURSENO", course);
+                sqlParams[1] = new SqlParameter("@P_UA_NO", techerUA_No);
+                sqlParams[2] = new SqlParameter("@P_SEMESTERNO", sem);
+                sqlParams[3] = new SqlParameter("@P_COLLEGE_ID", colgid);
+                sqlParams[4] = new SqlParameter("@P_SESSIONNO", sessionno);
+                sqlParams[5] = new SqlParameter("@P_SCHEMENO", schemeno);
+                sqlParams[6] = new SqlParameter("@P_COURSE_CODE", ccode);
+                sqlParams[7] = new SqlParameter("@P_MODIFIED_BY", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"]));
+                sqlParams[8] = new SqlParameter("@P_IP_ADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString());
+                sqlParams[9] = new SqlParameter("@P_ORGANIZATION_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SAVE_IMPROVEMENT_COURSE_TEACHER_ALLOT", sqlParams, true);
+            }
+            catch (Exception ex)
+            {
+                status = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.SaveImprovementCourseTeacherAllot() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return status;
+        }
     }
 }

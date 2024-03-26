@@ -32,7 +32,8 @@
                             <div class="col-12 mt-2">
                                 <asp:RadioButtonList ID="rdoSelect" runat="server" RepeatDirection="Horizontal" AutoPostBack="true" OnSelectedIndexChanged="rdoSelect_SelectedIndexChanged">
                                     <asp:ListItem Value="1" Selected="True">Backlog Course Teacher Allotment &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                    <asp:ListItem Value="2">Redo Course Teacher Allotment</asp:ListItem>
+                                    <asp:ListItem Value="2">Redo Course Teacher Allotment &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                    <asp:ListItem Value="3">Improvement Course Teacher Allotment</asp:ListItem>
                                 </asp:RadioButtonList>
                             </div>
                             <br />
