@@ -396,7 +396,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
 
                     //below code ADDED BY SHAILENDRA K ON DATED 13.03.2024 AS PER T-55537 & 55470
 
-                    int sessionRegdCount = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1) CNT", @"ISNULL(CANCEL,0)=0 AND
+                    int sessionRegdCount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1) CNT", @"ISNULL(CANCEL,0)=0 AND
                                                                     SESSIONNO IN (
                                                                     SELECT DISTINCT SM.SESSIONNO FROM ACD_SESSION S 
                                                                     INNER JOIN ACD_SESSION_MASTER SM ON S.SESSIONID=SM.SESSIONID
