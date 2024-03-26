@@ -244,7 +244,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
     }
     protected void ddlLevel_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (lstcollege.SelectedIndex == 0)
+        if (lstcollege.SelectedIndex > 0 || lstcollege.SelectedIndex == 0)
         {
             if (ddlLevel.SelectedIndex == 0)
             {
@@ -338,6 +338,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             txtMaxRange.Text = "";
             txtIndicator.Text = "";
             chkStatus1.Checked = false;
+            lstcollege.SelectedIndex = -1;
 
         }
         foreach (ListViewDataItem item in lvGrade.Items)
@@ -350,7 +351,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             txtRangeMax.Text = "";
             txtGraadePoint.Text = "";
             chkStatus.Checked = false;
-
+            lstcollege.SelectedIndex = -1;
         }
 
     }
@@ -449,7 +450,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                         }
                     }
 
-                    Clear();
+                    cleartext();
                     //listbox();
 
                 }
