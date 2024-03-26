@@ -6,6 +6,14 @@
     <link href="plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="plugins/datatables/jquery.dataTables_themeroller.css" rel="stylesheet" />
     <link href="plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" />
+
+    <style>
+        .dataTables_scrollHeadInner
+        {
+            width: max-content!important;
+        }
+    </style>
+
     <script type="text/javascript">
         RunThisAfterEachAsyncPostback();
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(RunThisAfterEachAsyncPostback);
@@ -37,6 +45,7 @@
         RunThisAfterEachAsyncPostback();
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(RunThisAfterEachAsyncPostback);
     </script>--%>
+
     <asp:UpdatePanel ID="updPanel" runat="server">
         <ContentTemplate>
 
@@ -77,8 +86,9 @@
 
                                                             <div class="form-group col-md-4">
                                                                 <label>Facility Details :</label>
-                                                                <asp:TextBox ID="txtDetail" runat="server" MaxLength="500" TabIndex="2"
-                                                                    TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Centralize Facility Details" />
+                                                                <asp:TextBox ID="txtDetail" runat="server" MaxLength="250" TabIndex="2"
+                                                                    TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Centralize Facility Details"
+                                                                    onkeyDown="checkTextAreaMaxLength(this,event,'199');" onkeyup="textCounter(this, this.form.remLen, 199);" />
 
                                                             </div>
 
@@ -96,7 +106,8 @@
                                                             <div class="form-group col-md-4">
                                                                 <label>Remark :</label>
                                                                 <asp:TextBox ID="txtRemark" runat="server" MaxLength="250" TabIndex="4"
-                                                                    TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Facility Remark" />
+                                                                    TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Facility Remark"
+                                                                    onkeyDown="checkTextAreaMaxLength(this,event,'199');" onkeyup="textCounter(this, this.form.remLen, 199);" />
 
                                                             </div>
 

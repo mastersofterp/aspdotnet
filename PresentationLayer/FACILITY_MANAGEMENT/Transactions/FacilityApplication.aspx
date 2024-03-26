@@ -10,6 +10,12 @@
         RunThisAfterEachAsyncPostback();
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(RunThisAfterEachAsyncPostback);
     </script>
+    <style>
+        .dataTables_scrollHeadInner
+        {
+            width: max-content!important;
+        }
+    </style>
     <asp:UpdatePanel ID="updPanel" runat="server">
         <ContentTemplate>
             <div class="row">
@@ -245,7 +251,7 @@
                                                                                         <i id="imgCalFacilityDt" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
                                                                                         <%--<asp:Image ID="imgCalFacilityDt" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />--%>
                                                                                     </div>
-                                                                                    <asp:TextBox ID="txtFromDt" runat="server" MaxLength="10" onchange="Cleardate()" class="form-control" Style="z-index: 0;" />
+                                                                                    <asp:TextBox ID="txtFromDt" runat="server" MaxLength="10" onchange="Cleardate()" class="form-control" Style="z-index: 0;"/>
                                                                                     <ajaxToolKit:CalendarExtender ID="ceFacilityDt" runat="server" Format="dd/MM/yyyy"
                                                                                         TargetControlID="txtFromDt" PopupButtonID="imgCalFacilityDt" Enabled="true"
                                                                                         EnableViewState="true">
@@ -278,7 +284,7 @@
                                                                                     ControlToValidate="txtFromTime" Display="None" EmptyValueBlurredText="Empty" EmptyValueMessage="Please Enter From Time"
                                                                                     InvalidValueMessage="From Time is Invalid (Enter 12 Hour Format)"
                                                                                     SetFocusOnError="true" TooltipMessage="Please Enter From Time"
-                                                                                    IsValidEmpty="false" ValidationGroup="Facility"/>
+                                                                                    IsValidEmpty="false" ValidationGroup="Facility" />
                                                                             </div>
                                                                             <%--</div>--%>
 
@@ -291,7 +297,7 @@
                                                                                                 <%--<asp:Image ID="imgCalToDt" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />--%>
                                                                                                 <i id="imgCalToDt" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
                                                                                             </div>
-                                                                                            <asp:TextBox ID="txtToDt" runat="server" MaxLength="10" class="form-control" Style="z-index: 0;" />
+                                                                                            <asp:TextBox ID="txtToDt" runat="server" AutoPostBack="true" MaxLength="10" class="form-control" Style="z-index: 0;" OnTextChanged="txtToDt_TextChanged"/>
                                                                                             <%-- <asp:TextBox ID="txtToDt" runat="server" MaxLength="10" class="form-control" Style="z-index: 0;" OnTextChanged="txtToDt_TextChanged" AutoPostBack="false" />--%>
 
                                                                                             <%-- <asp:TextBox ID="txtToDt" runat="server" MaxLength="10" class="form-control" Style="z-index: 0;" />--%>
@@ -306,8 +312,8 @@
                                                                                                 Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
                                                                                                 AcceptNegative="Left" ErrorTooltipEnabled="true" />
                                                                                             <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="MaskedEditExtender1"
-                                                                                                ControlToValidate="txtToDt" EmptyValueMessage="Please Enter To Date"
-                                                                                                InvalidValueMessage=" To Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" 
+                                                                                                ControlToValidate="txtToDt" EmptyValueMessage="Please Enter To Date" IsValidEmpty="false"
+                                                                                                InvalidValueMessage=" To Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
                                                                                                 TooltipMessage="Please Enter To Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
                                                                                                 ValidationGroup="Facility" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
                                                                                         </div>
@@ -349,6 +355,10 @@
                                                                                     <asp:ListItem Text="Low" Value="L"></asp:ListItem>
                                                                                     <asp:ListItem Text="Medium" Value="M"></asp:ListItem>
                                                                                 </asp:DropDownList>
+                                                                                <asp:RequiredFieldValidator ID="rfvPrioLvl" runat="server" ControlToValidate="ddlLevel"
+                                                                                    Display="None" ErrorMessage="Please Select Priority Level" ValidationGroup="Facility"
+                                                                                    SetFocusOnError="True" InitialValue="0">
+                                                                                </asp:RequiredFieldValidator>
 
                                                                             </div>
                                                                             <div class="form-group col-md-3">
@@ -420,7 +430,7 @@
                                             <div class="sub-heading">
                                                 <h5>Centralize Facility List </h5>
                                             </div>
-                                            <table class="table table-hover table-bordered" id="tbluser">
+                                            <table class="table table-hover table-bordered table-striped nowrap display" id="tbluser">
                                                 <thead>
                                                     <tr class="bg-light-blue">
                                                         <th>Action
@@ -797,9 +807,9 @@
    
       </center>
         </ContentTemplate>
-        <%--<Triggers>
-            <asp:PostBackTrigger ControlID="btnShowReport" />
-        </Triggers>--%>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="txtToDt" />
+        </Triggers>
     </asp:UpdatePanel>
     <%--  Enable the button so it can be played again --%>           <%-- <%# Eval("Leave_Name")%>--%>
     <ajaxToolKit:ModalPopupExtender ID="ModalPopupExtender1" BehaviorID="mdlPopupDel"
@@ -916,6 +926,19 @@
                 obj.focus();
             }
             return false;
+        }
+
+        function isValidDate(dateString) {
+            var date = new Date(dateString);
+            // Check if the date object is valid and the input format is correct
+            // For example, "Invalid Date" indicates an invalid date format
+            if (Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date)) {
+                // Date is valid
+                return true;
+            } else {
+                // Date is invalid
+                return false;
+            }
         }
 
     </script>

@@ -56,6 +56,9 @@ public partial class FacilityDetails : System.Web.UI.Page
               //  CheckPageAuthorization();
                 //FillMinorFacility();
                 BindFacilityDetail();
+
+                txtDetail.Attributes.Add("maxlength", txtDetail.MaxLength.ToString());
+                txtRemark.Attributes.Add("maxlength", txtRemark.MaxLength.ToString());
             }
 
         }

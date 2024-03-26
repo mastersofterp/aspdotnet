@@ -2,10 +2,14 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <style>
+        .dataTables_scrollHeadInner
+        {
+            width: max-content!important;
+        }
+    </style>
     <asp:UpdatePanel ID="updPanel" runat="server">
         <ContentTemplate>
-
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
@@ -22,15 +26,15 @@
                                             <div class="panel-heading" style="font-weight: 600; font-size: 13px">Add/Edit Minor Facility Details</div>
 
                                             <div class="panel-body">
-                                                 <div class="form-group col-lg-8 col-md-12 col-12">
-                                                        <div class=" note-div">
-                                                            <h5 class="heading">Note</h5>
-                                                            <p><i class="fa fa-star" aria-hidden="true"></i><span>* Marked Is Mandatory !</span></p>
-                                                        </div>
+                                                <div class="form-group col-lg-8 col-md-12 col-12">
+                                                    <div class=" note-div">
+                                                        <h5 class="heading">Note</h5>
+                                                        <p><i class="fa fa-star" aria-hidden="true"></i><span>* Marked Is Mandatory !</span></p>
                                                     </div>
-                                                    <br />
+                                                </div>
+                                                <br />
                                                 <div class="col-md-12">
-                                                   
+
                                                     <div class="row">
                                                         <div class="form-group col-md-4">
                                                             <label>Minor Facility Name :<span style="color: #FF0000">*</span></label>
@@ -41,14 +45,15 @@
                                                                 SetFocusOnError="True">
                                                             </asp:RequiredFieldValidator>
                                                         </div>
-                                                         <div class="form-group col-md-4">
+                                                        <div class="form-group col-md-4">
                                                             <label>Facility Details :</label>
                                                             <asp:TextBox ID="txtDetail" runat="server" MaxLength="250" TabIndex="2"
-                                                                TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Minor Facility Details" />
+                                                                TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Minor Facility Details"
+                                                                onkeyDown="checkTextAreaMaxLength(this,event,'199');" onkeyup="textCounter(this, this.form.remLen, 199);" />
 
                                                         </div>
                                                     </div>
-                                                       
+
                                                 </div>
                                             </div>
                                     </asp:Panel>

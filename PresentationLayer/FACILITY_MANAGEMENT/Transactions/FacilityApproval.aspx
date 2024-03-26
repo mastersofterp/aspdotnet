@@ -11,6 +11,13 @@
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(RunThisAfterEachAsyncPostback);
     </script>
 
+    <style>
+        .dataTables_scrollHeadInner
+        {
+            width: max-content!important;
+        }
+    </style>
+
     <asp:UpdatePanel ID="updPanel" runat="server">
         <ContentTemplate>
 
@@ -125,7 +132,7 @@
                                                                     <div class="form-group col-md-3">
                                                                         <label>Status <span style="color: #FF0000">*</span>:</label>
                                                                         <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" data-select2-enable="true">
-                                                                            <asp:ListItem Text="Please Select" Value="0"></asp:ListItem>
+                                                                            <%--<asp:ListItem Text="Please Select" Value="0"></asp:ListItem>--%>
                                                                             <asp:ListItem Selected="True" Text="Approved" Value="A"></asp:ListItem>
                                                                             <asp:ListItem Text="Reject" Value="R"></asp:ListItem>
                                                                             <asp:ListItem Text="Cancelled" Value="C"></asp:ListItem>

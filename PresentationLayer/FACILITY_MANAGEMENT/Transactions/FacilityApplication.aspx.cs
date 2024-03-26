@@ -14,6 +14,7 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
+using System.Globalization;
 
 public partial class FacilityApplication : System.Web.UI.Page
 {
@@ -182,144 +183,151 @@ public partial class FacilityApplication : System.Web.UI.Page
 
         try
         {
-            int result = checkApplication();
-            if (result == 1)
+            if (IsValid)
             {
-                MessageBox(ddlFacilityName.SelectedItem.Text + "  is already booked on this time and date");
-                ClearControls();
-                return;
-            }
-            else
-            {
-                ConvertDateTime();
-                int iresult = 0;
-                objFM.CenFacilityNo = Convert.ToInt32(ddlFacilityName.SelectedValue);
-                objFM.ApplicationDate = Convert.ToDateTime(txtApplicationDate.Text);
-                objFM.FromDate = Convert.ToDateTime(Session["FromDate"]);
-                objFM.ToDate = Convert.ToDateTime(Session["ToDate"]); 
-                objFM.PriorityLevel = Convert.ToChar(ddlLevel.SelectedValue);
-                objFM.IDNO = Convert.ToInt32(ViewState["idno"]);
-                //---------------------- Changed by Vijay Andoju on 07-02-20202----------------------
-            
-                objFM.Remark = txtAppRemark.Text; //Edited on  07-02-20202
-                //---------------------- Changed by Vijay Andoju on 07-02-20202----------------------
-                objFM.IsActive = true;
-                objFM.CreatedBy = Convert.ToInt32(Session["userno"]);
-                objFM.IPAddress = Session["ipAddress"].ToString();
-                objFM.MacAddress = Convert.ToString(Session["macAddress"]);
-                objFM.CollegeCode = Convert.ToInt32(Session["colcode"]);
-                DataTable dt = new DataTable();
-                dt.Columns.Add("MinFacilityNo");
-                dt.Columns.Add("IsExtraMinor");
-
-                if (chkIsCancel.Checked == true)
+                int result = checkApplication();
+                if (result == 1)
                 {
-                    objFM.IsCancel = true;
+                    MessageBox(ddlFacilityName.SelectedItem.Text + "  is already booked on this time and date");
+                    ClearControls();
+                    return;
                 }
                 else
                 {
-                    objFM.IsCancel = false;
-                }
-                objFM.Reason = txtReason.Text;
-                int count = 0;
-                foreach (RepeaterItem item in rptMinorFacilityList.Items)
-                {
-                    CheckBox chkSelect = item.FindControl("chkSelect") as CheckBox;
-                    if (chkSelect.Checked == true)
+                    ConvertDateTime();
+                    int iresult = 0;
+                    objFM.CenFacilityNo = Convert.ToInt32(ddlFacilityName.SelectedValue);
+                    objFM.ApplicationDate = Convert.ToDateTime(txtApplicationDate.Text);
+                    objFM.FromDate = Convert.ToDateTime(Session["FromDate"]);
+                    objFM.ToDate = Convert.ToDateTime(Session["ToDate"]);
+                    objFM.PriorityLevel = Convert.ToChar(ddlLevel.SelectedValue);
+                    objFM.IDNO = Convert.ToInt32(ViewState["idno"]);
+                    //---------------------- Changed by Vijay Andoju on 07-02-20202----------------------
+
+                    objFM.Remark = txtAppRemark.Text; //Edited on  07-02-20202
+                    //---------------------- Changed by Vijay Andoju on 07-02-20202----------------------
+                    objFM.IsActive = true;
+                    objFM.CreatedBy = Convert.ToInt32(Session["userno"]);
+                    objFM.IPAddress = Session["ipAddress"].ToString();
+                    objFM.MacAddress = Convert.ToString(Session["macAddress"]);
+                    objFM.CollegeCode = Convert.ToInt32(Session["colcode"]);
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("MinFacilityNo");
+                    dt.Columns.Add("IsExtraMinor");
+
+                    if (chkIsCancel.Checked == true)
                     {
-                        count = 1;
-                        DataRow dr = dt.NewRow();
-                        dr["MinFacilityNo"] = chkSelect.ToolTip;
-                        dr["IsExtraMinor"] = false;
-                        dt.Rows.Add(dr);
-                        dt.AcceptChanges();
-                    }
-                }
-                int countExtra = 0;
-                foreach (RepeaterItem item in rptExtraMinorList.Items)
-                {
-                    CheckBox chkSelectExtra = item.FindControl("chkSelectExtra") as CheckBox;
-                    if (chkSelectExtra.Checked == true)
-                    {
-                        countExtra = 1;
-                        DataRow dr = dt.NewRow();
-                        dr["MinFacilityNo"] = chkSelectExtra.ToolTip;
-                        dr["IsExtraMinor"] = true;
-                        dt.Rows.Add(dr);
-                        dt.AcceptChanges();
-
-                    }
-
-                }
-                if (count == 0 && countExtra == 0)
-                {
-                    MessageBox("Please Select Atleast One Minor Facility");
-                    return;
-                }
-
-                if (ViewState["action"] != null)
-                {
-                    if (ViewState["action"].ToString() == "add")
-                    {
-                        objFM.ApplicationNo = 0;
-
-                        iresult = Convert.ToInt32(objFC.AddUpdateFacilityApplication(objFM, dt));
-                        if (iresult <= 0)
-                        {
-                            MessageBox("Record Already Exists");
-                            pnlAdd.Visible = false;
-                            pnlList.Visible = true;
-                            ViewState["action"] = null;
-                            Clear();
-                            BindFacilityApplication();
-                        }
-                        if (iresult >= 1)
-                        {
-                            MessageBox("Record Saved Successfully");
-                            pnlAdd.Visible = false;
-                            pnlList.Visible = true;
-                            ViewState["action"] = null;
-                            Clear();
-                            BindFacilityApplication();
-                            //SendNotification();
-                        }
+                        objFM.IsCancel = true;
                     }
                     else
                     {
-                        objFM.ApplicationNo = Convert.ToInt32(ViewState["ApplicationNo"]);
-                        if (chkIsCancel.Checked == true)
+                        objFM.IsCancel = false;
+                    }
+                    objFM.Reason = txtReason.Text;
+                    int count = 0;
+                    foreach (RepeaterItem item in rptMinorFacilityList.Items)
+                    {
+                        CheckBox chkSelect = item.FindControl("chkSelect") as CheckBox;
+                        if (chkSelect.Checked == true)
                         {
-                            objFM.IsCancel = true;
+                            count = 1;
+                            DataRow dr = dt.NewRow();
+                            dr["MinFacilityNo"] = chkSelect.ToolTip;
+                            dr["IsExtraMinor"] = false;
+                            dt.Rows.Add(dr);
+                            dt.AcceptChanges();
+                        }
+                    }
+                    int countExtra = 0;
+                    foreach (RepeaterItem item in rptExtraMinorList.Items)
+                    {
+                        CheckBox chkSelectExtra = item.FindControl("chkSelectExtra") as CheckBox;
+                        if (chkSelectExtra.Checked == true)
+                        {
+                            countExtra = 1;
+                            DataRow dr = dt.NewRow();
+                            dr["MinFacilityNo"] = chkSelectExtra.ToolTip;
+                            dr["IsExtraMinor"] = true;
+                            dt.Rows.Add(dr);
+                            dt.AcceptChanges();
+
+                        }
+
+                    }
+                    if (count == 0 && countExtra == 0)
+                    {
+                        MessageBox("Please Select Atleast One Minor Facility");
+                        return;
+                    }
+
+                    if (ViewState["action"] != null)
+                    {
+                        if (ViewState["action"].ToString() == "add")
+                        {
+                            objFM.ApplicationNo = 0;
+
+                            iresult = Convert.ToInt32(objFC.AddUpdateFacilityApplication(objFM, dt));
+                            if (iresult <= 0)
+                            {
+                                MessageBox("Record Already Exists");
+                                pnlAdd.Visible = false;
+                                pnlList.Visible = true;
+                                ViewState["action"] = null;
+                                Clear();
+                                BindFacilityApplication();
+                            }
+                            if (iresult >= 1)
+                            {
+                                MessageBox("Record Saved Successfully");
+                                pnlAdd.Visible = false;
+                                pnlList.Visible = true;
+                                ViewState["action"] = null;
+                                Clear();
+                                BindFacilityApplication();
+                                //SendNotification();
+                            }
                         }
                         else
                         {
-                            objFM.IsCancel = false;
-                        }
-                        objFM.Reason = txtReason.Text;
+                            objFM.ApplicationNo = Convert.ToInt32(ViewState["ApplicationNo"]);
+                            if (chkIsCancel.Checked == true)
+                            {
+                                objFM.IsCancel = true;
+                            }
+                            else
+                            {
+                                objFM.IsCancel = false;
+                            }
+                            objFM.Reason = txtReason.Text;
 
-                        iresult = Convert.ToInt32(objFC.AddUpdateFacilityApplication(objFM, dt));
-                        if (iresult <= 0)
-                        {
-                            MessageBox("Record Already Exists");
-                            pnlAdd.Visible = false;
-                            pnlList.Visible = true;
-                            ViewState["action"] = null;
-                            Clear();
-                            BindFacilityApplication();
+                            iresult = Convert.ToInt32(objFC.AddUpdateFacilityApplication(objFM, dt));
+                            if (iresult <= 0)
+                            {
+                                MessageBox("Record Already Exists");
+                                pnlAdd.Visible = false;
+                                pnlList.Visible = true;
+                                ViewState["action"] = null;
+                                Clear();
+                                BindFacilityApplication();
 
-                        }
-                        if (iresult >= 1)
-                        {
-                            MessageBox("Record Updated Successfully");
-                            pnlAdd.Visible = false;
-                            pnlList.Visible = true;
-                            ViewState["action"] = null;
-                            Clear();
-                            BindFacilityApplication();
-                            //SendNotification();
+                            }
+                            if (iresult >= 1)
+                            {
+                                MessageBox("Record Updated Successfully");
+                                pnlAdd.Visible = false;
+                                pnlList.Visible = true;
+                                ViewState["action"] = null;
+                                Clear();
+                                BindFacilityApplication();
+                                //SendNotification();
+                            }
                         }
                     }
                 }
+            }
+            else
+            {
+                MessageBox("To Date is Invalid (Enter dd/MM/yyyy Format)");
             }
         }
         catch (Exception ex)
@@ -503,7 +511,8 @@ public partial class FacilityApplication : System.Web.UI.Page
     {
         txtFromDt.Text = txtToDt.Text = txtApplicationDate.Text = txtAppRemark.Text = txtDetail.Text = txtRemark.Text = txtDetail.Text = txtToTime.Text = txtFromTime.Text = txtRemark.Text = string.Empty;
         ddlFacilityName.SelectedIndex = 0;
-        ddlLevel.SelectedValue = "H";
+        //ddlLevel.SelectedValue = "0";
+        ddlLevel.SelectedIndex = 0;
         txtApplicationDate.Text = System.DateTime.Now.ToShortDateString();
         Panel2.Visible = false;
         Panel4.Visible = false;
@@ -517,7 +526,8 @@ public partial class FacilityApplication : System.Web.UI.Page
         Panel2.Visible = false;
         Panel4.Visible = false;
         ddlFacilityName.SelectedIndex = 0;
-        ddlLevel.SelectedValue = "H";
+        //ddlLevel.SelectedValue = "0";
+        ddlLevel.SelectedIndex = 0;
         txtApplicationDate.Text = System.DateTime.Now.ToShortDateString();
 
         // FillCentralizeFacilityList();
@@ -771,6 +781,26 @@ public partial class FacilityApplication : System.Web.UI.Page
            objUCommon.ShowError(Page, "Facility_Management_MinorFacility.ShowDetails->" + ex.Message + "  " + ex.StackTrace);
         }
 
+    }
+    protected void txtToDt_TextChanged(object sender, EventArgs e)
+    {
+        if (txtFromDt.Text != string.Empty)
+        {
+            if (IsValidDateFormat(txtFromDt.Text, "dd/MM/yyyy") && IsValidDateFormat(txtToDt.Text, "dd/MM/yyyy"))
+            {
+                if (Convert.ToDateTime(txtFromDt.Text) > Convert.ToDateTime(txtToDt.Text))
+                {
+                    MessageBox("To date should be greater than or equal to From date");
+                    txtToDt.Text = string.Empty;
+                }
+            }
+        }
+    }
+
+    static bool IsValidDateFormat(string date, string format)
+    {
+        DateTime parsedDate;
+        return DateTime.TryParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate);
     }
 }
 

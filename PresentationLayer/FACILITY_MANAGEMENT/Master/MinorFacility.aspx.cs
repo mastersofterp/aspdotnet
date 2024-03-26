@@ -53,7 +53,7 @@ public partial class MinorFacility : System.Web.UI.Page
                 pnlList.Visible = true;
                 pnlbutton.Visible = false;
                // CheckPageAuthorization();
-               
+                txtDetail.Attributes.Add("maxlength", txtDetail.MaxLength.ToString());
             }
 
         }
