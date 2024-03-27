@@ -182,7 +182,7 @@ public partial class PAYROLL_REPORTS_Pay_DolDojRdt : System.Web.UI.Page
             
             //url += "&param=@P_FDATE=" + Fdate + "&@P_TODATE=" + Tdate + "&@P_STAFFNO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + "&@P_SELECT=" + ddlReport.SelectedValue;
             //url += "&param=@P_SELECT=" + ddlReport.SelectedValue + ",@P_STAFFNO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_FDATE=" + Convert.ToDateTime(txtFromDate.Text) + ",@P_TODATE=" + Convert.ToDateTime(txtToDate.Text) + ",@P_COLLEGE_CODE=" + 17; 
-            url += "&param=@P_SELECT=" + ddlReport.SelectedValue + ",@P_STAFFNO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_FDATE=" + Fdate + ",@P_TODATE=" + Tdate + ",@P_COLLEGE_CODE=" + 24; 
+            url += "&param=@P_SELECT=" + ddlReport.SelectedValue + ",@P_STAFFNO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_FDATE=" + Fdate + ",@P_TODATE=" + Tdate + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + " "; 
            
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
