@@ -2,11 +2,11 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-     <style>
-#ctl00_ContentPlaceHolder1_pnlListView .dataTables_scrollHeadInner {
-width: max-content !important;
-}
-</style>
+    <style>
+        #ctl00_ContentPlaceHolder1_pnlListView .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updQual"
             DynamicLayout="true" DisplayAfter="0">
@@ -38,22 +38,44 @@ width: max-content !important;
                                             <sup>* </sup>
                                             <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlDegree" runat="server" TabIndex="1" CssClass="form-control" ToolTip="Please Select Degree." data-select2-enable="true" AppendDataBoundItems="true">
+                                        <asp:DropDownList ID="ddlDegree" runat="server" TabIndex="1" CssClass="form-control" OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged" AutoPostBack="true" ToolTip="Please Select Degree." data-select2-enable="true" AppendDataBoundItems="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree"
                                             Display="None" ValidationGroup="Submit" InitialValue="0" ErrorMessage="Please Select Degree."></asp:RequiredFieldValidator>
+                                    </div>
+                                    <div id="divBranch" runat="server" visible="false" class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <asp:Label ID="lblBranch" runat="server" Font-Bold="true" Text="Degree Branch"></asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlBranch" runat="server" TabIndex="1" CssClass="form-control" ToolTip="Please Select Degree Branch." AutoPostBack="true" data-select2-enable="true" AppendDataBoundItems="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlBranch"
+                                            Display="None" ValidationGroup="Submit" InitialValue="0" ErrorMessage="Please Select Branch."></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <asp:Label ID="lblQualDegree" runat="server" Font-Bold="true" Text="Qualifying Degree"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlQualDegree" runat="server" TabIndex="1" CssClass="form-control" ToolTip="Please Select Qualifying Degree." data-select2-enable="true" AppendDataBoundItems="true">
+                                        <asp:DropDownList ID="ddlQualDegree" runat="server" TabIndex="1" OnSelectedIndexChanged="ddlQualDegree_SelectedIndexChanged" CssClass="form-control" ToolTip="Please Select Qualifying Degree." AutoPostBack="true" data-select2-enable="true" AppendDataBoundItems="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlQualDegree"
                                             Display="None" ValidationGroup="Submit" InitialValue="0" ErrorMessage="Please Select Qualifying Degree."></asp:RequiredFieldValidator>
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <asp:Label ID="lblQualBranch" runat="server" Font-Bold="true" Text="Qualifying Branch"></asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlQualBranch" runat="server" TabIndex="1" CssClass="form-control" ToolTip="Please Select Qualifying Branch." AutoPostBack="true" data-select2-enable="true" AppendDataBoundItems="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlQualBranch"
+                                            Display="None" ValidationGroup="Submit" InitialValue="0" ErrorMessage="Please Select Qualifying Branch."></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -81,17 +103,17 @@ width: max-content !important;
                                             <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="divQualDetails">
                                                 <thead class="bg-light-blue">
                                                     <tr>
-                                                        <th style="text-align:center">
-                                                            Edit
+                                                        <th style="text-align: center">Edit
                                                         </th>
-                                                        <th>
-                                                            Degree
+                                                        <th>Degree
                                                         </th>
-                                                        <th>
-                                                            Qualifying Degree
+                                                        <th>Branch
                                                         </th>
-                                                        <th>
-                                                            Status
+                                                        <th>Qualifying Degree
+                                                        </th>
+                                                        <th>Qualifying Branch
+                                                        </th>
+                                                        <th>Status
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -104,16 +126,22 @@ width: max-content !important;
                                             <tr class="item">
                                                 <td style="text-align: center;">
                                                     <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/images/edit1.gif" OnClick="btnEdit_Click"
-                                                CommandArgument='<%# Eval("QUAL_DEGREE")%>'  AlternateText="Edit Record" ToolTip="Edit Record"/>
+                                                        CommandArgument='<%# Eval("QUAL_DEGREE")%>' AlternateText="Edit Record" ToolTip="Edit Record" />
                                                 </td>
                                                 <td>
                                                     <%#Eval("DEGREENAME") %>
                                                 </td>
-                                                 <td>
-                                                     <%#Eval("QUAL_DEGREENAME") %>
+                                                <td>
+                                                    <%#Eval("BRANCHNAME") %>
                                                 </td>
-                                                 <td>
-                                                     <asp:Label ID="lblStatus" runat="server" Text='<%#Eval("Status") %>' ForeColor='<%#  Convert.ToInt32(Eval("ACTIVE_STATUS"))==1 ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'></asp:Label>                                                     
+                                                <td>
+                                                    <%#Eval("QUALI_DEGREE_NAME") %>
+                                                </td>
+                                                <td>
+                                                    <%#Eval("QUALIFYING_BRANCHNAME") %>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblStatus" runat="server" Text='<%#Eval("Status") %>' ForeColor='<%#  Convert.ToInt32(Eval("ACTIVE_STATUS"))==1 ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'></asp:Label>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>

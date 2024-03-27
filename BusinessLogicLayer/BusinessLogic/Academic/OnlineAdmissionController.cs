@@ -403,7 +403,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
         /// <param name="created_IP"></param>
         /// <param name="created_UANO"></param>
         /// <returns></returns>
-        public int Add_Qualify_Degree(int degreeNo, int qualDegreeNo, int activeStatus, int OrgId, string created_IP, int created_UANO)
+        public int Add_Qualify_Degree(int degreeNo,int branchNo, int qualdegreeNo,int qualbranchNo, int activeStatus, int OrgId, string created_IP, int created_UANO)
         {
             //DataSet ds = null;
             int retStatus = 0;
@@ -413,7 +413,9 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                 SqlParameter[] sqlParams = new SqlParameter[]
                {
                     new SqlParameter("@P_DEGREENO",degreeNo) ,
-                    new SqlParameter("@P_QUAL_DEGREENO",qualDegreeNo) ,
+                    new SqlParameter("@P_BRANCHNO",branchNo),
+                    new SqlParameter("@P_QUAL_DEGREENO",qualdegreeNo) ,
+                    new SqlParameter("@P_QUAL_BRANCHNO",qualbranchNo),
                     new SqlParameter("@P_ACTIVE_STATUS",activeStatus) ,
                     new SqlParameter("@P_ORGANIZATION_ID",OrgId) ,
                     new SqlParameter("@P_CREATED_IP",created_IP) ,
@@ -480,7 +482,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
         /// <param name="modified_IP"></param>
         /// <param name="modified_UANO"></param>
         /// <returns></returns>
-        public int Update_Qualify_Degree(int qual_DegreeNo, int degreeNo, int qualDegree, int activeStatus, string modified_IP, int modified_UANO)
+        public int Update_Qualify_Degree(int qual_DegreeNo, int degreeNo,int BranchNo, int qualDegree,int QualBranchno, int activeStatus, string modified_IP, int modified_UANO)
         {
             //DataSet ds = null;
             int retStatus = 0;
@@ -491,7 +493,9 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                {
                     new SqlParameter("@P_QUAL_DEGREENO",qual_DegreeNo) ,
                     new SqlParameter("@P_DEGREENO",degreeNo) ,
+                    new SqlParameter("@P_BRANCHNO",BranchNo),
                     new SqlParameter("@P_QUAL_DEGREE",qualDegree) ,
+                    new SqlParameter("@P_QUALBRANCHNO",QualBranchno),
                     new SqlParameter("@P_ACTIVE_STATUS",activeStatus) ,
                     new SqlParameter("@P_MODIFIED_IP",modified_IP) ,
                     new SqlParameter("@P_MODIFIED_UANO",modified_UANO) ,
