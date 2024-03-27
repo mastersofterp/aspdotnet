@@ -385,7 +385,12 @@ public partial class EXAMINATION_Projects_Selection_Offer : System.Web.UI.Page
     {
         try
         {
-
+            DateTime FromDate = Convert.ToDateTime(objCommon.LookUp("ACD_TP_COMPSCHEDULE", "INTERVIEWFROM", "SCHEDULENO=" + Convert.ToInt32(ddlJobAnnouncementOffer.SelectedValue)));
+            if (Convert.ToDateTime(txtDateOffer.Text) < FromDate)
+            {
+                objCommon.DisplayMessage(upnlroundselection, "Offer Selection Date Should Not Less Than Announce From Date !", this.Page);
+                return;
+            }
             sendmail();
             int count = 0;
             if (ddlJobAnnouncementOffer.SelectedValue == "0")

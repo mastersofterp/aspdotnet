@@ -361,13 +361,14 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
             //return;
         }
 
-        string studconfirm2 = objCommon.LookUp("ACD_TP_REGISTER ", "STUDCONFIRM", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and STUDCONFIRM=1");
-        if (studconfirm2 == "True")
+        string studconfirm2 = objCommon.LookUp("ACD_TP_REGISTER ", "OFFER_SEND", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and OFFER_SEND=1");
+        if (studconfirm2 == "1")
         {
             //btnSubmitOffer.Enabled = false;
             //btnCancelOffer.Enabled = false;
 
-            int studconfirmselection = Convert.ToInt32(objCommon.LookUp("ACD_TP_REGISTER ", "cast(isnull(STUDCONFIRM,0) as int) STUDCONFIRM", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and STUDCONFIRM=1"));
+            //int studconfirmselection = Convert.ToInt32(objCommon.LookUp("ACD_TP_REGISTER ", "cast(isnull(STUDCONFIRM,0) as int) STUDCONFIRM", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "' and STUDCONFIRM=1"));
+            int studconfirmselection = Convert.ToInt32(objCommon.LookUp("ACD_TP_REGISTER ", "cast(isnull(STUDCONFIRM,0) as int) STUDCONFIRM", "IDNO='" + (Session["idno"]).ToString() + "' and SCHEDULENO= '" + Convert.ToInt32(ViewState["Sceduleno"]) + "'"));
             if (studconfirmselection == 1)
             {
                 ddlStatus.SelectedValue = "1";
@@ -823,6 +824,7 @@ public partial class EXAMINATION_Projects_Job_Profiles : System.Web.UI.Page
              {
                  objCommon.DisplayMessage(upnlJobProfile, "Response Saved Successfully.", this.Page);
                  ViewState["action"] = null;
+                 BindListViewJobProfile();
                  //clear();
              }
 

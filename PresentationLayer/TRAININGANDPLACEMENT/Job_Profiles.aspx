@@ -516,7 +516,7 @@
 
                             <div class="row" >
 
-                                <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divRounds">
+                                <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divRounds" visible="false">
                                     <div class="label-dynamic">
                                         <label>Download Attachement</label>
                                     </div>
