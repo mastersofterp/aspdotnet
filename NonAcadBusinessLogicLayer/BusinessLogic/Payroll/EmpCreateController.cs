@@ -1320,7 +1320,7 @@ namespace IITMS
                     }
                     return retStatus;
                 }
-                public DateTime RetirementDate(int staffNo, DateTime birthDate)
+                public DateTime RetirementDate(int staffNo, DateTime birthDate, int OrganizationId)
                 {
                     object ret = null;
                     DateTime retireDate = DateTime.Now;
@@ -1328,12 +1328,14 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[2];
+                        objParams = new SqlParameter[3];
                         objParams[0] = new SqlParameter("@P_STAFFNO", staffNo);
                         if (!birthDate.Equals(DateTime.MinValue))
                             objParams[1] = new SqlParameter("@P_DOB", birthDate);
                         else
                             objParams[1] = new SqlParameter("@P_DOB", DBNull.Value);
+
+                        objParams[2] = new SqlParameter("@P_OragnizationId", OrganizationId);
 
                         ret = objSQLHelper.ExecuteScalarSP("PKG_EMP_SP_RET_RETIREMENTAGE", objParams);
 
