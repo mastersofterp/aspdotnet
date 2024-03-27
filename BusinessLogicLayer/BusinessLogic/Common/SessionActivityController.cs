@@ -628,5 +628,77 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        #region Modification of Activity Master with group
+        public int AddSessionActivity(SessionActivity sessionActiity, int sessionid, string branch, string semester, string degreeno, string UserTypes, string College_Ids, int flag, int groupid, string Exam_No, string SubExam_No)
+        {
+            int status = 0;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {
+                    new SqlParameter("@P_SESSIONID", sessionid),
+                    new SqlParameter("@P_COLLEGE_IDS", College_Ids),
+                    new SqlParameter("@P_START_DATE", ((sessionActiity.StartDate != DateTime.MaxValue)? sessionActiity.StartDate as object : DBNull.Value as object)),
+                    new SqlParameter("@P_END_DATE", ((sessionActiity.EndDate != DateTime.MaxValue)? sessionActiity.EndDate as object : DBNull.Value as object)),
+                    new SqlParameter("@P_STARTED", sessionActiity.IsStarted),
+                    new SqlParameter("@P_SHOW_STATUS", sessionActiity.ShowStatus),   
+                    new SqlParameter("@P_DEGREE_NO", degreeno),
+                    new SqlParameter("@P_BRANCH", branch),
+                    new SqlParameter("@P_SEMESTER", semester),
+                    new SqlParameter("@P_USERTYPES", UserTypes),
+                    new SqlParameter("@P_ACTIVITY_NO", sessionActiity.ActivityNos), 
+                    new SqlParameter("@P_FLAG", flag),
+                    new SqlParameter("@P_GROUPID", groupid),
+                    new SqlParameter("@P_EXAMNO", Exam_No),
+                    new SqlParameter("@P_SUBEXAMNO", SubExam_No),
+                    new SqlParameter("@P_OUT", SqlDbType.Int)
+                };
+                sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
+                object stat = objDataAccess.ExecuteNonQuerySP("PKG_SESSION_INS_UPD_SESSION_ACTIVITY_DEGREE_GROUPID", sqlParams, true);
+                status = Convert.ToInt32(stat);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.SessionActivityController.AddSessionActivity() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return status;
+        }
+        #endregion
+        #region Exam Activity as per the Ticket 56283
+        public int AddUpdateSessionActivity(SessionActivity sessionActiity, string branch, string semester, string degreeno, string UserTypes, int College_Ids, int flag, int exam_type, int session_activity_no)
+        {
+            int status = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {
+                    new SqlParameter("@P_SESSION_NO", sessionActiity.SessionNo),
+                    new SqlParameter("@P_START_DATE", ((sessionActiity.StartDate != DateTime.MaxValue)? sessionActiity.StartDate as object : DBNull.Value as object)),
+                    new SqlParameter("@P_END_DATE", ((sessionActiity.EndDate != DateTime.MaxValue)? sessionActiity.EndDate as object : DBNull.Value as object)),
+                    new SqlParameter("@P_STARTED", sessionActiity.IsStarted),
+                    new SqlParameter("@P_SHOW_STATUS", sessionActiity.ShowStatus),                    
+                    new SqlParameter("@P_ACTIVITY_NO", sessionActiity.ActivityNos),
+                    new SqlParameter("@P_BRANCH", branch),
+                    new SqlParameter("@P_SEMESTER", semester),
+                    new SqlParameter("@P_DEGREE_NO", degreeno),
+                    new SqlParameter("@P_UserTypes", UserTypes),
+                    new SqlParameter("@P_SESSION_ACTIVITY_NO", session_activity_no),
+                    new SqlParameter("@P_COLLEGE_IDS", College_Ids),
+                    new SqlParameter("@P_FLAG", flag),
+                    new SqlParameter("@P_EXAM_TYPE", exam_type),
+                    new SqlParameter("@P_OUT", SqlDbType.Int)
+                };
+                sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
+                status = (Int32)objDataAccess.ExecuteNonQuerySP("PKG_EXAM_INS_UPD_SESSION_ACTIVITY_DEGREE", sqlParams, true);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.SessionActivityController.AddUpdateSessionActivity() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return status;
+        }
+        #endregion
     }
 }
