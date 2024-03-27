@@ -140,7 +140,7 @@
                                     </div>
 
                                     <div class="col-md-12">
-                                        <asp:Panel ID="Panel_StackTrace" runat="server">
+                                        <asp:Panel ID="Panel_StackTrace" runat="server" Visible="false">
                                             <h5><strong>&nbsp;Exception Stack Trace</strong></h5>
                                             <div>
                                                 <asp:Label ID="Label_StackTrace" runat="server" />

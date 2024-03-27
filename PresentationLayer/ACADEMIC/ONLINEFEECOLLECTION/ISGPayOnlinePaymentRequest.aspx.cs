@@ -234,7 +234,7 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
             }
 
             double amt = Convert.ToDouble(Session["studAmt"]);
-            string feeAmt = amt.ToString("N0");
+            string feeAmt = (amt * 100).ToString("0.##");  //"N0"
             // Compulsory information
             transactionData.Add("Version", "1");
             transactionData.Add("TxnRefNo", orderId);

@@ -46,7 +46,7 @@
 
 <body>
 
-    <form name="RedirectForm" id="form1" runat="server" action="https://sandbox.isgpay.com/ISGPay-Genius/request.action" method="post">
+    <form name="RedirectForm" id="form1" runat="server" action="https://isgpay.com/ISGPay-Genius/request.action" method="post">
 
        <%-- <asp:TextBox ID="service_provider" runat="server" Text="payu_paisa" Style="display: none" />--%>
 

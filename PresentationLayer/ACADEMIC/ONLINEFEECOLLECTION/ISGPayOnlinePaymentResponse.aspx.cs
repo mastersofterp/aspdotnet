@@ -193,7 +193,7 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
     
                 order_id = isgPayReturnParams.isgPayResponse.TxnRefNo;      //merchanttxnID;  //tokenID;
                 Session["order_id"] = order_id;
-                amount = isgPayReturnParams.isgPayResponse.Amount;
+                amount = (Convert.ToDouble(isgPayReturnParams.isgPayResponse.Amount) / 100).ToString();
                 txnStatus = isgPayReturnParams.isgPayResponse.ResponseCode;  // ResponseCode - success , failed
                 mihpayid = isgPayReturnParams.isgPayResponse.RetRefNo;   // TransactionId 
                 trackID = isgPayReturnParams.isgPayResponse.RetRefNo;      // TransactionId
@@ -256,8 +256,11 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
 
                 if (txnStatus.ToLower().ToString() == "00")        //Payment response in - (SUCCESS = "00", FAILURE =" ", AWAITED ="")
                 {
+                    // check user login details in User_Acc Tables
                     string UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
-                    string UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO = '" + Convert.ToInt32(UA_IDNO) + "'");
+                    string UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO = " + Convert.ToInt32(UA_IDNO) + "");
+                    string UA_FULLNAME = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_IDNO = " + Convert.ToInt32(UA_IDNO) + "");
+                    Session["UAFULLNAME"] = UA_FULLNAME;
 
                     divSuccess.Visible = true;
                     divFailure.Visible = false;
@@ -274,17 +277,22 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
                     objsem.IPADDRESS = Request.ServerVariables["REMOTE_HOST"];
                     objsem.Date_of_Payment = DateTime.Now.ToString("dd/MM/yyyy");
                     int output = 0;
-
+                    var DCR_NO = "0";
                     if (Convert.ToInt32(installmentno) > 0)
                     {
                         output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
-
+                        DCR_NO = objCommon.LookUp("ACD_DCR", "ISNULL(DCR_NO,0) AS DCR_NO", "ORDER_ID = '" + order_id + "'");                      
                     }
                     else
                     {
                         output = objFees.InsertOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Regno, "-");
+                        DCR_NO = objCommon.LookUp("ACD_DCR", "ISNULL(DCR_NO,0) AS DCR_NO", "ORDER_ID = '" + order_id + "'");                     
                     }
 
+                    if (DCR_NO != "")
+                        Session["DCRNO"] = DCR_NO;
+                    else
+                        Session["DCRNO"] = DCR_NO;
 
                     output = objFees.UpdateISGPayOnlinePaymentlog(Convert.ToInt32(Idno), order_id, tokenID, trackID, feeType, txnStatus, timeStamp);
 
@@ -367,6 +375,7 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
         else
         {
             ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            //ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt", Convert.ToInt32(Session["DCRNO"]));
         }
     }
 
@@ -409,6 +418,37 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
         //string returnpageurl = Convert.ToString(Session["ReturnpageUrl"]);
         //Response.Redirect(returnpageurl);
         Response.Redirect("~/default.aspx");
+    }
+
+    // Added by Gopal M 12032024 Ticket#52905
+    private void ShowReportOnline(string reportTitle, string rptFileName, int DRCNO)
+    {
+        try
+        {
+            int IDNO = Convert.ToInt32(Session["Stud_IDNO"]);
+            int College_ID = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+
+            url += "&param=@P_COLLEGE_CODE=" + College_ID + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DRCNO) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            //sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+           // ScriptManager.RegisterClientScriptBlock(this.updPopUP, this.updPopUP.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
     #endregion
 }
