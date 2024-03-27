@@ -428,7 +428,7 @@
                                             <div class="option">
                                                 <div class="icon">                                  
                                                     <asp:LinkButton ID="lnkWelcomeTour" OnClick="lnkWelcomeTour_Click" runat="server">
-                                                         <i class="fa fa-info" aria-hidden="true"></i>
+                                                         <asp:Image ID="imgWelcomeTour" runat="server" ImageUrl="~/Images/icons/info.png" />
                                                         <span class="text">Welcome Tour</span>
                                                     </asp:LinkButton>
                                                 </div>

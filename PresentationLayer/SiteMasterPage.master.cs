@@ -3367,7 +3367,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         {
             string uatype = Session["usertype"].ToString();
             Session["executeScript"] = true;
-            Response.Redirect("~/principalHome.aspx?executeScript=true&uatype=" + uatype);
+            Response.Redirect("~/principalHome.aspx");
         }
     }
 }
