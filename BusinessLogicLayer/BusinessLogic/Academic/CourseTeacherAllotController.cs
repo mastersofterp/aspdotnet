@@ -775,15 +775,35 @@ namespace IITMS
                     }
                     return ds;
                 }
-                public DataSet GetFacultyNotTagToCourse()
+                // Updated  By Jay T. On dated 27032024 (TkNo.55317)
+                public DataSet GetFacultyNotTagToCourse(int Sessionno)
                 {
 
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                        SqlParameter[] objParams = new SqlParameter[0];
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", Sessionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_FACULTY_NOT_TAG_LIST", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseTeacherAllotment.GetFacultyNotTagToCourse-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                // Added By Jay T. On dated 27032024 (TkNo.55317)
+                public DataSet GetBranchNotYetRegister(int Sessionno)
+                {
+
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", Sessionno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_BRANCHES_NOT_YET_NOT_REGISTER", objParams);
                     }
                     catch (Exception ex)
                     {
