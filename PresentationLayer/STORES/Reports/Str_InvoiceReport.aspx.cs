@@ -45,7 +45,7 @@ public partial class STORES_Reports_Str_InvoiceReport : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         try
-        {          
+        {
             if (!Page.IsPostBack)
             {
                 //Check Session
@@ -152,7 +152,7 @@ public partial class STORES_Reports_Str_InvoiceReport : System.Web.UI.Page
         {
             //if (ViewState["StoreUser"].ToString() == "MainStoreUser")
             string StoreUser = ViewState["StoreUser"].ToString();
-            DataSet ds = objCommon.FillDropDown("STORE_INVOICE", "INVTRNO,INVNO,INVDT", "(CASE PORDNO WHEN 0 THEN '-' ELSE POREFNO END) AS POREFNO", "MDNO = " + Convert.ToInt32(Session["strdeptcode"]), "");
+            DataSet ds = objCommon.FillDropDown("STORE_INVOICE A LEFT JOIN STORE_PORDER B ON (B.PORDNO=A.PORDNO)", "INVTRNO,INVNO,INVDATE", "(CASE A.PORDNO WHEN 0 THEN '-' ELSE B.REFNO END) AS POREFNO", "A.MDNO = " + Convert.ToInt32(Session["strdeptcode"]), "");
             lvInvdetails.DataSource = ds;
             lvInvdetails.DataBind();
             ViewState["Action"] = "add";
@@ -173,7 +173,7 @@ public partial class STORES_Reports_Str_InvoiceReport : System.Web.UI.Page
         int Invtrno = int.Parse(btn.CommandArgument);
         ShowReport("INVOICE_REPORT", "Str_Invoice.rpt", Invtrno);
     }
-    private void ShowReport(string reportTitle, string rptFileName,int Invtrno)
+    private void ShowReport(string reportTitle, string rptFileName, int Invtrno)
     {
         try
         {

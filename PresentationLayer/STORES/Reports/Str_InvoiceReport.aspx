@@ -56,7 +56,7 @@
                                                         <td><%# Eval("INVNO")%>                                                                    
                                                         </td>
                                                         <%-- <asp:HiddenField ID="hdnInvtrno" runat="server" Value='<%#Eval("INVTRNO")%>'/>--%>
-                                                        <td><%#Eval("INVDT","{0:dd/MM/yyyy}") %></td>
+                                                        <td><%#Eval("INVDATE","{0:dd/MM/yyyy}") %></td>
                                                         <td><%#Eval("POREFNO") %></td>
                                                         <td>
                                                             <asp:Button ID="btnReport" runat="server" CssClass="btn btn-primary" Text="Report"
@@ -80,3 +80,4 @@
     </asp:UpdatePanel>
 
 </asp:Content>
+
