@@ -313,6 +313,7 @@
     <Compile Include="BusinessLogic\Academic\MentorMentee\StudentControllerDetails_MM.cs" />
     <Compile Include="BusinessLogic\Academic\MentorMentee\TabularChartController_MM.cs" />
     <Compile Include="BusinessLogic\Academic\ModuleConfigController.cs" />
+    <Compile Include="BusinessLogic\Academic\NEPController.cs" />
     <Compile Include="BusinessLogic\Academic\NotificationController.cs" />
     <Compile Include="BusinessLogic\Academic\ODTrackerController.cs" />
     <Compile Include="BusinessLogic\Academic\OnlineAdmissionController.cs" />
