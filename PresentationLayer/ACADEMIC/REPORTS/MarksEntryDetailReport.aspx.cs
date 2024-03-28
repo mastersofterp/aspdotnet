@@ -53,12 +53,13 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
         if (!Page.IsPostBack)
         {
             //Page Authorization
-            CheckPageAuthorization();
+//CheckPageAuthorization();
 
             //Set the Page Title
             Page.Title = Session["coll_name"].ToString();
 
-            PopulateDropDownList();
+            this.PopulateDropDown();
+            //PopulateDropDownList();
             // GetDegree();
             //GetBranch();
 
@@ -108,6 +109,61 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
 
     }
 
+
+
+    //Added by Suraj Y. on 11032024 for Faculty Login
+    private void PopulateDropDown()
+    {
+        try
+        {
+            if (Session["usertype"].ToString().Equals("1"))
+            {
+
+                objCommon.FillDropDownList(ddlSchoolInstitite, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
+
+                //objCommon.FillDropDownList(ddlSchoolInstitite, "ACD_COLLEGE_SCHEME_MAPPING WITH (NOLOCK)", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID");
+                if (Session["usertype"].ToString().Equals("1"))
+                {
+                    divSchoolInstitute.Visible = true;
+                    divCourseType.Visible = true;
+                }
+                else
+                {
+                    divSchoolInstitute.Visible = false;
+                    divCourseType.Visible = false;
+                }
+
+
+            }
+            else
+            {
+                //objCommon.FillDropDownList(ddlSchoolInstitite, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
+
+                //objCommon.FillDropDownList(ddlSchoolInstitite, "ACD_COLLEGE_SCHEME_MAPPING  CSM INNER JOIN ACD_COURSE_TEACHER CT ON (CSM.SCHEMENO=CT.SCHEMENO)", "CSM.COSCHNO", "CSM.COL_SCHEME_NAME", "CSM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND CSM.COSCHNO>0 AND CSM.COLLEGE_ID > 0  AND CSM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "CSM.COLLEGE_ID DESC");
+                string deptno = objCommon.LookUp("USER_ACC", "UA_DEPTNO", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+                objCommon.FillDropDownList(ddlSchoolInstitite, "ACD_COLLEGE_SCHEME_MAPPING  SC INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON CDB.DEGREENO=SC.DEGREENO AND CDB.BRANCHNO=SC.BRANCHNO AND CDB.COLLEGE_ID=SC.COLLEGE_ID", "COSCHNO", "COL_SCHEME_NAME", "SC.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SC.COLLEGE_ID > 0 AND SC.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND CDB.DEPTNO IN (" + deptno + ")", "SC.COLLEGE_ID DESC");
+                if (Session["usertype"].ToString().Equals("3"))
+                {
+                    divSchoolInstitute.Visible = true;
+                    divCourseType.Visible = true;
+                }
+                else
+                {
+                    divSchoolInstitute.Visible = false;
+                    divCourseType.Visible = false;
+                }
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_EndSemExamMarkEntry.PopulateDropDown --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 
     private void CheckPageAuthorization()
     {
@@ -810,6 +866,7 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
             }
         }
     }
+
     protected void ddlcourse_SelectedIndexChanged(object sender, EventArgs e)
     {
         //if (ddlcourse.SelectedIndex > 0)
