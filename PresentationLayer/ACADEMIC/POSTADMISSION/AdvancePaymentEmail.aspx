@@ -6,8 +6,6 @@
     <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.js")%>"></script>
 
-
-
     <div class="row">
         <asp:UpdateProgress ID="UpdateProgress4" runat="server"
             DynamicLayout="true" DisplayAfter="0">
@@ -320,8 +318,8 @@
                             $("[id*=preloader]").hide();
                         }
                         else {
+                            alert('Failed to send email !!!');
                             $("[id*=preloader]").hide();
-                            alert('Error !!!');
                         }
                     }
                     else {
@@ -372,8 +370,5 @@
             }, 10);
         }
     </script>
-
-
-
 </asp:Content>
 

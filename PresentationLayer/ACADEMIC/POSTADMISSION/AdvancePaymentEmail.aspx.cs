@@ -21,11 +21,11 @@ Created On : 15-03-2024
 Purpose    : Create page to send email to student                              
 Version    : 1.0.0                                                
 ---------------------------------------------------------------------------------------------------------------------------                                                            
-Version   Modified On   Modified By        Purpose                                                            
+Version   Modified On   Modified By     Purpose                                                            
 ---------------------------------------------------------------------------------------------------------------------------                                                            
-                                      
+1.0.1     27-03-2024    Bhagyashree     Change login id username to emailid                                  
 ------------------------------------------- -------------------------------------------------------------------------------                             
-*/ 
+*/
 public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -49,7 +49,7 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                 CheckPageAuthorization();
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
-                objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"])); 
+                objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));
             }
         }
     }
@@ -103,9 +103,8 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
         return JsonConvert.SerializeObject(ds.Tables[0]);
     }
 
-
     [WebMethod]
-    public static string GetStudentDetails(int BatchNo, int UgPgOt, int DegreeNo, string BranchNos) 
+    public static string GetStudentDetails(int BatchNo, int UgPgOt, int DegreeNo, string BranchNos)
     {
         AdvancePaymentEmailController objAC = new AdvancePaymentEmailController();
         DataSet ds = null;
@@ -155,7 +154,7 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                     message += "Application Number: " + ds.Tables[0].Rows[i]["USERNAME"].ToString() + "<br />";
                     if (ds.Tables[0].Rows[i]["BRANCH_NAME"].ToString() != string.Empty)
                     {
-                        message += "Programme: " + ds.Tables[0].Rows[i]["DEGREENAME"].ToString() + " with " + ds.Tables[0].Rows[i]["BRANCH_NAME"].ToString() + " <br />";
+                        message += "Programme: " + ds.Tables[0].Rows[i]["DEGREENAME"].ToString() + " " + ds.Tables[0].Rows[i]["BRANCH_NAME"].ToString() + " <br />";
                     }
                     else
                     {
@@ -168,13 +167,15 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                     message += "<br />";
                     if (ds.Tables[0].Rows[i]["DEGREENO"].ToString() == "7")
                     {
-                        message += "Institute Online Fee Payment Link: " + loginurlbtech  + " <br />";
+                        message += "Institute Online Fee Payment Link: " + loginurlbtech + " <br />";
                     }
                     else
                     {
                         message += "Institute Online Fee Payment Link: " + loginurladmp + "  <br />";
                     }
-                    message += "Login ID: " + ds.Tables[0].Rows[i]["USERNAME"].ToString() + " <br />";
+                    //<1.0.1>
+                    message += "Login ID: " + ds.Tables[0].Rows[i]["EMAILID"].ToString() + " <br />";
+                    //</1.0.1>
                     message += "<br />";
                     message += "After making the online payment, please send the E- receipt as the attachment to the email ids given here to get the confirmation of your provisional admission. <br />";
                     message += "<br />";
@@ -213,11 +214,12 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                     message += "<br />";
                     message += "Admission Team <br />";
                     message += "B.S. Abdur Rahman Institute of Science & Technology";
+                    
                     EmailStatus = objSendEmail.SendEmail(emailid, message, subject).ToString();
                     if (EmailStatus == "1")
                     {
                         objAP.UserNo = ds.Tables[0].Rows[i]["USERNO"].ToString();
-                        objAP.UaNo = Convert.ToInt32(HttpContext.Current.Session["uano"].ToString());
+                        objAP.UaNo = Convert.ToInt32(HttpContext.Current.Session["userno"].ToString());
                         objAP.ProcessType = 'E';
                         objAP.Description = ds.Tables[0].Rows[i]["STUDETNAME"].ToString() + " | " + ds.Tables[0].Rows[i]["MOBILENO"].ToString() + " | " + ds.Tables[0].Rows[i]["EMAILID"].ToString();
                         objAP.ESubject = subject.ToString();
