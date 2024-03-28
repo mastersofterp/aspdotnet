@@ -30,6 +30,7 @@
  
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       <script>
 =======
 
@@ -37,6 +38,9 @@
 
     <script>
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+      <script>
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
         function SetParticipation(val) {
           
             $('#rdActive').prop('checked', val);
@@ -153,10 +157,14 @@
                                             <label>Office Report  Start Date </label>
                                         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                         <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"   ></asp:TextBox>
 =======
                                         <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"></asp:TextBox>
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+                                        <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"   ></asp:TextBox>
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtOfficeVisitStartDate"
                                             Display="None" ErrorMessage="Please Select Office Report Start Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -168,10 +176,14 @@
                                             <label>Office Report End Date</label>
                                         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                         <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
 =======
                                         <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged"></asp:TextBox>
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtOfficeVisitEndDate"
                                             Display="None" ErrorMessage="Please Select Office Report End Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -188,10 +200,14 @@
                                         <asp:TextBox ID="txtStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtStartDate_TextChanged"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvtxtStartDate" runat="server" ControlToValidate="txtStartDate"
 <<<<<<< HEAD
+<<<<<<< HEAD
                                             Display="None" ErrorMessage="Please Select Payment Start Date" SetFocusOnError="True"
 =======
                                             Display="None" ErrorMessage="Please Select Payment  Start Date" SetFocusOnError="True"
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+                                            Display="None" ErrorMessage="Please Select Payment Start Date" SetFocusOnError="True"
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
 
                                     </div>
@@ -224,11 +240,14 @@
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
                                     </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
 
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -267,11 +286,16 @@
                                         </div>
                                         <div class="switch form-inline">
 <<<<<<< HEAD
+<<<<<<< HEAD
                                             <input type="checkbox" id="rdActive" name="Started" checked /> 
 
 =======
                                             <input type="checkbox" id="rdActive" name="Started" checked />
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+                                            <input type="checkbox" id="rdActive" name="Started" checked /> 
+
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                             <label data-on="Started" data-off="Stopped" for="rdActive"></label>
                                         </div>
                                     </div>
@@ -302,12 +326,17 @@
                                                         <th>Degree</th>
                                                         <th>Branch</th>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                         <th>Payment Start Date</th>
                                                         <th>Payment End Date</th>
 =======
                                                         <th>Start Date</th>
                                                         <th>End Date</th>
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+                                                        <th>Payment Start Date</th>
+                                                        <th>Payment End Date</th>
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                                         <th>Payment Category</th>
                                                         <th>Amount/Percentage</th>
                                                         <th>Status</th>
@@ -442,10 +471,14 @@
                     alert('Please Select Payment Start Date first');
                     $('#<%= txtStartDate.ClientID %>').focus();
 <<<<<<< HEAD
+<<<<<<< HEAD
                     $(this).val(''); 
 =======
                     $(this).val(''); // Clear the value of End Date textbox
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
+=======
+                    $(this).val(''); 
+>>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                 }
             });
 
