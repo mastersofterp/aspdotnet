@@ -133,14 +133,14 @@
                                     <td>
                                         <%-- <asp:Button runat="server" ID="btnPreview" Text="Preview"  CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'
                                                   ToolTip='<%# Eval("FILENAME") %>'  OnClick="btnPreview_Click" CssClass="btn btn-primary btn-sm" CausesValidation="false" /> --%>
-                                        <%-- CommandArgument='<%# Eval("ENROLLMENTNO") %>' CommandName='<%# Eval("IDNO") %>'--%>
+                                       <%--  CommandArgument='<%# Eval("ENROLLMENTNO") %>' CommandName='<%# Eval("IDNO") %>'--%>
                                         <asp:ImageButton ID="btnPreview" runat="server" OnClick="btnPreview_Click" Text="Preview" ImageUrl="~/Images/view.png" ToolTip='<%# Eval("FILENAME") %>'
                                             CommandArgument='<%# Eval("FILENAME") %>' Visible="false"></asp:ImageButton> <%-- Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'--%>
 
                                         <%-- <asp:ImageButton ID="btncareer" runat="server" OnClick="btncareer_Click" Text="Preview" ImageUrl="~/Images/view.png" ToolTip='<%# Eval("FILENAME") %>'
                                                                  CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>--%>
                                       <%--  <asp:LinkButton ID="btnAddCompany" runat="server" CssClass="btn btn-outline-info" data-toggle="modal" data-target="#Request_Modal">Add Company</asp:LinkButton>--%>
-                                        <asp:Button ID="btnStatus" runat="server" Text="Student Profile" ToolTip="Check Transaction Status" CssClass="btn btn-primary" OnClick="btnStatus_Click"  TabIndex="9" />  <%--OnClientClick="SHOPOPUP(this);"--%>
+                                        <asp:Button ID="btnStatus" runat="server" Text="Student Profile" ToolTip="Check Transaction Status" CssClass="btn btn-primary" OnClick="btnStatus_Click"  TabIndex="9"  CommandArgument='<%# Eval("IDNO") %>' />  <%--OnClientClick="SHOPOPUP(this);"--%>
                                     </td>
                                     <td>
                                         <asp:CheckBox ID="cbRow" runat="server" ToolTip='<%# Eval("IDNO") %>' />

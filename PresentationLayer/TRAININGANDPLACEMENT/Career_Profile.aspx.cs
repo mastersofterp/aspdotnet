@@ -387,6 +387,12 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
             //----------start---23-02-2024
 
+            if (RdWorkType.SelectedValue != "0")
+            {
+                MessageBox("Please Select Work type.");
+                return;
+            }
+
             TPTraining objTpTraining = new TPTraining();
             string file = string.Empty;
             if (FileUploadWorkExp.HasFile)
@@ -485,7 +491,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             {
                 WorkType = "E";
             }
-            else
+            else if (RdWorkType.SelectedValue == "2")
             {
                 WorkType = "I";
             }
@@ -555,9 +561,13 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                  {
                      SalaryType = 1;  //Salary For 1
                  }
-                 else
+                 else if (RdSalaeyType.SelectedValue == "2")
                  {
                      SalaryType = 2;  //Stipend for 2
+                 }
+                 else
+                 {
+                     SalaryType = 0;
                  }
             decimal Salary ;
             decimal Stipend;
@@ -566,10 +576,15 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 Stipend = Convert.ToDecimal(TxtStipend.Text);
                 Salary = 0;
             }
+            else if (SalaryType == 1)
+            {
+                Salary = Convert.ToDecimal(txtSalary.Text);
+                Stipend = 0;
+            }
             else
             {
-               Salary =Convert.ToDecimal( txtSalary.Text);
-               Stipend = 0;
+                Salary = 0;
+                Stipend = 0;
             }
            //= Convert.ToDouble(TxtStipend.Text);
             //if (TxtStipend.Text == string.Empty)
@@ -1150,6 +1165,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         {
             txtEndDate.Enabled = false;
             Div2.Visible = false;
+            txtEndDate.Text = string.Empty;
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
         else
@@ -2554,6 +2570,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         if (chkCertification.Checked == true)
         {
             txtToDate.Enabled = false;
+            txtToDate.Text = string.Empty;
             Div4.Visible = false;
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
@@ -3171,7 +3188,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
             }
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
         catch (Exception ex)
         {

@@ -213,12 +213,13 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     objCommon.DisplayMessage(this.Page, "Records Approved Successfully..!", this.Page);
-
-                    ddlDegree.SelectedIndex = 0;
-                    ddlBranch.SelectedIndex = 0;
+                  
                     lvStudent.DataSource = null;
                     lvStudent.DataBind();
                     pnllist.Visible = false;
+                    ddlCollege.SelectedValue = "0";
+                    ddlDegree.SelectedValue = "0";
+                    ddlBranch.SelectedValue = "0";
                 }
             }
         }
@@ -287,7 +288,8 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
                 embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
                 embed += "</object>";
                 //ltEmbed.Text = "Image Not Found....!";
-
+                objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
+                return;
 
             }
             else
@@ -303,7 +305,7 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
 
                     var blob = blobContainer.GetBlockBlobReference(ImageName);
 
-                    string filePath = directoryPath + "\\" + ImageName;
+                    string filePath = directoryPath + "" + ImageName;
 
                     if ((System.IO.File.Exists(filePath)))
                     {
@@ -332,9 +334,14 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
                         //string url = filePath;
 
 
-                        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-                        divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-                        divMsg.InnerHtml += " </script>";
+                        //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                        //divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                        //divMsg.InnerHtml += " </script>";
+                        string Script = string.Empty;
+                        string DocLink = url;
+                        //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                        Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
 
                     }
                 }
@@ -517,13 +524,18 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
         try
         {
             int studentId = 0;
-            foreach (ListViewDataItem lvItem in lvStudent.Items)
-            {
+            Button btnPreview = sender as Button;
+            studentId = int.Parse(btnPreview.CommandArgument);
+            //foreach (ListViewDataItem lvItem in lvStudent.Items)
+            //{
              
-                HiddenField txtidno = lvItem.FindControl("hdidno") as HiddenField;
-                studentId = Convert.ToInt32(txtidno.Value);
+            //    //HiddenField txtidno = lvItem.FindControl("hdidno") as HiddenField;
+            //    //studentId = Convert.ToInt32(txtidno.Value);
+
+            //    Button btnStatus = lvItem.FindControl("btnStatus") as Button;
+            //    studentId = int.Parse(btnStatus.CommandArgument);
                
-            }
+            //}
           //  int studentId = (int)Session["studentId"];
             //ViewForm.Src = "/PresentationLayer/TRAININGANDPLACEMENT/Transactions/TP_Career_Profile.aspx?studentId="+ studentId;
 

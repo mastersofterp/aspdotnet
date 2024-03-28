@@ -716,7 +716,7 @@
                                                                     <div class="form-group col-lg-4 col-md-6 col-12">
 
                                                                         <div class="label-dynamic">
-                                                                            <sup></sup>
+                                                                            <sup>*</sup>
                                                                             <label>Work Type </label>
                                                                         </div>
                                                                         <%-- <asp:RadioButton ID="RdExperience" runat="server" Checked="True" GroupName="Type" Text="Work Experience" />
@@ -901,7 +901,7 @@
                                                                             </div>
                                                                             <label class="filelabel ">
                                                                                 <%-- <i class="fas fa-cloud-upload-alt"></i>--%>
-                                                                                <sup>Note Valid files : (.pdf should be of 500 Kb size.)</sup>
+                                                                                <sup>Note:Upload .pdf only-Max size 500 Kb.</sup>
                                                                                 <%-- <span class="title">Note<span class="choosefile">choose file</span>.</span>--%>
                                                                                 <asp:FileUpload ID="FileUploadWorkExp" runat="server" EnableViewState="true" TabIndex="5"
                                                                                     ToolTip="Click here to Attach File" />
@@ -1054,7 +1054,7 @@
                                                                         <h5>Work Experience List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -1201,7 +1201,7 @@
                                                                         <h5>Technical Skill List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -1352,7 +1352,7 @@
                                                                          <div class="form-group col-lg-4 col-md-6 col-12">
                                                                 <div class="label-dynamic">
                                                                     <sup> </sup>
-                                                                    <label>HR</label>
+                                                                    <label>HR Name</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtHr" runat="server" CssClass="form-control" MaxLength="200" />
                                                                 <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator34" runat="server" ControlToValidate="txtDescription"
@@ -1386,7 +1386,7 @@
                                                         </div>
                                                         <asp:TextBox ID="RelevantDocProject" runat="server" type="file" />
                                                     </div>--%>
-                                                                    <div class="col-lg-6 col-md-6 col-12 template-btn-move-up">
+                                                                    <div class="col-lg-4 col-md-6 col-12 template-btn-move-up">
                                                                         <div class="form-group">
                                                                             <div class="label-dynamic">
                                                                                 <sup></sup>
@@ -1394,7 +1394,7 @@
                                                                             </div>
                                                                             <label class="filelabel ">
                                                                                 <%-- <i class="fas fa-cloud-upload-alt"></i>--%>
-                                                                                <sup>Note Valid files : (.pdf should be of 500 Kb size.)</sup>
+                                                                                <sup>Note:Upload .pdf only-Max size 500 Kb.</sup>
                                                                                 <%-- <span class="title">Note<span class="choosefile">choose file</span>.</span>--%>
                                                                                 <asp:FileUpload ID="FileUploadProject" runat="server" EnableViewState="true" TabIndex="5"
                                                                                     ToolTip="Click here to Attach File" />
@@ -1444,7 +1444,7 @@
                                                                         <h5>Project List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -1523,6 +1523,10 @@
                                                                             <label>Grade</label>
                                                                         </div>
                                                                         <asp:TextBox ID="txtGrade" runat="server" CssClass="form-control" />
+                                                                         <ajaxToolKit:FilteredTextBoxExtender ID="ftbtxtContNo" runat="server" FilterType="Custom,UppercaseLetters,LowercaseLetters"
+                                                                    FilterMode="ValidChars"
+                                                                    ValidChars="+- " TargetControlID="txtGrade">
+                                                                </ajaxToolKit:FilteredTextBoxExtender>
                                                                     </div>
                                                                     <%--  <div class="form-group col-lg-4 col-md-6 col-12">
                                                         <div class="label-dynamic">
@@ -1599,7 +1603,7 @@
                                                                         <asp:CheckBox ID="chkCertification" runat="server" Text="I am currently doing this course" OnCheckedChanged="chkCertification_CheckedChanged" AutoPostBack="true" />
                                                                     </div>
 
-                                                                    <div class="col-lg-6 col-md-6 col-12 template-btn-move-up">
+                                                                    <div class="col-lg-4 col-md-6 col-12 template-btn-move-up">
                                                                         <div class="form-group">
                                                                             <div class="label-dynamic">
                                                                                 <sup></sup>
@@ -1607,7 +1611,7 @@
                                                                             </div>
                                                                             <label class="filelabel ">
                                                                                 <%-- <i class="fas fa-cloud-upload-alt"></i>--%>
-                                                                                <sup>Note Valid files : (.pdf should be of 500 Kb size.)</sup>
+                                                                                 <sup>Note:Upload .pdf only-Max size 500 Kb.</sup>
                                                                                 <%-- <span class="title">Note<span class="choosefile">choose file</span>.</span>--%>
                                                                                 <asp:FileUpload ID="FileUploadCertification" runat="server" EnableViewState="true" TabIndex="5"
                                                                                     ToolTip="Click here to Attach File" />
@@ -1636,7 +1640,7 @@
                                                                         <h5>Certification List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -1768,7 +1772,7 @@
                                                                         <h5>Language List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -1917,7 +1921,7 @@
                                                                         <h5>Award And Recognitions List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -2133,7 +2137,7 @@
                                                                         <h5>Competition List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -2329,7 +2333,7 @@
                                                                         <h5>Training And Workshop List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>Edit</th>
@@ -2454,6 +2458,10 @@
                                                                             <label>Test Score/Grade</label>
                                                                         </div>
                                                                         <asp:TextBox ID="txtTestScore" runat="server" CssClass="form-control" />
+                                                                          <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" FilterType="Custom,UppercaseLetters,LowercaseLetters"
+                                                                    FilterMode="ValidChars"
+                                                                    ValidChars="+-0123456789 " TargetControlID="txtTestScore">
+                                                                </ajaxToolKit:FilteredTextBoxExtender>
                                                                     </div>
                                                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                                                         <%--<div class="label-dynamic">
@@ -2489,7 +2497,7 @@
                                                                             <h5>Test Scores List</h5>
                                                                         </div>
 
-                                                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                             <thead class="bg-light-blue">
                                                                                 <tr>
                                                                                     <th>Edit</th>
@@ -2642,7 +2650,7 @@
                                                                         <h5>Upload Resume List</h5>
                                                                     </div>
 
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                         <thead class="bg-light-blue">
                                                                             <tr>
                                                                                 <th>File Name</th>
