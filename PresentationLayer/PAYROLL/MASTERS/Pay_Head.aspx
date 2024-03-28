@@ -130,6 +130,12 @@
                                             </div>
                                             <asp:CheckBox ID="chkperlock" runat="server" />
                                         </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                 <label>Is LWP Effect</label>
+                                            </div>
+                                              <asp:CheckBox ID="chkIsLWPEffect" runat="server" />
+                                        </div>
 
 
                                     </div>
@@ -165,6 +171,7 @@
                                                         <th>Calculation</th>
                                                         <th>Full Name</th>
                                                         <th>Formula</th>
+                                                        <th>ISLWPEffect</th>
                                                         <%--<th>Payhead Kannada</th>--%>
                                                     </tr>
                                                 </thead>
@@ -196,6 +203,9 @@
                                                 </td>
                                                 <td>
                                                     <%# Eval("FORMULA")%>
+                                                </td>
+                                                <td>
+                                                   <%# Eval("IsLWPEffect")%>
                                                 </td>
                                                 <%--<td>
                                                     <%# Eval("PAYSHORT_KANNADA")%>

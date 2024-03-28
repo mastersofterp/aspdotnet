@@ -132,6 +132,8 @@ namespace IITMS
                 private string _PAYSHORT_KANNADA;
                 private string _PAYSHORTNAME;
 
+                private bool _ISLWPEFFECT;
+
                 #endregion
 
                 #region Public Property Fields
@@ -1162,6 +1164,17 @@ namespace IITMS
                     set { _PAYSHORTNAME = value; }
                 }
 
+                public bool ISLWPEFFECT
+                {
+                    get
+                    {
+                        return _ISLWPEFFECT;
+                    }
+                    set
+                    {
+                        _ISLWPEFFECT = value;
+                    }
+                }
                 public System.Nullable<bool> IsR7
                 {
                     get

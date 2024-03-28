@@ -220,7 +220,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[7];
+                        objParams = new SqlParameter[8];
                         objParams[0] = new SqlParameter("@P_SRNO", objPayHead.Srno);
                         objParams[1] = new SqlParameter("@P_PAYSHORT", objPayHead.PayShort);
                         objParams[2] = new SqlParameter("@P_PAYFULL", objPayHead.PayFull);
@@ -228,6 +228,7 @@ namespace IITMS
                         objParams[4] = new SqlParameter("@P_CAL_ON", objPayHead.CalOn);
                         objParams[5] = new SqlParameter("@P_FORMULA", objPayHead.Formula);
                         objParams[6] = new SqlParameter("@P_Isclearamount",objPayHead.Isclearamount);
+                        objParams[7] = new SqlParameter("@P_IsLWPEffect", objPayHead.ISLWPEFFECT);
                         // objParams[6] = new SqlParameter("@P_PAYSHORT_KANNADA", objPayHead.PAYSHORT_KANNADA);
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_PAYHEAD", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
