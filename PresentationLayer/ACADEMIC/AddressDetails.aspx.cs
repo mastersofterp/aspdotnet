@@ -12,6 +12,19 @@ using System.Collections.Generic;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 
+/*                                                  
+---------------------------------------------------------------------------------------------------------------------------                                                          
+Created By :                                                      
+Created On :                         
+Purpose    :                                     
+Version    : 1.0.0                                                
+---------------------------------------------------------------------------------------------------------------------------                                                            
+Version     Modified On     Modified By            Purpose                                                            
+---------------------------------------------------------------------------------------------------------------------------                                                            
+1.0.1      28-03-2024      Ashutosh Dhobe        Added  CheckDisplaySection                
+------------------------------------------- -------------------------------------------------------------------------------                             
+*/
+
 public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -45,6 +58,7 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                     divadmissiondetails.Visible = false;
                     divAdmissionApprove.Visible = false;
                     divhome.Visible = false;
+ 
                     //divPrintReport.Visible = true;                   
 
                     int FinalSubmit = 0;
@@ -138,8 +152,10 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                 hdn_Pdistrict.Value = "";
               
             }
+            CheckDisplaySection();
         }
     }
+
 
     #region Student Related Configuration
     protected void StudentConfiguration()
@@ -149,7 +165,8 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "AddressDetails.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        string section = string.Empty;
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -210,7 +227,58 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
             }
         }
     }
+    //<1.0.1>
+    private void CheckDisplaySection()
+    {
+        DataSet ds = null;
+        string section = string.Empty;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "AddressDetails.aspx";
 
+            section = "Permanent Address";
+            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+                {
+                    DivPerAddr.Visible = true;
+                }
+                else 
+                {
+                    DivPerAddr.Visible = false;
+                }
+            }
+           
+            section = "Local Address";
+            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+                {
+                    DivLocalAddr.Visible = true;
+                }
+                else 
+                {
+                    DivLocalAddr.Visible = false;
+                }
+            }
+            section = "Local Guardian's Address";
+            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+                {
+                    DivGardAddr.Visible = true;
+                }
+                else 
+                {
+                    DivGardAddr.Visible = false;
+                }
+            }
+       
+    }
+    //<//1.0.1>
     private Control FindControlRecursive(Control parentControl, string controlId)
     {
         if (parentControl == null)
@@ -254,7 +322,8 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "AddressDetails.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        string section = string.Empty;
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {

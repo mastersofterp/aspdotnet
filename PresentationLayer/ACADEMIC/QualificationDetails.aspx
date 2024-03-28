@@ -529,7 +529,7 @@
                                 <div class="col-12 pl-0 pr-0 pl-lg-2 pr-lg-2">
                                     <div id="divStudentLastQualification" runat="server">
                                         <asp:Panel ID="pnlHssc" runat="server">
-                                            <div class="row">
+                                            <div class="row" id="divSecMArks" runat="server">
                                                 <div class="col-md-12">
                                                     <div class="sub-heading">
                                                         <h5>Secondary/10th Marks</h5>
@@ -728,7 +728,7 @@
                                         </asp:Panel>
 
                                         <asp:Panel ID="Panel2" runat="server">
-                                            <div class="row">
+                                            <div class="row" id="DivHigherEdu" runat="server">
                                                 <div class="col-md-12 mt-3">
                                                     <div class="sub-heading">
                                                         <h5>Higher Secondary/12th Marks / Diploma Marks</h5>
