@@ -9,6 +9,7 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.SQLServer.SQLDAL;
 
 using System.Data.SqlClient;
+using System.Collections.Generic;
 
 
 namespace IITMS
@@ -21374,6 +21375,148 @@ namespace IITMS
                     }
                     return ds;
                 }//end
+
+                //Added by Gunesh Mohane on 05-03-2024
+                public DataSet RetrieveStudentMasterDataForExcel(int batchno, int degreeno, int branchno, int semno, List<int> filter)
+                {
+                    DataSet ds = null;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[14];
+                        objParams[0] = new SqlParameter("@P_ADMISSIONBATCHNO", batchno);
+                        objParams[1] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParams[2] = branchno != 0 ? new SqlParameter("@P_BRANCHNO", branchno) : new SqlParameter("@P_BRANCHNO", DBNull.Value);
+                        objParams[3] = semno != 0 ? new SqlParameter("@P_SEMESTERNO", semno) : new SqlParameter("@P_SEMESTERNO", DBNull.Value);
+                        objParams[4] = new SqlParameter("@P_FILTER1", filter[0]);
+                        objParams[5] = filter.Count > 1 ? new SqlParameter("@P_FILTER2", filter[1]) : new SqlParameter("@P_FILTER2", DBNull.Value);
+                        objParams[6] = filter.Count > 2 ? new SqlParameter("@P_FILTER3", filter[2]) : new SqlParameter("@P_FILTER3", DBNull.Value);
+                        objParams[7] = filter.Count > 3 ? new SqlParameter("@P_FILTER4", filter[3]) : new SqlParameter("@P_FILTER4", DBNull.Value);
+                        objParams[8] = filter.Count > 4 ? new SqlParameter("@P_FILTER5", filter[4]) : new SqlParameter("@P_FILTER5", DBNull.Value);
+                        objParams[9] = new SqlParameter("@P_TABLENAME1", SqlDbType.NVarChar, 16);
+                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[10] = new SqlParameter("@P_TABLENAME2", SqlDbType.NVarChar, 16);
+                        objParams[10].Direction = ParameterDirection.Output;
+                        objParams[11] = new SqlParameter("@P_TABLENAME3", SqlDbType.NVarChar, 16);
+                        objParams[11].Direction = ParameterDirection.Output;
+                        objParams[12] = new SqlParameter("@P_TABLENAME4", SqlDbType.NVarChar, 16);
+                        objParams[12].Direction = ParameterDirection.Output;
+                        objParams[13] = new SqlParameter("@P_TABLENAME5", SqlDbType.NVarChar, 32);
+                        objParams[13].Direction = ParameterDirection.Output;
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_DATA_EXCEL_BLANKSHEET_NEW", objParams);
+
+                        string[] tableNames = new string[5];
+                        for (int i = 9; i <= 13; i++)
+                        {
+                            tableNames[i - 9] = objParams[i].Value.ToString();
+                        }
+
+                        ds.Tables[0].TableName = "Data";
+                        HashSet<string> usedNames = new HashSet<string>();
+                        foreach (DataTable table in ds.Tables)
+                        {
+                            if (table.TableName.StartsWith("Table"))
+                            {
+                                foreach (string tableName in tableNames)
+                                {
+                                    if (!string.IsNullOrEmpty(tableName) && !usedNames.Contains(tableName))
+                                    {
+                                        table.TableName = tableName;
+                                        usedNames.Add(tableName);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.RetrieveStudentMasterDataForExcel-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+
+               
+                public int UpdateBulkField(Student objStu, int uano, string ipAddress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[29];
+                        objParams[0] = new SqlParameter("@P_IDNO", objStu.IdNo);
+                        objParams[1] = new SqlParameter("@P_STUDNAME", objStu.StudName != null ? objStu.StudName : (object)DBNull.Value);
+                        objParams[2] = new SqlParameter("@P_STUDFIRSTNAME", objStu.firstName != null ? objStu.firstName : (object)DBNull.Value);
+                        objParams[3] = new SqlParameter("@P_STUDMIDDLENAME", objStu.MiddleName != null ? objStu.MiddleName : (object)DBNull.Value);
+                        objParams[4] = new SqlParameter("@P_STUDLASTNAME", objStu.LastName != null ? objStu.LastName : (object)DBNull.Value);
+                        objParams[5] = new SqlParameter("@P_FATHERNAME", objStu.FatherName != null ? objStu.FatherName : (object)DBNull.Value);
+                        objParams[6] = new SqlParameter("@P_MOTHERNAME", objStu.MotherName != null ? objStu.MotherName : (object)DBNull.Value);
+                        objParams[7] = new SqlParameter("@P_STUDMOBILE", objStu.StudentMobile != null ? objStu.StudentMobile : (object)DBNull.Value);
+                        objParams[8] = new SqlParameter("@P_FATHERMOBILE", objStu.FatherMobile != null ? objStu.FatherMobile : (object)DBNull.Value);
+                        objParams[9] = new SqlParameter("@P_MOTHERMOBILE", objStu.MotherMobile != null ? objStu.MotherMobile : (object)DBNull.Value);
+                        objParams[10] = new SqlParameter("@P_GENDERID", objStu.Sex != (char)0 ? objStu.Sex : (object)DBNull.Value);
+                        objParams[11] = new SqlParameter("@P_DOB", objStu.Dob != default(DateTime) ? objStu.Dob : (object)DBNull.Value);
+                        objParams[12] = new SqlParameter("@P_AADHARCARDNO", objStu.AadharCardNo != null ? objStu.AadharCardNo : (object)DBNull.Value);
+                        objParams[13] = new SqlParameter("@P_LADDRESS", objStu.LAddress != null ? objStu.LAddress : (object)DBNull.Value);
+                        objParams[14] = new SqlParameter("@P_PADDRESS", objStu.PAddress != null ? objStu.PAddress : (object)DBNull.Value);
+                        objParams[15] = new SqlParameter("@P_BLOODNO", objStu.BloodGroupNo != (int)0 ? objStu.BloodGroupNo : (object)DBNull.Value);
+                        objParams[16] = new SqlParameter("@P_CASTENO", objStu.Caste != (int)0 ? objStu.Caste : (object)DBNull.Value);
+                        objParams[17] = new SqlParameter("@P_CATEGORYNO", objStu.CategoryNo != (int)0 ? objStu.CategoryNo : (object)DBNull.Value);
+                        objParams[18] = new SqlParameter("@P_STUDEMAIL", objStu.EmailID != null ? objStu.EmailID : (object)DBNull.Value);
+                        objParams[19] = new SqlParameter("@P_FATHEREMAIL", objStu.Fatheremail != null ? objStu.Fatheremail : (object)DBNull.Value);
+                        objParams[20] = new SqlParameter("@P_MOTHEREMAIL", objStu.Motheremail != null ? objStu.Motheremail : (object)DBNull.Value);
+                        objParams[21] = new SqlParameter("@P_SHIFT", objStu.Shift != (int)0 ? objStu.Shift : (object)DBNull.Value);
+                        objParams[22] = new SqlParameter("@P_ABCCID", objStu.AbccId != null ? objStu.AbccId : (object)DBNull.Value);
+                        objParams[23] = new SqlParameter("@P_MERITNO", objStu.MeritNo != null ? objStu.MeritNo : (object)DBNull.Value);
+                        objParams[24] = new SqlParameter("@P_MEDIUMID", objStu.MediumID != null ? objStu.MediumID : (object)DBNull.Value);
+                        objParams[25] = new SqlParameter("@P_UA_NO", uano);
+                        objParams[26] = new SqlParameter("@P_UPDATEDFIELD", "All Bulk Field");
+                        objParams[27] = new SqlParameter("@P_IPADDRESS", ipAddress);
+                        objParams[28] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[28].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_STUDENT_SP_UPD_BULK_EXCEL_NEW", objParams, false);
+                        if (ret != null)
+                            if (ret.ToString() != "-99")
+                                retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateBulkField-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                //Added by Gunesh Mohane on 07-03-2024
+                public DataTableReader GetMasterID(string idno, string bloodgrpname, string categoryname, string castename, string mediumname, string aadharno, string mobile, string email)
+                {
+                    DataTableReader dtr = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[8];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+                        objParams[1] = new SqlParameter("@P_BLOODNAME", bloodgrpname);
+                        objParams[2] = new SqlParameter("@P_CATEGORYNAME", categoryname);
+                        objParams[3] = new SqlParameter("@P_CASTENAME", castename);
+                        objParams[4] = new SqlParameter("@P_MEDIUMNAME", mediumname);
+                        objParams[5] = new SqlParameter("@P_AADHARCARDNO", aadharno);
+                        objParams[6] = new SqlParameter("@P_MOBILENO", mobile);
+                        objParams[7] = new SqlParameter("@P_EMAIL", email);
+                        dtr = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_GET_MASTERID_FROM_MASTERNAME", objParams).Tables[0].CreateDataReader();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetMasterID() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return dtr;
+                }
+
             }
 
 

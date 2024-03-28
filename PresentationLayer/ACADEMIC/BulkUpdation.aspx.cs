@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+using System.Text.RegularExpressions;
+
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer;
@@ -17,6 +23,8 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
+
+    int[] selectedItems;
 
 
     #region Page Action
@@ -112,7 +120,11 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 }
             }
 
-        
+            objCommon.FillDropDownList(ddlAdm2, "ACD_ADMBATCH WITH (NOLOCK)", "BATCHNO", "BATCHNAME", "BATCHNO > 0", "BATCHNO DESC");
+
+            objCommon.FillDropDownList(ddlSemester1, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
+            objCommon.FillDropDownList(ddldegree1, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
+
             objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH WITH (NOLOCK)", "BATCHNO", "BATCHNAME", "BATCHNO > 0", "BATCHNO DESC");
 
             objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
@@ -1392,12 +1404,16 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             throw ex;
         }
     }
-    
+
     protected void ddlCat_SelectedIndexChanged(object sender, EventArgs e)
     {
         btnClear.Visible = true;
         btnSubmit.Visible = true;
-       
+        //btnExport.Visible = true;
+        //if (ddlCat.SelectedValue == "0")
+        //{
+        //    btnExport.Visible = false;
+        //}
         lvStudents.DataSource = null;
         lvStudents.DataBind();
         lvStudParentEmail.DataSource = null;
@@ -1425,17 +1441,946 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             return;
         }
         this.BindListView();
-        
+
         objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudents);//Set label -
     }
 
+    //protected void btnExport_Click(object sender, EventArgs e)
+    //{
+    //    try
+    //    {   DataSet ds;
+    //        if (ddlfilter1.SelectedValue == "1")  // for College Code
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_BLOODGRP SC WITH (NOLOCK) ON (S.BLOODGRPNO = SC.BLOODGRPNO)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.BLOODGRPNO AS COLUMNID,SC.BLOODGRPNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_COLLEGECODE SC WITH (NOLOCK) ON (S.COLLEGECODE = SC.CODENO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.COLLEGECODE AS COLUMNID,SC.CODENAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "2") // for Student Type
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_BLOODGRP SC WITH (NOLOCK) ON (S.BLOODGRPNO = SC.BLOODGRPNO)", "S.IDNO", "S.REGNO, S.STUDNAME,S.DOB AS COLUMNNAME, S.IDNO AS COLUMNID,SC.BLOODGRPNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_IDTYPE SC WITH (NOLOCK) ON (S.IDTYPE = SC.IDTYPENO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.IDTYPE AS COLUMNID ,SC.IDTYPEDESCRIPTION,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "3") // KEA status
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_CATEGORY SC WITH (NOLOCK) ON (S.CATEGORYNO = SC.CATEGORYNO)", "S.IDNO", "S.REGNO,S.STUDNAME,S.ADMDATE AS COLUMNNAME ,'' AS PCOLUMNNAME,S.CATEGORYNO AS COLUMNID,SC.CATEGORY", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_KEA_STATUS SC WITH (NOLOCK) ON (S.KEA_STATUS = SC.KEANO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.KEA_STATUS AS COLUMNID,SC.KEA_NAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "4") // Claim Category
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT JOIN ACD_CASTE C WITH (NOLOCK) ON (S.CASTE = C.CASTENO)", "S.IDNO", "S.REGNO, S.STUDNAME,C.CASTE AS COLUMNNAME, S.CASTE AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_CATEGORY SC WITH (NOLOCK) ON (S.CATEGORYNO = SC.CATEGORYNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.CATEGORYNO AS COLUMNID,SC.CATEGORY,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "5") // Allotted Category
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ADDHARCARDNO AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_CATEGORY SC WITH (NOLOCK) ON (S.ADMCATEGORYNO = SC.CATEGORYNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.ADMCATEGORYNO AS COLUMNID,SC.CATEGORY,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "6") // Admission Batch
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_GENDER SC WITH (NOLOCK) ON (S.SEX = SC.SEX)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.SEX AS COLUMNID,SC.GENDERNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            // ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_ADMBATCH SC WITH (NOLOCK) ON (S.ADMBATCH = SC.BATCHNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.ADMBATCH AS COLUMNID,SC.BATCHNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "7") // Blood Group
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.STUDENTMOBILE AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //S.CSN_NO,
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "8") // Admission Date
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.EMAILID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT", "IDNO AS COLUMNID", "REGNO, CSN_NO, STUDNAME, ADMDATE", "DEGREENO =" + ddlDegree.SelectedValue + " AND SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "CSN_NO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_BLOODGRP SC WITH (NOLOCK) ON (S.BLOODGRPNO = SC.BLOODGRPNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.IDNO AS COLUMNID,SC.BLOODGRPNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "9")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.STUDNAME AS COLUMNNAME , S.STUDFIRSTNAME  AS COLUMNFIRSTNAME,S.STUDMIDDLENAME AS COLUMNMIDDLENAME,S.STUDLASTNAME AS COLUMNLASTNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "IDNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_BLOODGRP SC WITH (NOLOCK) ON (S.BLOODGRPNO = SC.BLOODGRPNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.REGNO AS COLUMNNAME, S.IDNO AS COLUMNID,SC.BLOODGRPNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "10")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.FATHERNAME AS COLUMNNAME,'' AS PCOLUMNNAME, S.IDNO AS COLUMNID", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
 
-  
+    //            //S.CSN_NO,
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "11")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.MOTHERNAME AS COLUMNNAME ,'' AS PCOLUMNNAME, S.IDNO AS COLUMNID", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_BLOODGRP SC WITH (NOLOCK) ON (S.BLOODGRPNO = SC.BLOODGRPNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.CSN_NO AS COLUMNNAME, S.IDNO AS COLUMNID,SC.BLOODGRPNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "12")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S ", "S.IDNO", "S.REGNO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.SHIFT AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            // ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) INNER JOIN ACD_CASTE C WITH (NOLOCK) ON (S.CASTE = C.CASTENO)", "S.IDNO", "S.REGNO, S.STUDNAME,C.CASTE AS COLUMNNAME, S.CASTE AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S LEFT OUTER JOIN ACD_ADMBATCH SC ON (S.ADMBATCH = SC.BATCHNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.ADMBATCH AS COLUMNID,SC.BATCHNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.IDNO");
+    //            //S.CSN_NO,
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "13")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT  JOIN ACD_STU_ADDRESS A ON (S.IDNO = A.IDNO)", "S.IDNO", "S.REGNO,S.STUDNAME,A.LADDRESS AS COLUMNNAME ,A.PADDRESS AS PCOLUMNNAME, S.IDNO AS COLUMNID", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            // ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_PAYMENTTYPE P WITH (NOLOCK) ON (S.PTYPE = P.PAYTYPENO)", "S.IDNO", "S.REGNO, S.STUDNAME,P.PAYTYPENAME AS COLUMNNAME, S.PTYPE AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //            //S.CSN_NO,
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "14")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_MEDIUMOFINSTRUCTION_MASTER MIM WITH (NOLOCK) ON (MIM.MEDIUMID = S.MEDIUM_INSTRUCT_NO)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ADMDATE AS COLUMNNAME, S.MEDIUM_INSTRUCT_NO AS COLUMNID,MIM.MEDIUMNAME,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_ADMBATCH A WITH (NOLOCK) ON (S.ACAD_YR = A.BATCHNO)", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,A.BATCHNAME AS COLUMNNAME, S.ACAD_YR AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
 
-  
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "15")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.FATHER_EMAIL AS COLUMNNAMEFATHEREMAIL,S.MOTHER_EMAIL AS COLUMNNAMEMOTHEREMAIL, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.STATE_RANK, S.STUDNAME,S.STATE_RANK AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "16")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.MERITNO AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.QEXMROLLNO, S.STUDNAME,S.QEXMROLLNO AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "17")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO ", "S.REGNO,S.STUDNAME,S.FATHERMOBILE AS COLUMNNAME, S.IDNO AS COLUMNID, '' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.ORDER_NO, S.STUDNAME,S.ORDER_NO AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "18")
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME , S.IDNO AS COLUMNID , '' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //            //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_PAYMENT_GROUP P WITH (NOLOCK) ON(P.GROUP_ID=S.AIDED) ", "S.IDNO", "S.REGNO,S.CSN_NO, S.STUDNAME,P.PAYMENT_GROUP AS COLUMNNAME, S.AIDED AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+    //        }
+    //        else if (ddlfilter1.SelectedValue == "19")  // Added by Shrikant W. on 28-12-2023 for ABCC ID
+    //        {
+    //            ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ABCC_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddldegree1.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester1.SelectedValue + " AND  ADMBATCH=" + ddlAdm2.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlbranch1.SelectedValue, "S.REGNO");
+    //        }
+
+    //        else
+    //        {
+    //            ds = null;
+    //        }
+
+    //        StudentController objSC = new StudentController();
+    //        //DataSet ds = objCC.RetrieveBulkUpdateDataForExcel(Convert.ToInt32(ddlAdmBatch.SelectedValue),Convert.ToInt32(ddlDegreeSelectedValue),Convert.ToInt32(ddlBranchSelectedValue),Convert.ToInt32(ddlSemesterSelectedValue),);
+    //        if (ddlfilter1.SelectedValue != "9" && ddlfilter1.SelectedValue != "15")
+    //        {
+               
+    //            if (ddlfilter1.SelectedValue == "1" || ddlfilter1.SelectedValue == "3" || ddlfilter1.SelectedValue == "4" || ddlfilter1.SelectedValue == "6" || ddlfilter1.SelectedValue == "14")
+    //            {
+    //                DataSet ds1 = null;
+    //                ds1 = objSC.AddMasters(Convert.ToInt32(ddlfilter1.SelectedValue));
+    //                if (ds1 != null && ds1.Tables.Count > 0)
+    //                {
+    //                    DataTable dt = ds1.Tables[0];
+    //                    ds1.Tables.Remove(dt);
+    //                    dt.TableName = "Master";
+    //                    ds.Tables.Add(dt);
+    //                    ds.Tables[1].TableName = "Master";
+    //                }
+    //            }
+    //        }
+    //        //else if (ddlCat.SelectedValue == "9")
+    //        //{
+    //        //    ds = ViewState["DataSet2"] as DataSet;
+    //        //}
+    //        //else if (ddlCat.SelectedValue == "15")
+    //        //{
+    //        //    ds = ViewState["DataSet1"] as DataSet;
+    //        //}
+    //        //else
+    //        //{
+    //        //    ds = null;
+    //        //}
+    //        ds.Tables[0].TableName = "Data";
+    //        //ds.Tables[2].TableName = "Semester Master";
+    //        //ds.Tables[3].TableName = "Scheme Master";
+    //        //ds.Tables[4].TableName = "BOS_Department Master";
+    //        //ds.Tables[5].TableName = "Elective Group";
+
+    //        //if (ds.Tables[0].Rows.Count > 0)//&& ds.Tables[1].Rows.Count > 0 && ds.Tables[2].Rows.Count > 0 && ds.Tables[3].Rows.Count > 0 && ds.Tables[4].Rows.Count > 0 && ds.Tables[5].Rows.Count > 0)
+
+    //        //{         
+    //        using (XLWorkbook wb = new XLWorkbook())
+    //        {
+    //            foreach (System.Data.DataTable dt in ds.Tables)
+    //            {
+    //                //Add System.Data.DataTable as Worksheet.
+    //                wb.Worksheets.Add(dt);
+    //            }
+
+    //            //Export the Excel file.
+    //            Response.Clear();
+    //            Response.Buffer = true;
+    //            Response.Charset = "";
+    //            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    //            Response.AddHeader("content-disposition", "attachment;filename=Student_" + ddlfilter1.SelectedItem.Text + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
+    //            using (MemoryStream MyMemoryStream = new MemoryStream())
+    //            {
+    //                wb.SaveAs(MyMemoryStream);
+    //                MyMemoryStream.WriteTo(Response.OutputStream);
+    //                Response.Flush();
+    //                Response.End();
+    //            }
+    //        }
+    //    }
+    //    catch (ArgumentOutOfRangeException ex)
+    //    {
+    //        objCommon.DisplayMessage(updpnlImportData, "Something whent wrong", this.Page);
+    //        return;
+    //    }
+    //  //  }
+    //}
+
+    //protected void btnUploadexcel_Click(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        Uploaddata();
+    //    }
+    //    catch (Exception ex)
+    //    {
+          
+    //    }
+    //}
+
+    //private void Uploaddata()
+    //{
+    //    try
+    //    {
+    //        if (FUFile.HasFile)
+    //        {
+    //           string FileName = Path.GetFileName(FUFile.PostedFile.FileName);
+    //            string Extension = Path.GetExtension(FUFile.PostedFile.FileName);
+    //            if (Extension.Equals(".xls") || Extension.Equals(".xlsx"))
+    //            {
+    //                string FolderPath = ConfigurationManager.AppSettings["FolderPath"];
+    //                string FilePath = Server.MapPath(FolderPath + FileName);
+    //                FUFile.SaveAs(FilePath);
+    //                ExcelToDatabase(FilePath, Extension, "yes");
+    //            }
+    //            else
+    //            {
+    //                objCommon.DisplayMessage(updpnlImportData, "Only .xls or .xlsx extention is allowed", this.Page);
+    //                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+    //                return;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            objCommon.DisplayMessage(updpnlImportData, "Please select the Excel File to Upload", this.Page);
+    //            ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+    //            return;
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+            
+    //    }
+    //}
+
+    //private void ExcelToDatabase(string FilePath, string Extension, string isHDR)
+    //{
+    //    string studids= string.Empty;
+    //    string categaries = string.Empty;
+    //    int res =0;
+
+    //    int drawing = 0;
+    //    CourseController objCC = new CourseController();
+    //    Course objC = new Course();
+    //    try
+    //    {
+    //        CustomStatus cs = new CustomStatus();
+    //        string conStr = "";
+
+    //        switch (Extension)
+    //        {
+    //            //case ".xls": //Excel 97-03
+    //            //    conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+    //            //    break;
+    //            //case ".xlsx": //Excel 07
+    //            //    conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+    //            //    break;
+    //            case ".xls": //Excel 97-03
+    //                conStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + FilePath + ";Extended Properties='Excel 8.0'";
+    //                break;
+    //            case ".xlsx": //Excel 07
+    //                conStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + FilePath + ";Extended Properties='Excel 8.0'";
+
+    //                break;
+    //        }
+    //        conStr = String.Format(conStr, FilePath, isHDR);
+
+    //        OleDbConnection connExcel = new OleDbConnection(conStr);
+    //        OleDbCommand cmdExcel = new OleDbCommand();
+    //        OleDbDataAdapter oda = new OleDbDataAdapter();
+    //        DataTable dt = new DataTable();
+    //        cmdExcel.Connection = connExcel;
+    //        //Get the name of First Sheet
+
+    //        connExcel.Open();
+    //        DataTable dtExcelSchema;
+    //        dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+    //        string SheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+    //        connExcel.Close();
+
+    //        //Read Data from First Sheet
+    //        connExcel.Open();
+    //        cmdExcel.CommandText = "SELECT * From [" + SheetName + "]";
+    //        oda.SelectCommand = cmdExcel;
+    //        oda.Fill(dt);
+
+    //        //Bind Excel to GridView
+    //        DataSet ds = new DataSet();
+    //        oda.Fill(ds);
+    //        DataView dv1 = dt.DefaultView;
+    //       // dv1.RowFilter = "isnull(,'')<>''";
+    //        DataTable dtNew = dv1.ToTable();
+
+    //        //lvStudData.DataSource = dtNew; // ds.Tables[0]; /// dSet.Tables[0].DefaultView.RowFilter = "Frequency like '%30%')"; ;
+    //        //lvStudData.DataBind();
+    //        int i = 0;
+
+    //        int Ua_no = Convert.ToInt32(Session["userno"]);
+    //        #region Filter1
+    //        if (ddlfilter1.SelectedValue != "9" && ddlfilter1.SelectedValue != "15")
+    //        {
+    //        StudentController objSC = new StudentController();
+    //        for (i = 0; i < dtNew.Rows.Count; i++)
+    //        //for (i = 0; i < ds.Tables[0].Rows.Count; i++)
+    //        //foreach (DataRow dr in dt.Rows)
+    //        {
+    //            Student ObjStud = new Student();
+    //            DataRow row = dtNew.Rows[i];//ds.Tables[0].Rows[i];
+    //                if (!(dtNew.Rows[i]["IDNO"]).ToString().Equals(string.Empty))
+    //                {
+    //                    studids += Convert.ToInt32((dtNew.Rows[i]["IDNO"]).ToString()) + "$";
+    //                    // ObjStud.IdNo =Convert.ToInt32 (dtNew.Rows[i]["IDNO"]).ToString());
+    //                }
+    //                else
+    //                {
+    //                    objCommon.DisplayMessage(updpnlImportData, "Please enter IDNO at Row no. " + (i + 1), this.Page);
+    //                    return;
+    //                }
+
+    //                if (!(dtNew.Rows[i]["REGNO"]).ToString().Equals(string.Empty))
+    //                {
+    //                    //ObjStud.RegNo = (dtNew.Rows[i]["REGNO"]).ToString();
+    //                }
+    //                else
+    //                {
+    //                    objCommon.DisplayMessage(updpnlImportData, "Please enter REGNO at Row no. " + (i + 1), this.Page);
+    //                    return;
+    //                }
+
+    //                if (!(dtNew.Rows[i]["STUDNAME"]).ToString().Equals(string.Empty))
+    //                {
+    //                    //ObjStud.StudName = (dtNew.Rows[i]["STUDNAME"]).ToString();
+    //                }
+    //                else
+    //                {
+    //                    objCommon.DisplayMessage(updpnlImportData, "Please enter STUDENT NAME at Row no. " + (i + 1), this.Page);
+    //                    return;
+    //                }
+
+                  
+    //                    if (Convert.ToInt32(ddlfilter1.SelectedValue) == 2 || Convert.ToInt32(ddlfilter1.SelectedValue) == 6 || Convert.ToInt32(ddlfilter1.SelectedValue) == 4)
+    //                    {
+    //                        categaries += dtNew.Rows[i]["COLUMNID"].ToString() + "$";
+    //                    }
+    //                    else if (Convert.ToInt32(ddlfilter1.SelectedValue) == 3 || Convert.ToInt32(ddlfilter1.SelectedValue) == 4 || Convert.ToInt32(ddlfilter1.SelectedValue) == 1 || Convert.ToInt32(ddlfilter1.SelectedValue) == 12 || Convert.ToInt32(ddlfilter1.SelectedValue) == 14)
+    //                    {
+    //                        categaries += Convert.ToInt32((dtNew.Rows[i]["COLUMNID"]).ToString()) + "$";
+    //                    }
+    //                    else if (Convert.ToInt32(ddlfilter1.SelectedValue) == 7 || Convert.ToInt32(ddlfilter1.SelectedValue) == 8 || Convert.ToInt32(ddlfilter1.SelectedValue) == 10 || Convert.ToInt32(ddlfilter1.SelectedValue) == 11 || Convert.ToInt32(ddlfilter1.SelectedValue) == 13 || Convert.ToInt32(ddlfilter1.SelectedValue) == 16 || Convert.ToInt32(ddlfilter1.SelectedValue) == 17 || Convert.ToInt32(ddlfilter1.SelectedValue) == 18)
+    //                    {
+    //                        categaries += Convert.ToInt32((dtNew.Rows[i]["COLUMNNAME"]).ToString()) + "$";
+    //                    }
+    //                    //ObjStud.BloodGroupNo = Convert.ToInt32((dtNew.Rows[i]["COLUMNID"]).ToString());
+                   
+    //            }
+    //            string IpAddress = Request.ServerVariables["REMOTE_ADDR"];
+    //            int fieldID =  Convert.ToInt32(ddlfilter1.SelectedValue);
+    //            res = objSC.UpdateStudentCategory(studids, categaries, fieldID, IpAddress);
+                
+    //                //objC.BatchNo = Convert.ToInt32(ddlAdmBatch.SelectedValue);
+    //               // cs = (CustomStatus)objSC.UpdateExcelSheet(ObjStud);
+    //                connExcel.Close();
+                
+    //        }
+    //         #endregion Filter1 
+
+    //          #region filter2
+
+    //         else if (ddlfilter1.SelectedValue == "9")
+    //         {
+    //             StudentController objSC = new StudentController();
+                
+    //             string categorys = string.Empty;
+    //             string rollnos = string.Empty;
+    //             string FullName = string.Empty;
+    //             string FirstName = string.Empty;
+    //             string MiddleName = string.Empty;
+    //             string LastName = string.Empty;
+    //             string paddress = string.Empty;
+                
+
+                
+    //             string Ip_Address = string.Empty;
+
+    //            // StudentController objSC = new StudentController();
+    //             for (i = 0; i < dtNew.Rows.Count; i++)
+    //             //for (i = 0; i < ds.Tables[0].Rows.Count; i++)
+    //             //foreach (DataRow dr in dt.Rows)
+    //             {
+    //                 Student ObjStud = new Student();
+    //                 DataRow row = dtNew.Rows[i];//ds.Tables[0].Rows[i];
+    //                 object Name = row[0];
+    //                 if (Name != null && !String.IsNullOrEmpty(Name.ToString().Trim()))
+    //                 {
+    //                     if (!(dtNew.Rows[i]["IDNO"]).ToString().Equals(string.Empty))
+    //                     {
+    //                         studids += Convert.ToInt32((dtNew.Rows[i]["IDNO"]).ToString()) + "$";
+    //                         // ObjStud.IdNo =Convert.ToInt32 (dtNew.Rows[i]["IDNO"]).ToString());
+    //                     }
+    //                     else
+    //                     {
+    //                         objCommon.DisplayMessage(updpnlImportData, "Please enter IDNO at Row no. " + (i + 1), this.Page);
+    //                         return;
+    //                     }
+
+    //                     if (!(dtNew.Rows[i]["REGNO"]).ToString().Equals(string.Empty))
+    //                     {
+    //                         //ObjStud.RegNo = (dtNew.Rows[i]["REGNO"]).ToString();
+    //                     }
+    //                     else
+    //                     {
+    //                         objCommon.DisplayMessage(updpnlImportData, "Please enter REGNO at Row no. " + (i + 1), this.Page);
+    //                         return;
+    //                     }
 
 
+    //                     FullName += (dtNew.Rows[i]["COLUMNNAME"]).ToString() + "$";
+    //                     FirstName += (dtNew.Rows[i]["COLUMNFIRSTNAME"]).ToString() + "$";
+    //                     MiddleName += (dtNew.Rows[i]["COLUMNMIDDLENAME"]).ToString() + "$";
+    //                     LastName += (dtNew.Rows[i]["COLUMNLASTNAME"]).ToString() + "$";
 
-  
+                        
+    //                     //ObjStud.BloodGroupNo = Convert.ToInt32((dtNew.Rows[i]["COLUMNID"]).ToString());
 
+    //                 }
+    //                 string IpAddress = Request.ServerVariables["REMOTE_ADDR"];
+    //                 int fieldID = Convert.ToInt32(ddlfilter1.SelectedValue);
+    //                 res =  objSC.UpdateStudentAndFatherInfo(studids, fieldID, FullName, FirstName, MiddleName, LastName, IpAddress,ddlfilter1.SelectedItem.Text, Convert.ToInt32(Ua_no));
+
+    //                 //objC.BatchNo = Convert.ToInt32(ddlAdmBatch.SelectedValue);
+    //                 // cs = (CustomStatus)objSC.UpdateExcelSheet(ObjStud);
+    //                 connExcel.Close();
+    //             }
+
+
+    //         }
+    //        #endregion filter2
+
+
+    //         else if (ddlfilter1.SelectedValue == "15")
+    //         {
+    //             StudentController objSC = new StudentController();
+    //             int fieldID = Convert.ToInt32(ddlfilter1.SelectedValue);
+    //              string femail = string.Empty;   //ADDED BY VINAY MISHRA ON 28082023 FOR 47935
+    //             string memail = string.Empty;   //ADDED BY VINAY MISHRA ON 28082023 FOR 47935
+    //             if (!(dtNew.Rows[i]["IDNO"]).ToString().Equals(string.Empty))
+    //             {
+    //                 studids += Convert.ToInt32((dtNew.Rows[i]["IDNO"]).ToString()) + "$";
+    //                 // ObjStud.IdNo =Convert.ToInt32 (dtNew.Rows[i]["IDNO"]).ToString());
+    //             }
+    //             else
+    //             {
+    //                 objCommon.DisplayMessage(updpnlImportData, "Please enter IDNO at Row no. " + (i + 1), this.Page);
+    //                 return;
+    //             }
+    //             string IpAddress = Request.ServerVariables["REMOTE_ADDR"];
+    //             femail += (dtNew.Rows[i]["COLUMNNAMEFATHEREMAIL"]).ToString() + "$";
+    //             memail += (dtNew.Rows[i]["COLUMNNAMEMOTHEREMAIL"]).ToString() + "$";
+    //             res = objSC.UpdateFatherAndMotherEmail(studids, fieldID, femail, memail, IpAddress, ddlfilter1.SelectedItem.Text, Convert.ToInt32(Ua_no));
+    //         }
+    //        if (res >0)
+    //        {
+    //            // BindListView();
+    //            objCommon.DisplayMessage(updpnlImportData, "Excel Sheet Updated Successfully!!", this.Page);
+               
+    //            ddlAdm2.SelectedValue = "0";
+    //            ddldegree1.SelectedValue = "0";
+    //            ddlbranch1.SelectedValue = "0";
+    //            ddlSemester1.SelectedValue = "0";
+    //            ddlfilter1.SelectedValue = "0";
+    //            return;
+    //        }
+    //        else
+    //        {
+    //            //BindListView();
+    //            objCommon.DisplayMessage(updpnlImportData, "Excel Sheet Uploaded Successfully!!", this.Page);
+    //            return;
+    //        }
+    //        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+
+
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        if (Convert.ToBoolean(Session["error"]) == true)
+    //        {
+    //            objCommon.DisplayMessage(updpnlImportData, "Data not available in ERP Master", this.Page);
+    //            ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+
+    //            return;
+    //        }
+           
+              
+    //    }
+    //}
+
+    protected void ddldegree1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        objCommon.FillDropDownList(ddlbranch1, "ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) INNER JOIN ACD_BRANCH B WITH (NOLOCK) ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddldegree1.SelectedValue) + " AND CD.BRANCHNO > 0 ", "B.LONGNAME");
+    }
+
+    #region Old Code
+    //protected void ddlfilter1_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    btnUploadexcel.Visible = true;
+    //    btnExport.Visible = true;
+    //    if (ddlfilter1.SelectedValue == "0")
+    //    {
+    //        btnExport.Visible = false;
+    //    }
+
+    //    if (ddlAdm2.SelectedValue == "0")
+    //    {
+    //        objCommon.DisplayMessage(this.updStudent, "Please Select Admission Batch", this.Page);
+    //        return;
+    //    }
+    //    if (ddldegree1.SelectedValue == "0")
+    //    {
+    //        objCommon.DisplayMessage(this.updStudent, "Please Select Degree", this.Page);
+    //        return;
+    //    }
+    //    if (ddlbranch1.SelectedValue == "0")
+    //    {
+    //        objCommon.DisplayMessage(this.updStudent, "Please Select Branch", this.Page);
+    //        return;
+    //    }
+    //    if (ddlSemester1.SelectedValue == "0")
+    //    {
+    //        objCommon.DisplayMessage(this.updStudent, "Please Select Semester", this.Page);
+    //        return;
+    //    }
+    //}
+    #endregion
+
+    #region Bulk Student Field Updation (Excel) Added by Gunesh Mohane
+    //Added by Gunesh Mohane on 04/03/2024
+    protected void btnExport2_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            List<int> selectedItems = new List<int>();
+
+            foreach (int i in ddlfilter1.GetSelectedIndices())
+            {
+                selectedItems.Add(Convert.ToInt32(ddlfilter1.Items[i].Value));
+            }
+
+
+            StudentController objSC = new StudentController();
+            DataSet ds = objSC.RetrieveStudentMasterDataForExcel(Convert.ToInt32(ddlAdm2.SelectedValue), Convert.ToInt32(ddldegree1.SelectedValue),
+                Convert.ToInt32(ddlbranch1.SelectedValue), Convert.ToInt32(ddlSemester1.SelectedValue), selectedItems);
+
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    foreach (System.Data.DataTable dt in ds.Tables)
+                    {
+                        //Add System.Data.DataTable as Worksheet.
+                        wb.Worksheets.Add(dt);
+                    }
+
+                    //ClearControls();
+                    //Export the Excel file.
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=PreFormat_For_UploadStudentData_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        wb.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                        
+                    }
+                }
+                
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updStudent, "No Students Found for Selected Criteria.", this.Page);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+            }
+        }
+        catch 
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+            {
+                objCommon.DisplayMessage(updpnlImportData, "Data not available in ERP Master", this.Page);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+
+                return;
+            }
+        }
+    }
+
+    //Added by Gunesh Mohane on 04/03/2024
+    protected void btnUploadexcel2_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            Uploaddata2();
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    //Added by Gunesh Mohane on 04/03/2024
+    private void Uploaddata2()
+    {
+        try
+        {
+            if (FUFile.HasFile)
+            {
+                string FileName = Path.GetFileName(FUFile.PostedFile.FileName);
+                string Extension = Path.GetExtension(FUFile.PostedFile.FileName);
+                if (Extension.Equals(".xls") || Extension.Equals(".xlsx"))
+                {
+                    string FolderPath = ConfigurationManager.AppSettings["FolderPath"];
+                    string FilePath = Server.MapPath(FolderPath + FileName);
+                    FUFile.SaveAs(FilePath);
+                    ExcelToDatabase2(FilePath, Extension, "yes");
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updpnlImportData, "Only .xls or .xlsx extention is allowed", this.Page);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                    return;
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(updpnlImportData, "Please select the Excel File to Upload", this.Page);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    //Added by Gunesh Mohane on 04/03/2024
+    private void ExcelToDatabase2(string FilePath, string Extension, string isHDR)
+    {
+        string studids = string.Empty;
+        try
+        {
+            CustomStatus cs = new CustomStatus();
+            string conStr = "";
+            #region Excel Binding
+            switch (Extension)
+            {
+                //case ".xls": //Excel 97-03
+                //    conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                //    break;
+                //case ".xlsx": //Excel 07
+                //    conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                //    break;
+                case ".xls": //Excel 97-03
+                    conStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + FilePath + ";Extended Properties='Excel 8.0'";
+                    break;
+                case ".xlsx": //Excel 07
+                    conStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + FilePath + ";Extended Properties='Excel 8.0'";
+
+                    break;
+            }
+            conStr = String.Format(conStr, FilePath, isHDR);
+
+            OleDbConnection connExcel = new OleDbConnection(conStr);
+            OleDbCommand cmdExcel = new OleDbCommand();
+            OleDbDataAdapter oda = new OleDbDataAdapter();
+            DataTable dt = new DataTable();
+            cmdExcel.Connection = connExcel;
+            //Get the name of First Sheet
+
+            connExcel.Open();
+            DataTable dtExcelSchema;
+            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            string SheetName = null;
+            foreach (DataRow row in dtExcelSchema.Rows)
+            {
+                if (row["TABLE_NAME"].ToString() == "Data$")
+                {
+                    SheetName = row["TABLE_NAME"].ToString();
+                    break;
+                }
+            }
+            connExcel.Close();
+
+            //Read Data from First Sheet
+           connExcel.Open();
+            cmdExcel.CommandText = "SELECT * From [" + SheetName + "]";
+            oda.SelectCommand = cmdExcel;
+            oda.Fill(dt);
+
+
+            //Bind Excel to GridView
+            DataSet ds = new DataSet();
+            oda.Fill(ds);
+            DataView dv1 = dt.DefaultView;
+            DataTable dtNew = dv1.ToTable();
+            #endregion
+            int Ua_no = Convert.ToInt32(Session["userno"]);
+            string IpAddress = Request.ServerVariables["REMOTE_ADDR"];
+            for (int i = 0; i < dtNew.Rows.Count; i++)
+            {
+                Student objStu = new Student();
+                DataRow row = dtNew.Rows[i];//ds.Tables[0].Rows[i];
+                StudentController objSC = new StudentController();
+
+                #region Parameters
+                if (!(dtNew.Rows[i]["IDNO"]).ToString().Equals(string.Empty))
+                {
+                    objStu.IdNo += Convert.ToInt32((dtNew.Rows[i]["IDNO"]).ToString());
+                    // ObjStud.IdNo =Convert.ToInt32 (dtNew.Rows[i]["IDNO"]).ToString());
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updpnlImportData, "Please enter IDNO at Row no. " + (i + 1), this.Page);
+                    return;
+                }
+
+                string idno = objStu.IdNo.ToString();
+                objStu.StudName = (dtNew.Columns.Contains("STUDNAME") && !string.IsNullOrEmpty(dtNew.Rows[i]["STUDNAME"].ToString())) ? dtNew.Rows[i]["STUDNAME"].ToString() : null;
+                objStu.firstName = (dtNew.Columns.Contains("STUDFIRSTNAME") && !string.IsNullOrEmpty(dtNew.Rows[i]["STUDFIRSTNAME"].ToString())) ? dtNew.Rows[i]["STUDFIRSTNAME"].ToString() : null;
+                objStu.MiddleName = (dtNew.Columns.Contains("STUDMIDDLENAME") && !string.IsNullOrEmpty(dtNew.Rows[i]["STUDMIDDLENAME"].ToString())) ? dtNew.Rows[i]["STUDMIDDLENAME"].ToString() : null;
+                objStu.LastName = (dtNew.Columns.Contains("STUDLASTNAME") && !string.IsNullOrEmpty(dtNew.Rows[i]["STUDLASTNAME"].ToString())) ? dtNew.Rows[i]["STUDLASTNAME"].ToString() : null;
+                objStu.FatherName = (dtNew.Columns.Contains("FATHERNAME") && !string.IsNullOrEmpty(dtNew.Rows[i]["FATHERNAME"].ToString())) ? dtNew.Rows[i]["FATHERNAME"].ToString() : null;
+                objStu.MotherName = (dtNew.Columns.Contains("MOTHERNAME") && !string.IsNullOrEmpty(dtNew.Rows[i]["MOTHERNAME"].ToString())) ? dtNew.Rows[i]["MOTHERNAME"].ToString() : null;
+                objStu.StudentMobile = (dtNew.Columns.Contains("STUDENTMOBILE") && !string.IsNullOrEmpty(dtNew.Rows[i]["STUDENTMOBILE"].ToString())) ? dtNew.Rows[i]["STUDENTMOBILE"].ToString() : null;
+                objStu.Sex = (dtNew.Columns.Contains("SEX") && !string.IsNullOrEmpty(dtNew.Rows[i]["SEX"].ToString())) ? Convert.ToChar(dtNew.Rows[i]["SEX"].ToString()) : (char)0;
+                objStu.Dob = (dtNew.Columns.Contains("DOB") && dtNew.Rows[i]["DOB"] != DBNull.Value) ? Convert.ToDateTime(dtNew.Rows[i]["DOB"]) : default(DateTime);
+                objStu.AadharCardNo = (dtNew.Columns.Contains("ADDHARCARDNO") && !string.IsNullOrEmpty(dtNew.Rows[i]["ADDHARCARDNO"].ToString())) ? dtNew.Rows[i]["ADDHARCARDNO"].ToString() : null;
+                objStu.LAddress = (dtNew.Columns.Contains("LOCALADDRESS") && !string.IsNullOrEmpty(dtNew.Rows[i]["LOCALADDRESS"].ToString())) ? dtNew.Rows[i]["LOCALADDRESS"].ToString() : null;
+                objStu.PAddress = (dtNew.Columns.Contains("PERMANENTADDRESS") && !string.IsNullOrEmpty(dtNew.Rows[i]["PERMANENTADDRESS"].ToString())) ? dtNew.Rows[i]["PERMANENTADDRESS"].ToString() : null;
+                objStu.EmailID = (dtNew.Columns.Contains("STUDEMAIL")) ? dtNew.Rows[i]["STUDEMAIL"].ToString() : null;
+                objStu.Fatheremail = (dtNew.Columns.Contains("FATHER_EMAIL") && !string.IsNullOrEmpty(dtNew.Rows[i]["FATHER_EMAIL"].ToString())) ? dtNew.Rows[i]["FATHER_EMAIL"].ToString() : null;
+                objStu.Motheremail = (dtNew.Columns.Contains("MOTHER_EMAIL") && !string.IsNullOrEmpty(dtNew.Rows[i]["MOTHER_EMAIL"].ToString())) ? dtNew.Rows[i]["MOTHER_EMAIL"].ToString() : null;
+                int shiftValue = 0;
+                if (dtNew.Columns.Contains("SHIFT") && dtNew.Rows[i]["SHIFT"] != DBNull.Value)
+                {
+                    string shiftString = dtNew.Rows[i]["SHIFT"].ToString();
+                    if (shiftString == "Full Time")
+                    {
+                        shiftValue = 1;
+                    }
+                    else if (shiftString == "Part Time")
+                    {
+                        shiftValue = 2;
+                    }
+                    else 
+                    {
+                        objCommon.DisplayMessage(updpnlImportData, "Invalid Shift at IDNO. " + idno, this.Page);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                        return;
+                    }
+                }
+                objStu.Shift = shiftValue;
+                objStu.AbccId = (dtNew.Columns.Contains("ABCC_ID") && !string.IsNullOrEmpty(dtNew.Rows[i]["ABCC_ID"].ToString())) ? dtNew.Rows[i]["ABCC_ID"].ToString() : null;
+                objStu.MeritNo = (dtNew.Columns.Contains("MERITNO") && !string.IsNullOrEmpty(dtNew.Rows[i]["MERITNO"].ToString())) ? dtNew.Rows[i]["MERITNO"].ToString() : null;
+                objStu.FatherMobile = (dtNew.Columns.Contains("FATHERMOBILE") && !string.IsNullOrEmpty(dtNew.Rows[i]["FATHERMOBILE"].ToString())) ? dtNew.Rows[i]["FATHERMOBILE"].ToString() : null;
+                objStu.MotherMobile = (dtNew.Columns.Contains("MOTHERMOBILE") && !string.IsNullOrEmpty(dtNew.Rows[i]["MOTHERMOBILE"].ToString())) ? dtNew.Rows[i]["MOTHERMOBILE"].ToString() : null;
+
+                string aadharno = objStu.AadharCardNo;
+                string mobileno = objStu.StudentMobile;
+                string emailid = objStu.EmailID;
+                string bloodgrpname = (dtNew.Columns.Contains("BLOODGRPNAME") && dtNew.Rows[i]["BLOODGRPNAME"] != DBNull.Value) ? dtNew.Rows[i]["BLOODGRPNAME"].ToString() : null;
+                string catname = (dtNew.Columns.Contains("CATEGORY") && dtNew.Rows[i]["CATEGORY"] != DBNull.Value) ? dtNew.Rows[i]["CATEGORY"].ToString() : null;
+                string castename = (dtNew.Columns.Contains("CASTE") && dtNew.Rows[i]["CASTE"] != DBNull.Value) ? dtNew.Rows[i]["CASTE"].ToString() : null;
+                string mediumname = (dtNew.Columns.Contains("MEDIUMNAME") && dtNew.Rows[i]["MEDIUMNAME"] != DBNull.Value) ? dtNew.Rows[i]["MEDIUMNAME"].ToString() : null;
+
+                DataTableReader dtr = objSC.GetMasterID(idno,bloodgrpname, catname, castename, mediumname,aadharno,mobileno,emailid);
+                if (dtr.HasRows)
+                {
+                    if (dtr.Read())
+                    {
+                        objStu.BloodGroupNo = (dtr["BLOODGRPNO"] != DBNull.Value) ? Convert.ToInt32(dtr["BLOODGRPNO"].ToString()) : 0;
+                        objStu.CategoryNo = (dtr["CATEGORYNO"] != DBNull.Value) ? Convert.ToInt32(dtr["CATEGORYNO"].ToString()) : 0;
+                        objStu.Caste = (dtr["CASTENO"] != DBNull.Value) ? Convert.ToInt32(dtr["CASTENO"].ToString()) : 0;
+                        objStu.MediumID = (dtr["MEDIUMID"] != DBNull.Value) ? dtr["MEDIUMID"].ToString() : null;
+
+                        if(!string.IsNullOrEmpty(aadharno))
+                            if (dtr["ISAADHARALREADYPRESENT"] != DBNull.Value)
+                                if (dtr["AADHARCHARNO"] == DBNull.Value)
+                                {
+                                    objCommon.DisplayMessage(updpnlImportData, "Duplicate Aadhar Card Number is Present at IDNO. " + idno, this.Page);
+                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                                    return;
+                                }
+
+                        if (!string.IsNullOrEmpty(mobileno))
+                            if (dtr["ISMOBILEALREADYPRESENT"] != DBNull.Value)
+                                if (dtr["MOBILENO"] == DBNull.Value)
+                                {
+                                    objCommon.DisplayMessage(updpnlImportData, "Duplicate Mobile Number is Present at IDNO. " + idno, this.Page);
+                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                                    return;
+                                }
+
+                        if (!string.IsNullOrEmpty(emailid))
+                            if (dtr["ISEMAILALREADYPRESENT"] != DBNull.Value)
+                                if (dtr["EMAILID"] == DBNull.Value)
+                                {
+                                    objCommon.DisplayMessage(updpnlImportData, "Duplicate Email is Present at IDNO. " + idno, this.Page);
+                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                                    return;
+                                }
+
+                        if(bloodgrpname != null && objStu.BloodGroupNo == 0 && bloodgrpname != "-")
+                        {
+                            objCommon.DisplayMessage(updpnlImportData, "Blood Group not found in ERP Master at IDNO. " + idno, this.Page);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                            return;
+                        }
+                        else if (catname != null && objStu.CategoryNo == 0 && catname != "-")
+                        {
+                            objCommon.DisplayMessage(updpnlImportData, "Category not found in ERP Master at IDNO. " + idno, this.Page);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                            return;
+                        }
+                        else if (castename != null && objStu.Caste == 0 && castename != "-")
+                        {
+                            objCommon.DisplayMessage(updpnlImportData, "Caste not found in ERP Master at IDNO. " + idno, this.Page);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                            return;
+                        }
+                        else if (mediumname != null && string.IsNullOrEmpty(objStu.MediumID) && mediumname != "-")
+                        {
+                            objCommon.DisplayMessage(updpnlImportData, "Medium of Instruction not found in ERP Master at IDNO. " + idno, this.Page);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                            return;
+                        }
+                    }                
+                }
+                
+                dtr.Close();
+
+                if (!string.IsNullOrEmpty(objStu.AadharCardNo))
+                    if (objStu.AadharCardNo.Length != 12 || !objStu.AadharCardNo.ToString().All(char.IsDigit))
+                    {
+                        objCommon.DisplayMessage(updpnlImportData, "Invalid Aadhar Number at IDNO. " + idno, this.Page);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                        return;
+                    }
+
+                if (!string.IsNullOrEmpty(objStu.StudentMobile))
+                    if (objStu.StudentMobile.Length != 10 || !objStu.StudentMobile.ToString().All(char.IsDigit))
+                    {
+                        objCommon.DisplayMessage(updpnlImportData, "Invalid Student Mobile Number at IDNO. " + idno, this.Page);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                        return;
+                    }
+
+                
+                if (!string.IsNullOrEmpty(objStu.FatherMobile))
+                    if (objStu.FatherMobile.Length != 10 || !objStu.FatherMobile.ToString().All(char.IsDigit))
+                    {
+                        objCommon.DisplayMessage(updpnlImportData, "Invalid Father Mobile Number at IDNO. " + idno, this.Page);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                        return;
+                    }
+
+                
+                if (!string.IsNullOrEmpty(objStu.EmailID))
+                    if (!IsValidEmail(objStu.EmailID))
+                    {
+                        objCommon.DisplayMessage(updpnlImportData, "Invalid Email Address at IDNO. " + idno, this.Page);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                        return;
+                    }
+
+                if (!string.IsNullOrEmpty(objStu.Fatheremail))
+                    if (!IsValidEmail(objStu.Fatheremail))
+                    {
+                        objCommon.DisplayMessage(updpnlImportData, "Invalid Father Email Address at IDNO. " + idno, this.Page);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                        return;
+                    }
+
+                if (!string.IsNullOrEmpty(objStu.Motheremail))
+                    if (!IsValidEmail(objStu.Motheremail))
+                    {
+                        objCommon.DisplayMessage(updpnlImportData, "Invalid Mother Email Address at IDNO. " + idno, this.Page);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+                        return;
+                    }
+                #endregion
+
+                cs = (CustomStatus)objSC.UpdateBulkField(objStu, Ua_no, IpAddress);
+            }
+            if (cs.Equals(CustomStatus.RecordUpdated))
+            {
+                objCommon.DisplayMessage(updpnlImportData, "Excel Sheet Updated Successfully!!", this.Page);
+                ClearControls();
+                
+                return;
+            }
+        }
+        catch
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+            {
+                objCommon.DisplayMessage(updpnlImportData, "Data not available in ERP Master", this.Page);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
+
+                return;
+            }
+
+
+        }
+
+    }
+
+    //Added by Gunesh Mohane 11-03-2024
+    protected bool IsValidEmail(string email)
+    {
+        string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        return Regex.IsMatch(email, emailPattern);
+    }
+
+    //Added by Gunesh Mohane 07-03-2024
+    protected void ClearControls() 
+    {
+        ddlfilter1.ClearSelection();
+        ddlAdm2.SelectedValue = "0";
+        ddldegree1.SelectedValue = "0";
+        ddlbranch1.SelectedValue = "0";
+        ddlSemester1.SelectedValue = "0";
+        //ddlfilter1.SelectedValue = "0";
+    }
+
+    //Added by Gunesh Mohane 07-03-2024
+    protected void btnClear2_Click(object sender, EventArgs e)
+    {
+        ClearControls();
+    }
+
+    #endregion
 }

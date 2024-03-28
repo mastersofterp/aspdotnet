@@ -48,6 +48,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         // address info
         private string _pAddress = string.Empty;
         private string _pCity = string.Empty;
+        private string _lAddress = string.Empty;
+        private string _mediumID = string.Empty;
 
         // PG ENTRANCE EXAM SCORES
 
@@ -818,6 +820,18 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         {
             get { return _pAddress; }
             set { _pAddress = value; }
+        }
+
+        public string LAddress
+        {
+            get { return _lAddress; }
+            set { _lAddress = value; }
+        }
+
+        public string MediumID
+        {
+            get { return _mediumID; }
+            set { _mediumID = value; }
         }
 
         public int Cdbno
