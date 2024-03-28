@@ -183,6 +183,13 @@ public partial class FacilityApplication : System.Web.UI.Page
 
         try
         {
+            DateTime date = DateTime.Now;
+            DateTime Pdate = date.AddDays(-1);
+            if (Convert.ToDateTime(txtFromDt.Text) < Pdate)
+            {
+                MessageBox("You can not apply for back date!!");
+                return;
+            }
             if (IsValid)
             {
                 int result = checkApplication();
@@ -327,7 +334,7 @@ public partial class FacilityApplication : System.Web.UI.Page
             }
             else
             {
-                MessageBox("To Date is Invalid (Enter dd/MM/yyyy Format)");
+                MessageBox("To Date is Invalid (Enter dd/mm/yyyy Format)");
             }
         }
         catch (Exception ex)

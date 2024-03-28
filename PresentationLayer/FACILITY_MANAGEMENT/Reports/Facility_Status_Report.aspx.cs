@@ -57,6 +57,7 @@ public partial class Facility_Status_Report : System.Web.UI.Page
                 
             }
         }
+        Page.Title = Session["coll_name"].ToString();
     }
     private void CheckPageAuthorization()
     {
@@ -116,19 +117,22 @@ public partial class Facility_Status_Report : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-        // Check if the To Date is smaller than the From Date
-        if (DateTime.Parse(txtTodt.Text) <= DateTime.Parse(txtFromdt.Text))
+        if (IsValid)
         {
-            // If To Date is smaller, show an alert
-            ClientScript.RegisterStartupScript(this.GetType(), "Alert", "alert('To Date Should be Greater Than or Equals To From Date.');", true);
-        }
-        else
-        {
-            // If the dates are valid, proceed to generate the report
-            ShowReport("FacilityStatus", "Facility_ApplicationStatus.rpt");
+            // Check if the To Date is smaller than the From Date
+            if (DateTime.Parse(txtTodt.Text) <= DateTime.Parse(txtFromdt.Text))
+            {
+                // If To Date is smaller, show an alert
+                ClientScript.RegisterStartupScript(this.GetType(), "Alert", "alert('To date should be greater than or equals to From date.');", true);
+            }
+            else
+            {
+                // If the dates are valid, proceed to generate the report
+                ShowReport("FacilityStatus", "Facility_ApplicationStatus.rpt");
 
+            }
+            //ShowReport("FacilityStatus", "Facility_ApplicationStatus.rpt");
         }
-        //ShowReport("FacilityStatus", "Facility_ApplicationStatus.rpt");
     }
 
    

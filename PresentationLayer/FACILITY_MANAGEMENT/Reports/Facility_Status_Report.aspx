@@ -53,6 +53,11 @@
                                                             <asp:RequiredFieldValidator ID="rfvfdate" runat="server" ControlToValidate="txtFromdt"
                                                                 Display="None" ErrorMessage="Please Select / Enter From Date" SetFocusOnError="True"
                                                                 ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
+                                                            <ajaxToolKit:MaskedEditValidator ID="mevFacilityDt" runat="server" ControlExtender="mefrmdt"
+                                                                ControlToValidate="txtFromdt" EmptyValueMessage="Please Enter From Date" IsValidEmpty="false"
+                                                                InvalidValueMessage=" From Date is Invalid (Enter dd/mm/yyyy Format)" Display="None"
+                                                                TooltipMessage="Please Enter From Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                                ValidationGroup="Leaveapp" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
                                                         </div>
                                                     </div>
 
@@ -76,6 +81,11 @@
                                                             <ajaxToolKit:MaskedEditExtender ID="meeTodt" runat="server" AcceptNegative="Left"
                                                                 DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
                                                                 MessageValidatorTip="true" TargetControlID="txtTodt" />
+                                                            <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="meeTodt"
+                                                                ControlToValidate="txtTodt" EmptyValueMessage="Please Enter To Date" IsValidEmpty="false"
+                                                                InvalidValueMessage=" To Date is Invalid (Enter dd/mm/yyyy Format)" Display="None"
+                                                                TooltipMessage="Please Enter To Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                                ValidationGroup="Leaveapp" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-3" id="trddldept" runat="server">
@@ -486,7 +496,7 @@
         //    }
         //  
 
-        
+
 
     </script>
 

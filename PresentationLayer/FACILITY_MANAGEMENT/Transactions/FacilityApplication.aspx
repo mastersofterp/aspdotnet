@@ -217,7 +217,7 @@
                                                                          Style="cursor: pointer" />--%>
                                                                                         <i id="imgCalJoindt" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
                                                                                     </div>
-                                                                                    <asp:TextBox ID="txtApplicationDate" runat="server" MaxLength="10" CssClass="form-control" />
+                                                                                    <asp:TextBox ID="txtApplicationDate" runat="server" MaxLength="10" CssClass="form-control" Enabled="false"/>
 
 
                                                                                     <ajaxToolKit:CalendarExtender ID="CeJoindt" runat="server" Enabled="true"
@@ -232,7 +232,7 @@
                                                                                         ControlExtender="meeJoindt" ControlToValidate="txtApplicationDate" Display="None"
                                                                                         EmptyValueBlurredText="Empty" EmptyValueMessage="Please Enter Joining Date"
                                                                                         InvalidValueBlurredMessage="Invalid Date"
-                                                                                        InvalidValueMessage="Joining Date is Invalid (Enter dd/MM/yyyy Format)"
+                                                                                        InvalidValueMessage="Joining Date is Invalid (Enter dd/mm/yyyy Format)"
                                                                                         SetFocusOnError="true" TooltipMessage="Please Enter Joining Date"
                                                                                         ValidationGroup="Leaveapp">
                               
@@ -265,7 +265,7 @@
                                                                                         AcceptNegative="Left" ErrorTooltipEnabled="true" />
                                                                                     <ajaxToolKit:MaskedEditValidator ID="mevFacilityDt" runat="server" ControlExtender="meeFacilityDt"
                                                                                         ControlToValidate="txtFromDt" EmptyValueMessage="Please Enter From Date" IsValidEmpty="false"
-                                                                                        InvalidValueMessage=" From Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
+                                                                                        InvalidValueMessage=" From Date is Invalid (Enter dd/mm/yyyy Format)" Display="None"
                                                                                         TooltipMessage="Please Enter From Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
                                                                                         ValidationGroup="Facility" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
                                                                                 </div>
@@ -313,7 +313,7 @@
                                                                                                 AcceptNegative="Left" ErrorTooltipEnabled="true" />
                                                                                             <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="MaskedEditExtender1"
                                                                                                 ControlToValidate="txtToDt" EmptyValueMessage="Please Enter To Date" IsValidEmpty="false"
-                                                                                                InvalidValueMessage=" To Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
+                                                                                                InvalidValueMessage=" To Date is Invalid (Enter dd/mm/yyyy Format)" Display="None"
                                                                                                 TooltipMessage="Please Enter To Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
                                                                                                 ValidationGroup="Facility" SetFocusOnError="true"></ajaxToolKit:MaskedEditValidator>
                                                                                         </div>
