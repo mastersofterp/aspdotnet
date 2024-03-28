@@ -18,6 +18,7 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data.SqlClient;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using System.IO;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 //using System.Net.ServicePointManager;
 
 public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
@@ -28,6 +29,8 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
     FeeCollectionController objFees = new FeeCollectionController();
     StudentController objStu=new StudentController ();
     SemesterRegistration objsem = new SemesterRegistration();
+    OrganizationController objOrg = new OrganizationController();
+
     string hash_seq = string.Empty;
     int degreeno = 0;
     int college_id = 0;
@@ -47,15 +50,36 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
             try
             {
 
-            SqlDataReader dr = objCommon.GetCommonDetails();
+                //SqlDataReader dr = objCommon.GetCommonDetails();
 
-            if (dr != null)
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
+                DataSet Orgds = null;
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                    lblCollege.Text = dr["COLLEGENAME"].ToString();
-                    lblAddress.Text = dr["College_Address"].ToString();
-                    imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
 
@@ -469,20 +493,26 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
         {
             int IDNO = Convert.ToInt32(ViewState["IDNO"]);
 
-            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + IDNO + "' AND ORDER_ID ='" + ViewState["Order_id"].ToString() + "'");
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
+            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            //url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
             //To open new window from Updatepanel
-           
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            //sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            //ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
         }
         catch (Exception ex)
         {
@@ -492,6 +522,8 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+
     private string postPaymentRequestToGateway(String queryUrl, String urlParam)
     {
 

@@ -20,6 +20,19 @@ using BusinessLogicLayer.BusinessEntities.RazorPay;
 using Razorpay.Api;
 using Newtonsoft.Json;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
+using System.Threading.Tasks;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using EASendMail;
+using System.Net;
+using System.Net.Mail;
+using BusinessLogicLayer.BusinessLogic;
+using Newtonsoft.Json;
+using IITMS.UAIMS.BusinessLayer.BusinessEntities;
+using System.Security.Cryptography.X509Certificates;
+using mastersofterp_MAKAUAT;
+using System.Net.Security;
+
 
 public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
 {
@@ -29,6 +42,8 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
     FeeCollectionController objFees = new FeeCollectionController();
     Ent_Pay_Response ObjPR = new Ent_Pay_Response();
     OrganizationController objOrg = new OrganizationController();
+    FeeCollectionController feeController = new FeeCollectionController();
+    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
 
     string hash_seq = string.Empty;
     #endregion
@@ -40,8 +55,8 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
             try
             {
                 DataSet Orgds = null;
-                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
-                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -60,18 +75,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
 
                     }
                 }
-
-                //SqlDataReader dr = objCommon.GetCommonDetails();
-
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        lblAddress.Text = dr["College_Address"].ToString();
-                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
+     
 
                 string[] merc_hash_vars_seq;
                 string merc_hash_string = string.Empty;
@@ -81,8 +85,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                 double actualamount = 0;
                 double amountTax = 0;
                 string paymentId = Request.Form["hdnPaymentId"];
-                string paymentId1 = Request.Form["razorpay_payment_id"];
-
+                string paymentId1 = Request.Form["razorpay_payment_id"];                                    
                 string razorpay_signature = Request.Form["razorpay_signature"];
                 string order_id = Session["Order_ID"].ToString();
 
@@ -153,8 +156,6 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     Ent_Payment_notes ss = new Ent_Payment_notes();
                     ss = objPay.notes;
                     string comment_date = objPay.created_at;
-
-
                     lblRegNo.Text = Session["regno"].ToString();
                     lblstudentname.Text = Convert.ToString(Session["payStudName"]);
                     lblOrderId.Text = order_id;
@@ -173,13 +174,65 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     string PaymentFor = string.Empty, txnMessage = string.Empty, BankReferenceNo = string.Empty;
                     string rec_code = objCommon.LookUp("ACD_DCR_TEMP", "RECIEPT_CODE", "ORDER_ID = '" + order_id + "'");
                     int output = 0;
+                    string UA_IDNO = string.Empty;
+                    string UserFirstPaymentStatus = string.Empty;
+                    string UA_NAME = string.Empty;
+                    if (Session["OrgId"].ToString() == "3" || Session["OrgId"].ToString() == "4")
+                    {
+                        UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
+                        UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO = '" + Convert.ToInt32(UA_IDNO) + "'");
+
+                        if (UA_IDNO == UA_NAME)
+                        {
+                            UserFirstPaymentStatus = "5151";
+                            ViewState["First_PaymentStatus"] = "5151";
+
+                        }
+                        else
+                        {
+                            ViewState["First_PaymentStatus"] = "0";
+                        }
+                    }
+                    else
+                    {
+                        ViewState["First_PaymentStatus"] = "0";
+                    }
+
+
+
                     if (Convert.ToInt32(Session["Installmentno"]) > 0)
                     {
                         output = objFees.InsertInstallmentOnlinePayment_DCR(Convert.ToString(Session["idno"]), rec_code, order_id, mihpayid, "O", "1", Convert.ToString(amount), "Success", Convert.ToInt32(Session["Installmentno"]), "-");
+                        
+                        if (ViewState["First_PaymentStatus"] == "5151")
+                        {
+                            UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
+
+                            UPDATE_USER(UA_IDNO, 1);
+
+                            Sendmail();
+                        }
+                        else
+                        {
+
+                        }
                     }
                     else
                     {
                         output = objFees.InsertOnlinePayment_DCR(Convert.ToString(Session["idno"]), rec_code, order_id, mihpayid, "O", "1", Convert.ToString(amount), "Success", Session["regno"].ToString(), "-");
+
+                        if (ViewState["First_PaymentStatus"] == "5151")
+                        {
+                            UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
+
+                            UPDATE_USER(UA_IDNO, 1);
+
+                            Sendmail();
+                        }
+                        else
+                        {
+
+                        }
                     }
                     btnPrint.Visible = true;
                    
@@ -210,79 +263,79 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
     }
 
     #region Method
-    public void TransferToEmail1(string ToID, string userMsg, string userMsg1, string userMsg2, string messBody3, string messBody4, string messBody5)
-    {
-        try
-        {
-            //string path = Server.MapPath(@"/Css/images/Index.Jpeg");
-            //LinkedResource Img = new LinkedResource(path, MediaTypeNames.Image.Jpeg);
-            //Img.ContentId = "MyImage";   
+    //public void TransferToEmail1(string ToID, string userMsg, string userMsg1, string userMsg2, string messBody3, string messBody4, string messBody5)
+    //{
+    //    try
+    //    {
+    //        //string path = Server.MapPath(@"/Css/images/Index.Jpeg");
+    //        //LinkedResource Img = new LinkedResource(path, MediaTypeNames.Image.Jpeg);
+    //        //Img.ContentId = "MyImage";   
 
-            ServicePointManager.ServerCertificateValidationCallback += (o, c, ch, er) => true;
-            //string fromPassword = Common.DecryptPassword(objCommon.LookUp("REFF", "EMAILSVCPWD", string.Empty));
-            //string fromAddress = objCommon.LookUp("REFF", "EMAILSVCID", string.Empty);
-            string fromPassword = Common.DecryptPassword(objCommon.LookUp("Email_Configuration", "EMAILSVCPWD1", string.Empty));
-            string fromAddress = objCommon.LookUp("Email_Configuration", "EMAILSVCID1", string.Empty);
+    //        ServicePointManager.ServerCertificateValidationCallback += (o, c, ch, er) => true;
+    //        //string fromPassword = Common.DecryptPassword(objCommon.LookUp("REFF", "EMAILSVCPWD", string.Empty));
+    //        //string fromAddress = objCommon.LookUp("REFF", "EMAILSVCID", string.Empty);
+    //        string fromPassword = Common.DecryptPassword(objCommon.LookUp("Email_Configuration", "EMAILSVCPWD1", string.Empty));
+    //        string fromAddress = objCommon.LookUp("Email_Configuration", "EMAILSVCID1", string.Empty);
 
-            MailMessage msg = new MailMessage();
-            SmtpClient smtp = new SmtpClient();
+    //        MailMessage msg = new MailMessage();
+    //        SmtpClient smtp = new SmtpClient();
 
-            msg.From = new MailAddress(fromAddress, "NIT GOA");
-            msg.To.Add(new MailAddress(ToID));
+    //        msg.From = new MailAddress(fromAddress, "NIT GOA");
+    //        msg.To.Add(new MailAddress(ToID));
 
-            msg.Subject = "Your transaction with MAKAUT";
+    //        msg.Subject = "Your transaction with MAKAUT";
 
-            const string EmailTemplate = "<html><body>" +
-                                     "<div align=\"left\">" +
-                                     "<table style=\"width:602px;border:#FFFFFF 3px solid\" cellspacing=\"0\" cellpadding=\"0\">" +
-                                      "<tr>" +
-                                      "<td>" + "</tr>" +
-                                      "<tr>" +
-                                     "<td width=\"100%\" style=\"vertical-align:top;text-align:left;padding:20px 15px 20px 15px;height:200px;FONT-FAMILY: Trebuchet MS;FONT-SIZE: 14px\">#content</td>" +
-                                     "</tr>" +
-                                     "<tr>" +
-                                     "<td width=\"100%\" style=\"vertical-align:middle;text-align:left;padding:20px 15px 20px 15px;height:100px;FONT-FAMILY: Trebuchet MS;FONT-SIZE: 14px\"><img src=\"\"  id=\"../../Css/images/Index.png\" height=\"10\" width=\"10\"><br/><b>National Institute of Technology Goa </td>" +
-                                     "</tr>" +
-                                     "</table>" +
-                                     "</div>" +
-                                     "</body></html>";
-            StringBuilder mailBody = new StringBuilder();
-            //mailBody.AppendFormat("<h1>Greating !!</h1>");
-            mailBody.AppendFormat("Dear <b>{0}</b> ,", messBody3);
-            mailBody.AppendFormat("<br />");
-            mailBody.AppendFormat("<br />");
-            mailBody.AppendFormat(userMsg);
-            mailBody.AppendFormat("<br />");
-            mailBody.AppendFormat(messBody5);
-            mailBody.AppendFormat("<br />");
-            mailBody.AppendFormat(userMsg1);
-            mailBody.AppendFormat("<br />");
-            mailBody.AppendFormat(userMsg2);
-            mailBody.AppendFormat("<br />");
-            mailBody.AppendFormat(messBody4);
-            mailBody.AppendFormat("<br />");
-            string Mailbody = mailBody.ToString();
-            string nMailbody = EmailTemplate.Replace("#content", Mailbody);
-            msg.IsBodyHtml = true;
-            msg.Body = nMailbody;
+    //        const string EmailTemplate = "<html><body>" +
+    //                                 "<div align=\"left\">" +
+    //                                 "<table style=\"width:602px;border:#FFFFFF 3px solid\" cellspacing=\"0\" cellpadding=\"0\">" +
+    //                                  "<tr>" +
+    //                                  "<td>" + "</tr>" +
+    //                                  "<tr>" +
+    //                                 "<td width=\"100%\" style=\"vertical-align:top;text-align:left;padding:20px 15px 20px 15px;height:200px;FONT-FAMILY: Trebuchet MS;FONT-SIZE: 14px\">#content</td>" +
+    //                                 "</tr>" +
+    //                                 "<tr>" +
+    //                                 "<td width=\"100%\" style=\"vertical-align:middle;text-align:left;padding:20px 15px 20px 15px;height:100px;FONT-FAMILY: Trebuchet MS;FONT-SIZE: 14px\"><img src=\"\"  id=\"../../Css/images/Index.png\" height=\"10\" width=\"10\"><br/><b>National Institute of Technology Goa </td>" +
+    //                                 "</tr>" +
+    //                                 "</table>" +
+    //                                 "</div>" +
+    //                                 "</body></html>";
+    //        StringBuilder mailBody = new StringBuilder();
+    //        //mailBody.AppendFormat("<h1>Greating !!</h1>");
+    //        mailBody.AppendFormat("Dear <b>{0}</b> ,", messBody3);
+    //        mailBody.AppendFormat("<br />");
+    //        mailBody.AppendFormat("<br />");
+    //        mailBody.AppendFormat(userMsg);
+    //        mailBody.AppendFormat("<br />");
+    //        mailBody.AppendFormat(messBody5);
+    //        mailBody.AppendFormat("<br />");
+    //        mailBody.AppendFormat(userMsg1);
+    //        mailBody.AppendFormat("<br />");
+    //        mailBody.AppendFormat(userMsg2);
+    //        mailBody.AppendFormat("<br />");
+    //        mailBody.AppendFormat(messBody4);
+    //        mailBody.AppendFormat("<br />");
+    //        string Mailbody = mailBody.ToString();
+    //        string nMailbody = EmailTemplate.Replace("#content", Mailbody);
+    //        msg.IsBodyHtml = true;
+    //        msg.Body = nMailbody;
 
-            smtp.Host = "smtp.gmail.com";
+    //        smtp.Host = "smtp.gmail.com";
 
-            smtp.Port = 587;
-            smtp.UseDefaultCredentials = true;
-            smtp.Credentials = new System.Net.NetworkCredential(fromAddress, fromPassword);
-            smtp.EnableSsl = true;
-            smtp.Send(msg);
+    //        smtp.Port = 587;
+    //        smtp.UseDefaultCredentials = true;
+    //        smtp.Credentials = new System.Net.NetworkCredential(fromAddress, fromPassword);
+    //        smtp.EnableSsl = true;
+    //        smtp.Send(msg);
 
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "DISPATCH_Transactions_IO_InwardDispatch.TransferToEmail-> " + ex.Message + " " + ex.StackTrace);
-            else
-                objCommon.ShowError(Page, "Server UnAvailable");
-        }
-    }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        if (Convert.ToBoolean(Session["error"]) == true)
+    //            objCommon.ShowError(Page, "DISPATCH_Transactions_IO_InwardDispatch.TransferToEmail-> " + ex.Message + " " + ex.StackTrace);
+    //        else
+    //            objCommon.ShowError(Page, "Server UnAvailable");
+    //    }
+    //}
 
     public string Generatehash512(string text)
     {
@@ -302,10 +355,6 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
 
     }
     #endregion
-
-
-
-
     
     protected void btnBack_Click(object sender, EventArgs e)
     {
@@ -377,7 +426,8 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
         }
         else
         {
-            ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt");
+           // ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
             //ShowReport("OnlineFeePayment", "FeeCollectionReceiptForCash_ATLAS.rpt");
         }
     }
@@ -461,4 +511,143 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+
+
+    private DataSet getModuleConfig()
+    {
+        DataSet ds = objCommon.GetModuleConfig(Convert.ToInt32(Session["OrgId"]));
+        return ds;
+    }
+
+    public void Sendmail()
+    {
+        string email_type = string.Empty;
+        string Link = string.Empty;
+        int sendmail = 0;
+        string subject = string.Empty;
+        string srnno = string.Empty;
+        string pwd = string.Empty;
+        int status = 0;
+        string IDNO = Session["IDNO"].ToString();
+        string MISLink = objCommon.LookUp("ACD_MODULE_CONFIG", "ONLINE_ADM_LINK", "OrganizationId=" + Session["OrgId"]);
+        string Username = string.Empty;
+        string Password = string.Empty;
+        string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + Convert.ToInt32(Session["idno"]));
+        string Branchname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_DEGREE D ON (S.DEGREENO=D.DEGREENO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO=S.BRANCHNO)", "CONCAT(D.DEGREENAME, ' in ',B.LONGNAME)", "IDNO=" + Session["idno"].ToString());
+        string REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
+        string COLLEGE_CODE = objCommon.LookUp("REFF", "CODE_STANDARD", "");
+        string EmailID = objCommon.LookUp("ACD_STUDENT", "EMAILID", "IDNO=" + Convert.ToInt32(Session["idno"]));
+        string college = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_COLLEGE_MASTER M ON(S.COLLEGE_ID=M.COLLEGE_ID)", "M.COLLEGE_NAME", "IDNO=" + Convert.ToInt32(Session["idno"]));
+        Username = REGNO;
+        Password = REGNO;
+
+        DataSet ds = getModuleConfig();
+        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+        {
+            email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
+            Link = ds.Tables[0].Rows[0]["LINK"].ToString();
+            sendmail = Convert.ToInt32(ds.Tables[0].Rows[0]["THIRDPARTY_PAYLINK_MAIL_SEND"].ToString());
+
+            if (sendmail == 1)
+            {
+                subject = "New MIS Login Credentials";
+                string message = "";
+                message += "<p>Dear :<b>" + Name + "</b> </p>";
+                message += "<p><b>" + Branchname + "</b></p>";
+                message += "<p>Your fees have been submitted successfully and you have been registered for the program mentioned above.Your new Login credentials are as follows</p><p>" + MISLink + " </p><p>Username   : " + Username + " <br/>Password    : " + Password + "</p>";
+                message += "<p>Note for Provisional Registration only:</p>";
+                message += "<p>All the documents must be uploaded on URL: <b>" + MISLink + "</b>";
+                message += "<p>Process of fee payment: Login using above credentials in <b>" + MISLink + "</b> Academic Menu-->>Student Related-->>Online Payment.: ";
+                message += "<p>The fee payment should be made within 7 days of receiving this mail/letter, after which your claim for admission may be requested.</p>";
+                message += "<p style=font-weight:bold;>Thanks<br>Team Admissions<br>" + COLLEGE_CODE + " University<br></p>";
+
+                status = objSendEmail.SendEmail(EmailID, message, subject); //Calling Method
+            }
+        }
+
+        if (status == 1)
+        {
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.Page, "Failed to send mail.", this.Page);
+            //ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
+        }
+
+    }
+
+    protected void UPDATE_USER(string UA_NO, int FirstTimePay)
+    {
+        try
+        {
+            string UA_PWD = string.Empty;
+            string password = string.Empty;
+            //string student_Name = "ROHIT";
+            int IDNO = 0;
+            string REGNO = string.Empty;
+            string Email = string.Empty;
+            string UA_ACC = string.Empty;
+            if (Convert.ToInt32(Session["OrgId"].ToString()) == 3 || Convert.ToInt32(Session["OrgId"].ToString())== 4)
+            {
+                IDNO = Convert.ToInt32(Session["idno"]);
+                REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO = '" + Session["idno"] + "'");
+                UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(REGNO.ToString());
+
+            }
+            else
+            {
+                IDNO = Convert.ToInt32(Session["idno"]);
+                UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(IDNO.ToString());
+                REGNO = IDNO.ToString();
+            }
+
+            CustomStatus CS = (CustomStatus)feeController.UpdateUser(REGNO, UA_PWD, IDNO, FirstTimePay);
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    private void ShowReportOnline(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            int IDNO = Convert.ToInt32((Session["idno"]));
+
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + Session["idno"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+            string college_id = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO='" + Session["idno"].ToString() + "'");
+            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+
+            //url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+           // url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
+
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
+            // url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+
+            //divMSG.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMSG.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMSG.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+            
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
 }

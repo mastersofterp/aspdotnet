@@ -374,8 +374,8 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
         }
         else
         {
-            ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
-            //ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt", Convert.ToInt32(Session["DCRNO"]));
+            //ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt", Convert.ToInt32(Session["DCRNO"]));
         }
     }
 

@@ -320,8 +320,8 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
         }
         else
         {
-            ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
-            //ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt", Convert.ToInt32(Session["DCRNO"]));
+            //ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt", Convert.ToInt32(Session["DCRNO"]));
         }
     }
 
@@ -380,14 +380,14 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
             url += "&param=@P_COLLEGE_CODE=" + College_ID + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DRCNO) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
 
-            //divMSG.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMSG.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMSG.InnerHtml += " </script>";
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
 
             //To open new window from Updatepanel
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            //sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             // ScriptManager.RegisterClientScriptBlock(this.updPopUP, this.updPopUP.GetType(), "controlJSScript", sb.ToString(), true);
         }

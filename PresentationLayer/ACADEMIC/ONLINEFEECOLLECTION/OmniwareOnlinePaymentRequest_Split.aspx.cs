@@ -17,6 +17,7 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentRequest_Split : System.Web.UI.Page
 {
@@ -24,6 +25,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentRequest_S
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
+    OrganizationController objOrg = new OrganizationController();
 
     string hash_seq = string.Empty;
     #endregion
@@ -54,7 +56,28 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentRequest_S
                     {
                         lblCollege.Text = dr["COLLEGENAME"].ToString();
                         lblAddress.Text = dr["College_Address"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                        //imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                    }
+                }
+                DataSet Orgds = null;
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
+                {
+                    if (Orgds.Tables[0].Rows.Count > 0)
+                    {
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
                 if (Session["OrgId"].ToString() == "16")

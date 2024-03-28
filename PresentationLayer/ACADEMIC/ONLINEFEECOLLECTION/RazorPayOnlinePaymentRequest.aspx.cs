@@ -46,8 +46,8 @@ public partial class RazorPayOnlinePaymentRequest : System.Web.UI.Page
             {
 
                 DataSet Orgds = null;
-                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
-                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -61,9 +61,9 @@ public partial class RazorPayOnlinePaymentRequest : System.Web.UI.Page
                         }
                         else
                         {
-                           // hdnLogoOrg.Value = "0";
+                            // hdnLogoOrg.Value = "0";
                         }
-                    
+
                     }
                 }
 

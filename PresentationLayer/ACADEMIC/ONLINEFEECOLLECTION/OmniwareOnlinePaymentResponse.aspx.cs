@@ -27,6 +27,7 @@ using SendGrid.Helpers.Mail;
 using EASendMail;
 using System.Net;
 using System.Net.Mail;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentResponse : System.Web.UI.Page
 {
@@ -36,6 +37,8 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentResponse 
     FeeCollectionController objFees = new FeeCollectionController();
     StudentController objStu = new StudentController();
     SemesterRegistration objsem = new SemesterRegistration();
+    OrganizationController objOrg = new OrganizationController();
+
     string hash_seq = string.Empty;
     int degreeno = 0;
     int college_id = 0;
@@ -51,16 +54,36 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentResponse 
             try
             {
 
-                SqlDataReader dr = objCommon.GetCommonDetails();
+                //SqlDataReader dr = objCommon.GetCommonDetails();
 
-                if (dr != null)
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
+                DataSet Orgds = null;
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        Session["OrgId"] = dr["OrganizationId"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
 

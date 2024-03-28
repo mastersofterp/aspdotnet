@@ -29,6 +29,7 @@ using System.Net;
 using System.Net.Mail;
 using BusinessLogicLayer.BusinessLogic;
 using Newtonsoft.Json;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 
 public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
@@ -39,6 +40,7 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
     FeeCollectionController objFees = new FeeCollectionController();
     StudentController objStu=new StudentController ();
     SemesterRegistration objsem = new SemesterRegistration();
+    OrganizationController objOrg = new OrganizationController();
     string hash_seq = string.Empty;
     int degreeno = 0;
     int college_id = 0;
@@ -55,16 +57,37 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
             try
             {
 
-                SqlDataReader dr = objCommon.GetCommonDetails();
+                //SqlDataReader dr = objCommon.GetCommonDetails();
 
-                if (dr != null)
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        Session["OrgId"] = dr["OrganizationId"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
+                DataSet Orgds = null;
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        Session["OrgId"] = dr["OrganizationId"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
 
@@ -171,6 +194,7 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
                     }
 
 
+
                     //**********************************End by Nikhil L.********************************************//
 
                     Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + ViewState["IDNO"].ToString());
@@ -231,15 +255,66 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
                         objsem.Date_of_Payment = DateTime.Now.ToString("dd/MM/yyyy");
                         int output = 0;
 
-                        if (Convert.ToInt32(installmentno) > 0)
+
+
+                        if (Session["OrgId"].ToString() == "18")
                         {
-                            output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
-                           
+                            UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
+                            UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO = '" + Convert.ToInt32(UA_IDNO) + "'");
+                            
+                            if (UA_IDNO == UA_NAME)
+                            {
+                                UserFirstPaymentStatus = "5151";
+                                ViewState["First_PaymentStatus"] = "5151";
+
+                            }
+                            else
+                            {
+                                ViewState["First_PaymentStatus"] = "0";
+                            }
                         }
                         else
                         {
-                            output = objFees.InsertOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Regno, "-");
+                            ViewState["First_PaymentStatus"] = "0";
                         }
+
+                        if (Convert.ToInt32(installmentno) > 0)
+                        {
+                            output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
+
+                            if (ViewState["First_PaymentStatus"] == "5151")
+                            {
+                                 UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
+
+                                UPDATE_USER(UA_IDNO, 1);
+
+                                Sendmail();
+                            }
+                            else
+                            {
+
+                            }
+                            }
+                        else
+                        {
+                            output = objFees.InsertOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Regno, "-");
+
+                            if (Session["OrgId"].ToString() == "18")
+                            {
+                                if (ViewState["First_PaymentStatus"].Equals("5151"))
+                                {
+                                     UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
+
+                                    UPDATE_USER(UA_IDNO, 1);
+
+                                    Sendmail();
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            }
 
 
                         output = objFees.UpdateIOBPayOnlinePaymentlog(Convert.ToInt32(Idno), order_id, tokenID, trackID, feeType, txnStatus, timeStamp);
@@ -461,7 +536,8 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
         }
         else
         {
-            ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            //ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            ShowReport("OnlineFeePayment", "rptOnlineReceipt_New.rpt");
         }
     }
 
@@ -472,13 +548,14 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
             int IDNO = Convert.ToInt32(ViewState["IDNO"]);
 
             string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
-
+            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
+            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            //url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -510,48 +587,22 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
             string REGNO = string.Empty;
             string Email = string.Empty;
             string UA_ACC = string.Empty;
-            if (Convert.ToInt32(Session["OrgId"].ToString()) == 5)
+            if (Convert.ToInt32(Session["OrgId"].ToString()) == 18)
                 {
-                IDNO = Convert.ToInt32(Session["IDNO"]);
-                //string UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UANAME = '" + UA_IDNO + "'");
-                REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO = '" + Session["IDNO"] + "'");
-
-                string Username = string.Empty;
-                //string Password = string.Empty;
-                //string Userno = objCommon.LookUp("ACD_STUDENT", "USERNO", "IDNO=" + IDNO);
-                //Email = objCommon.LookUp("ACD_STUDENT", "EMAILID", "IDNO=" + IDNO);
-                //Username = objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + Userno);
-                //Password = objCommon.LookUp("ACD_USER_REGISTRATION", "User_Password", "USERNO=" + Userno);
-                //Username = Session["IDNO"].ToString();
-                UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(REGNO.ToString());
-               // UA_ACC = "0,500,76";
-                //REGNO = Username.ToString();
+                    IDNO = Convert.ToInt32(ViewState["IDNO"]);
+                    REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO = '" + ViewState["IDNO"] + "'");
+                    UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(REGNO.ToString());
+               
                 }
             else
                 {
-                IDNO = Convert.ToInt32(Session["IDNO"]);
-                UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(IDNO.ToString());
-               // UA_ACC = "0,500,76";
-                REGNO = IDNO.ToString();
+                  IDNO = Convert.ToInt32(ViewState["IDNO"]);
+                  UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(IDNO.ToString());
+                  REGNO = IDNO.ToString();
                 }
 
             CustomStatus CS = (CustomStatus)feeController.UpdateUser(REGNO, UA_PWD, IDNO, FirstTimePay);
 
-            //string sp_Name = string.Empty;
-            //string sp_Parameter = string.Empty;
-            //string sp_Call = string.Empty;
-            //int outP = 0;
-            //sp_Name = "PKG_BIND_ADMBATCH_DROPDOWN_APPLIES_STUDENT_LIST";
-            //sp_Parameter = "@P_OUT";
-            //sp_Call = "" + outP + "";
-            //DataSet ds = objCommon.DynamicSPCall_Select(sp_Name, sp_Parameter, sp_Call);
-            //if (ds.Tables[0].Rows.Count > 0)
-            //    {
-            //    ddlAdmbatch.DataSource = ds;
-            //    ddlAdmbatch.DataTextField = "BATCHNAME";
-            //    ddlAdmbatch.DataValueField = "BATCH";
-            //    ddlAdmbatch.DataBind();
-            //    }
             }
         catch (Exception ex)
             {
@@ -573,29 +624,18 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
         string pwd = string.Empty;
         int status = 0;
         string IDNO = Session["IDNO"].ToString();
-
-       // int IDNOnew = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO='" + IDNO + "'"));
-
-        //string DAmount = Convert.ToString(objCommon.LookUp("ACD_DEMAND", "ISNULL(TOTAL_AMT,0) TOTAL_AMT", "IDNO=" + IDNOnew));
-
         string MISLink = objCommon.LookUp("ACD_MODULE_CONFIG", "ONLINE_ADM_LINK", "OrganizationId=" + Session["OrgId"]);
-
         string Username = string.Empty;
         string Password = string.Empty;
-
-        string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + Convert.ToInt32(Session["IDNO"]));
-        string Branchname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_DEGREE D ON (S.DEGREENO=D.DEGREENO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO=S.BRANCHNO)", "CONCAT(D.DEGREENAME, ' in ',B.LONGNAME)", "IDNO=" + Session["IDNO"].ToString());
-
-        string REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + Convert.ToInt32(Session["IDNO"]));
-        string EmailID = objCommon.LookUp("ACD_STUDENT", "EMAILID", "IDNO=" + Convert.ToInt32(Session["IDNO"]));
-        string college = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_COLLEGE_MASTER M ON(S.COLLEGE_ID=M.COLLEGE_ID)", "M.COLLEGE_NAME", "IDNO=" + Convert.ToInt32(Session["IDNO"]));
-        // Username = objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + Userno);
-        //  Password = objCommon.LookUp("ACD_USER_REGISTRATION", "User_Password", "USERNO=" + Userno);
+        string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + Convert.ToInt32(ViewState["IDNO"]));
+        string Branchname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_DEGREE D ON (S.DEGREENO=D.DEGREENO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO=S.BRANCHNO)", "CONCAT(D.DEGREENAME, ' in ',B.LONGNAME)", "IDNO=" + ViewState["IDNO"].ToString());
+        string REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + Convert.ToInt32(ViewState["IDNO"]));
+        string COLLEGE_CODE = objCommon.LookUp("REFF", "CODE_STANDARD", "");
+        string EmailID = objCommon.LookUp("ACD_STUDENT", "EMAILID", "IDNO=" + Convert.ToInt32(ViewState["IDNO"]));
+        string college = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_COLLEGE_MASTER M ON(S.COLLEGE_ID=M.COLLEGE_ID)", "M.COLLEGE_NAME", "IDNO=" + Convert.ToInt32(ViewState["IDNO"]));
         Username = REGNO;
-       // objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + Userno);
         Password = REGNO;
 
-        Session["Enrollno"] = srnno;
         DataSet ds = getModuleConfig();
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -605,44 +645,24 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
 
             if (sendmail == 1)
                 {
-                subject = "New MIS Login Credentials";
-             //string message = "<p>Dear :<b>" + Name + "</b> </p>";
-             //       message += "<p>Your New Login Credentials Are Below Please Use this Credentails to Login in ERP from Following Link.</P>";
-             //       message+="<p style=font-weight:bold;> " + MISLink + " </p>";
-             //       message+="<p>Username   : " + Username + " <br/>Password: " + Password + "</p>";
-
+                subject = "New MIS Login Credentials";           
                 string message = "";
                 message += "<p>Dear :<b>" + Name + "</b> </p>";
-                message += "<p><b>" + Branchname + "</>b</p>";
-                message += "<p>Your fees have been submitted successfully and you have been registered for the program mentioned above.Your new Login credentials are as follows</p><p>" + MISLink + " </p><p>Username   : " + Username + " <br/>Password: " + Password + "</p>";
-                message+="<p>Note for Provisional Registration only:</p>";
+                message += "<p><b>" + Branchname + "</b></p>";
+                message += "<p>Your fees have been submitted successfully and you have been registered for the program mentioned above.Your new Login credentials are as follows</p><p>" + MISLink + " </p><p>Username   : " + Username + " <br/>Password   : " + Password + "</p>";
+                message +="<p>Note for Provisional Registration only:</p>";
                 message += "<p>All the documents must be uploaded on URL: <b>" + MISLink + "</b>";
                 message += "<p>Process of fee payment: Login using above credentials in <b>" + MISLink + "</b> Academic Menu-->>Student Related-->>Online Payment.: ";
                 message += "<p>The fee payment should be made within 7 days of receiving this mail/letter, after which your claim for admission may be requested.</p>";
-                message += "<p style=font-weight:bold;>Thanks<br>Team Admissions<br>admissions@jecrcu.edu.in<br>JECRC University, Jaipur</p>";
-
-                //if (email_type == "1" && email_type != "")
-                //    {
-                //    int reg = TransferToEmail(EmailID, message, subject);
-                //    }
-                //else if (email_type == "2" && email_type != "")
-                //    {
-                //    Task<int> task = Execute(message, EmailID, subject);
-                //    status = task.Result;
-                //    }
-                //if (email_type == "3" && email_type != "")
-                //    {
-                //    OutLook_Email(message, EmailID, subject);
-                //    }
+                message += "<p style=font-weight:bold;>Thanks<br>Team Admissions<br>" + COLLEGE_CODE + " University<br></p>";
 
                 status = objSendEmail.SendEmail(EmailID, message, subject); //Calling Method
-
                 }
             }
 
         if (status == 1)
             {
-            //objCommon.DisplayMessage(this.Page, "Email Sent Successfully.", this.Page);
+            
             ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
             }
         else
@@ -658,8 +678,6 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
         {
         //Response.Redirect("FeeCollectionOptions.aspx");
         }
-
-
 
 
     //New Code IOBPAY  - 23/08/2023
@@ -722,6 +740,7 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
 
         }
     }
+
     //end
 
 
