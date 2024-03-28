@@ -2156,6 +2156,8 @@ namespace IITMS
                     return retStatus;
                 }
 
+
+
                 public DataSet GetAllItemMaster()
                 {
                     DataSet ds = null;
@@ -2163,7 +2165,6 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = new SqlParameter[0];
-
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_STR_ITEM_GET_ALL", objParams);
 
                     }
@@ -3204,6 +3205,132 @@ namespace IITMS
                     return retStatus;
                 }
                 //---------------01/11/2022---------end-----------------------------------------------------------------//
+
+                public DataSet GetSubGroupWiseItemist(int misgno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_MISGNO", misgno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STR_ITEM_GET_ALL", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ItemMasterController.GetAllItemMaster-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                //---------------------------------------------piyush--------------------------------------//
+
+
+                //Added by arpita 06/03/2024
+
+                #region PO_SigningAuthority
+                public int AddSigningAuthority(int SigningAuthorityid, string PoSigningAuthoryName, int user_no)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        //Add New STORE_DEPT_PRIVELEGE
+                        objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_SigningAuthorityid", SigningAuthorityid);
+                        objParams[1] = new SqlParameter("@P_PoSigningAuthoryName", PoSigningAuthoryName);
+                        objParams[2] = new SqlParameter("@P_user_no", user_no);
+
+                        objParams[3] = new SqlParameter("@P_ID", SqlDbType.Int);
+                        objParams[3].Direction = ParameterDirection.Output;
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_STR_PoSigningAuthority_INSERT", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StoreMasterController.AddDeptPrivelege-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                public DataSet GetAllPosigningAuthority()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[0];
+                        //objParams[0] = new SqlParameter("@P_UA_TYPE", UA_TYPE);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STR_SIGNINGAUTHORITY_GET_ALL", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StoreMasterController.GetAllDeptPrivelege-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                public DataSet EditSigningAuthority(int id)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_ID", id);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STR_EDIT_SINGING_AUTHORITY", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.RetrieveSingleHoliday->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                public int UpdSigningAuthority(int SigningAuthorityid, string PoSigningAuthoryName, int userno, int Id)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        //Update  STORE_DEPT_PRIVELEGE
+                        objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_SigningAuthorityid", SigningAuthorityid);
+                        objParams[1] = new SqlParameter("@P_PoSigningAuthoryName", PoSigningAuthoryName);
+                        objParams[2] = new SqlParameter("@P_user_no", userno);
+                        objParams[3] = new SqlParameter("@P_ID", Id);
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_STR_UPDATE_SIGNINGAUTHORITY", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StoreMasterController.UpdateDeptPrivelege-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                #endregion
+
+
+                //--------------------------------------------------------------------------------------------------//
+
+
             }
         }
     }

@@ -442,6 +442,9 @@
                                                     TabIndex="18" OnClick="Button1_Click" />
                                                 <asp:Button ID="butItemMasterCancel" Text="Cancel" runat="server" CssClass="btn btn-warning"
                                                     OnClick="butItemMasterCancel_Click" TabIndex="19" />
+
+                                                <asp:Button ID="btnShowItem" Text="Show Item" runat="server" CssClass="btn btn-primary" OnClick="btnShowItem_Click"/>
+
                                                 <asp:ValidationSummary ID="ValidationSummary3" runat="server" ValidationGroup="store"
                                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                                 <asp:HiddenField ID="hidLastTab" Value="0" runat="server" />
