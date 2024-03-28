@@ -45,17 +45,18 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentRequest :
         {
             try
             {
-                //SqlDataReader dr = objCommon.GetCommonDetails();
+                SqlDataReader dr = objCommon.GetCommonDetails();
 
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        lblAddress.Text = dr["College_Address"].ToString();
-                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
+                if (dr != null)
+                {
+                    if (dr.Read())
+                    {
+                        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                        lblAddress.Text = dr["College_Address"].ToString();
+                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                    }
+                }
+
                 DataSet Orgds = null;
                 var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
                 Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
