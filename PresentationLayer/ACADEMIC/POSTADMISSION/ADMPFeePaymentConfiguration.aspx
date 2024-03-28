@@ -26,11 +26,10 @@
         }
 
     </script>
+ 
+ 
 
-
-
-
-    <script>
+      <script>
         function SetParticipation(val) {
           
             $('#rdActive').prop('checked', val);
@@ -146,7 +145,7 @@
                                             <sup>* </sup>
                                             <label>Office Report  Start Date </label>
                                         </div>
-                                        <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"></asp:TextBox>
+                                        <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"   ></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtOfficeVisitStartDate"
                                             Display="None" ErrorMessage="Please Select Office Report Start Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -157,7 +156,7 @@
                                             <sup>* </sup>
                                             <label>Office Report End Date</label>
                                         </div>
-                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged"></asp:TextBox>
+                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtOfficeVisitEndDate"
                                             Display="None" ErrorMessage="Please Select Office Report End Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -173,7 +172,7 @@
                                         </div>
                                         <asp:TextBox ID="txtStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtStartDate_TextChanged"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvtxtStartDate" runat="server" ControlToValidate="txtStartDate"
-                                            Display="None" ErrorMessage="Please Select Payment  Start Date" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Payment Start Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
 
                                     </div>
@@ -205,9 +204,6 @@
                                             Display="None" ErrorMessage="Please Select Provisional Admission Offer Valid Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
                                     </div>
-
-
-
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -233,7 +229,7 @@
 
 
                                         <%--||event.charCode == 46--%>
-                                        <asp:TextBox ID="txtAmount" runat="server" type="number" TextMode="Number" OnTextChanged="txtAmount_TextChanged" AutoPostBack="true" min="0" onKeyUp="setMaxLength(this)" onBlur="setMaxLength(this)" isMaxLength="8" CssClass="form-control" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"></asp:TextBox>
+                                        <asp:TextBox ID="txtAmount" runat="server" type="number" TextMode="Number" OnTextChanged="txtAmount_TextChanged"  min="0" CssClass="form-control" onKeyUp="setMaxLength(this)"  onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"  isMaxLength="8" ></asp:TextBox>
 
                                         <asp:RequiredFieldValidator ID="rfvtxtAmount" runat="server" ControlToValidate="txtAmount"
                                             Display="None" ErrorMessage="Please Enter Amount/Percentage" SetFocusOnError="True"
@@ -245,7 +241,8 @@
                                             <label>Status </label>
                                         </div>
                                         <div class="switch form-inline">
-                                            <input type="checkbox" id="rdActive" name="Started" checked />
+                                            <input type="checkbox" id="rdActive" name="Started" checked /> 
+
                                             <label data-on="Started" data-off="Stopped" for="rdActive"></label>
                                         </div>
                                     </div>
@@ -275,8 +272,8 @@
                                                         <th>Program Type</th>
                                                         <th>Degree</th>
                                                         <th>Branch</th>
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>
+                                                        <th>Payment Start Date</th>
+                                                        <th>Payment End Date</th>
                                                         <th>Payment Category</th>
                                                         <th>Amount/Percentage</th>
                                                         <th>Status</th>
@@ -410,7 +407,7 @@
                 if (startDate === '') {
                     alert('Please Select Payment Start Date first');
                     $('#<%= txtStartDate.ClientID %>').focus();
-                    $(this).val(''); // Clear the value of End Date textbox
+                    $(this).val(''); 
                 }
             });
 
