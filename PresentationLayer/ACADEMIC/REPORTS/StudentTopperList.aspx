@@ -89,7 +89,7 @@
 
                                     </div>
 
-                                    
+
 
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="divDegree" runat="server">
                                         <div class="label-dynamic">
@@ -153,10 +153,12 @@
                                         <asp:DropDownList ID="ddlAdmBatch" runat="server" AppendDataBoundItems="True" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                      <%--  <asp:RequiredFieldValidator ID="rvfadmbatch" runat="server" ControlToValidate="ddlAdmBatch"
+                                        <%--  <asp:RequiredFieldValidator ID="rvfadmbatch" runat="server" ControlToValidate="ddlAdmBatch"
                                             Display="None" ErrorMessage="Please Select Admission Batch" InitialValue="0"
                                             ValidationGroup="report"></asp:RequiredFieldValidator>--%>
                                     </div>
+
+
 
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="div1" runat="server">
@@ -177,6 +179,13 @@
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
                                     </div>
 
+                                    <div id="divRange" class="form-group col-lg-3 col-md-6 col-12 " runat="server">
+                                        <div class="label-dynamic">
+                                            <%--<sup>* </sup>--%>
+                                            <label>Top Range</label>
+                                        </div>
+                                        <asp:TextBox ID="txtTopcnt" runat="server"></asp:TextBox>
+                                    </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divReport" runat="server">
                                         <label>Report In:</label>
