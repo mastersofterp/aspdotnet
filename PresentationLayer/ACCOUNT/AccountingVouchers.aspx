@@ -443,7 +443,7 @@ function calTdsamount() {
     var total = parseFloat(amountper * per).toFixed(2);
     total = Math.round(total);
     document.getElementById("<%=txtTDSAmount.ClientID%>").value = total;
-  }
+}
 }
 function calTdsOnCgstAmount() {
     var amount = parseFloat(document.getElementById("<%=txtTdsCgstOnAmt.ClientID%>").value).toFixed(2);
@@ -1777,15 +1777,15 @@ function calTdsOnIGstAmount() {
 
                                 </div>
                                 <%-- started --%>
-                                  <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <sup></sup>
-                                                <label>
-                                                    <asp:Label ID="lblSearch" runat="server" Text=""></asp:Label></label>
-                                            </div>
+                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="label-dynamic">
+                                        <sup></sup>
+                                        <label>
+                                            <asp:Label ID="lblSearch" runat="server" Text=""></asp:Label></label>
+                                    </div>
 
-                                        </div>
-                                     <%-- ended --%>
+                                </div>
+                                <%-- ended --%>
 
 
                                 <br />
@@ -1819,10 +1819,14 @@ function calTdsOnIGstAmount() {
                                     </div>
                                     <div class="col-md-2">
                                         <asp:TextBox ID="txtChqNo2" runat="server" AutoPostBack="false" ToolTip="Please Enter Account Name"
-                                            MaxLength="6" CssClass="form-control" ReadOnly="false"></asp:TextBox>
-                                        <ajaxToolKit:FilteredTextBoxExtender TargetControlID="txtChqNo2" ID="ajxtklfiltertxtBox"
-                                            runat="server" ValidChars="0123456789">
+                                            MaxLength="20" CssClass="form-control" ReadOnly="false"></asp:TextBox>
+                                        <ajaxToolKit:FilteredTextBoxExtender
+                                            TargetControlID="txtChqNo2"
+                                            ID="ajxtklfiltertxtBox" 
+                                            runat="server"
+                                            ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789">
                                         </ajaxToolKit:FilteredTextBoxExtender>
+
                                     </div>
                                     <div class="col-md-3">
                                         <div class="input-group date">
@@ -1853,7 +1857,7 @@ function calTdsOnIGstAmount() {
 
 
 
-                                  <div class="row" runat="server" id="DivInvoicedateno" visible="false">
+                                <div class="row" runat="server" id="DivInvoicedateno" visible="false">
                                     <div class="col-md-2">
                                         <label>Invoice No./Invoice date</label>
                                     </div>
@@ -1899,7 +1903,7 @@ function calTdsOnIGstAmount() {
                                                 <div class="row">
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>     
+                                                            <sup></sup>
                                                             <label>Bill Name</label>
                                                         </div>
                                                         <asp:TextBox ID="txtBillName" runat="server" ToolTip="Enter Bill Name" CssClass="form-control"
@@ -1930,7 +1934,7 @@ function calTdsOnIGstAmount() {
 
                                                             <asp:ListView ID="lvNewBills" runat="server">
                                                                 <LayoutTemplate>
-                                                                    <div id="lgv1"> 
+                                                                    <div id="lgv1">
                                                                         <div class="sub-heading">
                                                                             <h5>Uploaded Bill List</h5>
                                                                         </div>
