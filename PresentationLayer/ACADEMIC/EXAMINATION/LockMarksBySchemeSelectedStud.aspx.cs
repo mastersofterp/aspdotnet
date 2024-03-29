@@ -181,6 +181,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
 
                 ddlSemester.Focus();
+               
 
                 //ddlDegree.SelectedIndex = 0;
                 // ddlBranch.Items.Clear();
@@ -196,6 +197,9 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
                 ddlSemester.SelectedIndex = 0;
                 ddlSemester.Items.Clear();
                 ddlSemester.Items.Add(new ListItem("Please Select", "0"));
+                activityname.Visible = false;
+                activitystart.Visible = false;
+                activityend.Visible = false;
             }
         }
         catch (Exception ex)
@@ -308,7 +312,11 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
             ddlExamType.SelectedIndex = 0;
             ddlStuType.SelectedIndex = 0;
             ddlsub.Focus();
+            activityname.Visible = false;
+            activitystart.Visible = false;
+            activityend.Visible = false;
         }
+
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -321,6 +329,9 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
     protected void ddlSection_SelectedIndexChanged(object sender, EventArgs e)
     {
         ClearPanel();
+        activityname.Visible = false;
+        activitystart.Visible = false;
+        activityend.Visible = false;
         //ddlExamType.SelectedIndex = 0;
     }
 
@@ -344,6 +355,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
             objCommon.FillDropDownList(ddlSubExam1, "ACD_EXAM_NAME A inner join Acd_subexam_name B on A.EXAMNO= B.EXAMNO  ", "DISTINCT B.FLDNAME", "B.SUBEXAMNAME", "B.FLDNAME LIKE '%" + ddlExamType.SelectedValue + "%' AND ISNULL(B.ACTIVESTATUS,0)=1 AND A.PATTERNNO=" + patternno + " AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "B.SUBEXAMNAME ASC");
 
             ddlSubExam1.Focus();
+            GETSTATUSDATE();
         }
         else
         {
@@ -351,7 +363,14 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
             activitystart.Visible = false;
             activityend.Visible = false;
         }
-       GETSTATUSDATE();
+        //if (ddlExamType.SelectedIndex > 0)
+        //{
+        //    GETSTATUSDATE();
+        //}
+        //else
+        //{
+
+        //}
         //btnSave.Visible = false;
         //spnNote.Visible = false;
         //lvStudList.DataSource = null;
@@ -363,7 +382,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         //ddlCourse.Items.Add("Please Select");
         //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND ISNULL(PREV_STATUS,0)=" + Convert.ToInt32(ddlStuType.SelectedValue) + " AND ISNULL(SUBID,0)=" + Convert.ToInt32(ddlsub.SelectedValue), "COURSENO");
     }
-
+    
     protected void ddlStuType_SelectedIndexChanged(object sender, EventArgs e)
     {
         // btnSave.Visible = false;
@@ -968,13 +987,17 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", " SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
 
                 ddlSession.Focus();
+               
 
 
             }
+            
         }
         else
         {
-
+            activityname.Visible = false;
+            activitystart.Visible = false;
+            activityend.Visible = false;
         }
 
     }

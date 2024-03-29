@@ -48,6 +48,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="ddlClgname"
                                             Display="None" ErrorMessage="Please Select College" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlClgname"
+                                            Display="None" ErrorMessage="Please Select College" InitialValue="0" SetFocusOnError="True"
+                                           ValidationGroup="save"></asp:RequiredFieldValidator>
                                     </div>
 
 
@@ -63,6 +66,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlSession"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
+                                            ValidationGroup="save" ></asp:RequiredFieldValidator>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -119,8 +125,8 @@
                                         <asp:DropDownList ID="ddlSubExam1" runat="server" AppendDataBoundItems="True" data-select2-enable="true" TabIndex="1" ValidationGroup="show" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlSubExam_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSubExam1" Display="None" ErrorMessage="Please Select Exam Type" InitialValue="0" SetFocusOnError="True" ValidationGroup="save"></asp:RequiredFieldValidator>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSubExam1" Display="None" ErrorMessage="Please Select Exam Type" InitialValue="0" SetFocusOnError="True" ValidationGroup="LockAll"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSubExam1" Display="None" ErrorMessage="Please Select Sub-Exam Type" InitialValue="0" SetFocusOnError="True" ValidationGroup="save"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSubExam1" Display="None" ErrorMessage="Please Select Sub-Exam Type" InitialValue="0" SetFocusOnError="True" ValidationGroup="LockAll"></asp:RequiredFieldValidator>
                                     </div>
 
 
