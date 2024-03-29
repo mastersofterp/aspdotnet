@@ -81,14 +81,17 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
     {
         try
         {
+            
             if (Session["usertype"].ToString().Equals("1"))
             {
 
                 objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
             }
             else
-            {
-                objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
+            {                
+                // ADDED BY SHUBHAM FOR FACULTY LOGIN 
+                string deptno = objCommon.LookUp("USER_ACC", "UA_DEPTNO", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+                objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_SCHEME_MAPPING  SC INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON CDB.DEGREENO=SC.DEGREENO AND CDB.BRANCHNO=SC.BRANCHNO AND CDB.COLLEGE_ID=SC.COLLEGE_ID", "COSCHNO", "COL_SCHEME_NAME", "SC.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SC.COLLEGE_ID > 0 AND SC.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND CDB.DEPTNO IN (" + deptno + ")", "SC.COLLEGE_ID DESC");
             }
         }
         catch (Exception ex)
@@ -263,53 +266,6 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
         }
     }
 
-    //protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
-    //{
-    //    try
-    //    {
-    //        if (ddlCourse.SelectedIndex > 0)
-    //        {
-    //            DataSet ds = objMarksEntry.GetLevelMarksEntryCourseDetail(Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Convert.ToInt32(ddlSubjectType.SelectedValue));
-
-    //            if (ds.Tables[0].Rows.Count > 0)
-    //            {
-    //                Session["Pattern"] = Convert.ToInt32(ds.Tables[0].Rows[0]["PATTERNNO"]);
-    //            }
-
-    //            DataSet dsMainExam = objCommon.FillDropDown("ACD_EXAM_NAME", " CAST(EXAMNO AS NVARCHAR)+'-'+ FLDNAME AS FLDNAME", "EXAMNAME", "PATTERNNO=" + Convert.ToInt32(Session["Pattern"]) + " AND ISNULL(EXAMNAME,'')<>'' AND EXAMTYPE=2 AND FLDNAME IN('EXTERMARK')", "EXAMNO");
-    //            MainSubExamBind(ddlExam, dsMainExam);
-    //            ddlExam.Focus();
-    //        }
-    //        else
-    //        {
-    //            ddlExam.Items.Clear();
-    //            ddlExam.Items.Add(new ListItem("Please Select", "0"));
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        if (Convert.ToBoolean(Session["error"]) == true)
-    //            objUCommon.ShowError(Page, "MarksEntryRpt.ddlCourse_SelectedIndexChanged -> " + ex.Message + " " + ex.StackTrace);
-    //        else
-    //            objUCommon.ShowError(Page, "Server UnAvailable");
-    //    }
-    //}
-
-    //private void MainSubExamBind(DropDownList ddlList, DataSet ds)
-    //{
-    //    ddlList.Items.Clear();
-    //    ddlList.Items.Add("Please Select");
-    //    ddlList.SelectedItem.Value = "0";
-
-    //    if (ds.Tables[0].Rows.Count > 0)
-    //    {
-    //        ddlList.DataSource = ds;
-    //        ddlList.DataValueField = ds.Tables[0].Columns[0].ToString();
-    //        ddlList.DataTextField = ds.Tables[0].Columns[1].ToString();
-    //        ddlList.DataBind();
-    //        ddlList.SelectedIndex = 0;
-    //    }
-    //}
 
     protected void btnInMrkPDF_Click(object sender, EventArgs e)
     {
