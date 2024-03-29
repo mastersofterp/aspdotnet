@@ -808,8 +808,8 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtAdmissionDate.Visible = false;
                 imgCal.Visible = false;
                 txtemail.Visible = false;
-                txtUSN.Visible = false;
-                txtLAdd.Visible = true;
+                txtUSN.Visible = true;
+                txtLAdd.Visible = false;
                 //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_BLOODGRP SC WITH (NOLOCK) ON (S.BLOODGRPNO = SC.BLOODGRPNO)", "S.IDNO AS COLUMNID ", "S.REGNO,S.CSN_NO, S.STUDNAME,S.CSN_NO AS COLUMNNAME, SC.BLOODGRPNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.CSN_NO");
                 //ddlcat1.Visible = false;
                 //txtAdmissionDate.Visible = false;
