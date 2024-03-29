@@ -1634,6 +1634,15 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 int org = Convert.ToInt32(Session["OrgId"]);
                 int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
                 int IsAdmin = Convert.ToInt32(Session["userno"]);
+
+                DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_LANGUAGES]", "LAUGUAGE", "IDNO", "LAUGUAGE='" + Convert.ToInt32(ddlLauguage.SelectedValue) + "' and IDNO='" + IDNO + "'", "");
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                    return;
+                }
                 CustomStatus cs = (CustomStatus)objCompany.InsLanguage(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
@@ -1673,6 +1682,14 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int org = Convert.ToInt32(Session["OrgId"]);
                      IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
                     int IsAdmin = Convert.ToInt32(Session["userno"]);
+                    DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_LANGUAGES]", "LAUGUAGE", "IDNO", "LAUGUAGE='" + Convert.ToInt32(ddlLauguage.SelectedValue) + "' and IDNO='" + IDNO + "' and L_ID!='" + id + "'", "");
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                        return;
+                    }
                     CustomStatus cs = (CustomStatus)objCompany.UpdLanguage(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {

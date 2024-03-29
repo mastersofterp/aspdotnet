@@ -1620,6 +1620,15 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
+                DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_LANGUAGES]", "LAUGUAGE", "IDNO", "LAUGUAGE='" + Convert.ToInt32(ddlLauguage.SelectedValue) + "' and IDNO='" + IDNO + "'", "");
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                    return;
+                }
+
                 CustomStatus cs = (CustomStatus)objCompany.InsLanguage(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
@@ -1658,6 +1667,14 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int IDNO = 0;
                     IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
+                    DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_LANGUAGES]", "LAUGUAGE", "IDNO", "LAUGUAGE='" + Convert.ToInt32(ddlLauguage.SelectedValue) + "' and IDNO='" + IDNO + "' and L_ID!='" + id + "'", "");
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                        return;
+                    }
                     CustomStatus cs = (CustomStatus)objCompany.UpdLanguage(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
@@ -2794,61 +2811,86 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
             // string img = Convert.ToString(objCommon.LookUp("VEHICLE_BUS_STRUCTURE_IMAGE_DATA", "FILE_PATH", "ROUTEID='" + routeid + "' and BUSSTR_ID='" + seating + "'"));
             var ImageName = img;
+            //if (img == null || img == "")
+            //{
+            //    string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
+            //    embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
+            //    embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //    embed += "</object>";
+            //    //ltEmbed.Text = "Image Not Found....!";
+
+
+            //}
+            //else
+            //{
+            //    if (img != "")
+            //    {
+            //        DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+            //        var blob = blobContainer.GetBlockBlobReference(ImageName);
+
+            //        string filePath = directoryPath + "\\" + ImageName;
+
+            //        if ((System.IO.File.Exists(filePath)))
+            //        {
+            //            System.IO.File.Delete(filePath);
+            //        }
+            //        blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+            //        //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+            //        //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
+            //        //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //        //embed += "</object>";
+            //        // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
+            //        string FILENAME = img;
+            //        string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
+
+
+            //        string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
+            //        FileInfo file = new FileInfo(filePath1);
+
+            //        if (file.Exists)
+            //        {
+            //            Session["sb"] = filePath.ToString();
+            //            //this.Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "window.open('"+filee+"'); alert('Your message here' );", true);
+
+            //            //Response.Redirect("~/TRAININGANDPLACEMENT/Transactions/TP_PDF_Reader.aspx");
+
+            //            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
+
+            //            url += "ACADEMIC/RESUME/" + FILENAME;
+            //            //string url = filePath;
+            //            // added by Gaurav varma 18/10/23
+            //            Response.Clear();
+            //            Response.AddHeader("Content-Disposition", "attachment; filename=" + FILENAME);
+            //            Response.AddHeader("Content-Length", file.Length.ToString());
+            //            Response.ContentType = "application/octet-stream";
+            //            Response.TransmitFile(filePath1);
+            //           // Response.End();
+            //            // end Gaurav varma 18/10/23
+
+            //            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //            divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //            divMsg.InnerHtml += " </script>";
+
+            //        }
             if (img == null || img == "")
             {
-                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
-                embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
-                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                embed += "</object>";
-                //ltEmbed.Text = "Image Not Found....!";
 
 
             }
             else
             {
-                if (img != "")
-                {
-                    DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr,blob_ContainerName,img);
-                    var blob = blobContainer.GetBlockBlobReference(ImageName);
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
 
-                    string filePath = directoryPath + "\\" + ImageName;
-
-                    if ((System.IO.File.Exists(filePath)))
-                    {
-                        System.IO.File.Delete(filePath);
-                    }
-                    blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
-                    //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
-                    //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
-                    //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                    //embed += "</object>";
-                   // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
-                    string FILENAME = img;
-                    string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
-
-
-                    string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
-                    FileInfo file = new FileInfo(filePath1);
-
-                    if (file.Exists)
-                    {
-                        Session["sb"] = filePath.ToString();
-                        //this.Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "window.open('"+filee+"'); alert('Your message here' );", true);
-
-                        //Response.Redirect("~/TRAININGANDPLACEMENT/Transactions/TP_PDF_Reader.aspx");
-
-                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
-
-                        url += "ACADEMIC/RESUME/" + FILENAME;
-                        //string url = filePath;
-
-
-                        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-                        divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-                        divMsg.InnerHtml += " </script>";
-
-                    }  
-                }
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            
 
             }
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
