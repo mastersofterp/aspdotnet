@@ -117,15 +117,28 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     {
         try
         {
-            if (Session["usertype"].ToString() != "1")
+            if (Session["usertype"].ToString() == "1")
+                this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID DESC");
+            else if (Session["usertype"].ToString() == "8")
             {
-                this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID) INNER JOIN ACD_STUDENT_RESULT SR ON(SM.SESSIONNO = SR.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND (SR.UA_NO = " + Convert.ToInt32(Session["userno"]) + " OR SR.UA_NO_PRAC = " + Convert.ToInt32(Session["userno"]) + " OR SR.UA_NO_TUTR = " + Convert.ToInt32(Session["userno"]) + ")", "S.SESSIONID DESC");
+                if (string.IsNullOrEmpty(Session["userdeptno"].ToString()))
+                {
+                    objCommon.DisplayMessage(this.UpdatePanel1, "Department not assign", this.Page);
+                    return;
+                }
+                else
+                {
+                    this.objCommon.FillDropDownList(ddlSession,
+                        @"ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID) INNER JOIN ACD_STUDENT_RESULT SR ON(SM.SESSIONNO = SR.SESSIONNO)
+                        INNER JOIN ACD_SCHEME SC ON SR.SCHEMENO=SC.SCHEMENO AND ISNULL(SM.STUDY_PATTERN,1)=ISNULL(SC.STUDY_PATTERN_NO,1)",
+                        "DISTINCT S.SESSIONID", "S.SESSION_NAME",
+                        "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND SC.DEPTNO IN ( " + Session["userdeptno"].ToString() + ")",
+                        "S.SESSIONID DESC");
+                }
             }
             else
-            {
-                this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID DESC");
-                ////Fill Dropdown Session 
-            }
+                this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID) INNER JOIN ACD_STUDENT_RESULT SR ON(SM.SESSIONNO = SR.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND (SR.UA_NO = " + Convert.ToInt32(Session["userno"]) + " OR SR.UA_NO_PRAC = " + Convert.ToInt32(Session["userno"]) + " OR SR.UA_NO_TUTR = " + Convert.ToInt32(Session["userno"]) + ")", "S.SESSIONID DESC");
+
         }
         catch (Exception ex)
         {
