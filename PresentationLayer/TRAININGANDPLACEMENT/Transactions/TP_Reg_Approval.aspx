@@ -135,8 +135,7 @@
                                                   ToolTip='<%# Eval("FILENAME") %>'  OnClick="btnPreview_Click" CssClass="btn btn-primary btn-sm" CausesValidation="false" /> --%>
                                        <%--  CommandArgument='<%# Eval("ENROLLMENTNO") %>' CommandName='<%# Eval("IDNO") %>'--%>
                                         <asp:ImageButton ID="btnPreview" runat="server" OnClick="btnPreview_Click" Text="Preview" ImageUrl="~/Images/view.png" ToolTip='<%# Eval("FILENAME") %>'
-                                            CommandArgument='<%# Eval("FILENAME") %>' Visible="false"></asp:ImageButton> <%-- Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'--%>
-
+                                            CommandArgument='<%# Eval("FILENAME") %>' Visible="true"></asp:ImageButton> <%-- Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'--%>
                                         <%-- <asp:ImageButton ID="btncareer" runat="server" OnClick="btncareer_Click" Text="Preview" ImageUrl="~/Images/view.png" ToolTip='<%# Eval("FILENAME") %>'
                                                                  CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>--%>
                                       <%--  <asp:LinkButton ID="btnAddCompany" runat="server" CssClass="btn btn-outline-info" data-toggle="modal" data-target="#Request_Modal">Add Company</asp:LinkButton>--%>

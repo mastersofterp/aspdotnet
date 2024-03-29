@@ -281,72 +281,93 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
             string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
             // string img = Convert.ToString(objCommon.LookUp("VEHICLE_BUS_STRUCTURE_IMAGE_DATA", "FILE_PATH", "ROUTEID='" + routeid + "' and BUSSTR_ID='" + seating + "'"));
             var ImageName = img;
-            if (img == null || img == "")
+            //if (img == null || img == "")
+            //{
+            //    string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
+            //    embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
+            //    embed += " or download <a target = \"_blank\" href = \"https://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //    embed += "</object>";
+            //    //ltEmbed.Text = "Image Not Found....!";
+            //    objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
+            //    return;
+
+            //}
+            //else
+            //{
+            //    if (img != "")
+            //    {
+            //        DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+            //        if (dtBlobPic.Rows.Count == 0)
+            //        {
+            //            objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
+            //            return;
+            //        }
+
+            //        var blob = blobContainer.GetBlockBlobReference(ImageName);
+
+            //        string filePath = directoryPath + "" + ImageName;
+
+            //        if ((System.IO.File.Exists(filePath)))
+            //        {
+            //            System.IO.File.Delete(filePath);
+            //        }
+            //        blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+            //        //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+            //        //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
+            //        //embed += " or download <a target = \"_blank\" href = \"https://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //        //embed += "</object>";
+            //        // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
+            //        string FILENAME = img;
+            //        string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
+
+
+            //        string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
+            //        FileInfo file = new FileInfo(filePath1);
+
+            //        if (file.Exists)
+            //        {
+            //            Session["sb"] = filePath.ToString();
+                      
+            //            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
+
+            //            url += "ACADEMIC/RESUME/" + FILENAME;
+            //            //string url = filePath;
+
+
+            //            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //            //divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //            //divMsg.InnerHtml += " </script>";
+            //            string Script = string.Empty;
+            //            string DocLink = url;
+            //            //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+            //            Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+            //            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+
+            //        }
+            //    }
+
+              if (img == null || img == "")
             {
-                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
-                embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
-                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                embed += "</object>";
-                //ltEmbed.Text = "Image Not Found....!";
-                objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
-                return;
 
             }
             else
             {
-                if (img != "")
-                {
-                    DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
-                    if (dtBlobPic.Rows.Count == 0)
-                    {
-                        objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
-                        return;
-                    }
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
 
-                    var blob = blobContainer.GetBlockBlobReference(ImageName);
-
-                    string filePath = directoryPath + "" + ImageName;
-
-                    if ((System.IO.File.Exists(filePath)))
-                    {
-                        System.IO.File.Delete(filePath);
-                    }
-                    blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
-                    //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
-                    //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
-                    //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                    //embed += "</object>";
-                    // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
-                    string FILENAME = img;
-                    string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
-
-
-                    string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
-                    FileInfo file = new FileInfo(filePath1);
-
-                    if (file.Exists)
-                    {
-                        Session["sb"] = filePath.ToString();
-                      
-                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
-
-                        url += "ACADEMIC/RESUME/" + FILENAME;
-                        //string url = filePath;
-
-
-                        //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-                        //divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-                        //divMsg.InnerHtml += " </script>";
-                        string Script = string.Empty;
-                        string DocLink = url;
-                        //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
-                        Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
-                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
-
-                    }
-                }
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            
 
             }
+
+          //  }
         }
 
         catch (Exception ex)
