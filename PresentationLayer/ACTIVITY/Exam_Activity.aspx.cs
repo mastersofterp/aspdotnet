@@ -1147,7 +1147,11 @@ public partial class Activity_Exam_Activity : System.Web.UI.Page
         {
             ImageButton btnEditRecord = sender as ImageButton;
             int recordId = int.Parse(btnEditRecord.CommandArgument);
-            DataSet ds = activityController.GetDefinedSessionActivities(recordId);
+            //DataSet ds = activityController.GetDefinedSessionActivities(recordId);
+            string pro = "PKG_SESSION_GET_EXAM_SESSION_ACTIVITY_BY_ID";
+            string para = "@P_SESSION_ACTIVITY_NO";
+            string value = "" + recordId;
+            DataSet ds = objCommon.DynamicSPCall_Select(pro, para, value);
             ViewState["CollegeSession"] = ds;
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -1184,7 +1188,7 @@ public partial class Activity_Exam_Activity : System.Web.UI.Page
                 ddlExamPattern_SelectedIndexChanged(sender, e);
                 ddlExamNo.SelectedValue = dr["EXAMNO"].ToString();
                 ddlExamNo_SelectedIndexChanged(sender, e);
-
+                ddlexamtype.SelectedValue = dr["EXAM_TYPE"].ToString();
                 string ss = string.IsNullOrEmpty(dr["SUBEXAMNO"].ToString()) ? "" : dr["SUBEXAMNO"].ToString();
                 if (!string.IsNullOrEmpty(ss))
                 {
