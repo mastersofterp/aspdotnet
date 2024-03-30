@@ -6242,7 +6242,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
-                objParams = new SqlParameter[14];
+                objParams = new SqlParameter[16];
                 objParams[0] = new SqlParameter("@P_SESSIONNOS", SESSIONNOS);
                 objParams[1] = new SqlParameter("@P_IDNO", objSR.IDNO);
                 objParams[2] = new SqlParameter("@P_REGNO", objSR.REGNO);
@@ -6256,9 +6256,11 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[10] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
                 objParams[11] = new SqlParameter("@P_GRADES", objSR.GRADE);
                 objParams[12] = new SqlParameter("@P_SUB_EQUI", objSR.SubEquivalence);
+                objParams[13] = new SqlParameter("@P_MARKS", objSR.ACTUAL_MARKS);
+                objParams[14] = new SqlParameter("@P_PATTERN", objSR.STUDENT_PATTERN);
 
-                objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[13].Direction = ParameterDirection.Output;
+                objParams[15] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[15].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_STUDENT_RESULT_DATA", objParams, true);
                 if (Convert.ToInt32(ret) == -99)
@@ -6283,7 +6285,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
-                objParams = new SqlParameter[15];
+                objParams = new SqlParameter[19];
                 objParams[0] = new SqlParameter("@P_IDNO", objSR.IDNO);
                 objParams[1] = new SqlParameter("@P_SESSIONNO", SESSIONNOS);
                 objParams[2] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
@@ -6298,9 +6300,13 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[11] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
                 objParams[12] = new SqlParameter("@P_ExamType", objSR.ExamType);
                 objParams[13] = new SqlParameter("@P_SUB_EQUI", objSR.SubEquivalence);
+                objParams[14] = new SqlParameter("@P_MIN_MARKS", objSR.MIN_MARKS);
+                objParams[15] = new SqlParameter("@P_MAX_MARKS", objSR.MAX_MARKS);
+                objParams[16] = new SqlParameter("@P_ACTUAL_MARKS", objSR.ACTUAL_MARKS);
+                objParams[17] = new SqlParameter("@P_STUDENT_PATTERN", objSR.STUDENT_PATTERN);
 
-                objParams[14] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[14].Direction = ParameterDirection.Output;
+                objParams[18] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[18].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_ADD_TRANSFERED_STUD_EQUI_RECORD", objParams, true);
                 if (Convert.ToInt32(ret) == -99)
