@@ -544,7 +544,8 @@ public partial class RFC_CONFIG_Masters_OrgStructure : System.Web.UI.Page
                 {
                     byte[] imgdata = System.IO.File.ReadAllBytes(System.Web.HttpContext.Current.Server.MapPath("~/Images/default-fileupload.png"));
                     ds.Tables[0].Rows[i]["COE_Sign"] = imgdata;
-                }
+					ds.Tables[0].Rows[i]["Logo"] = imgdata;
+				}
             };
            
             if (ds != null && ds.Tables[0].Rows.Count > 0)
