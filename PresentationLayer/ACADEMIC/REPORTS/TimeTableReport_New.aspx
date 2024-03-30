@@ -67,6 +67,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="ddlSchoolInstitute"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme" ValidationGroup="Report">
                                         </asp:RequiredFieldValidator>
+                                          <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlSchoolInstitute"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme" ValidationGroup="FacultywiseTimetableRe">
+                                        </asp:RequiredFieldValidator>
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -102,6 +105,9 @@
 
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="ddlSession"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Session" ValidationGroup="Report">
+                                        </asp:RequiredFieldValidator>
+                                          <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ControlToValidate="ddlSession"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Session" ValidationGroup="FacultywiseTimetableRe">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -224,6 +230,13 @@
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Semester" ValidationGroup="room">
                                         </asp:RequiredFieldValidator>
 
+                                          <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlSem"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Semester" ValidationGroup="FacultywiseTimetableRe">
+                                        </asp:RequiredFieldValidator>
+
+
+
+
 
 
                                     </div>
@@ -246,6 +259,10 @@
 
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ControlToValidate="ddlSection"
                                             Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="Course">
+                                        </asp:RequiredFieldValidator>
+
+                                          <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlSection"
+                                            Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="FacultywiseTimetableRe">
                                         </asp:RequiredFieldValidator>
 
                                     </div>
@@ -338,7 +355,7 @@
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Room" ValidationGroup="room">
                                         </asp:RequiredFieldValidator>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivSlotype"> 
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <asp:Label ID="lblDYddlSlotType" runat="server" Font-Bold="true">Slot Type</asp:Label>
@@ -347,18 +364,18 @@
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ControlToValidate="ddlSlotType"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type" ValidationGroup="ValidationTimeTable">
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type">
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSlotType"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type" ValidationGroup="Faculty">
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type">
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlSlotType"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type" ValidationGroup="Course">
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divExistsDate">
                                         <div class="label-dynamic">
                                             <%-- <sup>* </sup>--%>
                                             <label>Existing Dates </label>
@@ -375,7 +392,7 @@
 
 
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="pnlFromDate">
                                         <div class="label-dynamic">
                                             <label>From Date</label>
                                         </div>
@@ -398,17 +415,17 @@
                                                 ErrorMessage="Please Enter From Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
                                                 IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="SubPercentage" />
 
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ControlToValidate="txtFromDate"
+                                          <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ControlToValidate="txtFromDate"
                                                 Display="None" ErrorMessage="Please Enter From Date" ValidationGroup="Cumulative"></asp:RequiredFieldValidator>
 
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ControlToValidate="txtFromDate"
-                                                Display="None" ErrorMessage="Please Enter From Date" ValidationGroup="IncompleteFacultyAttendance"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Enter From Date" ValidationGroup="IncompleteFacultyAttendance"></asp:RequiredFieldValidator--%>>
 
                                         </div>
 
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="pnlTodate">
                                         <div class="label-dynamic">
                                             <label>To Date</label>
                                         </div>
@@ -433,11 +450,11 @@
                                                 ErrorMessage="Please Enter To Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
                                                 IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Daywise" />
 
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ControlToValidate="txtTodate"
+                                          <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ControlToValidate="txtTodate"
                                                 Display="None" ErrorMessage="Please Enter To Date" ValidationGroup="Cumulative"></asp:RequiredFieldValidator>
 
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ControlToValidate="txtTodate"
-                                                Display="None" ErrorMessage="Please Enter To Date" ValidationGroup="IncompleteFacultyAttendance"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Enter To Date" ValidationGroup="IncompleteFacultyAttendance"></asp:RequiredFieldValidator>--%>
 
                                         </div>
                                     </div>
@@ -476,12 +493,18 @@
                                 <asp:LinkButton ID="btnRoomWiseReport" runat="server" ToolTip="select upto Semester then Room"
                                     Visible="false" OnClick="btnRoomWiseReport_Click" ValidationGroup="room" CssClass="btn btn-info" TabIndex="22">
                          Room Wise Report</asp:LinkButton>
-                                <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Clear"
-                                    TabIndex="23" class="btn btn-warning" />
+                             
                                 <asp:LinkButton ID="btnSectionWiseReport" runat="server" ToolTip="selection till section is compulsory" Visible="false" TabIndex="23"
                                     OnClick="btnSectionWiseReport_Click" ValidationGroup="Section" CssClass="btn btn-info">
                         Section Wise Report
                                 </asp:LinkButton>
+
+                                <%-- Added by vipul Tichakule on date 21-03-2024 --%>
+                                 <asp:Button ID="btnreportt" runat="server"  Text="Faculty Wise Time Table"
+                                    TabIndex="23" class="btn btn-primary" ValidationGroup="FacultywiseTimetableRe"  OnClick="btnreportt_Click" Visible="false"/>
+                                   <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Clear"
+                                    TabIndex="23" class="btn btn-warning" />
+                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="FacultywiseTimetableRe" />
 
                                 <asp:ValidationSummary ID="valFacultyWiseReport" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Faculty" />
 
@@ -495,6 +518,9 @@
 
                                 <asp:ValidationSummary ID="ValidationTimeTable1212" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="ValidationTimeTable" />
                             </div>
+
+          
+
                             <div class="form-group col-lg-7 col-md-12 col-12" style="display: none">
                                 <div class=" note-div">
                                     <h5 class="heading">Note (Please Select)</h5>
@@ -513,11 +539,11 @@
         </ContentTemplate>
         <%-- <Triggers><asp:PostBackTrigger ControlID="imgCancel"/></Triggers>--%>
         <Triggers>
+            <asp:PostBackTrigger ControlID="btnreportt" />
             <asp:PostBackTrigger ControlID="btnExcel" />
             <asp:PostBackTrigger ControlID="btnReport" />
+            <asp:PostBackTrigger ControlID="btnCancel" />
 
         </Triggers>
     </asp:UpdatePanel>
-
-
 </asp:Content>

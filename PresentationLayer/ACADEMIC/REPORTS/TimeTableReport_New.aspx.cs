@@ -92,6 +92,27 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
                     btnCourseWise.Visible = false;
                     btnTimeTableReport.Visible = false;
                 }
+
+                // added by vipul t on date 21-03-2024 as per Tno:- 56047
+                if (Session["usertype"].ToString() == "3")
+                {
+                    btnReport.Visible = false;
+                    btnExcel.Visible = false;
+                    btnTimeTableReport.Visible = false;
+                    btnfacultywiseReport.Visible = false;
+                    btnCourseWise.Visible = false;
+                    btnRoomWiseReport.Visible = false;
+                    btnSectionWiseReport.Visible = false;
+                    btnreportt.Visible = true;
+                    pnlFromDate.Visible = false;
+                    pnlTodate.Visible = false;
+                    divExistsDate.Visible = false;
+                    DivSlotype.Visible = false;
+                
+                }
+
+
+
                 //Page Authorization
                 CheckPageAuthorization();
                 //Set the Page Title
@@ -129,12 +150,12 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
     {
         try
         {
-            if (Session["usertype"].ToString() != "1")
+            if (Session["usertype"].ToString() == "3")
             {
-                if (Session["dec"].ToString() == "1")
-                {
+              //  if (Session["dec"].ToString() == "1")
+             //   {
                     objCommon.FillDropDownList(ddlSchoolInstitute, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND DB.DEPTNO IN(" + Session["userdeptno"].ToString() + ") AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
-                }
+               // }
             }
             else
             {
@@ -363,7 +384,11 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
             //ddlSlotType.Items.Add(new ListItem("Please Select", "0"));
             ddlSlotType.SelectedIndex = -1;
 
+<<<<<<< HEAD
             DateTime StartDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.START_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
+=======
+            DateTime StartDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(DATETIME,A.START_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
+>>>>>>> c43ceca7 ([ENHANCEMENT][56047][TIMETABLEREPORTFACULTY])
             DateTime EndDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.END_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
             divDateDetails.Visible = true;
             lblTitleDate.Text = "Selected Session Start Date : " + StartDate.ToShortDateString() + " End Date : " + EndDate.ToShortDateString();
@@ -829,7 +854,15 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        Response.Redirect(Request.Url.ToString());
+      Response.Redirect(Request.Url.ToString());
+
+      ddlSchoolInstitute.SelectedIndex = 0;
+      ddlSession.SelectedIndex = 0;
+      ddlSem.SelectedIndex = 0;
+      ddlSection.SelectedIndex = 0;
+      txtFromDate.Text = string.Empty;
+      txtTodate.Text = string.Empty;
+
     }
 
 
@@ -1284,4 +1317,17 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
     }
     #endregion
 
+
+    // Added by vipul on date 21-03-2024 as per Tno:-56047
+    protected void btnreportt_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            ShowReport("TIME TABLE", "rptTimeTableReportNew_Facultywise.rpt");
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
 }
