@@ -79,7 +79,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                 {
                     attpanel.Visible = false;
                     divFaculty.Visible = true;
-                    objCommon.FillDropDownList(ddlFaculty, "ACD_TIME_TABLE_CONFIG TTC INNER JOIN ACD_COURSE_TEACHER CT ON(TTC.CTNO = CT.CT_NO) INNER JOIN USER_ACC UA ON (CT.UA_NO = UA.UA_NO OR UA.UA_NO = CT.ADTEACHER)", "DISTINCT UA.UA_NO", "UA_FULLNAME", "UA_TYPE IN(3,8) AND ISNULL(UA_STATUS,0)=0", "UA_NO");
+                    objCommon.FillDropDownList(ddlFaculty, "ACD_TIME_TABLE_CONFIG TTC INNER JOIN ACD_COURSE_TEACHER CT ON(TTC.CTNO = CT.CT_NO) INNER JOIN USER_ACC UA ON (CT.UA_NO = UA.UA_NO OR UA.UA_NO = CT.ADTEACHER) LEFT JOIN PAYROLL_EMPMAS PE ON (PE.IDNO = UA.UA_IDNO)", "DISTINCT UA.UA_NO", "CASE WHEN ISNULL(PFILENO,'')='' THEN UA.UA_FULLNAME ELSE CONCAT(UA.UA_FULLNAME,' - ',PFILENO) END AS UA_FULLNAME", "UA.UA_TYPE IN(3,8) AND ISNULL(UA_STATUS,0)=0", "UA_NO");
                     //Session["userno_Faculty"] = 77;
                 }
                 else
