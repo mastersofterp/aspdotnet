@@ -1852,37 +1852,37 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                                 {
                                     if (lblhead1.Text != string.Empty)
                                     {
-                                        lbl1.Text = ds.Tables[0].Rows[index][lblhead1.Text].ToString() == "0" ? "A" : "P";
+                                        lbl1.Text = (ds.Tables[0].Rows[index][lblhead1.Text].ToString() == "0" || ds.Tables[0].Rows[index][lblhead1.Text].ToString() == "") ? "A" : "P";
                                         lbl1.ForeColor = lbl1.Text.Equals("A") ? System.Drawing.Color.Red : System.Drawing.Color.Green;
                                     }
                                     if (lblhead2.Text != string.Empty)
                                     {
-                                        lbl2.Text = ds.Tables[0].Rows[index][lblhead2.Text].ToString() == "0" ? "A" : "P";
+                                        lbl2.Text = (ds.Tables[0].Rows[index][lblhead2.Text].ToString() == "0" || ds.Tables[0].Rows[index][lblhead2.Text].ToString() == "") ? "A" : "P";
                                         lbl2.ForeColor = lbl2.Text.Equals("A") ? System.Drawing.Color.Red : System.Drawing.Color.Green;
                                     }
                                     if (lblhead3.Text != string.Empty)
                                     {
-                                        lbl3.Text = ds.Tables[0].Rows[index][lblhead3.Text].ToString() == "0" ? "A" : "P";
+                                        lbl3.Text = (ds.Tables[0].Rows[index][lblhead3.Text].ToString() == "0" || ds.Tables[0].Rows[index][lblhead3.Text].ToString() == "") ? "A" : "P";
                                         lbl3.ForeColor = lbl3.Text.Equals("A") ? System.Drawing.Color.Red : System.Drawing.Color.Green;
                                     }
                                     if (lblhead4.Text != string.Empty)
                                     {
-                                        lbl4.Text = ds.Tables[0].Rows[index][lblhead4.Text].ToString() == "0" ? "A" : "P";
+                                        lbl4.Text = (ds.Tables[0].Rows[index][lblhead4.Text].ToString() == "0" || ds.Tables[0].Rows[index][lblhead4.Text].ToString() == "") ? "A" : "P";
                                         lbl4.ForeColor = lbl4.Text.Equals("A") ? System.Drawing.Color.Red : System.Drawing.Color.Green;
                                     }
                                     if (lblhead5.Text != string.Empty)
                                     {
-                                        lbl5.Text = ds.Tables[0].Rows[index][lblhead5.Text].ToString() == "0" ? "A" : "P";
+                                        lbl5.Text = (ds.Tables[0].Rows[index][lblhead5.Text].ToString() == "0" || ds.Tables[0].Rows[index][lblhead5.Text].ToString() == "") ? "A" : "P";
                                         lbl5.ForeColor = lbl5.Text.Equals("A") ? System.Drawing.Color.Red : System.Drawing.Color.Green;
                                     }
                                     if (lblhead6.Text != string.Empty)
                                     {
-                                        lbl6.Text = ds.Tables[0].Rows[index][lblhead6.Text].ToString() == "0" ? "A" : "P";
+                                        lbl6.Text = (ds.Tables[0].Rows[index][lblhead6.Text].ToString() == "0" || ds.Tables[0].Rows[index][lblhead6.Text].ToString() == "") ? "A" : "P";
                                         lbl6.ForeColor = lbl6.Text.Equals("A") ? System.Drawing.Color.Red : System.Drawing.Color.Green;
                                     }
                                     if (lblhead7.Text != string.Empty)
                                     {
-                                        lbl7.Text = ds.Tables[0].Rows[index][lblhead7.Text].ToString() == "0" ? "A" : "P";
+                                        lbl7.Text = (ds.Tables[0].Rows[index][lblhead7.Text].ToString() == "0" || ds.Tables[0].Rows[index][lblhead7.Text].ToString() == "") ? "A" : "P";
                                         lbl7.ForeColor = lbl7.Text.Equals("A") ? System.Drawing.Color.Red : System.Drawing.Color.Green;
                                     }
                                     index++;
