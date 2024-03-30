@@ -28,6 +28,7 @@ using System.Data.SqlClient;
 using IITMS.NITPRM.BusinessLayer.BusinessLogic;
 using IITMS.NITPRM;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public partial class Account_ledgerhead : System.Web.UI.Page
 {
@@ -285,10 +286,32 @@ public partial class Account_ledgerhead : System.Web.UI.Page
         }
 
     }
+
+    private bool IsValidGSTFormat(string gstNumber)
+    {
+
+        string gstPattern = @"^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[A-Z\d]{1}[A-Z\d]{1}$";
+        return Regex.IsMatch(gstNumber, gstPattern);
+    }
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
         {
+
+            string gstNumber = txtGSTtNo.Text.Trim().ToUpper();
+            if (txtGSTtNo.Text != "")
+            {
+                if (IsValidGSTFormat(gstNumber))
+                {
+
+                }
+                else
+                {
+                    objCommon.DisplayUserMessage(UPDLedger, "Invalid GST Number format.", this.Page);
+                    return;
+                }
+            }
+
             CustomStatus cs = new CustomStatus();
             if (ViewState["action"].ToString().Equals("add"))
             {

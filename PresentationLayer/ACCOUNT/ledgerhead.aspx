@@ -275,26 +275,27 @@
                                             <asp:TextBox ID="txtTinNo" runat="server" TabIndex="3" ToolTip="Please Enter TIN NO."
                                                 ValidationGroup="submit" CssClass="form-control"></asp:TextBox>
                                         </div>
-                                        <div class="col-md-2">
-                                            <label>PAN No. : </label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <asp:TextBox ID="txtPanNo" runat="server" TabIndex="3" ToolTip="Please Enter PAN NO."
-                                                ValidationGroup="submit" CssClass="form-control" MaxLength="10"></asp:TextBox>
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <div id="Div6" class="row" runat="server">
-                                            <%--Started  Pawan Nikhare : 27/10/2023--%>
                                          <div class="col-md-2">
                                             <label>GST No. : </label>
                                         </div>
                                         <div class="col-md-4">
                                             <asp:TextBox ID="txtGSTtNo" runat="server" MaxLength="15"
-                                                TabIndex="4" ToolTip="Please Enter GST No." CssClass="form-control"></asp:TextBox>
-                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterMode="ValidChars"
+                                                TabIndex="4" ToolTip="Please Enter GST No." CssClass="form-control" onkeyup="convertToUpperCase()"></asp:TextBox>
+                                            <%--<ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterMode="ValidChars"
                                                 TargetControlID="txtGSTtNo" ValidChars="0123456789">
-                                            </ajaxToolKit:FilteredTextBoxExtender>
+                                            </ajaxToolKit:FilteredTextBoxExtender>--%>
+                                        </div>
+                                       
+                                    </div>
+                                    <br />
+                                    <div id="Div6" class="row" runat="server">
+                                            <%--Started  Pawan Nikhare : 27/10/2023--%>
+                                         <div class="col-md-2">
+                                            <label>PAN No. : </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtPanNo" runat="server" TabIndex="3" ToolTip="Please Enter PAN NO."
+                                                ValidationGroup="submit" CssClass="form-control" MaxLength="10"></asp:TextBox>
                                         </div>
                                          <%--Ended  Pawan Nikhare : 27/10/2023--%>
 
@@ -628,6 +629,14 @@
         });
 
     </script>
+     <script type="text/javascript">
+         function convertToUpperCase() {
+             debugger
+             var textBox = document.getElementById('<%=txtGSTtNo.ClientID%>');
+
+                textBox.value = textBox.value.toUpperCase();
+            }
+        </script>
     <script language="javascript" type="text/javascript">
         function checkStatus(txt) {
             if (txt.value == 'c' || txt.value == 'C' || txt.value == 'D' || txt.value == 'd')
