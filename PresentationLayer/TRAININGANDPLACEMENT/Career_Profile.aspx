@@ -708,7 +708,7 @@
                                                             <div class="form-group col-lg-4 col-md-6 col-12">
 
                                                                 <div class="label-dynamic">
-                                                                    <sup></sup>
+                                                                    <sup>*</sup>
                                                                     <label>Work Type </label>
                                                                 </div>
                                                                 <%-- <asp:RadioButton ID="RdExperience" runat="server" Checked="True" GroupName="Type" Text="Work Experience" />
@@ -890,10 +890,11 @@
                                                                     <div class="label-dynamic">
                                                                         <sup></sup>
                                                                         <label>Upload Document<code></code></label>
+                                                                          <sup>(Note:Upload .pdf only-Max size 500 Kb.)</sup>
                                                                     </div>
                                                                     <label class="filelabel ">
                                                                         <%-- <i class="fas fa-cloud-upload-alt"></i>--%>
-                                                                        <sup>Note:Upload .pdf only-Max size 500 Kb.</sup>
+                                                                      
                                                                         <%-- <span class="title">Note<span class="choosefile">choose file</span>.</span>--%>
                                                                         <asp:FileUpload ID="FileUploadWorkExp" runat="server" EnableViewState="true" TabIndex="5"
                                                                             ToolTip="Click here to Attach File" />

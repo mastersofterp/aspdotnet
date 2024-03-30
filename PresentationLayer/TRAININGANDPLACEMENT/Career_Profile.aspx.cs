@@ -387,9 +387,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
             //----------start---23-02-2024
 
-            if (RdWorkType.SelectedValue != "0")
+            if (RdWorkType.SelectedValue == "")
             {
                 MessageBox("Please Select Work type.");
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                 return;
             }
 
@@ -615,9 +616,20 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             if (ViewState["action"].ToString().Equals("add"))
             {
 
+                DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_CP_STU_WORK_EXP]", "JOBTITLE", "IDNO", "COMPID='" + Convert.ToInt32(cmpid) + "'and WorkType='" + WorkType + "' and IDNO='" + IDNO + "'", "");
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+                    return;
+                }
+
                 CustomStatus cs = (CustomStatus)objCompany.InsWorkExperience(IDNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument, org,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
+
+                   
 
                     ViewState["action"] = "add";
                     objCommon.DisplayMessage(this.Page, "Record Saved Successfully.", this.Page);
@@ -631,6 +643,17 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (ViewState["WORKEXPNO"] != null)
                 {
                     int WORKEXPNO = Convert.ToInt32(ViewState["WORKEXPNO"]);
+
+                    DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_CP_STU_WORK_EXP]", "JOBTITLE", "IDNO", "COMPID='" + Convert.ToInt32(cmpid) + "'and WorkType='" + WorkType + "' and IDNO='" + IDNO + "' and WORKEXPNO!='" + WORKEXPNO + "'", "");
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+                        return;
+                    }
+
+
                     CustomStatus cs = (CustomStatus)objCompany.UpdWorkExperience(WORKEXPNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
@@ -744,16 +767,29 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     RdSalaeyType.SelectedValue = "2";
                     divCurrency.Visible = true;
                     divStipend.Visible = true;
+                    TxtStipend.Text = ds.Tables[0].Rows[0]["Stipend"].ToString();
+                    ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["currency"].ToString();
                 }
-                else
+                else if (salarytype == "1")
                 {
                     RdSalaeyType.SelectedValue = "1";
                     divSalary.Visible = true;
                     divCurrency.Visible = true;
+                    txtSalary.Text = ds.Tables[0].Rows[0]["Salary"].ToString();
+                    ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["currency"].ToString();
                 }
-                txtSalary.Text = ds.Tables[0].Rows[0]["Salary"].ToString();
-                TxtStipend.Text = ds.Tables[0].Rows[0]["Stipend"].ToString();
-                ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["currency"].ToString();
+                else if (salarytype == "0")
+                {
+                    RdSalaeyType.SelectedValue = null;
+                    divSalary.Visible = false;
+                    divCurrency.Visible = false;
+                    txtSalary.Text = string.Empty;
+                    TxtStipend.Text = string.Empty;
+                    ddlCurrency.SelectedValue = "0";
+                }
+                
+               
+             
                 ////  this.fuCollegeLogo = ds.Tables[0].Rows[0]["LOGO"].ToString();
                 //objCommon.FillDropDownList(ddlJobSector, "ACD_TP_JOBSECTOR", "JOBSECNO", "JOBSECTOR", "", "JOBSECTOR");
                 //ddlJobSector.SelectedValue = ds.Tables[0].Rows[0]["JOBSECNO"].ToString();
