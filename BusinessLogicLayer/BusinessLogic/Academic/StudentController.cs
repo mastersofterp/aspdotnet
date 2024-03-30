@@ -10977,6 +10977,26 @@ namespace IITMS
                     return ds;
                 }
                 //*********************************************************************************************************************************************************************
+                //************PRASHANTG-TN56760-260324************************************************************************************************
+                public DataSet RetrieveFacultyTimeTableDetails(int uano)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_UANO", uano);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_FACULTY_DASHBOARD_TIMETABLE", objParams);   //SP UPDATED FOR SINGLE PARAM
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.RetrieveStudentCurrentRegDetails-> " + ex.ToString());
+                    }
+                    return ds;
+                }
                 public DataSet GetTaskForFacultyDashboard(int UserTypeId, int ua_no)
                 {
                     DataSet ds = null;
@@ -11020,6 +11040,24 @@ namespace IITMS
                     }
                     return ds;
                 }
+                public DataSet RetrieveStudentAttendanceDetailsForDashboard(int idno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_REPORT_STUDENT_ATTENDANCE_DASHBOARD_PRAG", objParams); //SP Changed PRASHANTG-TN56760-220324          
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.RetrieveStudentAttendanceDetailsForDashboard-> " + ex.ToString());
+                    }
+                    return ds;
+                }
                 //*********************************************************************************************************************************************************************
                 public DataSet RetrieveStudentTimeTableDetails(int sessionno, int schemeno, int semesterno, int idno, int sectionno) // procedure not available
                 {
@@ -11036,6 +11074,26 @@ namespace IITMS
                         objParams[4] = new SqlParameter("@P_SECTIONNO", sectionno);                 // Added on 07-04-2020
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_STUDENT_TIMETABLE", objParams);          // Added on 06-04-2020
+                        //  ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_TIMETABLE", objParams);                // Commented on 06-04-2020
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.RetrieveStudentTimeTableDetails-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                //PRASHANTG-TN56760-240324
+                public DataSet RetrieveStudentTimeTableDetails(int idno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_STUDENT_TIMETABLE_PRAG", objParams);        //SP Changed PRASHANTG-TN56760-240324 
                         //  ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_TIMETABLE", objParams);                // Commented on 06-04-2020
                     }
                     catch (Exception ex)

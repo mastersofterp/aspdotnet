@@ -49,7 +49,6 @@ public partial class principalHome : System.Web.UI.Page
     {
         try
         {
-
             if (!Page.IsPostBack)
             {
                 //Check Session
@@ -69,7 +68,7 @@ public partial class principalHome : System.Web.UI.Page
                     }
 
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
-                    Show_Notice();
+                   // Show_Notice();//PRASHANTG-TN56760-tn56760
                 }
             }
         }
@@ -77,31 +76,41 @@ public partial class principalHome : System.Web.UI.Page
         {
 
             if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "Academic_StudentIDCardReport.Page_Load-> " + ex.Message + " " + ex.StackTrace);
+                objUCommon.ShowError(Page, "principalHome.aspx.Page_Load-> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
+    protected void btnNotice_Click(object sender, EventArgs e)
+    {
+        Show_Notice();
+    }
     public void Show_Notice()
     {
         try
         {
             DataSet ds = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
-            if (ds.Tables.Count > 0 && ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+            if (ds != null)
             {
-                lvActiveNotice.DataSource = ds.Tables[0];
-                lvActiveNotice.DataBind();
-            }
-            if (ds.Tables.Count > 0 && ds != null && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
-            {
-                lvExpNotice.DataSource = ds.Tables[1];
-                lvExpNotice.DataBind();
+                if (ds.Tables.Count > 0 && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    lvActiveNotice.DataSource = ds.Tables[0];
+                    lvActiveNotice.DataBind();
+                }
+                if (ds.Tables.Count > 0 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                {
+                    lvExpNotice.DataSource = ds.Tables[1];
+                    lvExpNotice.DataBind();
+                }
             }
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.Show_Notice() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
     //public string GetFileNamePath(object filename)
@@ -137,8 +146,7 @@ public partial class principalHome : System.Web.UI.Page
         string filename = e.CommandArgument.ToString();
         GetFileNamePath(filename);
     }
-
-
+    
     protected string GetFileNamePath(object filename)
     {
         string Url = string.Empty;
@@ -196,7 +204,7 @@ public partial class principalHome : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "homeFaculty.aspx.GetFileNamePath() --> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "principalHome.aspx.GetFileNamePath() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
 
@@ -218,50 +226,106 @@ public partial class principalHome : System.Web.UI.Page
                 retIfExists = true;
             });
         }
-        catch (Exception) { }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.CheckIFExits() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
         return retIfExists;
     }
+   //Method Added by PRASHANTG-TN56760-TN56760-290324-Aggregated 3 counters
     [WebMethod]
-    public static string ShowMaleCount()
+    public static List<PrincipalDashboardModel.StudentCounters> ShowCounters()
     {
         principalHome p = new principalHome();
-        string count = p.getMaleCountDetail();
-        return count;
+        List<PrincipalDashboardModel.StudentCounters> objStudCount = new List<PrincipalDashboardModel.StudentCounters>();
+        objStudCount = p.getCountDetail();
+        return objStudCount;       
+      
+    }
+    private List<PrincipalDashboardModel.StudentCounters> getCountDetail()
+    {
+        List<PrincipalDashboardModel.StudentCounters> objStudCount = new List<PrincipalDashboardModel.StudentCounters>();
+        try
+        {
+            DataSet ds = objCommon.FillDropDown("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "DISTINCT COUNT(IDNO) 'TOTAL',SUM (CASE WHEN SEX='M' THEN 1 ELSE 0 END) 'MALE'", "SUM (CASE WHEN SEX='F' THEN 1 ELSE 0 END) 'FEMALE',SUM (CASE WHEN SEX='T' THEN 1 ELSE 0 END) 'OTHER'", "SEX IN ('M','F','T') AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2", "");
+            if (ds != null)
+            {
+                if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    objStudCount = (from DataRow dr in ds.Tables[0].Rows
+                                    select new PrincipalDashboardModel.StudentCounters
+                                    {
+                                        _male = dr["MALE"].ToString(),
+                                        _female = dr["FEMALE"].ToString(),
+                                        _other = dr["OTHER"].ToString(),
+                                        _total = dr["TOTAL"].ToString()
+                                    }).ToList();
+                }
+                else
+                {
+                    objStudCount = null;
+                }
+            }
+            else
+            {
+                objStudCount = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.getCountDetail() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return objStudCount;
     }
 
-    private string getMaleCountDetail()
-    {
-        string maleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) MALECOUNT", "SEX='M' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
-        return maleCount;
-    }
+    //BELOW CODE COMMENTED BY PRASHANTG-TN56760-270324- AGGREGATED TO A SINGLE METHOD ShowCounters()
+    //[WebMethod]
+    //public static string ShowMaleCount()
+    //{
+    //    principalHome p = new principalHome();
+    //    string count = p.getMaleCountDetail();
+    //    return count;
+    //}
 
-    //Method to get female count
-    [WebMethod]
-    public static string ShowFeMaleCount()
-    {
-        principalHome p = new principalHome();
-        string count = p.getFemaleCountDetail();
-        return count;
-    }
-    private string getFemaleCountDetail()
-    {
-        string femaleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) FEMALECOUNT", "SEX='F' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
-        return femaleCount;
-    }
+    //private string getMaleCountDetail()
+    //{
+    //    string maleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) MALECOUNT", "SEX='M' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
+    //    return maleCount;
+    //}
 
-    //other count - Added By Rishabh on 02012024
-    [WebMethod]
-    public static string ShowOtherCount()
-    {
-        principalHome p = new principalHome();
-        string count = p.getOtherCountDetail();
-        return count;
-    }
-    private string getOtherCountDetail()
-    {
-        string othercount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) OTHERCOUNT", "SEX='T' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
-        return othercount;
-    }
+    ////Method to get female count
+    //[WebMethod]
+    //public static string ShowFeMaleCount()
+    //{
+    //    principalHome p = new principalHome();
+    //    string count = p.getFemaleCountDetail();
+    //    return count;
+    //}
+    //private string getFemaleCountDetail()
+    //{
+    //    string femaleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) FEMALECOUNT", "SEX='F' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
+    //    return femaleCount;
+    //}
+
+    ////other count - Added By Rishabh on 02012024
+    //[WebMethod]
+    //public static string ShowOtherCount()
+    //{
+    //    principalHome p = new principalHome();
+    //    string count = p.getOtherCountDetail();
+    //    return count;
+    //}
+    //private string getOtherCountDetail()
+    //{
+    //    string othercount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) OTHERCOUNT", "SEX='T' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
+    //    return othercount;
+    //}
 
 
     //Method to get active user count
@@ -280,18 +344,18 @@ public partial class principalHome : System.Web.UI.Page
 
 
     //Method to get total student count
-    [WebMethod]
-    public static string TotalStudentCount()
-    {
-        principalHome p = new principalHome();
-        string count = p.getTotalStudentDetails();
-        return count;
-    }
-    private string getTotalStudentDetails()
-    {
-        string count = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) STUDENT", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
-        return count;
-    }
+    //[WebMethod]
+    //public static string TotalStudentCount()
+    //{
+    //    principalHome p = new principalHome();
+    //    string count = p.getTotalStudentDetails();
+    //    return count;
+    //}
+    //private string getTotalStudentDetails()
+    //{
+    //    string count = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) STUDENT", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
+    //    return count;
+    //}
 
     // To Get Admission Batch wise Students count
     [WebMethod]
@@ -333,11 +397,13 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetStudentCounts() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objStudCount;
     }
-
 
     // TO GET ACADEMIC ACTIVITY DETAILS 
     [WebMethod]
@@ -355,26 +421,32 @@ public partial class principalHome : System.Web.UI.Page
         try
         {
             DataSet ds = objSC.GetAcdActivityDetailsForPrincipalDashboard();
-            if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+            if (ds != null)
             {
-                objActivity = (from DataRow dr in ds.Tables[0].Rows
-                               select new PrincipalDashboardModel.ActivityDetails
-                               {
-                                   ActivityName = dr["ACTIVITY_NAME"].ToString(),
-                                   SessionName = dr["SESSION_NAME"].ToString(),
-                                   StartDate = dr["START_DATE"].ToString(),
-                                   EndDate = dr["END_DATE"].ToString(),
-                                   ActivityStatus = dr["Activity_Status"].ToString()
-                               }).ToList();
-            }
-            else
-            {
-                objActivity = null;
+                if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    objActivity = (from DataRow dr in ds.Tables[0].Rows
+                                   select new PrincipalDashboardModel.ActivityDetails
+                                   {
+                                       ActivityName = dr["ACTIVITY_NAME"].ToString(),
+                                       SessionName = dr["SESSION_NAME"].ToString(),
+                                       StartDate = dr["START_DATE"].ToString(),
+                                       EndDate = dr["END_DATE"].ToString(),
+                                       ActivityStatus = dr["Activity_Status"].ToString()
+                                   }).ToList();
+                }
+                else
+                {
+                    objActivity = null;
+                }
             }
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetActivityDetails() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objActivity;
     }
@@ -477,13 +549,12 @@ public partial class principalHome : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "news.BindListViewNews-> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "principalHome.aspx.BindListViewNews-> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
         return newsList;
     }
-
 
     public static List<PrincipalDashboardModel.PrincipalNews> ShowExpiredNewsData()
     {
@@ -520,7 +591,7 @@ public partial class principalHome : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "news.BindListViewNews-> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "principalHome.aspx.BindListViewExpiredNews-> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server UnAvailable");
         }
@@ -632,7 +703,10 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetResultAnalysisData() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return ResultData;
     }
@@ -678,7 +752,10 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetQuickAccessData() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objQA;
     }
@@ -691,7 +768,6 @@ public partial class principalHome : System.Web.UI.Page
         objLeveCount = p.GetLeaveCount();
         return objLeveCount;
     }
-
     public LeaveCount GetLeaveCount()
     {
         LeaveCount objLeveCount = new LeaveCount();
@@ -724,7 +800,10 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetLeaveCount() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objLeveCount;
 
@@ -799,9 +878,7 @@ public partial class principalHome : System.Web.UI.Page
          }
 
      }*/
-
-
-
+    
     [WebMethod]
     public static List<LeaveApprovalData> ShowLeaveapprove()
     {
@@ -809,8 +886,6 @@ public partial class principalHome : System.Web.UI.Page
         List<LeaveApprovalData> LeaveApprove = p.GetLeaveApprovalpanel();
         return LeaveApprove;
     }
-
-
     private List<LeaveApprovalData> GetLeaveApprovalpanel()
     {
         List<LeaveApprovalData> objQA = new List<LeaveApprovalData>();
@@ -849,7 +924,10 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetLeaveApprovalpanel() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objQA;
     }
@@ -862,7 +940,6 @@ public partial class principalHome : System.Web.UI.Page
         List<LeaveApprovalData> LeaveApprove = p.GetLeaveApprovalpanelLeave();
         return LeaveApprove;
     }
-
     private List<LeaveApprovalData> GetLeaveApprovalpanelLeave()
     {
         List<LeaveApprovalData> objQA = new List<LeaveApprovalData>();
@@ -902,7 +979,10 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetLeaveApprovalpanelLeave() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objQA;
     }
@@ -952,13 +1032,14 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetLeavePendingpanelLeave() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objQA;
     }
-
-
-
+    
     [WebMethod]
     public static int Approvedleave(int id)
     {
@@ -984,9 +1065,7 @@ public partial class principalHome : System.Web.UI.Page
         return cnt;
     }
 
-
-
-
+    
     #region BlogStorage
     public int Blob_UploadDepositSlip(string ConStr, string ContainerName, string DocName, FileUpload FU, byte[] ChallanCopy)
     {

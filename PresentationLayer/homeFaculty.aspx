@@ -550,49 +550,13 @@
                 </div>
             </div>
             <%--Invigilation Schedule(No logic written)--%>
-            <%--Added by shubham on TID : 56240--%>
             <div class="col-lg-5 col-md-6 col-12">
                 <div class="x_panel in-right a2">
                     <div class="x_title">
-                        <h2>Invigilation Schedule</h2> 
-                         <button id="btnInvigi" runat="server" onserverclick="btnInvigi_ServerClick" 
-                                 type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760--260324 --%>
+                        <h2>Invigilation Schedule</h2>                        
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content height-250 scrollbar">
-                         <asp:ListView ID="lvInvgi" runat="server">
-                            <LayoutTemplate>
-                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblExamTimeTable">
-                                    <thead class="bg-primary">
-                                        <tr>
-                                            <th class="text-center">Exam Date</th>
-                                            <th class="text-center">Exam Time Slots</th>
-                                            <th class="text-center">Exam Name</th>
-                                            <th class="text-center">Room Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="itemPlaceholder" runat="server" />
-                                    </tbody>
-                                </table>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td class="text-center">
-                                        <%#Eval("EXAMDATE") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("SLOTIME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("EXAMNAME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("ROOMNAME") %>
-                                    </td>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
                     </div>
                 </div>
             </div>
@@ -782,21 +746,21 @@
             }   
       
             scales: {
-                    x:{
-                        ticks:{
-                                font:{
-                                    family: 'open_sansregular',
-                                    size:'11px'
-                                }
-                        }
-                    },
-                y:{                ticks:{
+                x:{
+                    ticks:{
                             font:{
-                            family: 'open_sansregular',
-                            size:11
+                                family: 'open_sansregular',
+                                size:'11px'
                             }
-                }}
-            }
+                    }
+                },
+            y:{                ticks:{
+                        font:{
+                        family: 'open_sansregular',
+                        size:11
+                        }
+            }}
+        }
 
         }
         });
@@ -865,7 +829,7 @@
                     html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><th class="text-center" >No Records To Display..</th></tr>';
                     $('#tblTimeTable').html(html);
                 }
-            });
+              });
             function OnSuccessTimeTable(response) {
                 loadTimeTable(response['d']);
             };
@@ -971,7 +935,7 @@
                     html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No Records To Display..</td></tr>';
                     $('#inOutBody').html(html);
                 }
-            });
+              });
             function OnSuccessInOut(response) {
                 loadInOutTbl(response['d']);
             };
