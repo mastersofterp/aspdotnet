@@ -650,17 +650,17 @@ public partial class Job_Announcement : System.Web.UI.Page
            //int Compid = int.Parse(btnEdit.CommandArgument);
             ViewState["ACOMSCHNO"] = ACOMSCHNO;
             ViewState["action"] = "edit";
-            int Count = Convert.ToInt32(objCommon.LookUp("ACD_TP_COMPSCHEDULE A INNER JOIN ACD_TP_REGISTER B ON (A.SCHEDULENO=B.SCHEDULENO)", "Count(1)", "A.ACOMSCHNO='" + ACOMSCHNO + "'"));
-            if(Count==0)
-            {
-                this.ShowDetailsJobAnnouncement(ACOMSCHNO);
-            }
-            else
-            {
-                objCommon.DisplayMessage("Student Use This Schedule .Record Can Not Be Modify. !", this.Page);
-                return;
-            }
-
+            //int Count = Convert.ToInt32(objCommon.LookUp("ACD_TP_COMPSCHEDULE A INNER JOIN ACD_TP_REGISTER B ON (A.SCHEDULENO=B.SCHEDULENO)", "Count(1)", "A.ACOMSCHNO='" + ACOMSCHNO + "'"));
+            //if(Count==0)
+            //{
+            //    this.ShowDetailsJobAnnouncement(ACOMSCHNO);
+            //}
+            //else
+            //{
+            //    objCommon.DisplayMessage("Student Use This Schedule .Record Can Not Be Modify. !", this.Page);
+            //    return;
+            //}
+            this.ShowDetailsJobAnnouncement(ACOMSCHNO);
         }
         catch (Exception ex)
         {
@@ -1340,6 +1340,7 @@ public partial class Job_Announcement : System.Web.UI.Page
         ViewState["action"] = "add";
         Session["announcement"] = null;
         ViewState["ACOMSCHNO"] = null;
+        ddlCompanyName.Enabled = true;
     }
     //public void Createddl(string id)
     //{

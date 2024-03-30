@@ -876,7 +876,8 @@
                                                                         DisplayMode="List" />
                                                                 </div>
                                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="color: Red; font-weight: bold;">
-                                                                    Note : File Upload Control Enabled After Adding Annouce Details
+                                                                    Note : File Upload Control Enabled After Adding Annouce Details.
+                                                                      (Upload .pdf only-Max size 500 Kb.)
                                                                 </div><br />
 
                                                                 <%--  //Added by Parag//29-02-2024--%>
