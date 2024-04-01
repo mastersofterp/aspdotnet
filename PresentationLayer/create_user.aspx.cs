@@ -660,7 +660,6 @@ public partial class create_user : System.Web.UI.Page
                 ViewState["CheckBtn"] = true;
                 ViewState["ExistUser"] = false;
 
-
             }
         }
         catch (Exception ex)
@@ -703,7 +702,7 @@ public partial class create_user : System.Web.UI.Page
             }
             else if (Convert.ToInt32(ddlUserType.SelectedValue) == 14)
             {
-                divmessage.Visible = true;
+                divmessage.Visible = false;
             }
             //</1.0.1>
         }
@@ -781,7 +780,7 @@ public partial class create_user : System.Web.UI.Page
             lvlinks.DataSource = null;
             lvlinks.DataBind();
             pnlStudent.Visible = true;
-            objCommon.FillDropDownList(ddlCollege, "ACD_college_master", "college_id", "college_name", "college_id>0 and ActiveStatus>0", "college_id");
+            objCommon.FillDropDownList(ddlCollege, "ACD_collage_master", "college_id", "college_name", "college_id>0 and ActiveStatus>0", "college_id");
             ddlBranch.Items.Clear();
             ddlBranch.Items.Add(new ListItem("Please Select", "0"));
             ddlSemester.Items.Clear();
@@ -1216,16 +1215,16 @@ public partial class create_user : System.Web.UI.Page
             else
             {
 
-                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "UA_NO,UA_FULLNAME,UA_NAME ,s.STUDNAME,s.REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND (UA_DEPTNO=" + Convert.ToInt32(dept) + " OR " + Convert.ToInt32(dept) + "=0) AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
+                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID", "UA_NO,UA_FULLNAME,UA_NAME ,'' STUDNAME,'' REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND (UA_DEPTNO=" + Convert.ToInt32(dept) + " OR " + Convert.ToInt32(dept) + "=0) AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
             }
             if (Convert.ToInt32(ddlSubDept.SelectedValue) > 0)
             {
                 //// ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID", "UA_NO,UA_FULLNAME,UA_NAME", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL AND  UA_STATUS = 0 AND (UA_EMPDEPTNO=" + Convert.ToInt32(ddlSubDept.SelectedValue) + " OR " + Convert.ToInt32(ddlSubDept.SelectedValue) + "=0)" + " AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
-                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "UA_NO,UA_FULLNAME,UA_NAME,s.STUDNAME,s.REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND (UA_EMPDEPTNO=" + Convert.ToInt32(ddlSubDept.SelectedValue) + " OR " + Convert.ToInt32(ddlSubDept.SelectedValue) + "=0)" + " AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
+                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID ", "UA_NO,UA_FULLNAME,UA_NAME,'' STUDNAME,'' REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND (UA_EMPDEPTNO=" + Convert.ToInt32(ddlSubDept.SelectedValue) + " OR " + Convert.ToInt32(ddlSubDept.SelectedValue) + "=0)" + " AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
             }
         }
         else
-            ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEIDINNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "UA_NO,UA_FULLNAME,UA_NAME,s.STUDNAME,s.REGNO", "' ' AS UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL AND UA_NO <> 0 " + (Session["usertype"].ToString() == "3" && Session["dec"].ToString() == "1" ? " AND UA_TYPE= 3 AND (UA_DEC IS NULL OR UA_DEC = 0) AND UA_DEPTNO= " + Session["userdeptno"].ToString() : Session["usertype"].ToString() == "4" ? " AND UA_TYPE= 3 AND UA_DEC = 1" : " AND R.PARENT_USERTYPE =" + Session["usertype"].ToString()), "UA_TYPE,UA_NO,UA_NAME");
+            ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS U ON A.UA_TYPE = R.USERTYPEID ", "UA_NO,UA_FULLNAME,UA_NAME,'' STUDNAME,'' REGNO", "' ' AS UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL AND UA_NO <> 0 " + (Session["usertype"].ToString() == "3" && Session["dec"].ToString() == "1" ? " AND UA_TYPE= 3 AND (UA_DEC IS NULL OR UA_DEC = 0) AND UA_DEPTNO= " + Session["userdeptno"].ToString() : Session["usertype"].ToString() == "4" ? " AND UA_TYPE= 3 AND UA_DEC = 1" : " AND R.PARENT_USERTYPE =" + Session["usertype"].ToString()), "UA_TYPE,UA_NO,UA_NAME");
         //</1.0.1>
 
         if (ds != null && ds.Tables.Count > 0)
@@ -1264,7 +1263,6 @@ public partial class create_user : System.Web.UI.Page
                 // pnlUser.Visible = false;
             }
         }
-
     }
 
     private void ShowPanelStudent()
@@ -1276,21 +1274,21 @@ public partial class create_user : System.Web.UI.Page
             if (ddlUserType.SelectedValue == "2")
             {
 
-                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "A.UA_NO,UA_FULLNAME,UA_NAME,STUDNAME,REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_TYPE=" + Convert.ToInt32(ddlUserType.SelectedValue) + " AND CAN=0 AND ADMCAN=0 AND (DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " OR " + Convert.ToInt32(ddlDegree.SelectedValue) + "=0) AND (BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " OR " + Convert.ToInt32(ddlBranch.SelectedValue) + "=0) AND (SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " OR " + Convert.ToInt32(ddlSemester.SelectedValue) + "=0) AND (COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " OR " + Convert.ToInt32(ddlCollege.SelectedValue) + "=0)", "UA_FULLNAME");
+                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "A.UA_NO,UA_FULLNAME,UA_NAME,S.STUDNAME,S.REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_TYPE=" + Convert.ToInt32(ddlUserType.SelectedValue) + " AND CAN=0 AND ADMCAN=0 AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + "   AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + "AND COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "UA_FULLNAME");
 
             }
             else if (ddlUserType.SelectedValue == "14")
             {
-                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "UA_NO,UA_FULLNAME,UA_NAME,STUDNAME,REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND  UA_TYPE=" + Convert.ToInt32(ddlUserType.SelectedValue) + " AND CAN=0 AND ADMCAN=0 AND (DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " OR " + Convert.ToInt32(ddlDegree.SelectedValue) + "=0) AND (BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " OR " + Convert.ToInt32(ddlBranch.SelectedValue) + "=0) AND (SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " OR " + Convert.ToInt32(ddlSemester.SelectedValue) + "=0) AND (COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " OR " + Convert.ToInt32(ddlCollege.SelectedValue) + "=0)", " UA_TYPE,UA_NO");
+                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "UA_NO,UA_FULLNAME,UA_NAME,S.STUDNAME,S.REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND  UA_TYPE=" + Convert.ToInt32(ddlUserType.SelectedValue) + " AND CAN=0 AND ADMCAN=0 AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), " UA_TYPE,UA_NO");
             }
             else
             {
                 //ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID", "UA_NO,UA_FULLNAME,UA_NAME", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL AND  UA_STATUS = 0 AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
-                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "UA_NO,UA_FULLNAME,UA_NAME,s.STUDNAME,s.REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
+                ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID", "UA_NO,UA_FULLNAME,UA_NAME,'' STUDNAME,'' REGNO", "UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL  AND  UA_TYPE=" + ddlUserType.SelectedValue, "UA_TYPE,UA_NO");
             }
         }
         else
-            ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID INNER JOIN ACD_STUDENT S ON A.UA_IDNO= S.IDNO", "UA_NO,UA_FULLNAME,UA_NAME,s.STUDNAME,s.REGNO", "' ' AS UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL AND UA_NO <> 0 " + (Session["usertype"].ToString() == "3" && Session["dec"].ToString() == "1" ? " AND UA_TYPE= 3 AND (UA_DEC IS NULL OR UA_DEC = 0) AND UA_DEPTNO= " + Session["userdeptno"].ToString() : Session["usertype"].ToString() == "4" ? " AND UA_TYPE= 3 AND UA_DEC = 1" : " AND R.PARENT_USERTYPE =" + Session["usertype"].ToString()), "UA_TYPE,UA_NO,UA_NAME");
+            ds = objCommon.FillDropDown("USER_ACC A INNER JOIN USER_RIGHTS R ON A.UA_TYPE = R.USERTYPEID ", "UA_NO,UA_FULLNAME,UA_NAME,'' STUDNAME,'' REGNO", "' ' AS UA_PWD,UA_TYPE,UA_STATUS,USERDESC", "UA_NO IS NOT NULL AND UA_NO <> 0 " + (Session["usertype"].ToString() == "3" && Session["dec"].ToString() == "1" ? " AND UA_TYPE= 3 AND (UA_DEC IS NULL OR UA_DEC = 0) AND UA_DEPTNO= " + Session["userdeptno"].ToString() : Session["usertype"].ToString() == "4" ? " AND UA_TYPE= 3 AND UA_DEC = 1" : " AND R.PARENT_USERTYPE =" + Session["usertype"].ToString()), "UA_TYPE,UA_NO,UA_NAME");
         //</1.0.1>
         if (ds != null && ds.Tables.Count > 0)
         {
@@ -1473,7 +1471,7 @@ public partial class create_user : System.Web.UI.Page
     {
         if (ddlCollege.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlDegree, "ACD_COLLEGE_DEGREE A INNER JOIN ACD_DEGREE B ON(A.DEGREENO=B.DEGREENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "B.DEGREENAME", "A.COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "a.DEGREENO");
+           objCommon.FillDropDownList(ddlDegree, "ACD_COLLEGE_DEGREE C INNER JOIN ACD_DEGREE B ON(A.DEGREENO=B.DEGREENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "B.DEGREENAME", "A.COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "a.DEGREENO");
         }
         int COLLEGEID = Convert.ToInt32(ddlCollege.SelectedValue);
         chkCollegeName.SelectedValue = COLLEGEID.ToString();
@@ -1492,7 +1490,7 @@ public partial class create_user : System.Web.UI.Page
     {
         if (ddlBranch.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER A INNER JOIN ACD_STUDENT B ON (A.SEMESTERNO=B.SEMESTERNO)", "DISTINCT A.SEMESTERNO", "A.SEMESTERNAME", "A.SEMESTERNO>0 AND DEGREENO=" + ddlDegree.SelectedValue, "A.SEMESTERNO");
+            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER A INNER JOIN ACD_STUDENT B ON (A.SEMESTERNO=S.SEMESTERNO)", "DISTINCT A.SEMESTERNO", "A.SEMESTERNAME", "A.SEMESTERNO>0 AND DEGREENO=" + ddlDegree.SelectedValue, "A.SEMESTERNO");
         }
         //<1.0.1>
         if (Convert.ToInt32(ddlUserType.SelectedValue) == 2)
