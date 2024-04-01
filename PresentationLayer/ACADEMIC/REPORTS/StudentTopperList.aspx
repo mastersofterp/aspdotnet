@@ -3,7 +3,6 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxtoolkit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updpnlExam"
             DynamicLayout="true" DisplayAfter="0">
@@ -55,9 +54,6 @@
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="report">
                                         </asp:RequiredFieldValidator>
                                     </div>
-
-
-
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divSession" runat="server">
                                         <div class="label-dynamic">
                                             <sup>* </sup>

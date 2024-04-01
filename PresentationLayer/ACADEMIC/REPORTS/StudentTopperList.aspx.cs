@@ -259,7 +259,6 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
 
                // ShowReport(rdoReportType.SelectedValue, "rptBranchwiseTopperList.rpt");
             }
-
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 2)
             {
                 //MeritShowReport(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
@@ -271,9 +270,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
                 else if (rdoReportType.SelectedValue == "xls")
                 {
                     MeritShowReport(rdoReportType.SelectedValue, "rptTopperMeritList.rpt");
-                }
-                
-                
+                }    
             }
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 3)
             {
