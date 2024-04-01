@@ -313,7 +313,7 @@
                                                                 <asp:Label ID="lblSEMESTERNAME" runat="server" Text='<%# Eval("SUBNAME")%>' />
                                                             </td>
                                                              <td>
-                                                                <asp:Label ID="lblCCODE" runat="server" Text=' <%# Eval("UA_FULLNAME")  +" - "+ Eval("UA_NAME")  %>' />
+                                                                <asp:Label ID="lblCCODE" runat="server" Text=' <%# Eval("UA_FULLNAME") %>' />
                                                             </td>
                                                            
                                                         </tr>
