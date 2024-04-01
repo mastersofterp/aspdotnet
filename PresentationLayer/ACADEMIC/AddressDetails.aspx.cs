@@ -152,6 +152,7 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                 hdn_Pdistrict.Value = "";
               
             }
+
            // CheckDisplaySection();
         }
     }

@@ -111,6 +111,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 
                 this.FillDropDown();
                 ShowStudentDetails();
+
                 StudentConfiguration();
             }
 
