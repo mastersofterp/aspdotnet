@@ -153,7 +153,7 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
               
             }
 
-           // CheckDisplaySection();
+            CheckDisplaySection();
         }
     }
 
@@ -167,7 +167,7 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
         string pageNo = "";
         string pageName = "AddressDetails.aspx";
         string section = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);  //, section
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);  
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -229,56 +229,56 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
         }
     }
     //<1.0.1>
-    //private void CheckDisplaySection()
-    //{
-    //    DataSet ds = null;
-    //    string section = string.Empty;
-    //    int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
-    //    string pageNo = "";
-    //    string pageName = "AddressDetails.aspx";
+    private void CheckDisplaySection()
+    {
+        DataSet ds = null;
+        string section = string.Empty;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "AddressDetails.aspx";
 
-    //        section = "Permanent Address";
-    //        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-    //            {
-    //                DivPerAddr.Visible = true;
-    //            }
-    //            else 
-    //            {
-    //                DivPerAddr.Visible = false;
-    //            }
-    //        }
-           
-    //        section = "Local Address";
-    //        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-    //            {
-    //                DivLocalAddr.Visible = true;
-    //            }
-    //            else 
-    //            {
-    //                DivLocalAddr.Visible = false;
-    //            }
-    //        }
-    //        section = "Local Guardian's Address";
-    //        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-    //            {
-    //                DivGardAddr.Visible = true;
-    //            }
-    //            else 
-    //            {
-    //                DivGardAddr.Visible = false;
-    //            }
-    //        }
-       
-    //}
+        section = "Permanent Address";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                DivPerAddr.Visible = true;
+            }
+            else
+            {
+                DivPerAddr.Visible = false;
+            }
+        }
+
+        section = "Local Address";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                DivLocalAddr.Visible = true;
+            }
+            else
+            {
+                DivLocalAddr.Visible = false;
+            }
+        }
+        section = "Local Guardian's Address";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                DivGardAddr.Visible = true;
+            }
+            else
+            {
+                DivGardAddr.Visible = false;
+            }
+        }
+
+    }
     //<//1.0.1>
     private Control FindControlRecursive(Control parentControl, string controlId)
     {
@@ -324,13 +324,19 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
         string pageNo = "";
         string pageName = "AddressDetails.aspx";
         string section = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName); //, section
+        Boolean isDisplaySection = false;
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
             string captionName = row["CAPTION_NAME"].ToString();
             string controlToHide = row["CONTROL_TO_HIDE"].ToString();
             string isMandatory = row["ISMANDATORY"].ToString();
+            if (row["IS_DISPLAY_SECTION_NAME"].ToString() != string.Empty)
+            {
+                isDisplaySection = Convert.ToBoolean(row["IS_DISPLAY_SECTION_NAME"].ToString());
+            }
+
             string controlID = string.Empty;
             string[] values = controlToHide.Split(',');
 
@@ -339,7 +345,7 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                 controlID = values[0].Trim();
             }
 
-            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID))
+            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID) && isDisplaySection == true)
             {
                 Control control = FindControlRecursive(Page, controlID);
 
