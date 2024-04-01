@@ -126,7 +126,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "AdmissionDetails.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName); // <1.0.1> , string.Empty
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, string.Empty); // <1.0.1> 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
