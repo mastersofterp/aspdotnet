@@ -673,14 +673,34 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
 
-        string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SA.SEMESTER", "STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
-        objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO IN(" + semester + ") AND  SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+        //string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SA.SEMESTER", "STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
+        //objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO IN(" + semester + ") AND  SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
 
+
+        //string subjecttype = string.Empty;
+
+        if (ddlSession.SelectedIndex > 0)
+        {
+            int patternno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "PATTERNNO", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ""));
+
+            string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) INNER JOIN ACD_EXAM_NAME EN ON EN.EXAMNO=AM.EXAMNO", "SA.SEMESTER", "STARTED = 1 AND PATTERNNO =" + patternno + " AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'') AND " + ViewState["branchno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
+
+            if (semester != "")
+            {
+                objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO IN(" + semester + ") AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+            }
+            else
+            {
+                objCommon.DisplayMessage(updpnl, "Session Activity not Created Or activity may not be Started!!!", this.Page);
+                return;
+            }
+        }
+        else
+        {
+
+        }
 
         string subjecttype = string.Empty;
-
-
-
     }
     protected void ddlExam_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -1026,18 +1046,18 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             {
                 if (ddlStudenttype.SelectedValue == "1")
                 {
-                    ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
+                    ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO IN (SELECT DISTINCT SCHEMENO FROM ACD_STUDENT_RESULT WHERE COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(CANCEL,0)) AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
 
                 }
                 else
                 {
-                    ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
+                    ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SCHEMENO IN (SELECT DISTINCT SCHEMENO FROM ACD_STUDENT_RESULT WHERE COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(CANCEL,0)) AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
 
                 }
             }
             else
             {
-                ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
+                ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO IN (SELECT DISTINCT SCHEMENO FROM ACD_STUDENT_RESULT WHERE COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(CANCEL,0)) AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
 
             }
 
@@ -2615,13 +2635,11 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     if (ddlcollege.SelectedIndex > 0)
                     {
                         int count = 0;
-                        count = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COUNT(SESSIONNO)", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1  AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND  COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and USERTYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')"));
+                        int patternno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "PATTERNNO", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ""));
+
+                        count = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COUNT(SESSIONNO)", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) INNER JOIN ACD_EXAM_NAME EN ON EN.EXAMNO=AM.EXAMNO WHERE STARTED = 1 AND EN.PATTERNNO=" + patternno + "  AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND  COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and USERTYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')"));
                         if (count > 0)
                         {
-                            
-                              //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");                           
-                           // ddlSession.Focus();
-
                             objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'  and USERTYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "");
                             ddlSession.Focus();
                         }
@@ -2912,7 +2930,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             double maxmark_e = 0;
             maxmark_i = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
             maxmark_e = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
-            TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
+            TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"])));
 
             if (maxmark_i > 0)
             {
