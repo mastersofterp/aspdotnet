@@ -181,6 +181,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                 this.ShowStudentDetails();
                 this.bindexpdetails();
                 this.bindSportDetails();
+
                 StudentConfiguration();
                
             }
