@@ -220,7 +220,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             {
                 ManagePageControlsModule.ManagePageControls(Page, filepath);
             }
-            CheckDisplaySection();
+           // CheckDisplaySection();
         }
     }
 
@@ -232,8 +232,8 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "PersonalDetails.aspx";
-        string section = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        string section = string.Empty;  //
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName); //, section
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -295,59 +295,59 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         }
     }
     //<1.0.1>
-    private void CheckDisplaySection()
-    {
-        DataSet ds = null;
-        string section = string.Empty;
-        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
-        string pageNo = "";
-        string pageName = "PersonalDetails.aspx";
+   // private void CheckDisplaySection()
+   // {
+   //     DataSet ds = null;
+   //     string section = string.Empty;
+   //     int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+   //     string pageNo = "";
+   //     string pageName = "PersonalDetails.aspx";
        
-            section = "Father Details";
-            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                if (Convert.ToBoolean( ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"])==true)
-                {
-                    FatherSection.Visible = true;
-                }
-                else 
-                {
-                    FatherSection.Visible = false;
-                }
+   //         section = "Father Details";
+   //         ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+   //         if (ds != null && ds.Tables[0].Rows.Count > 0)
+   //         {
+   //             if (Convert.ToBoolean( ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"])==true)
+   //             {
+   //                 FatherSection.Visible = true;
+   //             }
+   //             else 
+   //             {
+   //                 FatherSection.Visible = false;
+   //             }
 
-            }
-            section = "Mother Details";
-            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-                {
-                    MotherSection.Visible = true;
-                }
-                else 
-                {
-                    MotherSection.Visible = false;
-                }
-            }
-            section = "Student Personal Details";
-            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-                {
-                    DivStudPerDetails.Visible = true;
-                    divstudinfo.Visible = true;
-                    divApplicationId.Visible = true;
-                }
-                else
-                {
-                    DivStudPerDetails.Visible = false;
-                    divstudinfo.Visible=false;
-                    divApplicationId.Visible = false;
-                }
-            }
-   }
+   //         }
+   //         section = "Mother Details";
+   //         ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+   //         if (ds != null && ds.Tables[0].Rows.Count > 0)
+   //         {
+   //             if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+   //             {
+   //                 MotherSection.Visible = true;
+   //             }
+   //             else 
+   //             {
+   //                 MotherSection.Visible = false;
+   //             }
+   //         }
+   //         section = "Student Personal Details";
+   //         ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+   //         if (ds != null && ds.Tables[0].Rows.Count > 0)
+   //         {
+   //             if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+   //             {
+   //                 DivStudPerDetails.Visible = true;
+   //                 divstudinfo.Visible = true;
+   //                 divApplicationId.Visible = true;
+   //             }
+   //             else
+   //             {
+   //                 DivStudPerDetails.Visible = false;
+   //                 divstudinfo.Visible=false;
+   //                 divApplicationId.Visible = false;
+   //             }
+   //         }
+   //}
     //</1.0.1>
 
     private Control FindControlRecursive(Control parentControl, string controlId)
@@ -395,7 +395,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         string pageName = "PersonalDetails.aspx";
         string idno = string.Empty;
         string section = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);  //, section
 
         if (ViewState["usertype"].ToString() == "2")
         {

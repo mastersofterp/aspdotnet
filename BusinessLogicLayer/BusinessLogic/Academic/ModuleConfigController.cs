@@ -193,20 +193,38 @@ namespace IITMS
                 /// Added by SP
                 /// </summary>
                 /// <returns></returns>
+<<<<<<< HEAD
 
                 public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName, string section)
+=======
+                //public DataSet GetStudentConfigData()
+                //{
+                //    DataSet ds = null;
+                //    try
+                //    {
+                //        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                //        SqlParameter[] objParams = new SqlParameter[2];
+                //        objParams[0] = new SqlParameter("@ORGID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                //        objParams[1] = new SqlParameter("@PAGENO", "73");
+                //        ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GET_STUDENT_CONFIG_DATA", objParams);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ConfigAffilationTypeController.GetModuleConfigData() --> " + ex.Message + " " + ex.StackTrace);
+                //    }
+                //    return ds;
+                //}
+                public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName)
+>>>>>>> d663d3e5 ([BUGFIX][51653][Changes for revert section pathces])
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                        SqlParameter[] objParams = new SqlParameter[4];
+                        SqlParameter[] objParams = new SqlParameter[3];
                         objParams[0] = new SqlParameter("@ORGID", OrgID);
                         objParams[1] = new SqlParameter("@PAGENO", PageNo);
                         objParams[2] = new SqlParameter("@P_PAGENAME", PageName);
-                        //<1.0.1>
-                        objParams[3] = new SqlParameter("@P_SECTION", section);
-                        //</1.0.1>
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GET_STUDENT_CONFIG_DATA", objParams);
                     }
                     catch (Exception ex)
@@ -215,6 +233,28 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                //public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName, string section)
+                //{
+                //    DataSet ds = null;
+                //    try
+                //    {
+                //        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                //        SqlParameter[] objParams = new SqlParameter[4];
+                //        objParams[0] = new SqlParameter("@ORGID", OrgID);
+                //        objParams[1] = new SqlParameter("@PAGENO", PageNo);
+                //        objParams[2] = new SqlParameter("@P_PAGENAME", PageName);
+                //        //<1.0.1>
+                //        objParams[3] = new SqlParameter("@P_SECTION", section);
+                //        //</1.0.1>
+                //        ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GET_STUDENT_CONFIG_DATA", objParams);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ConfigAffilationTypeController.GetModuleConfigData() --> " + ex.Message + " " + ex.StackTrace);
+                //    }
+                //    return ds;
+                //}
 
                 public int SaveUpdateStudentConfig(List<StudentModuleConfig> objStudentConfig)
                 {
