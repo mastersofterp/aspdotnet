@@ -660,10 +660,19 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                 string SheetName=string.Empty;
                 if (chismaster.Checked==true)
                 {
-
+                    if (dtExcelSchema.Rows.Count!=2)
+                    {
+                        objCommon.DisplayMessage(Page, "Please Import With Master Data Excel Sheet", this.Page);
+                        return;
+                    }
                  SheetName = dtExcelSchema.Rows[1]["TABLE_NAME"].ToString();
                 }
                 else{
+                    if (dtExcelSchema.Rows.Count != 10)
+                    {   
+                        objCommon.DisplayMessage(Page, "Please Import Without Master Data Excel Sheet", this.Page);
+                        return;
+                    }
                       SheetName = dtExcelSchema.Rows[4]["TABLE_NAME"].ToString();
                 }
                 connExcel.Close();
@@ -849,9 +858,13 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                         for (int j = 0 ; j < dtNew.Rows.Count; j++)
                         {
                             DataRow drCompare = dtNew.Rows[j];
+                            if (drCompare != null)
+                            {
+                            
                             if (drCompare["Employee Id"].ToString() == columnValue)
                             {
                                 empcount++;
+                            }
                             }
                         }
                         break;
@@ -859,7 +872,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                     if (empcount > 1)
                     {
-                        message = "<span style='color:Red'><b> Employee Id Duplicat In Excel Sheet.</b></span>";
+                        message = "<span style='color:Red'><b> Employee Id Duplicate In Excel Sheet.</b></span>";
                         messageexp = " Employee Id Duplicat In Excel Sheet.";
                         ErrorString = ErrorString + message + " | ";
                         ErrorString1 = ErrorString1 + messageexp + " | ";
@@ -872,14 +885,18 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     {
                         DataRow dremp = dtNew.Rows[i];
                         string columnValue = dremp["RFIDNO"].ToString();
-
-                        // Check for duplicate value
-                        for (int j = 0; j < dtNew.Rows.Count; j++)
+                        if (columnValue != "" || columnValue != string.Empty)
                         {
-                            DataRow drCompare = dtNew.Rows[j];
-                            if (drCompare["RFIDNO"].ToString() == columnValue)
+                            // Check for duplicate value
+                            for (int j = 0; j < dtNew.Rows.Count; j++)
                             {
-                                rfidcount++;
+
+                                DataRow drCompare = dtNew.Rows[j];
+                                if (drCompare["RFIDNO"].ToString() == columnValue)
+                                {
+                                    rfidcount++;
+
+                                }
                             }
                         }
                         break;
@@ -887,7 +904,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                     if (rfidcount > 1)
                     {
-                        message = "<span style='color:Red'><b> RFIDNO Duplicat In Excel Sheet.</b></span>";
+                        message = "<span style='color:Red'><b> RFIDNO Duplicate In Excel Sheet.</b></span>";
                         messageexp = " RFIDNO Duplicat In Excel Sheet.";
                         ErrorString = ErrorString + message + " | ";
                         ErrorString1 = ErrorString1 + messageexp + " | ";
@@ -915,8 +932,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                     if (mobilecount > 1)
                     {
-                        message = "<span style='color:Red'><b> Mobile No Duplicat In Excel Sheet.</b></span>";
-                        messageexp = " Mobile No Duplicat In Excel Sheet.";
+                        message = "<span style='color:Red'><b> Mobile No Duplicate In Excel Sheet.</b></span>";
+                        messageexp = " Mobile No Duplicate In Excel Sheet.";
                         ErrorString = ErrorString + message + " | ";
                         ErrorString1 = ErrorString1 + messageexp + " | ";
                         IsErrorInUpload = true;
@@ -942,8 +959,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                     if (emailcount > 1)
                     {
-                        message = "<span style='color:Red'><b> Email Id Duplicat In Excel Sheet.</b></span>";
-                        messageexp = " Email Id Duplicat In Excel Sheet.";
+                        message = "<span style='color:Red'><b> Email Id Duplicate In Excel Sheet.</b></span>";
+                        messageexp = " Email Id Duplicate In Excel Sheet.";
                         ErrorString = ErrorString + message + " | ";
                         ErrorString1 = ErrorString1 + messageexp + " | ";
                         IsErrorInUpload = true;
@@ -954,14 +971,16 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     {
                         DataRow dremp = dtNew.Rows[i];
                         string columnValue = dremp["UID No"].ToString();
-
-                        // Check for duplicate value
-                        for (int j = 0; j < dtNew.Rows.Count; j++)
+                        if (columnValue != "" || columnValue != string.Empty)
                         {
-                            DataRow drCompare = dtNew.Rows[j];
-                            if (drCompare["UID No"].ToString() == columnValue)
+                            // Check for duplicate value
+                            for (int j = 0; j < dtNew.Rows.Count; j++)
                             {
-                                uidnocount++;
+                                DataRow drCompare = dtNew.Rows[j];
+                                if (drCompare["UID No"].ToString() == columnValue)
+                                {
+                                    uidnocount++;
+                                }
                             }
                         }
                         break;
@@ -969,8 +988,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
 
                     if (uidnocount > 1)
                     {
-                        message = "<span style='color:Red'><b> UID No Duplicat In Excel Sheet.</b></span>";
-                        messageexp = " UID No Duplicat In Excel Sheet.";
+                        message = "<span style='color:Red'><b> UID No Duplicate In Excel Sheet.</b></span>";
+                        messageexp = " UID No Duplicate In Excel Sheet.";
                         ErrorString = ErrorString + message + " | ";
                         ErrorString1 = ErrorString1 + messageexp + " | ";
                         IsErrorInUpload = true;
@@ -978,20 +997,21 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     //--------------End---12-03-2024-----------
 
                     string SchoolName = dtNew.Rows[i]["College Name"].ToString();
-                    ds1 = objCommon.FillDropDown("ACD_COLLEGE_MASTER", "*", "COLLEGE_NAME", "COLLEGE_NAME='" + SchoolName + "'", "");
+                  //  ds1 = objCommon.FillDropDown("ACD_COLLEGE_MASTER", "*", "COLLEGE_NAME", "COLLEGE_NAME='" + SchoolName + "'", "");
 
+                    ds1 = objCommon.FillDropDown("ACD_COLLEGE_MASTER", "*", "COLLEGE_NAME", "ActiveStatus=1 ", "");
                     //if (ds1.Tables[0].Rows[0]["EmployeeId"].ToString() != "")
                     if (ds1.Tables[0].Rows.Count == 0)
                     {
-                        //string empId1 = ds1.Tables[0].Rows[0]["EmployeeId"].ToString();
-                        //if (empId1 == empId)
-                        //{
+                        string Clgname = ds1.Tables[0].Rows[0]["COLLEGE_NAME"].ToString();
+                        if (Clgname != SchoolName)
+                        {
                         message = " <span style='color:Red'><b>Employee College Name is Not Correct. Please check Master Data.</span>";
                         messageexp = "Employee College Name is Not Correct. Please check Master Data.";
                         ErrorString = ErrorString + message + " | ";
                         ErrorString1 = ErrorString1 + messageexp + " | ";
                         IsErrorInUpload = true;
-                        //}
+                        }
                     }
 
                     string str = dtNew.Rows[i]["Mobile No"].ToString();
@@ -1566,23 +1586,23 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                                 // not a number
                             }
 
-                            string pattern = "[^a-zA-Z ]";
-                            Regex rgx = new Regex(pattern);
-                            Match match = rgx.Match(FName[j].ToString());
+                            //string pattern = "[^a-zA-Z ]";
+                            //Regex rgx = new Regex(pattern);
+                            //Match match = rgx.Match(FName[j].ToString());
 
-                            if (match.Success)
-                            {
-                                message = "<span style='color:Red'><b>Please enter a valid First Name. Only letters and spaces are allowed.</b></span>";
-                                messageexp = "Please enter a valid First Name. Only letters and spaces are allowed.";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-                                break;
-                            }
-                            else
-                            {
-                                // not a special character
-                            }
+                            //if (match.Success)
+                            //{
+                            //    message = "<span style='color:Red'><b>Please enter a valid First Name. Only letters and spaces are allowed.</b></span>";
+                            //    messageexp = "Please enter a valid First Name. Only letters and spaces are allowed.";
+                            //    ErrorString = ErrorString + message + " | ";
+                            //    ErrorString1 = ErrorString1 + messageexp + " | ";
+                            //    IsErrorInUpload = true;
+                            //    break;
+                            //}
+                            //else
+                            //{
+                            //    // not a special character
+                            //}
                         }
                     }
                     else
@@ -1616,23 +1636,23 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                                 // not a number
                             }
 
-                            string pattern = "[^a-zA-Z ]";
-                            Regex rgx = new Regex(pattern);
-                            Match match = rgx.Match(MName[j].ToString());
+                            //string pattern = "[^a-zA-Z ]";
+                            //Regex rgx = new Regex(pattern);
+                            //Match match = rgx.Match(MName[j].ToString());
 
-                            if (match.Success)
-                            {
-                                message = "<span style='color:Red'><b>Please enter a valid Middle Name. Only letters and spaces are allowed.</b></span>";
-                                messageexp = "Please enter a valid Middle Name. Only letters and spaces are allowed.";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-                                break;
-                            }
-                            else
-                            {
-                                // not a special character
-                            }
+                            //if (match.Success)
+                            //{
+                            //    message = "<span style='color:Red'><b>Please enter a valid Middle Name. Only letters and spaces are allowed.</b></span>";
+                            //    messageexp = "Please enter a valid Middle Name. Only letters and spaces are allowed.";
+                            //    ErrorString = ErrorString + message + " | ";
+                            //    ErrorString1 = ErrorString1 + messageexp + " | ";
+                            //    IsErrorInUpload = true;
+                            //    break;
+                            //}
+                            //else
+                            //{
+                            //    // not a special character
+                            //}
 
                         }
                     }
@@ -1659,23 +1679,23 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                             }
 
 
-                            string pattern = "[^a-zA-Z ]";
-                            Regex rgx = new Regex(pattern);
-                            Match match = rgx.Match(LName[j].ToString());
+                            //string pattern = "[^a-zA-Z ]";
+                            //Regex rgx = new Regex(pattern);
+                            //Match match = rgx.Match(LName[j].ToString());
 
-                            if (match.Success)
-                            {
-                                message = "<span style='color:Red'><b>Please enter a valid Last Name. Only letters and spaces are allowed.</b></span>";
-                                messageexp = "Please enter a valid Last Name. Only letters and spaces are allowed.";
-                                ErrorString = ErrorString + message + " | ";
-                                ErrorString1 = ErrorString1 + messageexp + " | ";
-                                IsErrorInUpload = true;
-                                break;
-                            }
-                            else
-                            {
-                                // not a special character
-                            }
+                            //if (match.Success)
+                            //{
+                            //    message = "<span style='color:Red'><b>Please enter a valid Last Name. Only letters and spaces are allowed.</b></span>";
+                            //    messageexp = "Please enter a valid Last Name. Only letters and spaces are allowed.";
+                            //    ErrorString = ErrorString + message + " | ";
+                            //    ErrorString1 = ErrorString1 + messageexp + " | ";
+                            //    IsErrorInUpload = true;
+                            //    break;
+                            //}
+                            //else
+                            //{
+                            //    // not a special character
+                            //}
                         }
                     }
                     else
