@@ -220,6 +220,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             {
                 ManagePageControlsModule.ManagePageControls(Page, filepath);
             }
+
            // CheckDisplaySection();
         }
     }
