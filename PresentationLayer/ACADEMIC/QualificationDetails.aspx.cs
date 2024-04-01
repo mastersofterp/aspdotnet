@@ -240,7 +240,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                
             }
 
-            //CheckDisplaySection();
+            CheckDisplaySection();
         }
         //divStudentLastQualification.Visible=false;
         //SSC_10TH_QUALIFICATION();   
@@ -284,7 +284,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         string pageNo = "";
         string pageName = "QualificationDetails.aspx";
         string section = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName); //, section
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -346,71 +346,71 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         }
     }
     //<1.0.1>
-    //private void CheckDisplaySection()
-    //{
-    //        DataSet ds = null;
-    //        string section = string.Empty;
-    //        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
-    //        string pageNo = "";
-    //        string pageName = "QualificationDetails.aspx";
-    //        section = "Entrance Exam Scores";
-    //        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-    //            {
-    //                divEntranceExamScores.Visible = true;
-    //            }
-    //            else 
-    //            {
-    //                divEntranceExamScores.Visible = false;
-    //            }
-    //        }
-    //        section = "Student Last Qualification Details (Only for PG students)";
-    //        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-    //            {
-    //                upEditQualExm.Visible = true;
-    //                trLastQual.Visible = true;
+    private void CheckDisplaySection()
+    {
+        DataSet ds = null;
+        string section = string.Empty;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "QualificationDetails.aspx";
+        section = "Entrance Exam Scores";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                divEntranceExamScores.Visible = true;
+            }
+            else
+            {
+                divEntranceExamScores.Visible = false;
+            }
+        }
+        section = "Student Last Qualification Details (Only for PG students)";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                upEditQualExm.Visible = true;
+                trLastQual.Visible = true;
 
-    //            }
-    //            else 
-    //            {
-    //                upEditQualExm.Visible = false;
-    //                trLastQual.Visible = false;
-    //            }
-    //        }
-    //        section = "Higher Secondary/12th Marks / Diploma Marks";
-    //        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-    //            {
-    //                DivHigherEdu.Visible = true;
-    //            }
-    //            else 
-    //            {
-    //                DivHigherEdu.Visible = false;
-    //            }
+            }
+            else
+            {
+                upEditQualExm.Visible = false;
+                trLastQual.Visible = false;
+            }
+        }
+        section = "Higher Secondary/12th Marks / Diploma Marks";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                DivHigherEdu.Visible = true;
+            }
+            else
+            {
+                DivHigherEdu.Visible = false;
+            }
 
-    //        }
+        }
 
-    //        section = "Secondary/10th Marks";
-    //        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
-    //            {
-    //                divSecMArks.Visible = true;
-    //            }
-    //            else
-    //            {
-    //                divSecMArks.Visible = false;
-    //            }
-    //        }
-    //}
+        section = "Secondary/10th Marks";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                divSecMArks.Visible = true;
+            }
+            else
+            {
+                divSecMArks.Visible = false;
+            }
+        }
+    }
     //</1.0.1>
     private Control FindControlRecursive(Control parentControl, string controlId)
     {
@@ -461,15 +461,20 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         string pageNo = "";
         string pageName = "QualificationDetails.aspx";
         string section = string.Empty;
-
+        Boolean isDisplaySection = false;
         // Filter data based on the provided keyword
-        ds = FilterDataByKeyword(objConfig.GetStudentConfigData(orgID, pageNo, pageName), keyword);  //,section
+        ds = FilterDataByKeyword(objConfig.GetStudentConfigData(orgID, pageNo, pageName, section), keyword);  
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
             string captionName = row["CAPTION_NAME"].ToString();
             string controlToHide = row["CONTROL_TO_HIDE"].ToString();
             string isMandatory = row["ISMANDATORY"].ToString();
+            if (row["IS_DISPLAY_SECTION_NAME"].ToString() != string.Empty)
+            {
+                isDisplaySection = Convert.ToBoolean(row["IS_DISPLAY_SECTION_NAME"].ToString());
+            }
+
             string controlID = string.Empty;
             string[] values = controlToHide.Split(',');
 
@@ -478,7 +483,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 controlID = values[0].Trim();
             }
 
-            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID))
+            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID) && isDisplaySection == true)
             {
                 Control control = FindControlRecursive(Page, controlID);
 
