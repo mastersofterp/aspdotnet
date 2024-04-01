@@ -343,13 +343,18 @@
 
                                     <asp:Button ID="btnReport" runat="server" Font-Bold="true" Text="Format-I" Style="display: none;" CssClass="btn btn-info"
                                         OnClick="btnReport_Click" />
+
+
                                     <asp:Button ID="btnGraphReport" runat="server" Font-Bold="true"
                                         Text="SHOW GRAPH" CssClass="btn btn-info d-none" OnClick="btnGraphReport_Click" />
                                     <asp:Button ID="btnPrint" runat="server" Font-Bold="true" Text="PRINT" CssClass="btn btn-info d-none"
                                         OnClientClick="return PrintPanel();" />
 
-                                    <asp:Button ID="btnRevalMarkRpt" runat="server" Font-Bold="true"
+                                    <asp:Button ID="btnRevalMarkRpt" runat="server" Font-Bold="true" 
                                         Text="Mark Entry Report" CssClass="btn btn-info " OnClick="btnRevalMarkRpt_Click" />
+
+                                       <asp:Button ID="btnRevalExcelReport" runat="server" Font-Bold="true" Visible="false"
+                                        Text="Mark Entry Excel" CssClass="btn btn-info " OnClick="btnRevalExcelReport_Click" />
 
                                     <asp:Button ID="btnCancel2" runat="server" Font-Bold="true" OnClick="btnCancel2_Click"
                                         Text="Cancel" CssClass="btn btn-warning" Visible="False" />
@@ -541,6 +546,7 @@
                                                                             Font-Bold="true" Style="text-align: center" />
                                                                         <asp:HiddenField ID="hidGrade" runat="server" Value='<%# Bind("GRADE") %>' />
                                                                         <asp:HiddenField ID="hidGradePoint" runat="server" />
+                                                                        <asp:HiddenField ID="hidGdpoint" runat="server" Value='<%# Bind("GDPOINT") %>' />
                                                                     </ItemTemplate>
 
                                                                     <HeaderStyle HorizontalAlign="Center" />
@@ -731,6 +737,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnExcelReport" />
+            <asp:PostBackTrigger ControlID="btnRevalExcelReport" />
         </Triggers>
     </asp:UpdatePanel>
 
