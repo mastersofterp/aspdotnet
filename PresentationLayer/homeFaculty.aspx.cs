@@ -936,4 +936,44 @@ public partial class homeFaculty : System.Web.UI.Page
         //ds.Dispose();
         return js.Serialize(rows);
     }
+
+    /// <summary>
+    /// ADDED TO DISPLAY INVIGILATOR DUTY DETAILS
+    /// TID     : 56240
+    /// DATE    : 29/03/2024
+    /// </summary>
+    public void Show_InvigilatorDeatils()
+    {
+        try
+        {
+            int UA = Convert.ToInt32(Session["userno"].ToString());
+            int sessionno = objCommon.LookUp("ACAD_INVIGILATION_DUTY", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACAD_INVIGILATION_DUTY", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
+            String SP_Name = "PKG_GET_HOMEPAGE_INVIGILATION_DUTY_DETAILS";
+            String SP_Parameters = "@P_UA_NO";
+            String Call_Values = "" + Convert.ToInt32(Session["userno"]);
+            DataSet ds1 = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+            if (ds1.Tables.Count > 0 && ds1 != null && ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+            {
+                lvInvgi.DataSource = ds1;
+                lvInvgi.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.Show_InvigilatorDeatils() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    /// <summary>
+    /// ADDED TO DISPLAY INVIGILATOR DUTY DETAILS
+    /// TID     : 56240
+    /// DATE    : 29/03/2024
+    /// </summary>
+    protected void btnInvigi_ServerClick(object sender, EventArgs e)
+    {
+        Show_InvigilatorDeatils();
+    }
 }
