@@ -239,6 +239,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 }
                
             }
+
             //CheckDisplaySection();
         }
         //divStudentLastQualification.Visible=false;
