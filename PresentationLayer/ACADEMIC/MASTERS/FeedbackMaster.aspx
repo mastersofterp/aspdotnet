@@ -199,8 +199,8 @@
                             <asp:Panel ID="Panel1" runat="server">
                                 <div class="row">
                                     <FTB:FreeTextBox ID="ftbDesc" runat="Server" Height="200px" Width="700px" TabIndex="1" />
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ftbDesc"
-                                        Display="None" ErrorMessage="Please Enter Feedback Note." ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                   <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ftbDesc"
+                                        Display="None" ErrorMessage="Please Enter Feedback Note." ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
                                 </div>
                             </asp:Panel>
 

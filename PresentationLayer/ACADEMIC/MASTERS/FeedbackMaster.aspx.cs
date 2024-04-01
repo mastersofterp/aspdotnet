@@ -105,6 +105,15 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
     {
         try
         {
+            int FEEDBACK = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(FEEDBACK_NOTE,0) AS FEEDBACK_NOTE", ""));
+            if (FEEDBACK == 1)
+            {
+                if (ftbDesc.Text == string.Empty)
+                {
+                    objCommon.DisplayMessage(updGrade, "Please Enter Feedback Note.", this.Page);
+                    return;
+                }
+            }
             int Coursetype = 0;
             int Choisefor = 0;
             if (rdoTheory.Checked == true || rdoPractical.Checked == true)
@@ -132,6 +141,8 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             {
                 Status = 0;
             }
+            
+
             //Check whether to add or update
             if (ViewState["action"] != null)
             {
