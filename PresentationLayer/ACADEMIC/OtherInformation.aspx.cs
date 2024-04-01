@@ -235,7 +235,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         string pageNo = "";
         string pageName = "OtherInformation.aspx";
         string section = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName); //, section
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -343,7 +343,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         string pageName = "OtherInformation.aspx";
         string section = string.Empty;
 
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName); //, section
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         var filteredRows = ds.Tables[0].AsEnumerable().Where(row => !row.Field<string>("CAPTION_NAME").ToLower().Contains(keyword)).CopyToDataTable();
 
@@ -406,7 +406,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         string pageName = "OtherInformation.aspx";
         string section = string.Empty;
 
-        ds = FilterDataByKeyword(objConfig.GetStudentConfigData(orgID, pageNo, pageName), keyword); //, section
+        ds = FilterDataByKeyword(objConfig.GetStudentConfigData(orgID, pageNo, pageName, section), keyword); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
