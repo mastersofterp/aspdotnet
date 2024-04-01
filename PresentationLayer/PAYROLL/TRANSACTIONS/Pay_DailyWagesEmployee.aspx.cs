@@ -66,7 +66,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_DailyWagesEmployee : System.Web.UI
                 {
                     FillDropdown();
                     btnunlock.Visible = true;
-                    btnreport.Visible = true;
+                    btnreport.Visible = false;
                 }
               }
                 pnlIncrement.Visible = false;
@@ -77,7 +77,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_DailyWagesEmployee : System.Web.UI
     {
         try
         {
-            objCommon.FillDropDownList(ddlStaff, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO IN(21)", "STAFFNO");
+            objCommon.FillDropDownList(ddlStaff, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFF like '%Daily%'", "STAFFNO");
             objCommon.FillDropDownList(ddldepratment, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", string.Empty, "SUBDEPTNO ASC");
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "COLLEGE_ID ASC");
         }
