@@ -379,10 +379,11 @@ public partial class Academic_StudentLedgerReport : System.Web.UI.Page
                 if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6" || Session["OrgId"].ToString() == "2")
                 {
                     btnShowReportFormat2.Visible = false;
+                    btnledgerFormat3.Visible = false;
                 }
                 else 
                 {
-                    btnShowReportFormat2.Visible = true;
+                    btnledgerFormat3.Visible = true;
                 }
                 
             }          
@@ -464,7 +465,7 @@ public partial class Academic_StudentLedgerReport : System.Web.UI.Page
         string rptFileName = "rptStudentLedgerReportHIT.rpt";
         try
         {
-            this.ShowReportFormatII(reportTitle, rptFileName);
+            this.ShowReportformatIII(reportTitle, rptFileName);
 
         }
         catch (Exception ex)
