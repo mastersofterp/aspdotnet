@@ -32,7 +32,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     ServiceBookController objServiceBook = new ServiceBookController();
-    
+
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -41,7 +41,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         else
             objCommon.SetMasterPage(Page, "");
     }
-    
+
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -73,7 +73,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
             //    this.FillDropDownByIdno(Convert.ToInt32(Session["idno"].ToString()), Convert.ToInt32(Session["userdeptno"].ToString()));
             //    ddlEmployee.Enabled = false;
             //    ddlCollege.Enabled = false;
-               
+
             //}
             else if (user_type == 8)
             {
@@ -87,6 +87,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
                 ddlCollege.Enabled = true;
                 this.FillCollege();
             }
+            FillCheckBox();
         }
         else
         {
@@ -116,7 +117,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         try
         {
 
-            string pfileNo = objCommon.LookUp("payroll_empmas","pfileno","idno="+Convert.ToInt32(ddlEmployee.SelectedValue));  
+            string pfileNo = objCommon.LookUp("payroll_empmas", "pfileno", "idno=" + Convert.ToInt32(ddlEmployee.SelectedValue));
             string IP = Request.ServerVariables["REMOTE_HOST"];
             //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("establishment")));
@@ -138,7 +139,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-    
+
     protected void btnCancel_Click(object sender, EventArgs e)
     {
 
@@ -150,33 +151,47 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
     private void Clear()
     {
         chkPersonalMemoranda.Checked = true;
-        chkDeptExamAndOtherDetails.Checked = false;
-        ChkDetailsOfLoansAndAdvances.Checked = false;
-        //chkDetailsOfServiceBook.Checked = false;
         chkEducationalQualification.Checked = false;
-        chkFamilyParticulars.Checked = false;
-        //chkForeginService.Checked = false;
-        chkTrainingConducted.Checked = false;
-        //chkGoodServiceAdvIncrcPunishMent.Checked = false;
-        chkIncetmentTermination.Checked = false;
-        chkLeaveRecords.Checked = false;
+        chkDeptExamAndOtherDetails.Checked = false;
         ChkNomination.Checked = false;
+        chkTraning.Checked = false;
+        chkTrainingConducted.Checked = false;
+        chkIncetmentTermination.Checked = false;
+        chkAdministrativeResponsibilities.Checked = false;
+        chkFamilyParticulars.Checked = false;
         chkMatter.Checked = false;
-        chkPayRevisionOrPromotion.Checked = false;       
         chkPreviousQualifyingService.Checked = false;
+        ChkDetailsOfLoansAndAdvances.Checked = false;
+        chkLeaveRecords.Checked = false;
+        chkPayRevisionOrPromotion.Checked = false;
+        chkPublicationDetails.Checked = false;
+        chkInvitedTalks.Checked = false;
+        chkConsultancy.Checked = false;
+        chkAccomplishment.Checked = false;
+        chkMembership.Checked = false;
+        chkStaffFunded.Checked = false;
+        chkPatent.Checked = false;
+        chkExp.Checked = false;
+        chkProfessional.Checked = false;
+        chkAvishkar.Checked = false;
+        chkResearch.Checked = false;
+        chkRevenue.Checked = false;
+        chkCurrent.Checked = false;
+        chkAward.Checked = false;
+
     }
 
     protected void btnShowReport_Click(object sender, EventArgs e)
-    {       
-            string param = this.GetParams(ddlEmployee.SelectedValue);
-            this.ShowReport(param, "Service_Book_Details","Pay_ServiceBook.rpt");
-   }
+    {
+        string param = this.GetParams(ddlEmployee.SelectedValue);
+        this.ShowReport(param, "Service_Book_Details", "Pay_ServiceBook.rpt");
+    }
 
     //private void FillCollege()
     //{
-        
+
     //    objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "COLLEGE_NAME");
-       
+
     //}
     private void FillCollege()
     {
@@ -207,7 +222,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         try
         {
             objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EM INNER JOIN PAYROLL_PAYMAS PM ON(EM.IDNO=PM.IDNO AND PM.PSTATUS='Y')", "EM.IDNO AS IDNO", " '['+ CONVERT(NVARCHAR(20),EM.IDNO) +']'+ISNULL(TITLE,'')+' '+ISNULL(EM.FNAME,'')+' '+ISNULL(EM.MNAME,'')+' '+ISNULL(EM.LNAME,'') as ENAME", "EM.IDNO = PM.IDNO AND PM.PSTATUS='Y' and EM.IDNO > 0 AND EM.STATUS IS NULL and EM.COLLEGE_NO=" + collegeno, "EM.FNAME");
-           // objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EM,PAYROLL_PAYMAS PM", "EM.IDNO AS IDNO", " '['+ CONVERT(NVARCHAR(20),EM.IDNO) +']'+ISNULL(TITLE,'')+' '+ISNULL(EM.FNAME,'')+' '+ISNULL(EM.MNAME,'')+' '+ISNULL(EM.LNAME,'') as ENAME", "EM.IDNO = PM.IDNO AND PM.PSTATUS='Y' and EM.IDNO > 0 AND EM.STATUS IS NULL and EM.SUBDEPTNO=" + collegeno, "EM.IDNO");
+            // objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EM,PAYROLL_PAYMAS PM", "EM.IDNO AS IDNO", " '['+ CONVERT(NVARCHAR(20),EM.IDNO) +']'+ISNULL(TITLE,'')+' '+ISNULL(EM.FNAME,'')+' '+ISNULL(EM.MNAME,'')+' '+ISNULL(EM.LNAME,'') as ENAME", "EM.IDNO = PM.IDNO AND PM.PSTATUS='Y' and EM.IDNO > 0 AND EM.STATUS IS NULL and EM.SUBDEPTNO=" + collegeno, "EM.IDNO");
         }
         catch (Exception ex)
         {
@@ -220,7 +235,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
 
 
 
-    private void FillDropDownByIdno(int idNo,int deptNo)
+    private void FillDropDownByIdno(int idNo, int deptNo)
     {
         try
         {
@@ -254,20 +269,20 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
             //int rowCount = ds.Tables[0].Rows.Count;
             if (ds.Tables[0].Rows.Count > 0)
             {
-               //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
                 DataSet dsEmp = objServiceBook.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), 0);
-               if (dsEmp.Tables[0].Rows.Count > 0)
-               {
-                   ddlEmployee.Items.Clear();
-                   ddlEmployee.Items.Add("Please Select");
-                   ddlEmployee.SelectedItem.Value = "0";
-                   ddlEmployee.DataSource = dsEmp;
-                   ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
-                   ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
-                   ddlEmployee.DataBind();
-                   ddlEmployee.SelectedIndex = 0;
+                if (dsEmp.Tables[0].Rows.Count > 0)
+                {
+                    ddlEmployee.Items.Clear();
+                    ddlEmployee.Items.Add("Please Select");
+                    ddlEmployee.SelectedItem.Value = "0";
+                    ddlEmployee.DataSource = dsEmp;
+                    ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                    ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                    ddlEmployee.DataBind();
+                    ddlEmployee.SelectedIndex = 0;
 
-               }
+                }
             }
         }
     }
@@ -275,7 +290,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
     {
         try
         {
-            if (ddlCollege.SelectedValue != string.Empty )
+            if (ddlCollege.SelectedValue != string.Empty)
             {
                 this.TableRowVisibleTrueFalse();
                 int user_type = Convert.ToInt32(Session["usertype"].ToString());
@@ -301,13 +316,13 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         }
 
     }
-    
+
     private void TableRowVisibleTrueFalse()
     {
         if (ddlCollege.SelectedValue == "0")
             trDept.Visible = false;
         else
-            trDept.Visible = true;    
+            trDept.Visible = true;
     }
     private string GetParams(string idno)
     {
@@ -328,6 +343,14 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         else
         {
             param += ",@P_IDNO=-1*Pay_Personal2.rpt";
+        }
+        if (chkPersonalMemoranda.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Thumb.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Thumb.rpt";
         }
         if (chkFamilyParticulars.Checked)
         {
@@ -472,22 +495,128 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         {
             param += ",@P_IDNO=-1*Pay_InvitedTalks.rpt";
         }
+        // Added by Sonal Banode on 21-03-2024
+        if (chkConsultancy.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Consultancy.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Consultancy.rpt";
+        }
 
+        if (chkAccomplishment.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Accomplishment.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Accomplishment.rpt";
+        }
 
+        if (chkMembership.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_MembershipBody.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_MembershipBody.rpt";
+        }
 
+        if (chkStaffFunded.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_StaffFunded.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_StaffFunded.rpt";
+        }
+
+        if (chkPatent.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Patent.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Patent.rpt";
+        }
+
+        if (chkExp.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Experience.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Experience.rpt";
+        }
+
+        if (chkProfessional.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_ProfessionalCourse.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_ProfessionalCourse.rpt";
+        }
+
+        if (chkAvishkar.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Avishkar.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Avishkar.rpt";
+        }
+
+        if (chkResearch.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Research.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Research.rpt";
+        }
+
+        if (chkRevenue.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_RevenueGenerated.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_RevenueGenerated.rpt";
+        }
+
+        if (chkCurrent.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_CurrentAppointment.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_CurrentAppointment.rpt";
+        }
+
+        if (chkAward.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Award.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Award.rpt";
+        }
         return param;
     }
+
     private string GetParamsOLD(string idno)
     {
-        string param ;
+        string param;
         param = string.Empty;
         if (chkPersonalMemoranda.Checked)
         {
-            param += "@P_IDNO=" + idno + "*Pay_Personal_Information.rpt"; 
+            param += "@P_IDNO=" + idno + "*Pay_Personal_Information.rpt";
         }
-        else 
+        else
         {
-            param += "@P_IDNO=-1*Pay_Personal_Information.rpt"; 
+            param += "@P_IDNO=-1*Pay_Personal_Information.rpt";
         }
 
         if (chkFamilyParticulars.Checked)
@@ -517,7 +646,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
             param += ",@P_IDNO=-1*Pay_Matter_Information.rpt";
         }
 
-        if(chkDeptExamAndOtherDetails.Checked)
+        if (chkDeptExamAndOtherDetails.Checked)
         {
             param += ",@P_IDNO=" + idno + "*Pay_DepartmantalExam_Information.rpt";
         }
@@ -531,9 +660,9 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         //    param += ",@P_IDNO=" + idno + "*Pay_DepartmantalExam_Information.rpt";
         //}
         //else
-       // {
-       //     param += ",@P_IDNO=0*Pay_DepartmantalExam_Information.rpt";
-       // }
+        // {
+        //     param += ",@P_IDNO=0*Pay_DepartmantalExam_Information.rpt";
+        // }
 
         if (chkPreviousQualifyingService.Checked)
         {
@@ -546,7 +675,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
 
 
 
-        
+
 
         //if (chkForeginService.Checked)
         //{
@@ -662,5 +791,158 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         return param;
     }
 
+    //Added by Sonal Banode on 29-03-2024
+    protected void FillCheckBox()
+    {
+        int ua_type = Convert.ToInt32(Session["usertype"]);
+        DataSet ds = null;
+        ds = objServiceBook.GetServieBookPageName(ua_type);
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                string TITLE;
+                TITLE = ds.Tables[0].Rows[i]["Title"].ToString();
+                if (TITLE == "Personal Memoranda")
+                {
+                    chkPersonalMemoranda.Visible = true;
+                }
+                if (TITLE == "Family Particulars")
+                {
+                    chkFamilyParticulars.Visible = true;
+                }
  
+                if (TITLE == "Nomination")
+                {
+                    ChkNomination.Visible = true;
+                }
+                if (TITLE == "Qualification")
+                {
+                    chkEducationalQualification.Visible = true;
+                }
+
+                if (TITLE == "Department Examination")
+                {
+                    chkDeptExamAndOtherDetails.Visible = true;
+                }
+
+                if (TITLE == "Previous Experience")
+                {
+                    chkPreviousQualifyingService.Visible = true;
+                }
+
+                if (TITLE == "Administrative Responsibilities")
+                {
+                    chkAdministrativeResponsibilities.Visible = true;
+                }
+
+                if (TITLE == "Publication Details")
+                {
+                    chkPublicationDetails.Visible = true;
+                }
+
+                if (TITLE == "Guest Lectures")
+                {
+                    chkInvitedTalks.Visible = true;
+                }
+
+                if (TITLE == "Training Attended")
+                {
+                    chkTraning.Visible = true;
+                }
+
+                if (TITLE == "Training Conducted")
+                {
+                    chkTrainingConducted.Visible = true;
+                }
+
+                if (TITLE == "Consultancy")
+                {
+                    chkConsultancy.Visible = true;
+                }
+
+                if (TITLE == "Accomplishment")
+                {
+                    chkAccomplishment.Visible = true;
+                }
+
+                if (TITLE == "Membership in Professional body")
+                {
+                    chkMembership.Visible = true;
+                }
+
+                if (TITLE == "Funded Project")
+                {
+                    chkStaffFunded.Visible = true;
+                }
+
+                if (TITLE == "Patent")
+                {
+                    chkPatent.Visible = true;
+                }
+
+                if (TITLE == "Experience")
+                {
+                    chkExp.Visible = true;
+                }
+
+                if (TITLE == "Loan & Advance")
+                {
+                    ChkDetailsOfLoansAndAdvances.Visible = true;
+                }
+
+                if (TITLE == "Leave")
+                {
+                    chkLeaveRecords.Visible = true;
+                }
+
+                if (TITLE == "Pay Revision")
+                {
+                    chkPayRevisionOrPromotion.Visible = true;
+                }
+
+                if (TITLE == "Increment / Termination")
+                {
+                    chkIncetmentTermination.Visible = true;
+                }
+
+                if (TITLE == "Matter")
+                {
+                    chkMatter.Visible = true;
+                }
+
+                if (TITLE == "Professional Course Certification")
+                {
+                    chkProfessional.Visible = true;
+                }
+
+                if (TITLE == "Avishkar")
+                {
+                    chkAvishkar.Visible = true;
+                }
+
+                if (TITLE == "Award")
+                {
+                    chkAward.Visible = true;
+                }
+
+                if (TITLE == "Current Appointment Status")
+                {
+                    chkCurrent.Visible = true;
+                }
+
+                if (TITLE == "Research")
+                {
+                    chkResearch.Visible = true;
+                }
+
+                if (TITLE == "Revenue Generated")
+                {
+                    chkRevenue.Visible = true;
+                }
+            }
+        }
+    }
+    //
+
 }

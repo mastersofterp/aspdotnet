@@ -8518,6 +8518,34 @@ namespace IITMS
                     return retStatus;
                 }
                 #endregion
+
+                //Added by Sonal Banode on 29-03-2024
+
+                public DataSet GetServieBookPageName(int usertype)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParam = null;
+                        objParam = new SqlParameter[1];
+                        objParam[0] = new SqlParameter("@P_USERTYPE", usertype);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_SERVICEBOOK_PAGE_NAME", objParam);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetServieBookPageName->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                //
             }
 
         }

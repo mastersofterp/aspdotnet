@@ -87,22 +87,34 @@
                                         <div class="form-group col-md-12 checkbox-list-colum">
                                             <div class="checkbox-list-box">
                                                 <asp:CheckBox ID="chkPersonalMemoranda" runat="server" Text="Personal Memoranda" CssClass="select-all-checkbox"
-                                                    Checked="true" TabIndex="3" />
-                                                <asp:CheckBox ID="chkEducationalQualification" runat="server" Text="Qualification Information" TabIndex="5" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkDeptExamAndOtherDetails" runat="server" Text="Departmental Exam Information" TabIndex="7" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="ChkNomination" runat="server" Text="Employee Nomination Information" TabIndex="9" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkTraning" runat="server" Text="Training/Short Term Course/Conference Attended" TabIndex="11" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkTrainingConducted" runat="server" Text="Training/Short Term Course/Conference Conducted" TabIndex="13" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkIncetmentTermination" runat="server" Text="Other Details Entries Like Increment termination etc" TabIndex="15" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkAdministrativeResponsibilities" runat="server" Text="Administrative Responsibilities" TabIndex="17" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkFamilyParticulars" runat="server" Text="Family Information" TabIndex="4" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkMatter" runat="server" Text="Matter" TabIndex="6" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkPreviousQualifyingService" runat="server" Text="Previous Experience" TabIndex="8" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="ChkDetailsOfLoansAndAdvances" runat="server" Text="Loans And Advances Information" TabIndex="10" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkLeaveRecords" runat="server" Text="Leave Records" TabIndex="12" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkPayRevisionOrPromotion" runat="server" Text="Pay Revision Information" TabIndex="14" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkPublicationDetails" runat="server" Text="Publication Details" TabIndex="16" CssClass="select-all-checkbox" />
-                                                <asp:CheckBox ID="chkInvitedTalks" runat="server" Text="Invited Talks" TabIndex="18" CssClass="select-all-checkbox" />
+                                                    Checked="true" TabIndex="3" Visible="false" />
+                                                <asp:CheckBox ID="chkEducationalQualification" runat="server" Text="Qualification Information" TabIndex="5" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="chkDeptExamAndOtherDetails" runat="server" Text="Departmental Exam Information" TabIndex="7" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="ChkNomination" runat="server" Text="Employee Nomination Information" TabIndex="9" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="chkTraning" runat="server" Text="Training/Short Term Course/Conference Attended" TabIndex="11" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="chkTrainingConducted" runat="server" Text="Training/Short Term Course/Conference Conducted" TabIndex="13" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkIncetmentTermination" runat="server" Text="Other Details Entries Like Increment termination etc" TabIndex="15" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="chkAdministrativeResponsibilities" runat="server" Text="Administrative Responsibilities" TabIndex="17" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="chkFamilyParticulars" runat="server" Text="Family Information" TabIndex="4" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkMatter" runat="server" Text="Matter" TabIndex="6" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkPreviousQualifyingService" runat="server" Text="Previous Experience" TabIndex="8" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="ChkDetailsOfLoansAndAdvances" runat="server" Text="Loans And Advances Information" TabIndex="10" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkLeaveRecords" runat="server" Text="Leave Records" TabIndex="12" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkPayRevisionOrPromotion" runat="server" Text="Pay Revision Information" TabIndex="14" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkPublicationDetails" runat="server" Text="Publication Details" TabIndex="16" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="chkInvitedTalks" runat="server" Text="Invited Talks" TabIndex="18" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkConsultancy" runat="server" Text="Consultancy" TabIndex="19" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkAccomplishment" runat="server" Text="Accomplishment" TabIndex="20" CssClass="select-all-checkbox" Visible="false" />
+                                                <asp:CheckBox ID="chkMembership" runat="server" Text="Membership in Professional Body" TabIndex="21" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkStaffFunded" runat="server" Text="Funded Project" TabIndex="22" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkPatent" runat="server" Text="Patent" TabIndex="23" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkExp" runat="server" Text="Experience" TabIndex="24" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkProfessional" runat="server" Text="Professional Course Certification" TabIndex="25" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkAvishkar" runat="server" Text="Avishkar" TabIndex="26" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkResearch" runat="server" Text="Research" TabIndex="27" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkRevenue" runat="server" Text="Revenue Generated" TabIndex="28" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkCurrent" runat="server" Text="Current Appointment Status" TabIndex="29" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkAward" runat="server" Text="Award" TabIndex="30" CssClass="select-all-checkbox" Visible="false"/>
                                             </div>
                                         </div>
                                     </div>
