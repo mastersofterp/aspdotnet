@@ -909,6 +909,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             else
             {
                 PartPayment = 0;
+                 Minamount = "0";
             }
             if (PartPayment == 1 && !string.IsNullOrEmpty(Minamount) && Minamount[0] == '0')
             {
