@@ -56,22 +56,11 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
         {
             try
             {
-
-                //SqlDataReader dr = objCommon.GetCommonDetails();
-
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        lblAddress.Text = dr["College_Address"].ToString();
-                //        Session["OrgId"] = dr["OrganizationId"].ToString();
-                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
+               
                 DataSet Orgds = null;
                 var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
                 Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                Session["OrgId"] = OrgId;
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {

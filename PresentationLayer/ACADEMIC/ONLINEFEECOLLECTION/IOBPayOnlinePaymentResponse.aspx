@@ -90,7 +90,7 @@
          
         <asp:TextBox ID="service_provider" runat="server" Text="payu_paisa" Style="display: none" />
         <div class="container">
-            <div class="row">
+            <div class="row  mt-5">
                 <div class="col-lg-8 offset-lg-2 col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
