@@ -152,8 +152,10 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                     DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
                     //objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
                     objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "ACTIVESTATUS=1", "REMARKNO");
-                    chk.Checked = false;
-                    chk.Enabled = false;
+                    //chk.Checked = false;
+                    chk.Checked = true;
+                    ddlRemark.SelectedValue = "1";
+                    //chk.Enabled = false;
                 }
              }
              else
@@ -188,19 +190,19 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                    // if (ddlRemark.SelectedValue == "3")
                     if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "T") //Added by Saurabh l on 06/01/2023
                     {
-                        chkIdno.Enabled = false;
+                        //chkIdno.Enabled = false;
                         //txtTime.Enabled = false;
                     }
                     //if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "A" || ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "L")
                     if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "A")
                     {
                         chkIdno.Checked = false;
-                        chkIdno.Enabled = false; //Added By Himanshu tamrakar 17-01-2024
+                        //chkIdno.Enabled = false; //Added By Himanshu tamrakar 17-01-2024
                     }
                     else
                     {
                         chkIdno.Checked = true;
-                        chkIdno.Enabled = false; //Added By Himanshu tamrakar 17-01-2024
+                        //chkIdno.Enabled = false; //Added By Himanshu tamrakar 17-01-2024
                     }
                     txtTime.Text = ds.Tables[0].Rows[i]["ATT_TIME"].ToString();
                     i++;

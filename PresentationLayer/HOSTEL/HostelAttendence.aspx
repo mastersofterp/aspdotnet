@@ -7,8 +7,8 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-                <div class="box-header with-border">
-                    <h3 class="box-title">Hostel Attendance</h3>
+                <div class="box-header with-border">  <%--lblDynamicPageTitle Added By Himanshu tamrakar 23-02-2024--%>
+                    <h3 class="box-title" style="text-transform:uppercase;" ><asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
 
                 <div class="box-body">
@@ -283,20 +283,20 @@
 
             if (ddlRemarkText == "Present" || ddlRemarkText == "PRESENT" || ddlRemarkText == "present") {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = true;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val(""); //this line added by Saurabh L on 18/01/2023 Purpose: To clear Time 
             }
             else if (ddlRemarkText == "Absent" || ddlRemarkText == "ABSENT" || ddlRemarkText == "absent") {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = false;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = true;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val("");
             }
             else if (ddlRemarkText == "Late" || ddlRemarkText == "LATE" || ddlRemarkText == "late")  // for late
             {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = false;
             }
                 //else if (id == "4") {
@@ -306,7 +306,7 @@
                 //}
             else {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val("");
                 //document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl"+index+"_txtTime").disabled=false; 
             }
