@@ -6520,6 +6520,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             DataSet ds = null;
             try
             {
+
                 SQLHelper objSQLHelper = new SQLHelper(_connectionString);
                 SqlParameter[] objParams = new SqlParameter[8];
                 objParams[0] = new SqlParameter("@P_FROMDATE", fromdate);
@@ -6530,8 +6531,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[5] = new SqlParameter("@P_RECIEPT_TYPE", recpttyp);
                 objParams[6] = new SqlParameter("@P_ADM_STATUS", admstatus);
                 objParams[7] = new SqlParameter("@P_ACADEMIC_YEAR_ID", academicyearid);
-
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_LEDGER_REPORT_EXCEL_FORMAT_II", objParams);
+
             }
             catch (Exception ex)
             {
@@ -7285,5 +7286,31 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //Added by Saurabh S. on 02042024
+        public DataSet Get_Fee_Details_BalanceReportFormatNew(int degreeNo, int branchNo, int year, int Academicyear,int semesterNo, string rectype,int Admstatus)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {                                                            
+                    new SqlParameter("@P_DEGREENO", degreeNo),
+                    new SqlParameter("@P_BRANCHNO", branchNo),
+                    new SqlParameter("@P_YEAR", year),  
+                    new SqlParameter("@P_ACADEMIC_YEAR_ID", Academicyear),
+                    new SqlParameter("@P_SEMESTERNO", semesterNo),
+                    new SqlParameter("@P_RECIEPT_TYPE", rectype),
+                    new SqlParameter("@P_ADM_STATUS", Admstatus),                   
+                   
+                };
+                ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_BRANCH_YEAR_WISE_FEES_BALANCE_REPORT_SHIRPUR", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_STUDENT_FOR_FEE_PAYMENT_WITH_HEADS_DEMANDWISE() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
     }
 }

@@ -1862,6 +1862,50 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     }
 
+    private void ExportinExcelforBalanceReportFormatNew()
+    {
+       string rectype = this.GetRecType();
+
+        if (string.IsNullOrEmpty(rectype))
+        {
+            objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+            return;
+        }
+        rectype = rectype.Substring(0, rectype.Length - 1);
+        int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+        int branchno = Convert.ToInt32(ddlBranch.SelectedValue);
+        int year = Convert.ToInt32(ddlYear.SelectedValue);
+        int AcademicYear = Convert.ToInt32(ddlAcdYear.SelectedValue);
+        int semesterNo = semesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
+        int admstatus = Convert.ToInt32(ddlAdmStatus.SelectedValue);
+
+        DataSet dsfeestud = feeCntrl.Get_Fee_Details_BalanceReportFormatNew(degreeno, branchno, year, AcademicYear, semesterNo, rectype, admstatus);
+
+        DataGrid dg = new DataGrid();
+
+        if (dsfeestud.Tables.Count > 0)
+        {
+            string attachment = "attachment; filename=" + "StudentWiseBalanceReportFormatNew_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/" + "ms-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            dg.DataSource = dsfeestud.Tables[0];
+            dg.DataBind();
+
+            dg.HeaderStyle.Font.Bold = true;
+            dg.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.Page, "No data found.", this.Page);
+        }
+
+    }
+
     protected void btnOnlineDcrReport_Click(object sender, EventArgs e)
     {
         string paymode = ddlPaymentMode.SelectedValue == "0" ? "" : ddlPaymentMode.SelectedValue;
@@ -2580,7 +2624,10 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             }
             Show_Summary_Report_Balance_fees("Fees_Payment_Summery_Report", "rptFeespaymentsummeryreport.rpt");
         }
-
+        else if (ddlReport.SelectedValue == "21")
+        {
+            this.ExportinExcelforDCRExcelReportFormatII();
+        }
     }
 
 
@@ -2851,6 +2898,16 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             fromDSpan.Visible = true;
             toDSpan.Visible = true;     
             reciptd.Visible = true;
+            btnShow.Visible = false;
+        }
+        else if (ddlReport.SelectedValue == "21")
+        {
+            acdyear.Visible = true;
+            degreed.Visible = true;
+            branchd.Visible = true;
+            reciptd.Visible = true;
+            semesterd.Visible = true;
+            yeard.Visible = true;
             btnShow.Visible = false;
         }
         else if (ddlReport.SelectedValue == "0")
