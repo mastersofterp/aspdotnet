@@ -813,6 +813,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else
                     {
                       //  DivMinamount.Style.Add("visibility", "");
+                        txtMinAmount.Text = ds.Tables[0].Rows[0]["MIN_AMOUNT_PARTIAL_PAYMENT"].ToString();
                         hdfchkPartialPay.Value = "false";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648113", "PartialPayment(false);", true);
                     }
@@ -911,7 +912,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 PartPayment = 0;
                  Minamount = "0";
             }
-            if (PartPayment == 1 && !string.IsNullOrEmpty(Minamount) && Minamount[0] == '0')
+            if ((PartPayment == 1 && string.IsNullOrEmpty(Minamount)) || (PartPayment == 1 && Minamount[0] == '0'))
             {
                 objCommon.DisplayMessage(this, "As Partial Payment Option is Enable so Minimum Amount Configuration for Partial Payment should not be zero or empty..!", this.Page);
                 BindData();
