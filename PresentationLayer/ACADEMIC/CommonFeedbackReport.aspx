@@ -401,7 +401,7 @@
             <asp:PostBackTrigger ControlID="btnCommentReport" />
             <asp:PostBackTrigger ControlID="btnHODFeedbackReport" />
             <asp:PostBackTrigger ControlID="btnShow" />
-
+            <asp:PostBackTrigger ControlID="btnExportSurvey" />
         </Triggers>
     </asp:UpdatePanel>
     <script type="text/javascript">

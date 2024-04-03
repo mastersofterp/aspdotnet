@@ -815,12 +815,12 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
 
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
             {
-                ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-                ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+                ViewState["degreeno_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                ViewState["branchno_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                ViewState["college_id_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                ViewState["schemeno_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
 
-                objCommon.FillDropDownList(ddlServeySession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
+                objCommon.FillDropDownList(ddlServeySession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id_sevrey"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
                 ddlServeySession.Focus();
             }
         }
@@ -896,7 +896,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         DataSet ds = new DataSet();
         SP_Name = "PKG_ACD_STUDENT_FEEDBACK_REPORT_CRESCENT";
         SP_Parameters = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO,@P_FEEDBACK_TYPENO";
-        Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue) + "," + Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
+        Call_Values = "" + Convert.ToInt32(ddlServeySession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno_sevrey"]) + "," + Convert.ToInt32(ddlServeySemester.SelectedValue) + "," + Convert.ToInt32(ddlserveySection.SelectedValue) + "," + Convert.ToInt32(ddlServeyDBType.SelectedValue);
         ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
         ds.Tables[0].TableName = "SSS Servey Report";
         if (ds.Tables[0].Rows.Count > 0)
