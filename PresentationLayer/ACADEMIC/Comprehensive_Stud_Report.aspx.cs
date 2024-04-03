@@ -3179,8 +3179,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         LinkButton lnkcode = sender as LinkButton;
         DataSet ds = null;
         string proc_name = "PKG_ACD_BIND_COURSE_REG_MODEL_POP_DATA";
-        string para_name = "@P_IDNO,@P_COURSENO";
-        string call_values = "" + idno + "," + lnkcode.ToolTip + "";
+        string para_name = "@P_IDNO,@P_COURSENO,@P_SESSIONNO";
+        string call_values = "" + idno + "," + lnkcode.ToolTip + ","+ ddlSession.SelectedValue +"";
         // string para_name = "@P_IDNO,@P_SESSIONNO,@P_SCHEMENO,@P_DEGREENO,@P_BRANCHNO,@P_ORGID";
         // string call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "," + ORG + "";
         ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
