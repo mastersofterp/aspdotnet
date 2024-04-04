@@ -661,6 +661,7 @@
                                                             <asp:ListItem Value="17">Father Mobile Number</asp:ListItem>
                                                             <asp:ListItem Value="18">Mother Mobile Number</asp:ListItem>
                                                             <asp:ListItem Value="19">ABCC ID</asp:ListItem>
+                                                            <asp:ListItem Value="20">DTE Application ID</asp:ListItem>  <%-- Added by Gunesh Mohane On Date : 19-03-2024--%>
 
 
                                                         </asp:DropDownList>
@@ -1061,8 +1062,9 @@
                                                                     <asp:ListItem Value="17">Father Mobile Number</asp:ListItem>
                                                                     <asp:ListItem Value="18">Mother Mobile Number</asp:ListItem>
                                                                     <asp:ListItem Value="19">ABCC ID</asp:ListItem>
+                                                                    <asp:ListItem Value="20">DTE Application ID</asp:ListItem>
                                                                 </asp:ListBox>
-                                                                <asp:RequiredFieldValidator ID="rfvFilter1" runat="server" Display="None" ErrorMessage="please select Filter"
+                                                                <asp:RequiredFieldValidator ID="rfvFilter1" runat="server" Display="None" ErrorMessage="Please Select Data"
                                                                     ControlToValidate="ddlfilter1" ValidationGroup="teacherallot1" />
                                                             </div>
                                                         </div>
@@ -1078,7 +1080,7 @@
                                                                      ToolTip="Please Select Admission Batch" data-select2-enable="true">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>
-                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="None" ErrorMessage="please select batch" ControlToValidate="ddlAdm2" ValidationGroup="teacherallot1" InitialValue="0">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="None" ErrorMessage="Please Select Batch" ControlToValidate="ddlAdm2" ValidationGroup="teacherallot1" InitialValue="0">
                                                                 </asp:RequiredFieldValidator>
                                                             </div>
 
@@ -1093,7 +1095,7 @@
                                                                     ToolTip="Please Select Degree" data-select2-enable="true" OnSelectedIndexChanged="ddldegree1_SelectedIndexChanged">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>
-                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="None" ErrorMessage="please select Degree" ControlToValidate="ddldegree1" ValidationGroup="teacherallot1" InitialValue="0">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="None" ErrorMessage="Please Select Degree" ControlToValidate="ddldegree1" ValidationGroup="teacherallot1" InitialValue="0">
                                                                 </asp:RequiredFieldValidator>
                                                             </div>
 

@@ -161,6 +161,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             string paddress = string.Empty;
             string femail = string.Empty;   //ADDED BY VINAY MISHRA ON 28082023 FOR 47935
             string memail = string.Empty;   //ADDED BY VINAY MISHRA ON 28082023 FOR 47935
+            string dteappid = string.Empty; //Added by Gunesh Mohane on 18032024
 
             int Ua_no = Convert.ToInt32 (Session["userno"]);
             string Ip_Address = string.Empty;
@@ -231,7 +232,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                         {
                             categorys += (lvItem.FindControl("txtAdmDate") as TextBox).Text + "$";
                         }
-                        else if (ddlCat.SelectedValue == "5" || ddlCat.SelectedValue == "7" || ddlCat.SelectedValue == "16" || ddlCat.SelectedValue == "17" || ddlCat.SelectedValue == "18" || ddlCat.SelectedValue == "19") // Modified By Shrikant W. on 28-11-2023                       
+                        else if (ddlCat.SelectedValue == "5" || ddlCat.SelectedValue == "7" || ddlCat.SelectedValue == "16" || ddlCat.SelectedValue == "17" || ddlCat.SelectedValue == "18" || ddlCat.SelectedValue == "19" || ddlCat.SelectedValue == "20") // Modified By Gunesh Mohane 18-03-2024                       
                         {
                             categorys += (lvItem.FindControl("txtusn") as TextBox).Text + "$";
                         }
@@ -390,6 +391,10 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             else if (ddlCat.SelectedValue == "19")  // Added by Shrikant W. on 28-12-2023 for ABCC ID
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ABCC_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
+            else if (ddlCat.SelectedValue == "20")  // Added by Shrikant W. on 28-12-2023 for ABCC ID
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.DTE_APPLICATION_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
 
 
@@ -966,6 +971,16 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
             }
+
+            else if (ddlCat.SelectedValue == "20")  // Added By Shrikant W. on 28-11-2023
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.DTE_APPLICATION_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+                ddlcat1.Visible = false;
+                txtAdmissionDate.Visible = false;
+                imgCal.Visible = false;
+                txtemail.Visible = false;
+                txtLAdd.Visible = false;
+            }
             #region Comment
             // else if (ddlCat.SelectedValue == "19") // Adarcard
            // {
@@ -1251,6 +1266,17 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 }
 
                 else if (ddlCat.SelectedValue == "19")    // Added By Shrikant W. on 28-11-2023
+                {
+                    txtemail.Visible = false;
+                    txtUSN.Visible = true;
+                    ddlcat1.Visible = false;
+                    txtAdmissionDate.Visible = false;
+                    imgCal.Visible = false;
+                    txtLAdd.Visible = false;
+                    txtUSN.MaxLength = 20;
+                    txtUSN.Attributes.Add("onkeypress", "return allowAlphaNumericSpace(event, this)");
+                }
+                else if (ddlCat.SelectedValue == "20")    // Added By Shrikant W. on 28-11-2023
                 {
                     txtemail.Visible = false;
                     txtUSN.Visible = true;
@@ -2017,7 +2043,6 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                         
                     }
                 }
-                
             }
             else
             {
@@ -2207,6 +2232,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 objStu.MeritNo = (dtNew.Columns.Contains("MERITNO") && !string.IsNullOrEmpty(dtNew.Rows[i]["MERITNO"].ToString())) ? dtNew.Rows[i]["MERITNO"].ToString() : null;
                 objStu.FatherMobile = (dtNew.Columns.Contains("FATHERMOBILE") && !string.IsNullOrEmpty(dtNew.Rows[i]["FATHERMOBILE"].ToString())) ? dtNew.Rows[i]["FATHERMOBILE"].ToString() : null;
                 objStu.MotherMobile = (dtNew.Columns.Contains("MOTHERMOBILE") && !string.IsNullOrEmpty(dtNew.Rows[i]["MOTHERMOBILE"].ToString())) ? dtNew.Rows[i]["MOTHERMOBILE"].ToString() : null;
+                objStu.DteAppId = (dtNew.Columns.Contains("DTE_APPLICATION_ID") && !string.IsNullOrEmpty(dtNew.Rows[i]["DTE_APPLICATION_ID"].ToString())) ? dtNew.Rows[i]["DTE_APPLICATION_ID"].ToString() : null;
 
                 string aadharno = objStu.AadharCardNo;
                 string mobileno = objStu.StudentMobile;
