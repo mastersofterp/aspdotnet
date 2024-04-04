@@ -378,7 +378,7 @@
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_11">Student Promotion Status</a>
                                                             </li>
                                                             <li class="nav-item" id="divMITExcel" runat="server" visible="false">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_12">Marks Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_12" onclick="return Checktabid(this)">Marks Details</a>
                                                             </li>
                                                             <li class="nav-item" id="divInternalMarks" runat="server" visible="false">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_13" onclick="return Checktabid(this)">Internal Marks</a>
