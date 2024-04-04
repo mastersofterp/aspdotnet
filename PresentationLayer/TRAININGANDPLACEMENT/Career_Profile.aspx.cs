@@ -143,6 +143,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     BindCompDetails(idno);
                     BindUploasResumeDetails(idno);
                     BindExamDetails(idno);
+                    checklockunlock(idno);
                 }
               
                     
@@ -158,6 +159,276 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+    private void checklockunlock(int idno)
+    {
+        DataSet DS = objCommon.FillDropDown("ACD_TP_STUDENT_REGISTRATION", "IDNO,REGNO", "ISNULL(EXAM_LOCK_UNLOCK,0) EXAM_LOCK_UNLOCK,isnull(WORK_EXP_LOCK_UNLOCK,0) WORK_EXP_LOCK_UNLOCK,ISNULL(TECH_SKIL_LOCK_UNLOCK,0) TECH_SKIL_LOCK_UNLOCK,ISNULL(PROJECT_LOCK_UNLOCK,0) PROJECT_LOCK_UNLOCK,ISNULL(CERTIFICATION_LOCK_UNLOCK,0) CERTIFICATION_LOCK_UNLOCK ,ISNULL(LANGUAGE_LOCK_UNLOCK,0) LANGUAGE_LOCK_UNLOCK,ISNULL(AWARD_LOCK_UNLOCK,0) AWARD_LOCK_UNLOCK,ISNULL(COMPETITION_LOCK_UNLOCK,0) COMPETITION_LOCK_UNLOCK,ISNULL(TRAINING_LOCK_UNLOCK,0) TRAINING_LOCK_UNLOCK,ISNULL(TEST_SCORE_LOCK_UNLOCK,0) TEST_SCORE_LOCK_UNLOCK,ISNULL(BUILD_RESUME_LOCK_UNLOCK,0) BUILD_RESUME_LOCK_UNLOCK", "IDNO='" + Convert.ToInt32(idno) + "'", "");
+        if (DS.Tables[0].Rows.Count > 0)
+        {
+            if (DS.Tables[0].Rows[0]["EXAM_LOCK_UNLOCK"].ToString() == "1")
+            {
+                rbGap.Enabled = false;
+                txtGapYear.Enabled = false;
+                btnSubmitExamDetails.Enabled = false;
+                btnCancelExamDetails.Enabled = false;
+            }
+            else
+            {
+                rbGap.Enabled = true;
+                txtGapYear.Enabled = true;
+                btnSubmitExamDetails.Enabled = true;
+                btnCancelExamDetails.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["WORK_EXP_LOCK_UNLOCK"].ToString() == "1")
+            {
+                RdWorkType.Enabled = false;
+                ddlCompany.Enabled = false;
+                txtJobTitle.Enabled = false;
+                txtLocation.Enabled = false;
+                ddlCompanySector.Enabled = false;
+                ddlJobType.Enabled = false;
+                ddlPositionType.Enabled = false;
+                txtDetails.Enabled = false;
+                txtStartPeriod.Enabled = false;
+                txtEndPeriod.Enabled = false;
+                chkCurrentlyWork.Enabled = false;
+                RdSalaeyType.Enabled = false;
+                FileUploadWorkExp.Enabled = false;
+                txtSalary.Enabled = false;
+                TxtStipend.Enabled = false;
+                ddlCurrency.Enabled = false;
+                btnSubmitWorkExperience.Enabled = false;
+                btnCancelWorkExperience.Enabled = false;
+            }
+            else
+            {
+                RdWorkType.Enabled = true;
+                ddlCompany.Enabled = true;
+                txtJobTitle.Enabled = true;
+                txtLocation.Enabled = true;
+                ddlCompanySector.Enabled = true;
+                ddlJobType.Enabled = true;
+                ddlPositionType.Enabled = true;
+                txtDetails.Enabled = true;
+                txtStartPeriod.Enabled = true;
+                txtEndPeriod.Enabled = true;
+                chkCurrentlyWork.Enabled = true;
+                RdSalaeyType.Enabled = true;
+                FileUploadWorkExp.Enabled = true;
+                txtSalary.Enabled = true;
+                TxtStipend.Enabled = true;
+                ddlCurrency.Enabled = true;
+                btnSubmitWorkExperience.Enabled = true;
+                btnCancelWorkExperience.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["TECH_SKIL_LOCK_UNLOCK"].ToString() == "1")
+            {
+                ddlSkillName.Enabled = false;
+                ddlProficiency.Enabled = false;
+                RelevantDocTechSkill.Enabled = false;
+                btnSubmitTechSkill.Enabled = false;
+                btnCancelTechSkill.Enabled = false;
+            }
+            else
+            {
+                ddlSkillName.Enabled = true;
+                ddlProficiency.Enabled = true;
+                RelevantDocTechSkill.Enabled = true;
+                btnSubmitTechSkill.Enabled = true;
+                btnCancelTechSkill.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["PROJECT_LOCK_UNLOCK"].ToString() == "1")
+            {
+                txtProjectTitle.Enabled = false;
+                txtProjectDomian.Enabled = false;
+                txtSupervisorName.Enabled = false;
+                txtStartDate.Enabled = false;
+                txtEndDate.Enabled = false;
+                chcurrwntlywork.Enabled = false;
+                txtHr.Enabled = false;
+                txtCompLoc.Enabled = false;
+                txtDescription.Enabled = false;
+                FileUploadProject.Enabled = false;
+                btnSubmitProject.Enabled = false;
+                btnCancelProject.Enabled = false;
+            }
+            else
+            {
+                txtProjectTitle.Enabled = true;
+                txtProjectDomian.Enabled = true;
+                txtSupervisorName.Enabled = true;
+                txtStartDate.Enabled = true;
+                txtEndDate.Enabled = true;
+                chcurrwntlywork.Enabled = true;
+                txtHr.Enabled = true;
+                txtCompLoc.Enabled = true;
+                txtDescription.Enabled = true;
+                FileUploadProject.Enabled = true;
+                btnSubmitProject.Enabled = true;
+                btnCancelProject.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["CERTIFICATION_LOCK_UNLOCK"].ToString() == "1")
+            {
+                txtTitle.Enabled = false;
+                txtCertifiedBy.Enabled = false;
+                txtGrade.Enabled = false;
+                txtFromDate.Enabled = false;
+                txtToDate.Enabled = false;
+                chkCertification.Enabled = false;
+                FileUploadCertification.Enabled = false;
+                btnSubmitCertification.Enabled = false;
+                btnCancelCertification.Enabled = false;
+
+            }
+            else
+            {
+                txtTitle.Enabled = true;
+                txtCertifiedBy.Enabled = true;
+                txtGrade.Enabled = true;
+                txtFromDate.Enabled = true;
+                txtToDate.Enabled = true;
+                chkCertification.Enabled = true;
+                FileUploadCertification.Enabled = true;
+                btnSubmitCertification.Enabled = true;
+                btnCancelCertification.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["LANGUAGE_LOCK_UNLOCK"].ToString() == "1")
+            {
+                ddlLauguage.Enabled = false;
+                ddlProficiencyLanguage.Enabled = false;
+                RelevantDocLanguage.Enabled = false;
+                chkReadLang.Enabled = false;
+                chkWriteLang.Enabled = false;
+                chkSpeakLang.Enabled = false;
+                btnSubmitLanguage.Enabled = false;
+                btnCancelLanguage.Enabled = false;
+            }
+            else
+            {
+                ddlLauguage.Enabled = true;
+                ddlProficiencyLanguage.Enabled = true;
+                RelevantDocLanguage.Enabled = true;
+                chkReadLang.Enabled = true;
+                chkWriteLang.Enabled = true;
+                chkSpeakLang.Enabled = true;
+                btnSubmitLanguage.Enabled = true;
+                btnCancelLanguage.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["AWARD_LOCK_UNLOCK"].ToString() == "1")
+            {
+                txtAwardTitle.Enabled = false;
+                txtAwardDate.Enabled = false;
+                txtGivenBy.Enabled = false;
+                ddlLevel.Enabled = false;
+                RelevantDocAward.Enabled = false;
+                btnSubmitAward.Enabled = false;
+                btnCancelAward.Enabled = false;
+            }
+            else
+            {
+                txtAwardTitle.Enabled = true;
+                txtAwardDate.Enabled = true;
+                txtGivenBy.Enabled = true;
+                ddlLevel.Enabled = true;
+                RelevantDocAward.Enabled = true;
+                btnSubmitAward.Enabled = true;
+                btnCancelAward.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["COMPETITION_LOCK_UNLOCK"].ToString() == "1")
+            {
+                txtCompetitionTitle.Enabled = false;
+                txtOrganizedBy.Enabled = false;
+                ddlLevel1.Enabled = false;
+                txtFromDateCompetition.Enabled = false;
+                txtToDateCompetition.Enabled = false;
+                txtProjectTitleCompetition.Enabled = false;
+                ddlParticipationStatus.Enabled = false;
+                RelevantDocCompetition.Enabled = false;
+                btnSubmitCompetition.Enabled = false;
+                btnCancelCompetition.Enabled = false;
+            }
+            else
+            {
+                txtCompetitionTitle.Enabled = true;
+                txtOrganizedBy.Enabled = true;
+                ddlLevel1.Enabled = true;
+                txtFromDateCompetition.Enabled = true;
+                txtToDateCompetition.Enabled = true;
+                txtProjectTitleCompetition.Enabled = true;
+                ddlParticipationStatus.Enabled = true;
+                RelevantDocCompetition.Enabled = true;
+                btnSubmitCompetition.Enabled = true;
+                btnCancelCompetition.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["TRAINING_LOCK_UNLOCK"].ToString() == "1")
+            {
+                txtTrainingTitle.Enabled = false;
+                txtOrganized.Enabled = false;
+                ddlCategory.Enabled = false;
+                txtFromDateTraining.Enabled = false;
+                txtToDateTraining.Enabled = false;
+                RelevantDocTraining.Enabled = false;
+                btnSubmitTraining.Enabled = false;
+                btnCancelTraining.Enabled = false;
+            }
+            else
+            {
+                txtTrainingTitle.Enabled = true;
+                txtOrganized.Enabled = true;
+                ddlCategory.Enabled = true;
+                txtFromDateTraining.Enabled = true;
+                txtToDateTraining.Enabled = true;
+                RelevantDocTraining.Enabled = true;
+                btnSubmitTraining.Enabled = true;
+                btnCancelTraining.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["TEST_SCORE_LOCK_UNLOCK"].ToString() == "1")
+            {
+                ddlExam.Enabled = false;
+                ddlQualificationStatus.Enabled = false;
+                txtyear.Enabled = false;
+                txtTestScore.Enabled = false;
+                RelevantDocScore.Enabled = false;
+                btnSubmitScore.Enabled = false;
+                btnCancelScore.Enabled = false;
+            }
+            else
+            {
+                ddlExam.Enabled = true;
+                ddlQualificationStatus.Enabled = true;
+                txtyear.Enabled = true;
+                txtTestScore.Enabled = true;
+                RelevantDocScore.Enabled = true;
+                btnSubmitScore.Enabled = true;
+                btnCancelScore.Enabled = true;
+            }
+
+            if (DS.Tables[0].Rows[0]["BUILD_RESUME_LOCK_UNLOCK"].ToString() == "1")
+            {
+                UploadResume.Enabled = false;
+                btnSubmitResume.Enabled = false;
+                btnCancelResume.Enabled = false;
+
+            }
+            else
+            {
+                UploadResume.Enabled = true;
+                btnSubmitResume.Enabled = true;
+                btnCancelResume.Enabled = true;
+
+            }
+
+        }
+    }
+
     private void StudentInformation()
     {
         DataSet ds = null;
@@ -406,8 +677,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                         {
 
                             MessageBox("File Size Should Not Be Greater Than 500 kb");
+                            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                             FileUploadProject.Dispose();
                             FileUploadProject.Focus();
+
                             return;
                         }
                     }
@@ -474,6 +747,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                     FileUploadProject.Focus();
                 }
             }
@@ -1020,6 +1294,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                         {
 
                             MessageBox("File Size Should Not Be Greater Than 500 kb");
+                            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
                             FileUploadProject.Dispose();
                             FileUploadProject.Focus();
                             return;
@@ -1088,6 +1363,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
                     FileUploadProject.Focus();
                 }
             }
@@ -1127,6 +1403,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                     ViewState["action"] = "add";
                     objCommon.DisplayMessage(this.Page, "Record Saved Successfully.", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
                     clear();
                     BindProjectDetails(IDNO);
                     
@@ -1166,7 +1443,8 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
                         ViewState["action"] = "add";
                         clear();
-                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); 
+                        int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
                         BindProjectDetails(IDNO1);
                         
                     }
@@ -1358,6 +1636,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                         {
 
                             MessageBox("File Size Should Not Be Greater Than 500 kb");
+                            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
                             FileUploadCertification.Dispose();
                             FileUploadCertification.Focus();
                             return;
@@ -1426,6 +1705,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
                     FileUploadProject.Focus();
                 }
             }
@@ -2712,6 +2992,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     {
 
                         MessageBox("File Size Should Not Be Greater Than 500 kb");
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
                         FileUploadProject.Dispose();
                         FileUploadProject.Focus();
                         return;
