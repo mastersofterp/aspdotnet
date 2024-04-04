@@ -12,6 +12,8 @@
 //-----------------------------------------------------------------------------------------------------------------------------
 //--1.0.1    20-02-2024     Rutuja         Changes for Parent type
 //--------------------------------------------- -------------------------------------------------------------------------------
+//--1.0.2    03-04-2024     Kajal         Changes for SMS TGPCET
+//--------------------------------------------- -------------------------------------------------------------------------------
 using System;
 using System.Collections;
 using System.Configuration;
@@ -435,7 +437,17 @@ public partial class create_user : System.Web.UI.Page
 
                             if (txtMobile.Text.Trim() != string.Empty)
                             {
-                                SendSMS(txtMobile.Text.Trim(), messageTemplate, TemplateID);
+                                // Added By Kajal Jaiswal on 02-04-2024
+
+                                if (Session["OrgId"].ToString() == "21") // For TGPCET
+                                {
+                                    SendSMSJUST(txtMobile.Text.Trim(), messageTemplate, TemplateID);
+
+                                }
+                                else
+                                {
+                                    SendSMS(txtMobile.Text.Trim(), messageTemplate, TemplateID);
+                                }
                             }
 
                             ShowPanel();
@@ -483,7 +495,18 @@ public partial class create_user : System.Web.UI.Page
 
                                 if (txtMobile.Text.Trim() != string.Empty)
                                 {
-                                    SendSMS(OldMobileno, TEMPLATE.ToString(), TemplateID);
+                                    // Added By Kajal Jaiswal on 02-04-2024
+                                    if (Session["OrgId"].ToString() == "21") // For TGPCET
+                                    {
+
+                                        SendSMSJUST(OldMobileno, TEMPLATE.ToString(), TemplateID);
+
+                                    }
+                                    else
+                                    {
+
+                                        SendSMS(OldMobileno, TEMPLATE.ToString(), TemplateID);
+                                    }
                                 }
                             }
                         }
@@ -516,6 +539,52 @@ public partial class create_user : System.Web.UI.Page
                 objUCommon.ShowError(Page, "create_user.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    private void SendSMSJUST(string mobileNo, string template, string templateId = "")
+    {
+        try
+        {
+            string result = "";
+            string Message = string.Empty;
+            DataSet drCred = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+            if (drCred != null)
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + drCred.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                request.ContentType = "text/xml; charset=utf-8";
+                request.Method = "POST";
+
+                string postDate = "username=" + drCred.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                postDate += "&";
+                postDate += "pass=" + drCred.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                postDate += "&";
+                postDate += "senderid=GPGNGP";
+                postDate += "&";
+                postDate += "message=" + template;
+                postDate += "&";
+                postDate += "dest_mobileno=91" + mobileNo;
+                postDate += "&";
+                postDate += "msgtype=TXT";
+                postDate += "&";
+                postDate += "response=Y";
+
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                request.ContentLength = byteArray.Length;
+                Stream dataStream = request.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+                WebResponse _webresponse = request.GetResponse();
+                dataStream = _webresponse.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                result = reader.ReadToEnd();
+            }
+        }
+        catch (Exception)
+        {
+            throw;
         }
     }
 

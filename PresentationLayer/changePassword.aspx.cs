@@ -1,12 +1,13 @@
-﻿//=================================================================================
-// PROJECT NAME  : UAIMS                                                           
-// PAGE NAME     : TO CHANGE PASSWORD                                              
-// CREATION DATE : 17-APRIL-2009                                                   
-// CREATED BY    : SHEETAL RAUT                                                    
-// MODIFIED BY   : 
-// MODIFIED DESC : 
-// MODIFIED DESC : 
-//=================================================================================
+﻿//--------------------------------------------- -------------------------------------------------------------------------------
+//PROJECT NAME  : UAIMS                                                           
+//PAGE NAME     : TO CHANGE PASSWORD                                           
+//CREATION DATE : 17-APRIL-2009                                                   
+//CREATED BY    : SHEETAL RAUT                                                    
+//-----------------------------------------------------------------------------------------------------------------------------
+//Version   ModifiedOn      Modified By             Purpose
+//-----------------------------------------------------------------------------------------------------------------------------
+//1.0.1     03-04-2024      Kajal Jaiswal           Changes for sending SMS TGCPET
+//--------------------------------------------- -------------------------------------------------------------------------------
 
 using System;
 using System.Collections;
@@ -53,8 +54,8 @@ public partial class changePassword : System.Web.UI.Page
         this.MasterPageFile = "SiteMasterPage.master";
         if (Request.QueryString["IsReset"] == "1")
         {
-            ViewState["IsReset"] = 1;
-            //this.MasterPageFile = "~/BlankMasterPage.master";
+            Session["IsReset"] = 1;
+            
         }
     }
 
@@ -62,8 +63,7 @@ public partial class changePassword : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
-            //txtEmailId.Enabled = false;
-            //txtMobile.Enabled = false;
+            
             //Check Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
@@ -79,7 +79,7 @@ public partial class changePassword : System.Web.UI.Page
                 //Load Page Help
                 if (Request.QueryString["pageno"] != null)
                 {
-                    //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
+                    
                     lblHelp.Text = "In this Page, the user can change his existing password";
                 }
 
@@ -88,7 +88,7 @@ public partial class changePassword : System.Web.UI.Page
                 {
                     if (Request.QueryString["status"].ToString().Equals("firstlog"))
                     {
-                        //lblStatus.Text = "You have logged in for the first time. Please Change your Password.";
+                       
                         objCommon.DisplayMessage(this.updPass, "You have logged in for the first time. Please Change your Password.", this);
                         //update the firstlog status
                         User_AccController objUA = new User_AccController();
@@ -109,7 +109,7 @@ public partial class changePassword : System.Web.UI.Page
                                 if (uads.Tables[0].Rows[0]["UA_EMAIL"].ToString() != "")
                                 {
                                     txtEmailId.Text = uads.Tables[0].Rows[0]["UA_EMAIL"].ToString();
-                                    //txtEmailId.Enabled = false; ;
+                                   
                                 }
                             }
                             if (uads.Tables[0].Rows[0]["UA_MOBILE"] != null)
@@ -275,21 +275,14 @@ public partial class changePassword : System.Web.UI.Page
             }
             if (txtNewPassword.Text.Trim() == string.Empty || txtOldPassword.Text.Trim() == string.Empty || txtConfirmPassword.Text.Trim() == string.Empty)
             {
-                //lblMessage.Text = "Blank password is not allowed";
+                
                 objCommon.DisplayMessage(this.updPass, "Blank password is not allowed", this);
             }
 
             string useremail = txtEmailId.Text.Trim().Replace("'", "");
             string mailid = objCommon.LookUp("USER_ACC", "UA_EMAIL", "UA_EMAIL='" + useremail + "' ");
 
-            //if (txtEmailId.Enabled != false)//if (txtmobile.Enabled != false && txtemailid.Enabled != false)
-            //{
-            //    objCommon.DisplayMessage(this.updPass, "Please verify Email Id", this.Page);
-            //    //Showmessage("Please verify Email Id");
-            //    //return;
-            //}
-            //if (mailid == useremail && txtEmailId.Text.Trim() != "")
-
+           
             Regex pass = new Regex("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{10,}$");
             if (!pass.IsMatch(txtConfirmPassword.Text))
             {
@@ -298,16 +291,12 @@ public partial class changePassword : System.Web.UI.Page
             }
             else
             {
-                //Success.
+               
             }
 
 
             if (txtEmailId.Text.Trim() != "")
             {
-
-
-                //string checkPass = objCommon.LookUp("USER_PASSWORD_CHANGE_LOG", "COUNT(UA_NO)", "UA_NAME='" + Session["username"].ToString() + "'" + "AND UA_PWD ='" + user_pwd + "'");
-
                 User_AccController objUC = new User_AccController();
                 UserAcc objUA = new UserAcc();
                 string UA_type = (objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NAME='" + Session["username"].ToString() + "'"));
@@ -316,37 +305,13 @@ public partial class changePassword : System.Web.UI.Page
                 objUA.UA_No = Convert.ToInt32(Session["userno"].ToString());
                 objUA.UA_Pwd = txtNewPassword.Text.Trim();
                 objUA.UA_OldPwd = txtOldPassword.Text.Trim();
-                //objUA.UA_Pwd = Common.EncryptPassword(txtNewPassword.Text.Trim());
-                //objUA.UA_OldPwd = Common.EncryptPassword(txtOldPassword.Text.Trim());
                 objUA.EMAIL = txtEmailId.Text.Trim();
                 objUA.MOBILE = txtMobile.Text.Trim();
                 objUA.IP_ADDRESS = Request.ServerVariables["REMOTE_HOST"];
                 objUA.UA_Type = Convert.ToInt32(UA_type);
 
                 DataSet ds = objUC.CheckPassword(objUA);
-                //if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                //{
-                //    DataTable Data = ds.Tables[0];
-                //    //foreach (DataRow dr in Data.Rows)
-                //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                //    {
-                //        string db_pwd = ds.Tables[0].Rows[i]["UA_PWD"].ToString();
-                //        db_pwd = clsTripleLvlEncyrpt.RSADecryption(db_pwd.ToString());
-                //        string user_pwd = clsTripleLvlEncyrpt.EncryptPassword(objUA.UA_Pwd);       // Encrypt withMasterSoft Logic
-                //        user_pwd = clsTripleLvlEncyrpt.OneAESEncrypt(user_pwd);
-                //        if (db_pwd == user_pwd)
-                //        {
-                //            objCommon.DisplayMessage(this.updPass, "You can not enter last five passwords.", this);
-                //            return;
-                //        }
-                //    }
-
-                //}
-
-                //CustomStatus cs3 = (CustomStatus)objUC.CheckPassword(objUA);
-
-
-
+                
                 CustomStatus cs1 = (CustomStatus)objUC.UpdateUserEmailMobile(objUA);
 
                 if (cs1.Equals(CustomStatus.RecordUpdated))
@@ -357,7 +322,6 @@ public partial class changePassword : System.Web.UI.Page
 
                     if (cs.Equals(CustomStatus.InvalidUserNamePassword))
                     {
-                        //lblMessage.Text = "Invalid Old Password";
                         objCommon.DisplayMessage(this.updPass, "Invalid Old Password", this);
                     }
                     else
@@ -375,25 +339,9 @@ public partial class changePassword : System.Web.UI.Page
                                 string message = "Dear " + UA_fullname + ", Password is changed succesfully, Your new password is " + txtNewPassword.Text.ToString() + "";
                                 if (txtEmailId.Text != string.Empty && txtNewPassword.Text != string.Empty)
                                 {
-                                    //if (sendmail == 1)
-                                    //{
-                                        //if (email_type == "1" && email_type != "")
-                                        //{
-                                        //     mailsend = TransferToEmail(txtEmailId.Text, message, subject);
-                                        //}
-                                        //else if (email_type == "2" && email_type != "")
-                                        //{
-                                        //    Task<int> ret = Execute(message, txtEmailId.Text, subject);
-                                        //    mailsend = ret.Result;
-                                        //}
-                                        //if (email_type == "3" && email_type != "")
-                                        //{
-                                        //      mailsend = OutLook_Email(message, txtEmailId.Text, subject);
-                                        //}
-
                                     mailsend = objSendEmail.SendEmail(txtEmailId.Text, message, subject); //Calling Method
-                                   // }
-                                  smssend = SendSms(txtNewPassword.Text);
+                                  
+                                    smssend = SendSms(txtNewPassword.Text);
                                   if (mailsend == 1 && smssend == 1)
                                   {
                                       objCommon.DisplayMessage(this.updPass, "Password changed successfully, New password has been sent on Email Id and Mobile Number.", this.Page);
@@ -429,26 +377,9 @@ public partial class changePassword : System.Web.UI.Page
                                 string message = "Dear " + UA_fullname + ", Password is changed succesfully, Your new password is " + txtNewPassword.Text.ToString() + "";
                                 if (txtEmailId.Text != string.Empty && txtNewPassword.Text != string.Empty)
                                 {
-                                    //if (sendmail == 1)
-                                    //{
-                                        //if (email_type == "1" && email_type != "")
-                                        //{
-                                        //     mailsend = TransferToEmail(txtEmailId.Text, message, subject);
-                                        //}
-                                        //else if (email_type == "2" && email_type != "")
-                                        //{
-                                        //    Task<int> ret = Execute(message, txtEmailId.Text, subject);
-                                        //    mailsend = ret.Result;
-                                        //}
-                                        //if (email_type == "3" && email_type != "")
-                                        //{
-                                        //    mailsend = OutLook_Email(message, txtEmailId.Text, subject);
-                                        //}
-
                                      mailsend = objSendEmail.SendEmail(txtEmailId.Text, message, subject); //Calling Method
 
-                                   // }
-                                    smssend = SendSms(txtNewPassword.Text);
+                                     smssend = SendSms(txtNewPassword.Text);
 
                                     if (mailsend == 1 && smssend == 1)
                                     {
@@ -510,8 +441,6 @@ public partial class changePassword : System.Web.UI.Page
         }
         else
         {
-            // Response.Redirect("~/home.aspx");
-
             if (Session["username"].ToString() == "superadmin")
             {
                 Response.Redirect("~/RFC_CONFIG/home.aspx", false);
@@ -528,10 +457,10 @@ public partial class changePassword : System.Web.UI.Page
             {
                 Response.Redirect("~/homeFaculty.aspx", false);
             }
-            //  Show Dashboard to Non Teaching Usertype.
+           
             else if (Session["usertype"].ToString() == "5")
             {
-                //Response.Redirect("~/homeFaculty.aspx", false);
+                
                 Response.Redirect("~/homeNonFaculty.aspx", false);
             }
             else
@@ -555,10 +484,7 @@ public partial class changePassword : System.Web.UI.Page
 
         catch (Exception ex)
         {
-            //if (Convert.ToBoolean(Session["error"]) == true)
-            //    lblMessage.Text = "Invalid Old Password";
-            //else
-            //    lblMessage.Text = "Server UnAvailable";
+            
         }
     }
 
@@ -587,7 +513,16 @@ public partial class changePassword : System.Web.UI.Page
 
             if (txtMobile.Text != string.Empty)
             {
-                SendSMS(txtMobile.Text.Trim(), message, TemplateID);
+                // Added By Kajal Jaiswal on 02-04-2024
+                if (Session["OrgId"].ToString() == "21") // For TGPCET
+                {
+                    SendSMSJUST(txtMobile.Text.Trim(), message, TemplateID);
+
+                }
+                else
+                {
+                    SendSMS(txtMobile.Text.Trim(), message, TemplateID);
+                }
             }
             status = 1;
         }
@@ -596,6 +531,52 @@ public partial class changePassword : System.Web.UI.Page
              status = 0;
         }
         return status;
+    }
+
+    private void SendSMSJUST(string mobileNo, string template, string templateId)
+    {
+        try
+        {
+            string result = "";
+            string Message = string.Empty;
+            DataSet drCred = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+            if (drCred != null)
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + drCred.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                request.ContentType = "text/xml; charset=utf-8";
+                request.Method = "POST";
+
+                string postDate = "username=" + drCred.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                postDate += "&";
+                postDate += "pass=" + drCred.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                postDate += "&";
+                postDate += "senderid=GPGNGP";
+                postDate += "&";
+                postDate += "message=" + template;
+                postDate += "&";
+                postDate += "dest_mobileno=91" + mobileNo;
+                postDate += "&";
+                postDate += "msgtype=TXT";
+                postDate += "&";
+                postDate += "response=Y";
+
+                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                request.ContentLength = byteArray.Length;
+                Stream dataStream = request.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+                WebResponse _webresponse = request.GetResponse();
+                dataStream = _webresponse.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                result = reader.ReadToEnd();
+            }
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public void SendSMS(string Mobile, string text, string TemplateID)
@@ -645,140 +626,13 @@ public partial class changePassword : System.Web.UI.Page
 
     }
 
-    //public int TransferToEmail(string useremail, string message, string subject)
-    //{
-    //    int ret = 0;
-    //    try
-    //    {
-    //        DataSet dsconfig = null;
-    //        dsconfig = objCommon.FillDropDown("reff", "EMAILSVCID", "EMAILSVCPWD,CODE_STANDARD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
-
-    //        if (dsconfig != null)
-    //        {
-    //            string fromAddress = dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString();
-    //            string fromPassword = dsconfig.Tables[0].Rows[0]["EMAILSVCPWD"].ToString();
-    //            string shortcode = dsconfig.Tables[0].Rows[0]["CODE_STANDARD"].ToString();
-    //            MailMessage msg = new MailMessage();
-    //            System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
-    //            // fromPassword = Common.DecryptPassword(fromPassword);
-    //            msg.From = new System.Net.Mail.MailAddress(fromAddress, shortcode);
-    //            msg.To.Add(new System.Net.Mail.MailAddress(useremail));
-    //            msg.Subject = subject;
-    //            msg.Body = message;
-    //            smtp.Credentials = new System.Net.NetworkCredential(fromAddress, fromPassword);
-    //            smtp.EnableSsl = true;
-    //            smtp.Port = 587; // 587
-    //            smtp.Host = "smtp.gmail.com";
-
-    //            ServicePointManager.ServerCertificateValidationCallback =
-    //            delegate(object s, X509Certificate certificate,
-    //            X509Chain chain, SslPolicyErrors sslPolicyErrors)
-    //            {
-    //                return true;
-    //            };
-
-    //            smtp.Send(msg);
-    //            if (System.Net.Mail.DeliveryNotificationOptions.OnSuccess == System.Net.Mail.DeliveryNotificationOptions.OnSuccess)
-    //            {
-    //                return ret = 1;
-    //                //Storing the details of sent email
-    //            }
-    //            else
-    //            {
-    //                return ret = 0;
-    //            }
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-
-    //        ret = 0;
-    //    }
-    //    return ret;
-
-    //}
-
-    //private int OutLook_Email(string Message, string toEmailId, string sub)
-    //{
-
-    //    int ret = 0;
-    //    try
-    //    {
-    //        Common objCommon = new Common();
-    //        DataSet dsconfig = null;
-
-    //        dsconfig = objCommon.FillDropDown("REFF", "EMAILSVCID,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
-    //        SmtpMail oMail = new SmtpMail("TryIt");
-    //        oMail.From = dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString();
-    //        oMail.To = toEmailId;
-    //        oMail.Subject = sub;
-    //        oMail.HtmlBody = Message;
-    //        // SmtpServer oServer = new SmtpServer("smtp.live.com");
-    //        SmtpServer oServer = new SmtpServer("smtp.office365.com"); // modify on 29-01-2022
-    //        oServer.User = dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString();
-    //        oServer.Password = dsconfig.Tables[0].Rows[0]["EMAILSVCPWD"].ToString();
-    //        oServer.Port = 587;
-    //        oServer.ConnectType = SmtpConnectType.ConnectSSLAuto;
-    //        Console.WriteLine("start to send email over TLS...");
-    //        EASendMail.SmtpClient oSmtp = new EASendMail.SmtpClient();
-    //        oSmtp.SendMail(oServer, oMail);
-    //        Console.WriteLine("email sent successfully!");
-    //        ret = 1;
-    //    }
-    //    catch (Exception ep)
-    //    {
-    //        Console.WriteLine("failed to send email with the following error:");
-    //        Console.WriteLine(ep.Message);
-    //        ret = 0;
-    //    }
-    //    return ret;
-    //}
-
     private DataSet getModuleConfig()
     {
         DataSet ds = objCommon.GetModuleConfig(Convert.ToInt32(Session["OrgId"]));
         return ds;
     }
 
-    //static async Task<int> Execute(string Message, string toEmailId, string sub)
-    //{
-    //    int ret = 0;
-    //    try
-    //    {
-    //        Common objCommon = new Common();
-    //        DataSet dsconfig = null;
-    //        dsconfig = objCommon.FillDropDown("REFF", "COMPANY_EMAILSVCID", "SENDGRID_USERNAME,SENDGRID_PWD,SENDGRID_APIKEY", "COMPANY_EMAILSVCID <> '' and SENDGRID_PWD<> ''", string.Empty);
-    //        var fromAddress = new System.Net.Mail.MailAddress(dsconfig.Tables[0].Rows[0]["COMPANY_EMAILSVCID"].ToString(), "RCSS");
-    //        var toAddress = new System.Net.Mail.MailAddress(toEmailId, "");
-    //        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-    //        var apiKey = dsconfig.Tables[0].Rows[0]["SENDGRID_APIKEY"].ToString();
-    //        var client = new SendGridClient(apiKey);
-    //        var from = new EmailAddress(dsconfig.Tables[0].Rows[0]["COMPANY_EMAILSVCID"].ToString(), "RCSS");
-    //        var subject = sub;
-    //        var to = new EmailAddress(toEmailId, "");
-    //        var plainTextContent = "";
-    //        var htmlContent = Message;
-    //        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-    //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11;
-    //        var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-    //        string res = Convert.ToString(response.StatusCode);
-    //        if (res == "Accepted")
-    //        {
-    //            ret = 1;
-    //        }
-    //        else
-    //        {
-    //            ret = 0;
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        ret = 0;
-    //    }
-    //    return ret;
-    //}
-
-    #endregion email and sms
+    #endregion  sms
   
     #region Not_in_use
 
