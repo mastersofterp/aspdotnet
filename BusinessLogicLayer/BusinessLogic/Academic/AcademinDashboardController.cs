@@ -48,6 +48,29 @@ namespace IITMS
 
                     return ds;
                 }
+                // Added By jay Takalkhede on dated 03042024
+                public DataSet Get_Session_Activity_Report(int Mode, int session)
+                {
+                    DataSet ds = null;
+                    SQLHelper objDataAccessLayer = new SQLHelper(_UAIMS_constr);
+
+                    try
+                    {
+                        SqlParameter[] objParams = new SqlParameter[]
+                        {
+                           new SqlParameter("@P_MODE",Mode),
+                           new SqlParameter("@P_SESSIONNO",session)
+                        };
+
+                        ds = objDataAccessLayer.ExecuteDataSetSP("PKG_ACAD_GET_SESSION_FOR_ACTIVITY_REPORT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.Message);
+                    }
+
+                    return ds;
+                }
 
                 public SqlDataReader GetAcademicExamRegistrationDashboardDetail(AcademicDashboardEntity objADE, string semester)
                 {
