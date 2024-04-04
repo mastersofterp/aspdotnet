@@ -1926,7 +1926,7 @@ namespace IITMS
 
 
 
-                public string InsertExtraActivityData(string program, string date, string group, string principal, string clgcode, string orgid, string uano, int schemeno, int sessionno)
+              public string InsertExtraActivityData(string program, string date, string group, string principal, string clgcode, string orgid, string uano, int schemeno, int sessionno)
                 {
                     string retStatus = string.Empty;
 
@@ -1935,7 +1935,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add
-                        objParams = new SqlParameter[9];
+                        objParams = new SqlParameter[10];
                         objParams[0] = new SqlParameter("@P_PROGRAM", program);
                         objParams[1] = new SqlParameter("@P_DATE", date);
                         objParams[2] = new SqlParameter("@P_GROUPTEACHER", group);
@@ -1945,10 +1945,14 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_UANO", uano);
                         objParams[7] = new SqlParameter("@P_SCHEMENO", schemeno);   // Added by Gunesh Mohane on 22-03-2024
                         objParams[8] = new SqlParameter("@P_SESSIONNO", sessionno); // Added by Gunesh Mohane on 22-03-2024
+                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int); // Added by Gunesh Mohane on 03-04-2024
+                        objParams[9].Direction = ParameterDirection.Output;
 
-                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EXT_CUR_ACTIVITY", objParams, true) != null)
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EXT_CUR_ACTIVITY", objParams, true);
+                        if (obj != null && obj.ToString() != "-99" && obj.ToString() != "-1001" && obj.ToString() != "-2")
                             retStatus = "1";
-
+                        else
+                            retStatus = "-1001";
                     }
                     catch (Exception ex)
                     {
@@ -1956,6 +1960,35 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
+
+
+
+
+
+              //Modified by Gunesh Mohane on 03-04-2024
+              public DataSet CheckDatainReportMajorMinor(int sessionno, int degreeno, int branchno, int collegecode, int projectid, string stage)
+              {
+                  DataSet ds = null;
+                  try
+                  {
+                      SQLHelper objDataAccess = new SQLHelper(_UAIMS_constr);
+                      SqlParameter[] sqlParams = new SqlParameter[6];
+                      sqlParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                      sqlParams[1] = new SqlParameter("@P_DEGREENO", degreeno);
+                      sqlParams[2] = new SqlParameter("@P_BRANCHNO", branchno);
+                      sqlParams[3] = new SqlParameter("@P_COLLEGE_CODE", collegecode);
+                      sqlParams[4] = new SqlParameter("@P_PROJECT_ID", projectid);
+                      sqlParams[5] = new SqlParameter("@P_STAGE", stage);
+
+                      ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_RPT_MAJOR_MINOR_STUDENT_PROJECTS", sqlParams);
+                  }
+                  catch (Exception ex)
+                  {
+                      throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.CheckDatainReport() --> " + ex.Message + " " + ex.StackTrace);
+                  }
+                  return ds;
+              }
 
 
                 public int InsertPeojectTitle(IITMS.UAIMS.BusinessLayer.BusinessEntities.Session objSession, int colgcode)
@@ -2467,6 +2500,53 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                //Added by Gunesh Mohane on 03-04-2024
+                public DataSet CheckDatainReportCo_Extra(int collegecode, int uano, int schemeno, int sessionno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objDataAccess = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] sqlParams = new SqlParameter[4];
+                        sqlParams[0] = new SqlParameter("@P_COLLEGECODE", collegecode);
+                        sqlParams[1] = new SqlParameter("@P_UANO", uano);
+                        sqlParams[2] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        sqlParams[3] = new SqlParameter("@P_SESSIONNO", sessionno);
+
+                        ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_GET_ACD_EXT_CUR_ACTIVITY", sqlParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.CheckDatainReportCo_Extra() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return ds;
+                }
+
+                //Added by Gunesh Mohane on 03-04-2024
+                public DataSet CheckDatainReportSubjectWiseContent(int collegecode, int uano, int schemeno, int sessionno, int courseno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objDataAccess = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] sqlParams = new SqlParameter[5];
+                        sqlParams[0] = new SqlParameter("@P_COLLEGE_CODE", collegecode);
+                        sqlParams[1] = new SqlParameter("@P_UANO", uano);
+                        sqlParams[2] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        sqlParams[3] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        sqlParams[4] = new SqlParameter("@P_COURSENO", courseno);
+
+                        ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_GET_ACD_SUB_CONTENT_NOTIN_SYLLABUS", sqlParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.CheckDatainReportSubjectWiseContent() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return ds;
+                }
+
+
 
                 #endregion
 

@@ -156,7 +156,7 @@
 
 
                             <div class="col-12">
-                                <asp:Panel ID="Panel1" runat="server">
+                                <asp:Panel ID="Panel1" runat="server" Visible="false">
                                     <asp:ListView ID="lvSubWiseContent" runat="server">
                                         <LayoutTemplate>
                                             <table class="table table-striped table-bordered nowrap display" style="width: 100%">
@@ -188,7 +188,7 @@
                                                 <td style="text-align: left; width: 20%;">
                                                     <asp:Label ID="lblTopicName" Text='<%# Eval("TOPIC_NAME")%>' runat="server" />
                                                 </td>
-                                                <td style="text-align: left; width: 10%;">
+                                                <td style="text-align: center; width: 10%;">
                                                     <asp:Label ID="lblDate" Text='<%# Eval("DATE")%>' runat="server" />
                                                 </td>
                                                 <td style="text-align: left; width: 50%;">

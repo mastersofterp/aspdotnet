@@ -88,7 +88,8 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
             {
                 if (Session["usertype"].ToString() != "1")
                 {
-                    objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "SC.COSCHNO");
+                    //objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "SC.COSCHNO");
+                    objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
                 }
                 else
                 {
@@ -124,10 +125,14 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
                     objCommon.FillDropDownList(ddlSession, "ACD_COURSE_TEACHER CT INNER JOIN ACD_SESSION_MASTER C ON (CT.SESSIONNO=C.SESSIONNO)", "DISTINCT C.SESSIONNO", "C.SESSION_NAME", "C.SESSIONNO > 0 AND ISNULL(C.IS_ACTIVE,0)=1 AND C.COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND C.OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + "AND CT.UA_NO=" + Convert.ToInt32(Session["userno"]), "C.SESSIONNO DESC");
                     ddlSession.Focus();
                     bindList(0, Convert.ToInt32(ddlClgname.SelectedValue));
+                    
                 }
             }
             else
             {
+                lvExtraActivity.DataSource = null;
+                lvExtraActivity.DataBind();
+                Panel1.Visible = false;
                 ddlSession.Items.Clear();
                 ddlSession.Items.Add(new ListItem("Please Select", "0"));
                 ddlClgname.Focus();
@@ -185,6 +190,7 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
             {
                 lvExtraActivity.DataSource = ds;
                 lvExtraActivity.DataBind();
+                Panel1.Visible = true;
             }
         }
         catch (Exception ex)
@@ -219,6 +225,11 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
                     objCommon.DisplayMessage("Record Inserted Succesfully", this.Page);
                     ClearControl();
                 }
+                if (result == "-1001") 
+                {
+                    objCommon.DisplayMessage("Record Already Exists.", this.Page);
+                    ClearControl();
+                }
                 else
                     objCommon.DisplayMessage("Record not Inserted", this.Page);
             }
@@ -249,8 +260,11 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = objCommon.FillDropDown("ACD_EXT_CUR_ACTIVITY", "PROGRAM_NAME", "PROGRAM_NAME", "", "");
-
+            string clgcode = ViewState["college_id"].ToString();
+            string uano = Session["userno"].ToString();
+            int schemeno = Convert.ToInt32(ddlClgname.SelectedValue);
+            int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+            DataSet ds = objTeachingPlanController.CheckDatainReportCo_Extra(Convert.ToInt32(clgcode),Convert.ToInt32(uano),schemeno,sessionno);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));

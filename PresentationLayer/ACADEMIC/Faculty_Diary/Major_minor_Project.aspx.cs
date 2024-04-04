@@ -276,6 +276,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             if (ddlSession.SelectedIndex > 0)
             {
                 objCommon.FillDropDownList(ddlCollege, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_MASTER CM ON (CT.COLLEGE_ID=CM.COLLEGE_ID)", "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND CT.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue), "CM.COLLEGE_NAME");
+                //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
             }
             lvStudent.Visible = false;
             divProject.Visible = false;
@@ -322,7 +323,8 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         {
             if (ddlDegree.SelectedIndex > 0)
             {
-                objCommon.FillDropDownList(ddlBranch, "ACD_STUDENT S INNER JOIN  USER_ACC A ON (A.UA_NO = S.FAC_ADVISOR) INNER JOIN ACD_BRANCH D ON (D.BRANCHNO=S.BRANCHNO)", "DISTINCT D.BRANCHNO", "D.LONGNAME", "A.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + "AND S.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "D.LONGNAME");
+                //objCommon.FillDropDownList(ddlBranch, "ACD_STUDENT S INNER JOIN  USER_ACC A ON (A.UA_NO = S.FAC_ADVISOR) INNER JOIN ACD_BRANCH D ON (D.BRANCHNO=S.BRANCHNO)", "DISTINCT D.BRANCHNO", "D.LONGNAME", "A.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + "AND S.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "D.LONGNAME");
+                objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH B INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON B.BRANCHNO=CB.BRANCHNO", "DISTINCT B.BRANCHNO", " B.LONGNAME", " CB.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE CB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "LONGNAME");
             }
             lvStudent.Visible = false;
             divProject.Visible = false;
@@ -631,6 +633,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             lvStudentAssign.Visible = false;
             divNewProject.Visible = false;
             divNewStage.Visible = false;
+            ddlCollegeNew.ClearSelection();
             ddlDegreeNew.ClearSelection();
             ddlBranchNew.ClearSelection();
         }
@@ -670,7 +673,8 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         {
             if (ddlDegreeNew.SelectedIndex > 0)
             {
-                objCommon.FillDropDownList(ddlBranchNew, " ACD_BRANCH B INNER JOIN ACD_MINOR_MAJOR_ALLOT_PROJECT_STUDENT S ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COURSE_TEACHER CT ON (CT.SESSIONNO= S.SESSIONNO)", "DISTINCT B.BRANCHNO", "B.LONGNAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue) + "AND S.DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue), "B.LONGNAME");
+                objCommon.FillDropDownList(ddlBranchNew, "ACD_BRANCH B INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON B.BRANCHNO=CB.BRANCHNO", "DISTINCT B.BRANCHNO", " B.LONGNAME", " CB.DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE CB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "LONGNAME");
+                //objCommon.FillDropDownList(ddlBranchNew, " ACD_BRANCH B INNER JOIN ACD_MINOR_MAJOR_ALLOT_PROJECT_STUDENT S ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COURSE_TEACHER CT ON (CT.SESSIONNO= S.SESSIONNO)", "DISTINCT B.BRANCHNO", "B.LONGNAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue) + "AND S.DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue), "B.LONGNAME");
             }
             lvStudentAssign.Visible = false;
             divNewProject.Visible = false;
@@ -875,7 +879,13 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             if (ddlReportSession.SelectedIndex > 0)
             {
                 objCommon.FillDropDownList(ddlReportCollege, "ACD_COLLEGE_MASTER CM INNER JOIN ACD_MINOR_MAJOR_ALLOT_PROJECT_STUDENT S ON (CM.COLLEGE_ID = S.COLLEGE_ID) INNER JOIN  ACD_COURSE_TEACHER CT ON (CT.SESSIONNO= S.SESSIONNO)", "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.SESSIONNO=" + Convert.ToInt32(ddlReportSession.SelectedValue), "CM.COLLEGE_NAME");
+                
             }
+            ddlReportCollege.ClearSelection();
+            ddlReportDegree.ClearSelection();
+            ddlReportBranch.ClearSelection();
+            ddlReportProject.ClearSelection();
+            ddlReportStage.ClearSelection();
         }
         catch (Exception ex)
         {
@@ -893,6 +903,10 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             {
                 objCommon.FillDropDownList(ddlReportDegree, " ACD_DEGREE D INNER JOIN ACD_MINOR_MAJOR_ALLOT_PROJECT_STUDENT S ON (D.DEGREENO= S.DEGREENO) INNER JOIN  ACD_COURSE_TEACHER CT ON (CT.SESSIONNO= S.SESSIONNO)", "DISTINCT D.DEGREENO", "D.DEGREENAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.COLLEGE_ID=" + Convert.ToInt32(ddlReportCollege.SelectedValue), "D.DEGREENAME");
             }
+            ddlReportDegree.ClearSelection();
+            ddlReportBranch.ClearSelection();
+            ddlReportProject.ClearSelection();
+            ddlReportStage.ClearSelection();
         }
         catch (Exception ex)
         {
@@ -908,8 +922,12 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         {
             if (ddlReportDegree.SelectedIndex > 0)
             {
-                objCommon.FillDropDownList(ddlReportBranch, " ACD_BRANCH B INNER JOIN ACD_MINOR_MAJOR_ALLOT_PROJECT_STUDENT S ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COURSE_TEACHER CT ON (CT.SESSIONNO= S.SESSIONNO)", "DISTINCT B.BRANCHNO", "B.LONGNAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.COLLEGE_ID=" + Convert.ToInt32(ddlReportCollege.SelectedValue) + "AND S.DEGREENO=" + Convert.ToInt32(ddlReportDegree.SelectedValue), "B.LONGNAME");
+                objCommon.FillDropDownList(ddlReportBranch, "ACD_BRANCH B INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON B.BRANCHNO=CB.BRANCHNO", "DISTINCT B.BRANCHNO", " B.LONGNAME", " CB.DEGREENO=" + Convert.ToInt32(ddlReportDegree.SelectedValue) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE CB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "LONGNAME");
+                //objCommon.FillDropDownList(ddlReportBranch, " ACD_BRANCH B INNER JOIN ACD_MINOR_MAJOR_ALLOT_PROJECT_STUDENT S ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COURSE_TEACHER CT ON (CT.SESSIONNO= S.SESSIONNO)", "DISTINCT B.BRANCHNO", "B.LONGNAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND S.COLLEGE_ID=" + Convert.ToInt32(ddlReportCollege.SelectedValue) + "AND S.DEGREENO=" + Convert.ToInt32(ddlReportDegree.SelectedValue), "B.LONGNAME");
             }
+            ddlReportBranch.ClearSelection();
+            ddlReportProject.ClearSelection();
+            ddlReportStage.ClearSelection();
         }
         catch (Exception ex)
         {
@@ -927,6 +945,8 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             {
                 objCommon.FillDropDownList(ddlReportProject, "ACD_FD_PROJECT_TITLE_MASTER", "ID", "Project_Title", "id > 0", "");
             }
+            ddlReportProject.ClearSelection();
+            ddlReportStage.ClearSelection();
         }
         catch (Exception ex)
         {
@@ -966,7 +986,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             int projectid = Convert.ToInt32(ddlReportProject.SelectedValue);
             string stage = ddlReportStage.SelectedValue;
 
-            DataSet ds = objTeachingPlanController.CheckDatainReport(sessionno, degreeno, branchno, clgcode, projectid, stage);
+            DataSet ds = objTeachingPlanController.CheckDatainReportMajorMinor(sessionno, degreeno, branchno, clgcode, projectid, stage);
             if (title != null && ds.Tables[0].Rows.Count > 0)
             {
                 try

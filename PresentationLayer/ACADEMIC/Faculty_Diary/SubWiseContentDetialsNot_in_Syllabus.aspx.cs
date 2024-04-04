@@ -8,6 +8,7 @@
 // MODIFIED DATE : 30/03/2024 
 // MODIFIED DESC : 
 //=================================================================================
+
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
@@ -83,7 +84,8 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
             {
                 if (Session["usertype"].ToString() != "1")
                 {
-                    objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "SC.COSCHNO");
+                    //objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "SC.COSCHNO");
+                    objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
                 }
                 else
                 {
@@ -123,8 +125,14 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
             }
             else
             {
+                lvSubWiseContent.DataSource = null;
+                lvSubWiseContent.DataBind();
+                Panel1.Visible = false;
+                
                 ddlSession.Items.Clear();
                 ddlSession.Items.Add(new ListItem("Please Select", "0"));
+                ddlCourseName.Items.Clear();
+                ddlCourseName.Items.Add(new ListItem("Please Select", "0"));
                 ddlClgname.Focus();
             }
         }
@@ -144,8 +152,9 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
             if (ddlSession.SelectedIndex > 0)
             {
                 objCommon.FillDropDownList(ddlCourseName, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (CT.COURSENO=C.COURSENO)", "DISTINCT CT.COURSENO", "C.COURSE_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")" + "AND CT.SESSIONNO=" + ddlSession.SelectedValue, "CT.COURSENO");
-                bindList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), 0);
+                
             }
+            bindList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), 0);
         }
         catch (Exception ex)
         {
@@ -215,6 +224,7 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
             {
                 lvSubWiseContent.DataSource = ds;
                 lvSubWiseContent.DataBind();
+                Panel1.Visible = true;
             }
         }
         catch (Exception ex)
@@ -311,8 +321,13 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
     private void ShowReport(string reportTitle, string rptFileName)
     {
         string clgcode = objCommon.LookUp("Reff", "College_code", "College_code >0");
-        DataSet ds = objCommon.FillDropDown("ACD_SUB_CONTENT_NOTIN_SYLLABUS", "CONTENT", "TOPIC_NAME", "", "");
-        if (ds != null)
+        string uano = Session["userno"].ToString();
+        int schemeno = Convert.ToInt32(ddlClgname.SelectedValue);
+        int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+        int courseno = Convert.ToInt32(ddlCourseName.SelectedValue);
+
+        DataSet ds = objTeachingPlanController.CheckDatainReportSubjectWiseContent(Convert.ToInt32(clgcode),Convert.ToInt32(uano),schemeno,sessionno,courseno);
+        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
         {
             try
             {
