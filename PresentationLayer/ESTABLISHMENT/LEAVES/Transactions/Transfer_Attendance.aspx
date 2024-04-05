@@ -138,14 +138,16 @@
                                                                     <asp:CheckBox ID="chkAllEmployees" Checked="false" Text="Select IDNO" Enabled="true"
                                                                         runat="server" onclick="checkAllEmployees(this)" />
                                                                 </th>  --%>
-                                                <th>IDNO
-                                                                    
+                                                <th style="display: none">IDNO                                                                    
+                                                </th>
+                                                <th>RFIDNO
                                                 </th>
                                                 <th>NAME
                                                 </th>
-                                                <%--  <th width="2%">
-                                                                    DEPARTMENT
-                                                                </th>--%>
+                                                <th>Designation
+                                                </th>
+                                                <th>DEPARTMENT
+                                                </th>
                                                 <th>LWP DAYS
                                                 </th>
                                                 <th>UPDATED LWP DAYS
@@ -163,18 +165,24 @@
                                                         <asp:CheckBox ID="chkID" runat="server" Checked="false" Tag='lvItem' 
                                                             ToolTip='<%#Eval("IDNO")%>'/>
                                                     </td>--%>
-                                        <td>
+                                        <td style="display: none">
                                             <%--  <%# Eval("IDNO")%>--%>
 
                                             <asp:Label ID="lblidno" runat="server" Text='<%# Eval("IDNO")%>' Enabled="false"></asp:Label>
 
                                         </td>
                                         <td>
+                                            <asp:Label ID="lblrfidno" runat="server" Text='<%# Eval("RFIDNO")%>' Enabled="false"></asp:Label>
+                                        </td>
+                                        <td>
                                             <%# Eval("NAME")%>
                                         </td>
-                                        <%--<td width="20%">
-                                                      <%# Eval("SUBDEPT")%>
-                                                    </td>--%>
+                                        <td>
+                                             <%# Eval("SUBDESIG")%>
+                                        </td>
+                                        <td>
+                                            <%# Eval("SUBDEPT")%>
+                                        </td>
                                         <td>
                                             <asp:TextBox ID="txtleave" runat="server" Text='<%# Eval("LEAVES")%>' Enabled="false"></asp:TextBox>
                                         </td>
