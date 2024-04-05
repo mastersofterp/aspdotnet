@@ -103,7 +103,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
     {
         try
         {
-          
+
             lblName.Text = string.Empty;
             lblEmail.Text = string.Empty;
             lblMobile.Text = string.Empty;
@@ -158,15 +158,15 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                     }
                     btnCancel.Visible = true;
                 }
-            else
-            {
-                divDetails.Visible = false;
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`No record found.`)", true);
-                btnCancel.Visible = false;
-                btnreceipt.Visible = false;
-                btnSubmit.Visible = false;
-                return;
-            }
+                else
+                {
+                    divDetails.Visible = false;
+                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`No record found.`)", true);
+                    btnCancel.Visible = false;
+                    btnreceipt.Visible = false;
+                    btnSubmit.Visible = false;
+                    return;
+                }
             }
         }
         catch (Exception ex)
@@ -179,12 +179,12 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
     {
         try
         {
-            int userNo = Convert.ToInt32(ViewState["USERNO"].ToString());          
+            int userNo = Convert.ToInt32(ViewState["USERNO"].ToString());
             //decimal amount = Convert.ToDecimal(ViewState["AMOUNT"].ToString());
-           //string amount ;
+            //string amount ;
             decimal amount = Convert.ToDecimal(ViewState["AMOUNT"].ToString());
             //string amount = ViewState["AMOUNT"].ToString();
-        
+
             //int amount = Convert.ToInt32(ViewState["AMOUNT"].ToString());
             string appId = string.Empty;
             appId = txtAppId.Text.ToString().TrimEnd();
@@ -203,7 +203,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 }
             }
             DataSet ds_degreenamePHD = objCommon.FillDropDown("ACD_college_degree_branch AD INNER JOIN ACD_PHD_REGISTRATION AUR ON (AD.BRANCHNO=AUR.DEPARTMENT_NO)", "AD.DEGREENO", "USERNO", "USERNO=" + userNo + "AND USERNAME =" + appId + " AND UGPGOT=3", "");
-            string PHDDegree = string.Empty; 
+            string PHDDegree = string.Empty;
             if (ds_degreenamePHD.Tables.Count > 0 && ds_degreenamePHD.Tables[0].Rows.Count > 0)
             {
                 if (ds_degreenamePHD.Tables[0].Rows[0]["DEGREENO"] != DBNull.Value)
@@ -212,7 +212,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 }
             }
 
-    
+
 
             string lookupResult = objCommon.LookUp("ACD_DEGREE AD INNER JOIN ACD_USER_REGISTRATION AUR ON (AD.DEGREENO=AUR.DEGREENO)", "AD.DEGREENO", "USERNO=" + userNo + " AND USERNAME ='" + appId + "'");
             DataSet dsPay = null;
@@ -224,7 +224,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 {
                     //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`Manual payment done successfully.`)", true);
                     dsPay = null;
-                    userNo =0;
+                    userNo = 0;
                     amount = 0;
                     spName = "";
                     spParameters = "";
@@ -257,9 +257,9 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
 
                         btnreceipt.Visible = true;
                     }
-                   //</1.0.1>
+                    //</1.0.1>
                     return;
-              }
+                }
             }
         }
         catch (Exception ex)
@@ -289,14 +289,14 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             throw;
         }
     }
-     //<1.0.1> 
+    //<1.0.1> 
     protected async Task<int> SendMailForAppId_PG()
     {
         int ret = 0;
         // int userno = Convert.ToInt32(((UserDetails)(Session["user"])).UserNo);
         try
         {
-            int userno = Convert.ToInt32(ViewState["USERNO"].ToString());      
+            int userno = Convert.ToInt32(ViewState["USERNO"].ToString());
             System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
             string MyHtmlString = "";
             Common objCommon = new Common();
@@ -434,7 +434,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this.Page, "Dear " + ViewState["firstName"].ToString().Trim() + " Congratulations! You have submitted the online application successfully. Your Application No. is " + UserName.Trim() + " For assistance, please call 9543277888.", this.Page);
                 int userNO = Convert.ToInt32(ViewState["USERNO"].ToString());
-                
+
             }
         }
         catch (Exception ex)
@@ -479,8 +479,8 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             //    cc.Add(new EmailAddress(i));
             //}
             #endregion
-       
-            string email =  objCommon.LookUp("ACD_USER_REGISTRATION", "EMAILID", "USERNO=" + userno);
+
+            string email = objCommon.LookUp("ACD_USER_REGISTRATION", "EMAILID", "USERNO=" + userno);
             string Name = objCommon.LookUp("ACD_USER_REGISTRATION", "FIRSTNAME", "USERNO=" + userno);
             ViewState["firstName"] = Name;
             string UserName = objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + userno);
@@ -614,7 +614,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this.Page, "Dear " + ViewState["firstName"].ToString().Trim() + " Congratulations! You have submitted the online application successfully. Your Application No. is " + UserName.Trim() + " For assistance, please call 9543277888.", this.Page);
                 int userNO = Convert.ToInt32(ViewState["USERNO"].ToString());
-               
+
             }
         }
         catch (Exception ex)
@@ -789,7 +789,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this.Page, "Dear " + ViewState["firstName"].ToString().Trim() + " Congratulations! You have submitted the online application successfully. Your Application No. is " + UserName.Trim() + " For assistance, please call 9543277888.", this.Page);
                 int userNO = Convert.ToInt32(ViewState["USERNO"].ToString());
-             
+
             }
         }
         catch (Exception ex)
@@ -963,7 +963,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this.Page, "Dear " + ViewState["firstName"].ToString().Trim() + " Congratulations! You have submitted the online application successfully. Your Application No. is " + UserName.Trim() + " For assistance, please call 9543277888.", this.Page);
                 int userNO = Convert.ToInt32(ViewState["USERNO"].ToString());
-               
+
             }
         }
         catch (Exception ex)
@@ -1006,7 +1006,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             //}
             #endregion
 
-            int userno = Convert.ToInt32(ViewState["USERNO"].ToString()); 
+            int userno = Convert.ToInt32(ViewState["USERNO"].ToString());
             string email = objCommon.LookUp("ACD_USER_REGISTRATION", "EMAILID", "USERNO=" + userno);
             string Name = objCommon.LookUp("ACD_USER_REGISTRATION", "FIRSTNAME", "USERNO=" + userno);
             ViewState["firstName"] = Name;
@@ -1133,8 +1133,8 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             if (ret == 1)
             {
                 objCommon.DisplayMessage(this.Page, "Dear " + ViewState["firstName"].ToString().Trim() + " Congratulations! You have submitted the online application successfully. Your Application No. is " + UserName.Trim() + " For assistance, please call 9543277888.", this.Page);
-                int userNo = Convert.ToInt32(ViewState["USERNO"].ToString());          
-              
+                int userNo = Convert.ToInt32(ViewState["USERNO"].ToString());
+
             }
         }
         catch (Exception ex)
@@ -1149,7 +1149,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
     {
         try
         {
-          
+
             string DcrNo = string.Empty;
             string IDNO = string.Empty;
             DataSet dsDCR_IDNO = objCommon.FillDropDown("ACD_DCR_ONLINE", "DCR_NO", "IDNO,NAME", " IDNO=" + Convert.ToInt32(ViewState["USERNO"]) + "", "");
@@ -1161,7 +1161,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
                 string IDNO1 = dsDCR_IDNO.Tables[0].Rows[0]["NAME"].ToString();
             }
             /// string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("")));
-         //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ManualEntryOA")));
+            //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ManualEntryOA")));
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
 
@@ -1183,25 +1183,25 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
         }
     }
 
-    static public MemoryStream ShowGeneralExportReportForMailForApplication(string path, string paramString,string DegreeName)
+    static public MemoryStream ShowGeneralExportReportForMailForApplication(string path, string paramString, string DegreeName)
     {
         MemoryStream oStream;
         ReportDocument customReport;
         customReport = new ReportDocument();
-          string reportPath = "";
-         if (DegreeName.ToString().Equals("B.Tech."))
-          {
-              reportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Academic/rptPreviewForm_Crescent.rpt");
-          }
-         if (DegreeName.ToString().Equals("MCA"))
-         {
-             reportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Academic/rptPreviewForm_PG.rpt");
-         }
-         else
-          {
-             reportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Academic/rptPreviewForm_PG.rpt");
-          }
-            customReport.Load(reportPath);
+        string reportPath = "";
+        if (DegreeName.ToString().Equals("B.Tech."))
+        {
+            reportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Academic/rptPreviewForm_Crescent.rpt");
+        }
+        if (DegreeName.ToString().Equals("MCA"))
+        {
+            reportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Academic/rptPreviewForm_PG.rpt");
+        }
+        else
+        {
+            reportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Academic/rptPreviewForm_PG.rpt");
+        }
+        customReport.Load(reportPath);
         char ch = ',';
         string[] val = paramString.Split(ch);
         if (customReport.ParameterFields.Count > 0)
@@ -1487,7 +1487,7 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
         Common.SetDBLogonForReport(connectionInfo, customReport);
     }
 
-    protected void btnreceipt_Click(object sender, EventArgs e)
+    protected void btnreciept_Click(object sender, EventArgs e)
     {
         try
         {
@@ -1498,6 +1498,6 @@ public partial class ACADEMIC_ManualEntryOA : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "Oops! Something Went Wrong!", this.Page);
             return;
         }
- //</1.0.1> 
+        //</1.0.1> 
     }
 }

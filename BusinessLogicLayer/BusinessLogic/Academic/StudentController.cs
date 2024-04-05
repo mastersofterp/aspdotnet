@@ -10929,6 +10929,26 @@ namespace IITMS
                     }
                     return ds;
                 }
+                //************PRASHANTG-TN56760-260324************************************************************************************************
+                public DataSet RetrieveFacultyTimeTableDetails(int uano)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_UANO", uano);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_FACULTY_DASHBOARD_TIMETABLE", objParams);   //SP UPDATED FOR SINGLE PARAM
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.RetrieveStudentCurrentRegDetails-> " + ex.ToString());
+                    }
+                    return ds;
+                }
                 //*********************************************************************************************************************************************************************
                 public DataSet RetrieveFacultyTimeTableDetails(int sessionno, int schemeno, int semesterno, int uano, int sectionno)
                 {

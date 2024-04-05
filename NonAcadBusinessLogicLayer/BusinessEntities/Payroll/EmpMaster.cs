@@ -2453,6 +2453,37 @@ namespace IITMS
                     }
                 }
 
+
+                public int COUNTRYNO
+                {
+                    get
+                    {
+                        return this._COUNTRYNO;
+                    }
+                    set
+                    {
+                        if ((this._COUNTRYNO != value))
+                        {
+                            this._COUNTRYNO = value;
+                        }
+                    }
+                }
+
+                public int STATENO
+                {
+                    get
+                    {
+                        return this._STATENO;
+                    }
+                    set
+                    {
+                        if ((this._STATENO != value))
+                        {
+                            this._STATENO = value;
+                        }
+                    }
+                }
+
             }
 
 

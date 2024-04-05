@@ -74,19 +74,19 @@ public partial class Job_Announcement : System.Web.UI.Page
                     objCommon.FillDropDownList(ddlInterval, "ACD_TP_INTERVALS", "INTNO", "INTERVALS", "STATUS=1", "INTERVALS");
                     //objCommon.FillDropDownList(ddlRound1, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "STATUS=1", "SELECTNAME");
                     objCommon.FillListBox(lstbxCity, "ACD_CITY ", "CITYNO", "CITY ", "CITYNO >0", "CITYNO ");
-                    
+
                     //objCommon.FillDropDownList(ddlRound2, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", " SELECTNO NOT IN (" + Convert.ToInt32(ddlRound1.SelectedValue) + ")", "SELECTNAME");
                     //objCommon.FillListBox(lstbxCareerAreas, "ACD_TP_WORK_AREA ", "WORKAREANO", "WORKAREANAME ", "", "WORKAREANAME ");
-                    objCommon.FillListBox(lstbxSemester, "ACD_SEMESTER ", "SEMESTERNO", "SEMESTERNAME ", "SEMESTERNO>0", "SEMESTERNAME ");
+                    objCommon.FillListBox(lstbxSemester, "ACD_SEMESTER ", "SEMESTERNO", "SEMESTERNAME ", "SEMESTERNO>0", "SEMESTERNO");
                     objCommon.FillDropDownList(ddlFaculty, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "", "COLLEGE_NAME");
                     //objCommon.FillDropDownList(ddlStudyLevel, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "", "UA_SECTIONNAME");
                     objCommon.FillDropDownList(ddlRound, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "SELECTNO NOT IN (0) and STATUS=1", "SELECTNAME");
                     objCommon.FillDropDownList(ddlPlacement, "ACD_TP_PLACEMENT_STATUS", "STATUS_NO", "PLACED_STATUS", "STATUS=1", "STATUS_NO");
-                  //  objCommon.FillListBox(lstbxProgramName, "ACD_BRANCH A inner join ACD_DEGREE B on (A.COLLEGE_CODE=B.COLLEGE_CODE) ", "DEGREENO", "CONCAT(LONGNAME,' ',DEGREENAME) as PROGRAME  ", "", "PROGRAME");
+                    //  objCommon.FillListBox(lstbxProgramName, "ACD_BRANCH A inner join ACD_DEGREE B on (A.COLLEGE_CODE=B.COLLEGE_CODE) ", "DEGREENO", "CONCAT(LONGNAME,' ',DEGREENAME) as PROGRAME  ", "", "PROGRAME");
                     btnSpecifyRange.Text = "SPECIFY RANGE";
-                  //  Session["announcement"] = null;
+                    //  Session["announcement"] = null;
                     BlobDetails();//Added by Parag
-    
+
                 }
                 BindListViewAddCompany();
                 pnlmin.Visible = false;
@@ -104,9 +104,9 @@ public partial class Job_Announcement : System.Web.UI.Page
                 divbtn.Visible = true;
                 lvJobAnnouncement.Visible = true;
                 Createtable_RoundDet();
-               // placeH.Visible = true;
+                // placeH.Visible = true;
             }
-            
+
             //Literal lit;
             //        panelfordropdown = new Panel();
             //        panelfordropdown.ID = "pnldropdown";
@@ -134,7 +134,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.Page_Load --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
-        }        
+        }
     }
 
     //private void Controlcreate(string p1, string p2)
@@ -186,7 +186,7 @@ public partial class Job_Announcement : System.Web.UI.Page
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         DataTable dt;
-       // DataTable dtr = (DataTable)Session["announcement"];
+        // DataTable dtr = (DataTable)Session["announcement"];
 
         if (Session["announcement"] == null)
         {
@@ -214,40 +214,40 @@ public partial class Job_Announcement : System.Web.UI.Page
             return;
         }
 
-            if (this.lvannouncefor.Items.Count == 0)
+        if (this.lvannouncefor.Items.Count == 0)
         {
             objCommon.DisplayMessage("Please select Announce for Details !", this.Page);
             return;
         }
         //}
-     //   string StartDate = dates[0];//Jul 15, 2021
-       // string EndDate = dates[1];
+        //   string StartDate = dates[0];//Jul 15, 2021
+        // string EndDate = dates[1];
         //DateTime dateTime10 = Convert.ToDateTime(a);
-            DateTime dtStartDate = DateTime.Parse(txtSchFromDate.Text);
+        DateTime dtStartDate = DateTime.Parse(txtSchFromDate.Text);
         string SDate = dtStartDate.ToString("yyyy/MM/dd");
         DateTime dtEndDate = DateTime.Parse(txtSchToDate.Text);
         string EDate = dtEndDate.ToString("yyyy/MM/dd");
         DateTime dtLastDate = DateTime.Parse(txtLastDate.Text);
-        string LDate = dtLastDate.ToString("yyyy/MM/dd"); 
+        string LDate = dtLastDate.ToString("yyyy/MM/dd");
         try
         {
-            if (SDate!= string.Empty && EDate!= string.Empty)
+            if (SDate != string.Empty && EDate != string.Empty)
             {
-            if (Convert.ToDateTime(SDate) > Convert.ToDateTime(EDate))
-            {
-                objCommon.DisplayMessage(this.upnlsalary, "Schdeudule TO DATE should be greater than Schedule FROM Date", this.Page);
-                return;
-            }
+                if (Convert.ToDateTime(SDate) > Convert.ToDateTime(EDate))
+                {
+                    objCommon.DisplayMessage(this.upnlsalary, "Schedule TO DATE should be greater than Schedule FROM Date", this.Page);
+                    return;
+                }
             }
 
             if (Convert.ToDateTime(LDate) > Convert.ToDateTime(SDate))
             {
-                objCommon.DisplayMessage(this.upnlsalary, "Schdeudule Last Date should not be greater than Schedule From Date and To Date", this.Page);
+                objCommon.DisplayMessage(this.upnlsalary, "Scheduled Last Date should not be greater than Schedule From Date and To Date", this.Page);
                 return;
             }
-           // else
+            // else
             {
-             
+
                 objTP.COMPID = Convert.ToInt32(ddlCompanyName.SelectedValue);
                 objTP.JOBTYPE = Convert.ToInt32(ddlJobType.SelectedValue);
                 objTP.JobRole = Convert.ToInt32(ddlJobRole.SelectedValue);
@@ -274,7 +274,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                     objTP.anywhereinsrilanka = 0;
                 }
                 objTP.COLLEGE_CODE = Convert.ToString(Session["colcode"]);
-                
+
                 objTP.INTERVIEWFROM = Convert.ToDateTime(SDate);
                 objTP.INTERVIEWTO = Convert.ToDateTime(EDate);
                 objTP.Venue = txtVenue.Text;
@@ -282,14 +282,14 @@ public partial class Job_Announcement : System.Web.UI.Page
 
                 //if (Convert.ToDateTime(txtLastDate.Text) < (Convert.ToDateTime(EDate)))
                 //{
-                    objTP.LASTDATE = Convert.ToDateTime(txtLastDate.Text);
+                objTP.LASTDATE = Convert.ToDateTime(txtLastDate.Text);
                 //}
-               // else {
-                  //  objCommon.DisplayMessage(this.upnlsalary, "Last Date to Apply is Less Than Schedule To Date.", this.Page);
-                 //   return;
-              //  }
+                // else {
+                //  objCommon.DisplayMessage(this.upnlsalary, "Last Date to Apply is Less Than Schedule To Date.", this.Page);
+                //   return;
+                //  }
 
-                objTP.JobDiscription = "" + Convert.ToString(hfdTemplate.Value).Replace(",", "^") +  "";
+                objTP.JobDiscription = "" + Convert.ToString(hfdTemplate.Value).Replace(",", "^") + "";
 
                 objTP.CRITERIA = "" + Convert.ToString(hfdEligibility.Value).Replace(",", "^") + "";
 
@@ -305,11 +305,11 @@ public partial class Job_Announcement : System.Web.UI.Page
                     objTP.HSCPER = Convert.ToDecimal(txtHSC.Text);
                     objTP.DIPLOMAPER = Convert.ToDecimal(0.0);
                 }
-                if(txtHSC.Text == string.Empty && txtDiploma.Text == string.Empty)
+                if (txtHSC.Text == string.Empty && txtDiploma.Text == string.Empty)
                 {
                     objCommon.DisplayMessage("Please Enter HSC Percentage or Diploma Percentage", this.Page);
                 }
-                 
+
                 objTP.UGPER = Convert.ToDecimal(txtUG.Text);
                 if (txtPG.Text == string.Empty)
                 {
@@ -319,7 +319,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                 {
                     objTP.PGPER = Convert.ToDecimal(txtPG.Text);
                 }
-                
+
                 //end
 
                 objTP.Amount = string.IsNullOrEmpty(txtAmount.Text.Trim()) ? 0 : Convert.ToDouble(txtAmount.Text);
@@ -329,19 +329,19 @@ public partial class Job_Announcement : System.Web.UI.Page
                 objTP.Currency = Convert.ToInt32(ddlCurrency.SelectedValue);
                 objTP.Interval = Convert.ToInt32(ddlInterval.SelectedValue);
                 string r1 = null, r2 = null, r3 = null, r4 = null;
-               
-                 //r1= ddlRound1.SelectedValue;
-               
+
+                //r1= ddlRound1.SelectedValue;
+
                 // r2=ddlRound2.SelectedValue;
-                
+
                 //     r3 = ddlRound3.SelectedValue;
-               
-                 //    r4 = ddlRound4.SelectedValue;
-                
-               
-                   objTP.SELECTNO = r1 + "," + r2 + "," + r3 + "," + r4;
-              
-               // objTP.SELECTNO = r1 + "," + r2 + "," + r3 + "," + r4;
+
+                //    r4 = ddlRound4.SelectedValue;
+
+
+                objTP.SELECTNO = r1 + "," + r2 + "," + r3 + "," + r4;
+
+                // objTP.SELECTNO = r1 + "," + r2 + "," + r3 + "," + r4;
                 objTP.RoundDiscription = "" + Convert.ToString(hfDescription.Value).Replace(",", "^") + "";
                 //dtround = Session["TblRound"];
 
@@ -355,10 +355,10 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //if (Session["ProjTbl"] != null && ((DataTable)Session["ProjTbl"]) != null)
                 //{
 
-               // dt = (DataTable)Session["announcement"];
+                // dt = (DataTable)Session["announcement"];
                 DataTable btannounce = (DataTable)Session["announcement"];
                 objTP.TP_ANNOUNCE_FOR_TBL = btannounce;
-                
+
                 string studentIds = "";
                 //for (int i = 0; i < dt.Rows.Count; i++)
                 //{
@@ -379,8 +379,8 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //}
 
 
-              
-                
+
+
                 //string ss = "r";
                 //DataTable dta = new DataTable();
                 //SqlDataAdapter sda = new SqlDataAdapter();
@@ -397,24 +397,24 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //    lv1.Visible = true;
                 //}
 
-            //    DataTable dt = new DataTable();
-            //    DataTable dtt = new DataTable();
-            //    dtt = dt;
-            //    DataSet ds = objCompany.GetIdEditJobAnnouncemnt(Compid);
-            //if (ds.Tables[0].Rows.Count > 0)
-            //{
+                //    DataTable dt = new DataTable();
+                //    DataTable dtt = new DataTable();
+                //    dtt = dt;
+                //    DataSet ds = objCompany.GetIdEditJobAnnouncemnt(Compid);
+                //if (ds.Tables[0].Rows.Count > 0)
+                //{
                 //string Program = lstbxProgramName.SelectedValue;
                 //string Program = ViewState["ProgramName"].ToString();
-            //    if (Program!=string.Empty)
-            //    {
-            //    string[] subs = Program.Split(',');
-            //    ViewState["Branchno"] = Convert.ToInt32(subs[0]);
-            //    ViewState["Degreeno"] = Convert.ToInt32(subs[1]);
-            //   // ViewState["Branchno"] =  0 ;
-            //  //  ViewState["Degreeno"] =  0 ;
-            //objTP.BRANCHNO=Convert.ToInt32(ViewState["Branchno"]);
-            //objTP.DEGREE = Convert.ToInt32(ViewState["Degreeno"]);
-            //    }
+                //    if (Program!=string.Empty)
+                //    {
+                //    string[] subs = Program.Split(',');
+                //    ViewState["Branchno"] = Convert.ToInt32(subs[0]);
+                //    ViewState["Degreeno"] = Convert.ToInt32(subs[1]);
+                //   // ViewState["Branchno"] =  0 ;
+                //  //  ViewState["Degreeno"] =  0 ;
+                //objTP.BRANCHNO=Convert.ToInt32(ViewState["Branchno"]);
+                //objTP.DEGREE = Convert.ToInt32(ViewState["Degreeno"]);
+                //    }
 
 
                 //Blob File Upload Code
@@ -493,7 +493,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                 {
                     objTP.FileName = "";
                 }
-               
+
 
                 //
 
@@ -506,12 +506,12 @@ public partial class Job_Announcement : System.Web.UI.Page
                         CustomStatus cs = (CustomStatus)objCompany.AddJobAnnouncement(objTP, org);
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
-                            objCommon.DisplayMessage( "Record Saved Successfully.", this.Page);
+                            objCommon.DisplayMessage("Record Saved Successfully.", this.Page);
                             ViewState["action"] = "add";
                             //Response.Redirect(Request.Url.ToString());
                             Clear();
                             BindListViewAddCompany();
-                            
+
                         }
                     }
                     else
@@ -521,12 +521,12 @@ public partial class Job_Announcement : System.Web.UI.Page
                             objTP.SCHEDULENO = 0;
                             objTP.ACOMSCHNO = Convert.ToInt32(ViewState["ACOMSCHNO"]);
                             //int org = Convert.ToInt32(Session["OrgId"]);
-                           // objTP.SCHEDULENO = Convert.ToInt32(ViewState["COMPID"]);
+                            // objTP.SCHEDULENO = Convert.ToInt32(ViewState["COMPID"]);
                             int org = Convert.ToInt32(Session["OrgId"]);
                             CustomStatus CS = (CustomStatus)objCompany.UpdJobAnnouncement(objTP, org);
                             if (CS.Equals(CustomStatus.RecordUpdated))
                             {
-                                objCommon.DisplayMessage( Page,"Record Updated Successfully.", this.Page);
+                                objCommon.DisplayMessage(Page, "Record Updated Successfully.", this.Page);
                                 ViewState["action"] = null;
                                 Clear();
                                 BindListViewAddCompany();
@@ -534,15 +534,15 @@ public partial class Job_Announcement : System.Web.UI.Page
                             ViewState["ACOMSCHNO"] = null;
                         }
                     }
-                   
+
                     Session["announcement"] = null;
                 }
-            //}
-            //pnlr2.Visible = false;
-           // pnlr3.Visible = false;
-           // pnlr4.Visible = false;
+                //}
+                //pnlr2.Visible = false;
+                // pnlr3.Visible = false;
+                // pnlr4.Visible = false;
+            }
         }
-           }
 
         catch (Exception ex)
         {
@@ -584,24 +584,24 @@ public partial class Job_Announcement : System.Web.UI.Page
             ddlInterval.Enabled = false;
         }
     }
-   
+
     protected void btnSpecifyRange_Click(object sender, EventArgs e)
     {
-        
+
         if (btnSpecifyRange.Text == "SPECIFY RANGE")
         {
-                pnlamount.Visible = false;
-                txtAmount.Visible = false;
-                lblAmount.Visible = false;
-                txtMinAmount.Visible = true;
-                txtMaxAmount.Visible = true;
-                lblMinAmount.Visible = true;
-                lblMaxAmount.Visible = true;
-                pnlmin.Visible = true;
-                pnlmax.Visible = true;
-                btnSpecifyRange.Text = "SPECIFY AMOUNT";
+            pnlamount.Visible = false;
+            txtAmount.Visible = false;
+            lblAmount.Visible = false;
+            txtMinAmount.Visible = true;
+            txtMaxAmount.Visible = true;
+            lblMinAmount.Visible = true;
+            lblMaxAmount.Visible = true;
+            pnlmin.Visible = true;
+            pnlmax.Visible = true;
+            btnSpecifyRange.Text = "SPECIFY AMOUNT";
         }
-        else if (btnSpecifyRange.Text == "SPECIFY AMOUNT" )
+        else if (btnSpecifyRange.Text == "SPECIFY AMOUNT")
         {
             pnlmin.Visible = false;
             pnlmax.Visible = false;
@@ -614,7 +614,7 @@ public partial class Job_Announcement : System.Web.UI.Page
             pnlamount.Visible = true;
             btnSpecifyRange.Text = "SPECIFY RANGE";
         }
-        
+
     }
 
     private void BindListViewAddCompany()
@@ -647,7 +647,7 @@ public partial class Job_Announcement : System.Web.UI.Page
 
             ViewState["ACOMSCHNO"] = int.Parse(btnEdit.CommandArgument);
             int ACOMSCHNO = Convert.ToInt32(ViewState["ACOMSCHNO"]);
-           //int Compid = int.Parse(btnEdit.CommandArgument);
+            //int Compid = int.Parse(btnEdit.CommandArgument);
             ViewState["ACOMSCHNO"] = ACOMSCHNO;
             ViewState["action"] = "edit";
             //int Count = Convert.ToInt32(objCommon.LookUp("ACD_TP_COMPSCHEDULE A INNER JOIN ACD_TP_REGISTER B ON (A.SCHEDULENO=B.SCHEDULENO)", "Count(1)", "A.ACOMSCHNO='" + ACOMSCHNO + "'"));
@@ -686,9 +686,9 @@ public partial class Job_Announcement : System.Web.UI.Page
                 ddlJobRole.SelectedValue = ds.Tables[0].Rows[0]["JOBROLE"].ToString();
                 //ddlPlacement.SelectedValue = ds.Tables[0].Rows[0]["SELECTNO"].ToString();
                 ddlPlacement.SelectedValue = (ds.Tables[0].Rows[0]["PLACEMENT_MODE"] == null) ? string.Empty : ds.Tables[0].Rows[0]["PLACEMENT_MODE"].ToString();
-               // ddlFaculty.SelectedValue = ds.Tables[0].Rows[0]["Faculty"].ToString();
-             //   objCommon.FillDropDownList(ddlStudyLevel, "ACD_UA_SECTION A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B on (A.UA_SECTION=B.UGPGOT)", "DISTINCT (UA_SECTION)", "A.UA_SECTIONNAME", "B.COLLEGE_ID=" + ddlFaculty.SelectedValue, "(UA_SECTION)");
-               // ddlStudyLevel.SelectedValue = ds.Tables[0].Rows[0]["Study Level"].ToString();
+                // ddlFaculty.SelectedValue = ds.Tables[0].Rows[0]["Faculty"].ToString();
+                //   objCommon.FillDropDownList(ddlStudyLevel, "ACD_UA_SECTION A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B on (A.UA_SECTION=B.UGPGOT)", "DISTINCT (UA_SECTION)", "A.UA_SECTIONNAME", "B.COLLEGE_ID=" + ddlFaculty.SelectedValue, "(UA_SECTION)");
+                // ddlStudyLevel.SelectedValue = ds.Tables[0].Rows[0]["Study Level"].ToString();
                 //ddlStudyLevel.SelectedValue = "1";
                 //ddlPlacement.SelectedValue = ds.Tables[0].Rows[0]["SELECTNO"].ToString();
                 string city = ds.Tables[0].Rows[0]["CITY"].ToString();
@@ -720,7 +720,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //        ProgramNames.Append(",");
                 //    }
                 //}
-                
+
                 //string programes = ds.Tables[0].Rows[0]["Program Name"].ToString();
                 //objCommon.FillListBox(lstbxProgramName, "ACD_COLLEGE_DEGREE_BRANCH A INNER JOIN ACD_BRANCH B ON (A.BRANCHNO=B.BRANCHNO) INNER JOIN ACD_DEGREE C ON (C.DEGREENO=A.DEGREENO) ", "CONCAT(B.BRANCHNO,',',A.DEGREENO)", "CONCAT(LONGNAME,'- ',DEGREENAME) as PROGRAME", "A.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");  //15-11-2022
                 //string[] progs = programes.Split(',');
@@ -750,16 +750,16 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //    }
                 //}
 
-              //  lstbxProgramName.Items.Add(programes);
-              
+                //  lstbxProgramName.Items.Add(programes);
+
                 //------------------END
                 //lstbxProgramName
                 ////
 
 
 
-               // string[] ptype = programe.Split(delimiterChars);
-               // string[] progTypes = programe.Split(delimiter);
+                // string[] ptype = programe.Split(delimiterChars);
+                // string[] progTypes = programe.Split(delimiter);
 
                 //for (int j = 0; j < ptype.Length; j++)
                 //{
@@ -772,12 +772,12 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //    }
                 //}
 
-                
 
-             //   string sem = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
 
-              //  string[] stype = sem.Split(delimiterChars);
-             //   string[] semTypes = sem.Split(delimiter);
+                //   string sem = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
+
+                //  string[] stype = sem.Split(delimiterChars);
+                //   string[] semTypes = sem.Split(delimiter);
 
                 //for (int j = 0; j < stype.Length; j++)
                 //{
@@ -790,7 +790,7 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //    }
                 //}
 
-                string  chk = ds.Tables[0].Rows[0]["ANYWHEREINSRILANKA"].ToString();
+                string chk = ds.Tables[0].Rows[0]["ANYWHEREINSRILANKA"].ToString();
                 if (chk == "1")
                 {
                     chkAnywhere.Checked = true;
@@ -820,38 +820,37 @@ public partial class Job_Announcement : System.Web.UI.Page
                 txtAmount.Text = ds.Tables[0].Rows[0]["AMOUNT"].ToString();
                 txtMinAmount.Text = ds.Tables[0].Rows[0]["MINAMOUNT"].ToString();
                 txtMaxAmount.Text = ds.Tables[0].Rows[0]["MAXAMOUNT"].ToString();
-               ddlInterval.SelectedValue = ds.Tables[0].Rows[0]["INTERVAL"].ToString();
+                ddlInterval.SelectedValue = ds.Tables[0].Rows[0]["INTERVAL"].ToString();
                 txtAddDetails.Text = ds.Tables[0].Rows[0]["ADDDETAILS"].ToString();
                 ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["CUR_NO"].ToString();
-               // ddlRound1.SelectedValue =
-                string rounds=ds.Tables[0].Rows[0]["SELECTNO"].ToString();
-               // string r1 = rounds.Split(new[] { ',' }, 2)[0];
+                // ddlRound1.SelectedValue =
+                string rounds = ds.Tables[0].Rows[0]["SELECTNO"].ToString();
+                // string r1 = rounds.Split(new[] { ',' }, 2)[0];
 
 
                 //string a[]=rounds.Split(",");
-               //string[] subs = rounds.Split(',');
-               //int a = Convert.ToInt32(subs[0]);
-               //int b = Convert.ToInt32(subs[1]);
-               //int c = Convert.ToInt32(subs[2]);
-               //int d = Convert.ToInt32(subs[3]);
+                //string[] subs = rounds.Split(',');
+                //int a = Convert.ToInt32(subs[0]);
+                //int b = Convert.ToInt32(subs[1]);
+                //int c = Convert.ToInt32(subs[2]);
+                //int d = Convert.ToInt32(subs[3]);
 
-               // ddlRound1.SelectedValue = a.ToString();
-               // objCommon.FillDropDownList(ddlRound2, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "", "SELECTNAME");            
-               // ddlRound2.SelectedValue = b.ToString();
-               // pnlr2.Visible = true;
-               // objCommon.FillDropDownList(ddlRound3, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "", "SELECTNAME");
-               // ddlRound3.SelectedValue = c.ToString();
-               // pnlr3.Visible = true;
-               // objCommon.FillDropDownList(ddlRound4, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "", "SELECTNAME");
-               // ddlRound4.SelectedValue = d.ToString();
-               // pnlr4.Visible = true;
+                // ddlRound1.SelectedValue = a.ToString();
+                // objCommon.FillDropDownList(ddlRound2, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "", "SELECTNAME");            
+                // ddlRound2.SelectedValue = b.ToString();
+                // pnlr2.Visible = true;
+                // objCommon.FillDropDownList(ddlRound3, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "", "SELECTNAME");
+                // ddlRound3.SelectedValue = c.ToString();
+                // pnlr3.Visible = true;
+                // objCommon.FillDropDownList(ddlRound4, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "", "SELECTNAME");
+                // ddlRound4.SelectedValue = d.ToString();
+                // pnlr4.Visible = true;
                 txtDescription.Text = ds.Tables[0].Rows[0]["ROUNDS_DISCRIPTION"].ToString();
                 txtEligibility.Text = ds.Tables[0].Rows[0]["CRITERIA"].ToString();
                 txtLastDate.Text = Convert.ToDateTime(ds.Tables[0].Rows[0]["LASTDATE"].ToString()).ToString("yyyy-MM-dd");//yyyy-MM-dd
-              //  ddlStudyLevel.SelectedIndex = Convert.ToInt32(ds.Tables[0].Rows[0]["StudyLevel"].ToString());
-             //   lstbxProgramName.SelectedValue = ds.Tables[0].Rows[0]["Program Name"].ToString();
+                //  ddlStudyLevel.SelectedIndex = Convert.ToInt32(ds.Tables[0].Rows[0]["StudyLevel"].ToString());
+                //   lstbxProgramName.SelectedValue = ds.Tables[0].Rows[0]["Program Name"].ToString();
 
-              
 
                 lvannouncefor.Visible = true;
                 lvannouncefor.DataSource = ds.Tables[2];
@@ -869,19 +868,19 @@ public partial class Job_Announcement : System.Web.UI.Page
                 //    lblfileName.Visible = true;
                 //    lblfileName.Text = fileName;
                 //}
-                
+
                 //ScriptManager.RegisterClientScriptBlock(upnlMain, upnlMain.GetType(), "Src", "Setdate('" + hdnDate.Value + "');", true);
                 //ScriptManager.RegisterClientScriptBlock(upnlMain, upnlMain.GetType(), "Src", "Setdate('" + hdnDate.Value + "');", true);
 
                 //btnr2.Visible = true;
-               // btnr1.Visible = false;
-              //  btnr1.Visible = true;
+                // btnr1.Visible = false;
+                //  btnr1.Visible = true;
                 //btnr3.Visible = true;
-               // btnr4.Visible = true;
+                // btnr4.Visible = true;
 
             }
-            }
-      
+        }
+
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -893,7 +892,7 @@ public partial class Job_Announcement : System.Web.UI.Page
 
     protected void chkAnywhere_CheckedChanged(object sender, EventArgs e)
     {
-           lstbxCity.Enabled = false;      
+        lstbxCity.Enabled = false;
     }
     private DataTable CreateTable_AnnounceFor()
     {
@@ -912,9 +911,8 @@ public partial class Job_Announcement : System.Web.UI.Page
         return dta;
     }
 
-   
+
     protected void btnAdd_Click(object sender, EventArgs e)
-    
     {
         try
         {
@@ -973,9 +971,10 @@ public partial class Job_Announcement : System.Web.UI.Page
 
                 //if (this.lvannouncefor.Items.Count > 0)
                 //{
-                //    objCommon.DisplayMessage(this.Page,"Please Remove Already Added Job Announcement.And Add New !", this.Page);
+                //    objCommon.DisplayMessage(this.Page, "Please Remove Already Added Job Announcement.And Add New !", this.Page);
                 //    return;
                 //}
+
                 DataTable dt = (DataTable)Session["announcement"];
 
 
@@ -1150,6 +1149,7 @@ public partial class Job_Announcement : System.Web.UI.Page
 
 
             }
+
         }
         catch (Exception ex)
         {
@@ -1172,7 +1172,6 @@ public partial class Job_Announcement : System.Web.UI.Page
     //    }    
     //}
     protected void btnDelPDetail_Click(object sender, EventArgs e)
-    
     {
         try
         {
@@ -1220,7 +1219,7 @@ public partial class Job_Announcement : System.Web.UI.Page
     }
 
 
-   
+
 
 
     protected void btnr1_Click(object sender, EventArgs e)
@@ -1237,7 +1236,7 @@ public partial class Job_Announcement : System.Web.UI.Page
         //    objCommon.FillDropDownList(ddlRound2, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", " SELECTNO NOT IN (" + Convert.ToInt32(ddlRound1.SelectedValue) + ")", "SELECTNAME");
         //    btnr1.Visible = false;
         //}
-       //objCommon.FillDropDownList(ddlRound2, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", " ", "SELECTNAME");
+        //objCommon.FillDropDownList(ddlRound2, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", " ", "SELECTNAME");
 
 
         //string Count = objCommon.LookUp("ACD_TP_SELECTIONTYPE", "Count(SELECTNO)", "");
@@ -1298,8 +1297,8 @@ public partial class Job_Announcement : System.Web.UI.Page
         ddlCurrency.SelectedIndex = 0;
         ddlInterval.SelectedIndex = 0;
         ddlPlacement.SelectedIndex = 0;
-      //  ddlRound1.SelectedIndex = 0;
-      //  ddlRound2.SelectedIndex = 0;
+        //  ddlRound1.SelectedIndex = 0;
+        //  ddlRound2.SelectedIndex = 0;
         ddlStudyLevel.SelectedIndex = 0;
         ddlFaculty.SelectedIndex = 0;
         txtAddDetails.Text = string.Empty;
@@ -1322,13 +1321,14 @@ public partial class Job_Announcement : System.Web.UI.Page
         chkAnywhere.Checked = false;
         lvannouncefor.DataSource = null;
         lvannouncefor.DataBind();
+        lvannouncefor.Visible = false;
         //lvannouncefor.Items.Clear();
-       // lvannouncefor.Visible = false;
-       // pnlr2.Visible = false;
-       // pnlr3.Visible = false;
-       // pnlr4.Visible = false;
-       // pnlr5.Visible = false;
-       // pnlr6.Visible = false;
+        // lvannouncefor.Visible = false;
+        // pnlr2.Visible = false;
+        // pnlr3.Visible = false;
+        // pnlr4.Visible = false;
+        // pnlr5.Visible = false;
+        // pnlr6.Visible = false;
         templateEditor.Text = string.Empty;
         ddlRound.SelectedValue = "0";
         txtRoundSrNo.Text = string.Empty;
@@ -1403,20 +1403,20 @@ public partial class Job_Announcement : System.Web.UI.Page
             objCommon.FillDropDownList(ddlStudyLevel, "ACD_UA_SECTION A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B on (A.UA_SECTION=B.UGPGOT)", "DISTINCT (UA_SECTION)", "A.UA_SECTIONNAME", "B.COLLEGE_ID=" + ddlFaculty.SelectedValue, "(UA_SECTION)");
             FileUploadCompany.Enabled = false;
         }
-   }
-    
+    }
+
     protected void ddlStudyLevel_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlStudyLevel.SelectedIndex > 0)
         {
 
-        //objCommon.FillListBox(lstbxProgramName, "ACD_COLLEGE_DEGREE_BRANCH A INNER JOIN ACD_BRANCH B ON (A.BRANCHNO=B.BRANCHNO) INNER JOIN ACD_DEGREE C ON (C.DEGREENO=A.DEGREENO) ", "DISTINCT (A.DEGREENO)", "CONCAT(LONGNAME,'-',DEGREENAME) as PROGRAME", "A.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");
-           // objCommon.FillListBox(lstbxProgramName, "ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B on (A.DEGREENO=B.DEGREENO)", "DISTINCT (A.DEGREENO)", "A.DEGREENAME", "B.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND B.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");
-        objCommon.FillListBox(lstbxProgramName, "ACD_COLLEGE_DEGREE_BRANCH A INNER JOIN ACD_BRANCH B ON (A.BRANCHNO=B.BRANCHNO) INNER JOIN ACD_DEGREE C ON (C.DEGREENO=A.DEGREENO) ", "CONCAT(B.BRANCHNO,',',A.DEGREENO)", "CONCAT(LONGNAME,'- ',DEGREENAME) as PROGRAME", "A.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");  //15-11-2022
-         //   objCommon.FillListBox(lstbxProgramName, "ACD_AFFILIATED_UNIVERSITY", "AFFILIATED_NO", "AFFILIATED_LONGNAME", "", "AFFILIATED_NO");  //15-11-2022
-        objCommon.FillListBox(lstbxSemester, "ACD_SEMESTER ", "SEMESTERNO", "SEMESTERNAME ", "SEMESTERNO>0", "SEMESTERNO ");
-        FileUploadCompany.Enabled = false;
-        }   
+            //objCommon.FillListBox(lstbxProgramName, "ACD_COLLEGE_DEGREE_BRANCH A INNER JOIN ACD_BRANCH B ON (A.BRANCHNO=B.BRANCHNO) INNER JOIN ACD_DEGREE C ON (C.DEGREENO=A.DEGREENO) ", "DISTINCT (A.DEGREENO)", "CONCAT(LONGNAME,'-',DEGREENAME) as PROGRAME", "A.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");
+            // objCommon.FillListBox(lstbxProgramName, "ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B on (A.DEGREENO=B.DEGREENO)", "DISTINCT (A.DEGREENO)", "A.DEGREENAME", "B.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND B.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");
+            objCommon.FillListBox(lstbxProgramName, "ACD_COLLEGE_DEGREE_BRANCH A INNER JOIN ACD_BRANCH B ON (A.BRANCHNO=B.BRANCHNO) INNER JOIN ACD_DEGREE C ON (C.DEGREENO=A.DEGREENO) ", "CONCAT(B.BRANCHNO,',',A.DEGREENO)", "CONCAT(LONGNAME,'- ',DEGREENAME) as PROGRAME", "A.UGPGOT=" + Convert.ToInt32(ddlStudyLevel.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ddlFaculty.SelectedValue), "(A.DEGREENO)");  //15-11-2022
+            //   objCommon.FillListBox(lstbxProgramName, "ACD_AFFILIATED_UNIVERSITY", "AFFILIATED_NO", "AFFILIATED_LONGNAME", "", "AFFILIATED_NO");  //15-11-2022
+            objCommon.FillListBox(lstbxSemester, "ACD_SEMESTER ", "SEMESTERNO", "SEMESTERNAME ", "SEMESTERNO>0", "SEMESTERNO ");
+            FileUploadCompany.Enabled = false;
+        }
     }
     protected void btnr4_Click(object sender, EventArgs e)
     {
@@ -1447,7 +1447,7 @@ public partial class Job_Announcement : System.Web.UI.Page
         //}
     }
 
-    
+
     private void createDynamicDropDownList(String _ddlId)
     {
         HtmlGenericControl tr = new HtmlGenericControl("tr");
@@ -1461,25 +1461,25 @@ public partial class Job_Announcement : System.Web.UI.Page
         HtmlGenericControl td2 = new HtmlGenericControl("td");
         DropDownList ddl = new DropDownList();
         ddl.ID = _ddlId.Replace(" ", "").ToLower();
-       // ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
-       // ddl.AutoPostBack = true;
-       
+        // ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
+        // ddl.AutoPostBack = true;
+
         td2.Controls.Add(ddl);
         tr.Controls.Add(td2);
-       // placeH.Controls.Add(tr);
+        // placeH.Controls.Add(tr);
 
-       // DropDownList ddl1 = (DropDownList)placeH.FindControl("DropDownList");
-       // lblValue.Text = ddl1.SelectedValue;
-   
+        // DropDownList ddl1 = (DropDownList)placeH.FindControl("DropDownList");
+        // lblValue.Text = ddl1.SelectedValue;
 
-       /// ddl.ID = _ddlId.Replace(" ", "").ToLower();
-        ddl.Items.Insert(0,"Please Select");
+
+        /// ddl.ID = _ddlId.Replace(" ", "").ToLower();
+        ddl.Items.Insert(0, "Please Select");
         objCommon.FillDropDownList(ddl, "ACD_TP_SELECTIONTYPE", "SELECTNO", "SELECTNAME", "SELECTNO NOT IN (0)", "SELECTNAME");
 
-      //  ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
+        //  ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
         //ddl.AutoPostBack = true;
     }
-    
+
 
     //public void ddl_SelectedIndexChanged(object sender, EventArgs e)
     //{
@@ -1538,101 +1538,109 @@ public partial class Job_Announcement : System.Web.UI.Page
 
         //ObjEL.AccessNoTbl = AccessionRegisterTbl;
 
-
+        DataTable dt = new DataTable();
         lvRoundDetail.Visible = true;
-                DataTable dt = (DataTable)ViewState["Round"];
+        if (ViewState["Round"] != null)
+        {
+            dt = (DataTable)ViewState["Round"];
+        }
+        else
+        {
+            Createtable_RoundDet();
+            dt = (DataTable)ViewState["Round"];
+        }
 
-                //int count = (from row in dt.AsEnumerable()
-                //             where row.Field<string>("Title").Equals(Convert.ToString(lblTitle.Text)) 
-                //             select row).Count();
+        //int count = (from row in dt.AsEnumerable()
+        //             where row.Field<string>("Title").Equals(Convert.ToString(lblTitle.Text)) 
+        //             select row).Count();
 
-                //if (count <= 0)
-                //{
-                foreach (ListViewDataItem dataitem in lvRoundDetail.Items)
-                {
-                    Label Label1 = dataitem.FindControl("Label1") as Label;
-                    string SrNo = Label1.Text;
-                    if (SrNo == txtRoundSrNo.Text)
-                    {
-                        objCommon.DisplayMessage("Should Not Enter Same Round Serial Number !", this.Page);
-                        return;
-                    }
-                }
-
-
-                     int maxVals = 0;
-                    DataRow dr = dt.NewRow();
-                    dr["SEQNO"] = maxVals + 1;
-                    dr["ROUNDS"] = ddlRound.SelectedItem.Text == null ? string.Empty : Convert.ToString(ddlRound.SelectedItem.Text);
-                    dr["ROUNDSID"] = Convert.ToInt32(ddlRound.SelectedValue) == null ? 0 : Convert.ToInt32(ddlRound.SelectedValue);
-                    dr["ROUNDS_SRNO"] = Convert.ToInt32(txtRoundSrNo.Text) == null ? 0 : Convert.ToInt32(txtRoundSrNo.Text);
-
-                   
-                    dt.Rows.Add(dr);
+        //if (count <= 0)
+        //{
+        foreach (ListViewDataItem dataitem in lvRoundDetail.Items)
+        {
+            Label Label1 = dataitem.FindControl("Label1") as Label;
+            string SrNo = Label1.Text;
+            if (SrNo == txtRoundSrNo.Text)
+            {
+                objCommon.DisplayMessage("Should Not Enter Same Round Serial Number !", this.Page);
+                return;
+            }
+        }
 
 
-                    lvRoundDetail.DataSource = dt;
-                    lvRoundDetail.DataBind();
-                    objCommon.DisplayMessage("Round Is Add !", this.Page);
-
-                 
-                //}
-                //else
-                //{
-                //    Showmessage("Selected entry already in the list.");
-                //    txtAccNo.Focus();
-                //    return;
-                //}
+        int maxVals = 0;
+        DataRow dr = dt.NewRow();
+        dr["SEQNO"] = maxVals + 1;
+        dr["ROUNDS"] = ddlRound.SelectedItem.Text == null ? string.Empty : Convert.ToString(ddlRound.SelectedItem.Text);
+        dr["ROUNDSID"] = Convert.ToInt32(ddlRound.SelectedValue) == null ? 0 : Convert.ToInt32(ddlRound.SelectedValue);
+        dr["ROUNDS_SRNO"] = Convert.ToInt32(txtRoundSrNo.Text) == null ? 0 : Convert.ToInt32(txtRoundSrNo.Text);
 
 
-                    upnlAnnouncedFor.Visible = true;
-                    divbtn.Visible = true;
-                    lvJobAnnouncement.Visible = true;
-                    ddlRound.SelectedValue = "0";
-                    txtRoundSrNo.Text = string.Empty;
+        dt.Rows.Add(dr);
 
-    
-         //if (Session["TblRound"] != null && ((DataTable)Session["TblRound"]) != null)
-         //{
-           
 
-         //    DataTable dt = (DataTable)Session["TblRound"];
-         //    DataRow dr = dt.NewRow();
-         //    dr["SEQNO"] = Convert.ToInt32(Session["SRNO"]) + 1;
-         //    dr["ROUNDS"] = ddlRound.SelectedItem.Text == null ? string.Empty : Convert.ToString(ddlRound.SelectedItem.Text);
-         //    //  dr["ROUNDS_SRNO"] = Convert.ToInt32(ddlRound.SelectedValue) == null ? 0  : Convert.ToInt32(ddlRound.SelectedValue);
-         //    dr["ROUNDS_SRNO"] = Convert.ToInt32(txtRoundSrNo.Text) == null ? 0 : Convert.ToInt32(txtRoundSrNo.Text);
+        lvRoundDetail.DataSource = dt;
+        lvRoundDetail.DataBind();
+        objCommon.DisplayMessage("Round Is Added !", this.Page);
 
-         //    dt.Rows.Add(dr);
-         //    Session["TblRound"]=dt; 
-         //    lvRoundDetail.DataSource = dt;
-         //    lvRoundDetail.DataBind();
 
-           
-         //}
-         //else
-         //{
-         //    int maxVals = 0;
-         //    DataTable dt = this.Createtable_RoundDet();
-         //    DataRow dr = dt.NewRow();
+        //}
+        //else
+        //{
+        //    Showmessage("Selected entry already in the list.");
+        //    txtAccNo.Focus();
+        //    return;
+        //}
 
-         //    dr["SEQNO"] = maxVals + 1; 
-         //    dr["ROUNDS"] = ddlRound.SelectedItem.Text == null ? string.Empty : Convert.ToString(ddlRound.SelectedItem.Text);
-         //    dr["ROUNDSID"] = Convert.ToInt32(ddlRound.SelectedValue) == null ? 0 : Convert.ToInt32(ddlRound.SelectedValue);
-         //    dr["ROUNDS_SRNO"] = Convert.ToInt32(txtRoundSrNo.Text) == null ? 0 : Convert.ToInt32(txtRoundSrNo.Text);
 
-         //    dt.Rows.Add(dr);
-         //    //Session["RoundTbl"] = dt;
-         //   // ViewState["RoundTbl"] = dt;
-         //    Session["TblRound"]=dt;
-         //    lvRoundDetail.DataSource = dt;
-         //    lvRoundDetail.DataBind();
+        upnlAnnouncedFor.Visible = true;
+        divbtn.Visible = true;
+        lvJobAnnouncement.Visible = true;
+        ddlRound.SelectedValue = "0";
+        txtRoundSrNo.Text = string.Empty;
 
-         //  //  ViewState["SRNO"] = Convert.ToInt32(ViewState["SRNO"]) + 1;
-         //    //ViewState["SRNO"] = maxVals + 1;
-         //    Session["SRNO"] = maxVals + 1;
-         //}
-       
+
+        //if (Session["TblRound"] != null && ((DataTable)Session["TblRound"]) != null)
+        //{
+
+
+        //    DataTable dt = (DataTable)Session["TblRound"];
+        //    DataRow dr = dt.NewRow();
+        //    dr["SEQNO"] = Convert.ToInt32(Session["SRNO"]) + 1;
+        //    dr["ROUNDS"] = ddlRound.SelectedItem.Text == null ? string.Empty : Convert.ToString(ddlRound.SelectedItem.Text);
+        //    //  dr["ROUNDS_SRNO"] = Convert.ToInt32(ddlRound.SelectedValue) == null ? 0  : Convert.ToInt32(ddlRound.SelectedValue);
+        //    dr["ROUNDS_SRNO"] = Convert.ToInt32(txtRoundSrNo.Text) == null ? 0 : Convert.ToInt32(txtRoundSrNo.Text);
+
+        //    dt.Rows.Add(dr);
+        //    Session["TblRound"]=dt; 
+        //    lvRoundDetail.DataSource = dt;
+        //    lvRoundDetail.DataBind();
+
+
+        //}
+        //else
+        //{
+        //    int maxVals = 0;
+        //    DataTable dt = this.Createtable_RoundDet();
+        //    DataRow dr = dt.NewRow();
+
+        //    dr["SEQNO"] = maxVals + 1; 
+        //    dr["ROUNDS"] = ddlRound.SelectedItem.Text == null ? string.Empty : Convert.ToString(ddlRound.SelectedItem.Text);
+        //    dr["ROUNDSID"] = Convert.ToInt32(ddlRound.SelectedValue) == null ? 0 : Convert.ToInt32(ddlRound.SelectedValue);
+        //    dr["ROUNDS_SRNO"] = Convert.ToInt32(txtRoundSrNo.Text) == null ? 0 : Convert.ToInt32(txtRoundSrNo.Text);
+
+        //    dt.Rows.Add(dr);
+        //    //Session["RoundTbl"] = dt;
+        //   // ViewState["RoundTbl"] = dt;
+        //    Session["TblRound"]=dt;
+        //    lvRoundDetail.DataSource = dt;
+        //    lvRoundDetail.DataBind();
+
+        //  //  ViewState["SRNO"] = Convert.ToInt32(ViewState["SRNO"]) + 1;
+        //    //ViewState["SRNO"] = maxVals + 1;
+        //    Session["SRNO"] = maxVals + 1;
+        //}
+
 
     }
     protected void btnCancelRound_Click(object sender, EventArgs e)
@@ -1648,13 +1656,13 @@ public partial class Job_Announcement : System.Web.UI.Page
     //        if (Session["TblRound"] != null && ((DataTable)Session["TblRound"]) != null)
     //        {
     //             dt = (DataTable)Session["TblRound"];
-               
+
     //                DataRow dr = this.GetEditableDataRow_RoundDet(dt, btnDelRoundDetail.CommandArgument);
     //             dt.Rows.Remove(dr);
     //             Session["TblRound"] = dt;
     //            lvRoundDetail.DataSource = dt;
     //            lvRoundDetail.DataBind();
-               
+
     //        }
     //        upnlAnnouncedFor.Visible = true;
     //        divbtn.Visible = true;
@@ -1673,7 +1681,6 @@ public partial class Job_Announcement : System.Web.UI.Page
 
 
     protected void btnDelRoundDetail_Click(object sender, EventArgs e)
-    
     {
         try
         {
@@ -1693,25 +1700,25 @@ public partial class Job_Announcement : System.Web.UI.Page
                     dt.Rows.RemoveAt(i);
                     break;
                 }
-                
+
             }
 
             lvRoundDetail.DataSource = dt;
             lvRoundDetail.DataBind();
-            objCommon.DisplayMessage(this.Page,"Round Delete Successfully  !", this.Page);
+            objCommon.DisplayMessage(this.Page, "Round Delete Successfully  !", this.Page);
             ViewState["Round"] = dt;
-           
-          //  objCommon.DisplayMessage("Round Delete Successfully  !", this.Page);
+
+            //  objCommon.DisplayMessage("Round Delete Successfully  !", this.Page);
 
         }
         catch (Exception ex)
         {
-           
+
 
             return;
         }
     }
-   
+
 
     private void Createtable_RoundDet()
     {
@@ -1751,7 +1758,7 @@ public partial class Job_Announcement : System.Web.UI.Page
 
 
     //Added by Parag//29-02-2024
-    
+
     protected void imgdownloadComDetails_Click(object sender, ImageClickEventArgs e)
     {
         string Url = string.Empty;
@@ -1829,7 +1836,7 @@ public partial class Job_Announcement : System.Web.UI.Page
     private bool FileTypeValid(string FileExtention)
     {
         bool retVal = false;
-        string[] Ext = {".pdf", ".PDF"};
+        string[] Ext = { ".pdf", ".PDF" };
         foreach (string ValidExt in Ext)
         {
             if (FileExtention == ValidExt)

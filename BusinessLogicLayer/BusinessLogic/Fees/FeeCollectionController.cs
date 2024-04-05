@@ -6976,7 +6976,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
 
         }
-       
+
         public int UpdateISGPayOnlinePaymentlog(int idno, string order_id, string token_id, string track_id, string fee_type, string status, string trxdate)
         {
             int retStatus = 0;
@@ -7012,5 +7012,278 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
 
         }
+
+        //Added RazorPay payment Integration by -Gopal M 31-01-2023 Ticket#53523
+        public int InsertInstallmentOnlinePayment_TempDCR_Razorpay(int IDNO, int Dmno, int SEMESTERNO, string ORDER_ID, double amount, string RECEIPTCODE, int uano, string data, int installmentno)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                                                     {
+                                                     new SqlParameter("@P_IDNO", IDNO),
+                                                     new SqlParameter("@P_DM_NO", Dmno),
+                                                     new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                                                     new SqlParameter("@P_ORDER_ID", ORDER_ID),
+                                                     new SqlParameter("@P_AMOUNT", amount),
+                                                     new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                                                     new SqlParameter("@P_UANO", uano),
+                                                     new SqlParameter("@P_MESSAGE", data),
+                                                     new SqlParameter("@P_INSTALLMENT_NO", installmentno),
+                                                     new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                                                     };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSTALLMENT_INSERT_ONLINE_PAYMENT_DCR_RAZORPAY_PG", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertInstallmentOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
+        public int InsertOnlinePayment_TempDCR_Razorpay(int IDNO, int SESSIONNO, int SEMESTERNO, string ORDER_ID, int PAYSERVICETYPE, string RECEIPTCODE, string msg)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                                                     {
+                                                     new SqlParameter("@P_IDNO", IDNO),
+                                                     new SqlParameter("@P_SESSIONNO", SESSIONNO),
+                                                     new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                                                     new SqlParameter("@P_ORDER_ID", ORDER_ID),
+                                                     new SqlParameter("@P_PAYSERVICETYPE", PAYSERVICETYPE),
+                                                     new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                                                     new SqlParameter("@P_MESSAGE",msg),
+                                                     new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                                                     };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ONLINE_PAYMENT_DCR_RAZORPAY_PG", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
+        public int InsertRazorPayNotCaptureTransaction(int SessionNo, int UserNo, string RazorPayId, double Amount, double RazorPay_Amount, double Fee, double Tax, string OrderId, string RazorPayOrderId, string IPAddress)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[11];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", SessionNo);
+                objParams[1] = new SqlParameter("@P_USERNO", UserNo);
+                objParams[2] = new SqlParameter("@P_RAZOR_PAYMENT_ID", RazorPayId);
+                objParams[3] = new SqlParameter("@P_AMOUNT", Amount);
+                objParams[4] = new SqlParameter("@P_RAZORPAY_AMOUNT", RazorPay_Amount);
+                objParams[5] = new SqlParameter("@P_FEE", Fee);
+                objParams[6] = new SqlParameter("@P_TAX", Tax);
+                objParams[7] = new SqlParameter("@P_ORDER_ID", OrderId);
+                objParams[8] = new SqlParameter("@P_RAZORPAY_ORDER_ID", RazorPayOrderId);
+                objParams[9] = new SqlParameter("@P_IPADDRESS", IPAddress);
+                objParams[10] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                objParams[10].Direction = ParameterDirection.Output;
+                object ret = objSQLHelper.ExecuteNonQuerySP("INS_RAZORPAY_NOT_CAPTURE_TRANS", objParams, false);
+                if ((int)ret != -99 && (int)ret != 0)
+                {
+                    retStatus = (int)ret;
+                }
+                else
+                {
+                    retStatus = -99;
+                }
+                return retStatus;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic-> " + ex.ToString());
+            }
+        }
+
+          //Added Paytm payment Integration by -Gopal M 29-12-2023 Ticket#51702
+        public int InsertPAYTMOnlinePaymentlog(int idno, decimal amount, string order_id, string token_id, string semesterno, string ipaddress)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlhelper = new SQLHelper(_connectionString);
+                SqlParameter[] sqlparam = null;
+                {
+                    sqlparam = new SqlParameter[7];
+                    sqlparam[0] = new SqlParameter("@P_IDNO", idno);
+                    sqlparam[1] = new SqlParameter("@P_AMOUNT", amount);
+                    sqlparam[2] = new SqlParameter("@P_ORDER_ID", order_id);
+                    sqlparam[3] = new SqlParameter("@P_TOKEN_ID", token_id);
+                    sqlparam[4] = new SqlParameter("@P_SEMESTER", semesterno);
+                    sqlparam[5] = new SqlParameter("@P_IPADDRESS", ipaddress);
+                    sqlparam[6] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                    sqlparam[6].Direction = ParameterDirection.Output;
+                    // string idcat = sqlparam[4].Direction.ToString();
+
+                };
+                object ret = objSqlhelper.ExecuteNonQuerySP("PKG_ACD_INSERT_PAYTM_TRANSACTIONS_LOG", sqlparam, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.InsertPAYTMOnlinePaymentlog() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return retStatus;
+
+        }
+
+        public int UpdatePAYTMOnlinePaymentlog(int idno, string order_id, string token_id, string track_id, string fee_type, string status, string trxdate)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlhelper = new SQLHelper(_connectionString);
+                SqlParameter[] sqlparam = null;
+                {
+                    sqlparam = new SqlParameter[8];
+                    sqlparam[0] = new SqlParameter("@P_IDNO", idno);
+                    sqlparam[1] = new SqlParameter("@P_ORDER_ID", order_id);
+                    sqlparam[2] = new SqlParameter("@P_TOKEN_ID", token_id);
+                    sqlparam[3] = new SqlParameter("@P_TRACK_ID", track_id);
+                    sqlparam[4] = new SqlParameter("@P_FEE_TYPE", fee_type);
+                    sqlparam[5] = new SqlParameter("@P_STATUS", status);
+                    sqlparam[6] = new SqlParameter("@P_TRANSACTION_TIMESTAMP", trxdate);
+                    sqlparam[7] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                    sqlparam[7].Direction = ParameterDirection.Output;
+
+                };
+                object ret = objSqlhelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_PAYTM_TRANSACTIONS_LOG", sqlparam, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.UpdatePAYTMOnlinePaymentlog() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return retStatus;
+
+        }
+
+        public int InsertInstallmentOnlinePayment_TempDCR_PAYTM(int IDNO, int Dmno, int SEMESTERNO, string ORDER_ID, double amount, string RECEIPTCODE, int uano, string data, string MID)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                        {                         
+                            new SqlParameter("@P_IDNO", IDNO),
+                            new SqlParameter("@P_DM_NO", Dmno),
+                            new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                            new SqlParameter("@P_ORDER_ID", ORDER_ID),                           
+                            new SqlParameter("@P_AMOUNT", amount),
+                            new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                            new SqlParameter("@P_UANO", uano),
+                            new SqlParameter("@P_MESSAGE", data),
+                            new SqlParameter("@P_MID", MID),
+                            new SqlParameter("@P_OUTPUT", SqlDbType.Int)          
+                        };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSTALLMENT_INSERT_ONLINE_PAYMENT_DCR_PAYTM", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertInstallmentOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+ 
+        public int InsertOnlinePayment_TempDCR_PAYTM(int IDNO, int SESSIONNO, int SEMESTERNO, string ORDER_ID, int PAYSERVICETYPE, string RECEIPTCODE, string msg, string MID)
+        {
+            int retStatus = 0;
+            try
+            {
+                SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+                SqlParameter[] param = new SqlParameter[]
+                        {                         
+                            new SqlParameter("@P_IDNO", IDNO),
+                            new SqlParameter("@P_SESSIONNO", SESSIONNO),
+                            new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                            new SqlParameter("@P_ORDER_ID", ORDER_ID),                           
+                            new SqlParameter("@P_PAYSERVICETYPE", PAYSERVICETYPE),
+                            new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                            new SqlParameter("@P_MESSAGE",msg),
+                            new SqlParameter("@P_MID",MID),
+                            new SqlParameter("@P_OUTPUT", SqlDbType.Int)          
+                        };
+                param[param.Length - 1].Direction = ParameterDirection.Output;
+                object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ONLINE_PAYMENT_DCR_PAYTM", param, true);
+
+                if (ret != null && ret.ToString() != "-99")
+                    retStatus = Convert.ToInt32(ret);
+                else
+                    retStatus = -99;
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
+        //Added by Rohit M  on 15_02_2024
+        public DataSet GetFeeItems_DataFineAllotmentNew(int sessionNo, int studentId, int semesterNo, string receiptType, int examtype, int currency, int payTypeNo, ref int status)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {
+                    new SqlParameter("@P_SESSIONNO", sessionNo),
+                    new SqlParameter("@P_IDNO", studentId),
+                    new SqlParameter("@P_SEMESTERNO", semesterNo),
+                    new SqlParameter("@P_RECEIPT_CODE", receiptType),
+                    new SqlParameter("@P_EXAMTYPE", examtype),
+                    new SqlParameter("@P_CURRENCY",currency),
+                    new SqlParameter("@P_PAYTYPENO",payTypeNo),
+                    new SqlParameter("@P_OUT", status)
+                };
+                sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
+                ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT_FOR_FINE_ALLOTMENT_NEW", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetFeeItems_Data() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
     }
 }

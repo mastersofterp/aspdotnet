@@ -71,16 +71,38 @@ public partial class homeFaculty : System.Web.UI.Page
                 //  BindQuickAccess(); // Not
 
 
-                DataSet dsLastLoginTime = objCommon.FillDropDown("LogFile", "TOP(1) LEFT(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 1)AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
-                DataSet dsLastLoginForm = objCommon.FillDropDown("LogFile", "TOP(1) right(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 4) as AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
-
-                lblLastLoginTime.Text = dsLastLoginTime.Tables[0].Rows[0]["AA"].ToString();
-                lblLastLoginForm.Text = dsLastLoginForm.Tables[0].Rows[0]["AA"].ToString();
-                Show_TodaysTT();
-                Show_ExamTT();
-                Show_Notice();
+                // DataSet dsLastLoginTime = objCommon.FillDropDown("LogFile", "TOP(1) LEFT(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 1)AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
+                //  DataSet dsLastLoginForm = objCommon.FillDropDown("LogFile", "TOP(1) right(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 4) as AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
+                //PATCH UPDATED-PRASHANTG-TN56760-260324
+                DataSet ds = objCommon.FillDropDown("LogFile", "TOP(1) LEFT(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 1)AA ", "right(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 4) as BB", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
+                if (ds != null)
+                {
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        lblLastLoginTime.Text = ds.Tables[0].Rows[0]["AA"].ToString();
+                        lblLastLoginForm.Text = ds.Tables[0].Rows[0]["BB"].ToString();
+                    }
+                }
+                //  Show_TodaysTT();//PRASHANTG-TN56760-260324
+                //  Show_ExamTT();//PRASHANTG-TN56760-260324
+                //  Show_Notice();//PRASHANTG-TN56760-260324
             }
         }
+    }
+
+    protected void btnTT_Click(object sender, EventArgs e)
+    {
+        Show_TodaysTT();
+    }
+
+    protected void btnActNotice_Click(object sender, EventArgs e)
+    {
+        Show_Notice();
+    }
+
+    protected void btnExamTT_Click(object sender, EventArgs e)
+    {
+        Show_ExamTT();
     }
 
     private void ApproveLeaves()
@@ -94,115 +116,25 @@ public partial class homeFaculty : System.Web.UI.Page
             {
                 //DataSet ds = objLeave.RetrievePendingLeaves(userno);
                 //lblLeaves.Text = ds.Tables[0].Rows[0]["PendingLeaves"].ToString();
-
             }
         }
         catch (Exception ex)
         {
-
             if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ESTABLISHMENT_LEAVES_Master_Holidays.BindListViewHolidays -> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "homefaculty.aspx.ApproveLeaves() --> " + ex.Message + " " + ex.StackTrace);
             else
-                objUCommon.ShowError(Page, "Server UnAvailable");
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
-
     }
 
     /***********************  Added On 30-03-2020  (TO BIND USING DATA USING JQUERY AJAX)   ************************/
+    //not in use -- prashantg290324
     [WebMethod]
     public static List<HomeFacultyModel> BindTodaysTimeTbl()
     {
         homeFaculty a = new homeFaculty();
         List<HomeFacultyModel> TTList = a.BindTodaysTimeTable();
         return TTList;
-    }
-    [WebMethod]
-    public static string ShowAttPer()
-    {
-        homeFaculty a = new homeFaculty();
-        // return a.BindEmployeeAttedence().GetXml();
-        string LblPer = a.BindEmployeeAttedence();
-        return LblPer;
-
-    }
-    [WebMethod]
-    public static List<EmpInOutTIme> ShowInOutTime()
-    {
-        homeFaculty a = new homeFaculty();
-        List<EmpInOutTIme> objList = a.BindListViewEmployees();
-        return objList;
-    }
-    [WebMethod]
-    public static List<EmpNews> ShowNewsData()
-    {
-        homeFaculty a = new homeFaculty();
-        List<EmpNews> objList = a.BindListViewNews();
-        return objList;
-    }
-    [WebMethod]
-    public static List<EmpNews> ShowExpiredNewsData()
-    {
-        homeFaculty a = new homeFaculty();
-        List<EmpNews> objList = a.BindListViewExpiredNews();
-        return objList;
-    }
-    //[WebMethod]
-    ////public static List<QuickAccessLinks> ShowQuickAccessLinks()
-    ////{
-    ////    homeFaculty a = new homeFaculty();
-    ////    List<QuickAccessLinks> objQLList = a.BindQuickAccess();
-    ////    return objQLList;
-    ////}
-    [WebMethod]
-    public static List<EmployeeTask> ShowEmpTasks()
-    {
-        homeFaculty a = new homeFaculty();
-        List<EmployeeTask> objETList = a.BindListViewTask();
-        return objETList;
-    }
-    [WebMethod]
-    public static string ShowCasualBalLeaves()
-    {
-        homeFaculty a = new homeFaculty();
-        string LblCLBal = a.BindLeaveBalance();
-        return LblCLBal;
-
-    }
-    [WebMethod]
-    public static UpcommingHolidays ShowUpcommingHolidays()
-    {
-        homeFaculty a = new homeFaculty();
-        UpcommingHolidays commingholidays = a.BindHolidays();
-        return commingholidays;
-    }
-    [WebMethod]
-    public static TableList ShowTimeTable()
-    {
-        homeFaculty a = new homeFaculty();
-        TableList objTablesList = a.BindTimeTable();
-        return objTablesList;
-    }
-
-    private string BindEmployeeAttedence()
-    {
-        DataSet ds = null;
-        string LblName = string.Empty;
-        //int collegeno = 1;
-        int userno = Convert.ToInt32(Session["idno"]);
-
-        if (userno > 0)
-        {
-            ds = objLeave.RetrieveEmployeeAttedeance(userno);
-            if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
-            {
-                LblName = ds.Tables[0].Rows[0]["Percentange"].ToString();
-            }
-            else
-            {
-                LblName = null;
-            }
-        }
-        return LblName;
     }
     public List<HomeFacultyModel> BindTodaysTimeTable()
     {
@@ -235,6 +167,43 @@ public partial class homeFaculty : System.Web.UI.Page
         return objList;
     }
 
+    [WebMethod]
+    public static string ShowAttPer()
+    {
+        homeFaculty a = new homeFaculty();
+        // return a.BindEmployeeAttedence().GetXml();
+        string LblPer = a.BindEmployeeAttedence();
+        return LblPer;
+    }
+    private string BindEmployeeAttedence()
+    {
+        DataSet ds = null;
+        string LblName = string.Empty;
+        //int collegeno = 1;
+        int userno = Convert.ToInt32(Session["idno"]);
+
+        if (userno > 0)
+        {
+            ds = objLeave.RetrieveEmployeeAttedeance(userno);
+            if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+            {
+                LblName = ds.Tables[0].Rows[0]["Percentange"].ToString();
+            }
+            else
+            {
+                LblName = null;
+            }
+        }
+        return LblName;
+    }
+
+    [WebMethod]
+    public static List<EmpInOutTIme> ShowInOutTime()
+    {
+        homeFaculty a = new homeFaculty();
+        List<EmpInOutTIme> objList = a.BindListViewEmployees();
+        return objList;
+    }
     public List<EmpInOutTIme> BindListViewEmployees()
     {
         List<EmpInOutTIme> objList = new List<EmpInOutTIme>();
@@ -265,12 +234,287 @@ public partial class homeFaculty : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ESTABLISHMENT_LEAVES_Master_Holidays.BindListViewHolidays -> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "homefaculty.aspx.BindListViewEmployees() --> " + ex.Message + " " + ex.StackTrace);
             else
-                objUCommon.ShowError(Page, "Server UnAvailable");
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objList;
     }
+
+    [WebMethod]
+    public static List<EmpNews> ShowNewsData()
+    {
+        homeFaculty a = new homeFaculty();
+        List<EmpNews> objList = a.BindListViewNews();
+        return objList;
+    }
+    private List<EmpNews> BindListViewNews()
+    {
+        List<EmpNews> objNewsList = new List<EmpNews>();
+        try
+        {
+
+            //DataSet dsNews = objNc.GetAllNews("PKG_NEWS_SP_ALL_NEWS");
+            DataSet dsNews = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
+
+            if (dsNews != null && dsNews.Tables[0] != null && dsNews.Tables[0].Rows.Count > 0)
+            {
+                objNewsList = (from DataRow dr in dsNews.Tables[0].Rows
+                               select new EmpNews
+                               {
+                                   Day = dr["DD"].ToString(),
+                                   Month = dr["MM"].ToString(),
+                                   NewsDescription = dr["NEWSDESC"].ToString(),
+                                   //NewsLink = dr["FILENAME"].ToString(),
+                                   //NewsLink = checkFile("upload_files/notice_document/" + dr["FILENAME"].ToString()),
+                                   NewsLink = checkFile(dr["FILENAME"].ToString()),
+                                   Title = dr["TITLE"].ToString()
+                               }).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.BindListViewNews() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+
+        }
+        return objNewsList;
+    }
+
+    [WebMethod]
+    public static List<EmpNews> ShowExpiredNewsData()
+    {
+        homeFaculty a = new homeFaculty();
+        List<EmpNews> objList = a.BindListViewExpiredNews();
+        return objList;
+    }
+    private List<EmpNews> BindListViewExpiredNews()
+    {
+        List<EmpNews> objNewsList = new List<EmpNews>();
+        try
+        {
+            NewsController objNc = new NewsController();
+            //DataSet dsNews = objNc.GetAllNews("PKG_NEWS_SP_ALL_NEWS");
+            DataSet dsNews = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
+
+            if (dsNews != null && dsNews.Tables[1] != null && dsNews.Tables[1].Rows.Count > 0)
+            {
+                objNewsList = (from DataRow dr in dsNews.Tables[1].Rows
+                               select new EmpNews
+                               {
+                                   Day = dr["DD"].ToString(),
+                                   Month = dr["MM"].ToString(),
+                                   NewsDescription = dr["NEWSDESC"].ToString(),
+                                   //NewsLink = dr["LINK"].ToString(),
+                                   //NewsLink = checkFile("upload_files/notice_document/" + dr["FILENAME"].ToString()),
+                                   NewsLink = checkFile(dr["FILENAME"].ToString()),
+                                   Title = dr["TITLE"].ToString()
+                               }).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.BindListViewExpiredNews() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+
+        }
+        return objNewsList;
+    }
+    //[WebMethod]
+    ////public static List<QuickAccessLinks> ShowQuickAccessLinks()
+    ////{
+    ////    homeFaculty a = new homeFaculty();
+    ////    List<QuickAccessLinks> objQLList = a.BindQuickAccess();
+    ////    return objQLList;
+    ////}
+
+    [WebMethod]
+    public static List<EmployeeTask> ShowEmpTasks()
+    {
+        homeFaculty a = new homeFaculty();
+        List<EmployeeTask> objETList = a.BindListViewTask();
+        return objETList;
+    }
+    private List<EmployeeTask> BindListViewTask()
+    {
+        List<EmployeeTask> TaskList = new List<EmployeeTask>();
+        try
+        {
+            //DataSet dsTasks = objLeave.RetrieveEmployeeTaskDetails(Convert.ToInt32(Session["idno"].ToString()), Convert.ToInt32(Session["userno"]));
+            int ua_no = Convert.ToInt32(Session["userno"]);
+            int ua_type = Convert.ToInt32(Session["usertype"]);
+
+            DataSet dsTasks = objSC.GetTaskForFacultyDashboard(ua_type, ua_no);
+            if (dsTasks != null && dsTasks.Tables[0] != null && dsTasks.Tables[0].Rows.Count > 0)
+            {
+                TaskList = (from DataRow dr in dsTasks.Tables[0].Rows
+                            select new EmployeeTask
+                            {
+                                //AL_URL = dr["AL_URL"].ToString(),
+                                //ACTIVITY_NAME = dr["ACTIVITY_NAME"].ToString(),
+                                //STAT = dr["STAT"].ToString()
+                                PageNo = Convert.ToInt32(dr[0].ToString()),
+                                LinkName = dr[1].ToString(),
+                                Link = dr[2].ToString()
+                            }).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.BindListViewTask() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+
+        }
+        return TaskList;
+    }
+
+    [WebMethod]
+    public static string ShowCasualBalLeaves()
+    {
+        homeFaculty a = new homeFaculty();
+        string LblCLBal = a.BindLeaveBalance();
+        return LblCLBal;
+
+    }
+    private string BindLeaveBalance()
+    {
+        string CasualBalLeave = string.Empty;
+        try
+        {
+            int userno = Convert.ToInt32(Session["idno"]);
+            int currentYear = Convert.ToInt32(DateTime.Now.Year.ToString());
+            if (userno > 0)
+            {
+                DataSet ds = objLeave.RetrieveLeaveBalance(userno, currentYear);
+                if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    CasualBalLeave = ds.Tables[0].Rows[0]["CLBal"].ToString();
+                }
+                else
+                {
+                    CasualBalLeave = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.BindLeaveBalance() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return CasualBalLeave;
+    }
+
+    [WebMethod]
+    public static UpcommingHolidays ShowUpcommingHolidays()
+    {
+        homeFaculty a = new homeFaculty();
+        UpcommingHolidays commingholidays = a.BindHolidays();
+        return commingholidays;
+    }
+    private UpcommingHolidays BindHolidays()
+    {
+        UpcommingHolidays commingHoliday = new UpcommingHolidays();
+        try
+        {
+            int userno = Convert.ToInt32(Session["idno"]);
+            if (userno > 0)
+            {
+                DataSet ds = objLeave.RetrieveHolidays(userno);
+                if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    commingHoliday.Holiday = ds.Tables[0].Rows[0]["holiday"].ToString();
+                    commingHoliday.Month = ds.Tables[0].Rows[0]["MonthN"].ToString();
+                }
+                else
+                {
+                    commingHoliday = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.BindHolidays() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return commingHoliday;
+    }
+
+    [WebMethod]
+    public static TableList ShowTimeTable()
+    {
+        homeFaculty a = new homeFaculty();
+        TableList objTablesList = a.BindTimeTable();
+        return objTablesList;
+    }
+    private TableList BindTimeTable()
+    {
+        TableList tblListData = new TableList();
+        try
+        {
+            DataSet dsTimeTable = new DataSet();
+            //PRASHANTG-TN56760-260324 -- BELOW 3 LINES COMMENTED
+            // int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
+            //  int schemeno = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SCHEMENO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SCHEMENO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno));
+            // int semesterno = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SEMESTERNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SEMESTERNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno));
+            int uano = Convert.ToInt32(Session["userno"].ToString());
+            // Added on 07-04-2020
+            //PRASHANTG-TN56760-260324 -  BELOW 1 LINE COMMENTED
+            //  int sectionNo = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno));
+            // Added on 07-04-2020
+            // dsTimeTable = objSC.RetrieveFacultyTimeTableDetails(Convert.ToInt32(sessionno), Convert.ToInt32(schemeno), Convert.ToInt32(semesterno), uano, sectionNo);
+            //PRASHANTG-TN56760-260324
+            dsTimeTable = objSC.RetrieveFacultyTimeTableDetails(uano);
+
+            List<TimeTable> objTTList = new List<TimeTable>();
+            if (dsTimeTable != null)
+            {
+                if (dsTimeTable.Tables[0] != null && dsTimeTable.Tables[0].Rows.Count > 0)
+                {
+                    objTTList = (from DataRow dr in dsTimeTable.Tables[0].Rows
+                                 select new TimeTable
+                                 {
+                                     // Slot = dr[0].ToString(),
+                                     Monday = dr[0].ToString(),
+                                     Tuesday = dr[1].ToString(),
+                                     Wednesday = dr[2].ToString(),
+                                     Thursday = dr[3].ToString(),
+                                     Friday = dr[4].ToString(),
+                                     Saturday = dr[5].ToString(),
+                                     Slot = dr[6].ToString(),
+                                 }).ToList();
+                    tblListData.objTTList = objTTList;
+                }
+                else
+                {
+                    tblListData = null;
+                }
+            }
+            else
+            {
+                tblListData = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.BindTimeTable() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return tblListData;
+    }
+
     //public string GetFileNamePath(object filename)
     //{
     //    if (filename != null && filename.ToString() != "")
@@ -309,19 +553,23 @@ public partial class homeFaculty : System.Web.UI.Page
             return "";
         }
     }
+
     public void Show_Notice()
     {
         //DataSet ds = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
         DataSet ds = objNc.GetUserTypeWiseNewsFaculty_HOD(Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Session["userno"]));
-        if (ds.Tables.Count > 0 && ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+        if (ds != null)
         {
-            lvActiveNotice.DataSource = ds.Tables[0];
-            lvActiveNotice.DataBind();
-        }
-        if (ds.Tables.Count > 0 && ds != null && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
-        {
-            lvExpNotice.DataSource = ds.Tables[1];
-            lvExpNotice.DataBind();
+            if (ds.Tables.Count > 0 && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+            {
+                lvActiveNotice.DataSource = ds.Tables[0];
+                lvActiveNotice.DataBind();
+            }
+            if (ds.Tables.Count > 0 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+            {
+                lvExpNotice.DataSource = ds.Tables[1];
+                lvExpNotice.DataBind();
+            }
         }
     }
 
@@ -336,7 +584,6 @@ public partial class homeFaculty : System.Web.UI.Page
         string filename = e.CommandArgument.ToString();
         GetFileNamePath(filename);
     }
-
 
     protected string GetFileNamePath(object filename)
     {
@@ -418,7 +665,13 @@ public partial class homeFaculty : System.Web.UI.Page
                 retIfExists = true;
             });
         }
-        catch (Exception) { }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.CheckIFExits() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
         return retIfExists;
     }
     public int Blob_UploadDepositSlip(string ConStr, string ContainerName, string DocName, FileUpload FU, byte[] ChallanCopy)
@@ -432,7 +685,7 @@ public partial class homeFaculty : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-           
+
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.Properties.ContentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
@@ -496,75 +749,16 @@ public partial class homeFaculty : System.Web.UI.Page
                 ((CloudBlockBlob)y).DeleteIfExists();
             });
         }
-        catch (Exception) { }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.DeleteIFExits() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
     }
     #endregion BlogStorage
-    private List<EmpNews> BindListViewNews()
-    {
-        List<EmpNews> objNewsList = new List<EmpNews>();
-        try
-        {
 
-            //DataSet dsNews = objNc.GetAllNews("PKG_NEWS_SP_ALL_NEWS");
-            DataSet dsNews = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
-
-            if (dsNews != null && dsNews.Tables[0] != null && dsNews.Tables[0].Rows.Count > 0)
-            {
-                objNewsList = (from DataRow dr in dsNews.Tables[0].Rows
-                               select new EmpNews
-                               {
-                                   Day = dr["DD"].ToString(),
-                                   Month = dr["MM"].ToString(),
-                                   NewsDescription = dr["NEWSDESC"].ToString(),
-                                   //NewsLink = dr["FILENAME"].ToString(),
-                                   //NewsLink = checkFile("upload_files/notice_document/" + dr["FILENAME"].ToString()),
-                                   NewsLink = checkFile(dr["FILENAME"].ToString()),
-                                   Title = dr["TITLE"].ToString()
-                               }).ToList();
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "news.BindListViewNews-> " + ex.Message + " " + ex.StackTrace);
-            else
-                objCommon.ShowError(Page, "Server UnAvailable");
-        }
-        return objNewsList;
-    }
-    private List<EmpNews> BindListViewExpiredNews()
-    {
-        List<EmpNews> objNewsList = new List<EmpNews>();
-        try
-        {
-            NewsController objNc = new NewsController();
-            //DataSet dsNews = objNc.GetAllNews("PKG_NEWS_SP_ALL_NEWS");
-            DataSet dsNews = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
-
-            if (dsNews != null && dsNews.Tables[1] != null && dsNews.Tables[1].Rows.Count > 0)
-            {
-                objNewsList = (from DataRow dr in dsNews.Tables[1].Rows
-                               select new EmpNews
-                               {
-                                   Day = dr["DD"].ToString(),
-                                   Month = dr["MM"].ToString(),
-                                   NewsDescription = dr["NEWSDESC"].ToString(),
-                                   //NewsLink = dr["LINK"].ToString(),
-                                   //NewsLink = checkFile("upload_files/notice_document/" + dr["FILENAME"].ToString()),
-                                   NewsLink = checkFile(dr["FILENAME"].ToString()),
-                                   Title = dr["TITLE"].ToString()
-                               }).ToList();
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "news.BindListViewNews-> " + ex.Message + " " + ex.StackTrace);
-            else
-                objCommon.ShowError(Page, "Server UnAvailable");
-        }
-        return objNewsList;
-    }
     //private List<QuickAccessLinks> BindQuickAccess()
     //{
     //    List<QuickAccessLinks> LinkList = new List<QuickAccessLinks>();
@@ -638,149 +832,6 @@ public partial class homeFaculty : System.Web.UI.Page
     //    return LinkList;
     //}
 
-    private List<EmployeeTask> BindListViewTask()
-    {
-        List<EmployeeTask> TaskList = new List<EmployeeTask>();
-        try
-        {
-            //DataSet dsTasks = objLeave.RetrieveEmployeeTaskDetails(Convert.ToInt32(Session["idno"].ToString()), Convert.ToInt32(Session["userno"]));
-            int ua_no = Convert.ToInt32(Session["userno"]);
-            int ua_type = Convert.ToInt32(Session["usertype"]);
-
-            DataSet dsTasks = objSC.GetTaskForFacultyDashboard(ua_type, ua_no);
-            if (dsTasks != null && dsTasks.Tables[0] != null && dsTasks.Tables[0].Rows.Count > 0)
-            {
-                TaskList = (from DataRow dr in dsTasks.Tables[0].Rows
-                            select new EmployeeTask
-                            {
-                                //AL_URL = dr["AL_URL"].ToString(),
-                                //ACTIVITY_NAME = dr["ACTIVITY_NAME"].ToString(),
-                                //STAT = dr["STAT"].ToString()
-                                PageNo = Convert.ToInt32(dr[0].ToString()),
-                                LinkName = dr[1].ToString(),
-                                Link = dr[2].ToString()
-                            }).ToList();
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "homeFaculty.BindListViewTask-> " + ex.Message + " " + ex.StackTrace);
-            else
-                objCommon.ShowError(Page, "Server UnAvailable");
-        }
-        return TaskList;
-    }
-    private string BindLeaveBalance()
-    {
-        string CasualBalLeave = string.Empty;
-        try
-        {
-            int userno = Convert.ToInt32(Session["idno"]);
-            int currentYear = Convert.ToInt32(DateTime.Now.Year.ToString());
-            if (userno > 0)
-            {
-                DataSet ds = objLeave.RetrieveLeaveBalance(userno, currentYear);
-                if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    CasualBalLeave = ds.Tables[0].Rows[0]["CLBal"].ToString();
-                }
-                else
-                {
-                    CasualBalLeave = null;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ESTABLISHMENT_LEAVES_Master_Holidays.BindListViewHolidays -> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server UnAvailable");
-        }
-        return CasualBalLeave;
-    }
-    private UpcommingHolidays BindHolidays()
-    {
-        UpcommingHolidays commingHoliday = new UpcommingHolidays();
-        try
-        {
-            int userno = Convert.ToInt32(Session["idno"]);
-            if (userno > 0)
-            {
-                DataSet ds = objLeave.RetrieveHolidays(userno);
-                if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    commingHoliday.Holiday = ds.Tables[0].Rows[0]["holiday"].ToString();
-                    commingHoliday.Month = ds.Tables[0].Rows[0]["MonthN"].ToString();
-                }
-                else
-                {
-                    commingHoliday = null;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ESTABLISHMENT_LEAVES_Master_Holidays.BindListViewHolidays -> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server UnAvailable");
-        }
-        return commingHoliday;
-    }
-
-    private TableList BindTimeTable()
-    {
-        TableList tblListData = new TableList();
-        try
-        {
-            DataSet dsTimeTable = new DataSet();
-            int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
-            int schemeno = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SCHEMENO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SCHEMENO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno));
-            int semesterno = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SEMESTERNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT MAX(SEMESTERNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno));
-            int uano = Convert.ToInt32(Session["userno"].ToString());
-            // Added on 07-04-2020
-            int sectionNo = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno));
-            // Added on 07-04-2020
-            dsTimeTable = objSC.RetrieveFacultyTimeTableDetails(Convert.ToInt32(sessionno), Convert.ToInt32(schemeno), Convert.ToInt32(semesterno), uano, sectionNo);
-            List<TimeTable> objTTList = new List<TimeTable>();
-            if (dsTimeTable != null)
-            {
-                if (dsTimeTable.Tables[0] != null && dsTimeTable.Tables[0].Rows.Count > 0)
-                {
-                    objTTList = (from DataRow dr in dsTimeTable.Tables[0].Rows
-                                 select new TimeTable
-                                 {
-                                     // Slot = dr[0].ToString(),
-                                     Monday = dr[0].ToString(),
-                                     Tuesday = dr[1].ToString(),
-                                     Wednesday = dr[2].ToString(),
-                                     Thursday = dr[3].ToString(),
-                                     Friday = dr[4].ToString(),
-                                     Saturday = dr[5].ToString(),
-                                     Slot = dr[6].ToString(),
-                                 }).ToList();
-                    tblListData.objTTList = objTTList;
-                }
-                else
-                {
-                    tblListData = null;
-                }
-            }
-            else
-            {
-                tblListData = null;
-            }
-        }
-        catch (Exception ex)
-        {
-
-        }
-        return tblListData;
-    }
-
     [WebMethod]
     public static List<FacultyQuickAccess> ShowQuickAccessData()
     {
@@ -788,7 +839,6 @@ public partial class homeFaculty : System.Web.UI.Page
         List<FacultyQuickAccess> QuickAccess = a.GetQuickAccessData();
         return QuickAccess;
     }
-
     private List<FacultyQuickAccess> GetQuickAccessData()
     {
         List<FacultyQuickAccess> objQA = new List<FacultyQuickAccess>();
@@ -822,52 +872,72 @@ public partial class homeFaculty : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.GetQuickAccessData() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
         return objQA;
     }
 
-
-    /***********************         Added On 30-03-2020  (TO BIND USING DATA USING JQUERY AJAX)       ************************/
+    /*********************** Added On 30-03-2020 (TO BIND USING DATA USING JQUERY AJAX)  ************************/
     public void Show_ExamTT()
     {
-        DataSet ds = objExamController.GetExamTimeTableDashboard(Convert.ToInt32(Session["currentsession"]), Convert.ToInt32(Session["userno"]));
-        if (ds.Tables.Count > 0 && ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+        try
         {
-            lvExamTT.DataSource = ds;
-            lvExamTT.DataBind();
+            DataSet ds = objExamController.GetExamTimeTableDashboard(Convert.ToInt32(Session["currentsession"]), Convert.ToInt32(Session["userno"]));
+            if (ds != null)
+            {
+                if (ds.Tables.Count > 0 && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    lvExamTT.DataSource = ds;
+                    lvExamTT.DataBind();
+                }
+            }
         }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "homefaculty.aspx.Show_ExamTT() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+
     }
 
     public void Show_TodaysTT()
     {
-        int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
+        // int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
+        //Prashantg260324
+        var sessNo = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()));
+        int sessionno = sessNo.ToString() == string.Empty ? 0 : Convert.ToInt32(sessNo);
 
         DataSet dsShowCourse = objFetch.GetCoursesForAttendanceFromHomeFaculty(Convert.ToInt32(sessionno), Convert.ToInt32(Session["userno"]), Convert.ToInt32(Session["usertype"]));
         // List<HomeFacultyModel> objList = new List<HomeFacultyModel>();
-        if (dsShowCourse.Tables.Count > 0 && dsShowCourse != null && dsShowCourse.Tables[0] != null && dsShowCourse.Tables[0].Rows.Count > 0)
+        if (dsShowCourse != null)
         {
-            //objList = (from DataRow dr in dsTodaysTimeTable.Tables[0].Rows
-            //           select new HomeFacultyModel
-            //           {
-            //               SlotIme = dr["SLOT"].ToString(),
-            //               Branch = dr["BRANCH"].ToString(),
-            //               Subject = dr["COURSENAME"].ToString(),
-            //               Semester = dr["SEMESTER"].ToString(),
-            //               Section = dr["SECTION"].ToString(),
-            //               CourseCode = dr["CCODE"].ToString(),
-            //               BranchShortName = dr["BRANCHSHORTNAME"].ToString()
-            //           }).ToList();
-            lvTodaysTT.DataSource = dsShowCourse;
-            lvTodaysTT.DataBind();
-
+            if (dsShowCourse.Tables.Count > 0 && dsShowCourse.Tables[0] != null && dsShowCourse.Tables[0].Rows.Count > 0)
+            {
+                //objList = (from DataRow dr in dsTodaysTimeTable.Tables[0].Rows
+                //           select new HomeFacultyModel
+                //           {
+                //               SlotIme = dr["SLOT"].ToString(),
+                //               Branch = dr["BRANCH"].ToString(),
+                //               Subject = dr["COURSENAME"].ToString(),
+                //               Semester = dr["SEMESTER"].ToString(),
+                //               Section = dr["SECTION"].ToString(),
+                //               CourseCode = dr["CCODE"].ToString(),
+                //               BranchShortName = dr["BRANCHSHORTNAME"].ToString()
+                //           }).ToList();
+                lvTodaysTT.DataSource = dsShowCourse;
+                lvTodaysTT.DataBind();
+            }
         }
     }
 
     protected void lnkCourse_Click(object sender, EventArgs e)
     {
         LinkButton lnk = sender as LinkButton;
-
 
         HiddenField hdnCoursename = lnk.NamingContainer.FindControl("hdnCoursename") as HiddenField;
         HiddenField hdnSchemename = lnk.NamingContainer.FindControl("hdnSchemename") as HiddenField;
@@ -884,7 +954,6 @@ public partial class homeFaculty : System.Web.UI.Page
             hdnSubjecttype.Value,hdnBatch.Value,hdnCourseno.Value,hdnSectionno.Value,hdnBatchno.Value,hdnSubId.Value};
 
         Session["arr"] = arr;
-
 
         //ArrayList arr = new ArrayList();
         //arr.Add(hdnCoursename.Value);

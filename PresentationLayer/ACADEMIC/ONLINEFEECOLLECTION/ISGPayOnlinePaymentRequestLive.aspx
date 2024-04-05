@@ -57,19 +57,11 @@
                         <div id="div1" runat="server"></div>
 
                         <div class="box-header with-border">
-<<<<<<<< HEAD:PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/ISGPayOnlinePaymentRequestLive.aspx
                               <div class="row">
                                 <%--  <div class="col-sm-3 text-center mt-md-4">
                                     <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive" runat="server" Width="200px" ImageUrl="~/images/nophoto.jpg" />
                                 </div>--%>
                                 <%--<div class="col-sm-9">
-========
-                            <div class="row">
-                                  <%--<div class="col-sm-3 text-center">
-                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive" runat="server" ImageUrl="~/images/nophoto.jpg" />
-                                </div>--%>
-                                <div class="col-sm-9" style="display:none;">
->>>>>>>> a3a798d5 ([ENHANCEMENT] [52905] DA-IICT - Fee collection receipt - 28Dec2023.pdf):PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/OmniwareOnlinePaymentRequest_Split.aspx
                                     <div class="text-center college-name mt-md-3">
                                         <h2>
                                             <asp:Label ID="lblCollege" runat="server" Text=""></asp:Label></h2>
@@ -79,10 +71,6 @@
                                 </div>--%>
 
                                 <div class="col-sm-12">
-                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive center" runat="server" ImageUrl="~/images/nophoto.jpg" />
-                                </div>
-                               
-                                  <div class="col-sm-12">
                                     <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive center" runat="server" ImageUrl="~/images/nophoto.jpg" />
                                 </div>
                             </div>

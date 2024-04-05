@@ -101,17 +101,17 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 {
                     divInternalMarks.Visible = true;
                 }
-                else if (Internalflag_subexam==1)
+                else if (Internalflag_subexam == 1)
                 {
                     //if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
                     //{
-                        //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "ISNULL(R.CANCEL,0)=0 AND IDNO = " + Convert.ToInt32(Session["idno"]), "R.SESSIONNO DESC");
-                        //if (ddlSession.Items.Count > 1)
-                        //{
-                        //    ddlSession.SelectedIndex = 1;
-                        //}
-                        divInternalMarks1.Visible = true;
-                        getstudentinternalcourse();
+                    //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "ISNULL(R.CANCEL,0)=0 AND IDNO = " + Convert.ToInt32(Session["idno"]), "R.SESSIONNO DESC");
+                    //if (ddlSession.Items.Count > 1)
+                    //{
+                    //    ddlSession.SelectedIndex = 1;
+                    //}
+                    divInternalMarks1.Visible = true;
+                    getstudentinternalcourse();
                     //}
                     //else
                     //{
@@ -674,13 +674,13 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                             {
                                 lvProt.DataSource = dsStudentPro;
                                 lvProt.DataBind();//added by lalit 
-                              
+
                             }
                             else
                             {
                                 lvProt.DataSource = null;
                                 lvProt.DataBind();
-                               
+
                             }
                         }
 
@@ -919,7 +919,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
 
             }
-            else if (Internalflag_subexam==1)
+            else if (Internalflag_subexam == 1)
             {
                 getstudentinternalcourse();
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
@@ -955,7 +955,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
 
             }
-          
+
             DataSet dsCourse = objSC.RetrieveRegDetailsByIdnoAndSession(idno, Convert.ToInt32(ddlSession.SelectedValue));
             if (dsCourse != null && dsCourse.Tables.Count > 0 && dsCourse.Tables[0].Rows.Count > 0)
             {
@@ -980,6 +980,57 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             else
                 objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
+    }
+    public void getFixedDetails()
+    {
+        int idno = 0;
+        StudentController objSC = new StudentController();
+       // DataSet dsregistration, dsResult, dsFees, dsCertificate, dsRemark, dsRefunds, dsTestMarks, dsAttendance;
+        FeeCollectionController feeController = new FeeCollectionController();
+
+        if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(ViewState["idno"]);
+            //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollmentSearch.Text.Trim());
+            //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + idno, "R.SESSIONNO DESC");                                
+
+        }
+
+        Session["stuinfoidno"] = idno;
+        int uano = Convert.ToInt32(Session["userno"]);
+
+        try
+        {
+            if (idno > 0)
+            {
+                DataTableReader dtr = objSC.GetStudentCompleteDetails(idno);
+
+                if (dtr != null)
+                {
+                    if (dtr.Read())
+                    {
+                        ViewState["admbatch"] = dtr["ADMBATCH"];
+                        string branchname = objCommon.LookUp("ACD_BRANCH", "LONGNAME", "BRANCHNO=" + dtr["branchno"].ToString());
+                        lblBranch.Text = branchname;
+
+                        lblfixStdName.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();
+                        lblfixRRN.Text = dtr["REGNO"].ToString();
+                        lblfixdegreeBranch.Text = (dtr["DEGREE"] == null ? string.Empty : dtr["DEGREE"].ToString()) + " - " + branchname;
+                        imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dtr["IDNO"].ToString() + "&type=STUDENT";
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }              
+
+
     }
     protected void lvSession_ItemDataBound(object sender, ListViewItemEventArgs e)
     {
@@ -1214,8 +1265,9 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
     protected void rdolistSemester_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+        getFixedDetails(); 
         BindListView();
+        
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
         int idno = 0;
         if (Session["usertype"].ToString().Equals("2"))
@@ -1232,6 +1284,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Src", "HideTableColumns();", true);
             // ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('.grade-range .studcount').hide();$('.grade-range .studcount').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('.grade-range .studcount').hide();$('.grade-range .studcount').hide();});", true);
         }
+       
     }
     public void BindListViewRevaluation()
     {
@@ -2311,12 +2364,6 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         //{
         //    objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
         //}
-
-        //string CheckMgEntry = objCommon.LookUp("ACD_MODULE_CONFIG MG INNER JOIN ACD_SESSION_MASTER SM ON (MG.ATT_SESSIONIDS = SM.SESSIONID)", "ATT_SESSIONIDS", "SESSIONNO=" + ddlSession.SelectedValue);
-        //if (CheckMgEntry == "")
-        //{
-        //    objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
-        //}
         if (Convert.ToInt32(Session["OrgId"]) == 16)
         {
             pnlCollege.Visible = false; //Added by lalit
@@ -2993,6 +3040,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
     }
     protected void RadioButtonList1_SelectedIndexChanged(object sender, EventArgs e)
     {
+        getFixedDetails(); 
         BindListViewRevaluation();
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
     }
@@ -3125,8 +3173,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         LinkButton lnkcode = sender as LinkButton;
         DataSet ds = null;
         string proc_name = "PKG_ACD_BIND_COURSE_REG_MODEL_POP_DATA";
-        string para_name = "@P_IDNO,@P_COURSENO,@P_SESSIONNO";
-        string call_values = "" + idno + "," + lnkcode.ToolTip + ","+ ddlSession.SelectedValue +"";
+        string para_name = "@P_IDNO,@P_COURSENO";
+        string call_values = "" + idno + "," + lnkcode.ToolTip + "";
         // string para_name = "@P_IDNO,@P_SESSIONNO,@P_SCHEMENO,@P_DEGREENO,@P_BRANCHNO,@P_ORGID";
         // string call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "," + ORG + "";
         ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
@@ -3139,7 +3187,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCoursePop();", true);
         }
     }
-   public void getstudentinternalcourse()
+    public void getstudentinternalcourse()
     {
         int idno = 0;
         if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "14")
@@ -3214,4 +3262,49 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         }
     }
 
+    protected void lnkmark_Click(object sender, EventArgs e)
+    {
+        int idno = 0;
+        if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(ViewState["idno"]);
+            //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollmentSearch.Text.Trim());
+            //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + idno, "R.SESSIONNO DESC");                                
+        }
+        string regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + idno + " ");
+        LinkButton lnkmark = sender as LinkButton;
+        if (lnkmark.CommandArgument != string.Empty)
+        {
+            DataSet ds = null;
+
+            string proc_name = "PKG_SHOW_SUBEXAMNAME_BY_PARTICULATUR_ID_SES_CO";
+
+            string para_name = "@P_IDNO,@P_SESSIONNO,@P_COURSENO";
+            string call_values = "" + idno + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Int32.Parse(lnkmark.CommandArgument) + "";
+            ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                LvinternalData2.DataSource = ds;
+                LvinternalData2.DataBind();
+                lblCoursename.Text = ds.Tables[0].Rows[0]["COURSE_NAME"].ToString();
+                lblCCode.Text = ds.Tables[0].Rows[0]["CCODE"].ToString();
+                lblSessionname.Text = ds.Tables[0].Rows[0]["SESSION_NAME"].ToString();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalInternal();", true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+            }
+
+
+
+
+        }
+
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
+    }
 }

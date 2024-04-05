@@ -2550,6 +2550,32 @@ namespace IITMS
 
                 #endregion
 
+
+                #region Check Existing Teaching Plan By TempTable - By GopalM 15/07/2023
+                public DataSet GetCheckExistsTeachingPlan(int courseNo, int sessionNo, int sectionNo, int uano)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+
+                        objParams[0] = new SqlParameter("@P_COURSENO", courseNo);
+                        objParams[1] = new SqlParameter("@P_SESSIONNO", sessionNo);
+                        objParams[2] = new SqlParameter("@P_SECTIONNO", sectionNo);
+                        objParams[3] = new SqlParameter("@P_UA_NO", uano);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("dbo.PKG_ACAD_SP_TEACHING_PLAN_UPLOAD_CHECK_EXISTS", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.TeachingPlanController.GetCheckExistsTeachingPlan -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                #endregion
+
             }
         }
     }
