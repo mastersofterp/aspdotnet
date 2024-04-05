@@ -1518,9 +1518,9 @@ public partial class ACADEMIC_TIMETABLE_Revised_TimeTable : System.Web.UI.Page
                         objE.Semesterno = Convert.ToInt32(semester);
                         objE.Sectionno = Convert.ToInt32(section);
                         objE.Slottype = Convert.ToInt32(slotype);
-                        objE.dtRevisedFac = (DataTable)HttpContext.Current.Session["Revised_Faculty"];
-                        objE.dtRevisedFac.Columns.Remove("FACNAME");
-                        objE.dtRevisedFac.Columns.Remove("FACULTYNAME");
+                        //objE.dtRevisedFac = (DataTable)HttpContext.Current.Session["Revised_Faculty"];
+                        //objE.dtRevisedFac.Columns.Remove("FACNAME");
+                        //objE.dtRevisedFac.Columns.Remove("FACULTYNAME");
 
                         if (outval != 7 && outval != 8)
                         {
@@ -1693,5 +1693,47 @@ public partial class ACADEMIC_TIMETABLE_Revised_TimeTable : System.Web.UI.Page
             ddlRoom.DataTextField = "ROOMNAME";
             ddlRoom.DataBind();
         }
+    }
+
+
+    /// <summary>
+    /// Added By Rishabh on 01/11/2023 to get validation, if attendance already marked for that perticular period.
+    /// </summary>
+    /// <param name="ctno"></param>
+    /// <param name="Slotno"></param>
+    /// <param name="dayno"></param>
+    /// <param name="startdate"></param>
+    /// <param name="enddate"></param>
+    /// <returns></returns>
+    [WebMethod]
+    public static string AttendanceCheck(int ctno, int Slotno, int dayno, string startdate, string enddate)
+    {
+        string yourHTMLstring = ""; string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
+        Common objCommon = new Common();
+
+        try
+        {
+            DataSet ds = new DataSet();
+            SP_Name = "PKG_ACD_CHECK_ATTENDANCE_FOR_REVISE";
+            SP_Parameters = "@P_CTNO,@P_SLOTNO,@P_DAYNO,@P_STARTDATE,@P_ENDDATE";
+            Call_Values = "" + ctno + "," + Slotno + "," + dayno + "," + startdate + "," + enddate + "";
+            ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+            if (ds.Tables != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    yourHTMLstring += ds.Tables[0].Rows[i]["ATTENDANCE_MARKED_DATES"].ToString();
+                }
+            }
+            else
+            {
+                yourHTMLstring = "0";
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+        return yourHTMLstring.Replace(System.Environment.NewLine, string.Empty);
     }
 }
