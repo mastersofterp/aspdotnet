@@ -816,8 +816,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         // CHECKS WHETHER ALL THE SUBEXAMS ARE LOCKED OR NOT FOR END SEM MARK ENTRY 
 
-
-        // ENDS HERE WHETHER ALL THE SUBEXAMS ARE LOCKED OR NOT FOR END SEM MARK ENTRY 
+        btnShow.Enabled = true;
         int Is_Specialcase; //Added by lalit 26-06-2023 because added by Exception Handling
         string Is_Specialcase1 = Convert.ToString(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
         if (Is_Specialcase1 == string.Empty)
@@ -910,6 +909,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     ddlExam.Items.Add("Please Select");
                     ddlExam.SelectedItem.Value = "0";
 
+
+                    btnShow.Enabled = false;
                     return;
                 }
             }
@@ -926,7 +927,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             ddlExam.Items.Clear();
             ddlExam.Items.Add("Please Select");
             ddlExam.SelectedItem.Value = "0";
-
+            btnShow.Enabled = false;
             return;
         }
 
