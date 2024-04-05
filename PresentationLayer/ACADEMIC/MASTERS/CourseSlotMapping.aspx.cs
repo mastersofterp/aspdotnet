@@ -40,7 +40,7 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
             else
             {
                 Page.Title = Session["coll_name"].ToString();
-
+                CheckPageAuthorization();
                 if (Request.QueryString["pageno"] != null)
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
@@ -49,6 +49,23 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
                 divMsg.InnerHtml = string.Empty;
                 ViewState["ipadress"] = Request.ServerVariables["REMOTE_ADDR"];
             }
+        }
+    }
+
+    private void CheckPageAuthorization()
+    {
+        if (Request.QueryString["pageno"] != null)
+        {
+            //Check for Authorization of Page
+            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
+            {
+                Response.Redirect("~/notauthorized.aspx?page=IGradeEntry.aspx");
+            }
+        }
+        else
+        {
+            //Even if PageNo is Null then, don't show the page
+            Response.Redirect("~/notauthorized.aspx?page=IGradeEntry.aspx");
         }
     }
 
@@ -116,7 +133,8 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
             lvcourse.DataBind();
             if (ddlScheme.SelectedIndex > 0)
             {
-                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S INNER JOIN ACD_OFFERED_COURSE OC ON (OC.SEMESTERNO=S.SEMESTERNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO=OC.SESSIONNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND OC.SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue), "S.SEMESTERNO");
+                objCommon.FillDropDownList(ddlSubjecttype, "ACD_SUBJECTTYPE S INNER JOIN ACD_COURSE C ON (S.SUBID=C.SUBID) INNER JOIN ACD_OFFERED_COURSE OC ON (C.COURSENO=OC.COURSENO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO=OC.SESSIONNO)", "DISTINCT S.SUBID", "S.SUBNAME", "SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND OC.SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue), "S.SUBID");
+
             }
         }
         catch (Exception ex)
@@ -131,17 +149,17 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
     {
         try
         {
-            ClearDropDown(ddlSubjecttype);
+            //ClearDropDown(ddlSubjecttype);
             ddlcourseslot.SelectedIndex = 0;
             pnlcommonapply.Visible = false;
             txtrowFrom.Text = string.Empty;
             txtrowTo.Text = string.Empty;
             lvcourse.DataSource = null;
             lvcourse.DataBind();
-            if (ddlSemester.SelectedIndex > 0)
-            {
-                objCommon.FillDropDownList(ddlSubjecttype, "ACD_SUBJECTTYPE S INNER JOIN ACD_COURSE C ON (S.SUBID=C.SUBID) INNER JOIN ACD_OFFERED_COURSE OC ON (C.COURSENO=OC.COURSENO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO=OC.SESSIONNO)", "DISTINCT S.SUBID", "S.SUBNAME", "SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND OC.SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + "AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue), "S.SUBID");
-            }
+            //if (ddlSemester.SelectedIndex > 0)
+            //{
+            //    objCommon.FillDropDownList(ddlSubjecttype, "ACD_SUBJECTTYPE S INNER JOIN ACD_COURSE C ON (S.SUBID=C.SUBID) INNER JOIN ACD_OFFERED_COURSE OC ON (C.COURSENO=OC.COURSENO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO=OC.SESSIONNO)", "DISTINCT S.SUBID", "S.SUBNAME", "SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND OC.SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + "AND OC.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue), "S.SUBID");
+            //}
         }
         catch (Exception ex)
         {
@@ -162,6 +180,11 @@ public partial class ACADEMIC_MASTERS_CourseSlotMapping : System.Web.UI.Page
             pnlcommonapply.Visible = false;
             lvcourse.DataSource = null;
             lvcourse.DataBind();
+            ClearDropDown(ddlSemester);
+            if (ddlSubjecttype.SelectedIndex > 0)
+            {
+                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S INNER JOIN ACD_OFFERED_COURSE OC ON (OC.SEMESTERNO=S.SEMESTERNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO=OC.SESSIONNO) INNER JOIN ACD_COURSE C ON (C.COURSENO=OC.COURSENO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND OC.SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + " AND C.SUBID=" + Convert.ToInt32(ddlSubjecttype.SelectedValue), "S.SEMESTERNO");
+            }
         }
         catch (Exception ex)
         {

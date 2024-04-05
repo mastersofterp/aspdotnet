@@ -32,7 +32,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">
-                        <asp:Label ID="lblDYpagecourseslot" runat="server"></asp:Label></h3>
+                        <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
                 <div class="box-body">
                     <div>
@@ -86,16 +86,6 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <div class="label-dynamic">
                                         <label>
-                                            <asp:Label ID="lblDYddlSemester" runat="server"></asp:Label></label>
-                                    </div>
-                                    <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="true" TabIndex="1"
-                                        data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
-                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                    </asp:DropDownList>
-                                </div>
-                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                    <div class="label-dynamic">
-                                        <label>
                                             <asp:Label ID="lblDYddlSubtype" runat="server"></asp:Label></label>
                                     </div>
                                     <asp:DropDownList ID="ddlSubjecttype" runat="server" AppendDataBoundItems="true"
@@ -103,7 +93,16 @@
                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
-
+                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="label-dynamic">
+                                        <label>
+                                            <asp:Label ID="lblDYddlSemester" runat="server"></asp:Label></label>
+                                    </div>
+                                    <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="true" TabIndex="1"
+                                        data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
+                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                    </asp:DropDownList>
+                                </div>
                             </div>
                             <div class="col-12 btn-footer">
                                 <asp:Button ID="btnshow" runat="server" Text="Show" CssClass="btn btn-info"
@@ -211,7 +210,7 @@
                             </div>
                         </ContentTemplate>
                         <Triggers>
-                            <asp:PostBackTrigger ControlID="btnreport"/>
+                            <asp:PostBackTrigger ControlID="btnreport" />
                         </Triggers>
                     </asp:UpdatePanel>
                 </div>
