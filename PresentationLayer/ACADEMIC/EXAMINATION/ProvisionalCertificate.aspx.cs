@@ -79,12 +79,32 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
             DataSet ds = null;
             if (Session["usertype"].ToString().Equals("2")) //Student 
             {
-                ds = objCommon.FillDropDown("ACD_TRRESULT TRRESULT WITH (NOLOCK) INNER JOIN ACD_STUDENT STUDENT WITH (NOLOCK) ON(STUDENT.IDNO=TRRESULT.IDNO)", "TRRESULT.REGNO,TRRESULT.STUDNAME,STUDENT.STUDENTMOBILE,STUDENT.EMAILID", "DGPA,TRRESULT.SESSIONNO", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE IDNO=" + Convert.ToInt32(Session["idno"]) + ") AND ISNULL(DGPA,0)>0 AND TRRESULT.IDNO=" + Convert.ToInt32(Session["idno"]) + "", "");
+                //ds = objCommon.FillDropDown("ACD_TRRESULT TRRESULT WITH (NOLOCK) INNER JOIN ACD_STUDENT STUDENT WITH (NOLOCK) ON(STUDENT.IDNO=TRRESULT.IDNO)", "TRRESULT.REGNO,TRRESULT.STUDNAME,STUDENT.STUDENTMOBILE,STUDENT.EMAILID", "DGPA,TRRESULT.SESSIONNO", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE IDNO=" + Convert.ToInt32(Session["idno"]) + ") AND ISNULL(DGPA,0)>0 AND TRRESULT.IDNO=" + Convert.ToInt32(Session["idno"]) + "", "");
+                string SP_Name = "PKG_ACD_DEGREE_COMPLETE_STUDENT"; // added by shubham on 27/11/2023
+                string SP_Parameters = "@P_IDNO";
+                string Call_Values = "" + Convert.ToInt32(Session["idno"]) + "";
+                ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
             }
             else
             {
+<<<<<<< HEAD
                 Session["idno"] = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "IDNO", "REGNO='" + txtRegistrationNo.Text + "'");
                 ds = objCommon.FillDropDown("ACD_TRRESULT TRRESULT WITH (NOLOCK) INNER JOIN ACD_STUDENT STUDENT WITH (NOLOCK) ON(STUDENT.IDNO=TRRESULT.IDNO)", "TRRESULT.REGNO,TRRESULT.STUDNAME,STUDENT.STUDENTMOBILE,STUDENT.EMAILID", "TRRESULT.DGPA,TRRESULT.SESSIONNO", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE IDNO=" + Convert.ToInt32(Session["idno"]) + ") AND ISNULL(DGPA,0)>0 AND TRRESULT.IDNO=" + Convert.ToInt32(Session["idno"]) + "", "");
+=======
+                ViewState["idno"] = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "IDNO", "REGNO='" + txtRegistrationNo.Text + "'");
+                String idno = ViewState["idno"].ToString();
+                if (idno == "")
+                {
+                    objCommon.DisplayUserMessage(this.Page, "Please Enter Valid !!!.", this.Page);
+                    return;
+                }
+                //ds = objCommon.FillDropDown("ACD_TRRESULT TRRESULT WITH (NOLOCK) INNER JOIN ACD_STUDENT STUDENT WITH (NOLOCK) ON(STUDENT.IDNO=TRRESULT.IDNO)", "TRRESULT.REGNO,TRRESULT.STUDNAME,STUDENT.STUDENTMOBILE,STUDENT.EMAILID", "TRRESULT.DGPA,TRRESULT.SESSIONNO", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE IDNO=" + Convert.ToInt32(Session["idno"]) + ") AND ISNULL(DGPA,0)>0 AND TRRESULT.IDNO=" + Convert.ToInt32(Session["idno"]) + "", "");
+                //ds = objCommon.FillDropDown("ACD_TRRESULT TRRESULT WITH (NOLOCK) INNER JOIN ACD_STUDENT STUDENT WITH (NOLOCK) ON(STUDENT.IDNO=TRRESULT.IDNO)", "TRRESULT.REGNO,TRRESULT.STUDNAME,STUDENT.STUDENTMOBILE,STUDENT.EMAILID", "TRRESULT.DGPA,TRRESULT.SESSIONNO", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE IDNO=" + Convert.ToInt32(Session["idno"]) + ") AND TRRESULT.IDNO=" + Convert.ToInt32(Session["idno"]) + "", "");
+                string SP_Name = "PKG_ACD_DEGREE_COMPLETE_STUDENT"; // added by shubham on 27/11/2023
+                string SP_Parameters = "@P_IDNO";
+                string Call_Values = "" + Convert.ToInt32(idno) + "";
+                ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+>>>>>>> b7004b39 ( [ENHANCEMENT] [57150] Solved bugs and Added RPT)
             }
 
             if (ds.Tables[0].Rows.Count > 0 && ds != null)
@@ -118,13 +138,17 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
                 }
                 else
                 {
-                    objCommon.DisplayUserMessage(this.Page, "Registration No. "+txtRegistrationNo.Text+ " is not Eligible to View the Provisionl Certificate Detail Due to DGPA is not Available.", this.Page);
+                    objCommon.DisplayUserMessage(this.Page, "Registration No. " + txtRegistrationNo.Text + " is not Eligible to View the Provisionl Certificate Detail Due to DGPA is not Available.", this.Page);
                     return;
                 }
             }
         }
         catch (Exception ex)
         {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_ProvisionalCertificate.StudentDetail()-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -196,9 +220,18 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
 
                 url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"]) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
+<<<<<<< HEAD
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
+=======
+                //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                //sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                //ScriptManager.RegisterClientScriptBlock(this.updUpdate, this.updUpdate.GetType(), "controlJSScript", sb.ToString(), true);
+                ShowReport("ProvisionalCertificate", "rptProvisionalCertificateNew.rpt");
+>>>>>>> b7004b39 ( [ENHANCEMENT] [57150] Solved bugs and Added RPT)
 
                 ScriptManager.RegisterClientScriptBlock(this.updUpdate, this.updUpdate.GetType(), "controlJSScript", sb.ToString(), true);
             }
@@ -216,4 +249,32 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+<<<<<<< HEAD
+=======
+
+    private void ShowReport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            //int clg_id = Convert.ToInt32(ViewState["college_id"]);
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"]);
+            //url += "&param=@P_IDNO=" + "45.1813";
+            string Script = string.Empty;
+            Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            ScriptManager.RegisterClientScriptBlock(this.updFacAllot, updFacAllot.GetType(), "Report", Script, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_PaperSetFacultyAllotment.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+>>>>>>> b7004b39 ( [ENHANCEMENT] [57150] Solved bugs and Added RPT)
 }
