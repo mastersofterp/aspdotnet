@@ -235,7 +235,7 @@
                                                                 <p class="text-center">
                                                                     <asp:Button ID="btnSave" runat="server" Text="Submit" CssClass="btn btn-primary"  OnClientClick="return confirmation();" OnClick="btnSave_Click"  />
                                                                     <asp:Button ID="btnunlock" runat="server" Text="UnLock" CssClass="btn btn-primary"  OnClientClick="return confirmationUnlock();"  OnClick="btnunlock_Click" Visible="false" />
-                                                                    <asp:Button ID="btnreport" runat="server" Text="Report" CssClass="btn btn-primary"    OnClick="btnreport_Click" />
+                                                                    <asp:Button ID="btnreport" runat="server" Text="Report" CssClass="btn btn-primary"    OnClick="btnreport_Click" Visible="false" />
                                                                      <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" CssClass="btn btn-warning"
                                                                         OnClick="btnCancel_Click" />
                                                                        <asp:Label ID="lblHelp" runat="server" Font-Names="Trebuchet MS" />

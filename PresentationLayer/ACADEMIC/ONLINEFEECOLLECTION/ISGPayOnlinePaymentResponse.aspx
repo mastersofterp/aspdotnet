@@ -82,17 +82,21 @@
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
-                            <div class="row">
-                                <div class="col-sm-3 text-center">
-                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive" runat="server" ImageUrl="~/images/nophoto.jpg" />
-                                </div>
-                                <div class="col-sm-9">
+                              <div class="row">
+                                <%--  <div class="col-sm-3 text-center mt-md-4">
+                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive" runat="server" Width="200px" ImageUrl="~/images/nophoto.jpg" />
+                                </div>--%>
+                                <%--<div class="col-sm-9">
                                     <div class="text-center college-name mt-md-3">
                                         <h2>
                                             <asp:Label ID="lblCollege" runat="server" Text=""></asp:Label></h2>
                                         <h6>
-                                            <asp:Label ID="lblAddress" runat="server" Text=""></asp:Label></h6>
+                                            <asp:Label ID="lblAddress" Font-Size="14px" runat="server" Text=""></asp:Label></h6>
                                     </div>
+                                </div>--%>
+
+                                <div class="col-sm-12">
+                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive center" runat="server" ImageUrl="~/images/nophoto.jpg" />
                                 </div>
                             </div>
                         </div>
@@ -136,7 +140,7 @@
                                     </div>
 
                                     <div class="col-md-12">
-                                        <asp:Panel ID="Panel_StackTrace" runat="server">
+                                        <asp:Panel ID="Panel_StackTrace" runat="server" Visible="false">
                                             <h5><strong>&nbsp;Exception Stack Trace</strong></h5>
                                             <div>
                                                 <asp:Label ID="Label_StackTrace" runat="server" />

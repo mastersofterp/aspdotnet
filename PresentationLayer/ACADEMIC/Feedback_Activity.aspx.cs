@@ -25,7 +25,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
-   
+
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -68,10 +68,10 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
 
                     // Fill drop down lists
                     //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
-                    
+
                     //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
                     objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONID DESC"); // ADDED ORDER BY DESC CLAUSE BY Nehal N. ON DATED 30.06.2023
-                    
+
                     objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
 
                     ddlSemester.DataSource = null;
@@ -131,6 +131,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
 
     private void LoadDefinedSessionActivities()
     {
+        ViewState["DYNAMIC_DATASET"] = null;
         try
         {
             SessionActivityController activityController = new SessionActivityController();
@@ -139,6 +140,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
             {
                 lvFeedbackType.DataSource = ds;
                 lvFeedbackType.DataBind();
+                ViewState["DYNAMIC_DATASET"] = ds.Tables[0];
             }
         }
         catch (Exception ex)
@@ -162,8 +164,9 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
         rdoStop.Checked = true;
         ddlClgname.SelectedIndex = 0;
         ViewState["sessionactivityno"] = "0";
-        ViewState["Edit"]=null;
+        ViewState["Edit"] = null;
         populatedropdown();
+        btnSubmit.Text = "Submit";
         ddlBranch.Items.Clear();
         txtStartTime.Text = string.Empty;
         txtEndTime.Text = string.Empty;
@@ -178,7 +181,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
             SessionActivity sessionActivity = new SessionActivity();
             sessionActivity = this.BindData();
             int ActivityCount = 0;
-           // int DATETIME_STATUS = Convert.ToInt32(rbddatetime.SelectedValue);
+            // int DATETIME_STATUS = Convert.ToInt32(rbddatetime.SelectedValue);
             int DATETIME_STATUS = 0;
 
 
@@ -194,9 +197,9 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
             }
             else if (int.Parse(ViewState["sessionactivityno"].ToString()) > 0)
             {
-                DataSet dsedit=(DataSet)(ViewState["Edit"]);
+                DataSet dsedit = (DataSet)(ViewState["Edit"]);
                 DataRow dr = dsedit.Tables[0].Rows[0];
-                ActivityCount = Convert.ToInt32(objCommon.LookUp("ACD_FEEDBACK_ACTIVITY", "COUNT(*)", "ISNULL(SHOW_STATUS,0)=1 AND FEEDBACK_TYPENO=" + Convert.ToInt32(dr["FEEDBACK_TYPENO"]) + " AND SESSION_NO=" + Convert.ToInt32(dr["SESSION_NO"]) + " AND SEMESTERNO=" + Convert.ToInt32(dr["SEMESTERNO"])  +" AND DEGREENO=" + Convert.ToInt32(dr["DEGREENO"]) + " AND BRANCHNO=" + Convert.ToInt32(dr["BRANCHNO"]) + " AND COLLEGE_ID=" + Convert.ToInt32(dr["COLLEGE_ID"]) + " AND SESSION_ACTIVITY_NO<>" + Convert.ToInt32(dr["SESSION_ACTIVITY_NO"])));
+                ActivityCount = Convert.ToInt32(objCommon.LookUp("ACD_FEEDBACK_ACTIVITY", "COUNT(*)", "ISNULL(SHOW_STATUS,0)=1 AND FEEDBACK_TYPENO=" + Convert.ToInt32(dr["FEEDBACK_TYPENO"]) + " AND SESSION_NO=" + Convert.ToInt32(dr["SESSION_NO"]) + " AND SEMESTERNO=" + Convert.ToInt32(dr["SEMESTERNO"]) + " AND DEGREENO=" + Convert.ToInt32(dr["DEGREENO"]) + " AND BRANCHNO=" + Convert.ToInt32(dr["BRANCHNO"]) + " AND COLLEGE_ID=" + Convert.ToInt32(dr["COLLEGE_ID"]) + " AND SESSION_ACTIVITY_NO<>" + Convert.ToInt32(dr["SESSION_ACTIVITY_NO"])));
                 if (ActivityCount > 0)
                 {
                     objCommon.DisplayMessage(this.updSesActivity, "Activity is Already Defined for Selected Session and Feedback Type !", this.Page);
@@ -224,18 +227,18 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
         SessionActivity sessionActivity = new SessionActivity();
         try
         {
-            
+
             sessionActivity.SessionActivityNo = int.Parse(ViewState["sessionactivityno"].ToString());
-            
+
             sessionActivity.College_Id = ((ddlClgname.SelectedIndex > 0) ? int.Parse(ddlClgname.SelectedValue) : 0);
-            
+
             int SessionId = 0;
-            if(ddlSession.SelectedValue.ToString() != string.Empty)
+            if (ddlSession.SelectedValue.ToString() != string.Empty)
             {
                 SessionId = Convert.ToInt32(ddlSession.SelectedValue);
             }
             sessionActivity.SessionNo = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(sessionActivity.College_Id) + " AND SESSIONID=" + SessionId));
-            
+
             //sessionActivity.SessionNo = ((ddlSession.SelectedIndex > 0) ? int.Parse(ddlSession.SelectedValue) : 0);
 
             sessionActivity.Feedbacktypeno = ((ddlFeedbackType.SelectedIndex > 0) ? int.Parse(ddlFeedbackType.SelectedValue) : 0);
@@ -265,37 +268,37 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
             //}
             //else
             //{
-               if (txtStartDate.Text == string.Empty)
-                {
-                    objCommon.DisplayMessage(updSesActivity, "Please Enter Start Date.", this.Page);
-                }
-                else
-                {
-                    sessionActivity.StartDate = Convert.ToDateTime(txtStartDate.Text.ToString());//).ToString("yyyy/MM/dd");
-                }
-                if (txtEndDate.Text == string.Empty)
-                {
-                    objCommon.DisplayMessage(updSesActivity, "Please Enter End Date.", this.Page);
-                }
-                else if ((Convert.ToDateTime(txtStartDate.Text)) > (Convert.ToDateTime(txtEndDate.Text)))
-                {
-                    objCommon.DisplayMessage(updSesActivity, "End Date should be greater than Start Date", this.Page);
-                    txtEndDate.Text = "";
-                }
-                else
-                {
-                    sessionActivity.EndDate = Convert.ToDateTime(txtEndDate.Text.ToString());//.ToString("yyyy/MM/dd");
-                }
-                if (txtStartTime.Text == string.Empty && txtEndTime.Text == string.Empty)
-                {
-                    sessionActivity.Start_Time = "12:00 AM";
-                    sessionActivity.End_Time = "11:59 PM";
-                }
-                else
-                {
-                    sessionActivity.Start_Time = txtStartTime.Text;
-                    sessionActivity.End_Time = txtEndTime.Text;
-                }
+            if (txtStartDate.Text == string.Empty)
+            {
+                objCommon.DisplayMessage(updSesActivity, "Please Enter Start Date.", this.Page);
+            }
+            else
+            {
+                sessionActivity.StartDate = Convert.ToDateTime(txtStartDate.Text.ToString());//).ToString("yyyy/MM/dd");
+            }
+            if (txtEndDate.Text == string.Empty)
+            {
+                objCommon.DisplayMessage(updSesActivity, "Please Enter End Date.", this.Page);
+            }
+            else if ((Convert.ToDateTime(txtStartDate.Text)) > (Convert.ToDateTime(txtEndDate.Text)))
+            {
+                objCommon.DisplayMessage(updSesActivity, "End Date should be greater than Start Date", this.Page);
+                txtEndDate.Text = "";
+            }
+            else
+            {
+                sessionActivity.EndDate = Convert.ToDateTime(txtEndDate.Text.ToString());//.ToString("yyyy/MM/dd");
+            }
+            if (txtStartTime.Text == string.Empty && txtEndTime.Text == string.Empty)
+            {
+                sessionActivity.Start_Time = "12:00 AM";
+                sessionActivity.End_Time = "11:59 PM";
+            }
+            else
+            {
+                sessionActivity.Start_Time = txtStartTime.Text;
+                sessionActivity.End_Time = txtEndTime.Text;
+            }
             ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
             sessionActivity.Ipaddress = ViewState["ipAddress"].ToString();
             sessionActivity.User_no = Convert.ToInt32(Session["userno"]);
@@ -318,24 +321,25 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
             int recordId = int.Parse(btnEditRecord.CommandArgument);
             SessionActivityController sa_controller = new SessionActivityController();
             DataSet ds = sa_controller.GetDefinedFeedbackActivities(recordId);
+            btnSubmit.Text = "Update";
             ViewState["Edit"] = ds;
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 DataRow dr = ds.Tables[0].Rows[0];
-                
+
                 //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
                 //ddlClgname.SelectedValue = dr["COLLEGE_ID"].ToString();
-              
+
 
                 //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ddlClgname.SelectedValue) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
 
                 //ddlSession.SelectedValue = dr["SESSION_NO"].ToString();
-                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONID DESC"); // ADDED ORDER BY DESC CLAUSE BY Nehal N. ON DATED 30.06.2023
-                 string sessionno = dr["SESSION_NO"].ToString();
-                 string sessionid = objCommon.LookUp("ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON (S.SESSIONID = SM.SESSIONID)", "S.SESSIONID", "ISNULL(S.IS_ACTIVE,0)=1 AND SM.SESSIONNO=" + Convert.ToInt32(sessionno));
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONID DESC"); // ADDED ORDER BY DESC CLAUSE BY Nehal N. ON DATED 30.06.2023
+                string sessionno = dr["SESSION_NO"].ToString();
+                string sessionid = objCommon.LookUp("ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON (S.SESSIONID = SM.SESSIONID)", "S.SESSIONID", "ISNULL(S.IS_ACTIVE,0)=1 AND SM.SESSIONNO=" + Convert.ToInt32(sessionno));
 
-                 ddlSession.SelectedValue = sessionid;
-                
+                ddlSession.SelectedValue = sessionid;
+
                 objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER C INNER JOIN ACD_SESSION_MASTER SM ON (C.COLLEGE_ID = SM.COLLEGE_ID)", "C.COLLEGE_ID", "C.COLLEGE_NAME", "C.COLLEGE_ID > 0 AND SM.SESSIONID= " + Convert.ToInt32(ddlSession.SelectedValue) + " AND C.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "C.COLLEGE_ID");
                 ddlClgname.SelectedValue = dr["COLLEGE_ID"].ToString();
 
@@ -364,7 +368,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
                         item.Selected = true;
                 }
                 SQLHelper objsql = new IITMS.SQLServer.SQLDAL.SQLHelper(_nitprm_constr);
-                
+
                 DataSet dssem = objsql.ExecuteDataSet("SELECT SEMESTERNO,SEMESTERNAME from ACD_SEMESTER where SEMESTERNO > 0 order by SEMESTERNO");
                 ddlSemester.Items.Clear();
                 // ListBox lstbxSections = e.Item.FindControl("ddlSemester") as ListBox;
@@ -386,14 +390,14 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
                 //}
                 //else if (dr["DATETIME_STATUS"].ToString().Equals("2"))
                 //{
-                 //   rbddatetime.SelectedValue = "2";
-                    txtStartTime.Text = ds.Tables[0].Rows[0]["START_TIME"].ToString();
-                    txtEndTime.Text = ds.Tables[0].Rows[0]["END_TIME"].ToString();
-              //  }
-                  
+                //   rbddatetime.SelectedValue = "2";
+                txtStartTime.Text = ds.Tables[0].Rows[0]["START_TIME"].ToString();
+                txtEndTime.Text = ds.Tables[0].Rows[0]["END_TIME"].ToString();
+                //  }
+
                 txtStartDate.Text = ((dr["START_DATE"].ToString() != string.Empty) ? ((DateTime)dr["START_DATE"]).ToShortDateString() : string.Empty);
                 txtEndDate.Text = ((dr["END_DATE"].ToString() != string.Empty) ? ((DateTime)dr["END_DATE"]).ToShortDateString() : string.Empty);
-            
+
                 if (dr["SHOW_STATUS"].ToString().Equals("1"))
                 {
                     rdoYes.Checked = true;
@@ -455,7 +459,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ddlClgname.SelectedValue) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
             //ddlSession.Focus();
             ddlDegree.Items.Clear();
-            DataSet ds = objCommon.FillDropDown("ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE B ON (A.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "A.DEGREENAME", "A.DEGREENO > 0 AND COLLEGE_ID= "+Convert.ToInt32(ddlClgname.SelectedValue), "A.DEGREENO");
+            DataSet ds = objCommon.FillDropDown("ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE B ON (A.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "A.DEGREENAME", "A.DEGREENO > 0 AND COLLEGE_ID= " + Convert.ToInt32(ddlClgname.SelectedValue), "A.DEGREENO");
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 ddlDegree.Items.Add(new ListItem(Convert.ToString(ds.Tables[0].Rows[i][1]), Convert.ToString(ds.Tables[0].Rows[i][0])));
@@ -484,7 +488,7 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
         }
         string[] DegreeNo = deg.Split(',');
 
-        DataSet ds = objCommon.FillDropDown("ACD_BRANCH a INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON a.BRANCHNO=B.BRANCHNO INNER JOIN ACD_DEGREE DE ON (DE.DEGREENO = B.DEGREENO)", "B.BRANCHNO", "DE.DEGREENAME+'-'+A.LONGNAME AS LONGNAME", "B.DEGREENO in(" + deg + ") AND COLLEGE_ID="+Convert.ToInt32(ddlClgname.SelectedValue), "B.DEGREENO,B.BRANCHNO");
+        DataSet ds = objCommon.FillDropDown("ACD_BRANCH a INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON a.BRANCHNO=B.BRANCHNO INNER JOIN ACD_DEGREE DE ON (DE.DEGREENO = B.DEGREENO)", "B.BRANCHNO", "DE.DEGREENAME+'-'+A.LONGNAME AS LONGNAME", "B.DEGREENO in(" + deg + ") AND COLLEGE_ID=" + Convert.ToInt32(ddlClgname.SelectedValue), "B.DEGREENO,B.BRANCHNO");
         ddlBranch.Items.Clear();
         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
         {
@@ -509,8 +513,8 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
         {
             degreeno = degreeNo.Substring(0, degreeNo.Length - 1);
         }
-      
-      
+
+
         if (degreeno != "")
         {
             string[] degValue = degreeno.Split('$');
@@ -589,12 +593,12 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
                 PnlDate.Visible = true;
                 PnlDateTime.Visible = false;
             }
-            else if (rbddatetime.SelectedValue =="2")
+            else if (rbddatetime.SelectedValue == "2")
             {
                 PnlDate.Visible = true;
                 PnlDateTime.Visible = true;
             }
-               
+
         }
         catch (Exception ex)
         {
@@ -618,6 +622,55 @@ public partial class ACADEMIC_Feedback_Activity : System.Web.UI.Page
 
             ddlSession.Focus();
         }
-                    
+
+    }
+    protected void lvFeedbackType_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+    {
+        try
+        {
+            (lvFeedbackType.FindControl("DataPager1") as DataPager).SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+            DataTable dt = new DataTable();
+            dt = (DataTable)ViewState["DYNAMIC_DATASET"];
+            lvFeedbackType.DataSource = dt;
+            lvFeedbackType.DataBind();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    protected void FilterData2_TextChanged(object sender, EventArgs e)
+    {
+        System.Web.UI.WebControls.TextBox searchTextBox = (System.Web.UI.WebControls.TextBox)lvFeedbackType.FindControl("FilterData2");
+        string searchText = searchTextBox.Text.Trim();
+
+        try
+        {
+            System.Data.DataTable dt = ViewState["DYNAMIC_DATASET"] as System.Data.DataTable;
+            if (dt != null)
+            {
+                DataView dv = new DataView(dt);
+                if (searchText != string.Empty)
+                {
+                    string searchedData = "FEEDBACK_NAME LIKE '%" + searchText + "%' OR SESSION_NAME LIKE '%" + searchText + "%' OR START_DATE LIKE '%" + searchText + "%' OR END_DATE LIKE '%" + searchText + "%' OR START_TIME LIKE '%" + searchText + "%' OR END_TIME LIKE '%" + searchText + "%' OR STATUS LIKE '%" + searchText + "%'  OR SHOWSTATUS LIKE '%" + searchText + "%'  OR COLLEGE_NAME LIKE '%" + searchText + "%' OR DEGREENAME LIKE '%" + searchText + "%' OR BRANCH LIKE '%" + searchText + "%' OR SEMESTERNAME LIKE '%" + searchText + "%'";
+                    dv.RowFilter = searchedData;
+                    if (dv != null && dv.ToTable().Rows.Count > 0)
+                    {
+                        lvFeedbackType.DataSource = dv;
+                        lvFeedbackType.DataBind();
+                    }
+
+                }
+                else
+                {
+                    lvFeedbackType.DataSource = dt;
+                    lvFeedbackType.DataBind();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+        }
+
     }
 }

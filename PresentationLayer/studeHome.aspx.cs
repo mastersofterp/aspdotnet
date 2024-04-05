@@ -30,6 +30,7 @@ public partial class StudeHome : System.Web.UI.Page
     StudentController objSC = new StudentController();
     ExamController objExamController = new ExamController();
     NewsController objNc = new NewsController();
+    TPController objTpcontroller = new TPController();
 
     string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
     string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerName"].ToString();
@@ -85,7 +86,7 @@ public partial class StudeHome : System.Web.UI.Page
                     Show_ExamTT();
                     Show_Notice();
                     Show_TodaysTT();
-
+                    Show_placement();
 
                     int Outstanding = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(STUD_DASH_OUTSTANING,0)",""));
 
@@ -999,5 +1000,33 @@ public partial class StudeHome : System.Web.UI.Page
         Response.Redirect("~/Academic/OnlinePayment.aspx?pageno=" + pageno);
 
         }
+
+    //------start 14-12-2023--Juned--Show Placement Data
+    public void Show_placement()
+    {
+        try
+        {
+            if (Convert.ToInt32(Session["usertype"]) == 2)
+            {
+                DataSet ds = objTpcontroller.GetPlacement(Convert.ToInt32(Session["userno"]));
+                if (ds.Tables.Count > 0 && ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    LvPlacement.DataSource = ds.Tables[0];
+                    LvPlacement.DataBind();
+                    divplacement.Visible = true;
+                }
+            }
+            else
+            {
+                divplacement.Visible = false;
+            }
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+    //------End 14-12-2023--Juned--Show Placement Data
 
 }

@@ -26,6 +26,7 @@ using System.Collections.Generic;
 
 public partial class ACADEMIC_PublishResult : System.Web.UI.Page
 {
+    string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     ResultProcessing objResult = new ResultProcessing();
@@ -92,24 +93,10 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
     {
         try
         {
-            //*if (rdoselect.SelectedIndex == 0)
-            //{
-            //    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
-            //}
-            //else
-            //{
-            //    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
-            //}
-            //objCommon.FillDropDownList(ddlColg, "ACD_COLLEGE_MASTER C WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.COLLEGE_ID=C.COLLEGE_ID)", "DISTINCT (C.COLLEGE_ID)", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "C.COLLEGE_ID IN(" + Session["college_nos"] + ") AND C.COLLEGE_ID > 0", "C.COLLEGE_ID");
-            //********
-            //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (DB.DEPTNO = ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0) OR ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0)=0)", "");
-            // objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND DB.DEPTNO IN(" + Session["userdeptno"].ToString() + ")", "");
 
-            objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER SM", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0", "SM.COLLEGE_ID DESC");
+           // objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER SM", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0", "SM.COLLEGE_ID DESC");
+            objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND DB.DEPTNO IN(" + Session["userdeptno"].ToString() + ")", "");
 
-
-            //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.DEGREENO=D.DEGREENO)", "DISTINCT(D.DEGREENO)", "D.DEGREENAME", "D.DEGREENO > 0 AND CD.UGPGOT IN (" + Session["ua_section"] + ")", "DEGREENAME");
-            //objCommon.FillDropDownList(ddlInternal, "ACD_EXAM_NAME", "FLDNAME", "EXAMNAME", "EXAMNAME !='' AND EXAMNO < 12", "FLDNAME");
         }
         catch (Exception ex)
         {
@@ -215,7 +202,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         if (ddlBranch.SelectedIndex > 0)
         {
             ddlScheme.Items.Clear();
-            objCommon.FillDropDownList(ddlScheme, "ACD_SCHEME WITH (NOLOCK)", "SCHEMENO", "SCHEMENAME", " BRANCHNO = " + ddlBranch.SelectedValue + " AND DEGREENO=" + ddlDegree.SelectedValue, "SCHEMENO");
+            objCommon.FillDropDownList(ddlScheme, "ACD_SCHEME WITH (NOLOCK)", "SCHEMENO", "SCHEMENAME", " BRANCHNO = " + ddlBranch.SelectedValue + " AND DEGREENO=" + ViewState["degreeno"], "SCHEMENO");
             ddlScheme.Focus();
             ddlSem.Items.Clear();
             ddlSem.Items.Add(new ListItem("Please Select", "0"));
@@ -252,7 +239,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         if (ddlScheme.SelectedIndex > 0)
         {
             ddlSem.Items.Clear();
-            objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER A WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT B WITH (NOLOCK) ON (A.SEMESTERNO=B.SEMESTERNO)", "DISTINCT A.SEMESTERNO", "A.SEMESTERNAME", "A.SEMESTERNO > 0 AND SESSIONNO=" + ddlSession.SelectedValue + " AND SCHEMENO=" + ddlScheme.SelectedValue, "A.SEMESTERNO");
+            objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER A WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT B WITH (NOLOCK) ON (A.SEMESTERNO=B.SEMESTERNO)", "DISTINCT A.SEMESTERNO", "A.SEMESTERNAME", "A.SEMESTERNO > 0 AND SESSIONNO=" + ddlSession.SelectedValue + " AND SCHEMENO=" + ViewState["schemeno"], "A.SEMESTERNO");
             ddlSem.Focus();
             ddlSection.Items.Clear();
             ddlSection.Items.Add(new ListItem("Please Select", "0"));
@@ -280,7 +267,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         divStudentRecord.Visible = false;
         lvStudent.DataSource = null;
         lvStudent.DataBind();
-        objCommon.FillDropDownList(ddlSection, "ACD_SECTION S WITH (NOLOCK),ACD_STUDENT_RESULT SRWITH (NOLOCK)", "DISTINCT SR.SECTIONNO", "S.SECTIONNAME", "SR.SECTIONNO = S.SECTIONNO AND S.SECTIONNO > 0 AND SR.EXAM_REGISTERED=1 AND SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + "AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.PREV_STATUS=" + Convert.ToInt32(ddlExam.SelectedValue), "S.SECTIONNAME");
+        objCommon.FillDropDownList(ddlSection, "ACD_SECTION S WITH (NOLOCK),ACD_STUDENT_RESULT SRWITH (NOLOCK)", "DISTINCT SR.SECTIONNO", "S.SECTIONNAME", "SR.SECTIONNO = S.SECTIONNO AND S.SECTIONNO > 0 AND SR.EXAM_REGISTERED=1 AND SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.PREV_STATUS=" + Convert.ToInt32(ddlExam.SelectedValue), "S.SECTIONNAME");
     }
 
     #endregion
@@ -289,17 +276,24 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
     {
         try
         {
-            //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-            //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-            //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-            //ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            // DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgname.SelectedValue));
+            ////ViewState["degreeno"]
+
+
+            // if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            // {
+            //     ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+            //     ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+            //     ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+            //     ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            // }
             int result = 0;
             int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-            int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
-            // int degreeno = Convert.ToInt32(ViewState["degreeno"]);
+            //int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+            int degreeno = Convert.ToInt32(ViewState["degreeno"]);
             int branchno = 0;
-            int schemeno = 0;
-            //int branchno = Convert.ToInt32(ViewState["branchno"]);
+            int schemeno = Convert.ToInt32(ViewState["schemeno"]); ;
+             //int branchno = Convert.ToInt32(ViewState["branchno"]);
             int semesterno = Convert.ToInt32(ddlSem.SelectedValue);
             DateTime publishDate = Convert.ToDateTime(txtDateOfPublish.Text);
             string examdate = "";  //Examination date added by Injamam Ansari 16-10-2023
@@ -329,7 +323,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
                 // result = objResult.AddPublishResult(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 0,  Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ViewState["schemeno"]));
 
                 //result = objResult.AddPublishResult(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 0, Convert.ToInt32(ddlExamType.SelectedValue), schemeno); //Commented for new method  with parameter of exam date
-                result = objResult.AddPublishResult(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 0, Convert.ToInt32(ddlExamType.SelectedValue), schemeno, examdate);     //Examination date added by Injamam Ansari 16-10-2023
+                result = AddPublishResults(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 0, Convert.ToInt32(ddlExamType.SelectedValue), schemeno, examdate);     //Examination date added by Injamam Ansari 16-10-2023
 
 
                 //if (rdoselect.SelectedValue == "1")
@@ -522,14 +516,14 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
             ResultProcessing objResult1 = new ResultProcessing();
             int result1 = 0;
             int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-            int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
-            // int degreeno = Convert.ToInt32(ViewState["degreeno"]);
+            //int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+            int degreeno = Convert.ToInt32(ViewState["degreeno"]);
             // int branchno = Convert.ToInt32(ddlBranch.SelectedValue);
             // int branchno = Convert.ToInt32(ViewState["branchno"]);
             int semesterno = Convert.ToInt32(ddlSem.SelectedValue);
             DateTime publishDate = Convert.ToDateTime(txtDateOfPublish.Text);
             int branchno = 0;
-            int schemeno = 0;
+            int schemeno = Convert.ToInt32(ViewState["schemeno"]); ;
 
 
             string ids = string.Empty;
@@ -546,7 +540,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
                 //result1 = objResult1.AddPublishResult(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 1, Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ViewState["schemeno"]));
                 //result1 = objResult1.AddPublishResult(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 1, Convert.ToInt32(ddlExamType.SelectedValue), schemeno);
 
-                result1 = objResult1.AddPublishResult(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 1, Convert.ToInt32(ddlExamType.SelectedValue), schemeno, examdate);     //Examination date added by Injamam Ansari 16-10-2023
+                result1 = AddPublishResults(sessionno, degreeno, branchno, semesterno, GetStudentID(), publishDate, Request.ServerVariables["REMOTE_HOST"].ToString(), 1, Convert.ToInt32(ddlExamType.SelectedValue), schemeno, examdate);     //Examination date added by Injamam Ansari 16-10-2023
 
                 //if (rdoselect.SelectedValue == "1")
                 //{
@@ -622,22 +616,30 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
     {
         try
         {
-            //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-            //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-            //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-            //ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            //DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgname.SelectedValue));
+            ////ViewState["degreeno"]
+
+
+            //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            //{
+            //    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+            //    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+            //    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+            //    ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            //}
             divStudentRecord.Visible = false;
             DataSet dsShowData = null;
-            int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
-            ViewState["degreeno"] = degreeno;
+            //int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+            //ViewState["degreeno"] = degreeno;
 
             //dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlScheme.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlExamName.SelectedValue), Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue));
             //dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlExamName.SelectedValue), Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
             //dsShowData = objSC.GetStudentDetailsForPublishresult(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue),  Convert.ToInt32(ddlExamType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
 
-            string sp_procedure = "PKG_ACAD_GET_STUDENT_FOR_PUBLISHRESULT";
-            string sp_parameters = "@P_SESSIONNO,@P_DEGREENO,@P_SEMESTERNO,@P_PREV_STATUS,@P_COLLEGE_ID,@P_OUT";
-            string sp_callValues = "" + (Convert.ToInt32(ddlSession.SelectedValue))+ "," + Convert.ToInt32(ddlDegree.SelectedValue) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlExamType.SelectedValue) + ","+Convert.ToInt32(ddlClgname.SelectedValue)+","+0+"";
+            string sp_procedure = "PKG_ACAD_GET_STUDENT_FOR_PUBLISHRESULT_SCHEMEWISE";
+            string sp_parameters = "@P_SCHEMENO,@P_SESSIONNO,@P_DEGREENO,@P_SEMESTERNO,@P_PREV_STATUS,@P_COLLEGE_ID,@P_OUT";
+            //string sp_callValues = "" + (Convert.ToInt32(ddlSession.SelectedValue))+ "," + Convert.ToInt32(ddlDegree.SelectedValue) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlExamType.SelectedValue) + ","+Convert.ToInt32(ddlClgname.SelectedValue)+","+0+"";
+            string sp_callValues = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + (Convert.ToInt32(ddlSession.SelectedValue)) + "," + Convert.ToInt32(ViewState["degreeno"]) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlExamType.SelectedValue) + "," + Convert.ToInt32(ViewState["college_id"]) + "," + 0 + "";
 
                dsShowData = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
             
@@ -741,7 +743,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         divStudentRecord.Visible = false;
         lvStudent.DataSource = null;
         lvStudent.DataBind();
-        objCommon.FillDropDownList(ddlSection, "ACD_SECTION S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (S.SECTIONNO = SR.SECTIONNO)", "DISTINCT SR.SECTIONNO", "S.SECTIONNAME", "SR.SECTIONNO = S.SECTIONNO AND S.SECTIONNO > 0 AND SR.EXAM_REGISTERED=1 AND SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + "AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue), "S.SECTIONNAME");
+        objCommon.FillDropDownList(ddlSection, "ACD_SECTION S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (S.SECTIONNO = SR.SECTIONNO)", "DISTINCT SR.SECTIONNO", "S.SECTIONNAME", "SR.SECTIONNO = S.SECTIONNO AND S.SECTIONNO > 0 AND SR.EXAM_REGISTERED=1 AND SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue), "S.SECTIONNAME");
     }
 
     #region
@@ -770,7 +772,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue);
+        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue);
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
         sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -809,7 +811,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue);
+        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue);
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
         sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -823,7 +825,7 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue);
+        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue);
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
         sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -944,19 +946,29 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
             //DataSet ds = objCommon.GetCollegeSchemeMappingDetails(collegeid);
             //ViewState["degreeno"]
 
-            //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
-            //{
-            // ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-            //  ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-            //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-            // ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();               
+           DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgname.SelectedValue));
+            //ViewState["degreeno"]
 
+
+           if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+           {
+               ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+               ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+               ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+               ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+
+           }
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
 
-            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ddlClgname.SelectedValue), "SESSIONNO desc");
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
+
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_CODE = " + Convert.ToInt32(Session["colcode"]), "SESSIONNO DESC");                
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
-            objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.DEGREENO=D.DEGREENO)", "DISTINCT(D.DEGREENO)", "D.DEGREENAME", "D.DEGREENO > 0 AND CD.COLLEGE_ID =" + Convert.ToInt32(ddlClgname.SelectedValue), "DEGREENAME");
+            objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.DEGREENO=D.DEGREENO)", "DISTINCT(D.DEGREENO)", "D.DEGREENAME", "D.DEGREENO > 0 AND CD.COLLEGE_ID =" + ViewState["college_id"].ToString(), "DEGREENAME");
+
+
+           
+            
             SetFocus(ddlSession);
 
         }
@@ -1049,4 +1061,45 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         return status;
     }
 
+
+    //---------------------------------------------------------------------Controller ----------------------------------------------------
+
+    public int AddPublishResults(int sessionno, int degreeno, int branchno, int semesterno, string idnos, DateTime pdate, string ipAdd, int status, int Prev_status, int schemeno, string examdate)
+    {
+        int retStatus = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(connectionString);
+            SqlParameter[] objParams = null;
+            objParams = new SqlParameter[12];
+            objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+            objParams[1] = new SqlParameter("@P_DEGREENO", degreeno);
+            objParams[2] = new SqlParameter("@P_BRANCHNO", branchno);
+            objParams[3] = new SqlParameter("@P_SEMESTERNO", semesterno);
+            objParams[4] = new SqlParameter("@P_IDNO", idnos);
+            objParams[5] = new SqlParameter("@P_IPADDRESS", ipAdd);
+            objParams[6] = new SqlParameter("@P_PUB_UNPUB_DATE", pdate);
+            objParams[7] = new SqlParameter("@P_PUB_UNPUB", status);
+            objParams[8] = new SqlParameter("@P_PREV_STATUS", Prev_status);
+            objParams[9] = new SqlParameter("@P_SCHEMENO", schemeno);
+            objParams[10] = new SqlParameter("@P_EXAM_DATE", examdate);
+            objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+            objParams[11].Direction = ParameterDirection.Output;
+
+            object ret = objSQLHelper.ExecuteNonQuerySP("PROC_EXAM_PUBLISH_RESULT_SCHEMEWISE", objParams, true);
+            if (Convert.ToInt32(ret) == -99)
+                retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+            else
+                retStatus = Convert.ToInt32(ret);
+
+        }
+        catch (Exception ex)
+        {
+            retStatus = Convert.ToInt32(CustomStatus.Error);
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.AddCourse-> " + ex.ToString());
+        }
+        return retStatus;
+
+    }
+    
 }

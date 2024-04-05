@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxControlToolkit">
@@ -49,6 +51,10 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\PresentationLayer\Bin\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SVN_CODE\NITR\PresentationLayer\Bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -146,6 +152,9 @@
     <Compile Include="BusinessEntities\ESTATE\Quater_Master.cs" />
     <Compile Include="BusinessEntities\ESTATE\Temp_Employee.cs" />
     <Compile Include="BusinessEntities\ESTATE\WaterMeterReading.cs" />
+    <Compile Include="BusinessEntities\FACILITY_MANAGEMENT\FacilityEntity.cs" />
+    <Compile Include="BusinessEntities\FACILITY_MANAGEMENT\SendNotice.cs" />
+    <Compile Include="BusinessEntities\FACILITY_MANAGEMENT\Status.cs" />
     <Compile Include="BusinessEntities\FileMovement\FileMovement.cs" />
     <Compile Include="BusinessEntities\GrievanceRedressal\GrievanceEntity.cs" />
     <Compile Include="BusinessEntities\GuestHouse\GuestHouse.cs" />
@@ -206,6 +215,7 @@
     <Compile Include="BusinessEntities\Payroll\Str_DeptRequest.cs" />
     <Compile Include="BusinessEntities\Payroll\Vendor.cs" />
     <Compile Include="BusinessEntities\Payroll\WithheldWithDrawn.cs" />
+    <Compile Include="BusinessEntities\RECRUITMENT\Requisition.cs" />
     <Compile Include="BusinessEntities\Sms\Sms.cs" />
     <Compile Include="BusinessEntities\Sports\EventApprovalEnt.cs" />
     <Compile Include="BusinessEntities\Sports\EventKitEnt.cs" />
@@ -330,6 +340,7 @@
     <Compile Include="BusinessLogic\ESTATE\QuaterTypeMasterController.cs" />
     <Compile Include="BusinessLogic\ESTATE\Temp_Employee_Controller.cs" />
     <Compile Include="BusinessLogic\ESTATE\WaterMeterReadingCont.cs" />
+    <Compile Include="BusinessLogic\FACILITY_MANAGEMENT\FacilityController.cs" />
     <Compile Include="BusinessLogic\FileMovement\FileMovementController.cs" />
     <Compile Include="BusinessLogic\GrievanceRedressal\GrievanceController.cs" />
     <Compile Include="BusinessLogic\GuestHouse\GuestHouseController.cs" />
@@ -406,6 +417,7 @@
     <Compile Include="BusinessLogic\Payroll\SalaryProcessController.cs" />
     <Compile Include="BusinessLogic\Payroll\ServiceBookController.cs" />
     <Compile Include="BusinessLogic\Payroll\WithheldWithdrawnController.cs" />
+    <Compile Include="BusinessLogic\RECRUITMENT\RequisitionController.cs" />
     <Compile Include="BusinessLogic\Sms\SmsController.cs" />
     <Compile Include="BusinessLogic\Sports\EventApprovalCon.cs" />
     <Compile Include="BusinessLogic\Sports\KitController.cs" />
@@ -481,6 +493,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\BusinessLogicLayer.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
     <Content Include="bin\Debug\NonAcadBusinessLogicLayer.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -750,43 +750,52 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
     }
     protected void ddlSubType_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (Convert.ToString(ViewState["EDIT_HIT"]) == "1")
+        try
         {
-        }
-        else
-        {
-            string subno = string.Empty;
-
-            string subnos = string.Empty;
-
-            foreach (ListItem items in ddlSubType.Items)
+            if (Convert.ToString(ViewState["EDIT_HIT"]) == "1")
             {
-                if (items.Selected == true)
-                {
-                    subnos += (items.Value).Split('-')[0] + ',';
-                }
-            }
-            if (subnos.Length > 1)
-            {
-                subnos = subnos.Remove(subnos.Length - 1);
-            }
-
-            if (subnos.Length > 0)
-            {
-                DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlSubType.SelectedValue));
-
-                if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
-                {
-                    ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-                    ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                    ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                    ViewState["subtype"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"]).ToString();
-                }
             }
             else
             {
+                string subno = string.Empty;
+
+                string subnos = string.Empty;
+
+                foreach (ListItem items in ddlSubType.Items)
+                {
+                    if (items.Selected == true)
+                    {
+                        subnos += (items.Value).Split('-')[0] + ',';
+                    }
+                }
+                if (subnos.Length > 1)
+                {
+                    subnos = subnos.Remove(subnos.Length - 1);
+                }
+
+                if (subnos.Length > 0)
+                {
+                    DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlSubType.SelectedValue));
+
+                    if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+                    {
+                        //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                        //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                        //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                       // ViewState["subtype"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"]).ToString();
+                    }
+                }
+                else
+                {
+                }
             }
         }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+        
     }
     protected void ddlcollege_SelectedIndexChanged(object sender, EventArgs e)
     {

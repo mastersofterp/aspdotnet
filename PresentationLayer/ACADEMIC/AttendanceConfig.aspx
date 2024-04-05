@@ -335,7 +335,8 @@
 
                                 </div>
                             </div>
-                            <div class="form-group col-lg-2 col-md-6 col-6">
+                            <%--(d-none) added by vipul T on date 04-03-2024 as per TNO:-55726 --%>
+                            <div class="form-group col-lg-2 col-md-6 col-6 d-none">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>SMS Facility</label>
@@ -346,7 +347,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-2 col-md-6 col-6">
+                            <div class="form-group col-lg-2 col-md-6 col-6 d-none">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>Email Facility</label>
@@ -356,7 +357,7 @@
                                     <label data-on="Yes" data-off="No" for="rdEmailYes"></label>
                                 </div>
                             </div>
-
+                            <%-- end --%>
                             <div class="form-group col-lg-2 col-md-6 col-6">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
@@ -397,8 +398,8 @@
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th>Att Lock Days</th>
-                                    <th>SMS Facility</th>
-                                    <th>Email Facility</th>
+                                    <th class="d-none">SMS Facility</th>
+                                    <th class="d-none">Email Facility</th>
                                     <th>Teaching Plan</th>
                                     <th>Status</th>
                                 </tr>
@@ -632,9 +633,11 @@
 
                     if ($("#hdnEditMode").val() == "1") {
                         alert('Attendance Configuration Updated Successfully !!!');
+                        $('#btnCancel').click(); // Added by vipul t on date 08/03/2024 as per Tno:- 55726
                     }
                     else {
                         alert('Attendance Configuration Added Successfully !!!');
+                        $('#btnCancel').click(); // Added by vipul t on date 08/03/2024 as per Tno:- 55726
                     }
 
 
@@ -661,22 +664,23 @@
                             str = str + '<td>' + GetValue.EndDateN + '</td>'
                             str = str + '<td>' + GetValue.AttLockDays + '</td>'
 
-                            if (GetValue.SMSFacility == true) {
-                                str = str + '<td><span class="badge badge-success">Yes</span>' +
-                                    '<input type="hidden" id="idSmsFacility" value="true"/></td>'
-                            }
-                            else {
-                                str = str + '<td><span class="badge badge-danger">No</span>' +
-                                    '<input type="hidden" id="idSmsFacility" value="false"/></td>'
-                            }
-                            if (GetValue.EmailFacility == true) {
-                                str = str + '<td><span class="badge badge-success">Yes</span>' +
-                                    '<input type="hidden" id="idEmailFacility" value="true"/></td>'
-                            }
-                            else {
-                                str = str + '<td><span class="badge badge-danger">No</span>' +
-                                    '<input type="hidden" id="idEmailFacility" value="false"/></td>'
-                            }
+                            // Commented by Vipul T on Date 04-03-2024 as per Tno:-55726
+                            //if (GetValue.SMSFacility == true) {
+                            //    str = str + '<td><span class="badge badge-success">Yes</span>' +
+                            //        '<input type="hidden" id="idSmsFacility" value="true"/></td>'
+                            //}
+                            //else {
+                            //    str = str + '<td><span class="badge badge-danger">No</span>' +
+                            //        '<input type="hidden" id="idSmsFacility" value="false"/></td>'
+                            //}
+                            //if (GetValue.EmailFacility == true) {
+                            //    str = str + '<td><span class="badge badge-success">Yes</span>' +
+                            //        '<input type="hidden" id="idEmailFacility" value="true"/></td>'
+                            //}
+                            //else {
+                            //    str = str + '<td><span class="badge badge-danger">No</span>' +
+                            //        '<input type="hidden" id="idEmailFacility" value="false"/></td>'
+                            //}
 
                             if (GetValue.TeachingPlan == true) {
                                 str = str + '<td><span class="badge badge-success">Yes</span>' +
@@ -742,22 +746,23 @@
                             str = str + '<td>' + GetValue.EndDateN + '</td>'
                             str = str + '<td>' + GetValue.AttLockDays + '</td>'
 
-                            if (GetValue.SMSFacility == true) {
-                                str = str + '<td><span class="badge badge-success">Yes</span>' +
-                                    '<input type="hidden" id="idSmsFacility" value="true"/></td>'
-                            }
-                            else {
-                                str = str + '<td><span class="badge badge-danger">No</span>' +
-                                    '<input type="hidden" id="idSmsFacility" value="false"/></td>'
-                            }
-                            if (GetValue.EmailFacility == true) {
-                                str = str + '<td><span class="badge badge-success">Yes</span>' +
-                                    '<input type="hidden" id="idEmailFacility" value="true"/></td>'
-                            }
-                            else {
-                                str = str + '<td><span class="badge badge-danger">No</span>' +
-                                    '<input type="hidden" id="idEmailFacility" value="false"/></td>'
-                            }
+                            // Commented by Vipul T on Date 04-03-2024 as per Tno:-55726
+                            //if (GetValue.SMSFacility == true) {
+                            //    str = str + '<td><span class="badge badge-success">Yes</span>' +
+                            //        '<input type="hidden" id="idSmsFacility" value="true"/></td>'
+                            //}
+                            //else {
+                            //    str = str + '<td><span class="badge badge-danger">No</span>' +
+                            //        '<input type="hidden" id="idSmsFacility" value="false"/></td>'
+                            //}
+                            //if (GetValue.EmailFacility == true) {
+                            //    str = str + '<td><span class="badge badge-success">Yes</span>' +
+                            //        '<input type="hidden" id="idEmailFacility" value="true"/></td>'
+                            //}
+                            //else {
+                            //    str = str + '<td><span class="badge badge-danger">No</span>' +
+                            //        '<input type="hidden" id="idEmailFacility" value="false"/></td>'
+                            //}
 
                             if (GetValue.TeachingPlan == true) {
                                 str = str + '<td><span class="badge badge-success">Yes</span>' +

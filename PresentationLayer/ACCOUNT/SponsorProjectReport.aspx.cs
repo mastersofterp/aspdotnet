@@ -138,14 +138,14 @@ public partial class ACCOUNT_SponsorProjectReport : System.Web.UI.Page
 
             string Script = string.Empty;
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("account")));
-
-
+            string projectname = ddlProjName.SelectedItem.Text;
+            projectname = projectname.Replace(",", "$").Replace("&", "$$");
 
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ACCOUNT," + rptFileName;
 
-            url += "&param=@P_CODE_YEAR=" + Session["comp_code"].ToString() + ",@PCODE_YEAR=" + Session["comp_code"].ToString() + ",@P_ProjectId=" + ddlProjName.SelectedValue.ToString() + ",@PPROJECTID=" + ddlProjName.SelectedValue.ToString() + ",@P_FROMDATE=" + Convert.ToDateTime(txtFrmDate.Text).ToString("dd-MMM-yyyy") + ",@P_TODATE=" + Convert.ToDateTime(txtUptoDate.Text).ToString("dd-MMM-yyyy") + "," + "@P_COMPANY_NAME=" + Session["comp_name"].ToString().Trim().ToUpper() + "," + "@PERIOD=" + txtFrmDate.Text.ToString().Trim() + " to " + txtUptoDate.Text.ToString().Trim() + "," + "@P_ProjectName=" + ddlProjName.SelectedItem.Text;
+            url += "&param=@P_CODE_YEAR=" + Session["comp_code"].ToString() + ",@PCODE_YEAR=" + Session["comp_code"].ToString() + ",@P_ProjectId=" + ddlProjName.SelectedValue.ToString() + ",@PPROJECTID=" + ddlProjName.SelectedValue.ToString() + ",@P_FROMDATE=" + Convert.ToDateTime(txtFrmDate.Text).ToString("dd-MMM-yyyy") + ",@P_TODATE=" + Convert.ToDateTime(txtUptoDate.Text).ToString("dd-MMM-yyyy") + "," + "@P_COMPANY_NAME=" + Session["comp_name"].ToString().Trim().ToUpper() + "," + "@PERIOD=" + txtFrmDate.Text.ToString().Trim() + " to " + txtUptoDate.Text.ToString().Trim() + "," + "@P_ProjectName=" + projectname;
 
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
 

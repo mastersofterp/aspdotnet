@@ -33,7 +33,7 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
     Panel panelfordropdown;
     string file_path = System.Configuration.ConfigurationManager.AppSettings["DirPath"].ToString();
     decimal File_size;
-
+   
     protected void Page_PreInit(object sender, EventArgs e)
     {
         if (Session["masterpage"] != null)
@@ -49,7 +49,7 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
     {
         if (!Page.IsPostBack)
         {
-
+           
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
             {
@@ -171,10 +171,10 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
             foreach (ListViewDataItem lvItem in lvStudent.Items)
             {
                 CheckBox chkBox = lvItem.FindControl("cbRow") as CheckBox;
-                TextBox txtRegno = lvItem.FindControl("txtRegNo") as TextBox;
+                HiddenField txtRegno = lvItem.FindControl("txtRegNo") as HiddenField;
                 if (chkBox.Checked == true)
                 {
-                    if (txtRegno.Text.ToString().Trim().Equals(string.Empty))
+                    if (txtRegno.Value.ToString().Trim().Equals(string.Empty))
                     {
                         objCommon.DisplayMessage(this.Page, "Reg. No. can not Blank", this.Page);
                         txtRegno.Focus();
@@ -187,9 +187,9 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
 
 
                     if (RegNos.Equals(string.Empty))
-                        RegNos = txtRegno.Text.ToString();
+                        RegNos = txtRegno.Value.ToString();
                     else
-                        RegNos += "," + txtRegno.Text.ToString();
+                        RegNos += "," + txtRegno.Value.ToString();
                     cnt += 1;
                 }
 
@@ -213,12 +213,13 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     objCommon.DisplayMessage(this.Page, "Records Approved Successfully..!", this.Page);
-
-                    ddlDegree.SelectedIndex = 0;
-                    ddlBranch.SelectedIndex = 0;
+                  
                     lvStudent.DataSource = null;
                     lvStudent.DataBind();
                     pnllist.Visible = false;
+                    ddlCollege.SelectedValue = "0";
+                    ddlDegree.SelectedValue = "0";
+                    ddlBranch.SelectedValue = "0";
                 }
             }
         }
@@ -280,66 +281,93 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
             string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
             // string img = Convert.ToString(objCommon.LookUp("VEHICLE_BUS_STRUCTURE_IMAGE_DATA", "FILE_PATH", "ROUTEID='" + routeid + "' and BUSSTR_ID='" + seating + "'"));
             var ImageName = img;
-            if (img == null || img == "")
-            {
-                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
-                embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
-                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                embed += "</object>";
-                //ltEmbed.Text = "Image Not Found....!";
+            //if (img == null || img == "")
+            //{
+            //    string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
+            //    embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
+            //    embed += " or download <a target = \"_blank\" href = \"https://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //    embed += "</object>";
+            //    //ltEmbed.Text = "Image Not Found....!";
+            //    objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
+            //    return;
 
+            //}
+            //else
+            //{
+            //    if (img != "")
+            //    {
+            //        DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+            //        if (dtBlobPic.Rows.Count == 0)
+            //        {
+            //            objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
+            //            return;
+            //        }
+
+            //        var blob = blobContainer.GetBlockBlobReference(ImageName);
+
+            //        string filePath = directoryPath + "" + ImageName;
+
+            //        if ((System.IO.File.Exists(filePath)))
+            //        {
+            //            System.IO.File.Delete(filePath);
+            //        }
+            //        blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+            //        //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+            //        //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
+            //        //embed += " or download <a target = \"_blank\" href = \"https://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //        //embed += "</object>";
+            //        // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
+            //        string FILENAME = img;
+            //        string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
+
+
+            //        string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
+            //        FileInfo file = new FileInfo(filePath1);
+
+            //        if (file.Exists)
+            //        {
+            //            Session["sb"] = filePath.ToString();
+                      
+            //            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
+
+            //            url += "ACADEMIC/RESUME/" + FILENAME;
+            //            //string url = filePath;
+
+
+            //            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //            //divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //            //divMsg.InnerHtml += " </script>";
+            //            string Script = string.Empty;
+            //            string DocLink = url;
+            //            //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+            //            Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+            //            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+
+            //        }
+            //    }
+
+              if (img == null || img == "")
+            {
 
             }
             else
             {
-                if (img != "")
-                {
-                    DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
-                    if (dtBlobPic.Rows.Count == 0)
-                    {
-                        objCommon.DisplayMessage(this.Page, "Resume is Not Available For This Student.", this.Page);
-                        return;
-                    }
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
 
-                    var blob = blobContainer.GetBlockBlobReference(ImageName);
-
-                    string filePath = directoryPath + "\\" + ImageName;
-
-                    if ((System.IO.File.Exists(filePath)))
-                    {
-                        System.IO.File.Delete(filePath);
-                    }
-                    blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
-                    //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
-                    //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
-                    //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                    //embed += "</object>";
-                    // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
-                    string FILENAME = img;
-                    string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
-
-
-                    string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
-                    FileInfo file = new FileInfo(filePath1);
-
-                    if (file.Exists)
-                    {
-                        Session["sb"] = filePath.ToString();
-                      
-                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
-
-                        url += "ACADEMIC/RESUME/" + FILENAME;
-                        //string url = filePath;
-
-
-                        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-                        divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-                        divMsg.InnerHtml += " </script>";
-
-                    }
-                }
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            
 
             }
+
+          //  }
         }
 
         catch (Exception ex)
@@ -499,5 +527,55 @@ public partial class TRAININGANDPLACEMENT_Transactions_TP_Reg_Approval : System.
     {
         //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO > 0 AND COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "DEGREENAME");
         objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE B  INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.DEGREENO=B.DEGREENO) ", "DISTINCT(CD.DEGREENO)", "B.DEGREENAME", "CD.COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "CD.DEGREENO");
+    }
+    //protected void btncareer_Click(object sender, ImageClickEventArgs e)
+    //{
+
+    //}
+    //protected void btnSend_Click(object sender, EventArgs e)
+    //{
+
+    //}
+    //protected void btnCanceladdcompany_Click(object sender, EventArgs e)
+    //{
+
+    //}
+    protected void btnStatus_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int studentId = 0;
+            Button btnPreview = sender as Button;
+            studentId = int.Parse(btnPreview.CommandArgument);
+            //foreach (ListViewDataItem lvItem in lvStudent.Items)
+            //{
+             
+            //    //HiddenField txtidno = lvItem.FindControl("hdidno") as HiddenField;
+            //    //studentId = Convert.ToInt32(txtidno.Value);
+
+            //    Button btnStatus = lvItem.FindControl("btnStatus") as Button;
+            //    studentId = int.Parse(btnStatus.CommandArgument);
+               
+            //}
+          //  int studentId = (int)Session["studentId"];
+            //ViewForm.Src = "/PresentationLayer/TRAININGANDPLACEMENT/Transactions/TP_Career_Profile.aspx?studentId="+ studentId;
+
+           // ,'width=600,height=400,addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');
+
+            int page_no = Convert.ToInt32(objCommon.LookUp("ACCESS_LINK", "AL_No", "AL_Link='TPCareer Profile'"));
+            var url = "TP_Career_Profile.aspx?studentId=" + studentId + "&pageno=" + page_no;
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+           // divMsg.InnerHtml += " window.open('" + "TP_Career_Profile.aspx?studentId=" + studentId + "','mywindow', 'width=1000,height=1000,fullscreen=yes, scrollbars=auto');";
+            divMsg.InnerHtml += " window.open('" + url + "' ,'mywindow', 'width=1000,height=1000,fullscreen=yes, scrollbars=auto');";
+            divMsg.InnerHtml += " </script>";
+            //hfValue.Value = "1";
+            // TRAININGANDPLACEMENT/Transactions/
+            //mdlopenPage.Show();
+        }
+        catch (Exception ex)
+        {
+                       return;
+        }
     }
 }

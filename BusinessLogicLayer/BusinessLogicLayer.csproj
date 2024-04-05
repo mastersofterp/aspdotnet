@@ -293,6 +293,7 @@
     <Compile Include="BusinessLogic\Academic\DocumentController.cs" />
     <Compile Include="BusinessLogic\Academic\DocumentControllerAcad.cs" />
     <Compile Include="BusinessLogic\Academic\EazyPaySettmentController.cs" />
+    <Compile Include="BusinessLogic\Academic\EventCalendarController.cs" />
     <Compile Include="BusinessLogic\Academic\EventCreationController.cs" />
     <Compile Include="BusinessLogic\Academic\ExamComponentConroller.cs" />
     <Compile Include="BusinessLogic\Academic\FetchDataController.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="BusinessLogic\Academic\MentorMentee\StudentControllerDetails_MM.cs" />
     <Compile Include="BusinessLogic\Academic\MentorMentee\TabularChartController_MM.cs" />
     <Compile Include="BusinessLogic\Academic\ModuleConfigController.cs" />
+    <Compile Include="BusinessLogic\Academic\NEPController.cs" />
     <Compile Include="BusinessLogic\Academic\NotificationController.cs" />
     <Compile Include="BusinessLogic\Academic\ODTrackerController.cs" />
     <Compile Include="BusinessLogic\Academic\OnlineAdmissionController.cs" />

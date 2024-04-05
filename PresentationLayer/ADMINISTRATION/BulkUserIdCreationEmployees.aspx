@@ -722,9 +722,9 @@
                                                                                                  <div class="form-group col-lg-3 col-md-6 col-12">
                                                                                                     <div class="label-dynamic">
                                                                                                         <sup> </sup>
-                                                                                                        <label>Without Master Data</label>
+                                                                                                        <label>Import With Master Data</label>
                                                                                                     </div>
-                                                                                                    <asp:CheckBox ID="chismaster" runat="server" ToolTip="Check if no need to master data" TabIndex="3" />
+                                                                                                    <asp:CheckBox ID="chismaster" runat="server" ToolTip="Check if import with master data" TabIndex="3" />
                                                                                                 </div>
 
                                                                                                 <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="divRecords" runat="server" visible="false">

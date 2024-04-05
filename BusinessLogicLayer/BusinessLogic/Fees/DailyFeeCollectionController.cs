@@ -891,6 +891,34 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
+        public string Reset_financial_year_and_reff_startdatenddate(string startdate, string enddate)
+        {
+            string retStatus = string.Empty;
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                SqlParameter[] objParams = null;
+                //Add
+                objParams = new SqlParameter[4];
+                objParams[0] = new SqlParameter("@P_START_YEAR", startdate);
+                objParams[1] = new SqlParameter("@P_END_YEAR", enddate);
+                objParams[2] = new SqlParameter("@P_UA_NO", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"]));
+                objParams[3] = new SqlParameter("@P_IP_ADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString());
+
+
+                if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPD_FINANCIAL_YEAR", objParams, true) != null)
+                    retStatus = "1";
+
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.SessionController.AddSession-> " + ex.ToString());
+            }
+            return retStatus;
+
+        }
         
     }
 }

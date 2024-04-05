@@ -892,31 +892,33 @@ public partial class ACADEMIC_MASTERS_ExamRule : System.Web.UI.Page
                             //   i = i + 3;
                         }
                         TextBox txtRule_1 = (TextBox)lvitem.FindControl(arr[j]);
-                        if (txtRule_1.Text != string.Empty)
-                        {
+                        //if (txtRule_1.Text != string.Empty)
+                        //{
                             objSR.COURSENNO += courses +",";
                             objSR.CCODE += ccodes +","; 
                             objSR.COURSENAME += coursenames+","; 
                             objSR.CATEGORY3 += ((HiddenField)lvitem.FindControl(arr_ExamSubName[j])).Value + ",";
                             //   objSR.CATEGORY3 += cl() + ",";
 
-                            objSR.Rule11 += Convert.ToString(Convert.ToDecimal(txtRule_1.Text) + ",");
+                           // objSR.Rule11 += Convert.ToString(Convert.ToDecimal(txtRule_1.Text) + ",");// commented by gaurav 19-03-2024
+
+                            objSR.Rule11 += string.IsNullOrEmpty(txtRule_1.Text) ? "0," : Convert.ToString(Convert.ToDecimal(txtRule_1.Text) + ",");
 
                             // return;
-                        }
-                        else
-                        {
-                            if (isLock == 1)
-                            {
-                                objCommon.DisplayMessage(this.updpnl, "Failed !! Unable to Lock Subject untill all Exam Percent Marks are not entered.", this.Page);
+                        //}
+                        //else
+                        //{
+                        //    if (isLock == 1)
+                        //    {
+                        //        objCommon.DisplayMessage(this.updpnl, "Failed !! Unable to Lock Subject untill all Exam Percent Marks are not entered.", this.Page);
                                
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
-                                txtRule_1.Focus();
-                                return;
-                            }                           
-                            objSR.CATEGORY3 += ((HiddenField)lvitem.FindControl(arr_ExamSubName[j])).Value + ",";
-                            objSR.Rule11 += Convert.ToString(Convert.ToDecimal("0") + ",");
-                        }
+                        //        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
+                        //        txtRule_1.Focus();
+                        //        return;
+                        //    }                           
+                        //    objSR.CATEGORY3 += ((HiddenField)lvitem.FindControl(arr_ExamSubName[j])).Value + ",";
+                        //    objSR.Rule11 += Convert.ToString(Convert.ToDecimal("0") + ",");
+                        //}
 
                         // For Rule 2
                         TextBox txtRule_2 = (TextBox)lvitem.FindControl("txtrule22");

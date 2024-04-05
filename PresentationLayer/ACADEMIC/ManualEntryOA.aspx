@@ -1,6 +1,16 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ManualEntryOA.aspx.cs" Inherits="ACADEMIC_ManualEntryOA" Title="" MasterPageFile="~/SiteMasterPage.master" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
+<%--/*
+ Created By         : Nikhil Lambe
+ Created Date       : 09-02-2023
+ Description        : To get student for manual fee entry for admission portal.
+*/
+//-----------------------------------------------------------------------------------------------------------------------------
+//--Version   Modified    On Modified         By Purpose
+//-----------------------------------------------------------------------------------------------------------------------------
+//--1.0.1    18-03-2024     Rutuja             added receipt button and correct  that spelling
+//--------------------------------------------- ---------------------------------------------------------------------------------%>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div>
         <asp:UpdateProgress ID="updOA" runat="server" AssociatedUpdatePanelID="updManual"
@@ -91,7 +101,9 @@
                             </div>
                             <div class="col-12 btn-footer">
                                 <asp:Button ID="btnSubmit" runat="server" Visible="false" Text="Manual Entry Payment" CssClass="btn btn-primary" OnClick="btnSubmit_Click" OnClientClick="return confirm('Click OK to make manual payment entry.');" />
-                                 <asp:Button ID="btnreceipt" runat="server"  Text="Recipt" CssClass="btn btn-primary" OnClick="btnreceipt_Click" Visible="false" />
+                              <%--   <1.0.1>--%>
+                                <asp:Button ID="btnreceipt" runat="server"  Text="Receipt" CssClass="btn btn-primary" OnClick="btnreciept_Click" Visible="false" />
+                             <%--   </1.0.1>--%>
                                   <asp:Button ID="btnCancel" runat="server" Visible="false" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
 
                             </div>

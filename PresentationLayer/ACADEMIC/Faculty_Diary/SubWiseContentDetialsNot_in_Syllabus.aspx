@@ -21,7 +21,7 @@
     </div>
 
 
-    <asp:UpdatePanel ID="updSection" runat="server">
+    <asp:UpdatePanel ID="updSection" runat="server" UpdateMode="Always">
         <ContentTemplate>
 
             <div class="row">
@@ -45,6 +45,7 @@
                                             ValidationGroup="offered" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
+                                        <asp:HiddenField ID="hfid" runat="server" />
                                         <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="validate">
                                         </asp:RequiredFieldValidator>
@@ -71,7 +72,7 @@
                                             <asp:Label ID="lblDYtxtCourseName" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlCourseName" runat="server" AppendDataBoundItems="True" TabIndex="3" CssClass="form-control" data-select2-enable="true"
-                                            ToolTip="Please Select Session" AutoPostBack="true">
+                                            ToolTip="Please Select Session" AutoPostBack="true" OnSelectedIndexChanged="ddlCourseName_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlCourseName"
@@ -108,8 +109,8 @@
                                             <asp:Label ID="lblTopicName" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
 
-                                        <asp:TextBox ID="txtTopicName" runat="server" MaxLength="100" ViewStateMode="Enabled" AppendDataBoundItems="True"
-                                            CssClass="form-control" ToolTip="Topic Name" AutoPostBack="true" TabIndex="5" />
+                                        <asp:TextBox ID="txtTopicName" runat="server" MaxLength="100" ViewStateMode="Enabled"
+                                            CssClass="form-control" ToolTip="Topic Name" TabIndex="5" />
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtTopicName"
                                             Display="None" ErrorMessage="Please Enter Topic Name" SetFocusOnError="True"
                                             ValidationGroup="validate" />
@@ -121,8 +122,8 @@
                                             <asp:Label ID="lblContentofTopic" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
 
-                                        <asp:TextBox ID="txtContentOfTopic" runat="server" MaxLength="100" ViewStateMode="Enabled" AppendDataBoundItems="True"
-                                            CssClass="form-control" ToolTip="Content of topic" AutoPostBack="true" TabIndex="6" />
+                                        <asp:TextBox ID="txtContentOfTopic" runat="server" MaxLength="100" ViewStateMode="Enabled"
+                                            CssClass="form-control" ToolTip="Content of topic" TabIndex="6" />
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtContentOfTopic"
                                             Display="None" ErrorMessage="Please Enter Content Of Topic" SetFocusOnError="True"
                                             ValidationGroup="validate" />
@@ -133,8 +134,8 @@
                                             <sup>* </sup>
                                             <asp:Label ID="lblMappinglevel" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:TextBox ID="txtMappingLevel" runat="server" MaxLength="100" ViewStateMode="Enabled" AppendDataBoundItems="True"
-                                            CssClass="form-control" ToolTip="Mapping Level With PEO" AutoPostBack="true" TabIndex="7" />
+                                        <asp:TextBox ID="txtMappingLevel" runat="server" MaxLength="100" ViewStateMode="Enabled"
+                                            CssClass="form-control" ToolTip="Mapping Level With PEO" TabIndex="7" />
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtMappingLevel"
                                             Display="None" ErrorMessage="Please Enter Mapping Level With PEO" SetFocusOnError="True"
                                             ValidationGroup="validate" />
@@ -151,9 +152,57 @@
                                 <asp:Button ID="btnCancel" runat="server" TabIndex="10" Text="Cancel" OnClick="btnCancel_Click" CssClass="btn btn-warning" />
                                 <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="validate" />
-
-
                             </div>
+
+
+                            <div class="col-12">
+                                <asp:Panel ID="Panel1" runat="server" Visible="false">
+                                    <asp:ListView ID="lvSubWiseContent" runat="server">
+                                        <LayoutTemplate>
+                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th style="text-align: center; width: 5%;">Edit</th>
+                                                        <th style="text-align: center; width: 5%;">Remove</th>
+                                                        <th style="text-align: center; width: 20%;">Topic Name</th>
+                                                        <th style="text-align: center; width: 10%;">Date</th>
+                                                        <th style="text-align: center; width: 50%;">Content of Topic</th>
+                                                        <th style="text-align: center; width: 10%;">Mapping</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                        </LayoutTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td style="text-align: center; width: 5%;">
+                                                    <asp:ImageButton ID="btnEdit" runat="server" AlternateText="Edit Record" CausesValidation="false"
+                                                        CommandArgument='<%# Eval("ID")%>' ImageUrl="~/Images/edit.png" ToolTip="Edit Record" OnClick="btnEdit_Click"/>
+                                                </td>
+                                                <td style="text-align: center; width: 5%;">
+                                                    <asp:ImageButton ID="btnRemove" runat="server" AlternateText="Delete Record" CausesValidation="false"
+                                                        CommandArgument='<%# Eval("ID")%>' ImageUrl="~/Images/delete.png" ToolTip="Delete Record" OnClick="btnRemove_Click"/>
+                                                </td>
+                                                <td style="text-align: left; width: 20%;">
+                                                    <asp:Label ID="lblTopicName" Text='<%# Eval("TOPIC_NAME")%>' runat="server" />
+                                                </td>
+                                                <td style="text-align: center; width: 10%;">
+                                                    <asp:Label ID="lblDate" Text='<%# Eval("DATE")%>' runat="server" />
+                                                </td>
+                                                <td style="text-align: left; width: 50%;">
+                                                    <asp:Label ID="lblContent" Text='<%# Eval("CONTENT")%>' runat="server" />
+                                                </td>
+                                                <td style="text-align: center; width: 10%;">
+                                                    <asp:Label ID="lblMapping" Text='<%# Eval("MAPP_PEO")%>' runat="server" />
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:ListView>
+                                </asp:Panel>
+                            </div>
+
                         </div>
 
                     </div>

@@ -3279,6 +3279,10 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         {
             Response.Redirect("~/studeHome.aspx", false);
         }
+        else if (Session["usertype"].ToString() == "5")
+        {
+            Response.Redirect("~/homeNonFaculty.aspx", false);
+        }
         else
         {
             Response.Redirect("~/principalHome.aspx");
@@ -3343,5 +3347,27 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
             informationid.InnerText = "Help - Information";
         }
         return ds;
+    }
+    protected void lnkWelcomeTour_Click(object sender, EventArgs e)
+    {
+        //Response.Redirect("~/home.aspx");
+        if (Session["usertype"].ToString() == "3")
+        {
+            Response.Redirect("~/homeFaculty.aspx", false);
+        }
+        else if (Session["usertype"].ToString() == "5")
+        {
+            Response.Redirect("~/homeNonFaculty.aspx", false);
+        }
+        else if (Session["usertype"].ToString() == "2" || Session["usertype"].ToString() == "14")  //Added by sachin 17082023
+        {
+            Response.Redirect("~/studeHome.aspx", false);
+        }
+        else
+        {
+            string uatype = Session["usertype"].ToString();
+            Session["executeScript"] = true;
+            Response.Redirect("~/principalHome.aspx");
+        }
     }
 }

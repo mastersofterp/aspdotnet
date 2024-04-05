@@ -107,6 +107,8 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
 
     protected void btnShow_Click(object sender, EventArgs e)
     {
+        Panel2.Visible = true;
+        Panel1.Visible = true;
         if (ddlType.SelectedValue == "1")
         {
             if (ddlAttendanceStatus.SelectedValue == "2")
@@ -129,6 +131,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
             lvClassSchedule.DataBind();
             lvRoomOccupancy.DataSource = null;
             lvRoomOccupancy.DataBind();
+         
         }
     }
 
@@ -138,7 +141,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
         {
 
             DataSet ds;
-
+            Panel1.Visible = true;
             DateTime FromDate = txtFromDate.Text == string.Empty ? DateTime.MinValue : Convert.ToDateTime(txtFromDate.Text);
 
             ds = objAttC.GetDatewiseDataForClassScheduleModified(Convert.ToDateTime(FromDate), Convert.ToInt32(ddlAttendanceStatus.SelectedValue));
@@ -223,8 +226,8 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
             }
             else
             {
-
-
+                Panel1.Visible = false;
+                Panel2.Visible = false;
                 lvRoomOccupancy.DataSource = null;
                 lvRoomOccupancy.DataBind();
                 lvClassSchedule.DataSource = null;
@@ -246,11 +249,37 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
         if (ddlType.SelectedValue == "1")
         {
             divAttendanceStatus.Visible = true;
+            lvClassSchedule.DataSource = null;
+            lvClassSchedule.DataBind();
+            lvRoomOccupancy.DataSource = null;
+            lvRoomOccupancy.DataBind();
+            btnSendEmail.Visible = false;
         }
         else
         {
             divAttendanceStatus.Visible = false;
+            btnSendEmail.Visible = false;
         }
+
+        if (ddlType.SelectedValue == "0")
+        {
+            lvClassSchedule.DataSource = null;
+            lvClassSchedule.DataBind();
+            lvRoomOccupancy.DataSource = null;
+            lvRoomOccupancy.DataBind();
+            btnSendEmail.Visible = false;
+          
+        }
+        if (ddlType.SelectedValue == "2")
+        {
+            lvClassSchedule.DataSource = null;
+            lvClassSchedule.DataBind();
+            lvRoomOccupancy.DataSource = null;
+            lvRoomOccupancy.DataBind();
+            btnSendEmail.Visible = false;
+
+        }
+
     }
     protected void btnExcel_Click(object sender, EventArgs e)
     {
@@ -348,7 +377,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
                     MyHtmlString += "We have observed that attendance for your class has not been marked on ERP. Please ensure it is done end of the day as we need to share updated student record with students & parent.<br/><br/>";
 
                     MyHtmlString += "<table width='1000px' cellspacing='0' style='border: 1px solid #190404'><thead style='background-color: #d3cccc !important;color: #0e0e0e !important;'><tr style='border: 1px solid #190404;'><th style='border: 1px solid #190404;' scope='col'>Attendance Date</th><th style='border: 1px solid #190404;' scope='col'>Slot</th>" +
-                   "<th style='border: 1px solid #190404;' scope='col'>Section</th>" + "<th style='border: 1px solid #190404;' scope='col'>Course Name</th><th style='border: 1px solid #190404;' scope='col'>Faculty Name</th></tr></thead><tbody>";
+                   "<th style='border: 1px solid #190404;' scope='col'>Section</th>" + "<th style='border: 1px solid #190404;' scope='col'>Course Name</th><th style='border: 1px solid #190404;' scope='col'>Degree</th><th style='border: 1px solid #190404;' scope='col'>Faculty Name</th></tr></thead><tbody>";
 
                     for (int j = 0; j < dr.Length; j++)
                     {
@@ -356,6 +385,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
                         MyHtmlString += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + " - " + dr[j][4].ToString() + "</td>";
                         MyHtmlString += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][14].ToString() + "</td>";
                         MyHtmlString += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][10].ToString() + "-" + dr[j][11].ToString() + "</td>";
+                        MyHtmlString += "<td style='border: 1px solid #190404; text-align:center;'> " + dr[j][15].ToString() + "</td>";
                         MyHtmlString += "<td style='border: 1px solid #190404; text-align:center;'> " + dr[j][12].ToString() + "</td></tr>";
                     }
                     MyHtmlString += "</tbody></table><br/><br/><br/> Regards,<br/>" + dsconfig.Tables[0].Rows[0]["CODE_STANDARD"].ToString();
@@ -411,7 +441,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
                     MyHtmlString = "Dear Team, <br/><br/>";
                     MyHtmlString += "Please Find Attached the detailed Faculty Class Attendance Tracker(Attendance not marked data) for all lectures taught during the day.<br/><br/><br/>";
                     MyHtmlString += "<table width='1000px' cellspacing='0' style='border: 1px solid #190404'><thead style='background-color: #d3cccc !important;color: #0e0e0e !important;'><tr style='border: 1px solid #190404;'><th style='border: 1px solid #190404;' scope='col'>Attendance Date</th><th style='border: 1px solid #190404;' scope='col'>Slot</th>" +
-                  "<th style='border: 1px solid #190404;' scope='col'>Section</th>" + "<th style='border: 1px solid #190404;' scope='col'>Course Name</th><th style='border: 1px solid #190404;' scope='col'>Faculty Name</th></tr></thead><tbody>";
+                  "<th style='border: 1px solid #190404;' scope='col'>Section</th>" + "<th style='border: 1px solid #190404;' scope='col'>Course Name</th><th style='border: 1px solid #190404;' scope='col'>Degree</th><th style='border: 1px solid #190404;' scope='col'>Faculty Name</th></tr></thead><tbody>";
 
                     for (int i = 0; i < dr.Length; i++)
                     {
@@ -419,6 +449,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
                         MyHtmlString += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[i][3].ToString() + " - " + dr[i][4].ToString() + "</td>";
                         MyHtmlString += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[i][14].ToString() + "</td>";
                         MyHtmlString += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[i][10].ToString() + "-" + dr[i][11].ToString() + "</td>";
+                        MyHtmlString += "<td style='border: 1px solid #190404; text-align:center;'> " + dr[i][15].ToString() + "</td>";
                         MyHtmlString += "<td style='border: 1px solid #190404; text-align:center;'> " + dr[i][12].ToString() + "</td></tr>";
                     }
                     MyHtmlString += "</tbody></table><br/><br/>";
@@ -620,5 +651,7 @@ public partial class ACADEMIC_TimeTable_Schedule_RoomOccupancy : System.Web.UI.P
         lvClassSchedule.DataSource = null;
         lvClassSchedule.DataBind();
         btnSendEmail.Visible = false;
+        Panel1.Visible = false;
+        Panel2.Visible = false;
     }
 }

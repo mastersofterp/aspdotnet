@@ -28,6 +28,7 @@ using System.Data.SqlClient;
 using IITMS.NITPRM.BusinessLayer.BusinessLogic;
 using IITMS.NITPRM;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public partial class Account_ledgerhead : System.Web.UI.Page
 {
@@ -285,10 +286,32 @@ public partial class Account_ledgerhead : System.Web.UI.Page
         }
 
     }
+
+    private bool IsValidGSTFormat(string gstNumber)
+    {
+
+        string gstPattern = @"^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[A-Z\d]{1}[A-Z\d]{1}$";
+        return Regex.IsMatch(gstNumber, gstPattern);
+    }
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
         {
+
+            string gstNumber = txtGSTtNo.Text.Trim().ToUpper();
+            if (txtGSTtNo.Text != "")
+            {
+                if (IsValidGSTFormat(gstNumber))
+                {
+
+                }
+                else
+                {
+                    objCommon.DisplayUserMessage(UPDLedger, "Invalid GST Number format.", this.Page);
+                    return;
+                }
+            }
+
             CustomStatus cs = new CustomStatus();
             if (ViewState["action"].ToString().Equals("add"))
             {
@@ -389,6 +412,10 @@ public partial class Account_ledgerhead : System.Web.UI.Page
             objParty.College_Code = Session["colcode"].ToString();
             objParty.PANNO = txtPanNo.Text;
             objParty.TINNO = txtTinNo.Text;
+            //Added by Pawan Nikhare
+            objParty.GSTNo = txtGSTtNo.Text;
+
+            
 
             if (chkDefault.Checked)
                 objParty.SetDefault = 1;
@@ -405,6 +432,9 @@ public partial class Account_ledgerhead : System.Web.UI.Page
                     return;
                 }
             }
+
+
+
 
             objTrans.Tran = ddlDrCr.SelectedValue.ToString().Trim();
 
@@ -626,6 +656,7 @@ public partial class Account_ledgerhead : System.Web.UI.Page
                         txtPanNo.Text = dtr["PANNO"] == DBNull.Value ? string.Empty : dtr["PANNO"].ToString();
                         txtTinNo.Text = dtr["TINNO"] == DBNull.Value ? string.Empty : dtr["TINNO"].ToString();
                         //ddlType.SelectedValue = dtr["PAYMENT_TYPE_NO"] == DBNull.Value ? "0" : dtr["PAYMENT_TYPE_NO"].ToString();
+                        txtGSTtNo.Text = dtr["GSTNo"] == DBNull.Value ? string.Empty : dtr["GSTNo"].ToString();
                         ddlDrCr.SelectedValue = dtr["STATUS"].ToString().Trim();
                         //if (dtr["OPBALANCE"].ToString() == "0.00" || dtr["OPBALANCE"] == DBNull.Value)
                         //{
@@ -821,9 +852,6 @@ public partial class Account_ledgerhead : System.Web.UI.Page
     {
         try
         {
-
-
-
             //objCommon.FillDropDownList(ddlType, "ACC_PAYMENT_TYPE_" + Session["comp_code"].ToString() + "_" + Session["fin_yr"], "PAYMENT_TYPE_NO", "UPPER(PAYMENT_TYPE_NAME) AS PAYMENT_TYPE_", "PAYMENT_TYPE_NO > 0", "PAYMENT_TYPE_NAME");
             //objCommon.FillDropDownList(ddlFAGroup, Session["DataBase"].ToString()+ "."+"ACC_" + Session["comp_code"].ToString() + "_" + "MAIN_GROUP", "MGRP_NO", "UPPER(MGRP_NAME) AS MGRP_NAME", "MGRP_NO > 0", "MGRP_NAME");
             objCommon.FillDropDownList(ddlFAGroup, "ACC_" + Session["comp_code"].ToString() + "_" + "MAIN_GROUP", "MGRP_NO", "UPPER(MGRP_NAME) AS MGRP_NAME", "MGRP_NO > 0", "MGRP_NAME");
@@ -910,6 +938,7 @@ public partial class Account_ledgerhead : System.Web.UI.Page
         txtPanNo.Text = string.Empty;
         txtAddress.Text = string.Empty;
         txtOpenBalance.Text = string.Empty;
+        txtGSTtNo.Text = string.Empty;
         ddlDrCr.SelectedValue = "D";
         if (IsAutogenratedLedgerAccountCode == "Y")
             txtAccountCode.Enabled = false;

@@ -411,7 +411,14 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                 if (rdbStatus.SelectedValue == "0")
                 {
                     objSevBook.UNIVERSITYAPPNO = txtApprovalno.Text;
-                    objSevBook.UNIAPPDT = Convert.ToDateTime(txtDate.Text);
+                    if (txtDate.Text != string.Empty)
+                    {
+                        objSevBook.UNIAPPDT = Convert.ToDateTime(txtDate.Text);
+                    }
+                    else
+                    {
+                        objSevBook.UNIAPPDT = null;
+                    }
                     objSevBook.UNIAPPSTATUS = "YES";
 
                     if (objSevBook.ISBLOB == 1)
@@ -494,7 +501,15 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                 if (rdbTeacher.SelectedValue == "0")
                 {
                     objSevBook.PGAPPNO = txtteachno.Text;
-                    objSevBook.PGTAPPDT = Convert.ToDateTime(txtappdt.Text);
+                    if (txtappdt.Text != string.Empty)
+                    {
+                        objSevBook.PGTAPPDT = Convert.ToDateTime(txtappdt.Text);
+                    }
+                    else
+                    {
+                        objSevBook.PGTAPPDT = null;
+                    }
+                   
                     objSevBook.PGTAPPSTATUS = "YES";
 
                     if (objSevBook.ISBLOB == 1)
@@ -793,6 +808,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
 
 
                 ViewState["attachment"] = ds.Tables[0].Rows[0]["ATTACHMENT"].ToString();
+                ViewState["universityattachment"] = ds.Tables[0].Rows[0]["UNIVERSITYATACHMENT"].ToString();
+                ViewState["pgtattachment"] = ds.Tables[0].Rows[0]["PGTATTACHMENT"].ToString();
 
                 string uniappstatus = ds.Tables[0].Rows[0]["UNIAPPSTATUS"].ToString();
                 if (uniappstatus == "YES")
@@ -935,6 +952,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
 
 
         ViewState["action"] = "add";
+        ViewState["attachment"] = null;
         divpg.Visible = false;
         divpgdt.Visible = false;
         divpgdoc.Visible = false;
@@ -993,8 +1011,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
     {
         try
         {
-            txtToDate.Text = string.Empty;
-            txtExperience.Text = string.Empty;
+            if (ViewState["action"].ToString().Equals("add"))
+            {
+                txtToDate.Text = string.Empty;
+                txtExperience.Text = string.Empty;
+            }
         }
         catch (Exception ex)
         {

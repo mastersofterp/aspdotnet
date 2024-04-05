@@ -599,7 +599,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
                 CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session, feescollection, relative, absolute, barcode, feedback, attendance, attendance_percentage, intsubexam, intassessment, intexcelformat, admissionstatus, endsemcomponent, adminexapproval, admincomponent, facultycomponent, exceltimetable, intmarkpublish, compwiseexcel, remark, subjecttype, userforrange, subexamwise, multiexternalexam, publish, checkconversion,erpurl);
                 if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
                 {
-                    objCommon.DisplayMessage("Record Save Sucessfully.... !", this.Page);
+                    objCommon.DisplayMessage("Record Save Successfully.... !", this.Page);
                     //clear();
                     BindView();
                 }
@@ -625,7 +625,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
 
             if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
             {
-                objCommon.DisplayMessage("Record Save Sucessfully.... !", this.Page);
+                objCommon.DisplayMessage("Record Save Successfully.... !", this.Page);
                 BindView();
             }
             else

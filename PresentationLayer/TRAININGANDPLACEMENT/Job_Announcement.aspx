@@ -10,12 +10,14 @@
     <script src='<%=Page.ResolveUrl("~/plugins/TinyMce/jquery.tinymce.min.js") %>'></script>
 
     <style>
-        #DataTables_Table_3_wrapper .dataTables_scrollHeadInner  {
-           width: max-content !important;
-        }
-           .dataTables_scrollHeadInner {
+        #DataTables_Table_3_wrapper .dataTables_scrollHeadInner {
             width: max-content !important;
         }
+
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+
         .card-header .title {
             font-size: 15px;
             color: #000;
@@ -155,7 +157,7 @@
                                                                 </div>
                                                                 <asp:DropDownList ID="ddlPlacement" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" TabIndex="4">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                                   <%-- <asp:ListItem Value="1">Online</asp:ListItem>
+                                                                    <%-- <asp:ListItem Value="1">Online</asp:ListItem>
                                                                     <asp:ListItem Value="2">Offline</asp:ListItem>
                                                                     <asp:ListItem Value="3">Hybrid</asp:ListItem>--%>
                                                                 </asp:DropDownList>
@@ -212,7 +214,7 @@
                                         <div class="card-body">
                                             <div class="col-12">
                                                 <div class="row">
-                                                  <%--  <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <%--  <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
                                                             <label>Schedule Date (From-To)</label>
@@ -225,33 +227,33 @@
                                                             <i class="fa fa-angle-down" aria-hidden="true" style="float: right; padding-top: 4px; font-weight: bold;"></i>
                                                         </div>
                                                     </div>
-                                                       --%>
+                                                    --%>
 
 
-                                                       <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <div class="label-dynamic">
-                                                                <sup>* </sup>
-                                                                <label>Schedule From Date</label>
-                                                            </div>
-                                                             <asp:TextBox ID="txtSchFromDate" runat="server" CssClass="form-control" type="date" TabIndex="3"></asp:TextBox>
+                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>* </sup>
+                                                            <label>Schedule From Date</label>
+                                                        </div>
+                                                        <asp:TextBox ID="txtSchFromDate" runat="server" CssClass="form-control" type="date" TabIndex="3"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="txtSchFromDate" Display="None"
                                                             ErrorMessage="Please Select Schedule From Date." ValidationGroup="jobannouncemennt">
                                                         </asp:RequiredFieldValidator>
-                                                        </div>
-                                                       
+                                                    </div>
+
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <div class="label-dynamic">
-                                                                <sup>* </sup>
-                                                                <label>Schedule To Date</label>
-                                                            </div>
-                                                            <asp:TextBox ID="txtSchToDate" runat="server" CssClass="form-control" type="date" TabIndex="3"></asp:TextBox>
+                                                        <div class="label-dynamic">
+                                                            <sup>* </sup>
+                                                            <label>Schedule To Date</label>
+                                                        </div>
+                                                        <asp:TextBox ID="txtSchToDate" runat="server" CssClass="form-control" type="date" TabIndex="3"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="txtSchToDate" Display="None"
                                                             ErrorMessage="Please Select Schedule To Date." ValidationGroup="jobannouncemennt">
                                                         </asp:RequiredFieldValidator>
-                                                        </div>
+                                                    </div>
 
-                                                   
+
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
@@ -306,7 +308,7 @@
                                                             <label>Job Description</label>
                                                         </div>
                                                         <asp:TextBox ID="templateEditor" runat="server" Visible="true" TextMode="MultiLine" ClientIDMode="Static" CssClass="form-control TextBox1" TabIndex="10" MaxLength="300"></asp:TextBox>
-                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="templateEditor" Display="None"
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="templateEditor" Display="None"
                                                             ErrorMessage="Please Enter Job Description." ValidationGroup="jobannouncemennt">
                                                         </asp:RequiredFieldValidator>
                                                     </div>
@@ -317,7 +319,7 @@
                                                             <label>Eligibility</label>
                                                         </div>
                                                         <asp:TextBox ID="txtEligibility" runat="server" Visible="true" TextMode="MultiLine" ClientIDMode="Static" CssClass="form-control TextBox1" TabIndex="11" MaxLength="300"></asp:TextBox>
-                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="txtEligibility" Display="None"
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="txtEligibility" Display="None"
                                                             ErrorMessage="Please Enter Eligibility." ValidationGroup="jobannouncemennt">
                                                         </asp:RequiredFieldValidator>
                                                     </div>
@@ -329,6 +331,64 @@
                                 <%--</ContentTemplate>
                             </asp:UpdatePanel>--%>
 
+                                <%-- <asp:UpdatePanel ID="upnlEligibilityCriteria" runat="server">
+                                <ContentTemplate>--%>
+                                <div class="card">
+                                    <div class="card-header collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                        <span class="title">Eligibility Criteria [%]</span>
+                                        <span class="accicon"><i class="fa fa-angle-down rotate-icon"></i></span>
+                                    </div>
+                                    <div id="Div1" class="collapse collapse show">
+                                        <div class="card-body">
+                                            <div class="col-12">
+                                                <div class="row">                  
+                                                    <div class="form-group col-lg-4 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>* </sup>
+                                                            <label>SSC</label>
+                                                        </div>
+                                                        <asp:TextBox ID="txtSSC" runat="server" Visible="true" ClientIDMode="Static" CssClass="form-control TextBox1" TabIndex="12" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="rfvSSC" runat="server" ControlToValidate="txtSSC" Display="None"
+                                                            ErrorMessage="Please Enter SSC Percentage" ValidationGroup="jobannouncemennt">
+                                                        </asp:RequiredFieldValidator>
+                                                    </div>
+                                                    <div class="form-group col-lg-4 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <label>HSC</label>
+                                                        </div>
+                                                        <asp:TextBox ID="txtHSC" runat="server" Visible="true" ClientIDMode="Static" CssClass="form-control TextBox1" TabIndex="13" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                                        
+                                                    </div>
+                                                    <div class="form-group col-lg-4 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <label>Diploma</label>
+                                                        </div>
+                                                       <asp:TextBox ID="txtDiploma" runat="server" Visible="true" ClientIDMode="Static" CssClass="form-control TextBox1" TabIndex="14" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                                    </div>
+                                                    <div class="form-group col-lg-4 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>* </sup>
+                                                            <label>UG</label>
+                                                        </div>
+                                                       <asp:TextBox ID="txtUG" runat="server" Visible="true" ClientIDMode="Static" CssClass="form-control TextBox1" TabIndex="15" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="rfvUG" runat="server" ControlToValidate="txtUG" Display="None"
+                                                            ErrorMessage="Please Enter UG Percentage" ValidationGroup="jobannouncemennt">
+                                                        </asp:RequiredFieldValidator>
+                                                    </div>
+                                                    <div class="form-group col-lg-4 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <label>PG</label>
+                                                        </div>
+                                                       <asp:TextBox ID="txtPG" runat="server" Visible="true" ClientIDMode="Static" CssClass="form-control TextBox1" TabIndex="16" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%--</ContentTemplate>
+                            </asp:UpdatePanel>--%>
 
                                 <asp:UpdatePanel ID="upnlsalary" runat="server">
                                     <ContentTemplate>
@@ -499,12 +559,12 @@
                                                             <asp:DropDownList ID="ddlRound" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" TabIndex="21">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             </asp:DropDownList>
-                                                           <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlRound"
+                                                            <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlRound"
                                                                 Display="None" ErrorMessage="Please Select Round." SetFocusOnError="true"
                                                                 ValidationGroup="Round" />--%>
-                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlRound" Display="None"
-                                                                    ErrorMessage="Please Select Round." InitialValue="0" ValidationGroup="Round">
-                                                                </asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlRound" Display="None"
+                                                                ErrorMessage="Please Select Round." InitialValue="0" ValidationGroup="Round">
+                                                            </asp:RequiredFieldValidator>
                                                         </div>
 
                                                         <div class="col-lg-3 col-md-6 col-12">
@@ -512,6 +572,9 @@
 
                                                             <asp:TextBox ID="txtRoundSrNo" runat="server" MaxLength="2000" class="form-control">
                                                             </asp:TextBox>
+                                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftbtxtSrNo" runat="server" ValidChars="0123456789"
+                                                                FilterType="Custom" FilterMode="ValidChars" TargetControlID="txtRoundSrNo">
+                                                            </ajaxToolKit:FilteredTextBoxExtender>
                                                             <asp:RequiredFieldValidator ID="rfvProjDetails" runat="server" ControlToValidate="txtRoundSrNo"
                                                                 Display="None" ErrorMessage="Please Enter Round Serial Number." SetFocusOnError="true"
                                                                 ValidationGroup="Round" />
@@ -545,7 +608,7 @@
                                                             <div class="row">
                                                                 <asp:Panel ID="pnlRoundDetail" runat="server" ScrollBars="Auto">
 
-                                                                  <%--  <asp:ListView ID="lvRoundDetail" runat="server">
+                                                                    <%--  <asp:ListView ID="lvRoundDetail" runat="server">
                                                                         <EmptyDataTemplate>
                                                                             <br />
                                                                             <center>
@@ -557,7 +620,7 @@
                                                                                     <strong>Round Details</strong>
                                                                                 </div>--%>
                                                                     <asp:ListView ID="lvRoundDetail" runat="server">
-                                                                          <LayoutTemplate>
+                                                                        <LayoutTemplate>
                                                                             <div id="lgv1">
                                                                                 <table class="table table-bordered table-hover">
                                                                                     <thead>
@@ -806,11 +869,31 @@
                                                                     <div class="label-dynamic">
                                                                         <label></label>
                                                                     </div>
-                                                                    <asp:LinkButton ID="btnAdd" runat="server" CssClass="btn btn-outline-info" OnClick="btnAdd_Click" ValidationGroup="announcement" TabIndex="32">ADD</asp:LinkButton>
+                                                                    <%-- <asp:LinkButton ID="btnAdd" runat="server" CssClass="btn btn-outline-info" OnClick="btnAdd_Click" ValidationGroup="announcement" TabIndex="32" UseSubmitBehavior="false" OnClientClick="disableButton()">ADD</asp:LinkButton>--%>
+                                                                    <asp:Button ID="btnAdd" runat="server" Text="ADD" CssClass="btn btn-outline-info" ValidationGroup="announcement"
+                                                                        OnClick="btnAdd_Click" ToolTip="Click here to Add Announce" TabIndex="7" UseSubmitBehavior="false" OnClientClick="handleButtonClick()" />
+                                                                    <%--Shaikh Juned 17-10-2023 disable button on single click--%>
+
                                                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="announcement" ShowMessageBox="true" ShowSummary="false"
                                                                         DisplayMode="List" />
+                                                                    <%--<asp:Button ID="Button1" runat=f"server" CssClass="btn btn-outline-info" OnClick="btnSubmit_Click" Text="Submit" ValidationGroup="jobannouncemennt" />--%>
                                                                 </div>
+                                                                <div class="form-group col-lg-3 col-md-6 col-12" style="color: Red; font-weight: bold;">
+                                                                    Note : File Upload Control Enabled After Adding Annouce Details.
+                                                                      (Upload .pdf only-Max size 500 Kb.)
+                                                                </div><br />
 
+                                                                <%--  //Added by Parag//29-02-2024--%>
+
+                                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                    <div class="label-dynamic">
+                                                                        <label>Document Upload</label>
+                                                                    </div>
+
+                                                                    <asp:FileUpload ID="FileUploadCompany" ToolTip="Select file to upload" runat="server" />
+                                                                  
+                                                                </div>
+                                                                <%-- //Added by Parag//29-02-2024--%>
                                                             </div>
 
                                                             <div class="col-md-12">
@@ -847,16 +930,20 @@
                                                                                     ToolTip="Delete Record" />
                                                                             </td>
                                                                             <td>
-                                                                                <%# Eval("Faculty Name")%>
+                                                                                <asp:Label runat="server" ID="lblfName" Text=' <%# Eval("Faculty Name")%>'></asp:Label>
+
                                                                             </td>
                                                                             <td>
-                                                                                <%# Eval("Study Level")%>
+                                                                                <asp:Label runat="server" ID="lblslevel" Text=' <%# Eval("Study Level")%>'></asp:Label>
+
                                                                             </td>
                                                                             <td>
-                                                                                <%# Eval("Program Name")%>
+                                                                                <asp:Label runat="server" ID="lblpname" Text=' <%# Eval("ProgramFullName")%>'></asp:Label>
+
                                                                             </td>
                                                                             <td>
-                                                                                <%# Eval("SEMESTERNO")%>
+                                                                                <asp:Label runat="server" ID="lblsno" Text=' <%# Eval("Semester")%>'></asp:Label>
+
                                                                             </td>
 
                                                                         </tr>
@@ -934,104 +1021,123 @@
                                         </tr>
                                     </tbody>
                                 </table>--%>
-                                     <asp:UpdatePanel ID="updJobAnn" runat="server">
-                                                        <ContentTemplate>
+                                    <asp:UpdatePanel ID="updJobAnn" runat="server">
+                                        <ContentTemplate>
 
-                                    <div class="col-12">
-                                        <asp:ListView ID="lvJobAnnouncement" runat="server">
-                                            <LayoutTemplate>
-                                                <div class="sub-heading">
-                                                    <h5>Job Announcement Details</h5>
-                                                </div>
-                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%">
-                                                    <thead class="bg-light-blue">
+                                            <div class="col-12">
+                                                <asp:ListView ID="lvJobAnnouncement" runat="server">
+                                                    <LayoutTemplate>
+                                                        <div class="sub-heading">
+                                                            <h5>Job Announcement Details</h5>
+                                                        </div>
+                                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                            <thead class="bg-light-blue">
+                                                                <tr>
+                                                                    <th>Edit</th>
+                                                                    <th>Logo</th>
+                                                                    <th>Company Name</th>
+                                                                    <th>Location</th>
+                                                                    <th>Job Type</th>
+                                                                    <th>Job Role</th>
+                                                                    <th>Schedule Date (From-To)</th>
+                                                                    <th>Venue</th>
+                                                                    <th>Download</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                        </table>
+                                                    </LayoutTemplate>
+                                                    <ItemTemplate>
                                                         <tr>
-                                                            <th>Edit</th>
-                                                            <th>Logo</th>
-                                                            <th>Company Name</th>
-                                                            <th>Location</th>
-                                                            <th>Job Type</th>
-                                                            <th>Job Role</th>
-                                                            <th>Schedule Date (From-To)</th>
-                                                            <th>Venue</th>
+                                                            <td>
+                                                                <asp:ImageButton ID="btnJobAnnouncement" class="btnEditX" runat="server" CausesValidation="false" CssClass="fa fa-pencil-square-o" ImageUrl="~/Images/edit1.png"
+                                                                    CommandArgument='<%# Eval("ACOMSCHNO") %>' AlternateText="Edit Record" OnClick="btnEditJobAnnouncement_Click" /><%-- ToolTip='<%# Eval("COMPID") %>'--%>
+                                                            </td>
+                                                            <td>
+                                                                <%--<%# Eval("LOGO")%>--%>
+                                                                <%--<asp:Image runat="server" AlternateText="img" ImageUrl='<%# "data:image/jpg;base64," + Convert.ToBase64String((byte[])Eval("LOGO")) %>'  Height="30" Width="30" />--%>
+                                                                <%-- <asp:Image ID="Image1" runat="server" ImageUrl='<%# Eval("LOGO") %>' height="20" width="20" />--%>
+
+                                                                <asp:Image ID="imgLogo" runat="server" ImageUrl='<%# String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String((byte[])Eval("LOGO")) ) %>' Height="30" Width="30" />
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("COMPNAME")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("CITY")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("JOBTYPE")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("JOBROLETYPE")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# String.Format("{0}, {1}", Eval("INTERVIEWFROM","{0: dd/MM/yyyy}"), Eval("INTERVIEWTO","{0: dd/MM/yyyy}")) %> 
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("VENUE")%>
+                                                            </td>
+                                                            <td>
+                                                                <%--asp:LinkButton ID="lnkDownloadOffer" runat="server" CssClass="fa fa-download" ></asp:LinkButton>--%>
+                                                                <asp:ImageButton ID="imgdownloadComDetails" runat="server" Text="Download" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FileName") %>'
+                                                                    CommandArgument='<%# Eval("FileName") %>' OnClick="imgdownloadComDetails_Click"></asp:ImageButton>
+
+                                                            </td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </LayoutTemplate>
-                                            <ItemTemplate>
-                                                <tr>
-                                                    <td>
-                                                        <asp:ImageButton ID="btnJobAnnouncement" class="btnEditX" runat="server" CausesValidation="false" CssClass="fa fa-pencil-square-o" ImageUrl="~/Images/edit1.png"
-                                                            CommandArgument='<%# Eval("ACOMSCHNO") %>' AlternateText="Edit Record" OnClick="btnEditJobAnnouncement_Click" /><%-- ToolTip='<%# Eval("COMPID") %>'--%>
-                                                    </td>
-                                                    <td>
-                                                        <%--<%# Eval("LOGO")%>--%>
-                                                        <%--<asp:Image runat="server" AlternateText="img" ImageUrl='<%# "data:image/jpg;base64," + Convert.ToBase64String((byte[])Eval("LOGO")) %>'  Height="30" Width="30" />--%>
-                                                        <%-- <asp:Image ID="Image1" runat="server" ImageUrl='<%# Eval("LOGO") %>' height="20" width="20" />--%>
+                                                    </ItemTemplate>
+                                                    <AlternatingItemTemplate>
+                                                        <tr>
+                                                            <td>
+                                                                <asp:ImageButton ID="btnEditAddCompany" runat="server" CausesValidation="false" CssClass="fa fa-pencil-square-o" ImageUrl="~/Images/edit1.png"
+                                                                    CommandArgument='<%# Eval("ACOMSCHNO") %>' AlternateText="Edit Record" ToolTip='<%# Eval("COMPID") %>' OnClick="btnEditJobAnnouncement_Click" />
+                                                            </td>
+                                                            <td>
+                                                                <%-- <%# Eval("LOGO")%>--%>
+                                                                <asp:Image ID="imgLogo" runat="server" ImageUrl='<%# String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String((byte[])Eval("LOGO")) ) %>' Height="30" Width="30" />
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("COMPNAME")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("CITY")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("JOBTYPE")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("JOBROLETYPE")%>
+                                                            </td>
+                                                            <td>
+                                                                <%# String.Format("{0}, {1}", Eval("INTERVIEWFROM","{0: dd/MM/yyyy}"), Eval("INTERVIEWTO","{0: dd/MM/yyyy}")) %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("VENUE")%>
+                                                            </td>
+                                                            <td>
+                                                                <%--<asp:LinkButton ID="lnkDownloadOffer" runat="server" CssClass="fa fa-download" ></asp:LinkButton>--%>
+                                                                <asp:ImageButton ID="imgdownloadComDetails" runat="server" Text="Download" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FileName") %>'
+                                                                    CommandArgument='<%# Eval("FileName") %>' OnClick="imgdownloadComDetails_Click"></asp:ImageButton>
 
-                                                        <asp:Image ID="imgLogo" runat="server" ImageUrl='<%# String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String((byte[])Eval("LOGO")) ) %>' Height="30" Width="30" />
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("COMPNAME")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("CITY")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("JOBTYPE")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("JOBROLETYPE")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# String.Format("{0}, {1}", Eval("INTERVIEWFROM","{0: dd/MM/yyyy}"), Eval("INTERVIEWTO","{0: dd/MM/yyyy}")) %> 
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("VENUE")%>
-                                                    </td>
-                                                </tr>
-                                            </ItemTemplate>
-                                            <AlternatingItemTemplate>
-                                                <tr>
-                                                    <td>
-                                                        <asp:ImageButton ID="btnEditAddCompany" runat="server" CausesValidation="false" CssClass="fa fa-pencil-square-o" ImageUrl="~/Images/edit1.png"
-                                                            CommandArgument='<%# Eval("ACOMSCHNO") %>' AlternateText="Edit Record" ToolTip='<%# Eval("COMPID") %>' OnClick="btnEditJobAnnouncement_Click" />
-                                                    </td>
-                                                    <td>
-                                                        <%-- <%# Eval("LOGO")%>--%>
-                                                        <asp:Image ID="imgLogo" runat="server" ImageUrl='<%# String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String((byte[])Eval("LOGO")) ) %>' Height="30" Width="30" />
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("COMPNAME")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("CITY")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("JOBTYPE")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("JOBROLETYPE")%>
-                                                    </td>
-                                                    <td>
-                                                        <%# String.Format("{0}, {1}", Eval("INTERVIEWFROM","{0: dd/MM/yyyy}"), Eval("INTERVIEWTO","{0: dd/MM/yyyy}")) %>
-                                                    </td>
-                                                    <td>
-                                                        <%# Eval("VENUE")%>
-                                                    </td>
+                                                            </td>
 
-                                                </tr>
-                                            </AlternatingItemTemplate>
-                                        </asp:ListView>
-                                    </div>
+                                                        </tr>
+                                                    </AlternatingItemTemplate>
+                                                </asp:ListView>
+                                            </div>
 
 
-                                                              </ContentTemplate>
-                                                       
-                                                    </asp:UpdatePanel>
+
+                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text="" Visible="false"></asp:Label>
+                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                            <asp:Label ID="lblBlobContainer" runat="server" Text="" Visible="false"></asp:Label>
+                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+
+                                        </ContentTemplate>
+
+                                    </asp:UpdatePanel>
                                 </div>
 
                             </div>
@@ -1051,56 +1157,58 @@
     </asp:UpdatePanel>
 
 
+
+
     <!-- Start End Date Script -->
     <script type="text/javascript">
-   //     $(document).ready(function () {
-   //         debugger;
-   //         $('#picker').daterangepicker({
-   //             startDate: moment().subtract(00, 'days'),
-   //             endDate: moment(),
-   //             locale: {
-   //                 format: 'DD MMM, YYYY'
-   //             },
-   //             ranges: {
-   //             },
-   //         },
-   //     function (start, end) {
-   //         debugger;
-   //         //alert("in");
-   //         $('#date').html(start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'));
-   //         document.getElementById('<%=txtSchFromDate.ClientID%>').value = (start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'))
-   //         var today = new Date();
-   //         var yyyy = today.getFullYear();
-   //         var mm = today.getMonth() + 1; // Months start at 0!
-   //         var dd = today.getDate();
-   //
-   //         if (dd < 10) dd = '0' + dd;
-   //         if (mm < 10) mm = '0' + mm;
-   //
-   //         var today = dd + '/' + mm + '/' + yyyy;
-   //         var startDate = start.format('DD/MM/YYYY');
-   //         //alert(today);
-   //         //alert(startDate);
-   //         var d1 = today.split("/");
-   //         var d2 = startDate.split("/");
-   //         //alert('today : ' + d1);
-   //         //alert('startdate : ' + d2);
-   //         var fromCurrent = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]);  // -1 because months are from 0 to 11                
-   //         var toStart = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
-   //         //alert(fromCurrent);
-   //         // alert(toStart);
-   //         if (toStart < fromCurrent) {
-   //             alert("Backdate are not allowed.");
-   //             // $('#date').html(start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'));
-   //             document.getElementById('<%=txtSchFromDate.ClientID%>').value = startDate = start.format('DD/MM/YYYY');
-   //         }
-   //     });
-   //
-   //         $('#date').html(moment().subtract(00, 'days').format('DD MMM, YYYY') + ' - ' + moment().format('DD MMM, YYYY'));
-   //         document.getElementById('<%=txtSchFromDate.ClientID%>').value = (moment().subtract(00, 'days').format('DD MMM, YYYY') + ' - ' + moment().format('DD MMM, YYYY'))
-   //
-   //
-   //     });
+        //     $(document).ready(function () {
+        //         debugger;
+        //         $('#picker').daterangepicker({
+        //             startDate: moment().subtract(00, 'days'),
+        //             endDate: moment(),
+        //             locale: {
+        //                 format: 'DD MMM, YYYY'
+        //             },
+        //             ranges: {
+        //             },
+        //         },
+        //     function (start, end) {
+        //         debugger;
+        //         //alert("in");
+        //         $('#date').html(start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'));
+        //         document.getElementById('<%=txtSchFromDate.ClientID%>').value = (start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'))
+        //         var today = new Date();
+        //         var yyyy = today.getFullYear();
+        //         var mm = today.getMonth() + 1; // Months start at 0!
+        //         var dd = today.getDate();
+        //
+        //         if (dd < 10) dd = '0' + dd;
+        //         if (mm < 10) mm = '0' + mm;
+        //
+        //         var today = dd + '/' + mm + '/' + yyyy;
+        //         var startDate = start.format('DD/MM/YYYY');
+        //         //alert(today);
+        //         //alert(startDate);
+        //         var d1 = today.split("/");
+        //         var d2 = startDate.split("/");
+        //         //alert('today : ' + d1);
+        //         //alert('startdate : ' + d2);
+        //         var fromCurrent = new Date(d1[2], parseInt(d1[1]) - 1, d1[0]);  // -1 because months are from 0 to 11                
+        //         var toStart = new Date(d2[2], parseInt(d2[1]) - 1, d2[0]);
+        //         //alert(fromCurrent);
+        //         // alert(toStart);
+        //         if (toStart < fromCurrent) {
+        //             alert("Backdate are not allowed.");
+        //             // $('#date').html(start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'));
+        //             document.getElementById('<%=txtSchFromDate.ClientID%>').value = startDate = start.format('DD/MM/YYYY');
+        //         }
+        //     });
+        //
+        //         $('#date').html(moment().subtract(00, 'days').format('DD MMM, YYYY') + ' - ' + moment().format('DD MMM, YYYY'));
+        //         document.getElementById('<%=txtSchFromDate.ClientID%>').value = (moment().subtract(00, 'days').format('DD MMM, YYYY') + ' - ' + moment().format('DD MMM, YYYY'))
+        //
+        //
+        //     });
 
     </script>
     <%--<script>
@@ -1177,57 +1285,57 @@
 
     </script>
     <script>
-    //   function Setdate(date) {
-    //       var prm = Sys.WebForms.PageRequestManager.getInstance();
-    //       prm.add_endRequest(function () {
-    //           $(document).ready(function () {
-    //               debugger;
-    //               var startDate = moment(date.split('-')[0], "MMM DD, YYYY");
-    //               var endtDate = moment(date.split('-')[1], "MMM DD, YYYY");
-    //               //$('#date').html(date);
-    //               $('#date').html(startDate.format("MMM DD, YYYY") + ' - ' + endtDate.format("MMM DD, YYYY"));
-    //               document.getElementById('<%=txtSchFromDate.ClientID%>').value = date;
-    //               //$('#picker').daterangepicker({ startDate: startDate, endDate: endtDate});
-    //               $('#picker').daterangepicker({
-    //                   startDate: startDate.format("MM/DD/YYYY"),
-    //                   endDate: endtDate.format("MM/DD/YYYY"),
-    //                   ranges: {
-    //                   },
-    //               },
-    //       function (start, end) {
-    //           debugger
-    //           $('#date').html(start.format('MMM DD, YYYY') + ' - ' + end.format('MMM DD, YYYY'))
-    //           document.getElementById('<%=txtSchFromDate.ClientID%>').value = (start.format('MMM DD, YYYY') + ' - ' + end.format('MMM DD, YYYY'))
-    //       });
-    //
-    //           });
-    //       });
-    //
+        //   function Setdate(date) {
+        //       var prm = Sys.WebForms.PageRequestManager.getInstance();
+        //       prm.add_endRequest(function () {
+        //           $(document).ready(function () {
+        //               debugger;
+        //               var startDate = moment(date.split('-')[0], "MMM DD, YYYY");
+        //               var endtDate = moment(date.split('-')[1], "MMM DD, YYYY");
+        //               //$('#date').html(date);
+        //               $('#date').html(startDate.format("MMM DD, YYYY") + ' - ' + endtDate.format("MMM DD, YYYY"));
+        //               document.getElementById('<%=txtSchFromDate.ClientID%>').value = date;
+        //               //$('#picker').daterangepicker({ startDate: startDate, endDate: endtDate});
+        //               $('#picker').daterangepicker({
+        //                   startDate: startDate.format("MM/DD/YYYY"),
+        //                   endDate: endtDate.format("MM/DD/YYYY"),
+        //                   ranges: {
+        //                   },
+        //               },
+        //       function (start, end) {
+        //           debugger
+        //           $('#date').html(start.format('MMM DD, YYYY') + ' - ' + end.format('MMM DD, YYYY'))
+        //           document.getElementById('<%=txtSchFromDate.ClientID%>').value = (start.format('MMM DD, YYYY') + ' - ' + end.format('MMM DD, YYYY'))
+        //       });
+        //
+        //           });
+        //       });
+        //
 
-    var dateToday = new Date();
-    $(function () {
-        $("#date").datepicker({
-            minDate: dateToday
+        var dateToday = new Date();
+        $(function () {
+            $("#date").datepicker({
+                minDate: dateToday
+            });
         });
-    });
 
 
 
 
-            //$('.picker').daterangepicker({
-            //    autoUpdateInput: false,
-            //    locale: {
-            //        format: 'DD/MM/YYYY',
-            //        cancelLabel: 'Clear'
-            //    }
-            //});
+        //$('.picker').daterangepicker({
+        //    autoUpdateInput: false,
+        //    locale: {
+        //        format: 'DD/MM/YYYY',
+        //        cancelLabel: 'Clear'
+        //    }
+        //});
 
 
-            //$('.picker').on('apply.daterangepicker', function (ev, picker) {
-            //    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-            //});
+        //$('.picker').on('apply.daterangepicker', function (ev, picker) {
+        //    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+        //});
 
-};
+        };
     </script>
     <script>
         $('#<%=btnSubmit.ClientID%>').click(function () {
@@ -1658,14 +1766,14 @@
             var last = $("[id$=txtLastDate]").attr("id");
             var date = document.getElementById('<%=txtLastDate.ClientID%>').value;
 
-             if (date == '') {
+            if (date == '') {
 
-                 alert('Please Select Last Date.', 'Warning!');
-                 $(date).focus();
-                 return false;
-             }
+                alert('Please Select Last Date.', 'Warning!');
+                $(date).focus();
+                return false;
+            }
 
-             var dis = document.getElementById('<%=hfdTemplate.ClientID%>').value
+            var dis = document.getElementById('<%=hfdTemplate.ClientID%>').value
             if (dis == '') {
                 alert('Please Enter Description.', 'Warning!');
                 return false;
@@ -1711,16 +1819,16 @@
             var currency = $("[id$=ddlCurrency]").attr("id");
             var rrr = document.getElementById('<%=ddlCurrency.ClientID%>').value;
 
-            if (rrr == '0') {
+             if (rrr == '0') {
 
-                alert('Please Select Currency.', 'Warning!');
-                $(currency).focus();
-                return false;
-            }
+                 alert('Please Select Currency.', 'Warning!');
+                 $(currency).focus();
+                 return false;
+             }
 
 
-            var int = $("[id$=ddlInterval]").attr("id");
-            var i = document.getElementById('<%=ddlInterval.ClientID%>').value;
+             var int = $("[id$=ddlInterval]").attr("id");
+             var i = document.getElementById('<%=ddlInterval.ClientID%>').value;
 
             if (i == '0') {
 
@@ -1737,16 +1845,16 @@
             var ddlfac = $("[id$=ddlFaculty]").attr("id");
             var fac = document.getElementById('<%=ddlFaculty.ClientID%>').value;
 
-             if (fac == '0') {
+            if (fac == '0') {
 
-                 alert('Please Select Faculty.', 'Warning!');
-                 $(fac).focus();
-                 return false;
-             }
+                alert('Please Select Faculty.', 'Warning!');
+                $(fac).focus();
+                return false;
+            }
 
 
-             var stuOGevel = $("[id$=ddlStudyLevel]").attr("id");
-             var studl = document.getElementById('<%=ddlStudyLevel.ClientID%>').value;
+            var stuOGevel = $("[id$=ddlStudyLevel]").attr("id");
+            var studl = document.getElementById('<%=ddlStudyLevel.ClientID%>').value;
 
             if (studl == '0') {
 
@@ -1756,38 +1864,38 @@
             }
 
             var ListBox = document.getElementById('<%=lstbxProgramName.ClientID %>');
-             var length = ListBox.length;
-             var i = 0;
-             var SelectedItemCount = 0;
+            var length = ListBox.length;
+            var i = 0;
+            var SelectedItemCount = 0;
 
-             for (i = 0; i < length; i++) {
-                 if (ListBox.options[i].selected) {
-                     SelectedItemCount = SelectedItemCount + 1;
-                 }
+            for (i = 0; i < length; i++) {
+                if (ListBox.options[i].selected) {
+                    SelectedItemCount = SelectedItemCount + 1;
+                }
 
-                 if (SelectedItemCount == 0) {
-                     alert('Please Select Program Name.');
-                     return false;
-                 }
-             }
+                if (SelectedItemCount == 0) {
+                    alert('Please Select Program Name.');
+                    return false;
+                }
+            }
 
-             var ListBox = document.getElementById('<%=lstbxSemester.ClientID %>');
-             var length = ListBox.length;
-             var i = 0;
-             var SelectedItemCount = 0;
+            var ListBox = document.getElementById('<%=lstbxSemester.ClientID %>');
+            var length = ListBox.length;
+            var i = 0;
+            var SelectedItemCount = 0;
 
-             for (i = 0; i < length; i++) {
-                 if (ListBox.options[i].selected) {
-                     SelectedItemCount = SelectedItemCount + 1;
-                 }
+            for (i = 0; i < length; i++) {
+                if (ListBox.options[i].selected) {
+                    SelectedItemCount = SelectedItemCount + 1;
+                }
 
-                 if (SelectedItemCount == 0) {
-                     alert('Please Select Semester Name.');
-                     return false;
-                 }
-             }
+                if (SelectedItemCount == 0) {
+                    alert('Please Select Semester Name.');
+                    return false;
+                }
+            }
 
-         }
+        }
 
 
     </script>
@@ -1899,6 +2007,22 @@
 
     </script>
 
+    <script>
+        function handleButtonClick() {
+            var button = document.getElementById('<%= btnAdd.ClientID %>');
+
+            // Disable the button and update text
+            button.disabled = true;
+            button.value = "Wait...";
+
+            // Enable the button after 10 seconds
+            setTimeout(function () {
+                button.disabled = false;
+                button.value = "Add";
+            }, 5000); // 10000 milliseconds = 10 seconds
+        }
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('.multi-select-demo').multiselect({
@@ -1922,6 +2046,47 @@
             });
         });
     </script>
+
+    <%-- <script>
+        var buttonClicked = false;
+
+        function hideButton() {
+            if (!buttonClicked) {
+                // Hide the button
+                document.getElementById('btnAdd').style.display = 'none';
+
+                // Set a timeout to show the button after 3 seconds
+                setTimeout(function () {
+                    document.getElementById('btnAdd').style.display = 'block';
+                    buttonClicked = false;
+                }, 3000);
+
+                buttonClicked = true;
+            }
+       return false;
+        }
+</script>--%>
+
+
+    <script>
+        function disableButton() {
+            if (!buttonClicked) {
+                // Disable the button
+                alert('A');
+                document.getElementById('btnAdd').disabled = true;
+
+                // Set a timeout to re-enable the button after 3 seconds
+                setTimeout(function () {
+                    document.getElementById('btnAdd').disabled = false;
+                    buttonClicked = false;
+                }, 3000);
+
+                buttonClicked = true;
+            }
+        }
+    </script>
+
+
 
 </asp:Content>
 

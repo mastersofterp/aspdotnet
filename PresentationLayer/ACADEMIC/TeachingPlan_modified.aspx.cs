@@ -2404,9 +2404,26 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     string Attachment = "Attachment; filename=Month_Wise_User_Count.xls";
                     ds.Tables[0].TableName = "Sheet1";
                     ds.Tables[1].TableName = "Section_Master";
-                    ds.Tables[2].TableName = "Batch_Mater";
+                    ds.Tables[2].TableName = "Batch_Master";
                     ds.Tables[3].TableName = "Slot Master";
                     //ds.Tables[4].TableName = "Slot Type Master";
+
+                    if (ds.Tables[1].Rows.Count == 0)
+                    {
+                        objCommon.DisplayMessage(updTeach, "The download template is denied because of Section Master is empty", this);
+                        return;
+                    }
+                    if (ds.Tables[2].Rows.Count == 0)
+                    {
+                        objCommon.DisplayMessage(updTeach, "The download template is denied because of Batch Master is empty ", this);
+                        return;
+                    }
+                    if (ds.Tables[3].Rows.Count == 0)
+                    {
+                        objCommon.DisplayMessage(updTeach, "The download template is denied because of Slot Master is empty ", this);
+                        return;
+                    }
+
                     using (XLWorkbook wb = new XLWorkbook())
                     {
                         foreach (System.Data.DataTable dt in ds.Tables)

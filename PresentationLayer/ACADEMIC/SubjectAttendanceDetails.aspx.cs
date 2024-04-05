@@ -120,19 +120,28 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-        // Added By Jay Takalkhede On dated 18/03/2024 (TkNo.56508)
-        ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
-
-        DataSet ds = objAtt.GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);
-        if (ds != null && ds.Tables.Count > 0)
+        if (ddlCollege.SelectedIndex > 0)
         {
-            if (ds.Tables[0].Rows.Count > 0)
+            // Added By Jay Takalkhede On dated 18/03/2024 (TkNo.56508)
+            ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
+
+            DataSet ds = objAtt.GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);
+            if (ds != null && ds.Tables.Count > 0)
             {
-                lvStudAttendance.DataSource = ds;
-                lvStudAttendance.DataBind();
-                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudAttendance);//Set label -
-                divlvStudentHeading.Visible=true;
-               // this.ShowReport("Attendance_Report", "rptAttSubjectWiseReport.rpt");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    lvStudAttendance.DataSource = ds;
+                    lvStudAttendance.DataBind();
+                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudAttendance);//Set label -
+                    divlvStudentHeading.Visible = true;
+                    // this.ShowReport("Attendance_Report", "rptAttSubjectWiseReport.rpt");
+                }
+                else
+                {
+                    objCommon.DisplayUserMessage(updProg, "No Record Found.", this.Page);
+                    divlvStudentHeading.Visible = false;
+                }
+
             }
             else
             {
@@ -142,8 +151,9 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
         }
         else
         {
-            objCommon.DisplayUserMessage(updProg, "No Record Found.", this.Page);
-            divlvStudentHeading.Visible = false;
+            objCommon.DisplayUserMessage(updProg, "Please Select School/Institute.", this.Page);
+                    divlvStudentHeading.Visible = false;
+           
         }
     }
     private void ShowReport(string reportTitle, string rptFileName)
@@ -197,7 +207,6 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
     }
     protected void btnExcel_Click(object sender, EventArgs e)
     {
-        // Added By Jay Takalkhede On dated 18/03/2024 (TkNo.56508)
         ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
         GridView GVDayWiseAtt = new GridView();
         DataSet ds = objAtt.GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);

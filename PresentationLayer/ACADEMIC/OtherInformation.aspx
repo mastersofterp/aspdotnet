@@ -501,9 +501,11 @@
                                                             <asp:CheckBox ID="chkAntiRagging" runat="server" />
                                                             I Agree
 
-                                                        <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#myModal_Declaration">
+                                                        <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#myModal_Declaration" runat="server" id="btnModalPopup">
                                                             View Declaration
                                                         </button>
+                                                            <asp:Button ID="btnDownloadAntiRaggingDeclaration" CssClass="btn btn-primary ml-3" runat="server" Text="Download Declaration" TabIndex="1" OnClientClick="openOrDownloadPdf();" />
+                                                            
                                                         </div>
 
                                                     </div>
@@ -953,6 +955,35 @@
         //    }
         //}
     </script>
+
+<script type="text/javascript">   // Added By Shrikant W. on 09022024
+    function openOrDownloadPdf() {
+        debugger;
+        var fileName = '<%= GetPdfFileName() %>';
+
+        if (!fileName) {
+            alert('Invalid File Name OR No File to Download!');
+            return false;
+        }
+
+        var pdfPath = '<%= ResolveUrl("~/AntiRagging/") %>' + encodeURIComponent(fileName);
+
+        var link = document.createElement('a');
+        link.href = pdfPath;
+        link.download = fileName;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        return false;
+
+    }
+</script>
+
+
+
+
 
    <script type="text/javascript" >
        function ErrorMessage(errorString) {

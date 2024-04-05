@@ -34,6 +34,8 @@ namespace IITMS
                     private DataTable _TP_STUDENT_EDUCATION_TBL = null;  //sHAIKH jUNED 18-11-2022
                     private DataTable _TP_STUDENT_CERTIFICATION_TBL = null;  //sHAIKH jUNED 21-11-2022
                     private DataTable _TP_STUDENT_SKILLS_TBL = null;  //sHAIKH jUNED 21-11-2022
+                    private string _Hr = string.Empty;
+                    private string _CompLoc = string.Empty;
                     
                     
                 #endregion
@@ -175,6 +177,30 @@ namespace IITMS
                             {
                                 this._TP_STUDENT_SKILLS_TBL = value;
                             }
+                        }
+                    }
+
+                    public string Hr
+                    {
+                        get
+                        {
+                            return _Hr;
+                        }
+                        set
+                        {
+                            _Hr = value;
+                        }
+                    }
+
+                    public string CompLoc
+                    {
+                        get
+                        {
+                            return _CompLoc;
+                        }
+                        set
+                        {
+                            _CompLoc = value;
                         }
                     }
                 //--------end
@@ -1063,6 +1089,9 @@ namespace IITMS
                     int _language = 0;
                     int _ProficiencyLang = 0;
                     string __ReleventDocument3 = string.Empty;
+                    int _Read = 0;
+                    int _Write = 0;
+                    int _Speak = 0;
 
                     public int language
                     {
@@ -1078,6 +1107,23 @@ namespace IITMS
                     {
                         get { return __ReleventDocument3; }
                         set { __ReleventDocument3 = value; }
+                    }
+                    public int Read
+                    {
+                        get { return _Read; }
+                        set { _Read = value; }
+                    }
+
+                    public int Write
+                    {
+                        get { return _Write; }
+                        set { _Write = value; }
+                    }
+
+                    public int Speak
+                    {
+                        get { return _Speak; }
+                        set { _Speak = value; }
                     }
                     #endregion
 

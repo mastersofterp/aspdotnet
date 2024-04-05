@@ -538,21 +538,26 @@ public partial class RFC_CONFIG_Masters_OrgStructure : System.Web.UI.Page
         {
             DataSet ds = objController.GetCollegeInfo();
 
-            for(int i =0 ;i<=ds.Tables[0].Rows.Count-1;i++)
+            for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
             {
                 if (DBNull.Value.Equals(ds.Tables[0].Rows[i]["COE_Sign"]))
                 {
                     byte[] imgdata = System.IO.File.ReadAllBytes(System.Web.HttpContext.Current.Server.MapPath("~/Images/default-fileupload.png"));
                     ds.Tables[0].Rows[i]["COE_Sign"] = imgdata;
                 }
-            };
+
+                if (DBNull.Value.Equals(ds.Tables[0].Rows[i]["Logo"]))
+                {
+                    byte[] imgdata = System.IO.File.ReadAllBytes(System.Web.HttpContext.Current.Server.MapPath("~/Images/default-fileupload.png"));
+                    ds.Tables[0].Rows[i]["Logo"] = imgdata;
+                }
+            }
            
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 pnlColgMaster.Visible = true;
                 lvColgMaster.DataSource = ds;
                 lvColgMaster.DataBind();
-
             }
             else
             {

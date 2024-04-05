@@ -6,6 +6,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
 
+    <link href="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.css")%>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.js")%>"></script>
+
     <style>
         .Searchfilter {
             font-size: 15px !important;
@@ -62,20 +65,39 @@
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
                                             Display="None" ErrorMessage="Please Select Session." InitialValue="0" ValidationGroup="course"></asp:RequiredFieldValidator>
                                     </div>
+
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
+                                            <asp:Label ID="lblDYddlCourse" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
-                                            ValidationGroup="offered" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged" data-select2-enable="true">
+                                        <asp:DropDownList ID="ddlCourse" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlCourse_SelectedIndexChanged"
+                                            TabIndex="7" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme." ValidationGroup="course">
+
+                                        <asp:RequiredFieldValidator ID="rfvCourse" runat="server" ControlToValidate="ddlCourse" SetFocusOnError="true"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Course." ValidationGroup="course">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
+                                        </div>
+                                        <%--    <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
+                                            ValidationGroup="offered" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>--%>
+                                        <%-- Added By Vipul Tichakule on date 16/02/2024 --%>
+                                        <asp:ListBox runat="server" ID="ddlClgname" AppendDataBoundItems="true"
+                                            SelectionMode="Multiple" CssClass="form-control multi-select-demo" ></asp:ListBox>
+
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme.">
+                                        </asp:RequiredFieldValidator>
+                                    </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
@@ -86,6 +108,9 @@
                                             AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="ddlColg_SelectedIndexChanged"
                                             ToolTip="Please Select Institute.">
                                         </asp:DropDownList>
+
+
+
                                         <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlColg"
                                             Display="None" ErrorMessage="Please Select Institute" ValidationGroup="course"
                                             SetFocusOnError="True" InitialValue="0"></asp:RequiredFieldValidator>--%>
@@ -131,32 +156,23 @@
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
+                                            <sup></sup>
                                             <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" TabIndex="6" CssClass="form-control" data-select2-enable="true"
+                                        <%--  <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" TabIndex="6" CssClass="form-control" data-select2-enable="true"
                                             AutoPostBack="True" OnSelectedIndexChanged="ddlSem_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
+                                        </asp:DropDownList>--%>
+
+                                        <%-- Added By Vipul Tichakule on date 16/02/2024 --%>
+                                        <asp:ListBox runat="server" ID="ddlSem" SelectionMode="Multiple" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"
+                                            OnSelectedIndexChanged="ddlSem_SelectedIndexChanged"></asp:ListBox>
+
                                         <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSem" SetFocusOnError="true"
-                                            Display="None" ErrorMessage="Please Select Semester." InitialValue="0" ValidationGroup="course">
+                                            Display="None" ErrorMessage="Please Select Semester." InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <asp:Label ID="lblDYddlCourse" runat="server" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlCourse" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlCourse_SelectedIndexChanged"
-                                            TabIndex="7" CssClass="form-control" data-select2-enable="true">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-
-                                        <asp:RequiredFieldValidator ID="rfvCourse" runat="server" ControlToValidate="ddlCourse" SetFocusOnError="true"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select Course." ValidationGroup="course">
-                                        </asp:RequiredFieldValidator>
-                                    </div>
 
                                 </div>
                             </div>
@@ -176,7 +192,7 @@
 
 
                             <div class="col-md-12">
-                                <div class="row"  runat="server" id="MainDivSection" visible="false">
+                                <div class="row" runat="server" id="MainDivSection" visible="false">
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivSection" visible="false">
                                         <div class="label-dynamic">
@@ -189,9 +205,6 @@
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
 
-                                        <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSection" SetFocusOnError="true"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select Section." ValidationGroup="course">
-                                        </asp:RequiredFieldValidator>--%>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivBatch" visible="false">
@@ -216,6 +229,53 @@
                                         </asp:DropDownList>
                                     </div>
 
+
+
+                                    <%-- Added By Vipul Tichakule on date 16/02/2024 --%>
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivSortBy" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            <label>Sort By:</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSortBy" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSortBy_SelectedIndexChanged"
+                                            TabIndex="10" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            <asp:ListItem Value="1">RegNo</asp:ListItem>
+                                            <asp:ListItem Value="2">Name</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+
+
+
+                                    <div class="form-group col-lg-6 col-md-6 col-12" id="DivRange" runat="server">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <label>Range From</label>
+                                        </div>
+                                        <div class="form-inline">
+                                            <asp:TextBox ID="txtEnrollFrom" runat="server" CssClass="form-control" ValidationGroup="EnrollText" TabIndex="7" />
+                                            <asp:RequiredFieldValidator ID="rfvEnrollFrom" runat="server" ControlToValidate="txtEnrollFrom"
+                                                Display="None" ErrorMessage="Please Select Registration No From Range" ValidationGroup="Range"></asp:RequiredFieldValidator>
+
+                                            &nbsp;&nbsp;
+                                            <label>To</label>
+                                            &nbsp;&nbsp;
+
+                                            <asp:TextBox ID="txtEnrollTo" runat="server" CssClass="form-control" ValidationGroup="EnrollText" TabIndex="8" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtEnrollTo"
+                                                Display="None" ErrorMessage="Please Select Registration No To Range" ValidationGroup="Range"></asp:RequiredFieldValidator>&nbsp;&nbsp;
+                                          
+                                            <asp:Button ID="btnConfirm" runat="server" TabIndex="9" CssClass="btn btn-primary mt-2 ml-5" Text="Confirm Students" OnClick="btnConfirm_Click" ValidationGroup="Range" />
+                                            <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="Range"
+                                                ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <%-- end --%>
                                 </div>
                             </div>
 
@@ -263,6 +323,8 @@
                                                             <th>Section</th>
                                                             <th>Batch Name</th>
                                                             <th>Tutorial Batch Name</th>
+                                                            <th>Semester </th>
+                                                            <th>Scheme</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -277,9 +339,9 @@
                                                     <%#Container.DataItemIndex+1 %>
                                                 </td>
                                                 <td>
-                                                    <asp:CheckBox ID="cbRow" runat="server" onclick="totSubjects(this)" ToolTip='<%# Eval("IDNO")%>' /></td>
+                                                    <asp:CheckBox ID="cbRow" Text='<%# Container.DataItemIndex + 1 %>' runat="server" onclick="totSubjects(this)" ToolTip='<%# Eval("IDNO")%>' /></td>
                                                 <td>
-                                                    <asp:Label ID="lblREGNO" runat="server"> <%# Eval("REGNO")%></asp:Label>
+                                                     <asp:Label ID="lblREGNO" runat="server"> <%# Eval("REGNO")%></asp:Label>
                                                 </td>
                                                 <td>
                                                     <asp:Label ID="lblSTUDNAME" runat="server"> <%# Eval("STUDNAME")%></asp:Label>
@@ -290,10 +352,16 @@
                                                     </asp:DropDownList>--%>
                                                     <asp:Label ID="lblSectionName" runat="server" Text='<%# Eval("SECTIONNAME")%>'></asp:Label>
                                                 </td>
-                                                <td> 
-                                                 <asp:Label ID="lblBatchName" runat="server" Text='<%# Eval("BATCHNAME")%>'></asp:Label></td>
-                                                <td>  
+                                                <td>
+                                                    <asp:Label ID="lblBatchName" runat="server" Text='<%# Eval("BATCHNAME")%>'></asp:Label></td>
+                                                <td>
                                                     <asp:Label ID="lblTutBatchName" runat="server" Text='<%# Eval("TH_BATCHNAME")%>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblsemester" runat="server" Text='<%# Eval("SEMESTERNAME")%>' ToolTip='<%# Eval("SEMESTERNO")%>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblScheme" runat="server" Text='<%# Eval("SCHEMENAME")%>' ToolTip='<%# Eval("SCHEMENO")%>'></asp:Label>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
@@ -308,6 +376,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnReport" />
+            <asp:AsyncPostBackTrigger ControlID="btnConfirm" />
         </Triggers>
     </asp:UpdatePanel>
 
@@ -442,6 +511,31 @@
             }
 
         }
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.multi-select-demo').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 200,
+                enableFiltering: true,
+                filterPlaceholder: 'Search',
+                enableCaseInsensitiveFiltering: true,
+            });
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
+            $(document).ready(function () {
+                $('.multi-select-demo').multiselect({
+                    includeSelectAllOption: true,
+                    maxHeight: 200,
+                    enableFiltering: true,
+                    filterPlaceholder: 'Search',
+                    enableCaseInsensitiveFiltering: true,
+                });
+            });
+        });
     </script>
 
 </asp:Content>

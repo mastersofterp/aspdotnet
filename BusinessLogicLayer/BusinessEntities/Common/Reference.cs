@@ -54,6 +54,8 @@ namespace IITMS
 
                 private byte[] _collegeBanner = null; //added by tanu on dated 08-12-2022
 
+                private string _errorlogemail = string.Empty; //Added by Anurag Baghele on 15-02-2024 
+
                 #endregion
 
                 #region Public Properties
@@ -250,6 +252,12 @@ namespace IITMS
                 {
                     get { return _Admin_Level_Marks_Entry; }
                     set { _Admin_Level_Marks_Entry = value; }
+                }
+
+                public string Error_Log_Email
+                {
+                    get { return _errorlogemail; }
+                    set { _errorlogemail = value; }
                 }
 
                 #endregion

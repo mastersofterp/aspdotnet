@@ -714,7 +714,7 @@ public partial class Activity_SessionActivityDefinition : System.Web.UI.Page
         try
         {
             //DataSet ds = activityController.GetDefinedSessionActivities();
-             DataSet ds = activityController.GetDefinedSessionActivitiesFlag(flg);
+            DataSet ds = activityController.GetDefinedSessionActivitiesFlag(flg);
             if (ds != null && ds.Tables.Count > 0)
             {
                 lvSessionActivities.DataSource = ds;
@@ -1053,7 +1053,6 @@ public partial class Activity_SessionActivityDefinition : System.Web.UI.Page
 
             if (ViewState["sessionactivityno"].ToString() != string.Empty && ViewState["sessionactivityno"].ToString() == "0")
             {
-               
 
                 //cs = (CustomStatus)activityController.AddSessionActivity(sessionActivity, branches, semester, degrees, UserTypes, Convert.ToInt32(ddlCollege.SelectedValue));   //Commented on 2022 Aug 30
                 //css = (CustomStatus)activityController.AddSessionActivity_FOR_NOTIFICATION(sessionActivity, branches, semester, degrees, UserTypes, Notification_Template, userno, Convert.ToInt32(ddlCollege.SelectedValue)); //Commented on 2022 Aug 30
@@ -1072,7 +1071,7 @@ public partial class Activity_SessionActivityDefinition : System.Web.UI.Page
                         Boolean IsvalidForInsert = PreparingForInsertRecord(sessionActivityItem, ref branches, ref semester, ref degrees, ref UserTypes, CollegeId);
                         if (IsvalidForInsert)
                         {
-                            DataSet ds1 = activityController.AddSessionActivity(sessionActivityItem, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId,flg);  //flg added by injamam 28-2-23
+                            DataSet ds1 = activityController.AddSessionActivity(sessionActivityItem, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg);  //flg added by injamam 28-2-23
 
                             if (ds1.Tables.Count > 0)
                             {
@@ -1125,7 +1124,6 @@ public partial class Activity_SessionActivityDefinition : System.Web.UI.Page
                     Clear();
                     return;
                 }
-                
                 branches = branchesO; semester = semesterO; degrees = degreesO; UserTypes = UserTypesO;  //ReAssiging originalValues;
                 this.LoadDefinedSessionActivities();
             }
@@ -1149,7 +1147,7 @@ public partial class Activity_SessionActivityDefinition : System.Web.UI.Page
                 }
 
 
-                cs = (CustomStatus)activityController.UpdateSessionActivity(sessionActivity, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId,flg);  //Commented on 2022 Aug 30  //flg added on 28-2-23 by Injamam
+                cs = (CustomStatus)activityController.UpdateSessionActivity(sessionActivity, branches.TrimEnd(','), semester.TrimEnd(','), degrees.TrimEnd(','), UserTypes.TrimEnd(','), CollegeId, flg);  //Commented on 2022 Aug 30  //flg added on 28-2-23 by Injamam
                 //css = (CustomStatus)activityController.AddSessionActivity_FOR_NOTIFICATION(sessionActivity, branches, semester, degrees, UserTypes, Notification_Template, userno, Convert.ToInt32(ddlCollege.SelectedValue));  //Commented on 2022 Aug 30
 
                 this.LoadDefinedSessionActivities();
@@ -1176,7 +1174,6 @@ public partial class Activity_SessionActivityDefinition : System.Web.UI.Page
             else if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 objCommon.DisplayUserMessage(this.updSesActivity, "Sessional Activity Definition Updated Successfully!", this.Page);
-               
             }
             else
             {
@@ -1749,7 +1746,7 @@ public partial class Activity_SessionActivityDefinition : System.Web.UI.Page
             //objCommon.FillDropDownList(ddlActivity, "ACTIVITY_MASTER A LEFT JOIN ACD_SUBEXAM_NAME B ON(A.SUBEXAMNO=B.SUBEXAMNO) LEFT JOIN ACD_EXAM_PATTERN C ON (C.PATTERNNO=B.PATTERNNO) LEFT JOIN ACD_EXAM_NAME D ON (A.EXAMNO=D.EXAMNO) LEFT JOIN ACD_EXAM_NAME E ON (A.EXAMNO=E.EXAMNO)", "DISTINCT A.ACTIVITY_NO", "CONCAT(ACTIVITY_NAME,' - ',C.PATTERN_NAME ,' - ',B.SUBEXAMNAME) ACTIVITY_NAME", "(A.EXAMNO=" + Convert.ToInt32(ddlExamNo.SelectedValue) + " OR " + Convert.ToInt32(ddlExamNo.SelectedValue) + "=0) AND (A.SUBEXAMNO = " + Convert.ToInt32(ddlSubExamNo.SelectedValue) + " OR " + Convert.ToInt32(ddlSubExamNo.SelectedValue) + "=0) AND (D.PATTERNNO = " + Convert.ToInt32(ddlExamPattern.SelectedValue) + " OR " + Convert.ToInt32(ddlExamPattern.SelectedValue) + "=0)", "A.ACTIVITY_NO");  //Commened On 28-2-23 by Injamam
 
 
-            objCommon.FillDropDownList(ddlActivity, "ACTIVITY_MASTER A LEFT JOIN ACD_SUBEXAM_NAME B ON(A.SUBEXAMNO=B.SUBEXAMNO) LEFT JOIN ACD_EXAM_PATTERN C ON (C.PATTERNNO=B.PATTERNNO) LEFT JOIN ACD_EXAM_NAME D ON (A.EXAMNO=D.EXAMNO) LEFT JOIN ACD_EXAM_NAME E ON (A.EXAMNO=E.EXAMNO)", "DISTINCT A.ACTIVITY_NO", "CONCAT(ACTIVITY_NAME,' - ',C.PATTERN_NAME ,' - ',B.SUBEXAMNAME) ACTIVITY_NAME", "(A.EXAMNO=" + Convert.ToInt32(ddlExamNo.SelectedValue) + " OR " + Convert.ToInt32(ddlExamNo.SelectedValue) + "=0) AND (A.SUBEXAMNO = " + Convert.ToInt32(ddlSubExamNo.SelectedValue) + " OR " + Convert.ToInt32(ddlSubExamNo.SelectedValue) + "=0) AND (D.PATTERNNO = " + Convert.ToInt32(ddlExamPattern.SelectedValue) + " OR " + Convert.ToInt32(ddlExamPattern.SelectedValue) + "=0) AND (ISNULL(ASSIGN_TO,0)=0)", "A.ACTIVITY_NO");
+            objCommon.FillDropDownList(ddlActivity, "ACTIVITY_MASTER A LEFT JOIN ACD_SUBEXAM_NAME B ON(A.SUBEXAMNO=B.SUBEXAMNO) LEFT JOIN ACD_EXAM_PATTERN C ON (C.PATTERNNO=B.PATTERNNO) LEFT JOIN ACD_EXAM_NAME D ON (A.EXAMNO=D.EXAMNO) LEFT JOIN ACD_EXAM_NAME E ON (A.EXAMNO=E.EXAMNO)", "DISTINCT A.ACTIVITY_NO", "CONCAT(ACTIVITY_NAME,' - ',C.PATTERN_NAME ,' - ',B.SUBEXAMNAME) ACTIVITY_NAME", "(A.EXAMNO=" + Convert.ToInt32(ddlExamNo.SelectedValue) + " OR " + Convert.ToInt32(ddlExamNo.SelectedValue) + "=0) AND (A.SUBEXAMNO = " + Convert.ToInt32(ddlSubExamNo.SelectedValue) + " OR " + Convert.ToInt32(ddlSubExamNo.SelectedValue) + "=0) AND (D.PATTERNNO = " + Convert.ToInt32(ddlExamPattern.SelectedValue) + " OR " + Convert.ToInt32(ddlExamPattern.SelectedValue) + "=0) AND (ISNULL(ASSIGN_TO,0)=0) AND ISNULL(A.ACTIVESTATUS,0)=1", "A.ACTIVITY_NO");
         }
 
         catch (Exception ex)

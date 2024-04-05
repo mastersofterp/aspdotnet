@@ -11,7 +11,7 @@
                         </div>
                         <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
                     </div>
-                </div> 
+                </div>
             </ProgressTemplate>
         </asp:UpdateProgress>
     </div>
@@ -136,12 +136,19 @@
                                                             <asp:CheckBox ID="chkAll" runat="server" onclick="totAllSubjects(this);" />
                                                             All
                                                         </th>
+                                                           <th>Semester</th>
+                                                          <th>Branch Name</th>
 
+                                                        <th>PRN</th>
+                                                        
                                                         <th>Enrollment No.</th>
                                                         
                                                         <th>Student Name
                                                         </th>
-
+                                                              <th>Seat Type
+                                                        </th>
+                                                           <th>Scholarship Amount
+                                                        </th>
                                                             <th>Category
                                                             </th>
                                                          <th>Current Year Balance Fee
@@ -190,13 +197,34 @@
                                              
                                           </td>
 
+                                             <td>
+                                                <%--<asp:LinkButton ID="lnkbtnPrint" runat="server" Text='<%# Eval("REGNO") %>' CommandArgument='<%# Eval("REGNO") %>' />--%>
+                                                <asp:Label ID="lblsem" runat="server" Text='<%# Eval("SEMESTERNO")%>'  />
+                                            </td>
+                                             <td>
+                                                <%--<asp:LinkButton ID="lnkbtnPrint" runat="server" Text='<%# Eval("REGNO") %>' CommandArgument='<%# Eval("REGNO") %>' />--%>
+                                                <asp:Label ID="lblbranch" runat="server" Text='<%# Eval("LONGNAME")%>'  />
+                                            </td>
                                             <td>
                                                 <%--<asp:LinkButton ID="lnkbtnPrint" runat="server" Text='<%# Eval("REGNO") %>' CommandArgument='<%# Eval("REGNO") %>' />--%>
                                                 <asp:Label ID="lblregno" runat="server" Text='<%# Eval("REGNO")%>' ToolTip='<%# Eval("REGNO")%>' />
                                             </td>
+                                             <td>
+                                                <%--<asp:LinkButton ID="lnkbtnPrint" runat="server" Text='<%# Eval("REGNO") %>' CommandArgument='<%# Eval("REGNO") %>' />--%>
+                                                <asp:Label ID="lblroll" runat="server" Text='<%# Eval("ENROLLNO")%>' />
+                                            </td>
 
                                             <td>
                                                 <asp:Label ID="lblstudname" runat="server" Text='<%# Eval("STUDNAME") %>' ToolTip='<%# Eval("IDNO")%>' />
+                                                <%--<%# Eval("STUDNAME")%>--%>
+                                            </td>
+                                            
+                                            <td>
+                                                <asp:Label ID="lblseattype" runat="server" Text='<%# Eval("[SEAT TYPE]") %>'  />
+                                                <%--<%# Eval("STUDNAME")%>--%>
+                                            </td>
+                                              <td>
+                                                <asp:Label ID="lblschamt" runat="server" Text='<%# Eval("[SCHOLERSHIP AMOUNT]") %>'  />
                                                 <%--<%# Eval("STUDNAME")%>--%>
                                             </td>
                                             <td>

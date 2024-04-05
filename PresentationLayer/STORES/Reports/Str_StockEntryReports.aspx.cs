@@ -156,7 +156,7 @@ public partial class STORES_Reports_Str_StockEntryReports : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,STORES," + rptFileName;
            // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_FROM_DATE=" + fromDate + "," + "@P_TO_DATE=" + toDate;
-            url += "&param=@P_FROM_DATE=" + fromDate + "," + "@P_TO_DATE=" + toDate;
+            url += "&param=@P_FROM_DATE=" + fromDate + "," + "@P_TO_DATE=" + toDate;//+ ", @P_COLLEGE_CODE=" + Convert.ToInt32(Session["college_nos"]);
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
 

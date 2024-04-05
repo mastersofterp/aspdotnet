@@ -1320,7 +1320,35 @@ namespace IITMS
                     }
                     return retStatus;
                 }
-                public DateTime RetirementDate(int staffNo, DateTime birthDate)
+                public DateTime RetirementDate(int staffNo, DateTime birthDate, int OrganizationId)
+                {
+                    object ret = null;
+                    DateTime retireDate = DateTime.Now;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_STAFFNO", staffNo);
+                        if (!birthDate.Equals(DateTime.MinValue))
+                            objParams[1] = new SqlParameter("@P_DOB", birthDate);
+                        else
+                            objParams[1] = new SqlParameter("@P_DOB", DBNull.Value);
+
+                        objParams[2] = new SqlParameter("@P_OragnizationId", OrganizationId);
+
+                        ret = objSQLHelper.ExecuteScalarSP("PKG_EMP_SP_RET_RETIREMENTAGE", objParams);
+
+                        if (ret != null)
+                            retireDate = Convert.ToDateTime(ret);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.EmpCreateController.RetirementDate -> " + ex.ToString());
+                    }
+                    return retireDate;
+                }
+                public DateTime RetirementDateNew(int staffNo, DateTime birthDate)
                 {
                     object ret = null;
                     DateTime retireDate = DateTime.Now;
@@ -1334,8 +1362,7 @@ namespace IITMS
                             objParams[1] = new SqlParameter("@P_DOB", birthDate);
                         else
                             objParams[1] = new SqlParameter("@P_DOB", DBNull.Value);
-
-                        ret = objSQLHelper.ExecuteScalarSP("PKG_EMP_SP_RET_RETIREMENTAGE", objParams);
+                        ret = objSQLHelper.ExecuteScalarSP("PKG_EMP_SP_RET_RETIREMENTAGE_NEW", objParams);
 
                         if (ret != null)
                             retireDate = Convert.ToDateTime(ret);

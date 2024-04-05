@@ -348,7 +348,6 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
             //    return;
             //}
 
-
             #region CheckActivity
             if (semesterno == "") { semesterno = "0"; }
             string collegename = ddlSession.SelectedItem.Text.Trim() == string.Empty ? "0" : ddlSession.SelectedItem.Text.Trim();  //College fetch from database through
@@ -744,13 +743,22 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     }
                 }
 
-                if (lblESMarks.ToolTip.ToUpper().Equals("TRUE"))
+                //if (lblESMarks.ToolTip.ToUpper().Equals("TRUE"))    //Commented dt on 01112023 
+                //{
+                //    txtESMarks.Enabled = false;
+                //    btnLock.Enabled = false;
+                //    btnLastSave.Enabled = false;
+                //    btnFinalLock.Enabled = false;
+                //}
+
+                if (lblESMarks.ToolTip.ToUpper().Equals("1"))
                 {
                     txtESMarks.Enabled = false;
                     btnLock.Enabled = false;
                     btnLastSave.Enabled = false;
                     btnFinalLock.Enabled = false;
                 }
+                 
                 // COMMENTED BELOW LINES
                 //txtESMarks.Attributes.Add("onblur", " validateMarkTH(" + txtESMarks.ClientID + "," + lblESMarks.Text + "," + lblESMinMarks.Text + "," + txtTotMarks.ClientID + "," + txtTAMarks.ClientID + "," + txtTotMarksAll.ClientID + "," + txtTotPer.ClientID + "," + txtGrade.ClientID + "," + txtGradeP.ClientID + "," + hidTotMarksAll.ClientID + "," + hidTotPer.ClientID + "," + hidGrade.ClientID + "," + hidGradePoint.ClientID + "," + Scale + "," + totalmarks + ")");
                 // ENDS HERE COMMENTED LINES 
@@ -836,10 +844,10 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
             string gradepoint = string.Empty;
             string new_gdpoint = string.Empty;
             string gdpoint2 = string.Empty;
+            string gdpoint_result = string.Empty;
             #endregion
 
-
-
+             
             string exam = string.Empty; string que_out = string.Empty;
             CustomStatus cs = CustomStatus.Error;
             int courseno = 0;
@@ -869,9 +877,8 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 {
                     return;
                 }
-            }
+            } 
 
-            //    return;
             for (int j = 2; j < gvStudent.Columns.Count; j++)
             {
                 if (gvStudent.Columns[j].Visible == true)
@@ -883,6 +890,8 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     string Gpoint = string.Empty;
                     string totPer = string.Empty;
                     string FinalConversion = string.Empty;
+                    string Gdpoint_bind = string.Empty;
+                    string Gdpoint_V1 = string.Empty;
                     //string studids1 = string.Empty;
                     //string marks1 = string.Empty;
                     //Label lbl1;
@@ -902,8 +911,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     {
                         //Gather Student IDs 
                         lbl = gvStudent.Rows[i].FindControl("lblIDNO") as Label;
-
-
+                         
                         if (j == 4) //TH MARKS
                         {
 
@@ -917,12 +925,14 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                             HiddenField hidGrade = gvStudent.Rows[i].FindControl("hidGrade") as HiddenField;
                             HiddenField hidGradePoint = gvStudent.Rows[i].FindControl("hidGradePoint") as HiddenField;
                             HiddenField hidConversion = gvStudent.Rows[i].FindControl("hdfConversion") as HiddenField;
+                            HiddenField hidGdpoint = gvStudent.Rows[i].FindControl("hidGdpoint") as HiddenField;        //Added dt on 27032024
+
 
                             txtTotMarksAll = gvStudent.Rows[i].FindControl("txtTotMarksAll") as TextBox;
                             txtTotPer = gvStudent.Rows[i].FindControl("txtTotPer") as TextBox;
                             txtGrade = gvStudent.Rows[i].FindControl("txtGrade") as TextBox;
                             txtGradePoint = gvStudent.Rows[i].FindControl("txtGradePoint") as TextBox;
-
+                            
 
                             #region gdpoint
                             HiddenField abolishstud = gvStudent.Rows[i].FindControl("hdfAbolish") as HiddenField;
@@ -949,8 +959,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                             }
                             //parseFloat((parseFloat(INT) * 100) / parseFloat(hdfMaxCourseMarks_I));
                             #endregion
-
-
+                             
                             //logic for round up TA mark entry
                             if (txtMarks.Text != string.Empty)
                             {
@@ -999,14 +1008,13 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                             totPer += Convert.ToString(txtTotPer.Text).Trim() == string.Empty ? "-100," : Convert.ToString(txtTotPer.Text).Trim() + ",";
                             FinalConversion += Convert.ToString(hidConversion.Value).Trim() == string.Empty ? "-100," : Convert.ToString(hidConversion.Value).Trim() + ",";
                             //}
-
+                            Gdpoint_bind += Convert.ToString(hidGdpoint.Value).Trim() == string.Empty ? "-100," : Convert.ToString(hidGdpoint.Value).Trim() + ",";            //Added dt on 27032024
+                            Gdpoint_V1 += Convert.ToString(txtGradePoint.Text).Trim() == string.Empty ? "-100," : Convert.ToString(txtGradePoint.Text).Trim() + ",";        //Added dt on 27032024
 
                             percent = Convert.ToDecimal(txtTotPer.Text);                        //Added dt on 09092023
-                            gdpoint1 = Convert.ToString(hidGradePoint.Value).Trim();             //Added dt on 09092023
-
+                            gdpoint1 = Convert.ToString(hidGradePoint.Value).Trim();             //Added dt on 09092023 
                         }
-
-
+                         
                         string lgrade = string.Empty;
                         string max = string.Empty;
                         string min = string.Empty;
@@ -1043,61 +1051,60 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
 
 
                             #region gdpoint //Added dt on 09092023
-                            totmax = Convert.ToDecimal(txtmax.Text);
-                            totmin = Convert.ToDecimal(txtmin.Text);
+                            //totmax = Convert.ToDecimal(txtmax.Text);
+                            //totmin = Convert.ToDecimal(txtmin.Text);
 
-                            string[] separatingStrings = { "," };
-                            string[] words = point.Split(separatingStrings, System.StringSplitOptions.RemoveEmptyEntries);
+                            //string[] separatingStrings = { "," };
+                            //string[] words = point.Split(separatingStrings, System.StringSplitOptions.RemoveEmptyEntries);
 
-                            if (gdpoint1 == "" && studids != "" && marks != "")
-                            {
-                                if (abolish != "1")
-                                {
-                                    if (totpercent < Extpassing || Internalpass < Convert.ToDecimal(hdfMinPassMark_I.Value))
-                                    {
-                                        foreach (var count in words)
-                                        {
-                                            if (count == "0")
-                                            {
-                                                gradepoint = "0";
-                                                new_gdpoint += gradepoint + ",";
-                                            }
-                                        }
-                                    }
-                                    if (totpercent >= Extpassing && Internalpass >= Convert.ToDecimal(hdfMinPassMark_I.Value))
-                                    {
-                                        if (totpercent <= totmax && totpercent >= totmin)
-                                        {
-                                            gradepoint = txtpoint.Text.Trim();
-                                            new_gdpoint += gradepoint + ",";
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if ((totpercent) < Extpassing)
-                                    {
-                                        foreach (var count in words)
-                                        {
-                                            if (count == "0")
-                                            {
-                                                gradepoint = "0";
-                                                new_gdpoint += gradepoint + ",";
-                                            }
-                                        }
-                                    }
-                                    if (totpercent >= Extpassing)
-                                    {
-                                        if (totpercent <= totmax && totpercent >= totmin)
-                                        {
-                                            gradepoint = txtpoint.Text.Trim();
-                                            new_gdpoint += gradepoint + ",";
-                                        }
-                                    }
-                                }
-                            }
+                            //if (gdpoint1 == "" && studids != "" && marks != "")
+                            //{
+                            //    if (abolish != "1")
+                            //    {
+                            //        if (totpercent < Extpassing || Internalpass < Convert.ToDecimal(hdfMinPassMark_I.Value))
+                            //        {
+                            //            foreach (var count in words)
+                            //            {
+                            //                if (count == "0")
+                            //                {
+                            //                    gradepoint = "0";
+                            //                    new_gdpoint += gradepoint + ",";
+                            //                }
+                            //            }
+                            //        }
+                            //        if (totpercent >= Extpassing && Internalpass >= Convert.ToDecimal(hdfMinPassMark_I.Value))
+                            //        {
+                            //            if (totpercent <= totmax && totpercent >= totmin)
+                            //            {
+                            //                gradepoint = txtpoint.Text.Trim();
+                            //                new_gdpoint += gradepoint + ",";
+                            //            }
+                            //        }
+                            //    }
+                            //    else
+                            //    {
+                            //        if ((totpercent) < Extpassing)
+                            //        {
+                            //            foreach (var count in words)
+                            //            {
+                            //                if (count == "0")
+                            //                {
+                            //                    gradepoint = "0";
+                            //                    new_gdpoint += gradepoint + ",";
+                            //                }
+                            //            }
+                            //        }
+                            //        if (totpercent >= Extpassing)
+                            //        {
+                            //            if (totpercent <= totmax && totpercent >= totmin)
+                            //            {
+                            //                gradepoint = txtpoint.Text.Trim();
+                            //                new_gdpoint += gradepoint + ",";
+                            //            }
+                            //        }
+                            //    }
+                            //}
                             #endregion
-
 
                         }
 
@@ -1108,38 +1115,49 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                         string ConversionMarks = FinalConversion.TrimEnd(',');
                         string Scaledn_Percent = totPer.TrimEnd(',');
 
-
                         #region GradePoint
-                        if ((!string.IsNullOrEmpty(studids)) && (gdpoint1 == "" || gdpoint1 == "-100"))
-                        {
-                            gdpoint2 = new_gdpoint.TrimEnd(',');
-                        }
-                        else if ((!string.IsNullOrEmpty(studids)) && (gdpoint1 != "" && gdpoint1 != "-100"))
-                        {
-                            new_gdpoint += gdpoint1 + ",";
-                            gdpoint2 = new_gdpoint;
-                        }
-                        string gdpoint3 = gdpoint2.TrimEnd(',');
+                        //if ((!string.IsNullOrEmpty(studids)) && (gdpoint1 == "" || gdpoint1 == "-100"))
+                        //{
+                        //    gdpoint2 = new_gdpoint.TrimEnd(',');
+                        //}
+                        //else if ((!string.IsNullOrEmpty(studids)) && (gdpoint1 != "" && gdpoint1 != "-100"))
+                        //{
+                        //    new_gdpoint += gdpoint1 + ",";
+                        //    gdpoint2 = new_gdpoint;
+                        //}
+                        //string gdpoint3 = gdpoint2.TrimEnd(','); 
                         #endregion
 
+                        //Gdpoint_V1 = Gdpoint_V1.TrimEnd(',');
+
+                        //if (gdpoint1 == "" || gdpoint1 == "-100")
+                        //{
+                        //    gdpoint_result = Gdpoint_V1;
+                        //}
+                        //else
+                        //{
+                        //    gdpoint_result = Gdpoint;
+                        //}
+                         
                         if (!string.IsNullOrEmpty(studids))
                         {
                             //  cs = (CustomStatus)objMarksEntry.UpdateMarkEntryAll(Convert.ToInt32(ddlSession2.SelectedValue), courseno, ccode, studids, marks, totmarks, grade, Gpoint, totPer, lgrade, max, min, point, totStud, lock_status, exam, 0, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), "0", txtTitle.Text, Convert.ToInt16(Session["DEGREENO"].ToString()));
                             // cs = (CustomStatus)objMarksEntry.UpdateMarkEntryAllNew(Convert.ToInt32(ddlSession2.SelectedValue), courseno, ccode, studids, marks, totmarks, grade, Gpoint, totPer, lgrade, max, min, point, totStud, lock_status, exam, 0, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), "0", txtTitle.Text, Convert.ToInt16(Session["DEGREENO"].ToString()), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value), FinalConversion);
-
+                             
                             if (Session["usertype"].ToString() == "3")
                             {
-                                //    cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
-                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, gdpoint3, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                // cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                // cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), "115.99.17.252", Convert.ToInt32(Session["OrgId"]), grades, gdpoint3, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                 cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
                             }
                             else if (Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "7")
                             {
-                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, gdpoint3, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
                             }
                             else
                             {
-                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession2.SelectedValue), Convert.ToInt32(courseno), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["branchno"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, gdpoint3, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
-                            }
+                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession2.SelectedValue), Convert.ToInt32(courseno), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["branchno"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                            } 
                         }
                     }
                 }
@@ -1166,7 +1184,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 objCommon.DisplayMessage(this.UpdatePanel1, "Error in Saving Marks!", this.Page);
             }
             this.ShowStudents(courseno, Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value), "R.PREV_STATUS,R.REGNO");
-            if (ViewState["islock"].Equals("TRUE"))
+            if (ViewState["islock"].Equals("1"))
             {
                 btnLock.Enabled = false;
                 btnLastSave.Enabled = false;
@@ -1178,7 +1196,8 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 //Grade_SectionNo = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "COUNT(*)", "COURSENO=" + lblCourse.ToolTip + "AND SESSIONNO=" + ddlSession.SelectedValue + "AND SECTIONNO=" + Convert.ToInt16(hdfSection.Value)));
                 //if (Grade_SectionNo > 0)
                 //{
-                this.ShowGradesSection(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
+                //this.ShowGradesSection(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
+                this.GradesBind(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));         //Added dt on 27032024
                 //}
             }
             else
@@ -1186,11 +1205,12 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 //Grade_SectionNo = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "COUNT(*)", "COURSENO=" + lblCourse.ToolTip + "AND SESSIONNO=" + ddlSession.SelectedValue + "AND SECTIONNO=" + Convert.ToInt16(hdfSection.Value)));
                 //if (Grade_SectionNo > 0)
                 //{
-                this.ShowGradesSection(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
+                //this.ShowGradesSection(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
+                this.GradesBind(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));         //Added dt on 27032024
                 // }
             }
 
-            if (ViewState["islock"].Equals("TRUE"))
+            if (ViewState["islock"].Equals("1"))
             {
                 btnLock.Enabled = false;
                 btnLastSave.Enabled = false;
@@ -1452,7 +1472,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     Label lblESMarks = gvRow.FindControl("lblESMarks") as Label;
                     Label lblESMinMarks = gvRow.FindControl("lblESMinMarks") as Label;
 
-                    if (lblESMarks.ToolTip.ToUpper().Equals("TRUE"))
+                    if (lblESMarks.ToolTip.ToUpper().Equals("1"))
                     {
                         k = k + 1;
                         int count = gvStudent.Rows.Count;
@@ -1482,7 +1502,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     Label lblESMarks = gvRow.FindControl("lblESMarks") as Label;
                     Label lblESMinMarks = gvRow.FindControl("lblESMinMarks") as Label;
 
-                    if (lblESMarks.ToolTip.ToUpper().Equals("TRUE"))
+                    if (lblESMarks.ToolTip.ToUpper().Equals("1"))
                     {
                         k = k + 1;
                         int count = gvStudent.Rows.Count;
@@ -1656,7 +1676,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     Label lblESMarks = gvRow.FindControl("lblESMarks") as Label;
                     Label lblESMinMarks = gvRow.FindControl("lblESMinMarks") as Label;
 
-                    if (lblESMarks.ToolTip.ToUpper().Equals("TRUE"))
+                    if (lblESMarks.ToolTip.ToUpper().Equals("1"))
                     {
 
                         k = k + 1;
@@ -1687,7 +1707,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     Label lblESMarks = gvRow.FindControl("lblESMarks") as Label;
                     Label lblESMinMarks = gvRow.FindControl("lblESMinMarks") as Label;
 
-                    if (lblESMarks.ToolTip.ToUpper().Equals("TRUE"))
+                    if (lblESMarks.ToolTip.ToUpper().Equals("1"))
                     {
                         k = k + 1;
                         int count = gvStudent.Rows.Count;
@@ -1881,74 +1901,76 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                                 hdfMaxCourseMarks.Value = dsStudent.Tables[0].Rows[0]["MAXMARKS_E"].ToString();
                                 hdfMaxCourseMarks_I.Value = dsStudent.Tables[0].Rows[0]["MAXMARKS_I"].ToString();   // ADDED ON 11042022 FOR LAW
 
-                                ViewState["islock"] = Convert.ToBoolean(dsStudent.Tables[0].Rows[0]["LOCKE"].ToString()); //        //Commented dt on 31032023
+                                // ViewState["islock"] = Convert.ToBoolean(dsStudent.Tables[0].Rows[0]["LOCKE"].ToString());  
+                                ViewState["islock"] = dsStudent.Tables[0].Rows[0]["LOCKE"].ToString();
 
                                 ViewState["hdfMaxCourseMarks"] = dsStudent.Tables[0].Rows[0]["MAXMARKS_E"].ToString();
                                 ViewState["hdfMaxCourseMarks_I"] = dsStudent.Tables[0].Rows[0]["MAXMARKS_I"].ToString();
 
 
                                 //added by prafull on dt 10082022 for issue releted to save button
+                                //#region MarkLockCheck
+                                //for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                                //{
+                                //    if (Convert.ToInt32(dsStudent.Tables[0].Rows[i]["LOCKE"]) == 1)
+                                //    {
+                                //        lockcount++;
+                                //    }
+                                //}
 
-                                for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
-                                {
-                                    if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["LOCKE"]) == true)
-                                    {
-                                        lockcount++;
-                                    }
-                                }
+                                //for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                                //{
+                                //    if (Convert.ToInt32(dsStudent.Tables[0].Rows[i]["APPROVE_UA_NO_REV"]) == 1)
+                                //    {
+                                //        Approved++;
+                                //    }
+                                //}
+                                //#endregion
 
-                                for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
-                                {
-                                    if (Convert.ToInt32(dsStudent.Tables[0].Rows[i]["APPROVE_UA_NO_REV"]) == 1)
-                                    {
-                                        Approved++;
-                                    }
-                                }
+                                //ViewState["MarkLock"] = string.Empty;
+                                //if (dsStudent.Tables[0].Rows.Count == Convert.ToInt32(lockcount)) // Checking the Marks lock for All Students
+                                //{
+                                //    // btnLastSave.Visible = false;
+                                //    btnLock.Visible = false;
+                                //    btnLock.Enabled = false;
+                                //    btnLastSave.Enabled = false;
+                                //    //  btnFinalLock.Enabled = false;
+                                //    ViewState["MarkLock"] = "1";
+                                //}
+                                //else
+                                //{
+                                //    btnLastSave.Visible = true;    //Added dt on 10022023
+                                //    btnLock.Visible = true;       //Added dt on 10022023
+                                //    //Button2.Visible = true;
+                                //    //Button3.Visible = true;
+                                //    //Button4.Visible = true;
+                                //    btnSave.Enabled = true;
+                                //    btnLastSave.Enabled = true;
+                                //    // btnFinalLock.Enabled = true;
 
-                                ViewState["MarkLock"] = string.Empty;
-                                if (dsStudent.Tables[0].Rows.Count == Convert.ToInt32(lockcount)) // Checking the Marks lock for All Students
-                                {
-                                    // btnLastSave.Visible = false;
-                                    btnLock.Visible = false;
-                                    btnLock.Enabled = false;
-                                    btnLastSave.Enabled = false;
-                                    //  btnFinalLock.Enabled = false;
-                                    ViewState["MarkLock"] = "1";
-                                }
-                                else
-                                {
-                                    btnLastSave.Visible = true;    //Added dt on 10022023
-                                    btnLock.Visible = true;       //Added dt on 10022023
-                                    //Button2.Visible = true;
-                                    //Button3.Visible = true;
-                                    //Button4.Visible = true;
-                                    btnSave.Enabled = true;
-                                    btnLastSave.Enabled = true;
-                                    // btnFinalLock.Enabled = true;
+                                //    ////To Check Mark is null or 0
+                                //    //foreach (GridViewRow gvRow in gvStudent.Rows)
+                                //    //{ 
+                                //    //    TextBox txtMarks = gvRow.FindControl("txtESMarks") as TextBox;
+                                //    //    HiddenField hidConversion = gvRow.FindControl("hdfConversion") as HiddenField;
+                                //    //    if (txtMarks.Text.Equals("902.00") || txtMarks.Text.Equals("902") || txtMarks.Text.Equals("903.00") || txtMarks.Text.Equals("903") || txtMarks.Text.Equals("904.00") || txtMarks.Text.Equals("904") || txtMarks.Text.Equals("905.00") || txtMarks.Text.Equals("905"))
+                                //    //    {  
+                                //    //    }
+                                //    //    else if (hidConversion.Value == string.Empty || hidConversion.Value == "0.00")
+                                //    //    {
+                                //    //        txtMarks.Text = string.Empty;
+                                //    //    }
+                                //    //} 
+                                //}
 
-                                    ////To Check Mark is null or 0
-                                    //foreach (GridViewRow gvRow in gvStudent.Rows)
-                                    //{ 
-                                    //    TextBox txtMarks = gvRow.FindControl("txtESMarks") as TextBox;
-                                    //    HiddenField hidConversion = gvRow.FindControl("hdfConversion") as HiddenField;
-                                    //    if (txtMarks.Text.Equals("902.00") || txtMarks.Text.Equals("902") || txtMarks.Text.Equals("903.00") || txtMarks.Text.Equals("903") || txtMarks.Text.Equals("904.00") || txtMarks.Text.Equals("904") || txtMarks.Text.Equals("905.00") || txtMarks.Text.Equals("905"))
-                                    //    {  
-                                    //    }
-                                    //    else if (hidConversion.Value == string.Empty || hidConversion.Value == "0.00")
-                                    //    {
-                                    //        txtMarks.Text = string.Empty;
-                                    //    }
-                                    //} 
-                                }
-
-                                if (dsStudent.Tables[0].Rows.Count == Convert.ToInt32(Approved)) // Checking the Marks lock for All Students
-                                {
-                                    btnFinalLock.Enabled = false;
-                                }
-                                else
-                                {
-                                    btnFinalLock.Enabled = true;
-                                }
+                                //if (dsStudent.Tables[0].Rows.Count == Convert.ToInt32(Approved)) // Checking the Marks lock for All Students
+                                //{
+                                //    btnFinalLock.Enabled = false;
+                                //}
+                                //else
+                                //{
+                                //    btnFinalLock.Enabled = true;
+                                //}
 
 
                                 //commented by prafull on dt 10082022
@@ -1961,6 +1983,50 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
 
                         }
                     }
+                     
+                    #region MarkLockCheck
+                    for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                    {
+                        if (Convert.ToInt32(dsStudent.Tables[0].Rows[i]["LOCKE"]) == 1)
+                        {
+                            lockcount++;
+                        }
+                    }
+
+                    for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                    {
+                        if (Convert.ToInt32(dsStudent.Tables[0].Rows[i]["APPROVE_UA_NO_REV"]) == 1)
+                        {
+                            Approved++;
+                        }
+                    }
+                    ViewState["MarkLock"] = string.Empty;
+                    if (dsStudent.Tables[0].Rows.Count == Convert.ToInt32(lockcount)) // Checking the Marks lock for All Students
+                    { 
+                        btnLock.Visible = false;
+                        btnLock.Enabled = false;
+                        btnLastSave.Enabled = false; 
+                        ViewState["MarkLock"] = "1";
+                    }
+                    else
+                    {
+                        btnLastSave.Visible = true;    
+                        btnLock.Visible = true;     
+                        btnSave.Enabled = true;
+                        btnLastSave.Enabled = true; 
+                    }
+
+                    if (dsStudent.Tables[0].Rows.Count == Convert.ToInt32(Approved)) // Checking the Marks lock for All Students
+                    {
+                        btnFinalLock.Enabled = false;
+                    }
+                    else
+                    {
+                        btnFinalLock.Enabled = true;
+                    }
+                    #endregion
+
+
 
                     dtrExams.Close();
                     dtrExams.Dispose();
@@ -2794,8 +2860,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 //    objCommon.DisplayMessage(this.Page, "Record Not Found, Please Contact Admin", this.Page);
                 //}
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "alert", "CallButton();", true);
-
-
+                 
                 btnSave.Enabled = true;
                 btnLock.Enabled = true;
                 btnSave.Visible = true;
@@ -2918,8 +2983,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
         {
             //1 - means lock marks
             SaveAndLock1(1);
-        }
-
+        } 
     }
     protected void btnReject_Click(object sender, EventArgs e)
     {
@@ -2942,7 +3006,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
             objCommon.DisplayMessage(this.UpdatePanel1, "Server Error", this.Page);
         }
         this.ShowStudents(Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value), "R.PREV_STATUS,R.REGNO");
-        if (!ViewState["islock"].Equals("TRUE"))
+        if (!ViewState["islock"].Equals("1"))
         {
             btnLock.Enabled = false;
             btnLastSave.Enabled = false;
@@ -2957,7 +3021,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
         //{
         this.GradesBind(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
         //}
-        if (!ViewState["islock"].Equals("TRUE"))
+        if (!ViewState["islock"].Equals("1"))
         {
             btnLock.Enabled = false;
             btnLastSave.Enabled = false;
@@ -3029,7 +3093,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 objCommon.DisplayMessage(this.UpdatePanel1, "Server Error", this.Page);
             }
             this.ShowStudents(Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value), "R.PREV_STATUS,R.REGNO");
-            if (ViewState["islock"].Equals("TRUE"))
+            if (ViewState["islock"].Equals("1"))
             {
                 btnLock.Enabled = false;
                 btnLastSave.Enabled = false;
@@ -3041,7 +3105,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
             //{
             this.GradesBind(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
             // }
-            if (ViewState["islock"].Equals("TRUE"))
+            if (ViewState["islock"].Equals("1"))
             {
                 btnLock.Enabled = false;
                 btnLastSave.Enabled = false;
@@ -3086,4 +3150,62 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
         }
     }
 
+    public void RevalExcelReport()
+    {
+        try
+        {
+            string sp_proc = string.Empty; string sp_para = string.Empty; string sp_cValues = string.Empty;
+            DataSet ds = null;
+            int valuerno = 0;
+            if (Session["usertype"].ToString() == "3")
+            {
+                valuerno = Convert.ToInt32(Session["userno"]);
+            }
+            else
+            {
+                valuerno = Convert.ToInt32(hdfValueruano.Value);
+            }
+
+            sp_proc = "ACD_GET_REVAL_MARK_ENTRY_DETAILS_FACULTY";
+            sp_para = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_COURSENO,@P_UA_NO,@P_SECTIONNO";
+            sp_cValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(hdfSchemeNo.Value) + "," + Convert.ToInt32(hdfSemester.Value) + "," + Convert.ToInt32(lblCourse.ToolTip) + "," + valuerno + "," + Convert.ToString(hdfSection.Value) + "";
+            ds = objCommon.DynamicSPCall_Select(sp_proc, sp_para, sp_cValues);
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            { 
+                GridView gvMarks = new GridView();
+                gvMarks.DataSource = ds;
+                gvMarks.DataBind();
+
+                string attachment = "attachment; filename=RevalMarkEntryFacultyReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                //string attachment = "attachment; filename=" + degree.Replace(" ", "_") + "_" + branch.Replace(" ", "_") + "_" + ccode + "_" + txtAttDate.Text.Trim() + "_" + txtRecDate.Text.Trim() + ".xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/vnd.MS-excel";
+                //Response.ContentType = "application/pdf";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                gvMarks.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+            }
+            else
+            {
+                //this.ShowMessage("No information found based on given criteria.");
+                objCommon.DisplayMessage(this.UpdatePanel1, "No information found based on given criteria.", this.Page);
+            } 
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_Examination_EndSemMarkEntry.btnExcelReport_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+    protected void btnRevalExcelReport_Click(object sender, EventArgs e)
+    {
+        this.RevalExcelReport();      //Generate Excel Report 
+    }
 }

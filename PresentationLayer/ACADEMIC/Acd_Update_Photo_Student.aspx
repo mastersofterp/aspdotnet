@@ -3,7 +3,59 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <style>
+        #ctl00_ContentPlaceHolder1_lvUpdatePhoto_DataPager1 a:first-child,
+        #ctl00_ContentPlaceHolder1_lvUpdatePhoto_DataPager1 a:last-child {
+            padding: 5px 10px;
+            border-radius: 0%;
+            background: white;
+            margin: 0 0px;
+            box-shadow: none;
+        }
 
+        #ctl00_ContentPlaceHolder1_lvUpdatePhoto_DataPager1 a {
+            padding: 5px 10px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 0px;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 3px rgb(0 0 0 / 24%);
+        }
+
+        #ctl00_ContentPlaceHolder1_lvUpdatePhoto_DataPager1 span {
+            padding: 5px 10px;
+            border-radius: 50%;
+            background: #4183c4;
+            color: #fff;
+            margin: 0 0px;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 3px rgb(0 0 0 / 24%);
+        }
+
+        #ctl00_ContentPlaceHolder1_lvUpdateSign_DataPager2 a:first-child,
+        #ctl00_ContentPlaceHolder1_lvUpdateSign_DataPager2 a:last-child {
+            padding: 5px 10px;
+            border-radius: 0%;
+            background: white;
+            margin: 0 0px;
+            box-shadow: none;
+        }
+
+        #ctl00_ContentPlaceHolder1_lvUpdateSign_DataPager2 a {
+            padding: 5px 10px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 0px;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 3px rgb(0 0 0 / 24%);
+        }
+
+        #ctl00_ContentPlaceHolder1_lvUpdateSign_DataPager2 span {
+            padding: 5px 10px;
+            border-radius: 50%;
+            background: #4183c4;
+            color: #fff;
+            margin: 0 0px;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 3px rgb(0 0 0 / 24%);
+        }
+    </style>
     <div>
         <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="updBulkPhoto"
             DynamicLayout="true" DisplayAfter="0">
@@ -103,6 +155,7 @@
                                         <asp:RequiredFieldValidator ID="rfvformat" runat="server" ControlToValidate="rboStudent"
                                             Display="None" ErrorMessage="Please Select Photo or Signature Format" ValidationGroup="Acd"></asp:RequiredFieldValidator>
                                     </div>
+
                                 </div>
                             </ContentTemplate>
                         </asp:UpdatePanel>
@@ -123,33 +176,67 @@
                         <asp:ValidationSummary ID="vsSelection" runat="server" ShowMessageBox="true" ShowSummary="false"
                             DisplayMode="List" CssClass="btn btn-primary" ValidationGroup="Acd" />
                     </div>
+                    <div class="form-group col-lg-7 col-md-12 col-12">
+                        <div class=" note-div">
+                            <h5 class="heading">Note</h5>
+                            <p><i class="fa fa-star" aria-hidden="true"></i><span>Image types should be in .JPEG or .JPG format, with a maximum size limit of 150KB.</span></p>
+                        </div>
+                    </div>
+                    <%-- <div runat="server" id="divNote" visible="false">
+                        <span style="color: red; font-weight: bold">Note :- Image types should be in .JPEG or .JPG format, with a maximum size limit of 150KB</span>
 
+                    </div>--%>
                     <div class="col-12">
                         <asp:UpdatePanel runat="server" ID="UpdatePanel1">
                             <ContentTemplate>
                                 <asp:Panel ID="pnlUpdatePhoto" runat="server" Visible="false">
-                                    <asp:ListView ID="lvUpdatePhoto" runat="server">
+                                    <asp:ListView ID="lvUpdatePhoto" runat="server" OnItemDataBound="lvUpdatePhoto_ItemDataBound" OnPagePropertiesChanging="lvUpdatePhoto_PagePropertiesChanging">
                                         <LayoutTemplate>
                                             <div class="sub-heading">
                                                 <h5>Student List</h5>
                                             </div>
-                                            <table class="table table-striped table-bordered nowrap display-s" style="width: 100%" id="divsessionlist">
-                                                <thead class="bg-light-blue">
-                                                    <tr>
-                                                        <th><%--Enrollment No.--%>
-                                                            <asp:Label ID="lblDYlvEnrollmentNo" runat="server" Font-Bold="true"></asp:Label>
-                                                        </th>
-                                                        <th>Student Name</th>
-                                                        <th>Photo</th>
-                                                        <th>Update Photo</th>
-                                                        <%--     <th>Signature</th>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="input-group sea-rch">
+                                                    <%--<input type="text" id="FilterData2" class="form-control" placeholder="Search" />--%>
+                                                    <asp:TextBox ID="FilterData2" runat="server" TabIndex="1" CssClass="form-control" MaxLength="20" placeholder="Search" AutoPostBack="true" OnTextChanged="FilterData2_TextChanged"></asp:TextBox>
+
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-search"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="table-responsive" style="max-height: 520px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="MainLeadTable2">
+                                                    <thead class="bg-light-blue" style="position: sticky; z-index: 1; background: #fff!important; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
+                                                        <tr>
+                                                            <th><%--Enrollment No.--%>
+                                                                <asp:Label ID="lblDYlvEnrollmentNo" runat="server" Font-Bold="true"></asp:Label>
+                                                            </th>
+                                                            <th>Student Name</th>
+                                                            <th>Photo</th>
+                                                            <th>Update Photo</th>
+                                                            <%--     <th>Signature</th>
                                                 <th>Update Signature</th>--%>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr id="itemPlaceholder" runat="server" />
-                                                </tbody>
-                                            </table>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-12 pt-1 pb-2" id="Tfoot1" runat="server">
+                                                <div class="float-right">
+                                                    <asp:DataPager ID="DataPager1" runat="server" PagedControlID="lvUpdatePhoto" PageSize="25">
+                                                        <Fields>
+                                                            <asp:NextPreviousPagerField ButtonType="Link" ShowFirstPageButton="false" ShowPreviousPageButton="true"
+                                                                ShowNextPageButton="false" />
+                                                            <asp:NumericPagerField ButtonType="Link" />
+                                                            <asp:NextPreviousPagerField ButtonType="Link" ShowNextPageButton="true" ShowLastPageButton="false" ShowPreviousPageButton="false" />
+                                                        </Fields>
+                                                    </asp:DataPager>
+                                                </div>
+                                            </div>
                                         </LayoutTemplate>
                                         <ItemTemplate>
                                             <tr class="item">
@@ -187,28 +274,53 @@
                         <asp:UpdatePanel runat="server" ID="UpdatePanel2">
                             <ContentTemplate>
                                 <asp:Panel ID="pnlUpdateSign" runat="server" Visible="false">
-                                    <asp:ListView ID="lvUpdateSign" runat="server">
+                                    <asp:ListView ID="lvUpdateSign" runat="server" OnItemDataBound="lvUpdateSign_ItemDataBound" OnPagePropertiesChanging="lvUpdateSign_PagePropertiesChanging" >
                                         <LayoutTemplate>
                                             <div class="sub-heading">
                                                 <h5>Student List</h5>
                                             </div>
-                                            <table class="table table-striped table-bordered nowrap display-s" style="width: 100%" id="divsessionlist">
-                                                <thead class="bg-light-blue">
-                                                    <tr>
-                                                        <th><%--Enrollment No.--%>
-                                                            <asp:Label ID="lblDYlvEnrollmentNo" runat="server" Font-Bold="true"></asp:Label>
-                                                        </th>
-                                                        <th>Student Name</th>
-                                                        <%-- <th>Photo</th>
+                                             <div class="col-lg-3 col-md-6">
+                                                <div class="input-group sea-rch">
+                                                    <%--<input type="text" id="FilterData2" class="form-control" placeholder="Search" />--%>
+                                                    <asp:TextBox ID="FilterData1" runat="server" TabIndex="1" CssClass="form-control" MaxLength="20" placeholder="Search" AutoPostBack="true" OnTextChanged="FilterData2_TextChanged1"></asp:TextBox>
+
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-search"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="table-responsive" style="max-height: 520px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="MainLeadTable2">
+                                                    <thead class="bg-light-blue" style="position: sticky; z-index: 1; background: #fff!important; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
+                                                        <tr>
+                                                            <th><%--Enrollment No.--%>
+                                                                <asp:Label ID="lblDYlvEnrollmentNo" runat="server" Font-Bold="true"></asp:Label>
+                                                            </th>
+                                                            <th>Student Name</th>
+                                                            <%-- <th>Photo</th>
                                                 <th>Update Photo</th>--%>
-                                                        <th>Signature</th>
-                                                        <th>Update Signature</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr id="itemPlaceholder" runat="server" />
-                                                </tbody>
-                                            </table>
+                                                            <th>Signature</th>
+                                                            <th>Update Signature</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-12 pt-1 pb-2" id="Tfoot1" runat="server">
+                                                <div class="float-right">
+                                                    <asp:DataPager ID="DataPager2" runat="server" PagedControlID="lvUpdateSign" PageSize="25">
+                                                        <Fields>
+                                                            <asp:NextPreviousPagerField ButtonType="Link" ShowFirstPageButton="false" ShowPreviousPageButton="true"
+                                                                ShowNextPageButton="false" />
+                                                            <asp:NumericPagerField ButtonType="Link" />
+                                                            <asp:NextPreviousPagerField ButtonType="Link" ShowNextPageButton="true" ShowLastPageButton="false" ShowPreviousPageButton="false" />
+                                                        </Fields>
+                                                    </asp:DataPager>
+                                                </div>
+                                            </div>
                                         </LayoutTemplate>
                                         <ItemTemplate>
                                             <tr class="item">

@@ -163,6 +163,7 @@ public partial class PayRoll_Pay_Head : System.Web.UI.Page
                 txtFormula.Text = ds.Tables[0].Rows[0]["FORMULA"].ToString();
                 enabledisable(ds.Tables[0].Rows[0]["TYPE"].ToString());
                 chkperlock.Checked = Convert.ToBoolean(ds.Tables[0].Rows[0]["Isclearamount"].ToString());
+                chkIsLWPEffect.Checked = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsLWPEffect"].ToString());
             }
 
         }
@@ -194,6 +195,7 @@ public partial class PayRoll_Pay_Head : System.Web.UI.Page
             if (!(ddltype.SelectedValue.ToString() == "-1")) objpayhead.Type = ddltype.SelectedValue;
             objpayhead.Formula = txtFormula.Text;
             objpayhead.Isclearamount = chkperlock.Checked;
+            objpayhead.ISLWPEFFECT = chkIsLWPEffect.Checked;
             CustomStatus cs = (CustomStatus)objpay.UpdatePayHead(objpayhead);
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
@@ -250,6 +252,7 @@ public partial class PayRoll_Pay_Head : System.Web.UI.Page
         txtFullname.Text = null;
         txtFormula.Text = null;
         chkperlock.Checked = false;
+        chkIsLWPEffect.Checked = false;
         //txtseqno.Text = null;
 
     }

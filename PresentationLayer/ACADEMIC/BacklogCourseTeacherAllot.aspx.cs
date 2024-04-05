@@ -149,7 +149,7 @@ public partial class ACADEMIC_BacklogCourseTeacherAllot : System.Web.UI.Page
                     objCommon.DisplayMessage(this, "No Teacher found for this selection!", this.Page);
                 }
             }
-            else
+            else if (rdoSelect.SelectedValue == "2")
             {
                 DataSet ds = objAttendC.GetRedoCourseRegistrationList(sessionno, schemeno);
                 if (ds != null & ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -160,11 +160,21 @@ public partial class ACADEMIC_BacklogCourseTeacherAllot : System.Web.UI.Page
                     objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvBacklogCourse);//Set label   
                 }
                 else
-                {
                     objCommon.DisplayMessage(this, "No Teacher found for this selection!", this.Page);
-                }
             }
-
+            else
+            {
+                DataSet ds = objAttendC.GetImprovementCourseRegistrationList(sessionno, schemeno);
+                if (ds != null & ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    lvBacklogCourse.DataSource = ds;
+                    lvBacklogCourse.DataBind();
+                    divFaculty.Visible = true;
+                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvBacklogCourse);//Set label   
+                }
+                else
+                    objCommon.DisplayMessage(this, "No Teacher found for this selection!", this.Page);
+            }
         }
         catch
         {
@@ -264,9 +274,13 @@ public partial class ACADEMIC_BacklogCourseTeacherAllot : System.Web.UI.Page
                     {
                         CustomStatus cs = (CustomStatus)objAttendC.SaveBacklogCourseTeacherAllot(teacherUA_NO, courseno, Convert.ToInt32(sem.Value), college_id, sessionno, schemeno, courseCode.Value);
                     }
-                    else
+                    else if (rdoSelect.SelectedValue == "2")
                     {
                         CustomStatus cs = (CustomStatus)objAttendC.SaveRedoCourseTeacherAllot(teacherUA_NO, courseno, Convert.ToInt32(sem.Value), college_id, sessionno, schemeno, courseCode.Value);
+                    }
+                    else 
+                    {
+                        CustomStatus cs = (CustomStatus)objAttendC.SaveImprovementCourseTeacherAllot(teacherUA_NO, courseno, Convert.ToInt32(sem.Value), college_id, sessionno, schemeno, courseCode.Value);
                     }
                     //if (cs.Equals(CustomStatus.RecordSaved))
                     //{

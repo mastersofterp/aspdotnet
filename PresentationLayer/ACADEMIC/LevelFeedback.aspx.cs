@@ -1269,6 +1269,8 @@ public partial class LevelFeedback : System.Web.UI.Page
 
     public void fillquestion()
     {
+        div2.Visible = false;
+        lblNote.Text = string.Empty;
         pnlFeedback.Visible = false;
         pnlFinalSumbit.Visible = false;
         pnlSubmit.Visible = false;
@@ -1279,6 +1281,20 @@ public partial class LevelFeedback : System.Web.UI.Page
             lblcrse.Visible = false;
             lvSelected.DataSource = null;
             lvSelected.DataBind();
+
+            //Added by sakshi M on 14-03-2024
+            string Note = objCommon.LookUp("ACD_FEEDBACK_MASTER", "FEEDBACK_NOTE", "FEEDBACK_NO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
+            if (Note != string.Empty)
+            {
+                div2.Visible = true;
+                lblNote.Text = Note;
+            }
+            else
+            {
+                div2.Visible = false;
+                lblNote.Text = string.Empty;
+            }
+
             int mode = Convert.ToInt32(objCommon.LookUp("ACD_FEEDBACK_MASTER", "MODE_ID", "FEEDBACK_NO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue)));
             ViewState["MODE"] = mode;
             if (mode == 1)

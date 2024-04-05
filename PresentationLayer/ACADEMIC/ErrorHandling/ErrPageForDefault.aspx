@@ -16,6 +16,7 @@
                     <center><h3><b>Sorry, Something went wrong !</b></h3></center>
                     <center><h5>Error has been occured during process.</h5></center>
                     <center><h5>Please contact us and we will solve this issue ASAP.</h5></center>
+                    <center ><h5 runat="server" id="errormsg">Please send an Email with error details to <asp:Label style="color: #007bff;" ID="lblemail" runat="server"></asp:Label></h5></center>
                     <%--<center><a class="btn btn-primary"><i class="fa fa-reply" aria-hidden="true"></i> Back to Page</a></center>--%>
                     <center>
                         <asp:LinkButton ID="lbtnBackToPage" runat="server" CssClass="btn btn-primary" OnClick="lbtnBackToPage_Click"><i class="fa fa-reply" aria-hidden="true"></i>  Go to Login Page</asp:LinkButton>

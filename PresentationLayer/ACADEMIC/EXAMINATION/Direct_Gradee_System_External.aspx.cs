@@ -62,6 +62,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             lvCGPA.Visible = false;
             lvGrade.Visible = false;
             //Session["action"] = null;
+            
 
 
 
@@ -77,14 +78,14 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             string cheme = string.Empty;
             foreach (ListItem items in lstcollege.Items)
             {
-
+               
                 if (items.Selected == true)
                 {
                     cheme += items.Value + ",";
                     //cheme = items.Value;
                 }
             }
-            //= objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(lstcollege.SelectedValue));
+                //= objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(lstcollege.SelectedValue));
             cheme = cheme.TrimEnd(',');
             ds = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID", "COSCHNO in (" + cheme + ")", "");
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
@@ -93,8 +94,8 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                 {
                     //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
                     //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-                    // ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-                    schemeno += ds.Tables[0].Rows[i]["SCHEMENO"].ToString() + ',';
+                   // ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                    schemeno +=ds.Tables[0].Rows[i]["SCHEMENO"].ToString()+',';
                 }
             }
             schemeno = schemeno.TrimEnd(',');
@@ -137,7 +138,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             ViewState["id"] = string.Empty;
             int LEVEL = Convert.ToInt32(ddlLevel.SelectedValue);
             string SCHEMENO = ViewState["SchemeNo"].ToString();
-            int schmeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COSCHNO=" + lstcollege.SelectedValue));
+            int schmeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COSCHNO="+lstcollege.SelectedValue));
             DataSet ds = objexam.GetIDGRADESYSTEM(LEVEL, schmeno);
 
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
@@ -208,15 +209,15 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             {
                 objCommon.FillListBox(lstcollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
 
-                //objCommon.FillDropDownList(ddlCollegeScheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
-                // DataSet ds = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
-                // if (ds.Tables[0].Rows.Count > 0)
-                // {
-                //     lstcollege.DataSource = ds;
-                //     lstcollege.DataTextField = ds.Tables[0].Columns["COL_SCHEME_NAME"].ToString();
-                //     lstcollege.DataValueField = ds.Tables[0].Columns["COSCHNO"].ToString();
-                //     lstcollege.DataBind();
-                // }
+               //objCommon.FillDropDownList(ddlCollegeScheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
+               // DataSet ds = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + ViewState["College_ID"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID ASC");
+               // if (ds.Tables[0].Rows.Count > 0)
+               // {
+               //     lstcollege.DataSource = ds;
+               //     lstcollege.DataTextField = ds.Tables[0].Columns["COL_SCHEME_NAME"].ToString();
+               //     lstcollege.DataValueField = ds.Tables[0].Columns["COSCHNO"].ToString();
+               //     lstcollege.DataBind();
+               // }
             }
             //else
             //{
@@ -243,7 +244,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
     }
     protected void ddlLevel_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (lstcollege.SelectedIndex == 0)
+        if (lstcollege.SelectedIndex > 0 || lstcollege.SelectedIndex == 0)
         {
             if (ddlLevel.SelectedIndex == 0)
             {
@@ -337,6 +338,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             txtMaxRange.Text = "";
             txtIndicator.Text = "";
             chkStatus1.Checked = false;
+            lstcollege.SelectedIndex = -1;
 
         }
         foreach (ListViewDataItem item in lvGrade.Items)
@@ -349,7 +351,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
             txtRangeMax.Text = "";
             txtGraadePoint.Text = "";
             chkStatus.Checked = false;
-
+            lstcollege.SelectedIndex = -1;
         }
 
     }
@@ -372,7 +374,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
 
             if (count == 0)
             {
-                objCommon.DisplayMessage(this.updDirectGrade, "Please Enter the College/Scheme.", this.Page);
+                objCommon.DisplayMessage(this.updDirectGrade, "Please Enter the College/Scheme.", this.Page); 
             }
             else if (ddlLevel.SelectedIndex == 0)
             {
@@ -448,7 +450,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
                         }
                     }
 
-                    Clear();
+                    cleartext();
                     //listbox();
 
                 }
@@ -533,7 +535,7 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
         {
 
         }
-    }
+    } 
 
 
     protected void txtRangeMin_TextChanged(object sender, EventArgs e)
@@ -586,8 +588,8 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
         {
             lvGrade.Visible = false;
             lvCGPA.Visible = false;
-            ddlLevel.SelectedValue = "0";
-
+            ddlLevel.SelectedValue="0";
+        
 
         }
         else
@@ -596,5 +598,5 @@ public partial class ACADEMIC_EXAMINATION_Direct_Gradee_System : System.Web.UI.P
         }
     }
 
-
+   
 }

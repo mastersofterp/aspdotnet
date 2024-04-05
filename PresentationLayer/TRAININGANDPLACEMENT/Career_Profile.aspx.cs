@@ -44,6 +44,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     Panel panelfordropdown;
     string file_path = System.Configuration.ConfigurationManager.AppSettings["DirPath"].ToString();
     decimal File_size;
+    public string back = string.Empty;
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -57,6 +58,8 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     {
         try
         {
+            if (Request.QueryString["obj"] != null)   /// Eknath
+            { back = Request.QueryString["obj"].ToString().Trim(); }
             if (!Page.IsPostBack)
             {
                 //Check Session
@@ -298,6 +301,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         {
             txtEndPeriod.Enabled = false;
             imgDate2.Visible = false;
+            txtEndPeriod.Text = string.Empty;
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
         else
@@ -345,7 +349,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         txtStartPeriod.Text = string.Empty;
         txtEndPeriod.Text = string.Empty;
         chkCurrentlyWork.Checked = false;
-        RelevantDocWorkExperience.Text = string.Empty;
+      //  RelevantDocWorkExperience.Text = string.Empty;
         txtSalary.Text = string.Empty;
         TxtStipend.Text = string.Empty;
         ddlCurrency.SelectedValue = "0";
@@ -380,7 +384,102 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             int IDNO = Convert.ToInt32(Session["idno"]);
             int org = Convert.ToInt32(Session["OrgId"]);
             string RelevantDocument = string.Empty;
-            
+
+            //----------start---23-02-2024
+
+            if (RdWorkType.SelectedValue == "")
+            {
+                MessageBox("Please Select Work type.");
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+                return;
+            }
+
+            TPTraining objTpTraining = new TPTraining();
+            string file = string.Empty;
+            if (FileUploadWorkExp.HasFile)
+            {
+                if (FileTypeValid(System.IO.Path.GetExtension(FileUploadWorkExp.FileName)))
+                {
+                    if (FileUploadWorkExp.HasFile)
+                    {
+                        if (FileUploadWorkExp.FileContent.Length >= 1024 * 500)
+                        {
+
+                            MessageBox("File Size Should Not Be Greater Than 500 kb");
+                            FileUploadProject.Dispose();
+                            FileUploadProject.Focus();
+                            return;
+                        }
+                    }
+
+                    int req_id = 0;
+                    int reqid1 = 0;
+
+
+                    if (lblBlobConnectiontring.Text == "")
+                    {
+                        objTpTraining.IsBlob = 0;
+                    }
+                    else
+                    {
+                        objTpTraining.IsBlob = 1;
+                    }
+                    if (objTpTraining.IsBlob == 1)
+                    {
+                        string filename = string.Empty;
+                        string FilePath = string.Empty;
+                        // string IdNo = _idnoEmp.ToString();
+                        if (FileUploadWorkExp.HasFile)
+                        {
+                            string contentType = contentType = FileUploadWorkExp.PostedFile.ContentType;
+                            string ext = System.IO.Path.GetExtension(FileUploadWorkExp.PostedFile.FileName);
+                            string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            string[] split = FileUploadWorkExp.FileName.Split('.');
+                            string firstfilename = string.Join(".", split.Take(split.Length - 1));
+                            string lastfilename = split.Last();
+                            // filename = req_id + "_REQTRNO_" + time + ext;
+                            //  objTpTraining.ReleventDocument = firstfilename + "_File_" + time + "." + lastfilename;
+                            file = firstfilename + "_" + time + "." + lastfilename;
+                            if (FileUploadWorkExp.FileContent.Length <= 1024 * 10000)
+                            {
+                                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                                bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                                if (result == true)
+                                {
+
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, firstfilename + "_" + time + "." + lastfilename, FileUploadWorkExp);
+                                    if (retval == 0)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                        return;
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+
+
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                    FileUploadProject.Focus();
+                }
+            }
+
+            //---------end------23-02-2024
+
             if (chkCurrentlyWork.Checked)
             {
                 currentlyWorking = 1;
@@ -393,7 +492,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             {
                 WorkType = "E";
             }
-            else
+            else if (RdWorkType.SelectedValue == "2")
             {
                 WorkType = "I";
             }
@@ -463,31 +562,41 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                  {
                      SalaryType = 1;  //Salary For 1
                  }
-                 else
+                 else if (RdSalaeyType.SelectedValue == "2")
                  {
                      SalaryType = 2;  //Stipend for 2
                  }
+                 else
+                 {
+                     SalaryType = 0;
+                 }
             decimal Salary ;
             decimal Stipend;
-            if (txtSalary.Text==String.Empty)
+            if (SalaryType==2)
             {
+                Stipend = Convert.ToDecimal(TxtStipend.Text);
                 Salary = 0;
             }
-            else
+            else if (SalaryType == 1)
             {
-               Salary =Convert.ToDecimal( txtSalary.Text);
-               Stipend = 0;
-            }
-           //= Convert.ToDouble(TxtStipend.Text);
-            if (TxtStipend.Text == string.Empty)
-            {
+                Salary = Convert.ToDecimal(txtSalary.Text);
                 Stipend = 0;
             }
             else
             {
-                 Stipend = Convert.ToDecimal(TxtStipend.Text);
-                 Salary = 0;
+                Salary = 0;
+                Stipend = 0;
             }
+           //= Convert.ToDouble(TxtStipend.Text);
+            //if (TxtStipend.Text == string.Empty)
+            //{
+            //    Stipend = 0;
+            //}
+            //else
+            //{
+            //     Stipend = Convert.ToDecimal(TxtStipend.Text);
+            //     Salary = 0;
+            //}
             //if (RdSalaeyType.SelectedValue == "1")
             //{
 
@@ -503,13 +612,24 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             jobtitle = txtJobTitle.Text;
             location = txtLocation.Text;
             WorkSummery = txtDetails.Text;
-            RelevantDocument = RelevantDocWorkExperience.Text;
+            RelevantDocument = file;
             if (ViewState["action"].ToString().Equals("add"))
             {
 
-                CustomStatus cs = (CustomStatus)objCompany.InsWorkExperience(IDNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument, org);
+                DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_CP_STU_WORK_EXP]", "JOBTITLE", "IDNO", "COMPID='" + Convert.ToInt32(cmpid) + "'and WorkType='" + WorkType + "' and IDNO='" + IDNO + "'", "");
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+                    return;
+                }
+
+                CustomStatus cs = (CustomStatus)objCompany.InsWorkExperience(IDNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument, org,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
+
+                   
 
                     ViewState["action"] = "add";
                     objCommon.DisplayMessage(this.Page, "Record Saved Successfully.", this.Page);
@@ -523,7 +643,18 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (ViewState["WORKEXPNO"] != null)
                 {
                     int WORKEXPNO = Convert.ToInt32(ViewState["WORKEXPNO"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdWorkExperience(WORKEXPNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument);
+
+                    DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_CP_STU_WORK_EXP]", "JOBTITLE", "IDNO", "COMPID='" + Convert.ToInt32(cmpid) + "'and WorkType='" + WorkType + "' and IDNO='" + IDNO + "' and WORKEXPNO!='" + WORKEXPNO + "'", "");
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+                        return;
+                    }
+
+
+                    CustomStatus cs = (CustomStatus)objCompany.UpdWorkExperience(WORKEXPNO, currentlyWorking, WorkType, SalaryType, Salary, Stipend, currency, cmpid, JobSector, JobType, PositionType, WorkSummery, jobtitle, location, StartDate, EndDate, NrOfDays, RelevantDocument,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -603,20 +734,22 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 {
                     txtEndPeriod.Enabled = false;
                     imgDate2.Visible = false;
+                    chkCurrentlyWork.Checked = true;
                     //  ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
                 }
                 else
                 {
+                    chkCurrentlyWork.Checked = false;
                     txtEndPeriod.Text =ds.Tables[0].Rows[0]["EndDate"].ToString();
                 }
-                if (ds.Tables[0].Rows[0]["currentlyworking"].ToString() != null)
-                {
-                    chkCurrentlyWork.Checked = true;
-                }
-                else
-                {
-                    chkCurrentlyWork.Checked = false;
-                }
+                //if (ds.Tables[0].Rows[0]["currentlyworking"].ToString() != null)
+                //{
+                //    chkCurrentlyWork.Checked = true;
+                //}
+                //else
+                //{
+                //    chkCurrentlyWork.Checked = false;
+                //}
 
                 //if (Convert.ToInt32(ds.Tables[0].Rows[0]["currentlyworking"]) == 0)
                 //{
@@ -627,23 +760,36 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 //    chkCurrentlyWork.Checked = true;
                 //}
 
-                RelevantDocWorkExperience.Text = ds.Tables[0].Rows[0]["RelevantDocument"].ToString();
+            //    RelevantDocWorkExperience.Text = ds.Tables[0].Rows[0]["RelevantDocument"].ToString();
                 string salarytype = ds.Tables[0].Rows[0]["SalaryType"].ToString();
                 if (salarytype=="2")
                 {
                     RdSalaeyType.SelectedValue = "2";
                     divCurrency.Visible = true;
                     divStipend.Visible = true;
+                    TxtStipend.Text = ds.Tables[0].Rows[0]["Stipend"].ToString();
+                    ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["currency"].ToString();
                 }
-                else
+                else if (salarytype == "1")
                 {
                     RdSalaeyType.SelectedValue = "1";
                     divSalary.Visible = true;
                     divCurrency.Visible = true;
+                    txtSalary.Text = ds.Tables[0].Rows[0]["Salary"].ToString();
+                    ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["currency"].ToString();
                 }
-                txtSalary.Text = ds.Tables[0].Rows[0]["Salary"].ToString();
-                TxtStipend.Text = ds.Tables[0].Rows[0]["Stipend"].ToString();
-                ddlCurrency.SelectedValue = ds.Tables[0].Rows[0]["currency"].ToString();
+                else if (salarytype == "0")
+                {
+                    RdSalaeyType.SelectedValue = null;
+                    divSalary.Visible = false;
+                    divCurrency.Visible = false;
+                    txtSalary.Text = string.Empty;
+                    TxtStipend.Text = string.Empty;
+                    ddlCurrency.SelectedValue = "0";
+                }
+                
+               
+             
                 ////  this.fuCollegeLogo = ds.Tables[0].Rows[0]["LOGO"].ToString();
                 //objCommon.FillDropDownList(ddlJobSector, "ACD_TP_JOBSECTOR", "JOBSECNO", "JOBSECTOR", "", "JOBSECTOR");
                 //ddlJobSector.SelectedValue = ds.Tables[0].Rows[0]["JOBSECNO"].ToString();
@@ -719,7 +865,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -742,7 +888,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int IDNO = 0;
 
                     int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
-                    CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO);
+                    CustomStatus cs = (CustomStatus)objCompany.InsTechnicalSkill(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -840,6 +986,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         ddlProficiency.SelectedValue = "0";
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
     }
+    public void MessageBox(string msg)
+    {
+        ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
+    }
 
     protected void btnSubmitProject_Click(object sender, EventArgs e)
     {
@@ -856,8 +1006,98 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
+            //----------start---23-02-2024
+
+            TPTraining objTpTraining = new TPTraining();
+            string file = string.Empty;
+            if (FileUploadProject.HasFile)
+            {
+                if (FileTypeValid(System.IO.Path.GetExtension(FileUploadProject.FileName)))
+                {
+                    if (FileUploadProject.HasFile)
+                    {
+                        if (FileUploadProject.FileContent.Length >= 1024 * 500)
+                        {
+
+                            MessageBox("File Size Should Not Be Greater Than 500 kb");
+                            FileUploadProject.Dispose();
+                            FileUploadProject.Focus();
+                            return;
+                        }
+                    }
+
+                    int req_id = 0;
+                    int reqid1 = 0;
+
+
+                    if (lblBlobConnectiontring.Text == "")
+                    {
+                        objTpTraining.IsBlob = 0;
+                    }
+                    else
+                    {
+                        objTpTraining.IsBlob = 1;
+                    }
+                    if (objTpTraining.IsBlob == 1)
+                    {
+                        string filename = string.Empty;
+                        string FilePath = string.Empty;
+                        // string IdNo = _idnoEmp.ToString();
+                        if (FileUploadProject.HasFile)
+                        {
+                            string contentType = contentType = FileUploadProject.PostedFile.ContentType;
+                            string ext = System.IO.Path.GetExtension(FileUploadProject.PostedFile.FileName);
+                            string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            string[] split = FileUploadProject.FileName.Split('.');
+                            string firstfilename = string.Join(".", split.Take(split.Length - 1));
+                            string lastfilename = split.Last();
+                            // filename = req_id + "_REQTRNO_" + time + ext;
+                            //  objTpTraining.ReleventDocument = firstfilename + "_File_" + time + "." + lastfilename;
+                            file = firstfilename + "_" + time + "." + lastfilename;
+                            if (FileUploadProject.FileContent.Length <= 1024 * 10000)
+                            {
+                                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                                bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                                if (result == true)
+                                {
+
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, firstfilename + "_" + time + "." + lastfilename, FileUploadProject);
+                                    if (retval == 0)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                        return;
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+
+
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                    FileUploadProject.Focus();
+                }
+            }
+
+            //---------end------23-02-2024
+
             if (ViewState["action"].ToString().Equals("add"))
             {
+               
+
                 int id = 0;
                 objTPT.ProjectTitle=txtProjectTitle.Text;
                 objTPT.ProjectDomian=txtProjectDomian.Text;
@@ -876,11 +1116,12 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
                 objTPT.Descripition = txtDescription.Text;
 
-                objTPT.ReleventDocument1 = RelevantDocProject.Text;
-
+                objTPT.ReleventDocument1 = file;
+                objTPT.Hr = txtHr.Text.Trim().Equals(string.Empty) ? string.Empty : txtHr.Text.Trim().ToString();
+                objTPT.CompLoc = txtCompLoc.Text.Trim().Equals(string.Empty) ? string.Empty : txtCompLoc.Text.Trim().ToString();
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsUpdProject(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsUpdProject(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -913,11 +1154,13 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     }
                     objTPT.Descripition = txtDescription.Text;
 
-                    objTPT.ReleventDocument1 = RelevantDocProject.Text;
+                    objTPT.ReleventDocument1 = file;
+                    objTPT.Hr = txtHr.Text.Trim().Equals(string.Empty) ? string.Empty : txtHr.Text.Trim().ToString();
+                    objTPT.CompLoc = txtCompLoc.Text.Trim().Equals(string.Empty) ? string.Empty : txtCompLoc.Text.Trim().ToString();
                     int IDNO =0;
                    // int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdProjects(objTPT, org, id, IDNO);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdProjects(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -937,13 +1180,28 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
     }
-   
+
+    public bool FileTypeValid(string FileExtention)
+    {
+        bool retVal = false;
+        string[] Ext = { ".pdf", ".PDF"};
+        foreach (string ValidExt in Ext)
+        {
+            if (FileExtention == ValidExt)
+            {
+                retVal = true;
+            }
+        }
+        return retVal;
+    }  
+
     protected void chcurrwntlywork_CheckedChanged(object sender, EventArgs e)
     {
         if (chcurrwntlywork.Checked == true)
         {
             txtEndDate.Enabled = false;
             Div2.Visible = false;
+            txtEndDate.Text = string.Empty;
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
         else
@@ -967,9 +1225,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         txtEndDate.Text = string.Empty;
         chcurrwntlywork.Checked = false;
         txtDescription.Text = string.Empty;
-        RelevantDocProject.Text = string.Empty;
+        //RelevantDocProject.Text = string.Empty;
         txtEndDate.Enabled = true;
         Div2.Visible = true;
+        txtHr.Text = string.Empty;
+        txtCompLoc.Text = string.Empty;
     }
 
     protected void BindProjectDetails(int idno)
@@ -1052,7 +1312,9 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     chcurrwntlywork.Checked = true;
                 }
                 txtDescription.Text = ds.Tables[0].Rows[0]["DESCRIPTION"].ToString();
-                RelevantDocProject.Text = ds.Tables[0].Rows[0]["UPLOAD_RELEVANT_DOCUMENT"].ToString();
+                txtHr.Text = ds.Tables[0].Rows[0]["HR"].ToString();
+                txtCompLoc.Text = ds.Tables[0].Rows[0]["CompanyLocation"].ToString();
+             //   RelevantDocProject.Text = ds.Tables[0].Rows[0]["UPLOAD_RELEVANT_DOCUMENT"].ToString();
 
 
 
@@ -1082,6 +1344,94 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
+            //----------start---23-02-2024
+
+            TPTraining objTpTraining = new TPTraining();
+            string file = string.Empty;
+            if (FileUploadCertification.HasFile)
+            {
+                if (FileTypeValid(System.IO.Path.GetExtension(FileUploadCertification.FileName)))
+                {
+                    if (FileUploadCertification.HasFile)
+                    {
+                        if (FileUploadCertification.FileContent.Length >= 1024 * 500)
+                        {
+
+                            MessageBox("File Size Should Not Be Greater Than 500 kb");
+                            FileUploadCertification.Dispose();
+                            FileUploadCertification.Focus();
+                            return;
+                        }
+                    }
+
+                    int req_id = 0;
+                    int reqid1 = 0;
+
+
+                    if (lblBlobConnectiontring.Text == "")
+                    {
+                        objTpTraining.IsBlob = 0;
+                    }
+                    else
+                    {
+                        objTpTraining.IsBlob = 1;
+                    }
+                    if (objTpTraining.IsBlob == 1)
+                    {
+                        string filename = string.Empty;
+                        string FilePath = string.Empty;
+                        // string IdNo = _idnoEmp.ToString();
+                        if (FileUploadCertification.HasFile)
+                        {
+                            string contentType = contentType = FileUploadCertification.PostedFile.ContentType;
+                            string ext = System.IO.Path.GetExtension(FileUploadCertification.PostedFile.FileName);
+                            string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            string[] split = FileUploadCertification.FileName.Split('.');
+                            string firstfilename = string.Join(".", split.Take(split.Length - 1));
+                            string lastfilename = split.Last();
+                            // filename = req_id + "_REQTRNO_" + time + ext;
+                            //  objTpTraining.ReleventDocument = firstfilename + "_File_" + time + "." + lastfilename;
+                            file = firstfilename + "_" + time + "." + lastfilename;
+                            if (FileUploadCertification.FileContent.Length <= 1024 * 10000)
+                            {
+                                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                                bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                                if (result == true)
+                                {
+
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, firstfilename + "_" + time + "." + lastfilename, FileUploadCertification);
+                                    if (retval == 0)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                        return;
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+
+
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                    FileUploadProject.Focus();
+                }
+            }
+
+            //---------end------23-02-2024
+
             if (ViewState["action"].ToString().Equals("add"))
             {
                 int id = 0;
@@ -1100,11 +1450,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.CurrentlyWork1 = 0;
                 }
 
-                objTPT.ReleventDocument2 = RelevantDocCertification.Text;
+                objTPT.ReleventDocument2 = file;
 
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsUpdCertificate(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsUpdCertificate(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1136,11 +1486,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                         objTPT.CurrentlyWork1 = 0;
                     }
 
-                    objTPT.ReleventDocument2 = RelevantDocCertification.Text;
+                    objTPT.ReleventDocument2 = file;
                     int IDNO = 0;
                      IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdCertification(objTPT,  org,  id,  IDNO);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdCertification(objTPT,  org,  id,  IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -1169,7 +1519,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         txtFromDate.Text = string.Empty;
         txtToDate.Text = string.Empty;
         chkCertification.Checked = false;
-        RelevantDocCertification.Text = string.Empty;
+        //RelevantDocCertification.Text = string.Empty;
         txtToDate.Enabled = true;
         Div4.Visible = true;
     }
@@ -1252,7 +1602,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     Div4.Visible = true;
                     txtToDate.Text = ds.Tables[0].Rows[0]["TO_DATE"].ToString();
                 }
-                RelevantDocCertification.Text = ds.Tables[0].Rows[0]["UPLOAD_RELEVANT_DOCUMENT"].ToString();
+                //RelevantDocCertification.Text = ds.Tables[0].Rows[0]["UPLOAD_RELEVANT_DOCUMENT"].ToString();
 
 
 
@@ -1290,9 +1640,32 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objTPT.Proficiency =Convert.ToInt32( ddlProficiencyLanguage.SelectedValue);
                 objTPT.ReleventDocument3 = RelevantDocLanguage.Text;
 
+                //added by amit pandey
+                if (chkReadLang.Checked)
+                {
+                    objTPT.Read = 1;
+                }
+                if (chkWriteLang.Checked)
+                {
+                    objTPT.Write = 1;
+                }
+                if (chkSpeakLang.Checked)
+                {
+                    objTPT.Speak = 1;
+                }
+
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsLanguage(objTPT, org, id, IDNO);
+                DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_LANGUAGES]", "LAUGUAGE", "IDNO", "LAUGUAGE='" + Convert.ToInt32(ddlLauguage.SelectedValue) + "' and IDNO='" + IDNO + "'", "");
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                    return;
+                }
+
+                CustomStatus cs = (CustomStatus)objCompany.InsLanguage(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1312,10 +1685,33 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     objTPT.language = Convert.ToInt32(ddlLauguage.SelectedValue);
                     objTPT.Proficiency = Convert.ToInt32(ddlProficiencyLanguage.SelectedValue);
                     objTPT.ReleventDocument3 = RelevantDocLanguage.Text;
+
+                    //added by amit pandey
+                    if (chkReadLang.Checked)
+                    {
+                        objTPT.Read = 1;
+                    }
+                    if (chkWriteLang.Checked)
+                    {
+                        objTPT.Write = 1;
+                    }
+                    if (chkSpeakLang.Checked)
+                    {
+                        objTPT.Speak = 1;
+                    }
+
                     int IDNO = 0;
                     IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdLanguage(objTPT, org, id, IDNO);
+                    DataSet ds = objCommon.FillDropDown("[dbo].[ACD_TP_LANGUAGES]", "LAUGUAGE", "IDNO", "LAUGUAGE='" + Convert.ToInt32(ddlLauguage.SelectedValue) + "' and IDNO='" + IDNO + "' and L_ID!='" + id + "'", "");
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Record Already Exist.", this.Page);
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                        return;
+                    }
+                    CustomStatus cs = (CustomStatus)objCompany.UpdLanguage(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -1340,6 +1736,9 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         ddlLauguage.SelectedValue = "0";
         ddlProficiencyLanguage.SelectedValue = "0";
         RelevantDocLanguage.Text = string.Empty;
+        chkReadLang.Checked = false;
+        chkSpeakLang.Checked = false;
+        chkWriteLang.Checked = false;
     }
     protected void BindLanguageDetails(int idno)
     {
@@ -1367,6 +1766,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         try
         {
             ImageButton btnEdit = sender as ImageButton;
+            clearLang();
             int Language = int.Parse(btnEdit.CommandArgument);
             ViewState["Language"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
@@ -1392,12 +1792,22 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             if (ds.Tables[0].Rows.Count > 0)
             {
 
-
-
                 ddlLauguage.SelectedValue = ds.Tables[0].Rows[0]["LAUGUAGE"].ToString();
                 ddlProficiencyLanguage.SelectedValue = ds.Tables[0].Rows[0]["Proficiency"].ToString();
                 RelevantDocLanguage.Text = ds.Tables[0].Rows[0]["UPLOAD_RELEVANT_DOCUMENT"].ToString();
-
+                //added by amit pandey
+                if (ds.Tables[0].Rows[0]["Read"].ToString() == "True")
+                {
+                    chkReadLang.Checked = true;
+                }
+                if (ds.Tables[0].Rows[0]["Write"].ToString() == "True")
+                {
+                    chkWriteLang.Checked = true;
+                }
+                if (ds.Tables[0].Rows[0]["Speak"].ToString() == "True")
+                {
+                    chkSpeakLang.Checked = true;
+                }
 
 
             }
@@ -1460,10 +1870,10 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                   objTPT.Given_By = txtGivenBy.Text;
                   objTPT.Level = Convert.ToInt32(ddlLevel.SelectedValue);
                 objTPT.ReleventDocument4 = RelevantDocAward.Text;
-
+                int IsAdmin = 0;
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsAWARDS_RECOGNITIONS(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsAWARDS_RECOGNITIONS(objTPT, org, id, IDNO, IsAdmin);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1487,7 +1897,8 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int IDNO = 0;
                     IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdAWARDS_RECOGNITIONS(objTPT, org, id, IDNO);
+                    int IsAdmin = 0;
+                    CustomStatus cs = (CustomStatus)objCompany.UpdAWARDS_RECOGNITIONS(objTPT, org, id, IDNO, IsAdmin);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -1495,6 +1906,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                         clearAward();
                         int IDNO1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
                         BindAwardsDetails(IDNO1);
+
 
                     }
                 }
@@ -1515,6 +1927,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         txtGivenBy.Text = string.Empty;
         ddlLevel.SelectedValue = "0";
         RelevantDocAward.Text = string.Empty;
+        ViewState["AR_ID"] = null;
     }
     protected void BindAwardsDetails(int idno)
     {
@@ -1617,7 +2030,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsCompetitions(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsCompetitions(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1644,7 +2057,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int IDNO = 0;
                     IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdCOMPETITIONS(objTPT, org, id, IDNO);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdCOMPETITIONS(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -1786,7 +2199,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsTrainingAndWorkshop(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsTrainingAndWorkshop(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -1811,7 +2224,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int IDNO = 0;
                     IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                     int org = Convert.ToInt32(Session["OrgId"]);
-                    CustomStatus cs = (CustomStatus)objCompany.UpdTrainingAndWorkshop(objTPT, org, id, IDNO);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdTrainingAndWorkshop(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -2036,7 +2449,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                   
 
                 //}
-                CustomStatus cs = (CustomStatus)objCompany.InsTestScores(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsTestScores(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -2063,7 +2476,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int org = Convert.ToInt32(Session["OrgId"]);
 
                
-                    CustomStatus cs = (CustomStatus)objCompany.UpdTestScores(objTPT, org, id, IDNO);
+                    CustomStatus cs = (CustomStatus)objCompany.UpdTestScores(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -2210,6 +2623,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         if (chkCertification.Checked == true)
         {
             txtToDate.Enabled = false;
+            txtToDate.Text = string.Empty;
             Div4.Visible = false;
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
@@ -2288,67 +2702,96 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         }
         if (UploadResume.HasFile == true)
         {
-            string fileName = System.Guid.NewGuid().ToString() + UploadResume.FileName.Substring(UploadResume.FileName.IndexOf('.'));
-            string fileExtention = System.IO.Path.GetExtension(fileName);
-            string ext = System.IO.Path.GetExtension(UploadResume.PostedFile.FileName);
-
-            int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
-            int sub_no = Convert.ToInt32(objCommon.LookUp("ACD_TP_STUDENT_REGISTRATION", "STUREGNO", "IDNO='"+IDNO+"'"));
-            string ResumeName = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'");
-            filename = sub_no + "_"+ResumeName +"_"+ sub_no;
-
-            //objTPT.ReleventDocument8 = sub_no + "_Resume_" + sub_no + ext;
-
-            objTPT.ReleventDocument8 = filename + ext;
-           // filename += ext;
-
-            if (UploadResume.HasFile == true)
+            TPTraining objTpTraining = new TPTraining();
+            string file = string.Empty;
+            if (FileTypeValid(System.IO.Path.GetExtension(UploadResume.FileName)))
             {
-
-              //  objTPT.ReleventDocument8 = UploadResume.FileName;
-
-                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
-                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
-                result1 = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
-
-                if (result1 == true)
+                if (UploadResume.HasFile)
                 {
-
-                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, filename, UploadResume);
-                    if (retval == 0)
+                    if (UploadResume.FileContent.Length >= 1024 * 500)
                     {
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+
+                        MessageBox("File Size Should Not Be Greater Than 500 kb");
+                        FileUploadProject.Dispose();
+                        FileUploadProject.Focus();
                         return;
                     }
+                }
 
-                  //  objTPT.ReleventDocument8 = UploadResume.FileName;
+                int req_id = 0;
+                int reqid1 = 0;
 
 
+                if (lblBlobConnectiontring.Text == "")
+                {
+                    objTpTraining.IsBlob = 0;
                 }
                 else
                 {
-                    objTPT.ReleventDocument8 = UploadResume.FileName;
-
+                    objTpTraining.IsBlob = 1;
                 }
+                if (objTpTraining.IsBlob == 1)
+                {
+                    //string filename = string.Empty;
+                    //string FilePath = string.Empty;
+                    // string IdNo = _idnoEmp.ToString();
+                    if (UploadResume.HasFile)
+                    {
+                        string contentType = contentType = UploadResume.PostedFile.ContentType;
+                        string ext = System.IO.Path.GetExtension(UploadResume.PostedFile.FileName);
+                        string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                        string[] split = UploadResume.FileName.Split('.');
+                        string firstfilename = string.Join(".", split.Take(split.Length - 1));
+                        string lastfilename = split.Last();
+                        // filename = req_id + "_REQTRNO_" + time + ext;
+                        //  objTpTraining.ReleventDocument = firstfilename + "_File_" + time + "." + lastfilename;
+                        file = firstfilename + "_" + time + "." + lastfilename;
+                        objTPT.ReleventDocument8 = file;
+                        if (UploadResume.FileContent.Length <= 1024 * 10000)
+                        {
+                            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                            bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                            if (result == true)
+                            {
+
+                                int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, firstfilename + "_" + time + "." + lastfilename, UploadResume);
+                                if (retval == 0)
+                                {
+                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                    return;
+                                }
+                                else
+                                {
+                                    int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                                  //  int IDNO = Convert.ToInt32(ViewState["Stud_idno"]);
+                                    int IsAdmin = 0;
+                                    CustomStatus cs = (CustomStatus)objCompany.UploadResume(objTPT, IDNO, IsAdmin);
+                                    if (cs.Equals(CustomStatus.RecordSaved))
+                                    {
+
+                                        //  ViewState["action"] = "add";
+                                        objCommon.DisplayMessage(this.Page, "Resume Upload Successfully.", this.Page);
+                                        BindUploasResumeDetails(IDNO);
+                                    }
+                                }
+                            }
+                        }
 
 
-                CustomStatus cs = (CustomStatus)objCompany.UploadResume(objTPT, IDNO);
-                if (cs.Equals(CustomStatus.RecordSaved))
+
+                    }
+                }
+                else
                 {
 
-                  //  ViewState["action"] = "add";
-                    objCommon.DisplayMessage(this.Page, "Resume Upload Successfully.", this.Page);
-                    BindUploasResumeDetails(IDNO);
                 }
-
-                //fileUploader.SaveAs(Server.MapPath("") + "\\UPLOAD_FILES\\" + fileName);
             }
             else
             {
-                objCommon.DisplayMessage("Unable to upload file. Size of uploaded file is greater than maximum upload size allowed.", this);
-
-                return;
-
+                objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.pdf]", this.Page);
+                UploadResume.Focus();
             }
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
         }
@@ -2404,61 +2847,86 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
             // string img = Convert.ToString(objCommon.LookUp("VEHICLE_BUS_STRUCTURE_IMAGE_DATA", "FILE_PATH", "ROUTEID='" + routeid + "' and BUSSTR_ID='" + seating + "'"));
             var ImageName = img;
+            //if (img == null || img == "")
+            //{
+            //    string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
+            //    embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
+            //    embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //    embed += "</object>";
+            //    //ltEmbed.Text = "Image Not Found....!";
+
+
+            //}
+            //else
+            //{
+            //    if (img != "")
+            //    {
+            //        DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+            //        var blob = blobContainer.GetBlockBlobReference(ImageName);
+
+            //        string filePath = directoryPath + "\\" + ImageName;
+
+            //        if ((System.IO.File.Exists(filePath)))
+            //        {
+            //            System.IO.File.Delete(filePath);
+            //        }
+            //        blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+            //        //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+            //        //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
+            //        //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //        //embed += "</object>";
+            //        // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
+            //        string FILENAME = img;
+            //        string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
+
+
+            //        string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
+            //        FileInfo file = new FileInfo(filePath1);
+
+            //        if (file.Exists)
+            //        {
+            //            Session["sb"] = filePath.ToString();
+            //            //this.Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "window.open('"+filee+"'); alert('Your message here' );", true);
+
+            //            //Response.Redirect("~/TRAININGANDPLACEMENT/Transactions/TP_PDF_Reader.aspx");
+
+            //            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
+
+            //            url += "ACADEMIC/RESUME/" + FILENAME;
+            //            //string url = filePath;
+            //            // added by Gaurav varma 18/10/23
+            //            Response.Clear();
+            //            Response.AddHeader("Content-Disposition", "attachment; filename=" + FILENAME);
+            //            Response.AddHeader("Content-Length", file.Length.ToString());
+            //            Response.ContentType = "application/octet-stream";
+            //            Response.TransmitFile(filePath1);
+            //           // Response.End();
+            //            // end Gaurav varma 18/10/23
+
+            //            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //            divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //            divMsg.InnerHtml += " </script>";
+
+            //        }
             if (img == null || img == "")
             {
-                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
-                embed += "If you are unable to view file, you can download from <a target = \"_blank\"  href = \"{0}\">here</a>";
-                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                embed += "</object>";
-                //ltEmbed.Text = "Image Not Found....!";
 
 
             }
             else
             {
-                if (img != "")
-                {
-                    DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr,blob_ContainerName,img);
-                    var blob = blobContainer.GetBlockBlobReference(ImageName);
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
 
-                    string filePath = directoryPath + "\\" + ImageName;
-
-                    if ((System.IO.File.Exists(filePath)))
-                    {
-                        System.IO.File.Delete(filePath);
-                    }
-                    blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
-                    //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
-                    //embed += "If you are unable to view file, you can download from <a  target = \"_blank\" href = \"{0}\">here</a>";
-                    //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
-                    //embed += "</object>";
-                   // DownloadFile(Server.MapPath("~/ACADEMIC/Resume/"), ImageName);
-                    string FILENAME = img;
-                    string filePath1 = Server.MapPath("~/ACADEMIC/Resume/" + ImageName);
-
-
-                    string filee = Server.MapPath("~/Transactions/TP_PDF_Reader.aspx");
-                    FileInfo file = new FileInfo(filePath1);
-
-                    if (file.Exists)
-                    {
-                        Session["sb"] = filePath.ToString();
-                        //this.Page.ClientScript.RegisterStartupScript(this.GetType(), "Alert", "window.open('"+filee+"'); alert('Your message here' );", true);
-
-                        //Response.Redirect("~/TRAININGANDPLACEMENT/Transactions/TP_PDF_Reader.aspx");
-
-                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToUpper().IndexOf("TRAININGANDPLACEMENT")));
-
-                        url += "ACADEMIC/RESUME/" + FILENAME;
-                        //string url = filePath;
-
-
-                        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-                        divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-                        divMsg.InnerHtml += " </script>";
-
-                    }  
-                }
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            
 
             }
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
@@ -2571,7 +3039,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
 
                 int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
                 int org = Convert.ToInt32(Session["OrgId"]);
-                CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO);
+                CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO,0);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
 
@@ -2598,7 +3066,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     int org = Convert.ToInt32(Session["OrgId"]);
  
                     int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
-                    CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO);
+                    CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO,0);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
@@ -2679,5 +3147,131 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
 
+    }
+    protected void imgbtnProjectPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+        }
+        catch (Exception ex)
+        {
+            throw;
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+        }
+    }
+    protected void imgbtnCertificationPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+        }
+        catch (Exception ex)
+        {
+            throw;
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
+        }
+    }
+    protected void imgbtnWorkExpPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+        }
+        catch (Exception ex)
+        {
+            throw;
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+        }
     }
 }

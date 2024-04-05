@@ -80,7 +80,7 @@
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
                             <div class="row">
-                                <div class="col-sm-3 text-center">
+                              <%--  <div class="col-sm-3 text-center">
                                     <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive" runat="server" ImageUrl="~/images/nophoto.jpg" />
                                 </div>
                                 <div class="col-sm-9">
@@ -90,7 +90,11 @@
                                         <h6>
                                             <asp:Label ID="lblAddress" runat="server" Text=""></asp:Label></h6>
                                     </div>
+                                </div>--%>
+                                 <div class="col-sm-12">
+                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive center" runat="server" ImageUrl="~/images/nophoto.jpg" />
                                 </div>
+
                             </div>
                         </div>
 

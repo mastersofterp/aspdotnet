@@ -313,4 +313,109 @@ public partial class ESTABLISHMENT_LEAVES_Reports_BiometricSummaryReport : Syste
                 objUCommon.ShowError(Page, "Server.UnAvailable");
         }
     }
+
+    protected void btnExcel_Click(object sender, EventArgs e)
+    {
+        LeavesController objleave = new LeavesController();
+        try
+        {
+            int collegeno, stno, deptno = 0;
+
+            if (ddlcollege.SelectedIndex > 0)
+            {
+                collegeno = Convert.ToInt32(ddlcollege.SelectedValue);
+            }
+            else
+            {
+                collegeno = 0;
+            }
+            if (ddlStaffType.SelectedIndex > 0)
+            {
+                stno = Convert.ToInt32(ddlStaffType.SelectedValue);
+            }
+            else
+            {
+                stno = 0;
+            }
+
+            string ToDate = Convert.ToDateTime(txtMonthYear.Text).ToString("yyyy-MM-dd");
+            DateTime dt = Convert.ToDateTime(ToDate);
+
+            String Fdate = dt.ToString();
+            String Tdate = dt.ToString();
+
+            int month = dt.Month;
+            int year = dt.Year;
+
+            string frmdt = null;
+            if (month == 1)
+            {
+                frmdt = "01" + "/" + month + "/" + year.ToString();
+            }
+            else
+            {
+                frmdt = year.ToString() + "-" + month + "-" + "01";
+            }
+
+            string todt = new DateTime(dt.Year, dt.Month, 1).AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd");
+
+            Fdate = frmdt;
+            Tdate = todt;
+
+            int empno = 0;
+            if (rblAllParticular.SelectedValue == "0")
+            {
+                empno = 0;
+            }
+            else
+            {
+                empno = Convert.ToInt32(ddlEmp.SelectedValue);
+            }
+
+            if (chkDept.Checked)
+            {
+                deptno = Convert.ToInt32(ddldept.SelectedValue);
+            }
+            else
+            {
+                deptno = 0;
+            }
+
+            DataSet ds = objleave.GetBiometricSummaryDataForExcel(collegeno, stno, deptno, Convert.ToDateTime(Fdate), Convert.ToDateTime(Tdate), empno);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                GridView gv_ExcelData = new GridView();
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    gv_ExcelData.DataSource = ds;
+                    gv_ExcelData.DataBind();
+                    string attachment = "attachment; filename=BiometricDetailsSummary.xls";
+                    Response.ClearContent();
+                    Response.AddHeader("content-disposition", attachment);
+                    Response.ContentType = "application/vnd.MS-excel";
+                    StringWriter sw = new StringWriter();
+                    HtmlTextWriter htw = new HtmlTextWriter(sw);
+                    gv_ExcelData.RenderControl(htw);
+                    Response.Write(sw.ToString());
+                    Response.End();
+                }
+            }
+            else
+            {
+                MessageBox("No Records found.");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+
+        }
+    }
+
+    public void MessageBox(string msg)
+    {
+        ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
+    }
 }

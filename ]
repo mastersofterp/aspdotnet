@@ -1,0 +1,28 @@
+[ENHANCEMENT] [56719] CPUK || Garde card with out header showing in 2 pages
+
+Sloving the issue of grade card without header comes in 2 pages fit into
+1 page for cpukota client.
+
+# Conflicts:
+#	PresentationLayer/Reports/Academic/rptGradeCardReport_CPUKOTA_Without_Header.rpt
+#
+# It looks like you may be committing a cherry-pick.
+# If this is not correct, please run
+#	git update-ref -d CHERRY_PICK_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Author:    Tejas Thakre <tejas.thakre1377>
+# Date:      Thu Mar 21 10:38:28 2024 +0530
+#
+# On branch CHERRY_PICK_main_2024-04-05_16.27.21
+# Your branch is up to date with 'origin/CHERRY_PICK_main_2024-04-05_16.27.21'.
+#
+# You are currently cherry-picking commit 652c78bd.
+#
+# Changes to be committed:
+#	modified:   PresentationLayer/Reports/Academic/rptGradeCardReport_CPUKOTA_Without_Header.rpt
+#

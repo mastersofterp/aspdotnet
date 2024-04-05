@@ -77,35 +77,35 @@ public partial class Stores_Masters_Str_Item_Master : System.Web.UI.Page
                 String Dept_Wise_Item = objCommon.LookUp("STORE_REFERENCE", "DEPT_WISE_ITEM", "");
                 ViewState["Dept_Wise_Item"] = Dept_Wise_Item;
 
-                if (ViewState["Dept_Wise_Item"].ToString() == "1")
-                {
-                    FillDepartment();
+                //if (ViewState["Dept_Wise_Item"].ToString() == "1")
+                //{
+                //    FillDepartment();
 
-                    divDept.Visible = true;
-                    //if (ViewState["StoreUser"].ToString() == "MainStoreUser")
-                    //{
-                    //    BindListViewItemMaster();
-                    //}
+                //    divDept.Visible = true;
+                //    //if (ViewState["StoreUser"].ToString() == "MainStoreUser")
+                //    //{
+                //    //    BindListViewItemMaster();
+                //    //}
 
 
-                    //if (ViewState["StoreUser"].ToString() != "NormalUser")
-                    //{
-                    //    BindListViewItemMaster(Convert.ToInt32(ddlDepartment.SelectedValue), ViewState["StoreUser"].ToString());
-                    //}
-                    //
+                //    //if (ViewState["StoreUser"].ToString() != "NormalUser")
+                //    //{
+                //    //    BindListViewItemMaster(Convert.ToInt32(ddlDepartment.SelectedValue), ViewState["StoreUser"].ToString());
+                //    //}
+                //    //
 
-                    //if (ViewState["StoreUser"].ToString() == "MainStoreUser")
-                    //{
-                    BindListViewItemMaster(Convert.ToInt32(ddlDepartment.SelectedValue)); //, ViewState["StoreUser"].ToString());
-                    //}
-                }
-                else
-                {
-                    divDept.Visible = false;
-                    BindListViewItemMaster();
-                    FillItemSubGroup();
-                    BindListViewDepriciation();
-                }
+                //    //if (ViewState["StoreUser"].ToString() == "MainStoreUser")
+                //    //{
+                //    BindListViewItemMaster(Convert.ToInt32(ddlDepartment.SelectedValue)); //, ViewState["StoreUser"].ToString());
+                //    //}
+                //}
+                //else
+                //{
+                //    divDept.Visible = false;
+                //    BindListViewItemMaster();
+                //    FillItemSubGroup();
+                //    BindListViewDepriciation();
+                //}
             }
             //Set Item Group Report Parameters
             objCommon.ReportPopUp(btnshorptitemgrp, "pagetitle=UAIMS&path=~" + "," + "Reports" + "," + "Stores" + "," + "Item_grp_Master.rpt&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@UserName=" + Session["userfullname"].ToString(), "UAIMS");
@@ -643,11 +643,11 @@ public partial class Stores_Masters_Str_Item_Master : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-    private void BindListViewItemMaster()
+    private void BindListViewItemMasterSubGroupWise(int misgno)
     {
         try
         {
-            DataSet ds = objStrMaster.GetAllItemMaster();
+            DataSet ds = objStrMaster.GetSubGroupWiseItemist(misgno);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 lvItemMaster.DataSource = ds;
@@ -795,7 +795,7 @@ public partial class Stores_Masters_Str_Item_Master : System.Web.UI.Page
                             objCommon.DisplayMessage(updatePanel1, "Record Saved Successfully", this);
                             if (ViewState["Dept_Wise_Item"].ToString() != "1")
                             {
-                                BindListViewItemMaster();
+                               // BindListViewItemMasterSubGroupWise(ddlItemSubGroup.SelectedValue);
                             }
                             else
                             {
@@ -832,7 +832,7 @@ public partial class Stores_Masters_Str_Item_Master : System.Web.UI.Page
                                 objCommon.DisplayMessage(updatePanel1, "Record Updated Successfully", this);
                                 if (ViewState["Dept_Wise_Item"].ToString() != "1")
                                 {
-                                    BindListViewItemMaster();
+                                   // BindListViewItemMasterSubGroupWise(ddlItemSubGroup.SelectedValue);
                                 }
                                 else
                                 {
@@ -1115,6 +1115,12 @@ public partial class Stores_Masters_Str_Item_Master : System.Web.UI.Page
         lvTaxFields.DataBind();
         lvTaxFields.Visible = false;
         chkTax.Checked = false;
+
+
+        lvItemMaster.DataSource = null;   //28/03/2024
+        lvItemMaster.DataBind();
+        pnlItemMaster.Visible = false;
+        
 
     }
 
@@ -1410,5 +1416,54 @@ public partial class Stores_Masters_Str_Item_Master : System.Web.UI.Page
     {
         BindListViewDepriciation();
 
+    }
+    //protected void dpPagerItemGroupMaster_PreRender(object sender, EventArgs e)
+    //{
+    //  //  BindListViewItemMaster();
+    //}
+    //protected void dpPagerItemGroupMaster_PreRender1(object sender, EventArgs e)
+    //{
+
+    //}
+    //protected void dpPagerGroupMaster_PreRender1(object sender, EventArgs e)
+    //{
+
+    //}
+    protected void btnShowItem_Click(object sender, EventArgs e)
+    {
+        if (ddlItemSubGroup.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(updatePanel4, "Please Select Item Sub Group", this);
+            return;
+        }
+        if (ViewState["Dept_Wise_Item"].ToString() == "1")
+        {
+            FillDepartment();
+
+            divDept.Visible = true;
+            //if (ViewState["StoreUser"].ToString() == "MainStoreUser")
+            //{
+            //    BindListViewItemMaster();
+            //}
+
+
+            //if (ViewState["StoreUser"].ToString() != "NormalUser")
+            //{
+            //    BindListViewItemMaster(Convert.ToInt32(ddlDepartment.SelectedValue), ViewState["StoreUser"].ToString());
+            //}
+            //
+
+            //if (ViewState["StoreUser"].ToString() == "MainStoreUser")
+            //{
+            BindListViewItemMaster(Convert.ToInt32(ddlDepartment.SelectedValue)); //, ViewState["StoreUser"].ToString());
+            //}
+        }
+        else
+        {
+            divDept.Visible = false;
+            BindListViewItemMasterSubGroupWise(Convert.ToInt32(ddlItemSubGroup.SelectedValue));
+            FillItemSubGroup();
+            BindListViewDepriciation();
+        }
     }
 }

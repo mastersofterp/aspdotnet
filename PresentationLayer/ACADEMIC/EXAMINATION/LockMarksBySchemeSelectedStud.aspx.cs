@@ -144,6 +144,9 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         ddlFac.Items.Clear();
         ddlFac.Items.Add("Please Select");
         spnNote.Visible = false;
+        activityname.Visible = false;
+        activitystart.Visible = false;
+        activityend.Visible = false;
     }
     #endregion Click Events
 
@@ -178,6 +181,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
 
                 ddlSemester.Focus();
+               
 
                 //ddlDegree.SelectedIndex = 0;
                 // ddlBranch.Items.Clear();
@@ -193,6 +197,9 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
                 ddlSemester.SelectedIndex = 0;
                 ddlSemester.Items.Clear();
                 ddlSemester.Items.Add(new ListItem("Please Select", "0"));
+                activityname.Visible = false;
+                activitystart.Visible = false;
+                activityend.Visible = false;
             }
         }
         catch (Exception ex)
@@ -305,7 +312,11 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
             ddlExamType.SelectedIndex = 0;
             ddlStuType.SelectedIndex = 0;
             ddlsub.Focus();
+            activityname.Visible = false;
+            activitystart.Visible = false;
+            activityend.Visible = false;
         }
+
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -318,6 +329,9 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
     protected void ddlSection_SelectedIndexChanged(object sender, EventArgs e)
     {
         ClearPanel();
+        activityname.Visible = false;
+        activitystart.Visible = false;
+        activityend.Visible = false;
         //ddlExamType.SelectedIndex = 0;
     }
 
@@ -341,7 +355,22 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
             objCommon.FillDropDownList(ddlSubExam1, "ACD_EXAM_NAME A inner join Acd_subexam_name B on A.EXAMNO= B.EXAMNO  ", "DISTINCT B.FLDNAME", "B.SUBEXAMNAME", "B.FLDNAME LIKE '%" + ddlExamType.SelectedValue + "%' AND ISNULL(B.ACTIVESTATUS,0)=1 AND A.PATTERNNO=" + patternno + " AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "B.SUBEXAMNAME ASC");
 
             ddlSubExam1.Focus();
+            GETSTATUSDATE();
         }
+        else
+        {
+            activityname.Visible = false;
+            activitystart.Visible = false;
+            activityend.Visible = false;
+        }
+        //if (ddlExamType.SelectedIndex > 0)
+        //{
+        //    GETSTATUSDATE();
+        //}
+        //else
+        //{
+
+        //}
         //btnSave.Visible = false;
         //spnNote.Visible = false;
         //lvStudList.DataSource = null;
@@ -353,7 +382,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         //ddlCourse.Items.Add("Please Select");
         //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND ISNULL(PREV_STATUS,0)=" + Convert.ToInt32(ddlStuType.SelectedValue) + " AND ISNULL(SUBID,0)=" + Convert.ToInt32(ddlsub.SelectedValue), "COURSENO");
     }
-
+    
     protected void ddlStuType_SelectedIndexChanged(object sender, EventArgs e)
     {
         // btnSave.Visible = false;
@@ -422,9 +451,15 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         if (ddlsub.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
-
+            // DataSet ds = objCommon.FillDropDown("", "", "", "", "");
             ddlExamType.Focus();
 
+        }
+        else
+        {
+            activityname.Visible = false;
+            activitystart.Visible = false;
+            activityend.Visible = false;
         }
         //if (Convert.ToInt32(ddlsub.SelectedValue) > 0 && Convert.ToInt32(ddlsub.SelectedValue) == 1)
         //    objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME", "FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND EXAMNO IN (1,2,6)", "EXAMNAME ASC");
@@ -512,6 +547,9 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         divMsg.InnerHtml = string.Empty;
         btnSave.Visible = false;
         spnNote.Visible = false;
+        activityname.Visible = false;
+        activitystart.Visible = false;
+        activityend.Visible = false;
     }
 
     private void BindStudents()
@@ -949,13 +987,17 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", " SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
 
                 ddlSession.Focus();
+               
 
 
             }
+            
         }
         else
         {
-
+            activityname.Visible = false;
+            activitystart.Visible = false;
+            activityend.Visible = false;
         }
 
     }
@@ -975,7 +1017,55 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         {
             objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SUBID,0)=" + Convert.ToInt32(ddlsub.SelectedValue), "COURSENAME ASC");
         }
+       // GETSTATUSDATE();
         //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT","DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue), "COURSENAME ASC");
+
+    }
+    public void GETSTATUSDATE()
+    {
+       // objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
+       // ViewState["schemeno"]
+        string patternno = objCommon.LookUp("acd_scheme", "patternno", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
+       // int Examno = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.Examno", "EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue));
+        //DataSet ds = objCommon.FillDropDown("ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
+        //if (ds.Tables[0].Rows.Count > 0)
+        //{
+        //    ViewState["FLDNAME"] = ds.Tables[0].Rows[0]["FLDNAME"].ToString();
+        //}
+        //"
+       // B.FLDNAME LIKE
+       int sub= Convert.ToInt32(ddlsub.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlsub.SelectedValue);
+      // string subname = Convert.ToString(ddlExamType.SelectedValue) == System.DBNull.Value ? System.DBNull.Value : Convert.ToString(ddlExamType.SelectedValue);
+        string subname = Convert.ToString(ddlExamType.SelectedValue) == "0" ? "" : Convert.ToString(ddlExamType.SelectedValue);
+       int Examno = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.Examno", "EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND E.FLDNAME like  '%" + subname + "%' AND  SUBEXAM_SUBID=" + sub));
+
+        DataSet DateSessionDs = objCommon.FillDropDown("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO) INNER JOIN ACCESS_LINK l ON(L.al_no IN (SELECT VALUE FROM DBO.SPLIT(page_link,',') WHERE VALUE <>''))", "SA.SESSION_NO", "substring(cast(SA.START_DATE as varchar),1,12)START_DATE,substring(cast(SA.END_DATE as varchar),1,12)END_DATE,ACTIVITY_NAME as ACTIVITYNAME", "COLLEGE_IDS in (" + ViewState["college_id"] + ") AND SESSION_NO like '%" + Convert.ToInt32(ddlSession.SelectedValue) + "%' AND EXAMNO=" + Examno + " AND AL_LINK LIKE '%MARK%' AND SEMESTER like '%'  + CAST('" + Convert.ToInt32(ddlSemester.SelectedValue) + "' AS NVARCHAR(5))  +'%'", "");
+        //sessionno = Session["currentsession"].ToString();
+        if (DateSessionDs.Tables.Count > 0)
+        {
+            if (DateSessionDs.Tables[0].Rows.Count > 0)
+            {
+                string sessionno = DateSessionDs.Tables[0].Rows[0]["SESSION_NO"].ToString();
+                lblActivity.Text = DateSessionDs.Tables[0].Rows[0]["ACTIVITYNAME"].ToString();
+                lblstart.Text = DateSessionDs.Tables[0].Rows[0]["START_DATE"].ToString();
+                lblEnd.Text = DateSessionDs.Tables[0].Rows[0]["END_DATE"].ToString();
+                ViewState["sessionno"] = sessionno;
+                activityname.Visible = true;
+                activitystart.Visible = true;
+                activityend.Visible = true;
+            }
+            else
+            {
+                activityname.Visible = false;
+                activitystart.Visible = false;
+                activityend.Visible = false;
+               // objCommon.DisplayMessage(this.Page, "Activity Not Created.", this.Page);
+                //return false;
+            }
+
+        }
+       
+        
 
     }
 }

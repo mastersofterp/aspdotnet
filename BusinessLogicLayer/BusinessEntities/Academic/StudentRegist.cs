@@ -253,6 +253,16 @@ namespace IITMS
                 private string _SEMESTERNOS;
 
                 private string _ExamType;
+
+                // Added by Sagar Mankar on Date 30032024 with TKT NO 56019
+
+                private string _MIN_MARKS;
+                private string _MAX_MARKS;
+                private string _ACTUAL_MARKS;
+                private System.Nullable<int> _STUDENT_PATTERN;
+
+                //
+
                 #endregion
 
 
@@ -1718,6 +1728,70 @@ namespace IITMS
                         }
                     }
                 }
+
+                // Added by Sagar Mankar on Date 30032024 with TKT NO 56019
+
+                public string MIN_MARKS
+                {
+                    get
+                    {
+                        return this._MIN_MARKS;
+                    }
+                    set
+                    {
+                        if ((this._MIN_MARKS != value))
+                        {
+                            this._MIN_MARKS = value;
+                        }
+                    }
+                }
+
+                public string MAX_MARKS
+                {
+                    get
+                    {
+                        return this._MAX_MARKS;
+                    }
+                    set
+                    {
+                        if ((this._MAX_MARKS != value))
+                        {
+                            this._MAX_MARKS = value;
+                        }
+                    }
+                }
+
+                public string ACTUAL_MARKS
+                {
+                    get
+                    {
+                        return this._ACTUAL_MARKS;
+                    }
+                    set
+                    {
+                        if ((this._ACTUAL_MARKS != value))
+                        {
+                            this._ACTUAL_MARKS = value;
+                        }
+                    }
+                }
+
+                public System.Nullable<int> STUDENT_PATTERN
+                {
+                    get
+                    {
+                        return this._STUDENT_PATTERN;
+                    }
+                    set
+                    {
+                        if ((this._STUDENT_PATTERN != value))
+                        {
+                            this._STUDENT_PATTERN = value;
+                        }
+                    }
+                }
+
+                //
 
                 #endregion
 

@@ -46,84 +46,87 @@ public class QueryStringModule : IHttpModule
 
             if (!context.Request.Url.OriginalString.ToUpper().Contains("ITLE/MATHEDITOR.ASPX"))
             {
-                //if (context.Request.Url.OriginalString.Contains("aspx") && context.Request.RawUrl.Contains("?"))
-                if ((context.Request.Url.OriginalString.Contains("iitms") && context.Request.RawUrl.Contains("?")) || context.Request.Url.OriginalString.Contains("aspx") || context.Request.Url.OriginalString.Contains("iitms"))
-                //Server.URLEncode(string) 
-                //if (context.Request.Url.PathAndQuery.Contains("PresentationLayer") && context.Request.RawUrl.Contains("?"))
+                if (!context.Request.Url.OriginalString.ToUpper().Contains("TRAININGANDPLACEMENT/TRANSACTIONS/TP_CAREER_PROFILE.ASPX"))
                 {
-                    string query = ExtractQuery(context.Request.RawUrl);
-                    if (context.Request.HttpMethod == "POST")
+                    //if (context.Request.Url.OriginalString.Contains("aspx") && context.Request.RawUrl.Contains("?"))
+                    if ((context.Request.Url.OriginalString.Contains("iitms") && context.Request.RawUrl.Contains("?")) || context.Request.Url.OriginalString.Contains("aspx") || context.Request.Url.OriginalString.Contains("iitms"))
+                    //Server.URLEncode(string) 
+                    //if (context.Request.Url.PathAndQuery.Contains("PresentationLayer") && context.Request.RawUrl.Contains("?"))
                     {
-                        if (query.Contains("pageno=") || query.Contains("IsReset="))
+                        string query = ExtractQuery(context.Request.RawUrl);
+                        if (context.Request.HttpMethod == "POST")
                         {
-                            query1 = Encrypt(query);
-                            query = query1.Substring(query1.LastIndexOf("?") + 1);
+                            if (query.Contains("pageno=") || query.Contains("IsReset="))
+                            {
+                                query1 = Encrypt(query);
+                                query = query1.Substring(query1.LastIndexOf("?") + 1);
+                            }
+                            else if (query.Contains(".aspx") || query.Contains("co") || query.Contains("in") || query.Contains("%"))
+                            {
+                                query = PARAMETER_NAME;
+                            }
                         }
-                        else if (query.Contains(".aspx") || query.Contains("co") || query.Contains("in") || query.Contains("%"))
-                        {
-                            query = PARAMETER_NAME;
-                        }
-                    }
-                    string path = GetVirtualPath();
+                        string path = GetVirtualPath();
 
-                    if (query.StartsWith(PARAMETER_NAME, StringComparison.OrdinalIgnoreCase) || query.Contains(PATH_PARAMETER))
-                    {
-                        // Decrypts the query string and rewrites the path.
-                        string rawQuery = query.Replace(PARAMETER_NAME, string.Empty);
-                        //string rawQuery = query.Replace(PARAMETER_NAME, string.Empty);
-                        if ((!rawQuery.Contains("iitms")) && (rawQuery != ""))
+                        if (query.StartsWith(PARAMETER_NAME, StringComparison.OrdinalIgnoreCase) || query.Contains(PATH_PARAMETER))
                         {
-                            decryptedQuery = Decrypt(rawQuery);
-                        }
+                            // Decrypts the query string and rewrites the path.
+                            string rawQuery = query.Replace(PARAMETER_NAME, string.Empty);
+                            //string rawQuery = query.Replace(PARAMETER_NAME, string.Empty);
+                            if ((!rawQuery.Contains("iitms")) && (rawQuery != ""))
+                            {
+                                decryptedQuery = Decrypt(rawQuery);
+                            }
 
-                        if (decryptedQuery == "/")
+                            if (decryptedQuery == "/")
+                            {
+
+                            }
+                            //if (rawQuery.Contains("in") &&  rawQuery.Contains("/"))  //
+                            //{
+                            //    decryptedQuery = "";
+                            //}
+
+                            string rawpath = path.Replace(PATH_PARAMETER, string.Empty);
+
+                            string decryptpath = Decrypt(rawpath).Trim();
+                            if (decryptpath.Contains("iitms"))
+                            {
+                                decryptpath = decryptpath.Replace(PATH_PARAMETER, string.Empty);
+                                decryptpath = Decrypt(decryptpath).Trim();
+                            }
+                            //string pathurl = HttpContext.Current.Request.RawUrl.Replace("%20", "+");
+                            string pathurl = HttpContext.Current.Request.RawUrl;
+                            pathurl = pathurl.Substring(0, pathurl.IndexOf("iitms"));
+                            string newurl = pathurl + "" + decryptpath;
+                            context.RewritePath(newurl, string.Empty, decryptedQuery);
+
+                        }
+                        else if (context.Request.HttpMethod == "GET")
                         {
-
+                            if (path == "")
+                            {
+                                path = "default.aspx";
+                            }
+                            string encryptedQuery = Encrypt(query);
+                            string path123 = Encrypt1(path);
+                            if (path.Contains("iitms"))
+                            {
+                                path123 = path;
+                            }
+                            context.Response.Redirect(path123 + encryptedQuery);
                         }
-                        //if (rawQuery.Contains("in") &&  rawQuery.Contains("/"))  //
+                        //else
                         //{
-                        //    decryptedQuery = "";
+                        //    string rawpath = path.Replace(PATH_PARAMETER, string.Empty);
+                        //    string decryptpath = Decrypt(rawpath);
+
+                        //    string pathurl = HttpContext.Current.Request.RawUrl;
+                        //    pathurl = pathurl.Substring(0, pathurl.IndexOf("aspx"));
+                        //    string newurl = pathurl + "" + decryptpath;
+                        //    context.RewritePath(newurl);
                         //}
-
-                        string rawpath = path.Replace(PATH_PARAMETER, string.Empty);
-
-                        string decryptpath = Decrypt(rawpath).Trim();
-                        if (decryptpath.Contains("iitms"))
-                        {
-                            decryptpath = decryptpath.Replace(PATH_PARAMETER, string.Empty);
-                            decryptpath = Decrypt(decryptpath).Trim();
-                        }
-                        //string pathurl = HttpContext.Current.Request.RawUrl.Replace("%20", "+");
-                        string pathurl = HttpContext.Current.Request.RawUrl;
-                        pathurl = pathurl.Substring(0, pathurl.IndexOf("iitms"));
-                        string newurl = pathurl + "" + decryptpath;
-                        context.RewritePath(newurl, string.Empty, decryptedQuery);
-
                     }
-                    else if (context.Request.HttpMethod == "GET")
-                    {
-                        if (path == "")
-                        {
-                            path = "default.aspx";
-                        }
-                        string encryptedQuery = Encrypt(query);
-                        string path123 = Encrypt1(path);
-                        if (path.Contains("iitms"))
-                        {
-                            path123 = path;
-                        }
-                        context.Response.Redirect(path123 + encryptedQuery);
-                    }
-                    //else
-                    //{
-                    //    string rawpath = path.Replace(PATH_PARAMETER, string.Empty);
-                    //    string decryptpath = Decrypt(rawpath);
-
-                    //    string pathurl = HttpContext.Current.Request.RawUrl;
-                    //    pathurl = pathurl.Substring(0, pathurl.IndexOf("aspx"));
-                    //    string newurl = pathurl + "" + decryptpath;
-                    //    context.RewritePath(newurl);
-                    //}
                 }
             }
         }

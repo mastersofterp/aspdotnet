@@ -31,7 +31,8 @@
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><b>EXAM MARK ENTRY BY ADMIN</b></h3>
+                            <h3 class="box-title">
+                                <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                         </div>
                         <div class="box-body">
                             <asp:Panel ID="pnlMarkEntry" runat="server">
@@ -50,7 +51,7 @@
                                                     <asp:RequiredFieldValidator ID="rfvcollege" runat="server" ControlToValidate="ddlcollege"
                                                         Display="None" ErrorMessage="Please Select Institute." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="show"></asp:RequiredFieldValidator>
-                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlcollege"
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlcollege"
                                                         Display="None" ErrorMessage="Please Select Institute." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="MarksModifyReport"></asp:RequiredFieldValidator>
                                                 </div>
@@ -77,7 +78,7 @@
                                                         <label>Degree</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddldegree" TabIndex="3" runat="server" CssClass="form-control" AppendDataBoundItems="true"
-                                                        AutoPostBack="True"  data-select2-enable="true">
+                                                        AutoPostBack="True" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <%--<asp:RequiredFieldValidator ID="rfvdegree" runat="server" ControlToValidate="ddldegree"
@@ -91,24 +92,24 @@
                                                         <label>Branch</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlbranch" TabIndex="4" runat="server" CssClass="form-control" AppendDataBoundItems="true"
-                                                        AutoPostBack="True"  data-select2-enable="true">
+                                                        AutoPostBack="True" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvbranch" runat="server" ControlToValidate="ddlbranch"
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvbranch" runat="server" ControlToValidate="ddlbranch"
                                                         Display="None" ErrorMessage="Please Select Branch." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="show"></asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="col-lg-4 col-md-6 col-12 form-group d-none" >
+                                                <div class="col-lg-4 col-md-6 col-12 form-group d-none">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <label>Scheme</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlscheme" TabIndex="5" runat="server" CssClass="form-control" AppendDataBoundItems="true"
-                                                        AutoPostBack="True"  data-select2-enable="true">
+                                                        AutoPostBack="True" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvscheme" runat="server" ControlToValidate="ddlscheme"
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvscheme" runat="server" ControlToValidate="ddlscheme"
                                                         Display="None" ErrorMessage="Please Select Scheme." InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="show"></asp:RequiredFieldValidator>--%>
                                                 </div>
@@ -119,7 +120,7 @@
                                                         <label>Semester</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlsemester" TabIndex="6" runat="server" CssClass="form-control" AppendDataBoundItems="true"
-                                                        AutoPostBack="True" OnSelectedIndexChanged="ddlsemester_SelectedIndexChanged"   data-select2-enable="true">
+                                                        AutoPostBack="True" OnSelectedIndexChanged="ddlsemester_SelectedIndexChanged" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="rfvsemester" runat="server" ControlToValidate="ddlsemester"
@@ -213,15 +214,15 @@
 
                                     <asp:Button ID="btnShow" runat="server" TabIndex="10" Font-Bold="True" OnClick="btnShow_Click"
                                         Text="Show Student" ValidationGroup="show"
-                                        CssClass="btn btn-primary"/>
+                                        CssClass="btn btn-primary" />
                                     <%--<asp:Button ID="btnSave" runat="server" TabIndex="12" Enabled="false" Font-Bold="true" CausesValidation="false"
                                         OnClick="btnSave_Click" Text="Save" CssClass="btn btn-success btnSaveEnabled" ValidationGroup="val" />--%>
 
-                                   <%-- <asp:Button ID="btnLock" runat="server" TabIndex="13" Enabled="false" Font-Bold="true"
+                                    <%-- <asp:Button ID="btnLock" runat="server" TabIndex="13" Enabled="false" Font-Bold="true"
                                         OnClick="btnLock_Click" OnClientClick="return showLockConfirm(this,'val');" Text="Lock"
                                         CssClass="btn btn-danger" /--%>
 
-                                 <%--    <asp:Button ID="btnGrade" runat="server" TabIndex="14" Enabled="false" Font-Bold="true" Visible="false"
+                                    <%--    <asp:Button ID="btnGrade" runat="server" TabIndex="14" Enabled="false" Font-Bold="true" Visible="false"
                                         OnClick="btnGrade_Click" OnClientClick="return showGradeConfirm(this,'val');" Text="Generate Grade"
                                         CssClass="btn btn-success btnSaveEnabled" />--%>
 
@@ -232,23 +233,23 @@
                                     <asp:Button ID="btnReport" TabIndex="15" runat="server" Font-Bold="true" Text="Report" CssClass="btn btn-info"
                                         OnClick="btnReport_Click" Enabled="false" Visible="true" />
 
-                                    <asp:Button ID="btnMarksModifyReport" TabIndex="15" runat="server" Font-Bold="true"  ValidationGroup="show" 
+                                    <asp:Button ID="btnMarksModifyReport" TabIndex="15" runat="server" Font-Bold="true" ValidationGroup="show"
                                         Text="Marks Entry Report" CssClass="btn btn-info" OnClick="btnMarksModifyReport_Click" Visible="true" />
-                                   <%-- ValidationGroup="MarksModifyReport" --%>
+                                    <%-- ValidationGroup="MarksModifyReport" --%>
 
-                                    <asp:Button ID="btnfinalmarkentry" TabIndex="16" runat="server" Font-Bold="true" ValidationGroup="MarksModifyReport" 
-                                        Text="Final TH/PR Marks Entry Report" CssClass="btn btn-info" OnClick="btnfinalmarkentry_Click" Visible="false" />
-                                        <asp:Button ID="btnmarkexcel" TabIndex="17" runat="server" Font-Bold="true" ValidationGroup="show"  
+                                    <asp:Button ID="btnfinalmarkentry" TabIndex="16" runat="server" Font-Bold="true" ValidationGroup="MarksModifyReport"
+                                        Text="Final TH/PR Marks Entry Report" CssClass="btn btn-info" OnClick="btnfinalmarkentry_Click" Visible="true" />
+                                    <asp:Button ID="btnmarkexcel" TabIndex="17" runat="server" Font-Bold="true" ValidationGroup="show"
                                         Text="Marks Entry Report Excel" CssClass="btn btn-info" OnClick="btnmarkexcel_Click" Visible="true" />
-                                   <%-- ValidationGroup="MarksModifyReport" --%>
+                                    <%-- ValidationGroup="MarksModifyReport" --%>
                                     <asp:Button ID="btnCancel2" runat="server" TabIndex="17" Font-Bold="true" OnClick="btnCancel2_Click"
                                         Text="Cancel" CssClass="btn btn-warning" />
                                     <br />
                                     <asp:Label ID="lblStudents" runat="server" Font-Bold="true" />
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary1" ValidationGroup="show" DisplayMode="List"
-                                         ShowSummary="false" ShowMessageBox="true" />
+                                        ShowSummary="false" ShowMessageBox="true" />
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary2" ValidationGroup="MarksModifyReport" DisplayMode="List"
-                                         ShowSummary="false" ShowMessageBox="true" />
+                                        ShowSummary="false" ShowMessageBox="true" />
 
 
                                 </div>
@@ -305,7 +306,7 @@
                                                         <ItemStyle />
                                                     </asp:BoundField>
 
-                                                   <%-- <asp:TemplateField HeaderText="Internal Marks" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%" HeaderStyle-CssClass="text-center">
+                                                    <%-- <asp:TemplateField HeaderText="Internal Marks" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%" HeaderStyle-CssClass="text-center">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblInternal" runat="server" Text='<%# Bind("INTERMARK") %>'
                                                                 Font-Size="9pt" />
@@ -315,7 +316,7 @@
                                                     <asp:TemplateField HeaderText="Internal Marks" ItemStyle-Width="8%" HeaderStyle-HorizontalAlign="Center" HeaderStyle-CssClass="text-center">
                                                         <ItemTemplate>
                                                             <asp:TextBox ID="lblInternal" runat="server" Text='<%# Bind("INTERMARK") %>' Width="80px"
-                                                                Enabled="false" MaxLength="5" Font-Bold="true" Style="text-align: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);"/>
+                                                                Enabled="false" MaxLength="5" Font-Bold="true" Style="text-align: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);" />
                                                         </ItemTemplate>
                                                         <HeaderStyle HorizontalAlign="Center" />
                                                         <ItemStyle />
@@ -349,7 +350,7 @@
                                                         <ItemStyle />
                                                     </asp:TemplateField>
 
-                                                 <%--   <asp:TemplateField HeaderText="Total Marks" Visible="false" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%" HeaderStyle-CssClass="text-center">
+                                                    <%--   <asp:TemplateField HeaderText="Total Marks" Visible="false" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%" HeaderStyle-CssClass="text-center">
                                                         <ItemTemplate>
                                                             <asp:Label ID="txtTotal" runat="server" Text='<%# Bind("MARKTOT") %>' Font-Size="9pt" />
                                                         </ItemTemplate>
@@ -360,14 +361,14 @@
                                                             <asp:TextBox ID="txtTotal" runat="server" Text='<%# Bind("MARKTOT") %>' Width="80px"
                                                                 Enabled='<%# (Eval("LOCK").ToString() == "True") ? false : true %>'
                                                                 MaxLength="5" Font-Bold="true" Style="text-align: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);" onkeyup="return CheckMark(this);" />
-                                                            
+
 
                                                         </ItemTemplate>
                                                         <HeaderStyle HorizontalAlign="Center" />
                                                         <ItemStyle />
                                                     </asp:TemplateField>
 
-                                                      <asp:TemplateField HeaderText="Grade" Visible="false" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%" HeaderStyle-CssClass="text-center">
+                                                    <asp:TemplateField HeaderText="Grade" Visible="false" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%" HeaderStyle-CssClass="text-center">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblgrade" runat="server" Text='<%# Bind("GRADE") %>' Font-Bold="true"
                                                                 Font-Size="9pt" />
@@ -387,7 +388,7 @@
             </div>
 
         </ContentTemplate>
-          <Triggers>
+        <Triggers>
             <asp:PostBackTrigger ControlID="btnmarkexcel" />
         </Triggers>
     </asp:UpdatePanel>

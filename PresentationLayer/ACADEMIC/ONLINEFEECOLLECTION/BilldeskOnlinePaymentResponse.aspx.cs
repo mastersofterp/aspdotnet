@@ -16,6 +16,7 @@ using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data.SqlClient;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
 {
@@ -24,7 +25,7 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
     StudentController objSC = new StudentController();
-
+    OrganizationController objOrg = new OrganizationController();
     string hash_seq = string.Empty;
     #endregion
     string Idno = string.Empty;
@@ -37,17 +38,39 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
         {
             try
             {
-                SqlDataReader dr = objCommon.GetCommonDetails();
+                //SqlDataReader dr = objCommon.GetCommonDetails();
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
 
-                if (dr != null)
+                DataSet Orgds = null;
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
+
 
                 if (Convert.ToString(Request.Form["msg"]) != string.Empty && Convert.ToString(Request.Form["msg"]) != null)
                 {
@@ -282,29 +305,29 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
 
     }
    
-
-   
-
     private void ShowReport(string reportTitle, string rptFileName)
     {
         try
         {
-
-            int DcrNo = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "DCR_NO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'"));
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'");
             int IDNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "IDNO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'"));
 
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ACADEMIC")));
+            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
+            //int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+            //string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-
-            url += "&param=@P_COLLEGE_CODE=35,@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            //url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
-
-            ////To open new window from Updatepanel
+            //To open new window from Updatepanel
             //System.Text.StringBuilder sb = new System.Text.StringBuilder();
             //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             //sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -319,6 +342,7 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
 
     protected void btnBack_Click(object sender, EventArgs e)
     {
@@ -346,7 +370,8 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
         }
         else
         {
-            ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            //ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            ShowReport("OnlineFeePayment", "rptOnlineReceipt_New.rpt");
         }
     }
 

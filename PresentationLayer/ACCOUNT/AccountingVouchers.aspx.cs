@@ -14362,6 +14362,10 @@ public partial class AccountingVouchers : System.Web.UI.Page
             }
 
             txtTranAmt.Focus();
+
+            string GSTNO = objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PARTY", "ISNULL(GSTNO, 0) AS GSTNO", "ACC_CODE='" + txtAcc.Text.ToString().Trim().Split('*')[1] + "'");
+            txtGSTNNO.Text = GSTNO;
+           
         }
     }
 

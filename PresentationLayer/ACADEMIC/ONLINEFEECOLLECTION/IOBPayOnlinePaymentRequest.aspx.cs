@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 public partial class IOBPayOnlinePaymentRequest : System.Web.UI.Page
 {
@@ -26,6 +27,7 @@ public partial class IOBPayOnlinePaymentRequest : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
+    OrganizationController objOrg = new OrganizationController();
 
     string hash_seq = string.Empty;
     #endregion
@@ -47,15 +49,37 @@ public partial class IOBPayOnlinePaymentRequest : System.Web.UI.Page
             try
             {
               
-                SqlDataReader dr = objCommon.GetCommonDetails();
+                //SqlDataReader dr = objCommon.GetCommonDetails();
 
-                if (dr != null)
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
+
+                DataSet Orgds = null;
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
 

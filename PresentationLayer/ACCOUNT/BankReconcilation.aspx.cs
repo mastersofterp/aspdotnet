@@ -120,7 +120,15 @@ public partial class BankReconcilation : System.Web.UI.Page
 
             string Fdate = DateTime.Now.ToString();
             Fdate = "01/" + DateTime.Parse(Fdate).Month.ToString() + "/" + DateTime.Parse(Fdate).Year.ToString();
-            txtFrmDate.Text = Convert.ToDateTime(Fdate).ToString("dd/MM/yyyy");
+            if (DateTime.Compare(Convert.ToDateTime(dtr["COMPANY_FINDATE_FROM"]), DateTime.Now) > 0)
+            {
+                txtFrmDate.Text = Convert.ToDateTime(Fdate).ToString("dd/MM/yyyy");
+            }
+            else
+            {
+                txtFrmDate.Text = Convert.ToDateTime(dtr["COMPANY_FINDATE_FROM"]).ToString("dd/MM/yyyy");
+            }
+          
 
             if (DateTime.Compare(Convert.ToDateTime(Session["fin_date_from"]), Convert.ToDateTime(txtFrmDate.Text)) == 1)
             {

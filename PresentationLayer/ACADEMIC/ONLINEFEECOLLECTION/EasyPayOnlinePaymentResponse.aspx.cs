@@ -22,6 +22,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 
 public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
@@ -30,6 +31,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
+    OrganizationController objOrg = new OrganizationController();
 
     string hash_seq = string.Empty;
     #endregion
@@ -40,17 +42,40 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
             {
             try
                 {              
-                SqlDataReader dr = objCommon.GetCommonDetails();
+                //SqlDataReader dr = objCommon.GetCommonDetails();
 
-                if (dr != null)
+                //if (dr != null)
+                //    {
+                //    if (dr.Read())
+                //        {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //        }
+                //    }
+
+                    DataSet Orgds = null;
+                    var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                    Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                    byte[] imgData = null;
+                    if (Orgds.Tables != null)
                     {
-                    if (dr.Read())
+                        if (Orgds.Tables[0].Rows.Count > 0)
                         {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                            if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                            {
+                                imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                                imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                            }
+                            else
+                            {
+                                // hdnLogoOrg.Value = "0";
+                            }
+
                         }
                     }
+
                 string responsevalue = string.Empty;
                 string resposestring = string.Empty;
                 foreach (string key in HttpContext.Current.Request.Form.AllKeys)
@@ -511,40 +536,79 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
         }
 
     protected void btnPrint_Click(object sender, EventArgs e)
-        {
-        ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+    {
+        //ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+        ShowReport("OnlineFeePayment", "rptOnlineReceipt_New.rpt");
+    }
 
-        }
+    //private void ShowReport(string reportTitle, string rptFileName)
+    //    {
+    //    try
+    //        {
+    //        int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+    //        //string collegecode = objCommon.LookUp("reff", "college_code", "");
+    //        Session["userno"] = ViewState["userno"];
+    //        string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + IDNO + "' AND ORDER_ID ='" + ViewState["Order_id"].ToString() + "'");
+
+    //        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+    //        url += "Reports/CommonReport.aspx?";
+    //        url += "pagetitle=" + reportTitle;
+    //        url += "&path=~,Reports,Academic," + rptFileName;
+
+    //        url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(72) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+
+    //        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+    //        divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+    //        divMsg.InnerHtml += " </script>";
+    //        //To open new window from Updatepanel
+
+    //        }
+    //    catch (Exception ex)
+    //        {
+    //        if (Convert.ToBoolean(Session["error"]) == true)
+    //            objUaimsCommon.ShowError(Page, "CourseWise_Registration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+    //        else
+    //            objUaimsCommon.ShowError(Page, "Server Unavailable.");
+    //        }
+    //    }
 
     private void ShowReport(string reportTitle, string rptFileName)
-        {
+    {
         try
-            {
+        {
             int IDNO = Convert.ToInt32(ViewState["IDNO"]);
-            //string collegecode = objCommon.LookUp("reff", "college_code", "");
             Session["userno"] = ViewState["userno"];
-            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + IDNO + "' AND ORDER_ID ='" + ViewState["Order_id"].ToString() + "'");
+
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["Order_id"]) + "'");
+            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
+            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(72) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            //url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
             //To open new window from Updatepanel
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            //sb.Append(@"window.open('" + url + "','','" + features + "');");
 
-            }
+            //ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
+        }
         catch (Exception ex)
-            {
+        {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUaimsCommon.ShowError(Page, "CourseWise_Registration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
-            }
         }
+    }
+
+
     #endregion
     }

@@ -202,7 +202,7 @@
             </div>
         </section>
 
-        <div class="row equalHMRWrap flex gutters-sm">
+        <div class="row equalHMRWrap flex gutters-sm generalAnalysis">
             <div style="display: none">
                 <div class="col-lg-2 col-md-6 col-12">
                     <div class="x_panel">
@@ -613,7 +613,7 @@
 
         <div class="row equalHMRWrap flex gutters-sm">
             <div class="col-lg-8 col-md-7 col-12">
-                <div class="x_panel in-left a2">
+                <div class="x_panel in-left a2 academicActivities">
                     <div class="x_title">
                         <h2>Academic Activities</h2>
                         <div class="clearfix"></div>
@@ -660,7 +660,7 @@
             </div>
 
             <div class="col-lg-4 col-md-5 col-12">
-                <div class="x_panel in-right a2">
+                <div class="x_panel in-right a2 activeNotice">
                     <div class="x_title">
                         <h2>Active Notice/News</h2>
                         <div class="clearfix"></div>
@@ -686,13 +686,13 @@
                                             <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#GetFileName(Eval("FILENAME"))%></asp:HyperLink>--%>
 
                                             <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
-                                                    <p><%#Eval("NEWSDESC") %></p>
+                                            <p><%#Eval("NEWSDESC") %></p>
                                         </div>
                                     </article>
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
-                        
+
                     </div>
                     <div class="x_title d-none">
                         <h2>Expired Notice/News</h2>
@@ -725,13 +725,40 @@
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="<%=Page.ResolveClientUrl("~/plugins/Introjs/intro.js")%>"></script>
+    <script>
+        var userType = '<%=Session["usertype"] %>';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // setTimeout(function(){ 
+            checkTheIntro(userType);
+        //   }, 4000);
+           
+
+        })
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve the parameter from the URL
+            var urlParams = new URLSearchParams(window.location.search);
+            //alert('<%=Session["executeScript"] %>')
+            var executeScript = '<%=Session["executeScript"] %>';//urlParams.get('executeScript');
+            var uatype = '<%=Session["usertype"] %>';
+            // Check if the parameter indicates to execute the script
+            if (executeScript == 'True') {
+                //alert();
+                checkTheIntroWelcome(uatype);
+                    <% Session["executeScript"] = ""; %>
+                }
+        });
+    </script>
     <script>
         var tableOffset = $("#table-1").offset().top;
         var $header = $("#table-1 > thead").clone();
@@ -780,13 +807,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/ShowFeMaleCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowFeMaleCount")%>',
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessfeMaleCount,
-                 failure: function (response) {
-                 }
-             });
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessfeMaleCount,
+                failure: function (response) {
+                }
+            });
             function OnSuccessfeMaleCount(response) {
                 var femaleCount = response['d'];
 
@@ -798,13 +825,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/ShowFeMaleCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowOtherCount")%>',
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessOtherCount,
-                 failure: function (response) {
-                 }
-             });
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessOtherCount,
+                failure: function (response) {
+                }
+            });
             function OnSuccessOtherCount(response) {
                 var otherCount = response['d'];
 
@@ -816,13 +843,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/ActiveUserCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ActiveUserCount")%>',
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessActiveUserCount,
-                 failure: function (response) {
-                 }
-             });
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessActiveUserCount,
+                failure: function (response) {
+                }
+            });
             function OnSuccessActiveUserCount(response) {
                 var activeUserCount = response['d'];
                 $('#lblActiveUser').html(activeUserCount);
@@ -833,13 +860,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/TotalStudentCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/TotalStudentCount")%>',
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessTotstudentCount,
-                 failure: function (response) {
-                 }
-             });
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessTotstudentCount,
+                failure: function (response) {
+                }
+            });
             function OnSuccessTotstudentCount(response) {
                 var totStudentCount = response['d'];
                 $('#lblTotalStudent').html(totStudentCount);
@@ -850,13 +877,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/BindStudentsCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindStudentsCount")%>',
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessStudentsCount,
-                 failure: function (response) {
-                 }
-             });
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessStudentsCount,
+                failure: function (response) {
+                }
+            });
             function OnSuccessStudentsCount(response) {
                 var StudentCount = response['d'];
                 loadStudentDetails(StudentCount);
@@ -897,14 +924,14 @@
 
                 type: "POST",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindLeaveCount")%>',
-                 //url: "principalHome.aspx/BindLeaveCount",
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessLeaveDetails,
-                 failure: function (response) {
-                 }
-             });
+                //url: "principalHome.aspx/BindLeaveCount",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessLeaveDetails,
+                failure: function (response) {
+                }
+            });
 
             function OnSuccessLeaveDetails(response) {
                 // console.log("Data", response);
@@ -926,14 +953,14 @@
             $.ajax({
                 type: "POST",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapprove")%>',
-                 //url: "principalHome.aspx/ShowLeaveapprove",
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessApprovePendignLeaveDetails,
-                 failure: function (response) {
-                 }
-             });
+                //url: "principalHome.aspx/ShowLeaveapprove",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessApprovePendignLeaveDetails,
+                failure: function (response) {
+                }
+            });
             function OnSuccessApprovePendignLeaveDetails(response) {
                 var ApprovePendignLeave = response['d'];
                 loadApprovePendignLeaveDetails(ApprovePendignLeave);
@@ -970,14 +997,14 @@
             $.ajax({
                 type: "POST",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapproveCount")%>',
-                 //url: "principalHome.aspx/ShowLeaveapproveCount",
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessApproveLeaveDetails,
-                 failure: function (response) {
-                 }
-             });
+                //url: "principalHome.aspx/ShowLeaveapproveCount",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessApproveLeaveDetails,
+                failure: function (response) {
+                }
+            });
             function OnSuccessApproveLeaveDetails(response) {
                 var ApproveLeaveCount = response['d'];
                 loadApproveLeaveDetails(ApproveLeaveCount);
@@ -1011,14 +1038,14 @@
             $.ajax({
                 type: "POST",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowPendingCount")%>',
-                 //url: "principalHome.aspx/ShowPendingCount",
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessPendingLeaveDetails,
-                 failure: function (response) {
-                 }
-             });
+                //url: "principalHome.aspx/ShowPendingCount",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessPendingLeaveDetails,
+                failure: function (response) {
+                }
+            });
             function OnSuccessPendingLeaveDetails(response) {
                 var PendingLeaveCount = response['d'];
                 loadPendingLeaveDetails(PendingLeaveCount);
@@ -1053,13 +1080,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/BindActivityDetails",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindActivityDetails")%>',
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessActivityDetails,
-                 failure: function (response) {
-                 }
-             });
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessActivityDetails,
+                failure: function (response) {
+                }
+            });
             function OnSuccessActivityDetails(response) {
                 var ActivityData = response['d'];
                 loadActivityDetails(ActivityData);
@@ -1182,13 +1209,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/ShowResultData",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowResultData")%>',
-                 data: '{}',
-                 contentType: "application/json; charset=utf-8",
-                 dataType: "json",
-                 success: OnSuccessResultData,
-                 failure: function (response) {
-                 }
-             });
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessResultData,
+                failure: function (response) {
+                }
+            });
             function OnSuccessResultData(response) {
                 var resultdata = response['d'];
                 loadReslutAnalysisDetails(resultdata);
@@ -1352,77 +1379,77 @@
                 $.ajax({
                     type: "POST",
                     url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapprove")%>',
-                //url: "principalHome.aspx/ShowLeaveapprove",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessApprovePendignLeaveDetails,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessApprovePendignLeaveDetails(response) {
-                var ApprovePendignLeave = response['d'];
-                loadApprovePendignLeaveDetails2(ApprovePendignLeave);
-            };
+                    //url: "principalHome.aspx/ShowLeaveapprove",
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccessApprovePendignLeaveDetails,
+                    failure: function (response) {
+                    }
+                });
+                function OnSuccessApprovePendignLeaveDetails(response) {
+                    var ApprovePendignLeave = response['d'];
+                    loadApprovePendignLeaveDetails2(ApprovePendignLeave);
+                };
 
-            function loadApprovePendignLeaveDetails2(ApprovePendignLeave) {
-                //$('#tLeaveAll tbody').empty();
-                $('#tLeaveAll').empty();
-                var html = '';
-                if (ApprovePendignLeave != null) {
-                    if (ApprovePendignLeave.length > 0) {
-                        $.each(ApprovePendignLeave, function (row, item) {
-                            html += '<tr>';
-                            html += '<td class="text-left">' + item.EmpName + '</td>';
-                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
-                            html += '<td class="text-center">' + item.LName + '</td>';
-                            html += '<td class="text-center">' + item.From_date + '</td>';
-                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
-                            html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick="return UpdateDataLeave(' + item.LETRNO + ')" /></td>';
-                            //html += '<td class="text-center">' + '<a href="ESTABLISHMENT/LEAVES/Transactions/DashboardleaveApproval.aspx" target="_self" style="text-align: right" class="buttonStyle ui-corner-all btn btn-success">Go To Approval</a>' + '</td>';
-                            //html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick=UpdateData('+item.letr+')/></td>' Leave_Approval.aspx;
+                function loadApprovePendignLeaveDetails2(ApprovePendignLeave) {
+                    //$('#tLeaveAll tbody').empty();
+                    $('#tLeaveAll').empty();
+                    var html = '';
+                    if (ApprovePendignLeave != null) {
+                        if (ApprovePendignLeave.length > 0) {
+                            $.each(ApprovePendignLeave, function (row, item) {
+                                html += '<tr>';
+                                html += '<td class="text-left">' + item.EmpName + '</td>';
+                                html += '<td class="text-center">' + item.SUBDEPT + '</td>';
+                                html += '<td class="text-center">' + item.LName + '</td>';
+                                html += '<td class="text-center">' + item.From_date + '</td>';
+                                html += '<td class="text-center">' + item.TO_DATE + '</td>';
+                                html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick="return UpdateDataLeave(' + item.LETRNO + ')" /></td>';
+                                //html += '<td class="text-center">' + '<a href="ESTABLISHMENT/LEAVES/Transactions/DashboardleaveApproval.aspx" target="_self" style="text-align: right" class="buttonStyle ui-corner-all btn btn-success">Go To Approval</a>' + '</td>';
+                                //html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick=UpdateData('+item.letr+')/></td>' Leave_Approval.aspx;
 
-                            html += '</tr>';
-                        });
+                                html += '</tr>';
+                            });
+                        } else {
+                            html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                        }
                     } else {
                         html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
                     }
-                } else {
-                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                }
-                $('#tLeaveAll').append(html);
-            };
-        }
+                    $('#tLeaveAll').append(html);
+                };
+            }
             var BinleaveCount = function () {
                 //alert('print2');
                 $.ajax({
 
                     type: "POST",
                     url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindLeaveCount")%>',
-                //url: "principalHome.aspx/BindLeaveCount",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessLeaveDetails2,
-                failure: function (response) {
-                }
-            });
+                    //url: "principalHome.aspx/BindLeaveCount",
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccessLeaveDetails2,
+                    failure: function (response) {
+                    }
+                });
 
-            function OnSuccessLeaveDetails2(response) {
-                // console.log("Data", response);
-                //debugger;
-                var ToTal_Applied = response['d'].ToTal_Applied;
-                var Approve_Leave = response['d'].Approve_Leave;
-                var Pending_Leave = response['d'].Pending_Leave;
-                //loadleavecount(leavecount);
+                function OnSuccessLeaveDetails2(response) {
+                    // console.log("Data", response);
+                    //debugger;
+                    var ToTal_Applied = response['d'].ToTal_Applied;
+                    var Approve_Leave = response['d'].Approve_Leave;
+                    var Pending_Leave = response['d'].Pending_Leave;
+                    //loadleavecount(leavecount);
 
-                $('#lblToTal_Applied').html(ToTal_Applied);
-                //alert(ToTal_Applied);
-                $('#lblApprove_Leave').html(Approve_Leave);
-                $('#lblPending_Leave').html(Pending_Leave);
+                    $('#lblToTal_Applied').html(ToTal_Applied);
+                    //alert(ToTal_Applied);
+                    $('#lblApprove_Leave').html(Approve_Leave);
+                    $('#lblPending_Leave').html(Pending_Leave);
 
-            };
-        }
+                };
+            }
 
             /************************ Quick Access ************************/
 

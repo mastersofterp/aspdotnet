@@ -312,6 +312,7 @@
                             <div class="col-12 btn-footer" id="divButton" runat="server">
                                 <asp:Button ID="btnShowReport" runat="server" Text="Ledger Report" OnClick="btnShowReport_Click" Visible="false" CssClass="btn btn-info" />
                                 <asp:Button ID="btnShowReportFormat2" runat="server" Text="Ledger Report Format-II" OnClick="btnShowReportFormat2_Click" Visible="false" CssClass="btn btn-info" />
+                                <asp:Button ID="btnledgerFormat3" runat="server" Text="Ledger Report Format-II" OnClick="btnledgerFormat3_Click" Visible="false" CssClass="btn btn-info" />
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" Visible="false" CssClass="btn btn-warning" />
                             </div>
                         </div>

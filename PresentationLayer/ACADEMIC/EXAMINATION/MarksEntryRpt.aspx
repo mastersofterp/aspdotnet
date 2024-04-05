@@ -38,7 +38,7 @@
                                                 AutoPostBack="True" OnSelectedIndexChanged="ddlcollege_SelectedIndexChanged">
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvcollege" runat="server" ControlToValidate="ddlcollege"
-                                                Display="None" ErrorMessage="Please Select College Scheme." InitialValue="0" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select College & Scheme." InitialValue="0" SetFocusOnError="True"
                                                 ValidationGroup="show"></asp:RequiredFieldValidator>
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12 form-group">
@@ -118,14 +118,27 @@
                                     </div>
                                 </div>
                                 <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnInMrkPDF" TabIndex="16" runat="server" ValidationGroup="show"
-                                        Text=" Internal Mark In PDF(Course Wise)" CssClass="btn btn-info" OnClick="btnInMrkPDF_Click" Visible="true" />
-                                    <asp:Button ID="btnWeightarpt" TabIndex="20" runat="server" ValidationGroup="show"
-                                        Text="Internal Weightagewise Report" CssClass="btn btn-info" OnClick="btnWeightarpt_Click" Visible="true" />
-                                    <asp:Button ID="BtnExcelReport" TabIndex="1" runat="server" Text="Internal Mark Details" 
-                                        CssClass="btn btn-info" OnClick="BtnExcelReport_Click" ValidationGroup="Excel"  />
-                                    <asp:Button ID="btnCancel2" runat="server" TabIndex="1" OnClick="btnCancel2_Click"
-                                        Text="Cancel" CssClass="btn btn-warning" />
+                                    <div class="col-12 btn-footer mt-4">
+                                        <asp:Button ID="btnInMrkPDF" TabIndex="1" runat="server" ValidationGroup="show"
+                                            Text=" Internal Mark In PDF(Course Wise)" CssClass="btn btn-info" OnClick="btnInMrkPDF_Click" Visible="true" />
+
+                                        <asp:Button ID="btnWeightarpt" TabIndex="1" runat="server" ValidationGroup="show"
+                                            Text="Internal Weightagewise Report" CssClass="btn btn-info" OnClick="btnWeightarpt_Click" Visible="true" />
+
+                                        <asp:Button ID="BtnExcelCW" TabIndex="1" runat="server" ValidationGroup="show"
+                                            Text=" Internal Mark In Excel(Course Wise)" CssClass="btn btn-info" OnClick="BtnExcelCW_Click" Visible="true" />
+
+                                    </div>
+                                    <div class="col-12 btn-footer mt-4">
+                                        <asp:Button ID="btnIntExcel" TabIndex="1" runat="server" ValidationGroup="show"
+                                            Text="Internal Mark Course Wise (Excel)" CssClass="btn btn-info" Visible="true" OnClick="btnIntExcel_Click" />
+
+                                        <asp:Button ID="BtnExcelReport" TabIndex="1" runat="server" Text="Internal Mark Details"
+                                            CssClass="btn btn-info" OnClick="BtnExcelReport_Click" ValidationGroup="Excel" />
+
+                                        <asp:Button ID="btnCancel2" runat="server" TabIndex="1" OnClick="btnCancel2_Click"
+                                            Text="Cancel" CssClass="btn btn-warning" />
+                                    </div>
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary1" ValidationGroup="show" DisplayMode="List"
                                         ShowSummary="false" ShowMessageBox="true" />
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary2" ValidationGroup="Excel" DisplayMode="List"
@@ -140,7 +153,10 @@
             </div>
         </ContentTemplate>
         <Triggers>
+            <asp:PostBackTrigger ControlID="btnIntExcel" />
             <asp:PostBackTrigger ControlID="BtnExcelReport" />
+            <asp:PostBackTrigger ControlID="btnIntExcel" />
+            <asp:PostBackTrigger ControlID="BtnExcelCW" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>

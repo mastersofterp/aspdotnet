@@ -58,7 +58,9 @@ namespace IITMS
                
                 private string _college_id_str = string.Empty; //add by maithili 19/08/2022
                 private int _sequence_no = 0; //For Session to add Sequence Number
-                 private string _projectname = string.Empty;
+                private string _projectname = string.Empty;
+                private string _projectid = string.Empty;  //Added by Gunesh Mohane on 26-03-2024
+                private string _selection = string.Empty;  //Added by Gunesh Mohane on 26-03-2024
                 #endregion
 
                 #region Public Properties
@@ -264,6 +266,20 @@ namespace IITMS
                 {
                     get { return _studyPattern; }
                     set { _studyPattern = value; }
+                }
+
+                //Added by Gunesh Mohane on 26-03-2024
+                public string ProjectID
+                {
+                    get { return _projectid; }
+                    set { _projectid = value; }
+                }
+
+                //Added by Gunesh Mohane on 26-03-2024
+                public string Selection
+                {
+                    get { return _selection; }
+                    set { _selection = value; }
                 }
                 #endregion
             }

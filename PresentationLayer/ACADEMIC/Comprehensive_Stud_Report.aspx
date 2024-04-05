@@ -1277,9 +1277,9 @@
                                                                                     <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
                                                                                         <tr>
                                                                                             
-                                                                                            <th>Semester
-                                                                                            </th>
                                                                                             <th>CCode
+                                                                                            </th>
+                                                                                            <th>Semester 
                                                                                             </th>
                                                                                             <th>Course Name
                                                                                             </th>
@@ -1859,11 +1859,11 @@
                                                                                     </table>
                                                                                 </div>
                                                                             </LayoutTemplate>
-                                                                           <EmptyDataTemplate>
-                                                                                           <%-- <div style="text-align: center; font-family: Arial; font-size: medium">
-                                                                                                No Record Found
-                                                                                            </div>--%>
-                                                                           </EmptyDataTemplate>
+                                                                            <EmptyDataTemplate>
+                                                                                <%--<div style="text-align: center; font-family: Arial; font-size: medium">
+                                                                                No Record Found
+                                                                            </div>--%>
+                                                                            </EmptyDataTemplate>
                                                                             <ItemTemplate>
                                                                                 <tr>
                                                                                     <td>
@@ -2932,13 +2932,13 @@
     <script>
         function Checktabid(tabid) {
             $("#ctl00_ContentPlaceHolder1_hdfDyanamicTabId").val($(tabid).attr("href").replace('#', ''));
-         
+
         }
 
 
         function SaveUpdateStudentConfig() {
             debugger;
-          //  var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}'
+            //  var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}'
             //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
             $.ajax({
                 type: "POST",
@@ -2948,7 +2948,7 @@
                 dataType: "json",
                 success: function (data) {
                     debugger;
-                  //  var Jdata = data.d;
+                    //  var Jdata = data.d;
                     alert(Jdata);
                 },
                 failure: function (response) {
@@ -2960,27 +2960,27 @@
                     alert(response.responseText);
                 }
             });
-        }       
+        }
     </script>
 
     <script type="text/javascript">
         function check() {
-          
-                $.ajax({
-                    type: "POST",
-                    url: "Comprehensive_Stud_Report.aspx/GetAttendanceDetails",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (response) {
-                        alert(response.d); // Display the response in an alert (replace with your logic)
-                    },
-                    error: function (xhr, status, error) {
-                        console.log(xhr.responseText); // Log the error to the console
-                    }
-                });
-          
+
+            $.ajax({
+                type: "POST",
+                url: "Comprehensive_Stud_Report.aspx/GetAttendanceDetails",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    alert(response.d); // Display the response in an alert (replace with your logic)
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText); // Log the error to the console
+                }
+            });
+
         }
-     
+
 </script>
       <script>
           function HideTableColumns() {

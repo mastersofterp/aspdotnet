@@ -181,8 +181,35 @@
 
 
                                 <div class="col-12">
-
-                                    <asp:ListView ID="lvonlinemapping" runat="server">
+                                   <%-- <div runat="server" visible="false" class="row">
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-12 d-flex mb-0 pb-0 mt-3">
+                                            <div class="form-group d-flex mb-0 pb-0">
+                                                <label class="mt-1 mr-1">Show</label>
+                                                <asp:DropDownList ID="NumberDropDown" runat="server" CssClass="custom-dropdown" AutoPostBack="true" OnSelectedIndexChanged="NumberDropDown_SelectedIndexChanged">
+                                                    <asp:ListItem Text="25" Value="25"></asp:ListItem>
+                                                    <asp:ListItem Text="50" Value="50"></asp:ListItem>
+                                                    <asp:ListItem Text="100" Value="100"></asp:ListItem>
+                                                    <asp:ListItem Text="200" Value="200"></asp:ListItem>
+                                                    <asp:ListItem Text="500" Value="500"></asp:ListItem>
+                                                    <asp:ListItem Text="1000" Value="1000"></asp:ListItem>
+                                                    <asp:ListItem Text="1500" Value="1500"></asp:ListItem>
+                                                    <asp:ListItem Text="2000" Value="2000"></asp:ListItem>
+                                                     <asp:ListItem Text="3000" Value="3000"></asp:ListItem>
+                                                     <asp:ListItem Text="4000" Value="4000"></asp:ListItem>
+                                                </asp:DropDownList>
+                                                <label class="mt-1 ml-1">Entries</label>
+                                            </div>
+                                        </div>
+                                        <div></div>
+                                        <div></div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-12 d-none">
+                                            <div class="form-group" style="text-align: right;">
+                                                <label for="FilterData"></label>
+                                                <input type="text" id="FilterData" class="form-control sfilter" placeholder="Search" />
+                                            </div>
+                                        </div>OnPagePropertiesChanging="lvBulkDetail_PagePropertiesChanging"
+                                    </div>--%>
+                                    <asp:ListView ID="lvonlinemapping" runat="server" >
                                         <LayoutTemplate>
                                             <div id="demo-grid">
                                                 <div class="sub-heading">
@@ -191,7 +218,8 @@
                                                 <%-- <div class="sub-heading">
                                                        <h5>Online Degree subject Mapping List</h5>
                                                         </div>--%>
-                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tab-le">
+
+                                                <table class="table table-striped table-bordered nowrap display2" style="width: 100%" id="tab-le">
                                                     <%--  <table class="table table-striped table-bordered nowrap" style="width: 100% !important" id="tab-le">--%>
                                                     <thead class="bg-light-blue">
                                                         <tr>
@@ -233,6 +261,35 @@
                                             </tr>
                                         </ItemTemplate>
                                     </asp:ListView>
+                                 <%--   <div runat="server" visible="false" style="text-align: left; margin-top: 0px;">
+                                        <asp:DataPager ID="DataPager2" runat="server" PagedControlID="lvonlinemapping" PageSize="50">
+                                            <Fields>
+                                                <asp:TemplatePagerField>
+                                                    <PagerTemplate>
+                                                        <b>Showing
+                                                                <asp:Label runat="server" ID="CurrentPageLabel"
+                                                                    Text="<%# Container.StartRowIndex+1 %>" />
+                                                            to
+                                                                <asp:Label runat="server" ID="TotalPagesLabel"
+                                                                    Text="<%# Convert.ToInt32(Container.StartRowIndex + Container.PageSize) > Convert.ToInt32(Container.TotalRowCount) ? Convert.ToInt32(Container.TotalRowCount):Convert.ToInt32(Container.StartRowIndex+ Container.PageSize) %>" />
+                                                            ( of
+                                                                <asp:Label runat="server" ID="TotalItemsLabel"
+                                                                    Text="<%# Container.TotalRowCount%>" />
+                                                            records)
+                                                                <br />
+                                                        </b>
+                                                    </PagerTemplate>
+                                                </asp:TemplatePagerField>
+                                            </Fields>
+                                        </asp:DataPager>
+                                    </div>
+                                    <div style="text-align: right; margin-top: 0px;">
+                                        <asp:DataPager ID="DataPager1" runat="server" PagedControlID="lvonlinemapping" PageSize="1000">
+                                            <Fields>
+                                                <asp:NumericPagerField />
+                                            </Fields>
+                                        </asp:DataPager>
+                                    </div>--%>
                                 </div>
                             </div>
                         </div>
@@ -286,7 +343,7 @@
                 alert("Please Enter Subject Name.");
                 return false;
             }
-           
+
 
             $('#hfdiscompulsory').val($('#rdiscompulsoryYes').prop('checked'));
             $('#hfdiscutoff').val($('#rdiscutoffYes').prop('checked'));
@@ -330,5 +387,338 @@
 
             }
         }
+    </script>
+   <script type="text/javascript">
+        function Datatable()
+        {
+            $(document).ready(function () {
+                var table = $('.display2').DataTable({
+                    responsive: true,
+                    lengthChange: true,
+                    scrollY: 320,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    paging: true,
+                    //lengthMenu: [
+                    // [500, 1000, 2000, 3000, 4000, 5000, 10000],
+                    // [500 + " - " + 1000, 1000 + " - " + 2000, 2000 + " - " + 3000, 3000 + " - " + 4000, 4000 + " - " + 5000, 5000 + " - " + 10000, "All"]
+                    //],
+                    dom: 'lBfrtip',
+                    buttons: [
+                        {
+                            extend: 'colvis',
+                            text: 'Column Visibility',
+                            columns: function (idx, data, node) {
+                                var arr = [0];
+                                if (arr.indexOf(idx) !== -1) {
+                                    return false;
+                                } else {
+                                    return $('.display2').DataTable().column(idx).visible();
+                                }
+                            }
+                        },
+                        {
+                            extend: 'collection',
+                            text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
+                            buttons: [
+                                {
+                                    extend: 'copyHtml5',
+                                    exportOptions: {
+                                        columns: function (idx, data, node) {
+                                            var arr = [0];
+                                            if (arr.indexOf(idx) !== -1) {
+                                                return false;
+                                            } else {
+                                                return $('.display2').DataTable().column(idx).visible();
+                                            }
+                                        },
+                                        format: {
+                                            body: function (data, column, row, node) {
+                                                var nodereturn;
+                                                if ($(node).find("input:text").length > 0) {
+                                                    nodereturn = "";
+                                                    nodereturn += $(node).find("input:text").eq(0).val();
+                                                }
+                                                else if ($(node).find("input:checkbox").length > 0) {
+                                                    nodereturn = "";
+                                                    $(node).find("input:checkbox").each(function () {
+                                                        if ($(this).is(':checked')) {
+                                                            nodereturn += "On";
+                                                        } else {
+                                                            nodereturn += "Off";
+                                                        }
+                                                    });
+                                                }
+                                                else if ($(node).find("a").length > 0) {
+                                                    nodereturn = "";
+                                                    $(node).find("a").each(function () {
+                                                        nodereturn += $(this).text();
+                                                    });
+                                                }
+                                                else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                    nodereturn = "";
+                                                    $(node).find("span").each(function () {
+                                                        nodereturn += $(this).text();
+                                                    });
+                                                }
+                                                else if ($(node).find("select").length > 0) {
+                                                    nodereturn = "";
+                                                    $(node).find("select").each(function () {
+                                                        var thisOption = $(this).find("option:selected").text();
+                                                        if (thisOption !== "Please Select") {
+                                                            nodereturn += thisOption;
+                                                        }
+                                                    });
+                                                }
+                                                else if ($(node).find("img").length > 0) {
+                                                    nodereturn = "";
+                                                }
+                                                else if ($(node).find("input:hidden").length > 0) {
+                                                    nodereturn = "";
+                                                }
+                                                else {
+                                                    nodereturn = data;
+                                                }
+                                                return nodereturn;
+                                            },
+                                        },
+                                    }
+                                },
+                                {
+                                    extend: 'excelHtml5',
+                                    exportOptions: {
+                                        columns: function (idx, data, node) {
+                                            var arr = [0];
+                                            if (arr.indexOf(idx) !== -1) {
+                                                return false;
+                                            } else {
+                                                return $('.display2').DataTable().column(idx).visible();
+                                            }
+                                        },
+                                        format: {
+                                            body: function (data, column, row, node) {
+                                                var nodereturn;
+                                                if ($(node).find("input:text").length > 0) {
+                                                    nodereturn = "";
+                                                    nodereturn += $(node).find("input:text").eq(0).val();
+                                                }
+                                                else if ($(node).find("input:checkbox").length > 0) {
+                                                    nodereturn = "";
+                                                    $(node).find("input:checkbox").each(function () {
+                                                        if ($(this).is(':checked')) {
+                                                            nodereturn += "On";
+                                                        } else {
+                                                            nodereturn += "Off";
+                                                        }
+                                                    });
+                                                }
+                                                else if ($(node).find("a").length > 0) {
+                                                    nodereturn = "";
+                                                    $(node).find("a").each(function () {
+                                                        nodereturn += $(this).text();
+                                                    });
+                                                }
+                                                else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                    nodereturn = "";
+                                                    $(node).find("span").each(function () {
+                                                        nodereturn += $(this).text();
+                                                    });
+                                                }
+                                                else if ($(node).find("select").length > 0) {
+                                                    nodereturn = "";
+                                                    $(node).find("select").each(function () {
+                                                        var thisOption = $(this).find("option:selected").text();
+                                                        if (thisOption !== "Please Select") {
+                                                            nodereturn += thisOption;
+                                                        }
+                                                    });
+                                                }
+                                                else if ($(node).find("img").length > 0) {
+                                                    nodereturn = "";
+                                                }
+                                                else if ($(node).find("input:hidden").length > 0) {
+                                                    nodereturn = "";
+                                                }
+                                                else {
+                                                    nodereturn = data;
+                                                }
+                                                return nodereturn;
+                                            },
+                                        },
+                                    }
+                                },
+
+                            ]
+                        }
+                    ],
+                    "bDestroy": true,
+                });
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var table = $('.display2').DataTable({
+                responsive: true,
+                lengthChange: true,
+                scrollY: 320,
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                //lengthMenu: [
+                // [500, 1000, 2000, 3000, 4000, 5000, 10000],
+                // [500 + " - " + 1000, 1000 + " - " + 2000, 2000 + " - " + 3000, 3000 + " - " + 4000, 4000 + " - " + 5000, 5000 + " - " + 10000, "All"]
+                //],
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        text: 'Column Visibility',
+                        columns: function (idx, data, node) {
+                            var arr = [0];
+                            if (arr.indexOf(idx) !== -1) {
+                                return false;
+                            } else {
+                                return $('.display2').DataTable().column(idx).visible();
+                            }
+                        }
+                    },
+                    {
+                        extend: 'collection',
+                        text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
+                        buttons: [
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: function (idx, data, node) {
+                                        var arr = [0];
+                                        if (arr.indexOf(idx) !== -1) {
+                                            return false;
+                                        } else {
+                                            return $('.display2').DataTable().column(idx).visible();
+                                        }
+                                    },
+                                    format: {
+                                        body: function (data, column, row, node) {
+                                            var nodereturn;
+                                            if ($(node).find("input:text").length > 0) {
+                                                nodereturn = "";
+                                                nodereturn += $(node).find("input:text").eq(0).val();
+                                            }
+                                            else if ($(node).find("input:checkbox").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:checkbox").each(function () {
+                                                    if ($(this).is(':checked')) {
+                                                        nodereturn += "On";
+                                                    } else {
+                                                        nodereturn += "Off";
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("a").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("a").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                nodereturn = "";
+                                                $(node).find("span").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("select").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("select").each(function () {
+                                                    var thisOption = $(this).find("option:selected").text();
+                                                    if (thisOption !== "Please Select") {
+                                                        nodereturn += thisOption;
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("img").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else if ($(node).find("input:hidden").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else {
+                                                nodereturn = data;
+                                            }
+                                            return nodereturn;
+                                        },
+                                    },
+                                }
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                exportOptions: {
+                                    columns: function (idx, data, node) {
+                                        var arr = [0];
+                                        if (arr.indexOf(idx) !== -1) {
+                                            return false;
+                                        } else {
+                                            return $('.display2').DataTable().column(idx).visible();
+                                        }
+                                    },
+                                    format: {
+                                        body: function (data, column, row, node) {
+                                            var nodereturn;
+                                            if ($(node).find("input:text").length > 0) {
+                                                nodereturn = "";
+                                                nodereturn += $(node).find("input:text").eq(0).val();
+                                            }
+                                            else if ($(node).find("input:checkbox").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:checkbox").each(function () {
+                                                    if ($(this).is(':checked')) {
+                                                        nodereturn += "On";
+                                                    } else {
+                                                        nodereturn += "Off";
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("a").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("a").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                nodereturn = "";
+                                                $(node).find("span").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("select").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("select").each(function () {
+                                                    var thisOption = $(this).find("option:selected").text();
+                                                    if (thisOption !== "Please Select") {
+                                                        nodereturn += thisOption;
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("img").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else if ($(node).find("input:hidden").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else {
+                                                nodereturn = data;
+                                            }
+                                            return nodereturn;
+                                        },
+                                    },
+                                }
+                            },
+
+                        ]
+                    }
+                ],
+                "bDestroy": true,
+            });
+        });
     </script>
 </asp:Content>

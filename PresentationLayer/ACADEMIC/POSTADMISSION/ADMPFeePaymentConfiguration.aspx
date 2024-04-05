@@ -3,6 +3,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.js")%>"></script>
 
     <script>
 
@@ -24,10 +26,12 @@
         }
 
     </script>
+ 
+ 
 
-    <script>
+      <script>
         function SetParticipation(val) {
-
+          
             $('#rdActive').prop('checked', val);
 
         }
@@ -43,6 +47,9 @@
                 });
             });
         });
+    </script>
+    <script>
+      
     </script>
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
 
@@ -113,7 +120,7 @@
                                             <sup>* </sup>
                                             <label>Degree </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlDegree" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                        <asp:DropDownList ID="ddlDegree" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
 
@@ -121,43 +128,82 @@
                                             Display="None" ErrorMessage="Please Select Degree" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
                                     </div>
-
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Status </label>
+                                            <label>Branch</label>
+
                                         </div>
-                                        <div class="switch form-inline">
-                                            <input type="checkbox" id="rdActive" name="Started" checked />
-                                            <label data-on="Started" data-off="Stopped" for="rdActive"></label>
-                                        </div>
+                                        <asp:ListBox ID="lstBranch" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo"
+                                            AppendDataBoundItems="true"></asp:ListBox>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="lstBranch" SetFocusOnError="true"
+                                            Display="None" ErrorMessage="Please Select Branch" InitialValue="" ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Start Date</label>
+                                            <label>Office Report  Start Date </label>
                                         </div>
-                                        <asp:TextBox ID="txtStartDate" runat="server" type="date" CssClass="form-control"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rfvtxtStartDate" runat="server" ControlToValidate="txtStartDate"
-                                            Display="None" ErrorMessage="Please Select Start Date" SetFocusOnError="True"
+                                        <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"   ></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtOfficeVisitStartDate"
+                                            Display="None" ErrorMessage="Please Select Office Report Start Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>End Date</label>
+                                            <label>Office Report End Date</label>
+                                        </div>
+                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtOfficeVisitEndDate"
+                                            Display="None" ErrorMessage="Please Select Office Report End Date" SetFocusOnError="True"
+                                            ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
+                                        <%--  <asp:CompareValidator ID="CompareValidator2" ValidationGroup="Academic" ForeColor="Red" runat="server"
+                                            ControlToValidate="txtOfficeVisitStartDate" ControlToCompare="txtOfficeVisitEndDate" Operator="LessThan" Type="Date"
+                                            Display="None" ErrorMessage=" Office Report  End Date Should Be Graeter Than Office Report Start Date."></asp:CompareValidator>--%>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Payment Start Date</label>
+                                        </div>
+                                        <asp:TextBox ID="txtStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtStartDate_TextChanged"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="rfvtxtStartDate" runat="server" ControlToValidate="txtStartDate"
+                                            Display="None" ErrorMessage="Please Select Payment Start Date" SetFocusOnError="True"
+                                            ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
+
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Payment End Date</label>
                                         </div>
                                         <asp:TextBox ID="txtEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtEndDate_TextChanged"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvtxtEndDate" runat="server" ControlToValidate="txtEndDate"
-                                            Display="None" ErrorMessage="Please Select End Date" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Payment End Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
-                                        <asp:CompareValidator ID="CompareValidator1" ValidationGroup="Academic" ForeColor="Red" runat="server"
+                                        <%--  <asp:CompareValidator ID="CompareValidator1" ValidationGroup="Academic" ForeColor="Red" runat="server"
                                             ControlToValidate="txtStartDate" ControlToCompare="txtEndDate" Operator="LessThan" Type="Date"
-                                            Display="None" ErrorMessage="Start date must be less than End date."></asp:CompareValidator>
+                                            Display="None" ErrorMessage="Payment Start  Date Should Be Graeter Than Office Report End Date."></asp:CompareValidator>--%>
                                     </div>
 
+
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Provisional Admission Offer Valid Date </label>
+                                        </div>
+                                        <asp:TextBox ID="txtProvisionalAdmissionValidDate" runat="server" type="date" CssClass="form-control" autopostback="true"  OnTextChanged="txtProvisionalAdmissionValidDate_TextChanged1"></asp:TextBox>
+                                        <%-- AutoPostBack="true" OnTextChanged="txtProvisionalAdmissionValidDate_TextChanged"--%>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtProvisionalAdmissionValidDate"
+                                            Display="None" ErrorMessage="Please Select Provisional Admission Offer Valid Date" SetFocusOnError="True"
+                                            ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
+                                    </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -180,13 +226,27 @@
                                             <sup>* </sup>
                                             <label id="lblAmount" runat="server">Amount </label>
                                         </div>
+
+
                                         <%--||event.charCode == 46--%>
-                                        <asp:TextBox ID="txtAmount" runat="server" type="number" TextMode="Number" OnTextChanged="txtAmount_TextChanged" AutoPostBack="true" min="0" onKeyUp="setMaxLength(this)" onBlur="setMaxLength(this)" isMaxLength="8" CssClass="form-control" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"></asp:TextBox>
+                                        <asp:TextBox ID="txtAmount" runat="server" type="number" TextMode="Number" OnTextChanged="txtAmount_TextChanged"  min="0" CssClass="form-control" onKeyUp="setMaxLength(this)"  onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"  isMaxLength="8" ></asp:TextBox>
 
                                         <asp:RequiredFieldValidator ID="rfvtxtAmount" runat="server" ControlToValidate="txtAmount"
                                             Display="None" ErrorMessage="Please Enter Amount/Percentage" SetFocusOnError="True"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                     </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Status </label>
+                                        </div>
+                                        <div class="switch form-inline">
+                                            <input type="checkbox" id="rdActive" name="Started" checked /> 
+
+                                            <label data-on="Started" data-off="Stopped" for="rdActive"></label>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -196,7 +256,7 @@
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false" OnClick="btnCancel_Click" />
                             </div>
 
-                            <div class="col-12 mt-3">
+                            <div class="col-12 mt-3" style="overflow-y: auto; max-height: 500px;">
                                 <div class="sub-heading">
                                     <h5>Fee Payment Configuration List</h5>
                                 </div>
@@ -211,8 +271,9 @@
                                                         <th>Admission Batch</th>
                                                         <th>Program Type</th>
                                                         <th>Degree</th>
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>
+                                                        <th>Branch</th>
+                                                        <th>Payment Start Date</th>
+                                                        <th>Payment End Date</th>
                                                         <th>Payment Category</th>
                                                         <th>Amount/Percentage</th>
                                                         <th>Status</th>
@@ -233,10 +294,20 @@
                                                 <td><%# Eval("ADMISSIONBATCH") %></td>
                                                 <td><%# Eval("PROGRAMTYPE") %></td>
                                                 <td><%# Eval("DEGREE") %></td>
-                                                <%--<td><%# Convert.ToDateTime (Eval("STDATE")).ToString("d") %></td>
-                                        <td><%# Convert.ToDateTime (Eval("ENDDATE")).ToString("d") %></td>--%>
-                                                <td><%# Eval("STARTDATE") %></td>
-                                                <td><%# Eval("ENDDATE") %></td>
+                                                <td><%# Eval("LONGNAME") %></td>
+
+                                                <td>
+                                                    <%# Eval("STARTDATE") %>
+                                                    <asp:HiddenField ID="hdnOfficeVisitStartDate" runat="server" Value='<%# Eval("OFFICE_VISIT_START_DATE") %>' />
+                                                </td>
+
+
+                                                <td>
+                                                    <%# Eval("ENDDATE") %>
+                                                    <asp:HiddenField ID="hdnOfficeVisitEndDate" runat="server" Value='<%# Eval("OFFICE_VISIT_End_DATE") %>' />
+                                                    <asp:HiddenField ID="hdnProvisinalDate" runat="server" Value='<%# Eval("PROVISIONAL_ADMISSION_OFFER_VALID_DATE") %>' />
+                                                </td>
+
 
                                                 <td><%# Eval("PAYMENTCATEGORY") %></td>
                                                 <td><%# Eval("FEEPAYMENT") %></td>
@@ -248,35 +319,7 @@
                                     </asp:ListView>
                                 </asp:Panel>
 
-                                <%--<table class="table table-striped table-bordered nowrap display" style="width: 100%">
-                            <thead class="bg-light-blue">
-                                <tr>
-                                    <th>Edit</th>
-                                    <th>Admission Batch</th>
-                                    <th>Program Type</th>
-                                    <th>Degree</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Status</th>
-                                    <th>Payment Category</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <asp:Image ID="imgEdit" runat="server" ImageUrl="~/Images/edit.png" /></td>
-                                    <td>Jan - June 2022</td>
-                                    <td>Program Type</td>
-                                    <td>Degree</td>
-                                    <td>01-11-2022</td>
-                                    <td>30-11-2022</td>
-                                    <td>Started</td>
-                                    <td>Fix Payment</td>
-                                    <td>50,000</td>
-                                </tr>
-                            </tbody>
-                        </table>--%>
+
                             </div>
 
                         </div>
@@ -297,6 +340,88 @@
 
         </Triggers>
     </asp:UpdatePanel>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.multi-select-demo').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 200,
+                enableFiltering: true,
+                filterPlaceholder: 'Search',
+                enableCaseInsensitiveFiltering: true,
+            });
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
+            $(document).ready(function () {
+                $('.multi-select-demo').multiselect({
+                    includeSelectAllOption: true,
+                    maxHeight: 200,
+                    enableFiltering: true,
+                    filterPlaceholder: 'Search',
+                    enableCaseInsensitiveFiltering: true,
+                });
+            });
+        });
 
+
+        $(document).ready(function () {
+            ValidateDate();
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
+            $(document).ready(function () {
+
+                ValidateDate();
+            });
+        });
+
+        function ValidateDate() {
+            $('#<%= txtStartDate.ClientID %>').click(function () {
+                var endDate = $('#<%= txtOfficeVisitEndDate.ClientID %>').val();
+                 var startDate = $(this).val();
+
+                 if (endDate === '') {
+                     alert('Please Select Office Report End Date First');
+                     $('#<%= txtOfficeVisitEndDate.ClientID %>').focus();
+                    $(this).val(''); // Clear the value of Start Date textbox
+                }
+             });
+
+
+
+            $('#<%= txtOfficeVisitEndDate.ClientID %>').click(function () {
+                var startDate = $('#<%= txtOfficeVisitStartDate.ClientID %>').val();
+
+                if (startDate === '') {
+                    alert('Please Select Office Report Start Date first');
+                    $('#<%= txtOfficeVisitStartDate.ClientID %>').focus();
+                    $('#<%= txtOfficeVisitEndDate.ClientID %>').val('');
+                }
+            });
+
+
+            $('#<%= txtEndDate.ClientID %>').click(function () {
+                var startDate = $('#<%= txtStartDate.ClientID %>').val();
+                var endDate = $(this).val();
+
+                if (startDate === '') {
+                    alert('Please Select Payment Start Date first');
+                    $('#<%= txtStartDate.ClientID %>').focus();
+                    $(this).val(''); 
+                }
+            });
+
+
+            $('#<%= txtProvisionalAdmissionValidDate.ClientID %>').click(function () {
+                var endDate = $('#<%= txtEndDate.ClientID %>').val();
+                var paymentValidDate = $(this).val();
+
+                if (endDate === '') {
+                    alert('Please Select Payment End Date first');
+                    $('#<%= txtEndDate.ClientID %>').focus();
+                    $(this).val(''); // Clear the value of Payment Valid Date textbox
+                }
+            });
+        }
+    </script>
 </asp:Content>
-

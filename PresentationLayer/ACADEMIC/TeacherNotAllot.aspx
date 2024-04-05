@@ -43,6 +43,7 @@
                                                 <asp:ListItem Value="2">Teacher Student not Alloted</asp:ListItem>
                                                 <asp:ListItem Value="3">Course Teacher Alloted</asp:ListItem>
                                                 <asp:ListItem Value="4">Teacher Not Tagged</asp:ListItem>
+                                                <asp:ListItem Value="5">Programs/Branches Not Yet Registered</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
                                     </div>
@@ -152,6 +153,26 @@
                                             <asp:RequiredFieldValidator ID="rfvTest" runat="server" ControlToValidate="ddlTest"
                                                 Display="None" ErrorMessage="Please Select Test" InitialValue="-1" SetFocusOnError="True"
                                                 ValidationGroup="report"></asp:RequiredFieldValidator>
+                                        </div>
+
+                                    </div>
+                                </asp:Panel>
+                                 <asp:Panel ID="pnlHideShow1" runat="server" Visible="false">
+                                    <div class="row">
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Session</label>
+                                                <%--<asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            </div>
+                                            <asp:DropDownList ID="ddlSessionH" runat="server" AutoPostBack="true" CssClass="form-control" data-select2-enable="true"
+                                                AppendDataBoundItems="true" TabIndex="2">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSessionH"
+                                                Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
+                                                ValidationGroup="teacherreport"></asp:RequiredFieldValidator>
                                         </div>
 
                                     </div>

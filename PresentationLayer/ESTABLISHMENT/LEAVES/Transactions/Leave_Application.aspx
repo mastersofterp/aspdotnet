@@ -45,6 +45,12 @@
         }
 
     </script>
+    <style>
+        .dataTables_scrollHeadInner
+        {
+            width: max-content!important;
+        }
+    </style>
     <%-- <asp:UpdatePanel ID="UpdatePanLeave" runat="server">
         <ContentTemplate>--%>
 
@@ -144,8 +150,8 @@
                     <div class="col-12 btn-footer">
                         <asp:LinkButton ID="lnkbut" runat="server" OnClick="lnkbut_Click" Text="Leave Application Status" CssClass="btn btn-primary"
                             ToolTip="Click here for Leave Application Status" TabIndex="2"></asp:LinkButton>
-                        <asp:LinkButton ID="lnkRestrictedLeaves" runat="server" OnClick="lnkRestrictedLeaves_Click" Text="Restricted Holidays List" CssClass="btn btn-primary"
-                            ToolTip="Click here for Leave Application Status" TabIndex="3" Style="display: none"></asp:LinkButton>
+                        <asp:LinkButton ID="lnkRestrictedLeaves" runat="server" OnClick="lnkRestrictedLeaves_Click" Text="Holidays List" CssClass="btn btn-primary"
+                            ToolTip="Click here for Holidays List" TabIndex="3" Style=" "></asp:LinkButton>
                     </div>
                     <asp:Panel ID="pnlLeaveStatus" runat="server">
                         <div class="col-12">
@@ -252,19 +258,17 @@
                             </EmptyDataTemplate>
                             <LayoutTemplate>
                                 <div class="sub-heading">
-                                    <h5>Restricted Holidays</h5>
+                                    <h5>Holidays List</h5>
                                 </div>
                                 <table class="table table-striped table-bordered nowrap display" style="width: 100%">
                                     <thead class="bg-light-blue">
                                         <tr>
-                                            <th></th>
                                             <th>Holiday Name
                                             </th>
-                                            <th>DATE
+                                            <th>Date
                                             </th>
-                                            <%-- <th>
-                                                        Joining Report
-                                                    </th>--%>
+                                            <th>Restricted Status
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -275,20 +279,14 @@
                             <ItemTemplate>
                                 <tr>
                                     <td>
-                                        <%--<asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit.gif" CommandArgument='<%# Eval("LETRNO") %>'
-                                                        AlternateText="Edit Record" ToolTip='<%# Eval("LNO")%>' OnClick="btnEdit_Click" Enabled="true" />&nbsp;
-                                                    <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/images/delete.gif" CommandArgument='<%# Eval("LETRNO") %>'
-                                                        AlternateText="Delete Record" ToolTip="Delete Record" OnClick="btnDelete_Click"
-                                                        OnClientClick="showConfirmDel(this); return false;" Enabled="true" />--%>
-
-                                    </td>
-                                    <td>
                                         <%# Eval("HOLIDAYNAME")%>
                                     </td>
                                     <td>
                                         <%# Eval("date")%>
                                     </td>
-
+                                    <td>
+                                        <%# Eval("RESTRICT_STATUS")%>
+                                    </td>
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
@@ -512,7 +510,7 @@
                                         <label>Reason</label>
                                     </div>
                                     <asp:TextBox ID="txtReason" runat="server" CssClass="form-control" TextMode="MultiLine"
-                                        ToolTip="Enter Reason" TabIndex="19" />
+                                        ToolTip="Enter Reason" TabIndex="19"  MaxLength="199" onkeyDown="checkTextAreaMaxLength(this,event,'199');" onkeyup="textCounter(this, this.form.remLen, 199);"/>
                                     <asp:RequiredFieldValidator ID="rfvReason" runat="server"
                                         ControlToValidate="txtReason" Display="None" ErrorMessage="Please Enter Reason"
                                         ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
@@ -522,7 +520,8 @@
                                         <label>Address During Leave</label>
                                     </div>
                                     <asp:TextBox ID="txtadd" runat="server" CssClass="form-control" TextMode="MultiLine"
-                                        ToolTip="Enter Address During Leave" TabIndex="20" />
+                                        ToolTip="Enter Address During Leave" TabIndex="20" MaxLength="170" 
+                                        onkeyDown="checkTextAreaMaxLength(this,event,'170');" onkeyup="textCounter(this, this.form.remLen, 170);"/>
                                 </div>
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <div class="label-dynamic">
@@ -544,7 +543,8 @@
                                         <label>Alternate Arrangement</label>
                                     </div>
                                     <asp:TextBox ID="txtcharge" runat="server" CssClass="form-control" ToolTip="Enter Charge Handed Over To"
-                                        TextMode="MultiLine" TabIndex="23"></asp:TextBox>
+                                        TextMode="MultiLine" TabIndex="23" MaxLength="90"
+                                        onkeyDown="checkTextAreaMaxLength(this,event,'90');" onkeyup="textCounter(this, this.form.remLen, 90);"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvcharge" runat="server" ControlToValidate="txtcharge"
                                         Display="None" ErrorMessage="Please Enter Alternate Arrangement" ValidationGroup="Leaveapp">
                                     </asp:RequiredFieldValidator>

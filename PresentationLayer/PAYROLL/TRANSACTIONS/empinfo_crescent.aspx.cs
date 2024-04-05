@@ -762,7 +762,7 @@ public partial class PAYROLL_TRANSACTIONS_empinfo_crescent : System.Web.UI.Page
         {
             DateTime RetDate = DateTime.MinValue;
             birthdate = Convert.ToDateTime(txtBirthDate.Text);
-            RetDate = Convert.ToDateTime(objECC.RetirementDate(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy"));
+            RetDate = Convert.ToDateTime(objECC.RetirementDateNew(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy"));
             if (RetDate == Convert.ToDateTime("9999-12-31"))
             {
             }
@@ -1605,7 +1605,7 @@ public partial class PAYROLL_TRANSACTIONS_empinfo_crescent : System.Web.UI.Page
                 {
                     //  DateTime RetDate = DateTime.MinValue;
                     birthdate = Convert.ToDateTime(txtBirthDate.Text);
-                    RetDate = Convert.ToDateTime(objECC.RetirementDate(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy"));
+                    RetDate = Convert.ToDateTime(objECC.RetirementDateNew(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToDateTime(birthdate)).ToString("dd/MM/yyyy"));
                     if (RetDate == Convert.ToDateTime("9999-12-31"))
                     {
                     }

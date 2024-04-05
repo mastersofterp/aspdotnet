@@ -136,6 +136,9 @@ namespace IITMS
                 private DataTable _TP_ROUND_TBL = null;  //sHAIKH jUNED 07-12-2022
                 private DataTable _TP_ANNOUNCE_FOR_TBL = null;  //sHAIKH jUNED 11-01-2023
                 private int _ACOMSCHNO = 0;
+                private int _ISBLOB = 0;
+                private string _ATTACHMENTS = string.Empty;
+                private string _FILEPATH = string.Empty;
                 #endregion 
 
                 #region Public Members
@@ -1157,6 +1160,28 @@ namespace IITMS
                              this._ACOMSCHNO = value;
                          }
                      }
+                 }
+
+
+                 public int ISBLOB
+                 {
+
+                     get { return _ISBLOB; }
+                     set { _ISBLOB = value; }
+                 }
+
+                 public string ATTACHMENTS
+                 {
+
+                     get { return _ATTACHMENTS; }
+                     set { _ATTACHMENTS = value; }
+                 }
+
+                 public string FILEPATH
+                 {
+
+                     get { return _FILEPATH; }
+                     set { _FILEPATH = value; }
                  }
 
  

@@ -539,13 +539,13 @@
     </script>
 
     <style>
-     @keyframes blink {
+        @keyframes blink {
             0%, 100% {
                 border: solid 2px #3F06FF;
             }
 
             50% {
-                border: solid 2px  #f10a0b;
+                border: solid 2px #f10a0b;
             }
         }
 
@@ -555,19 +555,19 @@
             animation: blink 1s linear infinite;
         }
     </style>
-     <script>
-         function AddClassTobtnoutfees() {
-             $('#ctl00_ContentPlaceHolder1_btnoutfees').addClass('blink');
-         }
+    <script>
+        function AddClassTobtnoutfees() {
+            $('#ctl00_ContentPlaceHolder1_btnoutfees').addClass('blink');
+        }
     </script>
 
     <asp:Panel ID="pnlMarquee" runat="server" Visible="false">
-         <div class="container-fluid">        
+        <div class="container-fluid">
             <h3>
-                <marquee width="100%" direction="left" style="color:#ff0000;font-size:18px"  >
+                <marquee width="100%" direction="left" style="color: #ff0000; font-size: 18px">
                      Due to student related ongoing activity, Students dashboard data has been off for certain period of time,It will available soon. 
                 </marquee>
-            </h3>                            
+            </h3>
         </div>
     </asp:Panel>
 
@@ -621,7 +621,8 @@
                                     <asp:Label ID="lblLastLoginTime" runat="server"></asp:Label>
                                     <small>
                                         <b>
-                                        <asp:Label ID="lblLastLoginForm" runat="server"></asp:Label></b></small></h3>&nbsp;
+                                            <asp:Label ID="lblLastLoginForm" runat="server"></asp:Label></b></small></h3>
+                                &nbsp;
                              
                                 <%--<span>Fees Related</span>--%>
                                 <asp:LinkButton ID="btnoutfees" runat="server" CssClass="btn btn-sm btn-outline-primary blink" Text="Pay" OnClick="btnoutfees_Click"></asp:LinkButton>
@@ -893,6 +894,51 @@
                         </div>
                     </div>
                 </div>
+
+                <%-- //-----------------start----14-12-2023--%>
+
+                <div class="col-lg-7 col-md-8 col-12">
+                    <div id="divplacement" runat="server">
+                        <div class="x_panel in-right a2">
+                            <div class="x_title">
+                                <h2>Placement Scheduled</h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content height-250 scrollbar">
+                                <asp:ListView ID="LvPlacement" runat="server">
+                                    <LayoutTemplate>
+                                        <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                            <thead class="bg-light-blue">
+                                                <tr>
+                                                    <th>Company Name</th>
+                                                    <th>Scheduled Date</th>
+                                                    <th>Salary/Stipend</th>
+                                                    <th>Eligibility</th>
+                                                    <th>Degree & Branch</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="itemPlaceholder" runat="server" />
+                                            </tbody>
+                                        </table>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td><%# Eval("COMPNAME")%></td>
+                                             <td><%# Eval("SCHEDULEDATE", "{0: dd-MM-yyyy}")%></td>
+                                            <td><%# Eval("Salary")%></td>
+                                            <td><%# Eval("CRITERIA")%></td>
+                                            <td><%# Eval("CourseStream")%></td>
+                                        </tr>
+                                    </ItemTemplate>
+                                </asp:ListView>
+                            </div>
+
+                            <%--  //end--------13-12-2023--%>
+                        </div>
+                    </div>
+                </div>
+                <%--  //---------------------end------14-12-2023--%>
             </div>
         </div>
     </div>

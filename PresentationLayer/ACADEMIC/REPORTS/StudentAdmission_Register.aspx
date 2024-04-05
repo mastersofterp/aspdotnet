@@ -200,7 +200,7 @@
 
                               <%--  OnClientClick="return validationAdmBatch();"--%>
 
-                                <asp:Button ID="btnAdmissionRegReport"  runat="server" Text="Admission Register Student Data (Excel)" OnClick="btnAdmissionRegReport_Click" TabIndex="14"  ValidationGroup="RegisterReport" CssClass="btn btn-info"  Visible="false"  />
+                                <asp:Button ID="btnAdmissionRegReport"  runat="server" Text="TOTAL APPLICABLE FEE REPORT(DEV,TUITION,GOVT)" OnClick="btnAdmissionRegReport_Click" TabIndex="14"  ValidationGroup="RegisterReport" CssClass="btn btn-info"  Visible="false"  />
                                 
                                  <asp:Button ID="btnAdmissionRegStuDataExcelReport" runat="server" Text="Admission Register Student Data (Excel Format II)" OnClick="btnAdmissionRegStuDataExcelReport_Click" ValidationGroup="RegisterReport" TabIndex="16" CssClass="btn btn-info"  Visible="false" />
 

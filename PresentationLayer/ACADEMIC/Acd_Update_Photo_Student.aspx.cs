@@ -112,7 +112,8 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
             objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.DEGREENO = " + ddlDegree.SelectedValue.ToString() + " AND B.COLLEGE_ID=" + ddlCollege.SelectedValue + " AND B.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "A.LONGNAME");
             lvUpdatePhoto.DataSource = null;
             lvUpdatePhoto.DataBind();
-            objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
+            //  Commented By Vipul T on date 13-02-2024
+            //  objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
             ddlBranch.Focus();
         }
         else
@@ -135,7 +136,8 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
         {
             lvUpdatePhoto.DataSource = null;
             lvUpdatePhoto.DataBind();
-            objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
+            //  Commented By Vipul T on date 13-02-2024
+            // objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
             ddlAdmbatch.Focus();
         }
         else
@@ -185,7 +187,8 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
             ddlDegree.Focus();
             lvUpdatePhoto.DataSource = null;
             lvUpdatePhoto.DataBind();
-            objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
+            //  Commented By Vipul T on date 13-02-2024
+            //  objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
             ddlDegree.Focus();
         }
         else
@@ -222,58 +225,116 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
 
     #endregion
 
+
+    //protected void lvGlobalTimeTable_ItemDataBound(object sender, ListViewItemEventArgs e)
+    //{
+    //    ListViewDataItem dataitem = (ListViewDataItem)e.Item;
+    //    ImageButton FacultyNo = dataitem.FindControl("btnEditTimeTable") as ImageButton;
+    //    HiddenField alternateflag = dataitem.FindControl("hdfalternateflag") as HiddenField;
+    //    //Label lblsessionnm = dataitem.FindControl("lblSessionname") as Label;
+    //    HiddenField hdfStartEndDate = dataitem.FindControl("hdfStartEndDate") as HiddenField;
+
+    //    int facultyno = Convert.ToInt32(FacultyNo.CommandArgument);
+    //    int courseno = Convert.ToInt32(FacultyNo.AlternateText);
+    //    int alternate = Convert.ToInt32(alternateflag.Value);
+    //    string startendate = hdfStartEndDate.Value;
+    //    string[] ttDates = startendate.Split('-');
+    //    string startDate; string endDate;
+    //    startDate = ttDates[0].Trim();
+    //    endDate = ttDates[1].Trim();
+    //    ListView lv = dataitem.FindControl("lvDetails") as ListView;
+    //    try
+    //    {
+    //        //Added By Rahul M. for lightweight performance.
+    //        if (ViewState["dsTimeslot"].ToString() != null)
+    //        {
+    //            DataSet dsFromViewState = ViewState["dsTimeslot"] as DataSet;
+    //            //DataSet ds = objCC.GetGlobalCoursesTimeTableDetailsSectionModified(facultyno, alternate, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate, courseno);
+    //            DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable()
+    //                               where Convert.ToInt32(r["UA_NO"]) == facultyno &&
+    //                                   Convert.ToDateTime(r["START_DATE"]) == Convert.ToDateTime(startDate) &&
+    //                                   Convert.ToDateTime(r["END_DATE"]) == Convert.ToDateTime(endDate) &&
+    //                                   Convert.ToInt32(r["COURSENO"]) == courseno &&
+    //                                   Convert.ToInt32(r["ALTERNATE_FLAG"]) == alternate
+    //                               select r).CopyToDataTable();
+    //            lv.DataSource = xdata;
+    //            lv.DataBind();
+    //        }
+
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        if (Convert.ToBoolean(Session["error"]) == true)
+    //            objUCommon.ShowError(Page, "Academic_Global_Offered_Course.GetGlobalCoursesTimeTableDetailsSection -> " + ex.Message + " " + ex.StackTrace);
+    //        else
+    //            objUCommon.ShowError(Page, "Server UnAvailable");
+    //    }
+    //}
+
+
+
+
+
     #region bind data
 
     private void BindListViewList(int branchNo, int admbatch, int degree, int college)
     {
         try
         {
+            ViewState["DYNAMIC_DATASET"] = null;
+            ViewState["DYNAMIC_DATASET_SIGN"] = null;
+            ViewState["dsoptimize"] = null;
             DataSet ds = objstudent.GetStudentsForUpdateBulkPhotoUpload(branchNo, admbatch, degree, college, Convert.ToInt32(Session["OrgId"]));
 
             if (ds.Tables[0].Rows.Count > 0)
             {
+                ViewState["dsoptimize"] = ds;
                 if (rboStudent.SelectedValue == "1")
                 {
                     butSubmit.Visible = true;
                     pnlUpdatePhoto.Visible = true;
                     lvUpdatePhoto.DataSource = ds;
                     lvUpdatePhoto.DataBind();
+                    ViewState["DYNAMIC_DATASET"] = ds.Tables[0];
                     pnlUpdateSign.Visible = false;
                     lvUpdateSign.DataSource = null;
                     lvUpdateSign.DataBind();
                     butReport.Visible = true;
                     btnSignReport.Visible = false;
-                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
-                    for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
-                    {
-                        HiddenField hididno = lvUpdatePhoto.Items[i].FindControl("hididno") as HiddenField;
+                    // Commented By Vipul T on on date 13-02-2024
+                    // objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
 
-                        Image ImgPhoto = lvUpdatePhoto.Items[i].FindControl("ImgPhoto") as Image;
-                        ImgPhoto.ImageUrl = "~/showimage.aspx?id=" + ds.Tables[0].Rows[i]["IDNO"].ToString() + "&type=STUDENT";
+                    //for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+                    //{
+                    //    HiddenField hididno = lvUpdatePhoto.Items[i].FindControl("hididno") as HiddenField;
 
-                    }
+                    //    Image ImgPhoto = lvUpdatePhoto.Items[i].FindControl("ImgPhoto") as Image;
+                    //    ImgPhoto.ImageUrl = "~/showimage.aspx?id=" + ds.Tables[0].Rows[i]["IDNO"].ToString() + "&type=STUDENT";
+
+                    //  }
                 }
-                else
-                    if (rboStudent.SelectedValue == "2")
-                    {
-                        butSubmit.Visible = true;
-                        pnlUpdateSign.Visible = true;
-                        lvUpdateSign.DataSource = ds;
-                        lvUpdateSign.DataBind();
-                        pnlUpdatePhoto.Visible = false;
-                        lvUpdatePhoto.DataSource = null;
-                        lvUpdatePhoto.DataBind();
-                        butReport.Visible = false;
-                        btnSignReport.Visible = true;
-                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
-                        for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
-                        {
-                            HiddenField hididno = lvUpdateSign.Items[i].FindControl("hididno1") as HiddenField;
+                else if (rboStudent.SelectedValue == "2")
+                {
+                    butSubmit.Visible = true;
+                    pnlUpdateSign.Visible = true;
+                    lvUpdateSign.DataSource = ds;
+                    lvUpdateSign.DataBind();
+                    ViewState["DYNAMIC_DATASET_SIGN"] = ds.Tables[0];
+                    pnlUpdatePhoto.Visible = false;
+                    lvUpdatePhoto.DataSource = null;
+                    lvUpdatePhoto.DataBind();
+                    butReport.Visible = false;
+                    btnSignReport.Visible = true;
+                    // Commented By Vipul T on on date 13-02-2024
+                    //  objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvUpdatePhoto);//Set label -
+                    //for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+                    //{
+                    //    HiddenField hididno = lvUpdateSign.Items[i].FindControl("hididno1") as HiddenField;
 
-                            Image ImgSign = lvUpdateSign.Items[i].FindControl("ImgSign") as Image;
-                            ImgSign.ImageUrl = "~/showimage.aspx?id=" + ds.Tables[0].Rows[i]["IDNO"].ToString() + " &type=STUDENTSIGN";
-                        }
-                    }
+                    //    Image ImgSign = lvUpdateSign.Items[i].FindControl("ImgSign") as Image;
+                    //    ImgSign.ImageUrl = "~/showimage.aspx?id=" + ds.Tables[0].Rows[i]["IDNO"].ToString() + " &type=STUDENTSIGN";
+                    //}
+                }
             }
             else
             {
@@ -292,6 +353,7 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
     protected void butShow_Click(object sender, EventArgs e)
     {
         this.BindListViewList(Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlAdmbatch.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue));
+        //divNote.Visible = true; // Added By Vipul T no date 13-02-2024
     }
 
     #endregion
@@ -332,7 +394,8 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
                     if (fuStudPhoto.HasFile)
                     {
                         string ext = System.IO.Path.GetExtension(fuStudPhoto.PostedFile.FileName);
-                        if (ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".heif" || ext == ".gif" || ext == ".JPG" || ext == ".PNG" || ext == ".JPEG" || ext == ".HEIF" || ext == ".GIF")
+                        //if (ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".heif" || ext == ".gif" || ext == ".JPG" || ext == ".PNG" || ext == ".JPEG" || ext == ".HEIF" || ext == ".GIF")
+                        if (ext == ".jpg" || ext == ".jpeg")
                         {
                             count3++;
                             if (fuStudPhoto.PostedFile.ContentLength < 150000)
@@ -358,7 +421,7 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
                         }
                         else
                         {
-                            objCommon.DisplayMessage(this.Page, "Please Upload file with .jpg .png .jpeg format only.", this.Page);
+                            objCommon.DisplayMessage(this.Page, "Please Upload file with .jpg .jpeg format only.", this.Page);
                             return;
                         }
 
@@ -405,7 +468,7 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
                     {
 
                         string ext = System.IO.Path.GetExtension(fuStudSign.PostedFile.FileName);
-                        if (ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".heif" || ext == ".gif" || ext == ".JPG" || ext == ".PNG" || ext == ".JPEG" || ext == ".HEIF" || ext == ".GIF")
+                        if (ext == ".jpg" || ext == ".jpeg" )
                         {
                             count4++;
                             if (fuStudSign.PostedFile.ContentLength < 150000)
@@ -432,7 +495,7 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
                         }
                         else
                         {
-                            objCommon.DisplayMessage(this.Page, "Please Upload file with .jpg .png .jpeg format only.", this.Page);
+                            objCommon.DisplayMessage(this.Page, "Please Upload file with .jpg .jpeg format only.", this.Page);
                             return;
                         }
                     }
@@ -574,7 +637,7 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
         try
         {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-              url += "Reports/CommonReport.aspx?";
+            url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
             url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"])
@@ -596,4 +659,142 @@ public partial class ACADEMIC_Acd_Update_Photo_Student : System.Web.UI.Page
         }
     }
     #endregion
+    protected void lvUpdatePhoto_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+        ListViewDataItem dataitem = (ListViewDataItem)e.Item;
+        HiddenField hididno = dataitem.FindControl("hididno") as HiddenField;
+        Image ImgPhoto = dataitem.FindControl("ImgPhoto") as Image;
+
+        if (hididno != null && ImgPhoto != null)
+        {
+            DataSet dsFromViewState = ViewState["dsoptimize"] as DataSet;
+            if (dsFromViewState != null)
+            {
+                DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable()
+                                   where Convert.ToInt32(r["idno"]) == Convert.ToInt32(hididno.Value)
+                                   select r).CopyToDataTable();
+
+                ImgPhoto.ImageUrl = "~/showimage.aspx?id=" + xdata.Rows[0]["IDNO"].ToString() + "&type=STUDENT";
+            }
+        }
+    }
+
+    // Added By Vipul T on date 13-02-2024
+    protected void lvUpdateSign_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+        ListViewDataItem dataitem = (ListViewDataItem)e.Item;
+        HiddenField hididno = dataitem.FindControl("hididno1") as HiddenField;
+        Image ImgSign = dataitem.FindControl("ImgSign") as Image;
+
+        if (hididno != null && ImgSign != null)
+        {
+            DataSet dsFromViewState = ViewState["dsoptimize"] as DataSet;
+            if (dsFromViewState != null)
+            {
+                DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable()
+                                   where Convert.ToInt32(r["idno"]) == Convert.ToInt32(hididno.Value)
+                                   select r).CopyToDataTable();
+
+                ImgSign.ImageUrl = "~/showimage.aspx?id=" + xdata.Rows[0]["IDNO"].ToString() + "&type=STUDENTSIGN";
+            }
+        }
+    }
+    protected void lvUpdatePhoto_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+    {
+        try
+        {
+            (lvUpdatePhoto.FindControl("DataPager1") as DataPager).SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+            DataTable dt = new DataTable();
+            dt = (DataTable)ViewState["DYNAMIC_DATASET"];
+            lvUpdatePhoto.DataSource = dt;
+            lvUpdatePhoto.DataBind();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    protected void FilterData2_TextChanged(object sender, EventArgs e)
+    {
+        System.Web.UI.WebControls.TextBox searchTextBox = (System.Web.UI.WebControls.TextBox)lvUpdatePhoto.FindControl("FilterData2");
+        string searchText = searchTextBox.Text.Trim();
+
+        try
+        {
+            System.Data.DataTable dt = ViewState["DYNAMIC_DATASET"] as System.Data.DataTable;
+            if (dt != null)
+            {
+                DataView dv = new DataView(dt);
+                if (searchText != string.Empty)
+                {
+                    string searchedData = "REGNO LIKE '%" + searchText + "%' OR STUDNAME LIKE '%" + searchText + "%'";
+                    dv.RowFilter = searchedData;
+                    if (dv != null && dv.ToTable().Rows.Count > 0)
+                    {
+                        lvUpdatePhoto.DataSource = dv;
+                        lvUpdatePhoto.DataBind();
+                    }
+
+                }
+                else
+                {
+                    lvUpdatePhoto.DataSource = dt;
+                    lvUpdatePhoto.DataBind();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+        }
+
+    }
+
+    protected void FilterData2_TextChanged1(object sender, EventArgs e)
+    {
+        System.Web.UI.WebControls.TextBox searchTextBox = (System.Web.UI.WebControls.TextBox)lvUpdateSign.FindControl("FilterData1");
+        string searchText = searchTextBox.Text.Trim();
+
+        try
+        {
+            System.Data.DataTable dt = ViewState["DYNAMIC_DATASET_SIGN"] as System.Data.DataTable;
+            if (dt != null)
+            {
+                DataView dv = new DataView(dt);
+                if (searchText != string.Empty)
+                {
+                    string searchedData = "REGNO LIKE '%" + searchText + "%' OR STUDNAME LIKE '%" + searchText + "%'";
+                    dv.RowFilter = searchedData;
+                    if (dv != null && dv.ToTable().Rows.Count > 0)
+                    {
+                        lvUpdateSign.DataSource = dv;
+                        lvUpdateSign.DataBind();
+                    }
+
+                }
+                else
+                {
+                    lvUpdateSign.DataSource = dt;
+                    lvUpdateSign.DataBind();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    protected void lvUpdateSign_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+    {
+        try
+        {
+            (lvUpdateSign.FindControl("DataPager2") as DataPager).SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+            DataTable dt = new DataTable();
+            dt = (DataTable)ViewState["DYNAMIC_DATASET_SIGN"];
+            lvUpdateSign.DataSource = dt;
+            lvUpdateSign.DataBind();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
 }

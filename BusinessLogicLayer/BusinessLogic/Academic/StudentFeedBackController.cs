@@ -831,13 +831,10 @@ namespace IITMS
                 }
 
 
-
-                //Added by Neha Baranwal 22July19
-
                 #region "FeedbackMaster"
+                //Updated by Sakshi M  ON 14-03-2024
 
-
-                public int AddFeedbackMaster(string feedbackName, string collegeCode, int feedbackmode, int coursetype, int choisefor, int is_active)
+                public int AddFeedbackMaster(string feedbackName, string collegeCode, int feedbackmode, int coursetype, int choisefor, int is_active, string note)
                 {
                     int status = -99;
                     try
@@ -851,7 +848,9 @@ namespace IITMS
                             new SqlParameter("@P_COURSETYPE", coursetype),  //added by Nehal on 25/8/23
                             new SqlParameter("@P_CHOISEFOR", choisefor), //added by Nehal on 25/8/23
                             new SqlParameter("@P_IS_ACTIVE", is_active),
+                            new SqlParameter("@P_FEEDBACK_NOTE", note),//added by sakshi m on 11/03/2024
                             new SqlParameter("@P_OUTPUT", status)
+                            
                         };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -866,7 +865,8 @@ namespace IITMS
                     return status;
                 }
 
-                public int UpdateFeedbackMaster(int feedbackNo, string feedbackName, string collegeCode, int modeid, int coursetype, int choisefor,int is_active)
+                //Updated By Sakhsi M on 14-03-2024
+                public int UpdateFeedbackMaster(int feedbackNo, string feedbackName, string collegeCode, int modeid, int coursetype, int choisefor, int is_active, string note)
                 {
                     int status = -99;
                     try
@@ -881,6 +881,7 @@ namespace IITMS
                                  new SqlParameter("@P_COURSETYPE", coursetype),  //added by Nehal on 25/8/23
                                  new SqlParameter("@P_CHOISEFOR", choisefor), //added by Nehal on 25/8/23
                                  new SqlParameter("@P_IS_ACTIVE", is_active),
+                                  new SqlParameter("@P_FEEDBACK_NOTE",note), //added by sakshi m on 11/03/2024
                                  new SqlParameter("@P_OUTPUT",status)
                             };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
@@ -895,6 +896,7 @@ namespace IITMS
                     }
                     return status;
                 }
+
 
                 public DataSet GetAllFeedback()
                 {
