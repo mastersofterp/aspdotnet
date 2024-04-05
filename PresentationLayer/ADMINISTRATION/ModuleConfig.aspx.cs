@@ -48,12 +48,12 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             var SessionOrgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
 
             Session["AuthFlag"] = 0;
-            objCommon.FillListBox(ddluser, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=5 and UA_STATUS=0", "UA_NO DESC");
+            objCommon.FillListBox(ddluser, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (2,14) and UA_STATUS=0", "UA_NO DESC");
             objCommon.FillListBox(ddlUserLogin, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=1 and UA_STATUS=0", "UA_NO");
             objCommon.FillListBox(ddlAttendanceuser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14)", "USERTYPEID");
             objCommon.FillListBox(ddlCourseUser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14) ", "USERTYPEID");
             objCommon.FillListBox(ddlCourseLock, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (2,14) and UA_STATUS=0", "UA_NO");
-           // objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT MIN(ORGANIZATION_ID) AS ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL GROUP BY DISPLAYPAGENAME", string.Empty);
+            // objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT MIN(ORGANIZATION_ID) AS ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL GROUP BY DISPLAYPAGENAME", string.Empty);
             BindAttDropDown();
             objCommon.FillListBox(lboModAdmInfo, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=1 and UA_STATUS=0", "UA_NO");
             BindData();
@@ -825,7 +825,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
                     else
                     {
-                      //  DivMinamount.Style.Add("visibility", "");
+                        //  DivMinamount.Style.Add("visibility", "");
                         txtMinAmount.Text = ds.Tables[0].Rows[0]["MIN_AMOUNT_PARTIAL_PAYMENT"].ToString();
                         hdfchkPartialPay.Value = "false";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648113", "PartialPayment(false);", true);
@@ -846,6 +846,60 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         hfStudMandate.Value = "false";
                         ScriptManager.RegisterStartupScript(this, GetType(), "AddNoteFeedback", "newAddNoteFeedback(false);", true);
                     }
+
+                    // Added by Vaishnavi Belekar on Date  02-04-2024
+
+                    if (ds.Tables[0].Rows[0]["LATEFEE_CAL_MODE"].ToString() != null && ds.Tables[0].Rows[0]["LATEFEE_CAL_MODE"].ToString() == "1")
+                    {
+                        hfchkLateFineDefinedOnPercentage.Value = "true";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "LateFineDefinedOnPercentage", "Latefinedefined(true);", true);
+                    }
+                    else
+                    {
+                        hfchkLateFineDefinedOnPercentage.Value = "false";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "LateFineDefinedOnPercentage", "Latefinedefined(false);", true);
+                    }
+                    if (ds.Tables[0].Rows[0]["ONLINE_PYMENT_APPLICABLE_FEE"].ToString() != null && ds.Tables[0].Rows[0]["ONLINE_PYMENT_APPLICABLE_FEE"].ToString() == "1")
+                    {
+                        hfchkOnlinePaymentApplicableFees.Value = "true";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "OnlinePaymentApplicableFees", "OnlinePaymentApplicableFees(true);", true);
+                    }
+                    else
+                    {
+                        hfchkOnlinePaymentApplicableFees.Value = "false";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "OnlinePaymentApplicableFees", "OnlinePaymentApplicableFees(false);", true);
+                    }
+
+                    if (ds.Tables[0].Rows[0]["NODUES_APRROVAL_COUNT"].ToString() != null)
+                    {
+                        ddlNoduesCount.SelectedValue = ds.Tables[0].Rows[0]["NODUES_APRROVAL_COUNT"].ToString();
+                    }
+
+                    if (ds.Tables[0].Rows[0]["NODUES_APRROVAL_FLOW"].ToString() != null)
+                    {
+                        ddlNoduesFlow.SelectedValue = ds.Tables[0].Rows[0]["NODUES_APRROVAL_FLOW"].ToString();
+                    }//end
+
+                    if (ds.Tables[0].Rows[0]["SINGLE_FEE_RECEIPT_ONLINE"].ToString() != null)
+                    {
+                        ddlNoduesFlow.SelectedValue = ds.Tables[0].Rows[0]["NODUES_APRROVAL_FLOW"].ToString();
+                    }
+
+                    if (ds.Tables[0].Rows[0]["SINGLE_FEE_RECEIPT_ONLINE"].ToString() != null && ds.Tables[0].Rows[0]["SINGLE_FEE_RECEIPT_ONLINE"].ToString() == "1")
+                    {
+                        hfchksinglFeeReceipt.Value = "true";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "Singlefeereceipt", "SinglFeeReceipt(true);", true);
+                    }
+                    else
+                    {
+                        hfchksinglFeeReceipt.Value = "false";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "Singlefeereceipt", "SinglFeeReceipt(false);", true);
+                    }
+                    if (ds.Tables[0].Rows[0]["ONLINE_ADM_LINK"].ToString() != null)
+                    {
+                        txtlink.Text = ds.Tables[0].Rows[0]["ONLINE_ADM_LINK"].ToString();
+                    }
+
 
                 }
             }
@@ -914,7 +968,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     {
         try
         {
-            int PartPayment = 0; 
+            int PartPayment = 0;
             string Minamount = txtMinAmount.Text.Trim();
             if (hdfchkPartialPay.Value == "true")
             {
@@ -923,7 +977,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             else
             {
                 PartPayment = 0;
-                 Minamount = "0";
+                Minamount = "0";
             }
             if ((PartPayment == 1 && string.IsNullOrEmpty(Minamount)) || (PartPayment == 1 && Minamount[0] == '0'))
             {
@@ -1020,6 +1074,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             bool createprnt = false;
             bool CreateRegno = false;
             bool AttTeaching = false;
+            bool SinglFeeReceipt = false;
 
             if (hfchkcreateusernewstudentry.Value == "true")
             {
@@ -1287,11 +1342,33 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 AddNote = true;
             }
 
+            bool Late_Fine = false;
+            if (hfchkLateFineDefinedOnPercentage.Value == "true")
+            {
+                Late_Fine = true;
+            }
+
+            bool OnlinePaymentApplicableFees = false;
+            if (hfchkOnlinePaymentApplicableFees.Value == "true")
+            {
+                OnlinePaymentApplicableFees = true;
+            }
+
+            if (hfchksinglFeeReceipt.Value == "true")
+            {
+                SinglFeeReceipt = true;
+            }
+            else
+            {
+                SinglFeeReceipt = false;
+            }
             int studAttendance = Convert.ToInt32(ddlMarkingAttendance.SelectedValue); //Added By Vipul Tichakule on date 24-01-2024
             int RecEmail = Convert.ToInt32(ddlSendParentsEmail.SelectedValue); //Added By Jay Takalkhede on date 17-02-2024
-            
+            int NoduesCount = Convert.ToInt32(ddlNoduesCount.SelectedValue);   // ADDED BY VAISHNAVI BELEKAR DATE 02-04-2024
+            int NoduesFlow = Convert.ToInt32(ddlNoduesFlow.SelectedValue);   // ADDED BY VAISHNAVI BELEKAR DATE 02-04-2024
             double ParMinimumAmount = 0;
-            
+            string AdmissionLink = string.Empty;
+            AdmissionLink = txtlink.Text.Trim();
 
             //Check whether to add or update
             if (ViewState["action"] != null)
@@ -1316,10 +1393,11 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 {
                     CustomStatus cs = (CustomStatus)objMConfig.SaveModuleConfiguration(objMod, UANO, IP_ADDRESS, MAC_ID, Trisemstatus, chkoutstanding, sempromodemandcreation, semadmofflinebtn,
                         semadmbeforepromotion, semadmafterepromotion, studReactvationlarefine, IntakeCapacity, chktimeReport, chkGlobalCTAllotment,
-                        BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow, 
-                        TPSlot, UserLoginNos, usercourselocked,DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, 
-                        AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance, RecEmail, PartPayment, Minamount, AddNote);
+                        BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow,
+                        TPSlot, UserLoginNos, usercourselocked, DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno,
+                        AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance, RecEmail, PartPayment, Minamount, AddNote, Late_Fine, OnlinePaymentApplicableFees, NoduesCount, NoduesFlow, SinglFeeReceipt, AdmissionLink);
                     //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
+                    //3 Additioinal Parameter Added by vaishnavi B on 03/08/2024 
                     //RecEmail Added By Jay Takalkhede on date 17-02-2024
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {

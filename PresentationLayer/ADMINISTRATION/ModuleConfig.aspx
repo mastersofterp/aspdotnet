@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ModuleConfig.aspx.cs" Inherits="ADMINISTRATION_ModuleConfig" MasterPageFile="~/SiteMasterPage.master"
     ViewStateEncryptionMode="Always" EnableViewStateMac="true" %>
+
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -117,14 +118,6 @@
                                                             <sup>* </sup>
                                                             <asp:Label ID="lblRollNo" runat="server" Font-Bold="true">Roll Number</asp:Label>
                                                         </div>
-
-
-
-
-
-
-
-
 
                                                         <div class="switch form-inline">
                                                             <input type="checkbox" id="rdRollNo" name="rdRollNo" onclick="return SetStat(this);" />
@@ -330,6 +323,16 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label38" runat="server" Font-Bold="true">Admission Link</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:TextBox ID="txtlink" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+
                                                     <%-- New code added by -Gopal M 02102023--%>
 
                                                     <div class="col-12">
@@ -359,7 +362,6 @@
                                                             <%-- <input type="text" id="txtOutstandingMessage" class="form-control" placeholder="Enter Outstanding Message"  />--%>
                                                         </div>
                                                     </div>
-
 
                                                     <div class="col-12">
                                                         <div class="sub-heading">
@@ -623,7 +625,7 @@
                                                             <label data-on="Yes" tabindex="22" data-off="No" for="chkhosteltypeop"></label>
                                                         </div>
                                                     </div>
-                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
                                                             <asp:Label ID="lblpartialpayment" runat="server" Font-Bold="true"> Yes, If Allow to Activate Partial Payment for Student</asp:Label>
@@ -634,16 +636,43 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-lg-4 col-md-3 col-12" id="DivMinamount" style="visibility:hidden" runat="server">
-                                                        <div class="form-group col-md-12">
-                                                           <%-- <sup>*</sup>--%>
-                                                            <label><span style="color: red;">*</span>Minimum Amount Configuration for Partial Payment</Label>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12" id="DivMinamount" style="visibility: hidden" runat="server">
+                                                        <%-- <div class="form-group col-md-12">--%>
+                                                        <div class="label-dynamic">
+                                                            <%--<sup>*</sup>--%>
+                                                            <label><span style="color: red;">*</span>Minimum Amount Configuration for Partial Payment</label>
+                                                        </div>
+
+                                                        <%-- <sup>*</sup>--%>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
                                                             <asp:TextBox ID="txtMinAmount" runat="server" CssClass="form-control" TabIndex="3" ToolTip="Please Enter Minimum Amount for Partial Payment Configuration"
-                                                            MaxLength="10" AutoComplete="true" onkeyup="validateAmount()" />
-                                                         <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtMinAmount" ValidChars="1234567890." />
-                                                        </div>                                                      
-                                                       
-                                              
+                                                                MaxLength="10" AutoComplete="true" onkeyup="validateAmount()" />
+                                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtMinAmount" ValidChars="1234567890." />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblOnlinePaymentApplicableFees" runat="server" Font-Bold="true">Yes,If Allow to Display Applicable Fees on Online Payment Page.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="switch form-inline">
+                                                                <input type="checkbox" id="chkOnlinePaymentApplicableFees" name="chkOnlinePaymentApplicableFees" />
+                                                                <label data-on="Yes" data-off="No" for="chkOnlinePaymentApplicableFees"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label37" runat="server" Font-Bold="true">Yes if Allow to show Single Online Fee Receipt to User</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chksinglFeeReceipt" name="chksinglFeeReceipt" />
+                                                            <label data-on="Yes" tabindex="8" data-off="No" for="chksinglFeeReceipt"></label>
+                                                        </div>
                                                     </div>
 
                                                     <div class="col-12">
@@ -705,7 +734,6 @@
                                                             <asp:ListBox ID="ddlAttendanceuser" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
 
                                                         </div>
-
 
                                                     </div>
                                                     <div class="form-group col-lg-6 col-md-6 col-12">
@@ -837,7 +865,7 @@
                                                     </div>
 
                                                     <%-- Added By Vipul Tichakule on date 24-01-2024 --%>
-                                                     <div class="col-12">
+                                                    <div class="col-12">
                                                         <div class="sub-heading">
                                                             <h5>Related to Android </h5>
                                                         </div>
@@ -848,16 +876,17 @@
                                                             <asp:Label ID="lblMarkingAttenstudisp" runat="server" Font-Bold="true">Marking Attendance Student Display/Sort Option.</asp:Label>
                                                         </div>
                                                         <div class="form-group col-lg-6 col-md-6 col-12">
-                                                            <asp:DropDownList ID="ddlMarkingAttendance" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">                       
+                                                            <asp:DropDownList ID="ddlMarkingAttendance" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <asp:ListItem Value="1">Registration No.</asp:ListItem>
                                                                 <asp:ListItem Value="2">Roll No.</asp:ListItem>
                                                                 <asp:ListItem Value="3">Enrollment No.</asp:ListItem>
-                                                            </asp:DropDownList>                                                          
+                                                            </asp:DropDownList>
                                                         </div>
-                                                    </div>   <%-- end--%>
+                                                    </div>
+                                                    <%-- end--%>
                                                     <%-- Added By Jay Takalkhed on date 17-02-2024 --%>
-                                                     <div class="col-12">
+                                                    <div class="col-12">
                                                         <div class="sub-heading">
                                                             <h5>Receipt Send on Parent/Student Email</h5>
                                                         </div>
@@ -868,15 +897,16 @@
                                                             <asp:Label ID="lblSendParentsEmail" runat="server" Font-Bold="true">Fees Receipt to be send on Parent/Student Email</asp:Label>
                                                         </div>
                                                         <div class="form-group col-lg-6 col-md-6 col-12">
-                                                            <asp:DropDownList ID="ddlSendParentsEmail" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">                       
+                                                            <asp:DropDownList ID="ddlSendParentsEmail" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <asp:ListItem Value="1">None </asp:ListItem>
                                                                 <asp:ListItem Value="2">Student</asp:ListItem>
                                                                 <asp:ListItem Value="3">Parent</asp:ListItem>
                                                                 <asp:ListItem Value="4">Both (Parent and Student)</asp:ListItem>
-                                                            </asp:DropDownList>                                                          
+                                                            </asp:DropDownList>
                                                         </div>
-                                                    </div>   <%-- end--%>
+                                                    </div>
+                                                    <%-- end--%>
 
                                                     <div class="col-12">
                                                         <div class="sub-heading">
@@ -895,6 +925,62 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <%-- Added By Vaishnavi Belekar on date 01-04-2024 --%>
+                                                    <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to Late Fine Defined On Percent</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblLateFine" runat="server" Font-Bold="true">Yes, Is Late Fine Defined on Percent </asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="switch form-inline">
+                                                                <input type="checkbox" id="chkLateFineDefinedOnPercentage" name="chkLateFineDefinedOnPercentage" />
+                                                                <label data-on="Yes" data-off="No" for="chkLateFineDefinedOnPercentage"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to No Dues </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblNoduesCount" runat="server" Font-Bold="true">For NoDues Approval Count.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:DropDownList ID="ddlNoduesCount" runat="server" CssClass="form-control" data-select2-enable="true" AutoPostBack="false">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">1</asp:ListItem>
+                                                                <asp:ListItem Value="2">2</asp:ListItem>
+                                                                <asp:ListItem Value="3">3</asp:ListItem>
+                                                                <asp:ListItem Value="4">4</asp:ListItem>
+                                                                <asp:ListItem Value="5">5</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblNoduesFlow" runat="server" Font-Bold="true">For NoDues Approval Flow .</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:DropDownList ID="ddlNoduesFlow" runat="server" CssClass="form-control" data-select2-enable="true" AutoPostBack="false">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Sequence</asp:ListItem>
+                                                                <asp:ListItem Value="2">Random</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" OnClientClick="return validate();" TabIndex="6" Text="Submit"
@@ -905,7 +991,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                   <div class="tab-pane" id="tab_3">
+                                    <div class="tab-pane" id="tab_3">
                                         <div class="col-12">
                                             <div id="demo-grid">
                                                 <div class="sub-heading mt-4">
@@ -915,14 +1001,16 @@
                                                 <div class="row">
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <span style="color: red;">* </span><label>Page Name </label>
+                                                            <span style="color: red;">* </span>
+                                                            <label>Page Name </label>
                                                         </div>
                                                         <select id="ddlPageName" class="form-control" data-select2-enable="true" tabindex="3" name="ddlPageName" onchange="handleDropDownChange();">
                                                         </select>
                                                     </div>
                                                     <div id="section" class="form-group col-lg-3 col-md-6 col-12 d-none ">
                                                         <div class="label-dynamic">
-                                                            <span style="color: red;">* </span><label>Section</label> 
+                                                            <span style="color: red;">* </span>
+                                                            <label>Section</label>
                                                         </div>
                                                         <select id="ddlsection" class="form-control" data-select2-enable="true" tabindex="3" name="ddlsection" onchange="handleDropDownChange1();">
                                                         </select>
@@ -1351,7 +1439,7 @@
                         </div>
                     </div>
                 </div>
-                <asp:HiddenField ID="TabName" runat="server" />
+            <asp:HiddenField ID="TabName" runat="server" />
                 <asp:HiddenField ID="hfdregno" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfRollNo" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfenroll" runat="server" ClientIDMode="Static" />
@@ -1399,6 +1487,9 @@
                 <asp:HiddenField ID="hftxtFeeReceiptCopies" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfchkScholarshipConAdj" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hdnAddNoteFeedback" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchkLateFineDefinedOnPercentage" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchkOnlinePaymentApplicableFees" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchksinglFeeReceipt" runat="server" ClientIDMode="Static" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -1406,7 +1497,6 @@
             <asp:PostBackTrigger ControlID="ddlCollege" />
             <asp:PostBackTrigger ControlID="btnCourseExamReg" />
             <%--<asp:PostBackTrigger ControlID="txtMinAmount" />--%>
-
         </Triggers>
     </asp:UpdatePanel>
 
@@ -2214,16 +2304,16 @@
             }); 
         }); 
     </script>
-     <script>
-         function ddlpagedisplay(Chksection)  
-         {
-             if (Chksection.checked)
-             {
-                 $('#divStudentConfig').removeClass('d-none');
-             } else {
-                 $('#divStudentConfig').addClass('d-none');
-             }
-         }
+    <script>
+        function ddlpagedisplay(Chksection)  
+        {
+            if (Chksection.checked)
+            {
+                $('#divStudentConfig').removeClass('d-none');
+            } else {
+                $('#divStudentConfig').addClass('d-none');
+            }
+        }
     </script>
     <script>
         $(document).ready(function ()
@@ -2259,18 +2349,18 @@
             });
         }
     </script>
-    
-     <script>
-         $(document).ready(function ()
-         {
-             var sessionvalue = "<%=Session["OrgId"]%>";
-             BindStudentconfig(sessionvalue,"","AddressDetails.aspx");
-         });
-         function BindStudentconfig(OrgID_,PageNo_,PageName_)
-         {
-             $.ajax({
-                 type: "POST",
-                 url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',               
+
+    <script>
+        $(document).ready(function ()
+        {
+            var sessionvalue = "<%=Session["OrgId"]%>";
+            BindStudentconfig(sessionvalue,"","AddressDetails.aspx");
+        });
+        function BindStudentconfig(OrgID_,PageNo_,PageName_)
+        {
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',               
                 data: JSON.stringify({ OrgID:OrgID_, PageNo:PageNo_, PageName:PageName_,SectionName:""}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -2365,15 +2455,15 @@
             
         }
     </script>
-     <script>
-         document.getElementById("btnReset").addEventListener("click", function () 
-         {
-             $('#section').addClass('d-none');
-             $('#Chksection').addClass('d-none');
-             $('#divStudentConfig').addClass('d-none');
-             $('#Chkdisplay_section').prop('checked', false); 
-             getpagename();
-         });
+    <script>
+        document.getElementById("btnReset").addEventListener("click", function () 
+        {
+            $('#section').addClass('d-none');
+            $('#Chksection').addClass('d-none');
+            $('#divStudentConfig').addClass('d-none');
+            $('#Chkdisplay_section').prop('checked', false); 
+            getpagename();
+        });
     </script>
 
     <script>     
@@ -2521,6 +2611,23 @@
         function newAddNoteFeedback(val) {
             $('[id*=chkAddNoteFeedback]').prop('checked', val);
         }
+
+        function Latefinedefined(val)
+        {
+            $('[id*=chkLateFineDefinedOnPercentage]').prop('checked', val);       
+        }
+
+        function OnlinePaymentApplicableFees(val)
+        {
+            $('[id*=chkOnlinePaymentApplicableFees]').prop('checked', val);       
+        }
+
+        function SinglFeeReceipt(val)
+        {
+            $('[id*=chksinglFeeReceipt]').prop('checked', val);       
+        }
+
+
        
         function validate() {
             $('#hfchknewstudentemail').val($('#chknewstudentemail').prop('checked'));
@@ -2562,6 +2669,9 @@
             $('#hfchkFeeHeadGroup').val($('#chkFessHeadGroup').prop('checked'));
             $('#hfchkScholarshipConAdj').val($('#chkScholarshipConAdj').prop('checked'));
             $('#hdnAddNoteFeedback').val($('#chkAddNoteFeedback').prop('checked'));
+            $('#hfchkLateFineDefinedOnPercentage').val($('#chkLateFineDefinedOnPercentage').prop('checked'));
+            $('#hfchkOnlinePaymentApplicableFees').val($('#chkOnlinePaymentApplicableFees').prop('checked'));
+            $('#hfchksinglFeeReceipt').val($('#chksinglFeeReceipt').prop('checked'));
             var numCopies =document.getElementById("<%=txtFeeReceiptCopies.ClientID %>").value;
             if(numCopies > 3 || numCopies == 0)
             {
@@ -2777,7 +2887,7 @@
         }
     </script>
 
-     <input type="hidden" id="Hidden1" value="<%= Session["OrgId"] %>" />
+    <input type="hidden" id="Hidden1" value="<%= Session["OrgId"] %>" />
 
     <script type="text/javascript">
         var pageName = "";
@@ -3041,7 +3151,7 @@
         }
 
     </script>
-<%--    <script>
+    <%--    <script>
         function validateAmount() {
             var amountTextBox = document.getElementById('<%= txtMinAmount.ClientID %>');
         var amount = amountTextBox.value;
@@ -3096,7 +3206,7 @@
                 return false;
             }
         }
-</script>
+    </script>
     <script>
         function pagenamevalid()
         {

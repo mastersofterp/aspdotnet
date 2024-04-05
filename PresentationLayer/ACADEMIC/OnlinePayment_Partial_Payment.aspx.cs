@@ -101,8 +101,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 }
 
 
-
             }
+
+          
         }
 
 
@@ -138,6 +139,19 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             {
                 divHostelTransport.Visible = false;
             }
+
+
+            int OnlinePaymentAppliacablefee = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(ONLINE_PYMENT_APPLICABLE_FEE,0) as ONLINE_PYMENT_APPLICABLE_FEE ", "ConfigNo > 0"));
+
+            if (OnlinePaymentAppliacablefee == 1)
+            {
+                pnlfeehead.Visible = true;
+            }
+            else
+            {
+                pnlfeehead.Visible = false;
+            }
+
             //div_Studentdetail.Visible = false;
             DataSet ds = null;
             int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
@@ -1207,6 +1221,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             divFeeItems.Visible = false;
             lvFeeItems.DataSource = null;
             lvFeeItems.DataBind();
+            divval.Visible = false;
+            divpartpay.Visible = false;
         }
         else 
         {

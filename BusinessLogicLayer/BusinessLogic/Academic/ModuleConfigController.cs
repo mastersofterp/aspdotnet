@@ -40,25 +40,26 @@ namespace IITMS
                 /// 
                 /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related) , Rishabh B. (Added student attendance dashboard flag)
                 /// Modified By Jay Takalkhede on date 17-02-2024 (Added parameter RecEmail)
-                public int SaveModuleConfiguration(ModuleConfig 
-                    objConfig, 
+                /// Modified By Vaishavi Belekar 02-04-2024 (Added parameter Late_Fine, OnlinePaymentApplicablefees, NoduesCount, NoduesFlow)
+                public int SaveModuleConfiguration(ModuleConfig
+                    objConfig,
                     int UANO,
                     string IPAddress,
                     string Mac_Address,
                     bool trisem,
                     bool chkoutsatnding,
-                    bool sempromdemand, 
+                    bool sempromdemand,
                     bool semadmissionoffbtn,
                     bool semadmbeforesempromotion,
                     bool semadmissionaftersempromotion,
                     bool studReactvationlarefine,
-                    bool IntakeCapacity, 
-                    bool chktimeReport, 
+                    bool IntakeCapacity,
+                    bool chktimeReport,
                     bool chkGlobalCTAllotment,
                     string BBCMailSENTRY,
                     bool hosteltypeselection,
                     bool chkElectChoiceFor,
-                    bool Seatcapacitynewstud, 
+                    bool Seatcapacitynewstud,
                     string Usernos,
                     bool Dashboardoutstanding,
                     string AttendanceUser,
@@ -69,25 +70,31 @@ namespace IITMS
                     bool DisplayStudLoginDashboard,
                     bool DisplayReceiptInHTMLFormat,
                     bool chkValueAddedCTAllotment,
-                    bool CreateRegno, 
-                    bool AttTeaching, 
-                    bool createprnt, 
+                    bool CreateRegno,
+                    bool AttTeaching,
+                    bool createprnt,
                     int AllowCurrSemForRedoImprovementCrsReg,
-                    string ModAdmInfoUserNos, 
+                    string ModAdmInfoUserNos,
                     string session_ids,
                     string college_ids,
                     int studAttendance,
                     int RecEmail,
-                    int PartPay, 
-                    string ParMinAmount, 
-                    bool AddNote)
+                    int PartPay,
+                    string ParMinAmount,
+                    bool AddNote,
+                    bool Late_Fine,
+                    bool OnlinePaymentApplicablefees,
+                    int NoduesCount,
+                    int NoduesFlow,
+                    bool SinglFeeReceipt,
+                    string AdmissionLink)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-                        sqlParams = new SqlParameter[62];
+                        sqlParams = new SqlParameter[68];
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -153,8 +160,14 @@ namespace IITMS
                         sqlParams[58] = new SqlParameter("@P_ENABLEPARPAYMENT", PartPay); //Added By Jay Takalkhede on date 17-02-2024
                         sqlParams[59] = new SqlParameter("@P_PARTMIN_AMOUNT", ParMinAmount); //Added By Jay Takalkhede on date 17-02-2024
                         sqlParams[60] = new SqlParameter("@P_FEEDBACK_NOTE_FLAG", AddNote);
-                        sqlParams[61] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[61].Direction = ParameterDirection.Output;
+                        sqlParams[61] = new SqlParameter("@P_LATE_FINE_DEFINED", Late_Fine);  // Added By Vaishavi Belekar 02-04-2024
+                        sqlParams[62] = new SqlParameter("@P_ONLINE_PYMENT_APPLICABLE_FEE", OnlinePaymentApplicablefees); //  Added By Vaishavi Belekar 02-04-2024
+                        sqlParams[63] = new SqlParameter("@P_NODUES_APRROVAL_COUNT", NoduesCount); // Added By Vaishavi Belekar 02-04-2024
+                        sqlParams[64] = new SqlParameter("@P_NODUES_APRROVAL_FLOW", NoduesFlow); //  Added By Vaishavi Belekar 02-04-2024
+                        sqlParams[65] = new SqlParameter("@P_SINGLE_ONLINE_RECEIPT", SinglFeeReceipt);
+                        sqlParams[66] = new SqlParameter("@P_ADMISSION_LINK", AdmissionLink);
+                        sqlParams[67] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        sqlParams[67].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);
