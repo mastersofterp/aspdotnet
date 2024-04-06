@@ -21,7 +21,7 @@
             //display the remaining characters
             var modid = control.getAttribute("id") + "_remain";
             if (document.getElementById(modid) != null) {
-                document.getElementById(modid).innerHTML = mLength - control.value.length;
+            document.getElementById(modid).innerHTML = mLength - control.value.length;
             }
         }
 
@@ -59,9 +59,7 @@
             });
         });
     </script>
-    <script>
-      
-    </script>
+   
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
 
     <asp:UpdatePanel ID="updSession" runat="server">
@@ -139,7 +137,7 @@
                                             Display="None" ErrorMessage="Please Select Degree" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="lsbranch">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Branch</label>
@@ -177,6 +175,7 @@
                                         </div>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                         <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
 =======
                                         <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged"></asp:TextBox>
@@ -184,6 +183,10 @@
 =======
                                         <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" 
+                                            OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtOfficeVisitEndDate"
                                             Display="None" ErrorMessage="Please Select Office Report End Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -303,13 +306,18 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 btn-footer">
+                            <div class="col-12 btn-footer"> 
+                                   <asp:Button ID="btnShow" runat="server" Text="Show"  CssClass="btn btn-primary"  onclick="btnShow_Click"/> 
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClientClick="validate();" CssClass="btn btn-primary" ValidationGroup="Academic" OnClick="btnSubmit_Click" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="false" ValidationGroup="Academic" />
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false" OnClick="btnCancel_Click" />
+                                
+                            
+                                   <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false" OnClick="btnCancel_Click"  /> 
+                                <asp:Button ID="btnReport" runat="server" Text="Report"  CssClass="btn btn-primary"  Onclick="btnReport_Click" />
+                              
                             </div>
 
-                            <div class="col-12 mt-3" style="overflow-y: auto; max-height: 500px;">
+                            <div class="col-12 mt-3" style="overflow-y: auto; max-height: 500px;" runat="server" id="lvPaymentConfiguration" visible="false">
                                 <div class="sub-heading">
                                     <h5>Fee Payment Configuration List</h5>
                                 </div>
@@ -338,7 +346,7 @@
                                                         <th>Payment End Date</th>
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                                         <th>Payment Category</th>
-                                                        <th>Amount/Percentage</th>
+                                                        <th>Amount / Percentage</th>
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
@@ -400,6 +408,8 @@
 
             <asp:PostBackTrigger ControlID="btnSubmit" />
             <asp:PostBackTrigger ControlID="btnCancel" />
+            <asp:PostBackTrigger ControlID="btnReport" /> 
+              <asp:PostBackTrigger ControlID="btnShow" />
 
         </Triggers>
     </asp:UpdatePanel>
@@ -465,7 +475,6 @@
 
             $('#<%= txtEndDate.ClientID %>').click(function () {
                 var startDate = $('#<%= txtStartDate.ClientID %>').val();
-                var endDate = $(this).val();
 
                 if (startDate === '') {
                     alert('Please Select Payment Start Date first');
@@ -490,7 +499,7 @@
                 if (endDate === '') {
                     alert('Please Select Payment End Date first');
                     $('#<%= txtEndDate.ClientID %>').focus();
-                    $(this).val(''); // Clear the value of Payment Valid Date textbox
+                    $(this).val(''); 
                 }
             });
         }

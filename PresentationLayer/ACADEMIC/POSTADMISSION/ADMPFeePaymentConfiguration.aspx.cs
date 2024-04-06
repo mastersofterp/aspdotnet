@@ -13,6 +13,15 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using BusinessLogicLayer.BusinessLogic.PostAdmission;
 using BusinessLogicLayer.BusinessEntities.Academic;
 using System.Globalization;
+using System.IO;
+using IITMS.NITPRM;
+using OfficeOpenXml;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Xml.Linq;
+using System.Data.SqlClient;
+using System.Text;
+using IITMS.SQLServer.SQLDAL;
 /*
 ---------------------------------------------------------------------------------------------------------------------------                                                                      
 Created By  :                                                                 
@@ -22,10 +31,15 @@ Version     :
 ---------------------------------------------------------------------------------------------------------------------------                                                                        
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Version     Modified On      Modified By             Purpose                                                                        
+=======
+Version    Modified On      Modified By             Purpose                                                                        
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
 ---------------------------------------------------------------------------------------------------------------------------                                                                        
-1.0.1     14-03-2024        Isha Kanojiya            Added Branch and Start/End Payment Date and Provision Admission Date  
+1.0.1     14-03-2024        Isha Kanojiya           Added Branch and Start/End Payment Date and Provision Admission Date  
 ---------------------------------------------------------------------------------------------------------------------------   
+<<<<<<< HEAD
  1.0.2    28-03-2024        Isha Kanojiya            changes for validation for all dates.
 ---------------------------------------------------------------------------------------------------------------------------         
 =======
@@ -42,6 +56,12 @@ Version     Modified On      Modified By             Purpose
  1.0.2    28-03-2024        Isha Kanojiya            changes for validation for all dates.
 ---------------------------------------------------------------------------------------------------------------------------         
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+1.0.2    28-03-2024         Isha Kanojiya           Changes For Validation For All Dates
+---------------------------------------------------------------------------------------------------------------------------       
+1.0.3    29-03-2024         Isha Kanojiya           Genrating excel report  
+---------------------------------------------------------------------------------------------------------------------------    
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
  */
 
 public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
@@ -51,6 +71,8 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     ADMPFeePaymentConfigEntity objAFPCEE = new ADMPFeePaymentConfigEntity();
     ADMPProvisionalAdmissionAprovalController objADMAPPR = new ADMPProvisionalAdmissionAprovalController();
 
+    private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
@@ -59,7 +81,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             ViewState["action"] = "add";
             FillDropDown_ForActvityFor();
             FillDropDown();
-            BindListView();
         }
     }
 
@@ -85,6 +106,7 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 whereData = "'UG','PG'";
             }
             objCommon.FillDropDownList(ddlProgramType, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION > 0 AND ACTIVESTATUS=1 AND UA_SECTION !=3", "UA_SECTION DESC");
+
         }
         catch (Exception ex)
         {
@@ -92,26 +114,37 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         }
     }
 
-
     protected void BindListView()
     {
         try
         {
-            DataSet ds = objAFPCEC.GetRetADMPFeePayConfigListData(0);
+            if (ddlAdmBatch.SelectedIndex == 0)
+            {
+                objCommon.DisplayMessage("Please select Admission Batch", this.Page);
+                return;
+            }
+            else if (ddlDegree.SelectedIndex == 0 && ddlProgramType.SelectedIndex == 0)
+            {
+                objCommon.DisplayMessage("Please select Program Type", this.Page);
+                return;
+            }
 
+            DataSet ds = objAFPCEC.GetRetADMPFeePayConfigListData(objAFPCEE, 0);
             if (ds.Tables[0].Rows.Count > 0)
             {
+                lvPaymentConfiguration.Visible = true;
                 pnlFeePayConfig.Visible = true;
+
                 lvFeePayConfig.DataSource = ds.Tables[0];
                 lvFeePayConfig.DataBind();
             }
             else
             {
-                pnlFeePayConfig.Visible = false;
+                objCommon.DisplayMessage("Record Not Found", this.Page);
+                lvPaymentConfiguration.Visible = false;
                 lvFeePayConfig.DataSource = null;
                 lvFeePayConfig.DataBind();
             }
-
 
             foreach (ListViewDataItem dataitem in lvFeePayConfig.Items)
             {
@@ -177,7 +210,14 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             if (ddlProgramType.SelectedIndex > 0)
             {
                 objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "ISNULL(D.ACTIVESTATUS,0)= 1 AND D.DEGREENO > 0 AND UGPGOT=" + ddlProgramType.SelectedValue, "D.DEGREENO");
+
             }
+            else
+            {
+                ddlDegree.Items.Clear();
+                ddlDegree.Items.Insert(0, new ListItem("Please Select", ""));
+            }
+            lstBranch.Items.Clear();
             ddlDegree.SelectedIndex = 0;
             ddlDegree.Focus();
         }
@@ -232,6 +272,9 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             ViewState["FeePayConfig_ID"] = Convert.ToInt32(btnEditCreateEvent.CommandArgument);
             ShowDetail(FeePayConfig_ID);
             ViewState["action"] = "edit";
+            ddlAdmBatch.Enabled = false;
+            ddlDegree.Enabled = false;
+            ddlProgramType.Enabled = false;
 
         }
         catch (Exception ex)
@@ -245,14 +288,11 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         try
         {
             DataTable dt;
-            DataSet ds = objAFPCEC.GetRetADMPFeePayConfigListData(FeePayConfig_ID);
-            dt = objAFPCEC.GetRetADMPFeePayConfigListData(Convert.ToInt32(FeePayConfig_ID)).Tables[0];
-
-
+            DataSet ds = objAFPCEC.GetRetADMPFeePayConfigListData(objAFPCEE, FeePayConfig_ID);
+            dt = objAFPCEC.GetRetADMPFeePayConfigListData(objAFPCEE, Convert.ToInt32(FeePayConfig_ID)).Tables[0];
+      
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-
-                //ACTIVITYFOR	ADMBATCH	PROGRAMTYPE	DEGREENO	PAYMENTCATEGORY	FEEPAYMENT	STARTDATE	ENDDATE	ACTIVITYSTATUS
                 if (ds.Tables[0].Rows[0]["ACTIVITYFOR"].ToString().Equals("1"))
                 {
                     rdoActivityFor.SelectedValue = "1";
@@ -273,8 +313,9 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 }
 
                 objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "ISNULL(D.ACTIVESTATUS,0)= 1 AND D.DEGREENO > 0 AND UGPGOT=" + ddlProgramType.SelectedValue, "D.DEGREENO");
-                ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"].ToString();
 
+                ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"].ToString();
+                DisplayBranch();
                 //<1.0.1>
                 int BranchNo = Convert.ToInt32(ddlDegree.SelectedValue);
                 MultipleBranchBind(BranchNo, 0);
@@ -326,18 +367,19 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         }
     }
 
-   
-
-
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
         {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
            
+=======
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
             DateTime startDate, endDate, officeStartDate, officeEndDate, provisionalAdmissionDate;
 
+            //<1.0.2>
             if (!DateTime.TryParseExact(txtOfficeVisitStartDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out officeStartDate))
             {
                 objCommon.DisplayMessage(updSession, "Enter Valid Office Report Start Date.", this.Page);
@@ -367,38 +409,34 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 objCommon.DisplayMessage(updSession, "Enter valid Provisional Admission Valid Date ", this.Page);
                 return;
             }
-
-            
             if (DateTime.Today > officeStartDate)
             {
                 objCommon.DisplayMessage(updSession, "Office Report Start Date should be today/future date", this.Page);
                 return;
             }
-            if (endDate < startDate)
-            {
-                objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page); 
-                return;
-            }
-
-            if (provisionalAdmissionDate < endDate)
-            {
-                objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment End Date", this.Page);
-                return;
-            }
-
-            if (startDate < officeEndDate)
-            {
-                objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report End Date", this.Page);
-                return;
-            }
-
             if (officeEndDate < officeStartDate)
             {
                 objCommon.DisplayMessage(updSession, "Office Report End Date should be greater than or equal to Office Report Start Date", this.Page);
                 return;
             }
+            if (startDate < officeStartDate)
+            {
+                objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report start Date", this.Page);
+                return;
+            }
+            if (endDate < startDate)
+            {
+                objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page);
+                return;
+            }
 
-            // Data submission
+            if (provisionalAdmissionDate < startDate)
+            {
+                objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment Start Date", this.Page);
+                return;
+            }
+            //</1.0.2>
+
             objAFPCEE.ConfigID = Convert.ToInt32(ViewState["FeePayConfig_ID"]);
             objAFPCEE.Activityfor = Convert.ToInt32(rdoActivityFor.SelectedValue.Equals("1") ? "1" : "2");
             objAFPCEE.Admbatch = Convert.ToInt32(ddlAdmBatch.SelectedValue);
@@ -576,8 +614,8 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             }
 
             objAFPCEE.Activitystatus = hfdActive.Value == "true";
+            DisplayBranch();
 
-        
             string SubjectNo = string.Empty;
             foreach (ListItem item in lstBranch.Items)
             {
@@ -594,37 +632,48 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             objAFPCEE.Branchno = SubjectNo;
 
             int ret = 0;
-            string displaymsg = "Record added successfully.";
+            string displaymsg = "Record added successfully";
+
             if (ViewState["action"].ToString().Equals("add"))
             {
                 ret = Convert.ToInt32(objAFPCEC.InsertADMPFeePayConfig(objAFPCEE));
+                objAFPCEE.Degreeno = 0;
+                clear();
+                BindListView();
             }
             else if (ViewState["action"].ToString().Equals("edit"))
             {
-                displaymsg = "Record updated successfully.";
+                ddlAdmBatch.Enabled = true;
+                ddlDegree.Enabled = true;
+                ddlProgramType.Enabled = true;
                 ret = Convert.ToInt32(objAFPCEC.UpdateADMPFeePayConfig(objAFPCEE));
+                objAFPCEE.Degreeno = 0;
+                displaymsg = "Record updated successfully";
+                DisplayBranch();
+                clear();
+                BindListView();
             }
             if (ret == 2)
             {
-                displaymsg = "Record already exists.";
+                displaymsg = "Record already exists";
                 objCommon.DisplayMessage(displaymsg, this.Page);
             }
             else if (ret > 0)
             {
                 objCommon.DisplayMessage(displaymsg, this.Page);
-                setDefaultValues();
             }
             else
             {
-                objCommon.DisplayMessage("Please fill data again.", this.Page);
+                objCommon.DisplayMessage("Please fill data again", this.Page);
             }
+
         }
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.btnsubmit_Click --> " + ex.Message + " " + ex.StackTrace);
             else
-                objCommon.ShowError(Page, "Server Unavailable.");
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
 
@@ -637,9 +686,14 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     {
         try
         {
+            lsbranch.Visible = true;
+            ddlAdmBatch.Enabled = true;
+            ddlDegree.Enabled = true;
+            ddlProgramType.Enabled = true;
             rdoActivityFor.SelectedValue = "1";
             ddlAdmBatch.ClearSelection();
             ddlProgramType.ClearSelection();
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
           //  ddlDegree.ClearSelection(); 
@@ -651,13 +705,17 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
           //  ddlDegree.ClearSelection(); 
             ddlDegree.Items.Clear();
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+            ddlDegree.Items.Clear();
+            ddlDegree.Items.Add(new ListItem("Please select", "0"));
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
             //<1.0.1>
             lstBranch.Items.Clear();
             //</1.0.1>
             divAmount.Visible = false;
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
-
+            lvPaymentConfiguration.Visible = false;
             txtOfficeVisitStartDate.Text = string.Empty;
             txtOfficeVisitEndDate.Text = string.Empty;
             txtProvisionalAdmissionValidDate.Text = string.Empty;
@@ -666,11 +724,40 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             ViewState["FeePayConfig_ID"] = 0;
             ViewState["action"] = "add";
             ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetParticipation(true);", true);
-            BindListView();
+
         }
         catch (Exception ex)
         {
             throw;
+        }
+    }
+
+    protected void clear()
+    {
+        try
+        {
+            rdoActivityFor.SelectedValue = "1";
+            ddlDegree.ClearSelection();
+            ddlDegree.Items.Add(new ListItem("Please select", "0"));
+            lstBranch.Items.Clear();
+            divAmount.Visible = false;
+            txtStartDate.Text = string.Empty;
+            txtEndDate.Text = string.Empty;
+            lvPaymentConfiguration.Visible = false;
+            txtOfficeVisitStartDate.Text = string.Empty;
+            txtOfficeVisitEndDate.Text = string.Empty;
+            txtProvisionalAdmissionValidDate.Text = string.Empty;
+            ddlPaymentCategory.ClearSelection();
+            txtAmount.Text = string.Empty;
+            ViewState["action"] = "add";
+            ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetParticipation(true);", true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.clear-> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
 
@@ -681,20 +768,24 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   
+=======
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
     protected void EndDate()
     {
-        if (!string.IsNullOrWhiteSpace(txtStartDate.Text) && !string.IsNullOrWhiteSpace(txtEndDate.Text))
+        try
         {
-            DateTime startDate;
-            DateTime endDate;
-
-            if (!DateTime.TryParseExact(txtStartDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
+            if (!string.IsNullOrWhiteSpace(txtStartDate.Text) && !string.IsNullOrWhiteSpace(txtEndDate.Text))
             {
-                
-            }
+                DateTime startDate;
+                DateTime endDate;
 
+                if (!DateTime.TryParseExact(txtStartDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
+                {
+
+<<<<<<< HEAD
             if (!DateTime.TryParseExact(txtEndDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
             {
               
@@ -736,10 +827,29 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page);
                
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+                }
+                if (!DateTime.TryParseExact(txtEndDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
+                {
+
+                }
+                if (endDate < startDate)
+                {
+                    objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page);
+                }
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
             }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.EndDate-> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
    
@@ -752,6 +862,8 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 
 
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
     protected void txtAmount_TextChanged(object sender, EventArgs e)
     {
         int Per = 0;
@@ -776,6 +888,11 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             {
                 int BranchNo = Convert.ToInt32(ddlDegree.SelectedValue);
                 MultipleBranchBind(BranchNo, 0);
+                DisplayBranch();
+            }
+            else
+            {
+                lstBranch.Items.Clear();
             }
             lstBranch.Focus();
         }
@@ -832,6 +949,7 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                     objCommon.DisplayMessage(updSession, "Office Report End Date should be greater than or equal to Office Report Start Date", this.Page);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                    
 =======
                     txtOfficeVisitEndDate.Text = string.Empty;
@@ -839,6 +957,9 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 =======
                    
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }
@@ -850,7 +971,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
 
     protected void txtOfficeVisitStartDate_TextChanged(object sender, EventArgs e)
     {
@@ -870,7 +990,11 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                     objCommon.DisplayMessage(updSession, "Office Report Start Date should be today/future date", this.Page);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     
+=======
+
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }
@@ -899,12 +1023,15 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
 =======
 
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
     protected void txtStartDate_TextChanged(object sender, EventArgs e)
     {
         StartDate();
@@ -914,12 +1041,13 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     {
         try
         {
-            if (txtOfficeVisitEndDate.Text != string.Empty)
+            if (txtOfficeVisitStartDate.Text != string.Empty)
             {
-                DateTime OfficeStartDate = Convert.ToDateTime(txtOfficeVisitEndDate.Text);
+                DateTime OfficeStartDate = Convert.ToDateTime(txtOfficeVisitStartDate.Text);
                 DateTime OfficeEndDate = Convert.ToDateTime(txtStartDate.Text);
                 if (OfficeEndDate < OfficeStartDate)
                 {
+<<<<<<< HEAD
                     objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report End Date", this.Page);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -930,6 +1058,10 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 =======
                   
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+                    objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report Start Date", this.Page);
+
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }
@@ -946,14 +1078,15 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     {
         try
         {
-            if (txtEndDate.Text != string.Empty)
+            if (txtStartDate.Text != string.Empty) //<1.0.2>
             {
-                DateTime enddate = Convert.ToDateTime(txtEndDate.Text);
+                DateTime enddate = Convert.ToDateTime(txtStartDate.Text);
 
                 DateTime prodate = Convert.ToDateTime(txtProvisionalAdmissionValidDate.Text);
 
                 if (prodate < enddate)
                 {
+<<<<<<< HEAD
                     objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment End Date", this.Page);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -964,6 +1097,10 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 =======
                    
 >>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+=======
+                    objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment Start Date", this.Page);
+
+>>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }
@@ -972,7 +1109,7 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             if (Convert.ToBoolean(Session["error"]) == true)
                 objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.ProvisionalAdmissionValidDate --> " + ex.Message + " " + ex.StackTrace);
             else
-                objCommon.ShowError(Page, "Server Unavailable.");
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
 
@@ -980,7 +1117,159 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     {
         ProvisionalAdmissionValidDate();
     }
+
+    //<1.0.3>
+
+    private void ValidateReportControl()
+    {
+        if (ddlAdmBatch.SelectedIndex == 0 && ddlProgramType.SelectedIndex == 0)
+        {
+            objCommon.DisplayMessage("Please Select Admission Batch And Program Type", this.Page);
+            return;
+        }
+        else if (ddlAdmBatch.SelectedIndex == 0)
+        {
+            objCommon.DisplayMessage("Please Select Admission Batch", this.Page);
+            return;
+        }
+        else if (ddlProgramType.SelectedIndex == 0)
+        {
+            objCommon.DisplayMessage("Please Select Program Type", this.Page);
+            return;
+        }
+    }
+
+    protected void btnReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            ValidateReportControl();
+            objAFPCEE.ConfigID = 0;
+            objAFPCEE.Admbatch = Convert.ToInt32(ddlAdmBatch.SelectedValue.ToString());
+            objAFPCEE.Programtype = Convert.ToInt32(ddlProgramType.SelectedValue.ToString());
+            objAFPCEE.Degreeno = Convert.ToInt32(ddlDegree.SelectedValue.ToString());
+            DataSet dsStudList = objAFPCEC.GetRetADMPFeePayConfigListData(objAFPCEE, 0);
+
+            if (dsStudList.Tables[0].Rows.Count > 0)
+            {
+                dsStudList.Tables[0].Columns.Remove("CONFIGID");
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append("<h3>Crescent Institute Of Science And Technology</h3>");
+
+                if (ddlDegree.SelectedIndex > 0)
+                {
+                    sb.Append("<h4>Admission Batch :- " + ddlAdmBatch.SelectedItem.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Program Type:- " + ddlProgramType.SelectedItem.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Degree:-" + ddlDegree.SelectedItem.Text + "</h4>");
+                }
+                else
+                {
+                    sb.Append("<h4>Admission Batch :- " + ddlAdmBatch.SelectedItem.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Program Type:- " + ddlProgramType.SelectedItem.Text + "</h4>");
+                }
+
+                sb.Append("<table border='1'><tr><th>Sr.No</th><th>Admission Batch</th><th>Program Type</th><th>Degree</th><th>Branch</th><th>Payment Category</th><th>Fee Payment</th><th>Payment Start Date</th><th>Payment End Date</th><th>Office Report Start Date</th><th>Office Report End Date</th><th>Provisional Admission Offer Valid Date</th><th>Status</th></tr>");
+
+                int srno = 1;
+
+                foreach (DataRow row in dsStudList.Tables[0].Rows)
+                {
+                    sb.Append("<tr>");
+
+                    sb.Append("<td>" + srno + "</td>");
+                    srno++;
+                    foreach (DataColumn column in dsStudList.Tables[0].Columns)
+                    {
+                        if (column.ColumnName == "FEEPAYMENT" && row[column].ToString() == "0")
+                        {
+                            sb.Append("<td></td>");
+                        }
+                        else
+                        {
+                            sb.Append("<td>" + row[column].ToString() + "</td>");
+                        }
+                    }
+                    sb.Append("</tr>");
+                }
+
+                sb.Append("</table>");
+
+                Response.ClearContent();
+
+                string attachment = "attachment; filename=ADMPFee_Payment_Configuration.xls";
+                Response.AddHeader("content-disposition", attachment);
+
+                Response.ContentType = "application/ms-excel";
+
+                Response.Write(sb.ToString());
+
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage("Report Not Found", this.Page);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.btnReport_Click-> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
+        }
+    }
+    //</1.0.3>
+
+    protected void btnShow_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int admBatch = Convert.ToInt32(ddlAdmBatch.SelectedValue);
+            ViewState["FeePayConfig_ID"] = 0;
+            objAFPCEE.Admbatch = Convert.ToInt32(ddlAdmBatch.SelectedValue);
+            objAFPCEE.Programtype = Convert.ToInt32(ddlProgramType.SelectedValue);
+            objAFPCEE.Degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+            BindListView();
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.btnShow_Click-> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
+        }
+    }
+
+    protected void DisplayBranch()
+    {
+        try
+        {
+            DataSet ds = objCommon.FillDropDown("ACD_PARAMETER", "PARAM_VALUE", "", "PARAM_NAME = 'ALLOW_ADMP_PROGRAMME_BRANCH_UG'", "PARAM_VALUE");
+            string Degreeno = ddlDegree.SelectedValue;
+            string ToShowBranch = ds.Tables[0].Rows[0]["PARAM_VALUE"].ToString();
+            string[] paramValues = ToShowBranch.Split(',');
+            bool isMatch = paramValues.Any(value => value.Trim() == Degreeno);
+
+            if (isMatch)
+            {
+                lstBranch.ClearSelection();
+                lsbranch.Visible = false;
+            }
+            else
+            {
+                lsbranch.Visible = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.DisplayBranch-> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
+        }
+    }
 }
+
 
 
 
