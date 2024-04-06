@@ -28,6 +28,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     ModuleConfigController objConfig = new ModuleConfigController();
+    PageControlValidationController objVC = new PageControlValidationController();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -126,7 +127,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "AdmissionDetails.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, string.Empty); // <1.0.1> 
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, string.Empty); // <1.0.1> 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {

@@ -31,6 +31,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
     ModuleConfigController objConfig = new ModuleConfigController();
+    PageControlValidationController objVC = new PageControlValidationController();
 
     List<string> validationErrors = new List<string>();
 
@@ -222,6 +223,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             }
 
             CheckDisplaySection();
+            CheckIsEditable();
         }
     }
 
@@ -234,7 +236,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         string pageNo = "";
         string pageName = "PersonalDetails.aspx";
         string section = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section); 
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -305,7 +307,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         string pageName = "PersonalDetails.aspx";
        
             section = "Father Details";
-            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (Convert.ToBoolean( ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"])==true)
@@ -319,7 +321,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
             }
             section = "Mother Details";
-            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
@@ -332,7 +334,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 }
             }
             section = "Student Personal Details";
-            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
@@ -349,7 +351,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 }
             }
             section = "Photo & Signature Details";
-            ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section);
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
@@ -364,6 +366,72 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             }
    }
     //</1.0.1>
+
+    //<1.0.2>
+    public string CheckIsEditable()
+    {
+        DataSet ds = null;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "PersonalDetails.aspx";
+        string idno = string.Empty;
+        string section = string.Empty;
+        Boolean isEditable = true;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+
+        //if (ViewState["usertype"].ToString() == "2")
+        //{
+        //    idno = (Session["idno"]).ToString();
+        //}
+        //else
+        //{
+        //    idno = (Session["stuinfoidno"]).ToString();
+        //}
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+
+            if (row["IS_EDITABLE"].ToString() != string.Empty)
+            {
+                isEditable = Convert.ToBoolean(row["IS_EDITABLE"].ToString());
+            }
+            // Boolean isEditable =Convert.ToBoolean( row["IS_EDITABLE"]);
+            string controlID = string.Empty;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+            }
+
+            if (isEditable == false && !string.IsNullOrEmpty(controlID))
+            {
+                Control control = FindControlRecursive(Page, controlID);
+
+                if (control is TextBox)
+                {
+                    TextBox textBox = (TextBox)control;
+                    textBox.ReadOnly = true;
+                }
+
+                if (control is DropDownList)
+                {
+                    DropDownList dropdownlist = (DropDownList)control;
+                    dropdownlist.Enabled = false;
+                }
+
+                if (ViewState["usertype"].ToString() == "2" && control is FileUpload)
+                {
+                    FileUpload fileUploadControl = (FileUpload)control;
+                    fileUploadControl.Enabled = false;
+                }
+            }
+        }
+        return string.Empty;
+    }
+    //</1.0.2>
 
     private Control FindControlRecursive(Control parentControl, string controlId)
     {
@@ -411,7 +479,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         string idno = string.Empty;
         string section = string.Empty;
         Boolean isDisplaySection = false;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName, section); 
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         if (ViewState["usertype"].ToString() == "2")
         {
