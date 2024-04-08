@@ -378,7 +378,7 @@
                                                     <a class="sub-label">
                                                         <asp:Label ID="lblEvent" runat="server" TabIndex="10" ToolTip="Event Type"></asp:Label></a>
                                                 </li>
-                                                <li class="list-group-item"><b>Topic :</b>
+                                                <li class="list-group-item"><b>Topic / Reason :</b>
                                                     <a class="sub-label">
                                                         <asp:Label ID="lblTopic" runat="server" TabIndex="11" ToolTip="Topic"></asp:Label></a>
                                                 </li>
