@@ -501,7 +501,7 @@
                                             </li>
                                             <li class="list-group-item"><b>Semester/Trimester :</b>
                                                 <a class="sub-label">
-                                                    <asp:Label ID="lblSemester" runat="server" Font-Bold="true" /></a>
+                                                    <asp:Label ID="lblCurrentSemester" runat="server" Font-Bold="true" /></a>
                                             </li>
                                             <li class="list-group-item" style="display: none;"><b>Admission Batch :</b>
                                                 <a class="sub-label">
