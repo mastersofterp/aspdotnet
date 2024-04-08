@@ -559,6 +559,11 @@ namespace IITMS
                 private int _RNO;
                 private int _CREATEDBY;
                 private int _MODIFYBY;
+                //Added by Sonal Banode on 08/04/2024
+                private int _IPRNO;
+                private string _IPRCategory;
+                private int _IPRNOAGNO;
+                private string _IPRIssuingAgency;
 
                 //
                 #endregion
@@ -5833,6 +5838,64 @@ namespace IITMS
                         if ((this._MODIFYBY != value))
                         {
                             this._MODIFYBY = value;
+                        }
+                    }
+                }
+
+                public int IPRNO
+                {
+                    get
+                    {
+                        return this._IPRNO;
+                    }
+                    set
+                    {
+                        if ((this._IPRNO != value))
+                        {
+                            this._IPRNO = value;
+                        }
+                    }
+                }
+                public string IPRCategory
+                {
+                    get
+                    {
+                        return this._IPRCategory;
+                    }
+                    set
+                    {
+                        if ((this._IPRCategory != value))
+                        {
+                            this._IPRCategory = value;
+                        }
+                    }
+                }
+
+                public int IPRNOAGNO
+                {
+                    get
+                    {
+                        return this._IPRNOAGNO;
+                    }
+                    set
+                    {
+                        if ((this._IPRNOAGNO != value))
+                        {
+                            this._IPRNOAGNO = value;
+                        }
+                    }
+                }
+                public string IPRIssuingAgency
+                {
+                    get
+                    {
+                        return this._IPRIssuingAgency;
+                    }
+                    set
+                    {
+                        if ((this._IPRIssuingAgency != value))
+                        {
+                            this._IPRIssuingAgency = value;
                         }
                     }
                 }

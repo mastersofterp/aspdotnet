@@ -36,6 +36,18 @@
                                                 <div class="row">
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
+                                                            <label><span style="color: #FF0000">*</span> IPR Category : </label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlIPRCategory" runat="server" CssClass="form-control" TabIndex="1" data-select2-enable="true"
+                                                            AppendDataBoundItems="true" ToolTip="Select IPR Category">                                                                                                               
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator ID="rfvIPRCategory" runat="server" ControlToValidate="ddlIPRCategory"
+                                                            Display="None" ErrorMessage="Please Select IPR Category" ValidationGroup="ServiceBook"
+                                                            SetFocusOnError="True" InitialValue="0">
+                                                        </asp:RequiredFieldValidator>
+                                                    </div>
+                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
 
                                                             <label><span style="color: #FF0000">*</span> Title of the Patent : </label>
                                                         </div>
@@ -212,6 +224,18 @@
                                                         <%--<span style="color: #FF0000">*</span>--%>
                                                         <asp:TextBox ID="txtNumber" runat="server" CssClass="form-control" ToolTip="Enter Number of members involved"
                                                             TabIndex="12" onkeyup="return validateNumeric(this);" MaxLength="6"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <label>IPR Issuing Agency : </label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlIssuingAgency" runat="server" CssClass="form-control"  TabIndex="1" data-select2-enable="true"
+                                                            AppendDataBoundItems="true" ToolTip="Select IPR Issuing Agency">                                                            
+                                                        </asp:DropDownList>
                                                     </div>
                                                 </div>
                                             </div>
@@ -506,6 +530,9 @@
                                                     <tr class="bg-light-blue">
                                                         <th>Action
                                                         </th>
+                                                        <th>
+                                                            IPR Category
+                                                        </th>
                                                         <th>Title of the Patent
                                                         </th>
                                                         <th>Applicant /Assignee Name
@@ -539,6 +566,9 @@
                                         <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/Images/delete.png" CommandArgument='<%# Eval("PCNO") %>'
                                             AlternateText="Delete Record" ToolTip="Delete Record" OnClick="btnDelete_Click"
                                             OnClientClick="showConfirmDel(this); return false;" />
+                                                </td>
+                                                <td>
+                                                    <%# Eval("IPR_NAME")%>
                                                 </td>
                                                 <td>
                                                     <%# Eval("Title_Patent")%>

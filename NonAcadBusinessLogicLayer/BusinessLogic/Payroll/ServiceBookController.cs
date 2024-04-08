@@ -4600,7 +4600,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[19];
+                        objParams = new SqlParameter[21];
                         objParams[0] = new SqlParameter("@P_IDNO", objPatent.IDNO);
                         objParams[1] = new SqlParameter("@P_Title_Patent", objPatent.PatentTitle);
                         objParams[2] = new SqlParameter("@P_Applicant_Name", objPatent.ApplicantName);
@@ -4635,8 +4635,10 @@ namespace IITMS
                         //if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_PATEGetSinglePatentOfEmployeeNT", objParams, false) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                         objParams[17] = new SqlParameter("@P_ISBLOB", objPatent.ISBLOB);
-                        objParams[18] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[18].Direction = ParameterDirection.Output;
+                        objParams[18] = new SqlParameter("@P_IPRNO", objPatent.IPRNO);
+                        objParams[19] = new SqlParameter("@P_IPRNOAGNO", objPatent.IPRNOAGNO);
+                        objParams[20] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[20].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_PATENT", objParams, true);
                         if (Convert.ToInt32(ret) == -1)
@@ -4692,7 +4694,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[20];
+                        objParams = new SqlParameter[22];
                         objParams[0] = new SqlParameter("@P_IDNO", objPatent.IDNO);
                         objParams[1] = new SqlParameter("@P_Title_Patent", objPatent.PatentTitle);
                         objParams[2] = new SqlParameter("@P_Applicant_Name", objPatent.ApplicantName);
@@ -4727,8 +4729,10 @@ namespace IITMS
                         #endregion
                         objParams[17] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
                         objParams[18] = new SqlParameter("@P_ISBLOB", objPatent.ISBLOB);
-                        objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[19].Direction = ParameterDirection.Output;
+                        objParams[19] = new SqlParameter("@P_IPRNO", objPatent.IPRNO);
+                        objParams[20] = new SqlParameter("@P_IPRNOAGNO", objPatent.IPRNOAGNO);
+                        objParams[21] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[21].Direction = ParameterDirection.Output;
 
                         // if (objSQLHelper.ExecuteNonQuerySP("PAYROLL_INST_SB_INVITED_TALK", objParams, false) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -8850,6 +8854,163 @@ namespace IITMS
 
                 #endregion
                 //
+
+                #region IPRCateMaster
+                public DataSet GetIPRCategory()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_IPRCategory", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.CCMS.BusinessLogicLayer.BusinessLogic.BusinessLogic.PayConfigurationController.GetITConfiguration->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public DataSet GetSingleIPRCategory(int IPRNO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IPRNO", IPRNO);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_SINGLE_IPRCategory", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.CCMS.BusinessLogicLayer.BusinessLogic.BusinessLogic.PayConfigurationController.GetITConfiguration->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                public int AddIPRCategory(ServiceBook objSevBook)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[5];
+                        objParams[0] = new SqlParameter("@P_IPRCategory", objSevBook.IPRCategory);
+                        objParams[1] = new SqlParameter("@P_ACTIVESTATUS", objSevBook.ACTIVESTATUS);
+                        objParams[2] = new SqlParameter("@P_IPRNO", objSevBook.IPRNO);
+                        objParams[3] = new SqlParameter("@P_COLLEGE_CODE", objSevBook.UCOLLEGE_CODE);
+
+                        objParams[4] = new SqlParameter("@P_STATUS", SqlDbType.Int);
+                        objParams[4].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_IPRCategory_INSERT", objParams, true);
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else if (Convert.ToInt32(ret) == 1)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (Convert.ToInt32(ret) == 2)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.CCMS.BusinessLogicLayer.BusinessLogic.BusinessLogic.ITMascontroller.AddUniversity -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                #endregion
+
+                #region IPRIssuingAgency
+
+                public DataSet GetIIssuingAgency()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_IPRIssuingAgency", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.CCMS.BusinessLogicLayer.BusinessLogic.BusinessLogic.PayConfigurationController.GetITConfiguration->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public DataSet GetSingleIPRAgency(int IPRNOAGNO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IPRNOAGNO", IPRNOAGNO);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_SINGLE_IPRIssuingAgency", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.CCMS.BusinessLogicLayer.BusinessLogic.BusinessLogic.PayConfigurationController.GetITConfiguration->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                public int AddIPRAgency(ServiceBook objSevBook)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[5];
+                        objParams[0] = new SqlParameter("@P_IPRIssuing_Agency", objSevBook.IPRIssuingAgency);
+                        objParams[1] = new SqlParameter("@P_ACTIVESTATUS", objSevBook.ACTIVESTATUS);
+                        objParams[2] = new SqlParameter("@P_IPRNOAGNO", objSevBook.IPRNOAGNO);
+                        objParams[3] = new SqlParameter("@P_COLLEGE_CODE", objSevBook.UCOLLEGE_CODE);
+
+                        objParams[4] = new SqlParameter("@P_STATUS", SqlDbType.Int);
+                        objParams[4].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_IPRIssuingAgency_INSERT", objParams, true);
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else if (Convert.ToInt32(ret) == 1)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (Convert.ToInt32(ret) == 2)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.CCMS.BusinessLogicLayer.BusinessLogic.BusinessLogic.ITMascontroller.AddUniversity -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                #endregion
+
+
             }
 
         }
