@@ -1843,7 +1843,18 @@ public partial class payroll_empinfo : System.Web.UI.Page
     {
         try
         {
-            ShowReport("EMployee_Report", "rptEmployee_Report.rpt");
+            OrganizationId = OrganizationId = Convert.ToInt32(Session["OrgId"]);
+            if (OrganizationId == 18)
+            {
+                ShowReport("EMployee_Report", "rptEmployee_Report_HITS.rpt");
+            }
+            else
+            {
+                
+                ShowReport("EMployee_Report", "rptEmployee_Report.rpt");
+
+            }
+            
         }
         catch (Exception ex)
         {
