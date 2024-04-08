@@ -29,6 +29,13 @@
                 </div>
                 <div class="box-body">
                     <div class="col-12">
+                        <div class="row pl-3 mb-3">
+                            <div style="color: Red; font-weight: bold">
+                                Note : Only the student for selected Degree configured from Fee Payment Configuration with Active status will be displayed.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
                         <div class="row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
@@ -209,13 +216,13 @@
                 success: function (response) {
                     var data = JSON.parse(response.d);
                     if (data != '') {
-
                         var _str = '';
                         var _tbody = '';
                         var rownum = 0;
                         str = '<table class="table table-striped table-bordered nowrap" id="tblStudentData">'
                         str = str + '<thead><tr><th id = "classall"><input type="checkbox" id="SelectAll" onclick="ToggleAllCheckbox();" /></th><th>Admission Batch</th><th>Application Id</th><th>Student Name</th><th>Mobile No</th><th>Email Id</th><th>Degree</th></tr></thead><tbody>';
                         $.each(data, function (a, b) {
+
                             rownum = rownum + 1;
                             str = str + '<tr>'
                             str = str + '<td><input type="checkbox"/></td><input type = "hidden" id="hdntblUserNo" value = "' + b.USERNO + '" />'
@@ -226,6 +233,7 @@
                             str = str + '<td>' + b.EMAILID + '</td>'
                             str = str + '<td>' + b.DEGREENAME + '</td>'
                             str = str + '</tr>'
+
                         });
                         str = str + '</tbody></table>'
                         $("#divStudentDetails").append(str);
@@ -307,7 +315,7 @@
                 type: "POST",
                 url: '<%= ResolveUrl("AdvancePaymentEmail.aspx/GetSendEmailStudentDetails") %>',
                 data: JSON.stringify({ UsernoXml: usernoxml }),
-                contentType: "application/json; charset=utf-8",            
+                contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 beforeSend: function () { $("[id*=preloader]").show(); },
                 success: function (response) {
@@ -348,10 +356,10 @@
 
         function commonDatatable(tableID) {
             setTimeout(function () {
-                var table = $(tableID).DataTable({     
+                var table = $(tableID).DataTable({
                     responsive: true,
                     lengthChange: true,
-                    paging: false,               
+                    paging: false,
                     fixedColumns: {
                         left: 0,
                         right: 1
@@ -360,7 +368,7 @@
                     fixedHeader: true,
                     scrollX: true,
                     dom: 'lBfrtip',
-                    buttons: [                   
+                    buttons: [
                     ],
                     "bDestroy": true,
                 });

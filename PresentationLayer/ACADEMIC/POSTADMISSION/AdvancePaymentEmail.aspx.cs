@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using BusinessLogicLayer.BusinessLogic;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using System.Web;
+using mastersofterp_MAKAUAT;
 /*                                                  
 ---------------------------------------------------------------------------------------------------------------------------                                                          
 Created By : Bhagyashree                                                      
@@ -139,6 +140,8 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
+                    string password = clsTripleLvlEncyrpt.ThreeLevelDecrypt(ds.Tables[0].Rows[i]["USER_PASSWORD"].ToString());
+
                     string emailid = ds.Tables[0].Rows[i]["EMAILID"].ToString();
                     string message = "Dear " + ds.Tables[0].Rows[i]["STUDETNAME"].ToString() + "<br />";
                     message += "<br />";
@@ -175,6 +178,7 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                     }
                     //<1.0.1>
                     message += "Login ID: " + ds.Tables[0].Rows[i]["EMAILID"].ToString() + " <br />";
+                    message += "Password: " + password.ToString() + " <br />";
                     //</1.0.1>
                     message += "<br />";
                     message += "After making the online payment, please send the E- receipt as the attachment to the email ids given here to get the confirmation of your provisional admission. <br />";
