@@ -1070,6 +1070,11 @@ public partial class Academic_AdmissionCancellation : System.Web.UI.Page
                 if (fuFile.HasFile)
                 {
                     path = MapPath("~/UPLOAD_FILES/ADMCANCEL_UPLOADFILES");
+
+                    if (!(Directory.Exists(MapPath("~/PresentationLayer/UPLOAD_FILES/ADMCANCEL_UPLOADFILES"))))
+
+                        Directory.CreateDirectory(path);
+
                     fileName = "idno_" + studId + "_" + Path.GetFileName(fuFile.PostedFile.FileName);
                     string existpath = path + "\\" + fileName;
                     string[] array1 = Directory.GetFiles(path);
@@ -1082,9 +1087,6 @@ public partial class Academic_AdmissionCancellation : System.Web.UI.Page
                         }
                     }
 
-
-                    if (!(Directory.Exists(MapPath("~/PresentationLayer/UPLOAD_FILES/ADMCANCEL_UPLOADFILES"))))
-                        Directory.CreateDirectory(path);
                     string[] validFileTypes = { "pdf" };
                     string ext = System.IO.Path.GetExtension(fuFile.PostedFile.FileName);
                     bool isValidFile = false;
