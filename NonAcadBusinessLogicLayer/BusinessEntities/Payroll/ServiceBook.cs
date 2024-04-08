@@ -552,6 +552,15 @@ namespace IITMS
                 private double _RGEVENTS;
                 private double _RGSPONSORSHIP;
 
+                //Added by Sonal Banode on 01/04/2024
+                private int _ACDNO;
+                private string _DEPTLEVEL;
+
+                private int _RNO;
+                private int _CREATEDBY;
+                private int _MODIFYBY;
+
+                //
                 #endregion
 
                 #region Public Members
@@ -5753,6 +5762,80 @@ namespace IITMS
                     }
                 }
 
+                public int ACDNO
+                {
+                    get
+                    {
+                        return this._ACDNO;
+                    }
+                    set
+                    {
+                        if ((this._ACDNO != value))
+                        {
+                            this._ACDNO = value;
+                        }
+                    }
+                }
+
+                public string DEPTLEVEL
+                {
+                    get
+                    {
+                        return this._DEPTLEVEL;
+                    }
+                    set
+                    {
+                        if ((this._DEPTLEVEL != value))
+                        {
+                            this._DEPTLEVEL = value;
+                        }
+                    }
+                }
+
+                public int RNO
+                {
+                    get
+                    {
+                        return this._RNO;
+                    }
+                    set
+                    {
+                        if ((this._RNO != value))
+                        {
+                            this._RNO = value;
+                        }
+                    }
+                }
+
+                public int CREATEDBY
+                {
+                    get
+                    {
+                        return this._CREATEDBY;
+                    }
+                    set
+                    {
+                        if ((this._CREATEDBY != value))
+                        {
+                            this._CREATEDBY = value;
+                        }
+                    }
+                }
+
+                public int MODIFYBY
+                {
+                    get
+                    {
+                        return this._MODIFYBY;
+                    }
+                    set
+                    {
+                        if ((this._MODIFYBY != value))
+                        {
+                            this._MODIFYBY = value;
+                        }
+                    }
+                }
             }//end class ServiceBook
 
         }//end namespace  BusinessLogicLayer.BusinessEntities 

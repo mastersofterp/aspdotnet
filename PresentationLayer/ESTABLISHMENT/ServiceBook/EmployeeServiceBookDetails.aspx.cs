@@ -1354,7 +1354,53 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
             }
             #endregion
 
+            #region AcademicList
 
+            DataSet dsAcademicResp = objServiceBook.GetAllAcademicResponsibilitiesCount();
+            if (dsAcademicResp.Tables[0].Rows.Count > 0)
+            {
+                lblAcademic.Text = dsAcademicResp.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvAcademic.DataSource = dsAcademicResp.Tables[0];
+                lvAcademic.DataBind();
+
+                if (lblBlobConnectiontring.Text != "")
+                {
+                    Control ctrHeader = lvAcademic.FindControl("divFolder");
+                    Control ctrHead1 = lvAcademic.FindControl("divBlob");
+                    ctrHeader.Visible = false;
+                    ctrHead1.Visible = true;
+
+                    foreach (ListViewItem lvRow in lvAcademic.Items)
+                    {
+                        Control ckBox = (Control)lvRow.FindControl("tdFolder");
+                        Control ckattach = (Control)lvRow.FindControl("tdBlob");
+                        ckBox.Visible = false;
+                        ckattach.Visible = true;
+                    }
+                }
+                else
+                {
+                    Control ctrHeader = lvAcademic.FindControl("divFolder");
+                    Control ctrHead1 = lvAcademic.FindControl("divBlob");
+                    ctrHeader.Visible = true;
+                    ctrHead1.Visible = false;
+
+                    foreach (ListViewItem lvRow in lvAcademic.Items)
+                    {
+                        Control ckBox = (Control)lvRow.FindControl("tdFolder");
+                        Control ckattach = (Control)lvRow.FindControl("tdBlob");
+                        ckBox.Visible = true;
+                        ckattach.Visible = false;
+                    }
+                }
+            }
+            else
+            {
+                lblAcademic.Text = "0";
+                lvAcademic.DataSource = null;
+                lvAcademic.DataBind();
+            }
+            #endregion
 
         }
         catch (Exception ex)
@@ -1523,7 +1569,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
     #endregion
 
 
-
+    #region Previous Exp Document
     public string GetFileNamePath(object filename, object PSNO, object idno)
     {
         string[] extension = filename.ToString().Split('.');
@@ -1532,6 +1578,18 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
         else
             return "";
     }
+    #endregion
+
+    #region AcademicResponsibiltyDocument
+    public string GetFileNameAcademicPath(object filename, object ACDNO, object idno)
+    {
+        string[] extension = filename.ToString().Split('.');
+        if (filename != null && filename.ToString() != string.Empty)
+            return ("~/ESTABLISHMENT/upload_files/ACADEMIC_RESPONSIBLITY/" + idno.ToString() + "/ACAD_" + ACDNO + "." + extension[1].ToString().Trim());
+        else
+            return "";
+    }
+    #endregion
 
     #region Family Particulars Approval
     protected void btnApproval_Click(object sender, EventArgs e)
@@ -2646,6 +2704,11 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
         DownloadBlob(sender, e);
     }
 
+    protected void imgbtnAcademicPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        DownloadBlob(sender, e);
+    }
+
     private void DownloadBlob(object sender, EventArgs e)
     {
         string Url = string.Empty;
@@ -2685,5 +2748,56 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
     }
    
     #endregion
-   
+
+    #region Academic Approval
+    protected void btnAcademicApproval_Click(object sender, EventArgs e)
+    {
+        Button btnAcademicApproval = sender as Button;
+        int ACDNO = int.Parse(btnAcademicApproval.CommandArgument);
+        int ACADIDNO = int.Parse(btnAcademicApproval.CommandName);
+
+        ViewState["ACADIDNO"] = ACADIDNO;
+        ViewState["ACDNO"] = ACDNO;
+        string type = "AcademicResp";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(ACDNO, ACADIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            AcademicClear();
+            ShowDetails();
+        }
+    }
+
+    protected void btnAcademicReject_Click(object sender, EventArgs e)
+    {
+        Button btnAcademicReject = sender as Button;
+        int ACDNO = int.Parse(btnAcademicReject.CommandArgument);
+        int ACADIDNO = int.Parse(btnAcademicReject.CommandName);
+
+        ViewState["ACDNO"] = ACDNO;
+        ViewState["ACADIDNO"] = ACADIDNO;
+        string type = "AcademicResp";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(ACDNO, ACADIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            AcademicClear();
+            ShowDetails();
+        }
+    }
+
+    private void AcademicClear()
+    {
+        ViewState["ACDNO"] = null;
+        ViewState["ACADIDNO"] = null;
+    }
+
+
+
+    #endregion
+    
 }

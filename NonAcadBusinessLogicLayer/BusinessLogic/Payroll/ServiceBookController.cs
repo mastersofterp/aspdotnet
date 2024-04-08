@@ -8546,6 +8546,310 @@ namespace IITMS
                 }
 
                 //
+
+                //Added  by Sonal Banode 01/04/2024
+                #region PAYROLL_SB_ACADEMIC_RESPONSIBILITIES
+
+                public int AddAcademicReponsibilities(ServiceBook objAcademic)
+                {
+                    int retStatus = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add New File
+                        objParams = new SqlParameter[13];
+                        objParams[0] = new SqlParameter("@P_IDNO", objAcademic.IDNO);
+                        objParams[1] = new SqlParameter("@P_RESPONSIBILITY", objAcademic.RESPONSIBILITY);
+                        objParams[2] = new SqlParameter("@P_DEPTLEVEL", objAcademic.DEPTLEVEL);
+
+                        if (!objAcademic.FROMDATE.Equals(DateTime.MinValue))
+                            objParams[3] = new SqlParameter("@P_FROMDATE", objAcademic.FROMDATE);
+                        else
+                            objParams[3] = new SqlParameter("@P_FROMDATE", DBNull.Value);
+
+                        if (!objAcademic.TODATE.Equals(DateTime.MinValue))
+                            objParams[4] = new SqlParameter("@P_TODATE", objAcademic.TODATE);
+                        else
+                            objParams[4] = new SqlParameter("@P_TODATE", DBNull.Value);
+
+
+                        objParams[5] = new SqlParameter("@P_REMARK", objAcademic.REMARK);
+                        objParams[6] = new SqlParameter("@P_COLLEGE_CODE", objAcademic.COLLEGE_CODE);
+                        objParams[7] = new SqlParameter("@P_ATTACHMENT", objAcademic.ATTACHMENTS);
+                        objParams[8] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                        objParams[9] = new SqlParameter("@P_Is_Current", objAcademic.IsCurrent);
+                        objParams[10] = new SqlParameter("@P_FILEPATH", objAcademic.FILEPATH);
+                        objParams[11] = new SqlParameter("@P_ISBLOB", objAcademic.ISBLOB);
+                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PAYROLL_SB_INST_ACADEMIC_RESPONSIBILITIES", objParams, false);
+                        {
+                            if (ret != null)
+                            {
+                                if (ret.ToString().Equals("-1"))
+                                {
+                                    retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                                }
+                                else if (ret.ToString().Equals("1"))
+                                {
+                                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.ServiceBookController.AddAdminResponsibilities-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int UpdateAcademicResponsibilities(ServiceBook objAcademic)
+                {
+                    int retStatus = 0;
+
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[14];
+                        objParams[0] = new SqlParameter("@P_ACDNO", objAcademic.ACDNO);
+                        objParams[1] = new SqlParameter("@P_RESPONSIBILITY", objAcademic.RESPONSIBILITY);
+                        objParams[2] = new SqlParameter("@P_DEPTLEVEL", objAcademic.DEPTLEVEL);
+                        if (!objAcademic.FROMDATE.Equals(DateTime.MinValue))
+                            objParams[3] = new SqlParameter("@P_FROMDATE", objAcademic.FROMDATE);
+                        else
+                            objParams[3] = new SqlParameter("@P_FROMDATE", DBNull.Value);
+
+                        if (!objAcademic.TODATE.Equals(DateTime.MinValue))
+                            objParams[4] = new SqlParameter("@P_TODATE", objAcademic.TODATE);
+                        else
+                            objParams[4] = new SqlParameter("@P_TODATE", DBNull.Value);
+
+                        objParams[5] = new SqlParameter("@P_REMARK", objAcademic.REMARK);
+
+                        objParams[6] = new SqlParameter("@P_COLLEGE_CODE", objAcademic.COLLEGE_CODE);
+                        objParams[7] = new SqlParameter("@P_ATTACHMENT", objAcademic.ATTACHMENTS);
+                        objParams[8] = new SqlParameter("@P_IDNO", objAcademic.IDNO);
+                        objParams[9] = new SqlParameter("@P_Is_Current", objAcademic.IsCurrent);
+                        objParams[10] = new SqlParameter("@P_FILEPATH", objAcademic.FILEPATH);
+                        objParams[11] = new SqlParameter("@P_ISBLOB", objAcademic.ISBLOB);
+                        objParams[12] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                        objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PAYROLL_SB_UPD_ACADEMIC_RESPONSIBILITIES", objParams, false);
+                        if (ret != null)
+                        {
+                            if (ret.ToString().Equals("-1"))
+                            {
+                                retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                            }
+                            else if (ret.ToString().Equals("1"))
+                            {
+                                retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.ServiceBookController.UpdateAdminResponsibilities-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int DeleteAcademicResponsibilities(int ACADNO)
+                {
+                    int retStatus = 0;
+
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_ACDNO", ACADNO);
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PAYROLL_SB_DEL_ACADEMIC_RESPONSIBILITIES", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordDeleted);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.ServiceBookController.DeleteAdminResponsibilities.-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet GetAllAcademicResponsibilities(int idNo)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IDNO", idNo);
+                        ds = objSQLHelper.ExecuteDataSetSP("PAYROLL_SB_GETALL_ACADEMIC_RESPONSIBILITIES", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllAdminResponsibilities-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetSingleAcademicResponsibilities(int acdno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_ACDNO", acdno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PAYROLL_SB_GETSINGLE_ACADEMIC_RESPONSIBILITIES", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetSingleAcademicResponsibilities-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllAcademicResponsibilitiesCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_ACADEMIC_RESPONSIBILITIES_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllAcademicResponsibilitiesCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                #endregion
+
+                #region Responsibility Master
+                public int AddResponsibility(ServiceBook objResp)
+                {
+                    int retstatus = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_RESPONSIBILITIES", objResp.RESPONSIBILITY);
+                        objParams[1] = new SqlParameter("@P_COLLEGE_CODE", objResp.COLLEGE_CODE);
+                        objParams[2] = new SqlParameter("@P_CREATEDBY", objResp.CREATEDBY);
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_RESPONSIBILITY_INSERT", objParams, false) != null)
+                            retstatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                    }
+                    catch (Exception ex)
+                    {
+                        retstatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeaveController.AddResponsibility-> " + ex.ToString());
+                    }
+                    return retstatus;
+                }
+
+                public int UpdateResponsibility(ServiceBook objResp)
+                {
+                    int retstatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_RNO", objResp.RNO);
+                        objParams[1] = new SqlParameter("@P_RESPONSIBILITIES", objResp.RESPONSIBILITY);
+                        objParams[2] = new SqlParameter("@P_COLLEGE_CODE", objResp.COLLEGE_CODE);
+                        objParams[3] = new SqlParameter("@P_MODIFYBY", objResp.MODIFYBY);
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_RESPONSIBILITY_UPDATE", objParams, false) != null)
+                            retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        retstatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeaveController.UpdateResponsibility-> " + ex.ToString());
+                    }
+                    return retstatus;
+                }
+
+                public DataSet GetAllResponsibility()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_RESPONSIBILITY", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeavesController.GetAllProgramType-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+
+                    return ds;
+                }
+
+                public DataSet GetSingleResponsibility(int RNO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_RNO", RNO);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_RESPONSIBILITY_BY_RNO", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeavesController.GetSingleResponsibility->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                #endregion
+                //
             }
 
         }
