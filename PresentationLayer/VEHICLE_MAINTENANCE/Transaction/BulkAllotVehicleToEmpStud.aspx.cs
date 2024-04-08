@@ -114,19 +114,19 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
     {
         try
         {
-            for (int i = 0; i < lvAllotment.Items.Count; i++)
-            {
-                Label lbl = this.lvAllotment.Controls[0].FindControl("lblUserName") as Label;
-                if (rdbUserType.SelectedValue == "1")
-                {
-                    lbl.Text = "EMPLOYEE NAME"; 
-                }
-                else
-                {
-                    lbl.Text = "STUDENT NAME";
-                }
+            //for (int i = 0; i < lvAllotment.Items.Count; i++)
+            //{
+            //    Label lbl = this.lvAllotment.Controls[0].FindControl("lblUserName") as Label;
+            //    if (rdbUserType.SelectedValue == "1")
+            //    {
+            //        lbl.Text = "EMPLOYEE NAME"; 
+            //    }
+            //    else
+            //    {
+            //        lbl.Text = "STUDENT NAME";
+            //    }
 
-            }
+            //}
             
             if (rdbUserType.SelectedValue == "1")
             {
@@ -348,6 +348,20 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
                         return;
                     }
                 }
+
+                for (int i = 0; i < lvAllotment.Items.Count; i++)
+                {
+                    Label lbl = this.lvAllotment.Controls[0].FindControl("lblUserName") as Label;
+                    if (rdbUserType.SelectedValue == "1")
+                    {
+                        lbl.Text = "EMPLOYEE NAME";
+                    }
+                    else
+                    {
+                        lbl.Text = "STUDENT NAME";
+                    }
+
+                }
             }
         }
         catch (Exception ex)
@@ -490,9 +504,13 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
     {
         ViewState["URNO"] = null;
         ViewState["action"] = "add";
-        //ddlDegree.SelectedIndex = 0;
-        //ddlBranch.SelectedIndex = 0;
-        //ddlSem.SelectedIndex = 0;  
+        ddlDegree.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlSem.SelectedIndex = 0;
+        lvAllotment.DataSource = null;
+        lvAllotment.DataBind();
+        rdbUserType.SelectedValue = "1";
+        rdbAllotted.SelectedValue = "1";
     }
 
 
