@@ -411,9 +411,10 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
     
     protected void btnBack_Click(object sender, EventArgs e)
     {
-       string returnpageurl = Convert.ToString(Session["ReturnpageUrl"]);
-        Response.Redirect(returnpageurl);
-   // Response.Redirect("~/academic/Semester_Registration.aspx?pageno=1797");
+        Response.Redirect("~/default.aspx");
+       //string returnpageurl = Convert.ToString(Session["ReturnpageUrl"]);
+       // Response.Redirect(returnpageurl);
+       // Response.Redirect("~/academic/Semester_Registration.aspx?pageno=1797");
     }
 
     private string PreparePOSTForm(string url, System.Collections.Hashtable data)      // post form
