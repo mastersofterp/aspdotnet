@@ -102,7 +102,7 @@ public partial class HOSTEL_GATEPASS_Purpose : System.Web.UI.Page
                     {
                         objPurpose.PurposeNo = Convert.ToInt32(ViewState["purpose_no"].ToString());
 
-                        if (CheckDuplicateEntry() == true)
+                        if (CheckDuplicateEntryUpdate(objPurpose.PurposeNo) == true)
                         {
                             objCommon.DisplayMessage("Entry for this Selection Already Done!", this.Page);
                             return;
@@ -144,6 +144,7 @@ public partial class HOSTEL_GATEPASS_Purpose : System.Web.UI.Page
             btnSubmit.Text = "Update";
             ImageButton btnEdit = sender as ImageButton;
             int purpose_no = int.Parse(btnEdit.CommandArgument);
+            ViewState["purposeno"] = purpose_no;
             ShowDetail(purpose_no);
             ViewState["action"] = "edit";
         }
@@ -180,7 +181,7 @@ public partial class HOSTEL_GATEPASS_Purpose : System.Web.UI.Page
         bool flag = false;
         try
         {
-            string purname = objCommon.LookUp("ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME='" + txtPurposeName.Text + "'  and  ISACTIVE ='" + Convert.ToInt32(chkIsActive.Checked) + "'");
+            string purname = objCommon.LookUp("ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME='" + txtPurposeName.Text + "'");
             if (purname != null && purname != string.Empty)
             {
                 flag = true;
@@ -196,13 +197,13 @@ public partial class HOSTEL_GATEPASS_Purpose : System.Web.UI.Page
         return flag;
     }
 
-    private bool CheckDuplicateEntryUpdate(int purpose_no)
+    private bool CheckDuplicateEntryUpdate(int purpose_no) //Added By Himanshu Tamrakar 05042024
     {
         bool flag = false;
         try
         {
-            string purposeno = objCommon.LookUp("ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NAME", "PURPOSE_NAME='" + txtPurposeName.Text + "';");
-            if (purpose_no != null && purpose_no != 0)
+            string purposeno = objCommon.LookUp("ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME='" + txtPurposeName.Text + "' AND PURPOSE_NO <> " + ViewState["purposeno"]);
+            if (purposeno != null && purposeno != string.Empty)
             {
                 flag = true;
             }

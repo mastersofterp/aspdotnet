@@ -18,7 +18,7 @@ namespace IITMS
             public class HostelInOutRequestsController
             {
                 private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
-                public DataSet GetAllRequestsBySearch(HostelInOutReq ObjHReq,string applydate,string indate,string outdate)
+                public DataSet GetAllRequestsBySearch(HostelInOutReq ObjHReq,string applydate,string todate,string fromdate)
                 {
                     DataSet ds = null;
                     try
@@ -28,8 +28,8 @@ namespace IITMS
                         objParams[0] = new SqlParameter("@P_APPLYDATE", applydate);
                         objParams[1] = new SqlParameter("@P_PURPOSE", ObjHReq.Purpose);
                         objParams[2] = new SqlParameter("@P_GATEPASSCODE", ObjHReq.Gatepassno);
-                        objParams[3] = new SqlParameter("@P_INDATE", indate);
-                        objParams[4] = new SqlParameter("@P_OUTDATE", outdate);
+                        objParams[3] = new SqlParameter("@P_TODATE", todate);
+                        objParams[4] = new SqlParameter("@P_FROMDATE", fromdate);
                         objParams[5] = new SqlParameter("@P_STATUS", ObjHReq.Status);
                         
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_GET_REQUESTS_BY_SEARCH", objParams);

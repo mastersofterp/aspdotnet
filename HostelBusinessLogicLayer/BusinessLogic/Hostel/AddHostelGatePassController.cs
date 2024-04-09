@@ -36,14 +36,15 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet GetAllGatePass()
+                public DataSet GetAllGatePass(string Fromdate, string Todate)  //From date to date Added By Himanshu tamrakar 05042024
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[0];
-
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_FROMDATE", Fromdate);
+                        objParams[1] = new SqlParameter("@P_TODATE", Todate);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GET_ALL_GATEPASS", objParams);
                     }
                     catch (Exception ex)

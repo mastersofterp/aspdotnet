@@ -24,6 +24,10 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     AdminApprovalController objAAC = new AdminApprovalController();
     int recid = 0;
+
+    //Below Code Added By Himanshu Tamrakar 02042024
+    DateTime Fromdate = DateTime.Now.AddDays(-1);
+    DateTime Todate = DateTime.Now.AddDays(7);
     #region Page Events
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -59,7 +63,11 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                     {
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
-                    BindListView();
+
+                    //commented and added by Himanshu Tamrakar 05042024
+                    //BindListView():
+                    BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
+
                     
                 }
             }
@@ -149,8 +157,16 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     objCommon.DisplayMessage("Record Saved successfully.", this.Page);
-                    this.BindListView(); //Added by Himanshu Tamrakar 24/11/2023 for bug id 169646
+
+                    //commented and added by Himanshu Tamrakar 05042024
+                    //BindListView():
+                    BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
+                    //Added by Himanshu Tamrakar 24/11/2023 for bug id 169646
                     Clear();
+                    txtFromDateSearch.Text = string.Empty;
+                    txtToDateSearch.Text = string.Empty;
+                    txtApplyDate.Text = string.Empty;
+
                 }
             }
         }
@@ -160,11 +176,11 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
         }
     }
 
-    private void BindListView()
+    private void BindListView(string Applydate, int Purpose, string Todate, string Fromdate, string Status)
     {
         try
         {
-            DataSet ds = objAAC.GetAllGatePass();
+            DataSet ds = objAAC.GetAllGatePass(Applydate, Purpose, Todate, Fromdate, Status);
             lvGatePass.DataSource = ds;
             lvGatePass.DataBind();
         }
@@ -599,5 +615,34 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
             btnApprove.Visible = true;
         }
 
+    }
+
+    //Added By Himanshu Tamrakar 02042024
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        if (Convert.ToDateTime(txtFromDateSearch.Text) > Convert.ToDateTime(txtToDateSearch.Text))
+        {
+            objCommon.DisplayMessage("To Date is Greater Than From date.", this);
+            txtToDateSearch.Text = string.Empty;
+            txtFromDateSearch.Text = string.Empty;
+            return;
+        }
+        string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? null : DateTime.Parse(txtApplyDate.Text).ToString("yyyy-MM-dd");
+        //int Purpose = string.IsNullOrEmpty(ddlPurposeSearch.SelectedValue) ? 0 : Convert.ToInt32(ddlPurposeSearch.SelectedValue);
+        string Todate = string.IsNullOrEmpty(txtToDateSearch.Text) ? null : DateTime.Parse(txtToDateSearch.Text).ToString("yyyy-MM-dd");
+        string Fromdate = string.IsNullOrEmpty(txtFromDateSearch.Text) ? null : DateTime.Parse(txtFromDateSearch.Text).ToString("yyyy-MM-dd");
+        //string Status = string.IsNullOrEmpty(ddlStatus.SelectedValue) ? null : ddlStatus.SelectedValue;
+        this.BindListView(Applydate, 0, Todate, Fromdate, "0");
+    }
+
+    //Added By Himanshu Tamrakar 02042024
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        txtApplyDate.Text = string.Empty;
+        //ddlPurposeSearch.SelectedValue = "0";
+        txtToDateSearch.Text = string.Empty;
+        txtFromDateSearch.Text = string.Empty;
+        //ddlStatus.SelectedValue = "0";
+        BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
     }
 }

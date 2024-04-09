@@ -17,7 +17,8 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     AddHostelGatePass objGatePass = new AddHostelGatePass();
     AddHostelGatePassController objHGP = new AddHostelGatePassController();
-
+    DateTime Fromdate = DateTime.Now.AddDays(-1);
+    DateTime Todate = DateTime.Now.AddDays(7);
     #region Page Events
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -55,7 +56,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
                 }
-                BindListView();
+                BindListView(Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")));
             }
         }
         catch (Exception ex)
@@ -265,11 +266,11 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
         }
     }
 
-    private void BindListView()
+    private void BindListView(string Fromdate, string Todate)
     {
         try
         {
-            DataSet ds = objHGP.GetAllGatePass();
+            DataSet ds = objHGP.GetAllGatePass(Fromdate,Todate);
             lvPurpose.DataSource = ds;
             lvPurpose.DataBind();
         }

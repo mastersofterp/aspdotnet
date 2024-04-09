@@ -62,15 +62,23 @@ namespace IITMS
                     return retStatus;
                 }
 
-                public DataSet GetAllGatePass()
+                public DataSet GetAllGatePass(string Applydate,int Purpose,string Todate,string Fromdate,string Status) //parameters added by Himanshu tamrakar 05042024
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[2];
+                        SqlParameter[] objParams = new SqlParameter[7];
                         objParams[0] = new SqlParameter("@P_IDNO", Convert.ToInt32(System.Web.HttpContext.Current.Session["idno"]));
                         objParams[1] = new SqlParameter("@P_USERTYPE", Convert.ToInt32(System.Web.HttpContext.Current.Session["usertype"]));
+
+                        //below code added by Himanshu tamrakar 05042024
+                        objParams[2] = new SqlParameter("@P_TODATE", Todate);
+                        objParams[3] = new SqlParameter("@P_FROMDATE", Fromdate);
+                        objParams[4] = new SqlParameter("@P_PURPOSE",Purpose);
+                        objParams[5] = new SqlParameter("@P_APPLYDATE",Applydate);
+                        objParams[6] = new SqlParameter("@P_STATUS", Status);
+                        
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_GET_ALL", objParams);
                     }

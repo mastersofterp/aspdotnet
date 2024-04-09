@@ -18,16 +18,22 @@ namespace IITMS
             {
                 private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-                public DataSet GetAllGatePass()
+                public DataSet GetAllGatePass(string Applydate, int Purpose, string Todate, string Fromdate, string Status)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[2];
+                        SqlParameter[] objParams = new SqlParameter[7];
                         objParams[0] = new SqlParameter("@P_IDNO", Convert.ToInt32(System.Web.HttpContext.Current.Session["idno"]));
                         objParams[1] = new SqlParameter("@P_USERTYPE", Convert.ToInt32(System.Web.HttpContext.Current.Session["usertype"]));
 
+                        //Below Code Added By Himanshu Tamrakar 02042024
+                        objParams[2] = new SqlParameter("@P_TODATE", Todate);
+                        objParams[3] = new SqlParameter("@P_FROMDATE", Fromdate);
+                        objParams[4] = new SqlParameter("@P_PURPOSE", Purpose);
+                        objParams[5] = new SqlParameter("@P_APPLYDATE", Applydate);
+                        objParams[6] = new SqlParameter("@P_STATUS", Status);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_GET_ALL", objParams);
                     }
                     catch (Exception ex)
@@ -48,7 +54,7 @@ namespace IITMS
                             new SqlParameter("@P_RECORDID",recid),
                             new SqlParameter("@P_Approve",Approve),
                             new SqlParameter("@P_Remark",Remark),
-                            new SqlParameter("@P_UANO",  Convert.ToInt32(System.Web.HttpContext.Current.Session["usertype"])),
+                            new SqlParameter("@P_UANO",  Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"])),
                             new SqlParameter("@P_OUTPUT", SqlDbType.Int)                        
                             };
                         param[param.Length - 1].Direction = ParameterDirection.Output;

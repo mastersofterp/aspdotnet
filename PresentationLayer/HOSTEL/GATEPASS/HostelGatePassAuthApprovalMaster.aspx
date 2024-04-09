@@ -402,7 +402,8 @@
                                                 <thead class="bg-light-blue">
                                                     <tr>
                                                         <th>Action</th>
-                                                        <th>Authority Type</th>
+                                                        <%--<th>Authority Type</th>--%>
+                                                        <th>Hostel Name</th> <%--Added by himanshu tamrakar 01/04/2024--%>
                                                         <th>Student Type</th>
                                                         <th>Days Type</th>
                                                         <th>Department</th>
@@ -427,7 +428,8 @@
                                                         AlternateText="Delete Record" ToolTip="Delete Record" OnClientClick="showConfirmDel(this); return false;" />
                                                 </td>
                                                 <td>
-                                                    <%# Eval("AUTHORITY_TYPE") %>
+                                                    <%--<%# Eval("AUTHORITY_TYPE") %>--%>
+                                                    <%# Eval("HOSTELNAME") %>    <%--Added by himanshu tamrakar 01/04/2024--%>
                                                 </td>
                                                 <td>
                                                     <%# Eval("STUDENT_TYPE") %>

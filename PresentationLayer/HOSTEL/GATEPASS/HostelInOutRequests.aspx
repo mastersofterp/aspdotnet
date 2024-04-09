@@ -79,7 +79,7 @@
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
-                                    <label>Out Date </label>
+                                    <sup>* </sup><label>From Date </label>
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -92,18 +92,18 @@
                                     <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" TargetControlID="txtOutDate"
                                         Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
                                         MaskType="Date" ErrorTooltipEnabled="false" />
-                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" EmptyValueMessage="Please enter date."
+                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" EmptyValueMessage="Please Enter From Date."
                                         ControlExtender="MaskedEditExtender1" ControlToValidate="txtOutDate" IsValidEmpty="false"
                                         InvalidValueMessage="Out Date  is invalid" Display="None" TooltipMessage="Input a date"
                                         ErrorMessage="Please Select Out Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
-                                        ValidationGroup="submit" SetFocusOnError="true" />
+                                        ValidationGroup="search" SetFocusOnError="true" />
                                 </div>
                             </div>
                         </div>
                         <div class="row" runat="server">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
-                                    <label>In Date </label>
+                                    <sup>* </sup><label>To Date </label>
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -116,11 +116,11 @@
                                     <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" TargetControlID="txtInDate"
                                         Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
                                         MaskType="Date" ErrorTooltipEnabled="false" />
-                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator4" runat="server" EmptyValueMessage="Please enter In Date."
+                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator4" runat="server" EmptyValueMessage="Please Enter To Date."
                                         ControlExtender="MaskedEditExtender1" ControlToValidate="txtInDate" IsValidEmpty="false"
                                         InvalidValueMessage="In Date  is invalid" Display="None" TooltipMessage="Input a In Date"
                                         ErrorMessage="Please Select In Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
-                                        ValidationGroup="submit" SetFocusOnError="true" />
+                                        ValidationGroup="search" SetFocusOnError="true" />
                                 </div>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -139,10 +139,12 @@
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="row">
-                                <asp:Button ID="btnSearch" runat="server" Text="Search" Width="30%" OnClick="btnSearch_Click"
-                                    CssClass="btn btn-primary" />
+                                
+                                <asp:Button ID="btnSearch" runat="server" Text="Search" Width="30%" OnClick="btnSearch_Click" ValidationGroup="search"
+                                    CssClass="btn btn-info" />
                                 <asp:Button ID="btnBack" runat="server" Text="Back" Width="30%" OnClick="btnBack_Click"
                                     CssClass="btn btn-danger" />
+                                <asp:ValidationSummary ID="search" DisplayMode="List" runat="server" ValidationGroup="search" ShowMessageBox="true" ShowSummary="false" />
                                 </div>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -215,6 +217,7 @@
                             </td>
                             <td>
                                 <asp:DropDownList ID="ddlparentapproval" runat="server">
+                                    <asp:ListItem Value=" ">Pending</asp:ListItem>
                                     <asp:ListItem Value="Y">Yes</asp:ListItem>
                                     <asp:ListItem Value="N">No</asp:ListItem>
                                 </asp:DropDownList>
