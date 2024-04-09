@@ -380,7 +380,18 @@ public partial class PayRoll_Payroll_LIC_Report : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_TABNAME=" + ddlMonth.SelectedItem.Text + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString()+",@P_COLLEGNO="+ddlCollege.SelectedValue;
+
+           // url += "&param=@P_TABNAME=" + ddlMonth.SelectedItem.Text + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString()+",@P_COLLEGNO="+ddlCollege.SelectedValue;
+           
+            if (ddlCollege.SelectedIndex > 0)
+            {
+                url += "&param=@P_TABNAME=" + ddlMonth.SelectedItem.Text + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_COLLEGE_CODE=" + ddlCollege.SelectedValue + ",@P_COLLEGNO=" + ddlCollege.SelectedValue;
+            }
+            else
+            {
+                url += "&param=@P_TABNAME=" + ddlMonth.SelectedItem.Text + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_COLLEGE_CODE=" + ddlCollege.SelectedValue + ",@P_COLLEGNO=" + ddlCollege.SelectedValue;
+            }
+
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
@@ -458,7 +469,16 @@ public partial class PayRoll_Payroll_LIC_Report : System.Web.UI.Page
     {
         try
         {
-            ShowReport("PT_Report", "Pay_PTAmoutDeduction.rpt");
+            int OrganizationId = Convert.ToInt32(Session["OrgId"]);
+            string ReportName = objCommon.LookUp("PayReportConfiguration", "IDCardReportName", "OrganizationId=" + OrganizationId + " and IDCardType='PTAmountDeduction'");
+            if (ReportName == "")
+            {
+                ShowReport("PT_Report", "Pay_PTAmoutDeduction.rpt");
+            }
+            else
+            {
+                ShowReport("PT_Report", ReportName);
+            }
         }
         catch (Exception ex)
         {
