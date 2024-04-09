@@ -18,19 +18,19 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data.SqlClient;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using System.IO;
-using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
+using IITMS.SQLServer.SQLDAL;
 //using System.Net.ServicePointManager;
 
 public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
 {
+    string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+
     #region class
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
     StudentController objStu=new StudentController ();
     SemesterRegistration objsem = new SemesterRegistration();
-    OrganizationController objOrg = new OrganizationController();
-
     string hash_seq = string.Empty;
     int degreeno = 0;
     int college_id = 0;
@@ -39,6 +39,7 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
     string userno = string.Empty;
     string Regno = string.Empty;
     string order_id = string.Empty;
+    string transactinid = string.Empty;
     string ResJson = string.Empty;
     string msg = string.Empty;
 
@@ -50,36 +51,15 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
             try
             {
 
-                //SqlDataReader dr = objCommon.GetCommonDetails();
+            SqlDataReader dr = objCommon.GetCommonDetails();
 
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        lblAddress.Text = dr["College_Address"].ToString();
-                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
-                DataSet Orgds = null;
-                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
-                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
-                byte[] imgData = null;
-                if (Orgds.Tables != null)
+            if (dr != null)
                 {
-                    if (Orgds.Tables[0].Rows.Count > 0)
+                if (dr.Read())
                     {
-
-                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
-                        {
-                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
-                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
-                        }
-                        else
-                        {
-                            // hdnLogoOrg.Value = "0";
-                        }
-
+                    lblCollege.Text = dr["COLLEGENAME"].ToString();
+                    lblAddress.Text = dr["College_Address"].ToString();
+                    imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
                     }
                 }
 
@@ -161,7 +141,7 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                    #region JSON_RESPONCE
                 string orderStatusQueryJson = "{ \"reference_no\":\"" + Params["tracking_id"].ToString() + "\", \"order_no\":\"" + Params["order_id"].ToString() + "\" }";
                 string encJson = "";//Params["order_id"]
-                string queryUrl = "https://logintest.ccavenue.com/apis/servlet/DoWebTrans";
+                string queryUrl = "https://login.ccavenue.com/apis/servlet/DoWebTrans";//"https://logintest.ccavenue.com/apis/servlet/DoWebTrans";
                 // "https://apitest.ccavenue.com/apis/servlet/DoWebTrans";
                 //https://login.ccavenue.com/apis/servlet/DoWebTrans
                 //"https://logintest.ccavenue.com/apis/servlet/DoWebTrans?enc_request=&access_code=&request_type=JSON&response_type=JSON&command=orderStatusTracker&version=1.2"
@@ -224,15 +204,16 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                     Session["branchname"] = ds.Tables[0].Rows[0]["LONGNAME"].ToString();
                 }               
                 order_id = Params["order_id"];//adde by gaurav
+
                 ViewState["Order_id"] = order_id;
+                transactinid = Params["tracking_id"];
                 Regno = Convert.ToString(objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + Idno)); //adde by gaurav
                 // added by gaurav START
-                lblRegNo.Text = Regno;      
-        
+                lblRegNo.Text = Regno;              
                 string tranID = Params["tracking_id"];
                 string orderno = Params["order_id"];//Params["billing_address"]
-               // int installmentno = Convert.ToInt32(Params["installno"]);
-                lblBranch.Text = Params["merchant_param2"];
+                int installmentno = Convert.ToInt32(Params["installno"]);
+                lblBranch.Text = Convert.ToString(Session["branchname"]);
                 string semester = objCommon.LookUp("ACD_DCR_TEMP", "SEMESTERNO", "IDNO=" + Idno.ToString() + "and RECIEPT_CODE='" + Params["billing_address"] + "'");
                 lblSemester.Text = semester;
                 lblOrderId.Text = order_id;
@@ -240,13 +221,12 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 string StatusF = Params["order_status"];
                // string msg = "";
                 string msg = ResJson;
-                userno = Params["merchant_param1"];
-                //lblmessage.Text = msg;
+                userno = Params["billing_notes"];
+              
                Session["userno"] = userno;
                 DataSet ds1 = objCommon.FillDropDown("USER_ACC", "UA_NAME", "UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG", "UA_NO=" + Convert.ToInt32(Session["userno"]), string.Empty);
                 if (ds1 != null && ds1.Tables[0].Rows.Count > 0)
                 {
-
 
                     Session["username"] = ds1.Tables[0].Rows[0]["UA_NAME"].ToString();
                     Session["usertype"] = ds1.Tables[0].Rows[0]["UA_TYPE"].ToString();
@@ -283,11 +263,11 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 {
                     divSuccess.Visible = true;
 
-                    //if (Convert.ToInt32(installmentno) > 0)
-                    //    {
-                    //    output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, recipt, order_id, tranID, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
-                    //    }
-                    //else
+                    if (Convert.ToInt32(installmentno) > 0)
+                        {
+                        output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, recipt, order_id, tranID, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
+                        }
+                    else
                         {
                          output = objFees.InsertOnlinePayment_DCR(Idno, recipt, order_id, tranID, "O", "1", amount, "Success", Regno, msg);
                         }
@@ -317,8 +297,9 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                     string PaymentFor = string.Empty, txnMessage = string.Empty, BankReferenceNo = string.Empty;
                     string rec_code = objCommon.LookUp("ACD_DCR_TEMP", "RECIEPT_CODE", "ORDER_ID = '" + order_id + "'");
                     objFees.InsertOnlinePaymentlog(Idno, rec_code, "O", amount, "Payment Fail", order_id);
-
-                  //  result = objFees.OnlineInstallmentFeesPayment(tranID, order_id, amount, "0000", "", PaymentFor, txnMessage, BankReferenceNo, PaymentFor, rec_code);
+                    int statusnew = InsertOnlinePaymentlogNEW(Idno, rec_code, "O", amount, "Payment Fail", order_id, transactinid);
+    
+                
                     btnPrint.Visible = false;
 
                 }
@@ -493,26 +474,20 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
         {
             int IDNO = Convert.ToInt32(ViewState["IDNO"]);
 
-            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
-            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
-            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + IDNO + "' AND ORDER_ID ='" + ViewState["Order_id"].ToString() + "'");
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            //url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
+
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
             //To open new window from Updatepanel
-            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            //sb.Append(@"window.open('" + url + "','','" + features + "');");
-
-            //ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
+           
         }
         catch (Exception ex)
         {
@@ -522,8 +497,6 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
-
     private string postPaymentRequestToGateway(String queryUrl, String urlParam)
     {
 
@@ -574,4 +547,53 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
         }
         return Params;
     }
+
+
+
+    public int InsertOnlinePaymentlogNEW(string userno, string recipt, string PaymentMode, string Amount, string status, string PayId, string transactinid)
+    {
+        int retStatus1 = 0;
+        int retStatus = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            SQLHelper objSqlhelper = new SQLHelper(_connectionString);
+            SqlParameter[] sqlparam = null;
+            {
+                sqlparam = new SqlParameter[8];
+                sqlparam[0] = new SqlParameter("@P_IDNO", userno);
+                sqlparam[1] = new SqlParameter("@P_RECIPT", recipt);
+                sqlparam[2] = new SqlParameter("@P_PAYMENTMODE", PaymentMode);
+                sqlparam[3] = new SqlParameter("@P_AMOUNT", Amount);
+                sqlparam[4] = new SqlParameter("@P_STATUS", status);
+                sqlparam[5] = new SqlParameter("@P_PAYID", PayId);
+                sqlparam[6] = new SqlParameter("@P_TRANID", transactinid);
+
+                sqlparam[7] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                sqlparam[7].Direction = ParameterDirection.Output;
+                string idcat = sqlparam[4].Direction.ToString();
+
+            };
+            object studid = objSqlhelper.ExecuteNonQuerySP("PKG_ONLINE_PAYMENT_FOR_LOG_ADMIN_CC", sqlparam, true);
+            //if (Convert.ToInt32(studid) == -99)
+            //{
+            //    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+            //}
+            //else
+            //    retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+            retStatus1 = Convert.ToInt32(studid);
+            return retStatus1;
+        }
+        catch (Exception ex)
+        {
+            //Console.Write("Exception occured while connection." + exception);
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.InsertOnlinePaymentlog() --> " + ex.Message + " " + ex.StackTrace);
+        }
+
+    }
+
+
+
+
+
 }
