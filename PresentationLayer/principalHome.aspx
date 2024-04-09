@@ -1030,6 +1030,7 @@
                 success: function (response) {
                     var data = response.d;
                     var html = '';
+                    var baseUrl = '<%= ResolveUrl("~/") %>';    //Added by kajal jaiswal on 09-04-2024
                     var LinkCount = 1;
                     if (data != null) {
                         if (data.length > 0) {
@@ -1039,8 +1040,13 @@
                                 //                Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
                                 //                Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
                                 //               ************************************************************************************************************* */
-                                html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                               // html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                                
+                                //Added by kajal jaiswal on 09-04-2024
+
+                                html += '<li class="list-group-item"><a href="' + baseUrl + item.Link + '?pageno=' + item.PageNo + '" target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
                                 LinkCount += 1;
+
                                 //html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display..</li>';
                             });
                         } else {

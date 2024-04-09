@@ -248,8 +248,14 @@ public partial class StudeHome : System.Web.UI.Page
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
+                        //Added by Kajal Jaiswal on 09-04-2024
                         string nav = ds.Tables[0].Rows[i]["AL_URL"] == null ? "#" : ds.Tables[0].Rows[i]["AL_URL"].ToString() + "?pageno=" + ds.Tables[0].Rows[i]["AL_NO"].ToString();
-                        sb.Append("<li class='list-group-item'><a id='A1' href='" + nav + "'  runat='server'  target='_blank'><i class='fa fa-star'></i>" + ds.Tables[0].Rows[i]["AL_LINK"] + "</a></li>");
+                        string resolvedNav = ResolveUrl(nav);
+                        sb.Append("<li class='list-group-item'><a id='A1' href='" + resolvedNav + "'  runat='server'  target='_blank'><i class='fa fa-star'></i>" + ds.Tables[0].Rows[i]["AL_LINK"] + "</a></li>");
+
+                       
+                        //string nav = ds.Tables[0].Rows[i]["AL_URL"] == null ? "#" : ds.Tables[0].Rows[i]["AL_URL"].ToString() + "?pageno=" + ds.Tables[0].Rows[i]["AL_NO"].ToString();
+                        //sb.Append("<li class='list-group-item'><a id='A1' href='" + nav + "'  runat='server'  target='_blank'><i class='fa fa-star'></i>" + ds.Tables[0].Rows[i]["AL_LINK"] + "</a></li>");
                     }
                 }
                 else
