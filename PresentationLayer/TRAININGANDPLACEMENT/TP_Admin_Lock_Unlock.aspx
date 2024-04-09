@@ -6,7 +6,7 @@
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
                 <div class="box-header with-border">
-                    <h3 class="box-title">STUDENT REGISTRATION APPROVAL</h3>
+                    <h3 class="box-title">STUDENT PROFILE LOCK UNLOCK</h3>
                 </div>
 
                 <div class="box-body">
@@ -49,7 +49,7 @@
                                                                 <h5>Lock Unlock List</h5>
                                                             </div>
 
-                                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                            <table class="table table-striped table-bordered nowrap " style="width: 100%">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
                                                                         <th>Student Name</th>

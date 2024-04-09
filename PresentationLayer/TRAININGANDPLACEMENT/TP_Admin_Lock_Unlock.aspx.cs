@@ -75,7 +75,7 @@ public partial class TRAININGANDPLACEMENT_TP_Admin_Lock_Unlock : System.Web.UI.P
                     }
                     ViewState["action"] = "add";
 
-                    objCommon.FillDropDownList(ddlStudent, "ACD_TP_STUDENT_REGISTRATION A INNER JOIN ACD_STUDENT B ON (A.IDNO=B.IDNO)", "A.IDNO", "CONCAT(B.STUDNAME, '_', B.REGNO) AS full_name", "", "");
+                    objCommon.FillDropDownList(ddlStudent, "ACD_TP_STUDENT_REGISTRATION A INNER JOIN ACD_STUDENT B ON (A.IDNO=B.IDNO)", "A.IDNO", "CONCAT(B.STUDNAME, '_', B.REGNO) AS full_name", "REGSTATUS = 'Y'", "");
                   
                 }
 
@@ -118,14 +118,22 @@ public partial class TRAININGANDPLACEMENT_TP_Admin_Lock_Unlock : System.Web.UI.P
     }
     protected void Show_Click(object sender, EventArgs e)
     {
+        if (ddlStudent.SelectedValue=="0")
+        {
+            objCommon.DisplayMessage(this.Page, "Please select TP Student.", this.Page);
+            return;
+        }
         DataSet DS = objCommon.FillDropDown("ACD_TP_STUDENT_REGISTRATION A INNER JOIN ACD_STUDENT B ON (A.IDNO=B.IDNO)", "A.IDNO,A.REGNO", "B.STUDNAME,ISNULL(EXAM_LOCK_UNLOCK,0) EXAM_LOCK_UNLOCK,isnull(WORK_EXP_LOCK_UNLOCK,0) WORK_EXP_LOCK_UNLOCK,ISNULL(TECH_SKIL_LOCK_UNLOCK,0) TECH_SKIL_LOCK_UNLOCK,ISNULL(PROJECT_LOCK_UNLOCK,0) PROJECT_LOCK_UNLOCK,ISNULL(CERTIFICATION_LOCK_UNLOCK,0) CERTIFICATION_LOCK_UNLOCK ,ISNULL(LANGUAGE_LOCK_UNLOCK,0) LANGUAGE_LOCK_UNLOCK,ISNULL(AWARD_LOCK_UNLOCK,0) AWARD_LOCK_UNLOCK,ISNULL(COMPETITION_LOCK_UNLOCK,0) COMPETITION_LOCK_UNLOCK,ISNULL(TRAINING_LOCK_UNLOCK,0) TRAINING_LOCK_UNLOCK,ISNULL(TEST_SCORE_LOCK_UNLOCK,0) TEST_SCORE_LOCK_UNLOCK,ISNULL(BUILD_RESUME_LOCK_UNLOCK,0) BUILD_RESUME_LOCK_UNLOCK", "A.IDNO='" + Convert.ToInt32(ddlStudent.SelectedValue) + "'", "");
         lvlockunlock.DataSource = DS;
         lvlockunlock.DataBind();
+        lvlockunlock.Visible = true;
+
     }
     protected void Submit_Click(object sender, EventArgs e)
     {
         try
         {
+            int count = 0;
             TPStudent objtpstudent = new TPStudent();
             TPScheNewController objTPSchont = new TPScheNewController();
             foreach(ListViewDataItem lvitem in lvlockunlock.Items)
@@ -231,16 +239,25 @@ public partial class TRAININGANDPLACEMENT_TP_Admin_Lock_Unlock : System.Web.UI.P
                 {
                     objtpstudent.BUILD_RESUME_LOCK_UNLOCK = 0;
                 }
-
+                count++;
                 CustomStatus cs = (CustomStatus)objTPSchont.UpdateStudentLockUnlock(objtpstudent);
 
 
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     objCommon.DisplayMessage(this.Page, "Records Update Successfully..!", this.Page);
-
+                    ddlStudent.SelectedValue = "0";
+                    lvlockunlock.DataSource = null;
+                    lvlockunlock.DataBind();
+                    lvlockunlock.Visible = false;
 
                 }
+            }
+
+            if(count==0)
+            {
+                objCommon.DisplayMessage(this.Page, "Please show TP Student.", this.Page);
+                return;
             }
         }
         catch(Exception ex)
@@ -257,6 +274,7 @@ public partial class TRAININGANDPLACEMENT_TP_Admin_Lock_Unlock : System.Web.UI.P
         ddlStudent.SelectedValue = "0";
         lvlockunlock.DataSource = null;
         lvlockunlock.DataBind();
+        lvlockunlock.Visible = false;
 
     }
 }
