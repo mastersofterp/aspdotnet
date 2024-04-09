@@ -56,6 +56,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
             {
                 DataSet Orgds = null;
                 var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Session["OrgId"] = OrgId;
                 Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
@@ -75,30 +76,35 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
 
                     }
                 }
-     
 
+              
                 string[] merc_hash_vars_seq;
                 string merc_hash_string = string.Empty;
                 string merc_hash = string.Empty;
-               
+                string key = string.Empty;
+                string secret = string.Empty;
                 string amount = string.Empty;
                 double actualamount = 0;
                 double amountTax = 0;
-                string paymentId = Request.Form["hdnPaymentId"];
-                string paymentId1 = Request.Form["razorpay_payment_id"];                                    
+                int Installmentno = 0; 
+                //string paymentId = Request.Form["hdnPaymentId"];
+                
+                string paymentId = Request.Form["razorpay_payment_id"];
+                string razorpay_order_id = Request.Form["razorpay_order_id"];                
                 string razorpay_signature = Request.Form["razorpay_signature"];
-                string order_id = Session["Order_ID"].ToString();
+                Session["RZPay_Order_ID"] = razorpay_order_id;
+                Session["ipAddress"] = Request.ServerVariables["REMOTE_HOST"];
+                //Dictionary<string, object> input = new Dictionary<string, object>();
+                //double tranAmt = Convert.ToDouble(Request.Form["hdnAmount"]);
+                //input.Add("amount", Convert.ToInt32(Math.Round(tranAmt * 100))); // this amount should be same as transaction amount
 
+                //Get fetch pg details
+                GetFetchRazorPayPG();
 
-                Dictionary<string, object> input = new Dictionary<string, object>();
-                double tranAmt = Convert.ToDouble(Request.Form["hdnAmount"]);
-                input.Add("amount", Convert.ToInt32(Math.Round(tranAmt * 100))); // this amount should be same as transaction amount
+                //key = Convert.ToString("rzp_test_rWxD79Cq93I4CT"); 
+                //string secret = Convert.ToString("s3Uc3f3KhXUJQW0EA7SKVsBz"); 
 
-
-                string key = Convert.ToString(Session["RazKey"]);
-                string secret = Convert.ToString(Session["Secrets"]);
-
-                RazorpayClient client = new RazorpayClient(key, secret);
+                RazorpayClient client = new RazorpayClient(Session["RazKey"].ToString(), Session["Secrets"].ToString());
                 var json = "";
                 if (paymentId != null)
                 {
@@ -106,13 +112,27 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     json = payment.Attributes.ToString(Formatting.None);
 
                 }
-                Ent_Payment objPay = JsonConvert.DeserializeObject<Ent_Payment>(json);
+
+                //dynamic JsonObj = JsonConvert.DeserializeObject<dynamic>(json);
+                Ent_PaymentNew objPay = JsonConvert.DeserializeObject<Ent_PaymentNew>(json);
                 long unixDate = Convert.ToInt64(objPay.created_at);
                 
                 DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 DateTime sTime = start.AddSeconds(unixDate).ToLocalTime();
 
-                DataSet ds = objCommon.FillDropDown("USER_ACC U INNER JOIN ACD_STUDENT S ON(S.IDNO = U.UA_IDNO) INNER JOIN ACD_BRANCH B ON(B.BRANCHNO = S.BRANCHNO)", "UA_NAME", "UA_NO,UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG,B.LONGNAME", "UA_TYPE = 2 AND UA_IDNO=" + Convert.ToInt32(Session["idno"]), string.Empty);
+                var MS_order_id = objPay.notes.Order_ID.ToString();
+                Session["Order_ID"] = MS_order_id;
+                ViewState["order_id"] = MS_order_id;
+                Installmentno = Convert.ToInt32(objPay.description);  // use for installment no.
+
+
+                #region check student details
+                // int idno = Convert.ToInt32(objCommon.LookUp("ACD_UG_RAZORPAY_NOT_CAPTURE_TRANS CT LEFT JOIN USER_ACC UA ON UA.UA_NO = CT.USERNO", "UA_IDNO", "ORDER_ID = '" + MS_order_id + "' AND RAZORPAY_ORDER_ID = '" + razorpay_order_id + "'"));
+                int idno = Convert.ToInt32(objCommon.LookUp("ACD_DCR_TEMP", "IDNO", "ORDER_ID='" + MS_order_id + "'"));
+                string regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO = "+ idno +" ");
+                Session["idno"] = idno;
+                Session["regno"] = regno;
+                DataSet ds = objCommon.FillDropDown("USER_ACC U INNER JOIN ACD_STUDENT S ON(S.IDNO = U.UA_IDNO) INNER JOIN ACD_BRANCH B ON(B.BRANCHNO = S.BRANCHNO)", "UA_NAME", "UA_NO,UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG,B.LONGNAME, S.SEMESTERNO", "UA_TYPE = 2 AND UA_IDNO=" + Convert.ToInt32(Session["idno"]), string.Empty);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
 
@@ -123,43 +143,56 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     Session["firstlog"] = ds.Tables[0].Rows[0]["UA_FIRSTLOG"].ToString();
                     Session["userno"] = ds.Tables[0].Rows[0]["UA_NO"].ToString();
                     Session["branchname"] = ds.Tables[0].Rows[0]["LONGNAME"].ToString();
+                    Session["paysemester"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
                 }
 
                 Session["coll_name"] = objCommon.LookUp("REFF", "CollegeName", "");
                 Session["colcode"] = objCommon.LookUp("REFF", "COLLEGE_CODE", "");
                 Session["currentsession"] = objCommon.LookUp("ACD_SESSION_MASTER", "MAX(SESSIONNO)", "SESSIONNO>0");
                 Session["sessionname"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSION_NAME", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_SESSION_MASTER WHERE SESSIONNO>0)");
-               
+                #endregion
+
+                // check payment status 
+                var transaction_id = string.Empty;
+                if (objPay.method == "card") 
+                {
+                    transaction_id = "";
+                }
+                if (objPay.method == "upi")
+                {
+                    transaction_id = objPay.acquirer_data.upi_transaction_id.ToString();
+                }
+
                 if (objPay.status == "captured")
                 {
-
-                    ObjPR.TransactionId = objPay.notes.merchant_order_id.ToString();
+                    ObjPR.TransactionId = transaction_id; //objPay.notes.merchant_order_id.ToString();
                     ObjPR.Status = "Ok";
                     ObjPR.Message = "captured";
                     ObjPR.ErrorMessage = "NA";
                     ObjPR.ResponceTransactionId = objPay.id;
                     ObjPR.Amount = Convert.ToDouble(objPay.amount) / 100;
-                   
-                    actualamount = tranAmt;
+
+                    actualamount = Convert.ToDouble(objPay.amount) / 100;    //tranAmt;
                     amountTax = Convert.ToDouble(Convert.ToDouble(ObjPR.Amount) - Convert.ToDouble(actualamount));
                     ObjPR.TransactionTime = sTime;
                     ObjPR.OrderId = objPay.order_id;
-                    ObjPR.CreatedBy = Convert.ToInt32(Session["USERNO"].ToString());
-                    ObjPR.UserNo = Session["USERNO"].ToString();
+                    ObjPR.CreatedBy = Convert.ToInt32(Session["userno"]);   //Session["USERNO"].ToString();
+                    ObjPR.UserNo = Session["userno"].ToString();                 //Session["USERNO"].ToString();
+                    ObjPR.IPAddress = Session["ipAddress"].ToString();       
+                    //ObjPR.OrderId = Session["Order_ID"].ToString();
                     //ObjPR.IPAddress = Session["IPADDR"].ToString();
-                    ObjPR.IPAddress = Session["ipAddress"].ToString();
-                    ObjPR.OrderId = Session["Order_ID"].ToString();
                     ObjPR.MACAddress = "";
                     
                     int Result = 0;
 
-                    Ent_Payment_notes ss = new Ent_Payment_notes();
+                    //Ent_Payment_notes ss = new Ent_Payment_notes();
+                    Notes ss = new Notes();
                     ss = objPay.notes;
-                    string comment_date = objPay.created_at;
+                    string comment_date = objPay.created_at.ToString();
                     lblRegNo.Text = Session["regno"].ToString();
-                    lblstudentname.Text = Convert.ToString(Session["payStudName"]);
-                    lblOrderId.Text = order_id;
-                    ViewState["order_id"] = lblOrderId.Text;
+                    lblstudentname.Text = Convert.ToString(Session["userfullname"]);
+                    lblOrderId.Text = razorpay_order_id;
+                    //ViewState["order_id"] = razorpay_order_id;
                     lblamount.Text = Convert.ToString(ObjPR.Amount);
                     amount = Convert.ToString(ObjPR.Amount);
                     lblTransactionDate.Text = System.DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
@@ -172,11 +205,13 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     divFailure.Visible = false;
                     int result = 0;
                     string PaymentFor = string.Empty, txnMessage = string.Empty, BankReferenceNo = string.Empty;
-                    string rec_code = objCommon.LookUp("ACD_DCR_TEMP", "RECIEPT_CODE", "ORDER_ID = '" + order_id + "'");
+                    string rec_code = objCommon.LookUp("ACD_DCR_TEMP", "RECIEPT_CODE", "ORDER_ID = '" + MS_order_id + "'");
                     int output = 0;
                     string UA_IDNO = string.Empty;
                     string UserFirstPaymentStatus = string.Empty;
                     string UA_NAME = string.Empty;
+
+                    //add TGPCET ORGID = ?
                     if (Session["OrgId"].ToString() == "3" || Session["OrgId"].ToString() == "4")
                     {
                         UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
@@ -198,11 +233,10 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                         ViewState["First_PaymentStatus"] = "0";
                     }
 
-
-
-                    if (Convert.ToInt32(Session["Installmentno"]) > 0)
+                   //Convert.ToInt32(Session["Installmentno"]);
+                    if (Convert.ToInt32(Installmentno) > 0)
                     {
-                        output = objFees.InsertInstallmentOnlinePayment_DCR(Convert.ToString(Session["idno"]), rec_code, order_id, mihpayid, "O", "1", Convert.ToString(amount), "Success", Convert.ToInt32(Session["Installmentno"]), "-");
+                        output = objFees.InsertInstallmentOnlinePayment_DCR(Convert.ToString(Session["idno"]), rec_code, MS_order_id, mihpayid, "O", "1", Convert.ToString(amount), "Success", Convert.ToInt32(Installmentno), "-");
                         
                         if (ViewState["First_PaymentStatus"] == "5151")
                         {
@@ -219,7 +253,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     }
                     else
                     {
-                        output = objFees.InsertOnlinePayment_DCR(Convert.ToString(Session["idno"]), rec_code, order_id, mihpayid, "O", "1", Convert.ToString(amount), "Success", Session["regno"].ToString(), "-");
+                        output = objFees.InsertOnlinePayment_DCR(Convert.ToString(Session["idno"]), rec_code, MS_order_id, mihpayid, "O", "1", Convert.ToString(amount), "Success", Session["regno"].ToString(), "-");
 
                         if (ViewState["First_PaymentStatus"] == "5151")
                         {
@@ -243,17 +277,14 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     divFailure.Visible = true;
                     int result = 0;
                     string PaymentFor = string.Empty, txnMessage = string.Empty, BankReferenceNo = string.Empty;
-                    string rec_code = objCommon.LookUp("ACD_DCR_TEMP", "RECIEPT_CODE", "ORDER_ID = '" + order_id + "'");
-                    objFees.InsertOnlinePaymentlog(Convert.ToString(Session["idno"]), rec_code, "O", amount, "Payment Fail", order_id);
+                    string rec_code = objCommon.LookUp("ACD_DCR_TEMP", "RECIEPT_CODE", "ORDER_ID = '" + MS_order_id + "'");
+                    objFees.InsertOnlinePaymentlog(Convert.ToString(Session["idno"]), rec_code, "O", amount, "Payment Fail", MS_order_id);
 
                     //result = objFees.OnlineInstallmentFeesPayment(mihpayid, order_id, amount, "0000", "", PaymentFor, txnMessage, BankReferenceNo, PaymentFor, rec_code);
                     btnPrint.Visible = false;
                 }
 
               
-                
-                
-               
             }
             catch (Exception ex)
             {
@@ -261,6 +292,28 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
             }
         }
     }
+
+   #region Get Fetch RazorPay PG Details
+    protected void GetFetchRazorPayPG()
+    {
+        DataSet pg_ds = new DataSet();
+        try
+        {
+            pg_ds = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "ACCESS_CODE", "CHECKSUM_KEY, MERCHANT_ID, INSTANCE", "ACTIVE_STATUS= 1", "CONFIG_ID DESC");   //Merchant_Id
+            if (pg_ds.Tables[0].Rows.Count > 0)
+            {
+                Session["RazKey"] = pg_ds.Tables[0].Rows[0]["ACCESS_CODE"].ToString(); 
+                Session["Secrets"] = pg_ds.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();
+                Session["MerchantId"] = pg_ds.Tables[0].Rows[0]["MERCHANT_ID"].ToString(); 
+                Session["Instance"] = pg_ds.Tables[0].Rows[0]["INSTANCE"].ToString(); 
+
+            }
+        }
+        catch (Exception ex)
+        { }
+
+    }
+   #endregion
 
     #region Method
     //public void TransferToEmail1(string ToID, string userMsg, string userMsg1, string userMsg2, string messBody3, string messBody4, string messBody5)
@@ -413,6 +466,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
         return hex;
     }
 
+    #region Print button event
     protected void btnPrint_Click(object sender, EventArgs e)
     {
 
@@ -512,7 +566,39 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
         }
     }
 
+    private void ShowReportOnline(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            int IDNO = Convert.ToInt32((Session["idno"]));
+            // DCR ENTRY NO FOUND --- order_id
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + Session["idno"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+            string college_id = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO='" + Session["idno"].ToString() + "'");
+            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            // url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
 
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+
+            //divMSG.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMSG.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMSG.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+    #endregion
 
     private DataSet getModuleConfig()
     {
@@ -606,43 +692,6 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
 
             CustomStatus CS = (CustomStatus)feeController.UpdateUser(REGNO, UA_PWD, IDNO, FirstTimePay);
 
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-    }
-
-    private void ShowReportOnline(string reportTitle, string rptFileName)
-    {
-        try
-        {
-            int IDNO = Convert.ToInt32((Session["idno"]));
-
-            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + Session["idno"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
-            string college_id = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO='" + Session["idno"].ToString() + "'");
-            Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-
-            //url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
-           // url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
-
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo) + ",@P_UA_NAME=" + Session["UAFULLNAME"];
-            // url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
-
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " </script>";
-
-            //divMSG.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMSG.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMSG.InnerHtml += " </script>";
-
-            //To open new window from Updatepanel
-            
         }
         catch (Exception ex)
         {
