@@ -39,6 +39,49 @@
            </ContentTemplate>
       </asp:UpdatePanel>
 
+
+      <div id="popup" runat="server">
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>
+                <div class="modal" id="myModalPopUp" data-backdrop="static">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-body pl-0 pr-0 pl-lg-2 pr-lg-2">
+                                <div class="col-12 mt-3">
+                                    <h5 class="heading">Please enter password to access this page.</h5>
+                                    <div class="row">
+                                        <div class="form-group col-lg-12 col-md-12 col-12">
+                                            <%--  <label>PASSWORD</label>--%>
+                                            <asp:Label ID="lblPass" runat="server" Text="ybc@123" Visible="false"></asp:Label>
+                                            <asp:TextBox ID="txtPass" TextMode="Password" runat="server" TabIndex="1" ToolTip="Please Enter Password" AutoComplete="new-password"
+                                                MaxLength="50" CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="req_password" runat="server" ErrorMessage="Password Required !" ControlToValidate="txtPass"
+                                                Display="None" ValidationGroup="password"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <div class="form-group col-lg-12 col-md-12 col-12">
+                                        </div>
+                                        <div class="btn form-group col-lg-12 col-md-12 col-12">
+                                            <asp:Button ID="btnConnect" data-dismiss="myModalPopUp" data-keyboard="false" TabIndex="1" CssClass="btn btn-outline-primary"
+                                                runat="server" Text="Submit" ValidationGroup="password" OnClick="btnConnect_Click" />
+                                            <asp:Button ID="btnCancel1" data-dismiss="myModalPopUp" data-keyboard="false" TabIndex="2" CssClass="btn btn-danger"
+                                                runat="server" Text="Cancel" OnClick="btnCancel1_Click" />
+                                            <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List"
+                                                ShowMessageBox="True" ShowSummary="false" ValidationGroup="password" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ContentTemplate>
+            <Triggers>
+                <asp:PostBackTrigger ControlID="btnConnect" />
+            </Triggers>
+        </asp:UpdatePanel>
+    </div>
+
+
     <script>
         function ConfirmCourseMessage() {
             var selectedvalue = confirm("Do you want to Migrates the Course Records?");
@@ -68,6 +111,11 @@
             }
         }
 
+    </script>
+     <script type="text/javascript">
+         $(window).on('load', function () {
+             $('#myModalPopUp').modal('show');
+         });
     </script>
 
 </asp:Content>
