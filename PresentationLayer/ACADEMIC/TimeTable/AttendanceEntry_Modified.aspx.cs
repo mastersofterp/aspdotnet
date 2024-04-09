@@ -1477,7 +1477,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                 if (AttType == 0)//(0 <--Regular, 1 <-- Alternet) AttType used to check selected course(lecture,slot) is regular or alternate.
                 {
                     #region regular att..
-                    ddlClassType.Enabled = true;
+                    ddlClassType.Enabled = false;
 
                     //Comment by Mahesh on Dated 18-05-2021
                     //isAddStatus = objCommon.LookUp("ACD_COURSE_TEACHER", "ISNULL(IS_ADTEACHER,0)", "SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND COURSENO=" + courseno + " AND SEMESTERNO=" + sem + " AND SECTIONNO=" + sectionno + "  AND (BATCHNO =" + batchno + " OR BATCHNO =" + batchno + ") AND ISNULL(CANCEL,0)=0 AND (UA_NO=" + uano + " OR ADTEACHER=" + uano + ")");
