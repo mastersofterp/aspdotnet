@@ -328,10 +328,12 @@
                                                         <asp:Label ID="lblDYddlBranch" runat="server" Font-Bold="true"></asp:Label></th>
                                                     <th>Course Code</th>
                                                     <th>Course Name</th>
-                                                    <th>Total Calsses</th>
-                                                    <th>Present</th>
-                                                    <th>Absent</th>
-                                                    <th>Percentage</th>
+                                                    <th>Total Classes (Available Slots)</th>
+                                                    <th>Present Classes (Marked Slots)</th>
+                                                    <th>Absent Classes (Unmarked Slots)</th>
+                                                    <th>OD Classes</th>
+                                                    <th>Without OD %</th>
+                                                    <th>With OD %</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -360,16 +362,22 @@
                                                 <%# Eval("COURSENAME") %>
                                             </td>
                                             <td>
-                                                <%# Eval("TOTAL_CLASSES") %>
+                                                <%# Eval("Total Classes (Available Slots)") %>
                                             </td>
                                             <td>
-                                                <%# Eval("PRESENT") %>
+                                                <%# Eval("Present Classes (Marked Slots)") %>
                                             </td>
                                             <td>
-                                                <%# Eval("ABSENT") %>
+                                                <%# Eval("Absent Classes (Unmarked Slots)") %>
                                             </td>
                                             <td>
-                                                <%# Eval("PERCENTAGE") %>
+                                                <%# Eval("OD Classes") %>
+                                            </td>
+                                            <td>
+                                                <%# Eval("Without OD %") %>
+                                            </td>
+                                            <td>
+                                                <%# Eval("With OD %") %>
                                             </td>
                                         </tr>
                                     </ItemTemplate>
