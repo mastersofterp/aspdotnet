@@ -304,8 +304,44 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
         return hex;
 
     }
-   
+
     private void ShowReport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'");
+            int IDNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "IDNO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'"));
+            //int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+            //string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+            //To open new window from Updatepanel
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            //sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            //ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "CourseWise_Registration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+
+    private void ShowReportOnline(string reportTitle, string rptFileName)
     {
         try
         {
@@ -371,7 +407,7 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
         else
         {
             //ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
-            ShowReport("OnlineFeePayment", "rptOnlineReceipt_New.rpt");
+            ShowReportOnline("OnlineFeePayment", "rptOnlineReceipt_New.rpt");
         }
     }
 
