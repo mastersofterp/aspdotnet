@@ -96,18 +96,18 @@
 
     <%--===== Data Table Script added by gaurav =====--%>
 
-    <script>
+    <script type="text/javascript">
         // added by kajal jaiswal on 20-02-2024
-        $(document).ready(function () {
-           
-            var ActiveTab = $('#ctl00_ContentPlaceHolder1_hdftab').val();
-         
+        function FunctionHideShow() {
+           var ActiveTab = $('#ctl00_ContentPlaceHolder1_hdftab').val();
+
             $(".tab - pane").removeClass("active");
             $(".tab - pane").removeClass("fade");
             $(".tab - pane").addClass("fade");
             $("." + ActiveTab).addClass("active");
             $("." + ActiveTab).removeClass("fade");
-        });
+        }
+        
     </script>
 
     <script>

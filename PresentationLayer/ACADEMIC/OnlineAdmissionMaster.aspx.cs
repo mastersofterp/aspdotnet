@@ -101,6 +101,8 @@ public partial class ACADEMIC_OnlineAdmissionMaster : System.Web.UI.Page
                 FillDropDownList_NonGate();
 
                 HideShowTab();
+                string script = "<script type='text/javascript'>FunctionHideShow();</script>";
+                ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", script);
             }
         }
         catch (Exception ex)
