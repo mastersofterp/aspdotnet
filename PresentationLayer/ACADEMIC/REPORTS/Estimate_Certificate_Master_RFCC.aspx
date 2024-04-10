@@ -64,7 +64,7 @@
                                                                             </asp:DropDownList>
                                                                         </div>
 
-                                                                        <%--  ADDED BY POOJA ON DATE 11-08-2023--%>
+                                                                       
                                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="dvdegree" runat="server">
                                                                             <div class="label-dynamic">
                                                                                 <sup>* </sup>
@@ -208,20 +208,28 @@
                                                                         </div>
                                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                                             <div class="label-dynamic">
+                                                                                 <sup>* </sup>
                                                                                 <label>Degree</label>
                                                                             </div>
                                                                             <asp:DropDownList ID="ddlDegree" runat="server" AppendDataBoundItems="True" AutoPostBack="True" ToolTip="Please Select Degree" CssClass="form-control" data-select2-enable="true" TabIndex="2"
                                                                                 OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged">
                                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                             </asp:DropDownList>
+                                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="ddlDegree"
+                                                                                Display="None" ErrorMessage="Please Select Degree" InitialValue="0"
+                                                                                SetFocusOnError="True" ValidationGroup="Show1"></asp:RequiredFieldValidator>
                                                                         </div>
                                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                                             <div class="label-dynamic">
+                                                                                 <sup>* </sup>
                                                                                 <label>Branch</label>
                                                                             </div>
                                                                             <asp:DropDownList ID="ddlBranch" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Branch" CssClass="form-control" data-select2-enable="true" TabIndex="3" OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged" AutoPostBack="true">
                                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                             </asp:DropDownList>
+                                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlBranch"
+                                                                                Display="None" ErrorMessage="Please Select Branch" InitialValue="0"
+                                                                                SetFocusOnError="True" ValidationGroup="Show1"></asp:RequiredFieldValidator>
                                                                         </div>
                                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                                             <div class="label-dynamic">
