@@ -194,8 +194,9 @@
                         </div>
 
                         <div class="box-body">
-                            <div class="col-12">
+                            <div class="col-12" id="divAdminMain" runat="server" visible="false">
                                 <div class="row">
+<<<<<<< HEAD
                                     <div class="form-group col-lg-12 col-md-12 col-12">
                                         <asp:RadioButtonList ID="rdbReports" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" 
                                             OnSelectedIndexChanged="rdbReports_SelectedIndexChanged" AutoPostBack="true" CssClass="col-12 radio-button-list-style">
@@ -205,10 +206,22 @@
                                             <asp:ListItem Value="4">&nbsp;Class Attendance Entry Report Of Faculty&nbsp;</asp:ListItem>
                                         <%--  Added By jay T on dated 09-04-2024 as per Tno:-  --%>
                                              <asp:ListItem Value="5">&nbsp;Attendance Report For Global Elective  &nbsp;&nbsp;&nbsp;</asp:ListItem>
+=======
+                                    <div class="form-group col-lg-12 col-md-12 col-12" id="divAdmin" runat="server" visible="false">
+                                        <asp:RadioButtonList ID="rdbReports" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" OnSelectedIndexChanged="rdbReports_SelectedIndexChanged" AutoPostBack="true">
+                                            <asp:ListItem Selected="True" Value="1">&nbsp;Attendance Tracker&nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                            <asp:ListItem Value="2">&nbsp;Attendance Marked & Not-Marked &nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                            <asp:ListItem Value="3">&nbsp;Attendance register & Consolidated Attendance&nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                            <asp:ListItem Value="4">&nbsp;Class Attendance Entry Report Of Faculty&nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                            <%--  Added By jay T on dated 09-04-2024 as per Tno:-  --%>
+                                            <%-- <asp:ListItem Value="5">&nbsp;Attendance Report For Global Elective Of HOD &nbsp;&nbsp;&nbsp;</asp:ListItem>--%>
+>>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
                                         </asp:RadioButtonList>
                                         <%--Attendance register & Consolidated Attendance--%>
                                     </div>
+
                                     <%-- dvSession Added By Vipul T on dated 22-12-2023 as per Tno:- --%>
+                                    <%--<div id="divAll" runat="server" visible="false">--%>
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="dvSession" visible="false">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
@@ -226,6 +239,7 @@
                                         </div>
                                         <asp:ListBox ID="ddlSession1" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true" TabIndex="1"></asp:ListBox>
                                     </div>
+
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divCollege" visible="false">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
@@ -352,7 +366,7 @@
                                             <sup>*</sup>
                                             <label>Attendance Start Date</label>
                                         </div>
-                                          <div class="label-dynamic" runat="server" id="DivLabel2"  visible="false">
+                                        <div class="label-dynamic" runat="server" id="DivLabel2" visible="false">
                                             <sup>*</sup>
                                             <label>Attendance Date</label>
                                         </div>
@@ -388,6 +402,7 @@
                                                 <i class="fa fa-calendar" runat="server"></i>
                                             </div>
                                             <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" TabIndex="7" CssClass="form-control" placeholder="DD/MM/YYYY" />
+
                                             <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"
                                                 TargetControlID="txtEndDate" PopupButtonID="txtEndDate1" />
 
@@ -405,10 +420,11 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" SetFocusOnError="True" ControlToValidate="txtEndDate" Display="None" ValidationGroup="ShowStudent" />
                                         </div>
                                     </div>
+                                    <%--</div>--%>
                                 </div>
                             </div>
 
-                            <div class="col-12 btn-footer">
+                            <div class="col-12 btn-footer" id="divAdminMainButton" runat="server" visible="false">
                                 <asp:Button ID="btnAttReport" runat="server" OnClick="btnAttReport_Click" TabIndex="8" OnClientClick="return validate();"
                                     Text="Attendance Marked-Not Marked Report" ValidationGroup="show" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnAttTracker" runat="server" OnClick="btnAttTracker_Click" TabIndex="9" OnClientClick="return validate1();"
@@ -421,8 +437,11 @@
                                     CssClass="btn btn-info" ValidationGroup="GlobalAtt" />
 
                                 <%-- btnExcel Added By Vipul T on dated 22-12-2023 as per Tno:- --%>
-                                <asp:Button ID="btnExcel" runat="server" TabIndex="6" Text="Report (Excel)" OnClick="btnExcel_Click" 
+                                <asp:Button ID="btnExcel" runat="server" TabIndex="6" Text="Report (Excel)" OnClick="btnExcel_Click"
                                     CssClass="btn btn-info" Visible="false" />
+                                <%-- btnExcel Added By Jay T on dated 09-04-2024 as per Tno:- --%>
+                                <%--  <asp:Button ID="btnGlobalAtt" runat="server" TabIndex="6" Text="Report (Excel)" OnClick="btnGlobalAtt_Click"
+                                    CssClass="btn btn-info" Visible="false" />--%>
                                 <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" TabIndex="10"
                                     Text="Cancel" CssClass="btn btn-warning" />
 
@@ -432,6 +451,113 @@
                                     ShowSummary="False" ValidationGroup="Submit" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="True"
                                     ShowSummary="False" ValidationGroup="ShowStudent" />
+                            </div>
+
+                            <%--  Added By jay T on dated 09-04-2024 as per Tno:- 57349  --%>
+                            <div class="col-12" id="divHODMain" runat="server" visible="false">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-md-12 col-12" id="divHOD" runat="server" visible="false">
+                                        <asp:RadioButtonList ID="rbdReportsHOD" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" OnSelectedIndexChanged="rbdReportsHOD_SelectedIndexChanged" AutoPostBack="true">
+                                            <asp:ListItem Value="1" Selected="True">&nbsp;Attendance Report For Global Elective Of HOD &nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                        </asp:RadioButtonList>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divSessionHOD" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <asp:Label ID="lblSession" runat="server" Font-Bold="true" >Session</asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSessionHOD" runat="server" AppendDataBoundItems="true"
+                                            AutoPostBack="true" TabIndex="1" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlSessionHOD"
+                                            ErrorMessage="Select atleast one Session " InitialValue="0" Display="None" ValidationGroup="GlobalAtt"></asp:RequiredFieldValidator>
+                                    </div>
+
+                                <%--<div class="form-group col-lg-3 col-md-6 col-12" id="divMClg" runat="server" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <asp:Label ID="lblClg" runat="server" Font-Bold="true">College</asp:Label>
+                                            <asp:ListBox ID="lboddlCollege" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
+                                        </div>
+                                    </div>--%>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divSDHOD" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <label>Attendance Start Date</label>
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="input-group-addon" id="txtStartDate1HOD" runat="server">
+                                                <i id="I1" class="fa fa-calendar" runat="server"></i>
+                                            </div>
+                                            <asp:TextBox ID="txtStartDateHOD" runat="server" ValidationGroup="submit" TabIndex="6"
+                                                CssClass="form-control" placeholder="DD/MM/YYYY" />
+
+                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd/MM/yyyy"
+                                                TargetControlID="txtStartDateHOD" PopupButtonID="txtStartDate1HOD" />
+
+                                            <ajaxToolKit:MaskedEditExtender ID="meeStartDateHOD" runat="server" OnInvalidCssClass="errordate"
+                                                TargetControlID="txtStartDateHOD" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+
+                                            <ajaxToolKit:MaskedEditValidator ID="mevStartDateHOD" runat="server" ControlExtender="meeStartDateHOD"
+                                                ControlToValidate="txtStartDateHOD" EmptyValueMessage="Please Enter Attendance Start Date" IsValidEmpty="false"
+                                                InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
+                                                ErrorMessage="Start Date is Invalid (Enter dd/mm/yyyy Format)"
+                                                TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                ValidationGroup="GlobalAtt" SetFocusOnError="True" />
+
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtStartDateHOD"
+                                                Display="None" SetFocusOnError="True" ValidationGroup="GlobalAtt" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divSDHOD1" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <label>Attendance End Date</label>
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="input-group-addon" id="txtEndDateHOD1" runat="server">
+                                                <i id="I2" class="fa fa-calendar" runat="server"></i>
+                                            </div>
+                                            <asp:TextBox ID="txtEndDateHOD" runat="server" ValidationGroup="submit" TabIndex="7"
+                                                CssClass="form-control" placeholder="DD/MM/YYYY" />
+
+                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Format="dd/MM/yyyy"
+                                                TargetControlID="txtEndDateHOD" PopupButtonID="txtEndDateHOD1" />
+
+                                            <ajaxToolKit:MaskedEditExtender ID="meeEndDateHOD" runat="server" OnInvalidCssClass="errordate"
+                                                TargetControlID="txtEndDateHOD" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+
+                                            <ajaxToolKit:MaskedEditValidator ID="mevEndDateHOD" runat="server" ControlExtender="meeEndDateHOD"
+                                                ControlToValidate="txtEndDateHOD" EmptyValueMessage="Please Enter Attendance End Date"
+                                                InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" IsValidEmpty="false"
+                                                TooltipMessage="Please Enter Attendance End Date" EmptyValueBlurredText="Empty"
+                                                InvalidValueBlurredMessage="Invalid Date" ValidationGroup="GlobalAtt" SetFocusOnError="True" />
+
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" SetFocusOnError="True"
+                                                ControlToValidate="txtEndDateHOD"
+                                                Display="None" ValidationGroup="GlobalAtt" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <%--  Added By jay T on dated 09-04-2024 as per Tno:- 57349  --%>
+                            <div class="col-12 btn-footer" id="divHODMainButton" runat="server" visible="false">
+                                <asp:Button ID="btnGlobalAtt" runat="server" TabIndex="6" Text="Report (Excel)" OnClick="btnGlobalAtt_Click"
+                                    CssClass="btn btn-info" ValidationGroup="GlobalAtt" />
+                                <asp:Button ID="btnCancelHOD" runat="server" OnClick="btnCancelHOD_Click" TabIndex="10"
+                                    Text="Cancel" CssClass="btn btn-warning" />
+                                <asp:ValidationSummary ID="ValidationSummary3" runat="server" ShowMessageBox="True"
+                                    ShowSummary="False" ValidationGroup="GlobalAtt" />
+
                             </div>
                         </div>
                     </div>

@@ -6603,6 +6603,28 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //Added by jay takalkhede on dated 10042024 Added report in which get Global Elective Course Attendance Data (TkNo.56806)
+        public DataSet RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(string AttendanceStartDate, string AttendanceEndDate, int UANO, int session)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = new SqlParameter[4];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", session);
+                objParams[1] = new SqlParameter("@P_FROMDATE", AttendanceStartDate);
+                objParams[2] = new SqlParameter("@P_TODATE", AttendanceEndDate);
+                objParams[3] = new SqlParameter("@P_UA_NO", UANO);
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_REPORT_STU_ATTENDANCE_FACULTY_SUBJECTWISE", objParams);
+            }
+            catch (Exception ex)
+            {
+                return ds;
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.RetrieveStudentAttDetailsExcel-> " + ex.ToString());
+            }
+            return ds;
+        }
+
 
         //Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
         public DataSet GetAllLeaveForApproval_HOD(int uaType, int uano, int college_ID, int sessionno)
