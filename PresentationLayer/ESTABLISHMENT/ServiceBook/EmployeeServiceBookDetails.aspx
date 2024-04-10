@@ -3032,11 +3032,7 @@
                             </div>
                         </asp:Panel>
 
-
-                        <%-- ================================================================== Miscellaneous Information--%>
-
                         <%-- ================================================================== Academic Responsibility--%>
-
                         <asp:Panel ID="Panel1" runat="server">
                             <div class="col-12 colapse-heading">
                                 <div class="row">
@@ -3133,8 +3129,74 @@
                                 </div>
                             </div>
                         </asp:Panel>
+                        <%-- ================================================================== Miscellaneous Information--%>
+                        <asp:Panel ID="pnlMiscellaneous" runat="server">
+                            <div class="col-12 colapse-heading">
+                                <div class="row">
+                                    <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#div38" aria-expanded="false" aria-controls="collapsetwentysix">
+                                        <i class="more-less fas fa-plus"></i>
+                                        <div class="row">
+                                            <div class="sub-heading col-md-6 ">
+                                                <h5>Miscellaneous Details
+                                                </h5>
+                                            </div>
 
-
+                                            <div class=" sub-heading  col-md-6">
+                                                <h5>Pending Count :
+                                                    <asp:Label ID="lblMiscellaneous" runat="server"></asp:Label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div38" class="col-12 collapse mt-4" data-parent="#accordion">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="table19">
+                                        <asp:ListView ID="lvMiscellaneous" runat="server">
+                                            <LayoutTemplate>
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Employee Name
+                                                        </th>
+                                                        <th>Ph.D Under Guidance
+                                                        </th>
+                                                        <th>Ph.D Awarded
+                                                        </th>
+                                                        <th>Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Eval("EMPNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("PHDGUIDED")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("PHDAWARD")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Button ID="btnMiscellaneousApproval" runat="server" Text="Approve" CommandArgument='<%# Eval("MOSNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnMiscellaneousApproval_Click" />
+                                                        <asp:Button ID="btnMiscellaneousReject" runat="server" Text="Reject" CommandArgument='<%# Eval("MOSNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnMiscellaneousReject_Click" />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </table>
+                                    <div id="Div39" runat="server" visible="false" style="padding: 20px 20px; text-align: center; color: #000;">
+                                        No records to display.
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
                         <%-- ================================================================== Miscellaneous Information--%>
                     </div>
                 </div>

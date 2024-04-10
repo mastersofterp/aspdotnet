@@ -73,6 +73,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_StaffConsultancy : System.
             //return;
         }
         BlobDetails();
+        GetConfigForEditAndApprove();
     }
 
     private void BindListViewStaffConsultancy()
@@ -308,14 +309,25 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_StaffConsultancy : System.
                 lvCompAttach.DataSource = null;
                 lvCompAttach.DataBind();
             }
-            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-            if (STATUS == "A")
+            if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
             {
-                MessageBox("Your Details are Approved you cannot edit.");
-                return;
+                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                if (STATUS == "A")
+                {
+                    MessageBox("Your Details Are Approved You Cannot Edit.");
+                    btnSubmit.Enabled = false;
+                    return;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+                GetConfigForEditAndApprove();
             }
             else
             {
+                btnSubmit.Enabled = true;
+                GetConfigForEditAndApprove();
             }
         }
         catch (Exception ex)
@@ -342,6 +354,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_StaffConsultancy : System.
                 MessageBox("Your Details are Approved you cannot delete.");
                 return;
             }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Edit.");
+                return;
+            }
             else
             {
                 CustomStatus cs = (CustomStatus)objServiceBook.DeleteStaffConsultancyInfo(SCNO);
@@ -366,6 +383,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_StaffConsultancy : System.
     {
         Clear();
         DeleteDirecPath(Docpath + "TEMP_UPLOADFILES\\" + _idnoEmp + "\\APP_0");
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -381,7 +399,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_StaffConsultancy : System.
         lvCompAttach.DataBind();
         pnlAttachmentList.Visible = false;
         ViewState["FILE1"] = null;
-
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
     public void MessageBox(string msg)
     {
@@ -974,6 +994,56 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_StaffConsultancy : System.
         catch (Exception ex)
         {
             throw;
+        }
+    }
+
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Staff Consultancy";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
         }
     }
 

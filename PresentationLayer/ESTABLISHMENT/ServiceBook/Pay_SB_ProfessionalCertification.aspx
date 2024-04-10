@@ -21,7 +21,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="sub-heading">
-                                        <h5>Training/Short Term Training Program/Conference Attended/Workshop</h5>
+                                        <h5>Professional Course Certification</h5>
                                     </div>
                                 </div>
                             </div>

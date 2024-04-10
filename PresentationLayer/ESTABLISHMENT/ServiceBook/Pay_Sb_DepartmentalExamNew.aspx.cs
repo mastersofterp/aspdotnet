@@ -54,8 +54,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
             ViewState["action"] = "add";
         }
 
-       // DropDownList ddlempidno = (DropDownList)this.Parent.FindControl("ddlEmployee");
-       // _idnoEmp = Convert.ToInt32(ddlempidno.SelectedValue);
+        // DropDownList ddlempidno = (DropDownList)this.Parent.FindControl("ddlEmployee");
+        // _idnoEmp = Convert.ToInt32(ddlempidno.SelectedValue);
         if (Session["serviceIdNo"] != null)
         {
             _idnoEmp = Convert.ToInt32(Session["serviceIdNo"].ToString().Trim());
@@ -63,6 +63,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
         BlobDetails();
         BindListViewDeptExam();
         btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
+        GetConfigForEditAndApprove();
     }
 
     private void CheckPageAuthorization()
@@ -131,75 +132,75 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-    //    try
-    //    {
-    //        Panel updpersonaldetails = (Panel)this.Parent.FindControl("upWebUserControl");
-    //        ServiceBook objSevBook = new ServiceBook();
-    //        objSevBook.IDNO = _idnoEmp;
-    //        objSevBook.EXAM = txtNameOfExam.Text;
-    //        objSevBook.PASSYEAR = txtYearOfPassing.Text;
-    //        objSevBook.OFFICER = txtAttestOfficer.Text;
-    //        objSevBook.REGNO = txtRegNo.Text;
-    //        objSevBook.COLLEGE_CODE = Session["colcode"].ToString();
-    //        if (flupld.HasFile)
-    //        {
-    //            objSevBook.ATTACHMENTS = Convert.ToString(flupld.PostedFile.FileName.ToString());
-    //        }
-    //        else
-    //        {
-    //            if (ViewState["attachment"] != null)
-    //            {
-    //                objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
-    //            }
-    //            else
-    //            {
-    //                objSevBook.ATTACHMENTS = string.Empty;
-    //            }
+        //    try
+        //    {
+        //        Panel updpersonaldetails = (Panel)this.Parent.FindControl("upWebUserControl");
+        //        ServiceBook objSevBook = new ServiceBook();
+        //        objSevBook.IDNO = _idnoEmp;
+        //        objSevBook.EXAM = txtNameOfExam.Text;
+        //        objSevBook.PASSYEAR = txtYearOfPassing.Text;
+        //        objSevBook.OFFICER = txtAttestOfficer.Text;
+        //        objSevBook.REGNO = txtRegNo.Text;
+        //        objSevBook.COLLEGE_CODE = Session["colcode"].ToString();
+        //        if (flupld.HasFile)
+        //        {
+        //            objSevBook.ATTACHMENTS = Convert.ToString(flupld.PostedFile.FileName.ToString());
+        //        }
+        //        else
+        //        {
+        //            if (ViewState["attachment"] != null)
+        //            {
+        //                objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+        //            }
+        //            else
+        //            {
+        //                objSevBook.ATTACHMENTS = string.Empty;
+        //            }
 
-    //        }
-    //        //Check whether to add or update
-    //        if (ViewState["action"] != null)
-    //        {
-    //            if (ViewState["action"].ToString().Equals("add"))
-    //            {
-    //                //Add New Help
-    //                CustomStatus cs = (CustomStatus)objServiceBook.AddDeptExam(objSevBook);
+        //        }
+        //        //Check whether to add or update
+        //        if (ViewState["action"] != null)
+        //        {
+        //            if (ViewState["action"].ToString().Equals("add"))
+        //            {
+        //                //Add New Help
+        //                CustomStatus cs = (CustomStatus)objServiceBook.AddDeptExam(objSevBook);
 
-    //                if (cs.Equals(CustomStatus.RecordSaved))
-    //                {
-    //                    objServiceBook.upload_new_files("DEPARTMENT_EXAMINATION", _idnoEmp, "DENO", "PAYROLL_SB_DEPTEXAM", "DEX_", flupld);
-    //                    this.Clear();
-    //                    this.BindListViewDeptExam();
-    //                    this.objCommon.DisplayMessage(updpersonaldetails, "Record Saved Successfully", this.Page);
-    //                }
-    //            }
-    //            else
-    //            {
-    //                //Edit
-    //                if (ViewState["deNO"] != null)
-    //                {
-    //                    objSevBook.DENO = Convert.ToInt32(ViewState["deNO"].ToString());
-    //                    CustomStatus cs = (CustomStatus)objServiceBook.UpdateDeptExam(objSevBook);
-    //                    if (cs.Equals(CustomStatus.RecordUpdated))
-    //                    {
-    //                        objServiceBook.update_upload("DEPARTMENT_EXAMINATION", objSevBook.DENO, ViewState["attachment"].ToString(), _idnoEmp, "DEX_", flupld);
-    //                        ViewState["action"] = "add";
-    //                        this.Clear();
-    //                        this.BindListViewDeptExam();
-    //                        this.objCommon.DisplayMessage(updpersonaldetails, "Record Updated Successfully", this.Page);
-    //                    }
-    //                }
-    //            }
-    //        }
+        //                if (cs.Equals(CustomStatus.RecordSaved))
+        //                {
+        //                    objServiceBook.upload_new_files("DEPARTMENT_EXAMINATION", _idnoEmp, "DENO", "PAYROLL_SB_DEPTEXAM", "DEX_", flupld);
+        //                    this.Clear();
+        //                    this.BindListViewDeptExam();
+        //                    this.objCommon.DisplayMessage(updpersonaldetails, "Record Saved Successfully", this.Page);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                //Edit
+        //                if (ViewState["deNO"] != null)
+        //                {
+        //                    objSevBook.DENO = Convert.ToInt32(ViewState["deNO"].ToString());
+        //                    CustomStatus cs = (CustomStatus)objServiceBook.UpdateDeptExam(objSevBook);
+        //                    if (cs.Equals(CustomStatus.RecordUpdated))
+        //                    {
+        //                        objServiceBook.update_upload("DEPARTMENT_EXAMINATION", objSevBook.DENO, ViewState["attachment"].ToString(), _idnoEmp, "DEX_", flupld);
+        //                        ViewState["action"] = "add";
+        //                        this.Clear();
+        //                        this.BindListViewDeptExam();
+        //                        this.objCommon.DisplayMessage(updpersonaldetails, "Record Updated Successfully", this.Page);
+        //                    }
+        //                }
+        //            }
+        //        }
 
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        if (Convert.ToBoolean(Session["error"]) == true)
-    //            objUCommon.ShowError(Page, "PayRoll_Pay_DepartmentalExam.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
-    //        else
-    //            objUCommon.ShowError(Page, "Server UnAvailable");
-    //    }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (Convert.ToBoolean(Session["error"]) == true)
+        //            objUCommon.ShowError(Page, "PayRoll_Pay_DepartmentalExam.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
+        //        else
+        //            objUCommon.ShowError(Page, "Server UnAvailable");
+        //    }
 
 
 
@@ -415,14 +416,25 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
                 ddlexam.SelectedIndex = Convert.ToInt32(ds.Tables[0].Rows[0]["EXAMID"]);
                 ViewState["attachment"] = ds.Tables[0].Rows[0]["ATTACHMENT"].ToString();
 
-                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-                if (STATUS == "A")
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
                 {
-                    MessageBox("Your Details are Approved you cannot edit.");
-                    return;
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
                 }
                 else
                 {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
                 }
             }
         }
@@ -452,7 +464,12 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Edit.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Edit.");
                 return;
             }
             else
@@ -478,6 +495,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -488,6 +506,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
         txtYearOfPassing.Text = string.Empty;
         ddlexam.SelectedIndex = 0;
         ViewState["action"] = "add";
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     public void MessageBox(string msg)
@@ -591,5 +612,55 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
             throw;
         }
     }
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Department Examination";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
     #endregion
 }

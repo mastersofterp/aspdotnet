@@ -67,6 +67,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
         //DropDownList ddlempidno = (DropDownList)this.Parent.FindControl("ddlEmployee");
         //_idnoEmp = Convert.ToInt32(ddlempidno.SelectedValue);
         BindListViewMisOtherDetail();
+        GetConfigForEditAndApprove();
     }
 
     public void MessageBox(string msg)
@@ -145,15 +146,26 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
         txtThesisUniversity.Text = string.Empty;
         txtMonth.Text = string.Empty;
         txtThesisYear.Text = string.Empty;
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
 
     protected void btnSubmit_Click(object sender, System.EventArgs e)
     {
         try
-        {        
+        {
             objSevBook.IDNO = _idnoEmp;
 
+            if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+            {
+                btnSubmit.Enabled = false;
+            }
+            else
+            {
+                btnSubmit.Enabled = true;
+            }
             //objSevBook.HIndex = txtHindex.Text;
             //objSevBook.Bond = txtbond.Text;          
             //objSevBook.FROMDATE = Convert.ToDateTime(txtFromDate.Text);
@@ -434,13 +446,13 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                 //if (((ViewState["RecTbl"] == null && ((DataTable)ViewState["RecTbl"]) == null)) && ((ViewState["BRecTbl"] == null && ((DataTable)ViewState["BRecTbl"]) == null)) && ((ViewState["PRecTbl"] == null && ((DataTable)ViewState["PRecTbl"]) == null)) && ((ViewState["IdRecTbl"] == null && ((DataTable)ViewState["IdRecTbl"]) == null)) && ((ViewState["ThRecTbl"] == null && ((DataTable)ViewState["ThRecTbl"]) == null)))
                 //{
 
-                    //dtIF = this.CreateTable();
-                    //dtBD = this.CreateTableBond();
-                    //dtPH = this.CreateTablePhd();
-                    //dtId = this.CreateTableIDDetail();
-                    //dtTh = this.CreateTableThesisTitle();
-                    MessageBox("Please add Atleast One Detail!");
-                    return;
+                //dtIF = this.CreateTable();
+                //dtBD = this.CreateTableBond();
+                //dtPH = this.CreateTablePhd();
+                //dtId = this.CreateTableIDDetail();
+                //dtTh = this.CreateTableThesisTitle();
+                MessageBox("Please add Atleast One Detail!");
+                return;
 
                 //}
             }
@@ -470,13 +482,13 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                         Clear();
                         this.BindListViewMisOtherDetail();
                         //this.objCommon.DisplayMessage(updpersonaldetails, "Record Saved Successfully", this.Page);
-                        MessageBox("Record Saved Successfully");                     
+                        MessageBox("Record Saved Successfully");
                     }
                     else if (cs.Equals(CustomStatus.RecordFound))
                     {
                         MessageBox("Record Already Exist");
-                        Clear();                        
-                    }                    
+                        Clear();
+                    }
                 }
                 else
                 {
@@ -495,7 +507,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                             this.BindListViewMisOtherDetail();
                             //this.objCommon.DisplayMessage(updpersonaldetails, "Record Updated Successfully", this.Page);
                             MessageBox("Record Updated Successfully");
-                            DeletePath();                           
+                            DeletePath();
                         }
                     }
                 }
@@ -759,6 +771,26 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
                 lvThesis.DataSource = null;
                 lvThesis.DataBind();
             }
+            if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
+            {
+                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                if (STATUS == "A")
+                {
+                    MessageBox("Your Details Are Approved You Cannot Edit.");
+                    btnSubmit.Enabled = false;
+                    return;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+                GetConfigForEditAndApprove();
+            }
+            else
+            {
+                btnSubmit.Enabled = true;
+                GetConfigForEditAndApprove();
+            }
         }
         catch (Exception ex)
         {
@@ -778,6 +810,7 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
     protected void btnCancel_Click(object sender, System.EventArgs e)
     {
         Clear();
+        GetConfigForEditAndApprove();
     }
 
     public string GetFileNamePath(object filename, object MOSNO, object idno)
@@ -795,14 +828,30 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
             //lblFamilymsg.Text = string.Empty;
             ImageButton btnDel = sender as ImageButton;
             int MOSNO = int.Parse(btnDel.CommandArgument);
-            CustomStatus cs = (CustomStatus)objServiceBook.DeletemiseInfo(MOSNO);
-            if (cs.Equals(CustomStatus.RecordDeleted))
+             DataSet ds = new DataSet();
+            ds = objCommon.FillDropDown("PAYROLL_SB_MIS_OTHER", "*", "", "MOSNO=" + MOSNO, "");
+            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+            if (STATUS == "A")
             {
-                BindListViewMisOtherDetail();
-                Clear();
-                //lblFamilymsg.Text = "Record Deleted Successfully";
-                ViewState["action"] = "add";
-                MessageBox("Record Deleted Successfully");
+                MessageBox("Your Details are Approved You Cannot Edit.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Edit.");
+                return;
+            }
+            else
+            {
+                CustomStatus cs = (CustomStatus)objServiceBook.DeletemiseInfo(MOSNO);
+                if (cs.Equals(CustomStatus.RecordDeleted))
+                {
+                    BindListViewMisOtherDetail();
+                    Clear();
+                    //lblFamilymsg.Text = "Record Deleted Successfully";
+                    ViewState["action"] = "add";
+                    MessageBox("Record Deleted Successfully");
+                }
             }
         }
         catch (Exception ex)
@@ -2388,4 +2437,55 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
             ViewState["dtaction"] = "edit";
         }
     }
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Miscellaneous Detail";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
+    #endregion
+
 }

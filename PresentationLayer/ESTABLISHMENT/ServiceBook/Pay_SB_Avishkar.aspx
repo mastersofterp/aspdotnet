@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/ServiceBookMaster.master"  AutoEventWireup="true" CodeFile="Pay_SB_Avishkar.aspx.cs" Inherits="ESTABLISHMENT_ServiceBook_Pay_SB_Avishkar" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/ServiceBookMaster.master" AutoEventWireup="true" CodeFile="Pay_SB_Avishkar.aspx.cs" Inherits="ESTABLISHMENT_ServiceBook_Pay_SB_Avishkar" %>
 
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
@@ -12,28 +12,28 @@
         <ContentTemplate>
             <div class="row">
                 <div class="col-md-12">
-                 
+
 
                     <div class="col-md-12">
-                        
-                                          <div class="col-12">
-	                                    <div class="row">
-		                                    <div class="col-12">
-		                                    <div class="sub-heading">
-				                                    <h5>Avishkar</h5>
-			                                    </div>
-		                                    </div>
-	                                    </div>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="sub-heading">
+                                        <h5>Avishkar</h5>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <asp:Panel ID="pnlavishkar" runat="server">
-                           
+
                             <div class="panel panel-info">
-                              
+
                                 <div class="panel panel-body">
-                                      <div class="col-12">
-                                            <div class="row">
-                                                <%--<div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <%--<div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                           <label>Employee Name :</label>
                                                      </div>
@@ -42,123 +42,123 @@
                                                  </div>--%>
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <label> <span style="color: #FF0000">*</span> Level :</label>
-                                                     </div>
-                                        <asp:DropDownList ID="ddlLevel" runat="server" AppendDataBoundItems="true"
-                                            CssClass="form-control" ToolTip="Select Award Level" TabIndex="1">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            <asp:ListItem Value="1">State</asp:ListItem>
-                                            <asp:ListItem Value="2">District</asp:ListItem>
-                                            <asp:ListItem Value="3">University</asp:ListItem>
-                                        </asp:DropDownList> 
-                                                
-                                    
-                                       <asp:RequiredFieldValidator ID="rfvlevel" runat="server" ControlToValidate="ddlLevel"
-                                        Display="None" ErrorMessage="Please Select Level" ValidationGroup="ServiceBook"
-                                        InitialValue="0"></asp:RequiredFieldValidator>                                                  
-                                    </div>
+                                                <div class="label-dynamic">
+                                                    <label><span style="color: #FF0000">*</span> Level :</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlLevel" runat="server" AppendDataBoundItems="true" data-select2-enable="true"
+                                                    CssClass="form-control" ToolTip="Select Award Level" TabIndex="1">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    <asp:ListItem Value="1">State</asp:ListItem>
+                                                    <asp:ListItem Value="2">District</asp:ListItem>
+                                                    <asp:ListItem Value="3">University</asp:ListItem>
+                                                </asp:DropDownList>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                          <label> <span style="color: #FF0000">*</span> College(University) :</label>
-                                                     </div>
-                                        <asp:DropDownList ID="ddlUniversity" runat="server" AppendDataBoundItems="true" CssClass="form-control"
-                                             ToolTip="Select University Name" TabIndex="2"></asp:DropDownList>
-                                      <asp:RequiredFieldValidator ID="rfvuniversity" runat="server" ControlToValidate="ddlUniversity"
-                                        Display="None" ErrorMessage="Please Select College(University)" ValidationGroup="ServiceBook"
-                                        InitialValue="0"></asp:RequiredFieldValidator> 
-                                    </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                       <label> <span style="color: #FF0000">*</span> Title of Poster/Model Paper</label>
-                                                        </div>
-                                                    <asp:TextBox ID="txtTitle" runat="server"  CssClass="form-control"  ToolTip="Enter Title of Poster/Model Paper" TabIndex="3"></asp:TextBox>
-                                                   
-                                                    <asp:RequiredFieldValidator ID="rfvTitle" runat="server" ControlToValidate="txtTitle" Display="None"
-                                                     ErrorMessage="Please Enter  Title of Poster/Model Paper" SetFocusOnError="true" ValidationGroup="ServiceBook">
-                                                                        </asp:RequiredFieldValidator>
-                      
+                                                <asp:RequiredFieldValidator ID="rfvlevel" runat="server" ControlToValidate="ddlLevel"
+                                                    Display="None" ErrorMessage="Please Select Level" ValidationGroup="ServiceBook"
+                                                    InitialValue="0"></asp:RequiredFieldValidator>
+                                            </div>
 
-                                                     </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label><span style="color: #FF0000">*</span> College(University) :</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlUniversity" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
+                                                    ToolTip="Select University Name" TabIndex="2">
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="rfvuniversity" runat="server" ControlToValidate="ddlUniversity"
+                                                    Display="None" ErrorMessage="Please Select College(University)" ValidationGroup="ServiceBook"
+                                                    InitialValue="0"></asp:RequiredFieldValidator>
+                                            </div>
 
-                                                 <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <label>Venue :</label>
-                                                        </div>
-                                                     <asp:TextBox ID="txtVenue" runat="server"  CssClass="form-control"  ToolTip="Enter Title of Poster/Model Paper" TabIndex="4"></asp:TextBox>
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label><span style="color: #FF0000">*</span> Title of Poster/Model Paper</label>
+                                                </div>
+                                                <asp:TextBox ID="txtTitle" runat="server" CssClass="form-control" ToolTip="Enter Title of Poster/Model Paper" TabIndex="3"></asp:TextBox>
+
+                                                <asp:RequiredFieldValidator ID="rfvTitle" runat="server" ControlToValidate="txtTitle" Display="None"
+                                                    ErrorMessage="Please Enter  Title of Poster/Model Paper" SetFocusOnError="true" ValidationGroup="ServiceBook">
+                                                </asp:RequiredFieldValidator>
+
+
+                                            </div>
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label>Venue :</label>
+                                                </div>
+                                                <asp:TextBox ID="txtVenue" runat="server" CssClass="form-control" ToolTip="Enter Title of Poster/Model Paper" TabIndex="4"></asp:TextBox>
+                                            </div>
+
+
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label>Date Received : </label>
                                                 </div>
 
-                                                
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <asp:Image ID="imgcal" runat="server" class="fa fa-calendar text-blue" />
+                                                    </div>
+                                                    <asp:TextBox ID="txtdatereceived" runat="server" CssClass="form-control" ToolTip="Enter Date Received"
+                                                        TabIndex="5" Style="z-index: 0;"></asp:TextBox>
+                                                    <ajaxToolKit:CalendarExtender ID="ceToDate" runat="server" Format="dd/MM/yyyy" TargetControlID="txtdatereceived"
+                                                        PopupButtonID="imgcal" Enabled="true" EnableViewState="true" PopupPosition="BottomLeft">
+                                                    </ajaxToolKit:CalendarExtender>
+                                                    <ajaxToolKit:MaskedEditExtender ID="meToDate" runat="server" TargetControlID="txtdatereceived"
+                                                        Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
+                                                        AcceptNegative="Left" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate">
+                                                    </ajaxToolKit:MaskedEditExtender>
+                                                    <ajaxToolKit:MaskedEditValidator ID="mevToDate" runat="server" ControlExtender="meToDate"
+                                                        ControlToValidate="txtdatereceived" EmptyValueMessage="Please Enter Date of talk"
+                                                        InvalidValueMessage="Date of Received is Invalid (Enter dd/mm/yyyy Format)" Display="None"
+                                                        TooltipMessage="Please Enter Date of talk" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                        ValidationGroup="ServiceBook" SetFocusOnError="True" />
 
-                                  <div class="form-group col-lg-3 col-md-6 col-12">
-                                       <div class="label-dynamic">
-                                          <label>Date Received : </label>
-                                         </div>
-
-                                        <div class="input-group date">
-                                            <div class="input-group-addon">
-                                                <asp:Image ID="imgcal" runat="server"  class="fa fa-calendar text-blue"/>
+                                                </div>
                                             </div>
-                                            <asp:TextBox ID="txtdatereceived" runat="server" CssClass="form-control" ToolTip="Enter Date Received"
-                                                TabIndex="5" Style="z-index: 0;"></asp:TextBox>
-                                            <ajaxToolKit:CalendarExtender ID="ceToDate" runat="server" Format="dd/MM/yyyy" TargetControlID="txtdatereceived"
-                                                PopupButtonID="imgcal" Enabled="true" EnableViewState="true" PopupPosition="BottomLeft">
-                                            </ajaxToolKit:CalendarExtender>                                          
-                                            <ajaxToolKit:MaskedEditExtender ID="meToDate" runat="server" TargetControlID="txtdatereceived"
-                                                Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
-                                                AcceptNegative="Left" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate">
-                                            </ajaxToolKit:MaskedEditExtender>
-                                            <ajaxToolKit:MaskedEditValidator ID="mevToDate" runat="server" ControlExtender="meToDate"
-                                                ControlToValidate="txtdatereceived" EmptyValueMessage="Please Enter Date of talk"
-                                                InvalidValueMessage="Date of Received is Invalid (Enter dd/mm/yyyy Format)" Display="None"
-                                                TooltipMessage="Please Enter Date of talk" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
-                                                ValidationGroup="ServiceBook" SetFocusOnError="True" />
-                                             
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label><span style="color: #FF0000">*</span>Award</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlAward" runat="server" AppendDataBoundItems="true" data-select2-enable="true"
+                                                    CssClass="form-control" ToolTip="Select Award Level" TabIndex="6">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    <asp:ListItem Value="1">1st Award</asp:ListItem>
+                                                    <asp:ListItem Value="2">2nd Award</asp:ListItem>
+                                                    <asp:ListItem Value="3">3rd/Mentor</asp:ListItem>
+                                                    <asp:ListItem Value="4">Participation</asp:ListItem>
+                                                </asp:DropDownList>
+
+
+                                                <asp:RequiredFieldValidator ID="rfvaward" runat="server" ControlToValidate="ddlAward"
+                                                    Display="None" ErrorMessage="Please Select Award" ValidationGroup="ServiceBook"
+                                                    InitialValue="0"></asp:RequiredFieldValidator>
+
+                                            </div>
                                         </div>
                                     </div>
-
-                                                 <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <label><span style="color: #FF0000">*</span>Award</label>
-                                                        </div>
-                                                     <asp:DropDownList ID="ddlAward" runat="server" AppendDataBoundItems="true"
-                                                          CssClass="form-control" ToolTip="Select Award Level" TabIndex="6">
-                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                         <asp:ListItem Value="1">1st Award</asp:ListItem>
-                                                         <asp:ListItem Value="2">2nd Award</asp:ListItem>
-                                                         <asp:ListItem Value="3">3rd/Mentor</asp:ListItem>
-                                                         <asp:ListItem Value="4">Participation</asp:ListItem>
-                                                     </asp:DropDownList>
-
-                                                     
-                                      <asp:RequiredFieldValidator ID="rfvaward" runat="server" ControlToValidate="ddlAward"
-                                        Display="None" ErrorMessage="Please Select Award" ValidationGroup="ServiceBook"
-                                        InitialValue="0"></asp:RequiredFieldValidator> 
-
-                                                    </div>
-                                                </div>
-                                          </div>
-                                    
                         </asp:Panel>
                     </div>
-                
 
-                   
+
+
 
                     <div class="form-group col-md-12">
                         <p class="text-center">
                             <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="7"
-                                 CssClass="btn btn-primary" ToolTip="Click here to Submit" OnClick="btnSubmit_Click"  />&nbsp;
+                                CssClass="btn btn-primary" ToolTip="Click here to Submit" OnClick="btnSubmit_Click" />&nbsp;
                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="8"
-                                  CssClass="btn btn-warning" ToolTip="Click here to Reset" OnClick="btnCancel_Click"  />
+                                   CssClass="btn btn-warning" ToolTip="Click here to Reset" OnClick="btnCancel_Click" />
                             <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="ServiceBook"
                                 ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                         </p>
                     </div>
 
-                  <div class="col-md-12">
+                    <div class="col-md-12">
                         <asp:Panel ID="pnlList" runat="server" ScrollBars="Auto">
                             <asp:ListView ID="lvInfo" runat="server">
                                 <EmptyDataTemplate>
@@ -172,7 +172,7 @@
                                         <h4 class="box-title">Award Details
                                         </h4>
                                         <table class="table table-striped table-bordered nowrap display" style="width: 100%">
-                                     
+
                                             <thead>
                                                 <tr class="bg-light-blue">
                                                     <th>Action
@@ -183,8 +183,8 @@
                                                     </th>
                                                     <th>Date Received
                                                     </th>
-                                                                                                
-                                               </tr>
+
+                                                </tr>
                                             </thead>
                                             <tbody>
                                                 <tr id="itemPlaceholder" runat="server" />
@@ -194,7 +194,7 @@
                                 </LayoutTemplate>
                                 <ItemTemplate>
                                     <tr>
-                                          
+
                                         <td>
                                             <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("AVNO")%>'
                                                 AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" />&nbsp;
@@ -211,18 +211,18 @@
                                         <td>
                                             <%# Eval("DOR", "{0:dd/MM/yyyy}")%>
                                         </td>
-                                       
+
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>
                         </asp:Panel>
                     </div>
-                    
+
                 </div>
             </div>
         </ContentTemplate>
         <Triggers>
-           
+
 
             <asp:PostBackTrigger ControlID="btnSubmit" />
         </Triggers>

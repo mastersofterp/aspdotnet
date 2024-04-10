@@ -304,7 +304,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
                 lblNom.Text = dsNom.Tables[0].Rows[0]["PENDING COUNT"].ToString();
                 Rep_Nomination.DataSource = dsNom.Tables[0];
                 Rep_Nomination.DataBind();
-                
+
                 if (lblBlobConnectiontring.Text != "")
                 {
                     Control ctrHeader = Rep_Nomination.FindControl("divFolder");
@@ -1399,6 +1399,24 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
                 lblAcademic.Text = "0";
                 lvAcademic.DataSource = null;
                 lvAcademic.DataBind();
+            }
+            #endregion
+
+            #region Miscellaneous Detail
+
+            DataSet dsMiscellaneous = objServiceBook.GetAllMiscellaneousCount();
+            if (dsMiscellaneous.Tables[0].Rows.Count > 0)
+            {
+                lblMiscellaneous.Text = dsMiscellaneous.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvMiscellaneous.DataSource = dsMiscellaneous.Tables[0];
+                lvMiscellaneous.DataBind();
+
+            }
+            else
+            {
+                lblMiscellaneous.Text = "0";
+                lvMiscellaneous.DataSource = null;
+                lvMiscellaneous.DataBind();
             }
             #endregion
 
@@ -2693,7 +2711,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
     }
     protected void imgbtnprevExpPGPreview_Click(object sender, ImageClickEventArgs e)
     {
-        DownloadBlob(sender,e);
+        DownloadBlob(sender, e);
     }
     protected void imgbtnLoanUndPreview_Click(object sender, ImageClickEventArgs e)
     {
@@ -2746,7 +2764,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
             throw;
         }
     }
-   
+
     #endregion
 
     #region Academic Approval
@@ -2796,8 +2814,54 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
         ViewState["ACADIDNO"] = null;
     }
 
+    #endregion
 
+    #region Miscellaneous
+    protected void btnMiscellaneousApproval_Click(object sender, EventArgs e)
+    {
+        Button btnMiscellaneousApproval = sender as Button;
+        int MOSNO = int.Parse(btnMiscellaneousApproval.CommandArgument);
+        int MOSIDNO = int.Parse(btnMiscellaneousApproval.CommandName);
+
+        ViewState["MOSIDNO"] = MOSIDNO;
+        ViewState["MOSNO"] = MOSNO;
+        string type = "MiscellaneousDetail";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(MOSNO, MOSIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            MiscellaneousClear();
+            ShowDetails();
+        }
+    }
+
+    protected void btnMiscellaneousReject_Click(object sender, EventArgs e)
+    {
+        Button btnMiscellaneousApproval = sender as Button;
+        int MOSNO = int.Parse(btnMiscellaneousApproval.CommandArgument);
+        int MOSIDNO = int.Parse(btnMiscellaneousApproval.CommandName);
+
+        ViewState["MOSNO"] = MOSNO;
+        ViewState["MOSIDNO"] = MOSIDNO;
+        string type = "MiscellaneousDetail";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(MOSNO, MOSIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            MiscellaneousClear();
+            ShowDetails();
+        }
+    }
+
+    private void MiscellaneousClear()
+    {
+        ViewState["MOSNO"] = null;
+        ViewState["MOSIDNO"] = null;
+    }
 
     #endregion
-    
 }

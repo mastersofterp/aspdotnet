@@ -37,7 +37,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
 
             ViewState["action"] = "add";
 
-           
+
         }
 
         if (Session["serviceIdNo"] != null)
@@ -47,7 +47,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
             txtDepartment.Text = DEPTNAME.ToString();
         }
         BindListViewAllResearch();
-        
+        GetConfigForEditAndApprove();
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
@@ -78,7 +78,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
                 objSevBook.PERIOD_TO_DATE = Convert.ToDateTime(txtPeriodToDate.Text);
             }
 
-            
+
             var Yr = txtYear.Text;
             objSevBook.YEAR = Convert.ToInt32(Yr);
             objSevBook.PROJECT_STATUS_ID = Convert.ToInt32(ddlStatus.SelectedValue);
@@ -105,7 +105,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
                         this.BindListViewAllResearch();
                         MessageBox("Record Saved Successfully");
                     }
-                    
+
                 }
                 else
                 {
@@ -140,6 +140,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         this.Clear();
+        GetConfigForEditAndApprove();
     }
     private void Clear()
     {
@@ -162,6 +163,9 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
         txtImpact.Text = string.Empty;
         ddlBelong.SelectedIndex = 0;
         ViewState["action"] = "add";
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     private void BindListViewAllResearch()
@@ -226,6 +230,27 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
                 txtoutput.Text = ds.Tables[0].Rows[0]["RESULT"].ToString();
                 txtImpact.Text = ds.Tables[0].Rows[0]["IMPACT_FACTOR"].ToString();
                 ddlBelong.SelectedValue = ds.Tables[0].Rows[0]["JOINT_BELONG_TO_ID"].ToString();
+
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
+                {
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
+                }
             }
         }
         catch (Exception ex)
@@ -251,16 +276,29 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
             ImageButton btnDel = sender as ImageButton;
             int RESEARNO = int.Parse(btnDel.CommandArgument);
             int IDNO = _idnoEmp;
-
-            CustomStatus cs = (CustomStatus)objServiceBook.DeleteResearch(RESEARNO);
-            if (cs.Equals(CustomStatus.RecordDeleted))
+            DataSet ds = new DataSet();
+            ds = objCommon.FillDropDown("PAY_SB_RESEARCH", "*", "", "RESEARNO=" + RESEARNO, "");
+            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+            if (STATUS == "A")
             {
-                
-               
-                ViewState["action"] = "add";
-                MessageBox("Record Deleted Successfully");
-                Clear();
-                BindListViewAllResearch();
+                MessageBox("Your Details are Approved you cannot delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Edit.");
+                return;
+            }
+            else
+            {
+                CustomStatus cs = (CustomStatus)objServiceBook.DeleteResearch(RESEARNO);
+                if (cs.Equals(CustomStatus.RecordDeleted))
+                {
+                    ViewState["action"] = "add";
+                    MessageBox("Record Deleted Successfully");
+                    Clear();
+                    BindListViewAllResearch();
+                }
             }
         }
         catch (Exception ex)
@@ -277,4 +315,54 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
         ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
 
     }
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Research";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
+    #endregion
 }

@@ -404,7 +404,7 @@ public partial class ServiceBookMaster : System.Web.UI.MasterPage
         //progressBar.Attributes.Add("aria-valuenow", "50");
         //lblPercentage.InnerText = "50%";
         int idno = Convert.ToInt32(Session["serviceIdNo"]);
-        if (Convert.ToInt32(ddlEmployee.SelectedValue) > 0)
+        if (!string.IsNullOrEmpty(ddlEmployee.SelectedValue) && Convert.ToInt32(ddlEmployee.SelectedValue) > 0)
         {
             perBar.Visible = true;
         }

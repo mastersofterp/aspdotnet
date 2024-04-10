@@ -82,6 +82,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
             _idnoEmp = Convert.ToInt32(Session["serviceIdNo"].ToString().Trim());
         }
         BindListCurrentAppointment();
+        GetConfigForEditAndApprove();
     }
 
     private void CheckPageAuthorization()
@@ -128,10 +129,10 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
         if (rdbStatus.SelectedValue == "0")
         {
             // appstatus.Visible = true;
-           // PanelUni.Visible = true;
+            // PanelUni.Visible = true;
             divapp.Visible = true;
             divdate.Visible = true;
-          //  divdoc.Visible = true;
+            //  divdoc.Visible = true;
 
 
 
@@ -153,15 +154,15 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
             //PanelPG.Visible = true;
             divpg.Visible = true;
             divpgdt.Visible = true;
-           // divpgdoc.Visible = true;
+            // divpgdoc.Visible = true;
         }
         else
         {
             // divpgteacher.Visible = false;
             divpg.Visible = false;
             divpgdt.Visible = false;
-           // PanelPG.Visible = false;
-           // divpgdoc.Visible = false;
+            // PanelPG.Visible = false;
+            // divpgdoc.Visible = false;
         }
     }
     //protected void txtToDate_TextChanged(object sender, EventArgs e)
@@ -231,11 +232,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                 objSevBook.FDT = Convert.ToDateTime(txtFromDate.Text);
                 objSevBook.TDT = Convert.ToDateTime(txtToDate.Text);
 
-              //  objSevBook.APPOINTMENT = txtAppointment.Text;
+                //  objSevBook.APPOINTMENT = txtAppointment.Text;
                 objSevBook.APPOINTMENTMODE = ddlAppMode.SelectedValue;
-               // objSevBook.COMMITTEEDETAILS = txtSelectionDetail.Text;
+                // objSevBook.COMMITTEEDETAILS = txtSelectionDetail.Text;
                 objSevBook.COMMITTEEMEMBER = txtCommitteeMembers.Text;
-               // objSevBook.ADVERTISEMENT = txtAdvt.Text;
+                // objSevBook.ADVERTISEMENT = txtAdvt.Text;
                 objSevBook.NEWSPAPER = txtNewspaper.Text;
                 //objSevBook.DATE = txtNewsDt.Text.Trim().Equals(string.Empty) ? DateTime.MinValue : Convert.ToDateTime(txtNewsDt.Text.Trim());
                 if (txtNewsDt.Text == String.Empty)
@@ -252,8 +253,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
 
 
                 objSevBook.REFERENCE = txtReference.Text;
-               // objSevBook.AUTHORITYNAME = txtNameAuthority.Text;
-               // objSevBook.APPOINTMENTDDATE = txtApppDate.Text.Trim().Equals(string.Empty) ? DateTime.MinValue : Convert.ToDateTime(txtApppDate.Text.Trim());
+                // objSevBook.AUTHORITYNAME = txtNameAuthority.Text;
+                // objSevBook.APPOINTMENTDDATE = txtApppDate.Text.Trim().Equals(string.Empty) ? DateTime.MinValue : Convert.ToDateTime(txtApppDate.Text.Trim());
                 if (txtApppDate.Text == String.Empty)
                 {
                     objSevBook.APPOINTMENTDDATE = null;
@@ -263,7 +264,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                     objSevBook.APPOINTMENTDDATE = Convert.ToDateTime(txtApppDate.Text);
                 }
 
-                
+
                 objSevBook.APPNO = txtAppNo.Text;
                 objSevBook.POSTNAME = txtPostName.Text;
                 objSevBook.APPSTATUS = txtAppStatus.Text;
@@ -284,7 +285,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                     //{
                     //    objSevBook.UNIVERSITYATACHMENT = Convert.ToString(flupuniv.PostedFile.FileName.ToString());
                     //   // objSevBook.UNIVERSITYATACHMENT = ViewState["fileOne"].ToString();
-                // }
+                    // }
                     //else
                     //{
                     //    //if (ViewState["universityattachment"] != null)
@@ -343,7 +344,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                     if (ViewState["action"].ToString().Equals("add"))
                     {
 
-                       // CustomStatus cs = (CustomStatus)objServiceBook.AddCurrentAppointment(objSevBook, dt);
+                        // CustomStatus cs = (CustomStatus)objServiceBook.AddCurrentAppointment(objSevBook, dt);
                         CustomStatus cs = (CustomStatus)objServiceBook.AddCurrentAppointment(objSevBook);
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
@@ -352,7 +353,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                             //    string SFNO = objCommon.LookUp("PAYROLL_SB_CURRENT_APPOINTMENT", "MAX(CANO)", "");
                             //    //AddDocuments(Convert.ToInt32(SFNO));
                             //}
-                          //  objServiceBook.upload_new_files("CURRENT_APPOINTMENT", _idnoEmp, "CANO", "PAYROLL_SB_CURRENT_APPOINTMENT", "CAS_", flupuniv);
+                            //  objServiceBook.upload_new_files("CURRENT_APPOINTMENT", _idnoEmp, "CANO", "PAYROLL_SB_CURRENT_APPOINTMENT", "CAS_", flupuniv);
                             //objServiceBook.upload_new_files("CURRENT_APPOINTMENT", _idnoEmp, "CANO", "PAYROLL_SB_CURRENT_APPOINTMENT", "CAS_", flupteach);
 
                             this.Clear();
@@ -373,7 +374,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                         {
                             objSevBook.CANO = Convert.ToInt32(ViewState["caNo"].ToString());
                             CustomStatus cs = (CustomStatus)objServiceBook.UpdateCurrentAppointment(objSevBook);
-                            if (cs.Equals(CustomStatus.RecordUpdated)) 
+                            if (cs.Equals(CustomStatus.RecordUpdated))
                             {
                                 //if (ViewState["DESTINATION_PATH"] != null)
                                 //{
@@ -383,7 +384,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                                 ViewState["action"] = "add";
                                 this.Clear();
                                 this.BindListCurrentAppointment();
-                                
+
                                 MessageBox("Record Updated Successfully");
                             }
                             else
@@ -409,7 +410,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-         Clear();
+        Clear();
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -420,15 +422,15 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
 
         ddlAppMode.SelectedIndex = 0;
         txtExperience.Text = string.Empty;
-       // txtAppointment.Text = string.Empty;
+        // txtAppointment.Text = string.Empty;
         //txtAppMode.Text = string.Empty;
-       // txtSelectionDetail.Text = string.Empty;
+        // txtSelectionDetail.Text = string.Empty;
         txtCommitteeMembers.Text = string.Empty;
         //txtAdvt.Text = string.Empty;
         txtNewspaper.Text = string.Empty;
         txtNewsDt.Text = string.Empty;
         txtReference.Text = string.Empty;
-       // txtNameAuthority.Text = string.Empty;
+        // txtNameAuthority.Text = string.Empty;
         txtApppDate.Text = string.Empty;
         txtAppNo.Text = string.Empty;
         txtPostName.Text = string.Empty;
@@ -445,15 +447,18 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
         txtappdt.Text = string.Empty;
         divapp.Visible = false;
         divdate.Visible = false;
-       // divdoc.Visible = false;
+        // divdoc.Visible = false;
         divpg.Visible = false;
         divpgdt.Visible = false;
-       // divpgdoc.Visible = false;
+        // divpgdoc.Visible = false;
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
-         try
+        try
         {
             ImageButton btnEdit = sender as ImageButton;
             int caNo = int.Parse(btnEdit.CommandArgument);
@@ -469,30 +474,30 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
         }
     }
 
-     private void ShowDetails(int caNo)
+    private void ShowDetails(int caNo)
     {
         DataSet ds = null;
         try
         {
             ds = objServiceBook.GetSingleCurrentAppoinmentDetailsOfEmployee(caNo);
-            
+
             if (ds.Tables[0].Rows.Count > 0)
             {
 
                 ViewState["caNo"] = caNo.ToString();
                 txtFromDate.Text = ds.Tables[0].Rows[0]["fdt"].ToString();
                 txtToDate.Text = ds.Tables[0].Rows[0]["tdt"].ToString();
-               
-                txtExperience.Text = ds.Tables[0].Rows[0]["EXPERIENCE"].ToString();           
-               // txtAppointment.Text = ds.Tables[0].Rows[0]["APPOINTMENT"].ToString();
-               ddlAppMode.SelectedValue = ds.Tables[0].Rows[0]["APPOINTMENTMODE"].ToString();
-              //  txtSelectionDetail.Text = ds.Tables[0].Rows[0]["COMMITTEEDETAILS"].ToString();
+
+                txtExperience.Text = ds.Tables[0].Rows[0]["EXPERIENCE"].ToString();
+                // txtAppointment.Text = ds.Tables[0].Rows[0]["APPOINTMENT"].ToString();
+                ddlAppMode.SelectedValue = ds.Tables[0].Rows[0]["APPOINTMENTMODE"].ToString();
+                //  txtSelectionDetail.Text = ds.Tables[0].Rows[0]["COMMITTEEDETAILS"].ToString();
                 txtCommitteeMembers.Text = ds.Tables[0].Rows[0]["COMMITTEEMEMBER"].ToString();
-               // txtAdvt.Text = ds.Tables[0].Rows[0]["ADVERTISEMENT"].ToString();
+                // txtAdvt.Text = ds.Tables[0].Rows[0]["ADVERTISEMENT"].ToString();
                 txtNewspaper.Text = ds.Tables[0].Rows[0]["NEWSPAPER"].ToString();
                 txtNewsDt.Text = ds.Tables[0].Rows[0]["DATE"].ToString();
                 txtReference.Text = ds.Tables[0].Rows[0]["REFERENCE"].ToString();
-               // txtNameAuthority.Text = ds.Tables[0].Rows[0]["AUTHORITYNAME"].ToString();
+                // txtNameAuthority.Text = ds.Tables[0].Rows[0]["AUTHORITYNAME"].ToString();
                 txtApppDate.Text = ds.Tables[0].Rows[0]["APPOINTMENTDDATE"].ToString();
                 txtAppNo.Text = ds.Tables[0].Rows[0]["APPNO"].ToString();
                 txtPostName.Text = ds.Tables[0].Rows[0]["POST"].ToString();
@@ -509,30 +514,30 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                 if (uniappstatus == "YES")
                 {
                     rdbStatus.SelectedValue = "0";
-                   // appstatus.Visible = true;
+                    // appstatus.Visible = true;
                     divapp.Visible = true;
                     divdate.Visible = true;
-                   // divdoc.Visible = true;
+                    // divdoc.Visible = true;
                     txtApprovalno.Text = ds.Tables[0].Rows[0]["UNIVERSITYAPPNO"].ToString();
                     txtDate.Text = ds.Tables[0].Rows[0]["UNIAPPDT"].ToString();
                 }
                 else
                 {
-                     rdbStatus.SelectedValue = "1";
-                   // appstatus.Visible = false;
+                    rdbStatus.SelectedValue = "1";
+                    // appstatus.Visible = false;
                     divapp.Visible = false;
                     divdate.Visible = false;
-                   // divdoc.Visible = false;
+                    // divdoc.Visible = false;
                 }
 
                 string pgappstatus = ds.Tables[0].Rows[0]["PGTAPPSTATUS"].ToString();
                 if (pgappstatus == "YES")
                 {
                     rdbTeacher.SelectedValue = "0";
-                   // divpgteacher.Visible = true;
+                    // divpgteacher.Visible = true;
                     divpg.Visible = true;
                     divpgdt.Visible = true;
-                   // divpgdoc.Visible = true;
+                    // divpgdoc.Visible = true;
                     txtteachno.Text = ds.Tables[0].Rows[0]["PGAPPNO"].ToString();
                     txtappdt.Text = ds.Tables[0].Rows[0]["PGTAPPDT"].ToString();
                 }
@@ -545,7 +550,26 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                     //divpgdoc.Visible = false;
                 }
 
-             
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
+                {
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
+                }
             }
         }
         catch (Exception ex)
@@ -565,17 +589,33 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
 
     protected void btnDelete_Click(object sender, ImageClickEventArgs e)
     {
-         try
+        try
         {
             ImageButton btnDel = sender as ImageButton;
             int caNo = int.Parse(btnDel.CommandArgument);
-            CustomStatus cs = (CustomStatus)objServiceBook.DeleteCurrentAppointment(caNo);
-            if (cs.Equals(CustomStatus.RecordDeleted))
+            DataSet ds = new DataSet();
+            ds = objCommon.FillDropDown("PAYROLL_SB_CURRENT_APPOINTMENT", "*", "", "CANO=" + caNo, "");
+            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+            if (STATUS == "A")
             {
-                MessageBox("Record Deleted Successfully");
-                Clear();
-                BindListCurrentAppointment();
-                ViewState["action"] = "add";
+                MessageBox("Your Details are Approved You Cannot Edit.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Edit.");
+                return;
+            }
+            else
+            {
+                CustomStatus cs = (CustomStatus)objServiceBook.DeleteCurrentAppointment(caNo);
+                if (cs.Equals(CustomStatus.RecordDeleted))
+                {
+                    MessageBox("Record Deleted Successfully");
+                    Clear();
+                    BindListCurrentAppointment();
+                    ViewState["action"] = "add";
+                }
             }
         }
         catch (Exception ex)
@@ -586,6 +626,54 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
- 
-  
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Current Appointment Status";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
+    #endregion
 }

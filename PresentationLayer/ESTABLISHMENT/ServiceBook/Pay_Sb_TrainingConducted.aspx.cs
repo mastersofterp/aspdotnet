@@ -76,6 +76,7 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
         }
         BlobDetails();
         //  txtDuration.Enabled = false;
+        GetConfigForEditAndApprove();
     }
     private void CheckPageAuthorization()
     {
@@ -423,14 +424,25 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
                 lvCompAttach.DataSource = null;
                 lvCompAttach.DataBind();
             }
-            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-            if (STATUS == "A")
+            if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
             {
-                MessageBox("Your Details are Approved you cannot edit.");
-                return;
+                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                if (STATUS == "A")
+                {
+                    MessageBox("Your Details Are Approved You Cannot Edit.");
+                    btnSubmit.Enabled = false;
+                    return;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+                GetConfigForEditAndApprove();
             }
             else
             {
+                btnSubmit.Enabled = true;
+                GetConfigForEditAndApprove();
             }
         }
         catch (Exception ex)
@@ -462,13 +474,21 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
                 MessageBox("Your Details are Approved you cannot delete.");
                 return;
             }
-            CustomStatus cs = (CustomStatus)objServiceBook.DeleteTrainingConducted(tNo);
-            if (cs.Equals(CustomStatus.RecordDeleted))
+            else if (STATUS == "R")
             {
-                BindListViewTraining();
-                this.Clear();
-                ViewState["action"] = "add";
-                MessageBox("Record Deleted Successfully");
+                MessageBox("Your Details are Rejected You Cannot Edit.");
+                return;
+            }
+            else
+            {
+                CustomStatus cs = (CustomStatus)objServiceBook.DeleteTrainingConducted(tNo);
+                if (cs.Equals(CustomStatus.RecordDeleted))
+                {
+                    BindListViewTraining();
+                    this.Clear();
+                    ViewState["action"] = "add";
+                    MessageBox("Record Deleted Successfully");
+                }
             }
         }
         catch (Exception ex)
@@ -484,6 +504,7 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
     {
         Clear();
         DeleteDirecPath(Docpath + "TEMP_CONDUCTTRAINING_FILES\\" + _idnoEmp + "\\APP_0");
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -516,8 +537,11 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
         txtIntFaculty.Text = txtIntStud.Text = txtExtFaculty.Text = txtExtStud.Text = string.Empty;
         txtProfessionalbody.Text = string.Empty;
         rdbMode.SelectedIndex = 0;
-
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
+
     public void MessageBox(string msg)
     {
         ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
@@ -1078,6 +1102,56 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
         catch (Exception ex)
         {
             throw;
+        }
+    }
+
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Training Conducted";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
         }
     }
 

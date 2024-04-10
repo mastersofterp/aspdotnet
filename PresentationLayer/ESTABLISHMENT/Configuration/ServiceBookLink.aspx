@@ -50,9 +50,13 @@
                                                     <th>Link Name
                                                     </th>
                                                     <th>Access
-                                                     </th>
-                                                    <th> Is Calculate for Percentage
-                                                    </th>                  
+                                                    </th>
+                                                    <th>Is Calculate for Percentage
+                                                    </th>
+                                                    <th>Is Edit Restricted
+                                                    </th>
+                                                    <th>Is Approval Require
+                                                    </th>
                                                 </tr>
                                                 <tbody>
                                                     <tr id="itemPlaceholder" runat="server" />
@@ -71,8 +75,14 @@
                                         <td>
                                             <asp:CheckBox runat="server" ID="chkActive" />
                                         </td>
-                                         <td>
+                                        <td>
                                             <asp:CheckBox runat="server" ID="chkPer" />
+                                        </td>
+                                        <td>
+                                            <asp:CheckBox runat="server" ID="chkEdit" />
+                                        </td>
+                                         <td>
+                                            <asp:CheckBox runat="server" ID="chkApprove" />
                                         </td>
                                     </tr>
                                 </ItemTemplate>

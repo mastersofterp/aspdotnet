@@ -9010,7 +9010,57 @@ namespace IITMS
 
                 #endregion
 
+                //Added by Sonal Banode on 08-04-2024
 
+                public DataSet GetAllMiscellaneousCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_MISCELLANEOUSDETAIL_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllMiscellaneousCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                //
+
+                #region Service Book Config
+
+                public DataSet GetServiceBookConfigurationForRestrict(int usertype, string CommandType)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_USERTYPE", usertype);
+                        objParams[1] = new SqlParameter("@P_COMMDANDTYPE", CommandType);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_CONFIG_FOR_SERVICEBOOK_EDIT_APPROVE", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetServiceBookConfigurationForRestrict-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                #endregion
             }
 
         }
