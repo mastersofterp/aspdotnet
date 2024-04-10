@@ -860,6 +860,11 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         HiddenItemForPm();
                                         HiddenItem();
                                         HiddenItemParents();
+<<<<<<< HEAD
+=======
+                                        //Added By Jay T. On dated 23022024
+                                     HiddenItemFeesNotPaid();
+>>>>>>> c665535e ([BUGFIX][53298][Maintain_Log_email])
                                     }
                                 }
                                 catch (Exception ex)
@@ -4326,6 +4331,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     SendSMS_today(lblParMobile.Text.Trim(), template, TemplateID);
                                     //  CustomStatus cs = (CustomStatus)excol.INSERTPARENTSMSLOG(Convert.ToInt32(Session["userno"]), message, lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), MSGTYPE);
                                     MailSendStatus += hdnidno1.Value + ',';
+<<<<<<< HEAD
+=======
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Todays Students Attendance list", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+>>>>>>> c665535e ([BUGFIX][53298][Maintain_Log_email])
 
                                 }
                                 else
@@ -5505,7 +5516,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     if (status1 == 1)
                                     {
 
-                                        cs = objAttC.INSERTPARENTEMAILLOG(Convert.ToInt32(Session["userno"]), message, useremail, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), IPaddress, Convert.ToDateTime(txtFromDat.Text));
+                                       // cs = objAttC.INSERTPARENTEMAILLOG(Convert.ToInt32(Session["userno"]), message, useremail, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), IPaddress, Convert.ToDateTime(txtFromDat.Text));
                                         objCommon.DisplayMessage(this.updDetained, "Email Send Successfully", this.Page);
                                         // chek.Checked = false;
                                         pnlfirst.Visible = true;
