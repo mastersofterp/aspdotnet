@@ -14,7 +14,9 @@ using Newtonsoft.Json;
 using BusinessLogicLayer.BusinessLogic;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using System.Web;
-using mastersofterp_MAKAUAT;
+using System.Security.Cryptography;
+using System.IO;
+using System.Text;
 /*                                                  
 ---------------------------------------------------------------------------------------------------------------------------                                                          
 Created By : Bhagyashree                                                      
@@ -25,7 +27,9 @@ Version    : 1.0.0
 Version   Modified On   Modified By     Purpose                                                            
 ---------------------------------------------------------------------------------------------------------------------------                                                            
 1.0.1     27-03-2024    Bhagyashree     Change login id username to emailid                                  
-------------------------------------------- -------------------------------------------------------------------------------                             
+------------------------------------------- -------------------------------------------------------------------------------     
+1.0.2     09-04-2024    Bhagyashree     Change for decrypted password
+------------------------------------------- -------------------------------------------------------------------------------     
 */
 public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.Page
 {
@@ -127,6 +131,7 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
         AdvancePaymentEmailController objAEC = new AdvancePaymentEmailController();
         ApplicationProcessController objAPC = new ApplicationProcessController();
         ApplicationProcess objAP = new ApplicationProcess();
+        ACADEMIC_POSTADMISSION_AdvancePaymentEmail objAE = new ACADEMIC_POSTADMISSION_AdvancePaymentEmail();
         DataSet ds = null;
         string EmailStatus = string.Empty; string subject = string.Empty;
         try
@@ -140,8 +145,7 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    string password = clsTripleLvlEncyrpt.ThreeLevelDecrypt(ds.Tables[0].Rows[i]["USER_PASSWORD"].ToString());
-
+                    string password = objAE.DecryptPassword_Adm(ds.Tables[0].Rows[i]["USER_PASSWORD"].ToString());
                     string emailid = ds.Tables[0].Rows[i]["EMAILID"].ToString();
                     string message = "Dear " + ds.Tables[0].Rows[i]["STUDETNAME"].ToString() + "<br />";
                     message += "<br />";
@@ -218,7 +222,7 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
                     message += "<br />";
                     message += "Admission Team <br />";
                     message += "B.S. Abdur Rahman Institute of Science & Technology";
-                    
+
                     EmailStatus = objSendEmail.SendEmail(emailid, message, subject).ToString();
                     if (EmailStatus == "1")
                     {
@@ -239,4 +243,29 @@ public partial class ACADEMIC_POSTADMISSION_AdvancePaymentEmail : System.Web.UI.
         }
         return JsonConvert.SerializeObject(EmailStatus);
     }
+    //<1.0.2>
+    public string DecryptPassword_Adm(string cipherText)
+    {
+        string EncryptionKey = "0123456789abcdefghijklmnopqrstuvwxyz";
+        cipherText = cipherText.Replace(" ", "+");
+        byte[] cipherBytes = Convert.FromBase64String(cipherText);
+        using (Aes encryptor = Aes.Create())
+        {
+            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] {
+            0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76});
+            encryptor.Key = pdb.GetBytes(32);
+            encryptor.IV = pdb.GetBytes(16);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(cipherBytes, 0, cipherBytes.Length);
+                    cs.Close();
+                }
+                cipherText = Encoding.Unicode.GetString(ms.ToArray());
+            }
+        }
+        return cipherText;
+    }
+    //</1.0.2>
 }
