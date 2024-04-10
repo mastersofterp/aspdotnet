@@ -17,10 +17,28 @@ using System.Net.Security;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
+using BusinessLogicLayer.BusinessLogic;
+
+/*
+---------------------------------------------------------------------------------------------------------------------------
+Created By : 
+Created On : 
+Purpose : For sending Email for online admission portal student.
+Version : 1.0.0
+---------------------------------------------------------------------------------------------------------------------------
+Version              Modified On             Modified By             Purpose
+---------------------------------------------------------------------------------------------------------------------------
+1.0.1                Kajal Jaiswal          09-04-2024               Added changes for email added student name dynamically.
+                                                                     and binding page title dynamically.
+------------------------------------------- -------------------------------------------------------------------------------
+*/
+
+
 public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
 {
     Common objCommon = new Common();
     OnlineAdmissionController objOA = new OnlineAdmissionController();
+
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -44,6 +62,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -60,6 +79,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             Response.Redirect("~/notauthorized.aspx?page=SendEmailToStudents.aspx");
         }
     }
+
     protected void rdoList_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -73,6 +93,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     protected void btnShow_Click(object sender, EventArgs e)
     {
         try
@@ -84,10 +105,10 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     protected void btnSend_Click(object sender, EventArgs e)
     {
         string userno = string.Empty;string Email = string.Empty;string message = string.Empty;string Subject = string.Empty;string appIds = string.Empty;
-        int sendGrid=Convert.ToInt32(objCommon.LookUp("REFF","ISNULL(SENDGRID_STATUS,0)SENDGRID_STATUS",""));
         try
         {
             int count = 0;
@@ -98,29 +119,21 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
                 //CheckBox chek = item.FindControl("chkSelect1") as CheckBox;
                 Label lblEmail = lv.FindControl("lblEmail") as Label;
                 Label lblStudmobile = lv.FindControl("lblStudmobile") as Label;
+                Label lblstudname = lv.FindControl("lblName") as Label;
                 if (cbRow.Checked==true)
                 {
                     count++;
                     Email = lblEmail.Text.ToString().Trim();
                     Subject = txtSubject.Text.ToString().Trim();
+                    string msg = "Dear " + lblstudname.Text.ToString().Trim() + "<br/>";
                     string s = txtMessage.Text.ToString().Trim();
-                    message = s.Replace("\r\n", "<br/>");
+                    message = msg + s.Replace("\r\n", "<br/>");
 
-                    if (sendGrid == 1)
-                    {
-                        Task<int> task = Execute(message, Email, Subject);
-                        status = task.Result;
-                    }
-                    else
-                    {
-                        sendEmail(message, Email, Subject);
-                    }
+                    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation 
+                    objSendEmail.SendEmail(Email, message, Subject); //Calling Method
+                   
                 }
-                
-                //else
-                //{
- 
-                //}
+              
             }
             if (count == 0)
             {
@@ -139,6 +152,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         try
@@ -150,6 +164,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     protected void PoplulateDropDown()
     {
         try
@@ -176,6 +191,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     protected void ddlProgramme_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -199,6 +215,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     protected void BindStudentList()
     {
         try
@@ -223,6 +240,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
+
     protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -248,97 +266,7 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
             throw;
         }
     }
-    public int sendEmail(string Message, string toEmailId, string sub)
-    {
-        int ret = 0;
-        try
-        {
-            DataSet dsconfig = null;
-            //dsconfig = objCommon.FillDropDown("REFF", "EMAILSVCID,USER_PROFILE_SUBJECT,CollegeName", "EMAILSVCPWD,USER_PROFILE_SENDERNAME", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
-            dsconfig = objCommon.FillDropDown("REFF", "EMAILSVCID,CollegeName,SUBJECT_OTP", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
-            var fromAddress = new MailAddress(dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString(), dsconfig.Tables[0].Rows[0]["SUBJECT_OTP"].ToString());
-            var toAddress = new MailAddress(toEmailId, "");
-            // string fromPassword = clsTripleLvlEncyrpt.ThreeLevelDecrypt(Session["EMAILSVCPWD"].ToString());
-            string fromPassword = dsconfig.Tables[0].Rows[0]["EMAILSVCPWD"].ToString();
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11;
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-            };
-            using (var message = new MailMessage(fromAddress, toAddress)
-            {
-                Subject = sub,
-                Body = Message,
-                BodyEncoding = System.Text.Encoding.UTF8,
-                SubjectEncoding = System.Text.Encoding.Default,
-                IsBodyHtml = true
-            })
-            {
-                //ServicePointManager.ServerCertificateValidationCallback += (o, c, ch, er) => true;
-                ServicePointManager.ServerCertificateValidationCallback =
-               delegate(object s, X509Certificate certificate,
-               X509Chain chain, SslPolicyErrors sslPolicyErrors)
-               {
-                   return true;
-               };
-                smtp.Send(message);
-                return ret = 1;
-            }
-        }
-        catch (Exception ex)
-        {
-            //Response.Write(ex.Message);
-            ret = 0;
-        }
-        return ret;
-    }
-    static async Task<int> Execute(string Message, string toEmailId, string sub)
-    {
-        int ret = 0;
 
-        try
-        {
-
-            Common objCommon = new Common();
-            DataSet dsconfig = null;
-
-            //dsconfig = objCommon.FillDropDown("REFF", "COMPANY_EMAILSVCID", "SENDGRID_USERNAME,SENDGRID_PWD,SENDGRID_APIKEY,SUBJECT_NAME", "OrganizationId=2" , string.Empty);  //Convert.ToInt32(Session["OrgId"])
-            dsconfig = objCommon.FillDropDown("REFF", "COMPANY_EMAILSVCID", "SENDGRID_USERNAME,SENDGRID_PWD,SENDGRID_APIKEY,SUBJECT_OTP", "COMPANY_EMAILSVCID <> '' and SENDGRID_PWD<> ''", string.Empty);
-            var fromAddress = new MailAddress(dsconfig.Tables[0].Rows[0]["COMPANY_EMAILSVCID"].ToString(), dsconfig.Tables[0].Rows[0]["SUBJECT_OTP"].ToString());
-            var toAddress = new MailAddress(toEmailId, "");
-
-            var apiKey = dsconfig.Tables[0].Rows[0]["SENDGRID_APIKEY"].ToString();
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(dsconfig.Tables[0].Rows[0]["COMPANY_EMAILSVCID"].ToString(), dsconfig.Tables[0].Rows[0]["SUBJECT_OTP"].ToString());
-            var subject = sub;
-            var to = new EmailAddress(toEmailId, "");
-            var plainTextContent = "";
-            var htmlContent = Message;
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-            string res = Convert.ToString(response.StatusCode);
-            if (res == "Accepted")
-            {
-                ret = 1;
-            }
-            else
-            {
-                ret = 0;
-            }
-
-
-        }
-        catch (Exception ex)
-        {
-            ret = 0;
-        }
-        return ret;
-    }
     protected void Clear()
     {
         ddlAdmBatch.SelectedIndex = 0;
@@ -353,7 +281,9 @@ public partial class ACADEMIC_SendEmailToStudents : System.Web.UI.Page
         lvStudList.DataSource = null;
         lvStudList.DataBind();
         lvStudList.Visible = false;
+        rdoList.SelectedValue = "1";
     }
+
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
