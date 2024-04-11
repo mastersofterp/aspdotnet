@@ -801,10 +801,10 @@
                     dataType: "json",
                     success: OnSuccessGetCount,
                     failure: function (response) {
-                        alert(response);
+                        //alert(response);
                     },
                     error: function (response) {
-                        alert(response);
+                       // alert(response);
                     }
                 });
 
@@ -1030,6 +1030,7 @@
                 success: function (response) {
                     var data = response.d;
                     var html = '';
+                    $('#ulQuickAccess').html("");
                     var baseUrl = '<%= ResolveUrl("~/") %>';    //Added by kajal jaiswal on 09-04-2024
                     var LinkCount = 1;
                     if (data != null) {
@@ -1198,6 +1199,8 @@
                 loadStudentDetails(StudentCount);
             };
             function loadStudentDetails(StudentCount) {
+                $('#tblstudsCount td').parent().remove();
+                $('#tblstudsCount th').parent().remove();
                 var html = '';
                 html += '<thead class="bg-primary"><tr><th>Year</th><th class="text-center">Count</th></tr></thead>';
                 html += '<tbody>';
@@ -1284,7 +1287,10 @@
                 loadReslutAnalysisDetails(resultdata);
             };
             function loadReslutAnalysisDetails(resultdata) {
+
                 $('.analy').hide();
+                $('#table-1 td').parent().remove();
+                $('#table-1 th').parent().remove();
                 var html = '';
                 if (resultdata != null) {
                     if (resultdata.tHeader.length > 0) {
@@ -1366,11 +1372,12 @@
             });
             function OnSuccessActivityDetails(response) {
                 var ActivityData = response['d'];
-                alert(ActivityData);
+                //alert(ActivityData);
                 loadActivityDetails(ActivityData);
             };
             function loadActivityDetails(ActivityData) {
-                var html = '';             
+                var html = '';  
+                $('#tbodyActivity td').parent().remove();
                 if (ActivityData != null) {
                     if (ActivityData.length > 0) {
                         $.each(ActivityData, function (row, item) {
@@ -1416,6 +1423,7 @@
             function loadApprovePendignLeaveDetails(ApprovePendignLeave) {
 
                 var html = '';
+                $('#tLeaveAll').html("");
                 if (ApprovePendignLeave != null) {
                     if (ApprovePendignLeave.length > 0) {
                         $.each(ApprovePendignLeave, function (row, item) {
@@ -1463,6 +1471,7 @@
             function loadApproveLeaveDetails(ApproveLeaveCount) {
 
                 var html = '';
+                $('#TLeaveApproved').html("");
                 if (ApproveLeaveCount != null) {
                     if (ApproveLeaveCount.length > 0) {
                         $.each(ApproveLeaveCount, function (row, item) {
@@ -1510,6 +1519,7 @@
             function loadPendingLeaveDetails(PendingLeaveCount) {
 
                 var html = '';
+                $('#TPendingLeave').html("");
                 if (PendingLeaveCount != null) {
                     if (PendingLeaveCount.length > 0) {
                         $.each(PendingLeaveCount, function (row, item) {

@@ -349,81 +349,88 @@ public partial class StudeHome : System.Web.UI.Page
     //PRASHANTG-TN56760--240324
     protected void btnClassTT_Click(object sender, EventArgs e)
     {
-        DataSet dsTimeTable = new DataSet();
-        int idno = Convert.ToInt32(Session["idno"].ToString());
-        dsTimeTable = objSC.RetrieveStudentTimeTableDetails(idno);
-        StringBuilder html = new StringBuilder();
-
-        if (dsTimeTable != null)
+        try
         {
-            if (dsTimeTable.Tables[0] != null && dsTimeTable.Tables[0].Rows.Count > 0)
+            DataSet dsTimeTable = new DataSet();
+            int idno = Convert.ToInt32(Session["idno"].ToString());
+            dsTimeTable = objSC.RetrieveStudentTimeTableDetails(idno);
+            StringBuilder html = new StringBuilder();
+
+            if (dsTimeTable != null)
             {
-                for (int i = 0; i < dsTimeTable.Tables[0].Rows.Count; i++)
+                if (dsTimeTable.Tables[0] != null && dsTimeTable.Tables[0].Rows.Count > 0)
                 {
+                    for (int i = 0; i < dsTimeTable.Tables[0].Rows.Count; i++)
+                    {
 
-                    html.Append("<tr>");
-                    html.Append("<td class='text-center' style='width:14%'>" + dsTimeTable.Tables[0].Rows[i]["Slot"].ToString() + "</td>");
-                    if (dsTimeTable.Tables[0].Rows[i]["Monday"].ToString() != "-")
-                    {
-                        var arrLec1 = dsTimeTable.Tables[0].Rows[i]["Monday"].ToString();
-                        html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec1[1] + "-" + arrLec1[0] + " (SEC-" + arrLec1[2] + ")' data-toggle='tooltip'>" + arrLec1 + "</td>");
-                    }
-                    else
-                    {
-                        html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Monday"].ToString() + "</td>");
-                    }
+                        html.Append("<tr>");
+                        html.Append("<td class='text-center' style='width:14%'>" + dsTimeTable.Tables[0].Rows[i]["Slot"].ToString() + "</td>");
+                        if (dsTimeTable.Tables[0].Rows[i]["Monday"].ToString() != "-")
+                        {
+                            var arrLec1 = dsTimeTable.Tables[0].Rows[i]["Monday"].ToString();
+                            html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec1[1] + "-" + arrLec1[0] + " (SEC-" + arrLec1[2] + ")' data-toggle='tooltip'>" + arrLec1 + "</td>");
+                        }
+                        else
+                        {
+                            html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Monday"].ToString() + "</td>");
+                        }
 
-                    if (dsTimeTable.Tables[0].Rows[i]["Tuesday"].ToString() != "-")
-                    {
-                        var arrLec2 = dsTimeTable.Tables[0].Rows[i]["Tuesday"].ToString();
+                        if (dsTimeTable.Tables[0].Rows[i]["Tuesday"].ToString() != "-")
+                        {
+                            var arrLec2 = dsTimeTable.Tables[0].Rows[i]["Tuesday"].ToString();
 
-                        html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec2[1] + " - " + arrLec2[0] + " (SEC-" + arrLec2[2] + ")' data-toggle='tooltip'>" + arrLec2 + "</td>");
-                    }
-                    else
-                    {
-                        html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Tuesday"].ToString() + "</td>");
-                    }
+                            html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec2[1] + " - " + arrLec2[0] + " (SEC-" + arrLec2[2] + ")' data-toggle='tooltip'>" + arrLec2 + "</td>");
+                        }
+                        else
+                        {
+                            html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Tuesday"].ToString() + "</td>");
+                        }
 
-                    if (dsTimeTable.Tables[0].Rows[i]["Wednesday"].ToString() != "-")
-                    {
-                        var arrLec3 = dsTimeTable.Tables[0].Rows[i]["Wednesday"].ToString();
-                       html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec3[1] + " - " + arrLec3[0] + " (SEC-" + arrLec3[2] + ")' data-toggle='tooltip'>" + arrLec3 + "</td>");
-                    }
-                    else
-                    {
-                        html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Wednesday"].ToString() + "</td>");
-                    }
+                        if (dsTimeTable.Tables[0].Rows[i]["Wednesday"].ToString() != "-")
+                        {
+                            var arrLec3 = dsTimeTable.Tables[0].Rows[i]["Wednesday"].ToString();
+                            html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec3[1] + " - " + arrLec3[0] + " (SEC-" + arrLec3[2] + ")' data-toggle='tooltip'>" + arrLec3 + "</td>");
+                        }
+                        else
+                        {
+                            html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Wednesday"].ToString() + "</td>");
+                        }
 
-                    if (dsTimeTable.Tables[0].Rows[i]["Thursday"].ToString() != "-")
-                    {
-                        var arrLec4 = dsTimeTable.Tables[0].Rows[i]["Thursday"].ToString();
-                       html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec4[1] + " - " + arrLec4[0] + " (SEC-" + arrLec4[2] + ")' data-toggle='tooltip'>" + arrLec4 + "</td>");
-                    }
-                    else
-                    {
-                        html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Thursday"].ToString() + "</td>");
-                    }
+                        if (dsTimeTable.Tables[0].Rows[i]["Thursday"].ToString() != "-")
+                        {
+                            var arrLec4 = dsTimeTable.Tables[0].Rows[i]["Thursday"].ToString();
+                            html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec4[1] + " - " + arrLec4[0] + " (SEC-" + arrLec4[2] + ")' data-toggle='tooltip'>" + arrLec4 + "</td>");
+                        }
+                        else
+                        {
+                            html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Thursday"].ToString() + "</td>");
+                        }
 
-                    if (dsTimeTable.Tables[0].Rows[i]["Friday"].ToString() != "-")
-                    {
-                        var arrLec5 = dsTimeTable.Tables[0].Rows[i]["Friday"].ToString();
-                        html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec5[1] + " - " + arrLec5[0] + " (SEC-" + arrLec5[2] + ")' data-toggle='tooltip'>" + arrLec5 + "</td>");
-                    }
-                    else
-                    {
-                        html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Friday"].ToString() + "</td>");
-                    }
+                        if (dsTimeTable.Tables[0].Rows[i]["Friday"].ToString() != "-")
+                        {
+                            var arrLec5 = dsTimeTable.Tables[0].Rows[i]["Friday"].ToString();
+                            html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec5[1] + " - " + arrLec5[0] + " (SEC-" + arrLec5[2] + ")' data-toggle='tooltip'>" + arrLec5 + "</td>");
+                        }
+                        else
+                        {
+                            html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Friday"].ToString() + "</td>");
+                        }
 
-                    if (dsTimeTable.Tables[0].Rows[i]["Saturday"].ToString() != "-")
-                    {
-                        var arrLec6 = dsTimeTable.Tables[0].Rows[i]["Saturday"].ToString().Split('-');
-                        if (arrLec6[0] == "undefined") { arrLec6[0] = ""; }
-                        html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec6[1] + "-" + arrLec6[0] + " (SEC-" + arrLec6[2] + ")' data-toggle='tooltip'>" + arrLec6 + "</td>");
+                        if (dsTimeTable.Tables[0].Rows[i]["Saturday"].ToString() != "-")
+                        {
+                            var arrLec6 = dsTimeTable.Tables[0].Rows[i]["Saturday"].ToString().Split('-');
+                            if (arrLec6[0] == "undefined") { arrLec6[0] = ""; }
+                            html.Append("<td class='text-center' data-container='body'  data-original-title='" + arrLec6[1] + "-" + arrLec6[0] + " (SEC-" + arrLec6[2] + ")' data-toggle='tooltip'>" + arrLec6 + "</td>");
+                        }
+                        else
+                        {
+                            html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Saturday"].ToString() + "</td>");
+                        }
                     }
-                    else
-                    {
-                        html.Append("<td class='text-center'>" + dsTimeTable.Tables[0].Rows[i]["Saturday"].ToString() + "</td>");
-                    }
+                }
+                else
+                {
+                    html.Append("<tr style='text-align:center; font-size:15px; font-weigth:bold' class='info'><td colspan='8'>No records to display..</td></tr>");
                 }
             }
             else
@@ -431,9 +438,12 @@ public partial class StudeHome : System.Web.UI.Page
                 html.Append("<tr style='text-align:center; font-size:15px; font-weigth:bold' class='info'><td colspan='8'>No records to display..</td></tr>");
             }
         }
-        else
+        catch (Exception ex)
         {
-            html.Append("<tr style='text-align:center; font-size:15px; font-weigth:bold' class='info'><td colspan='8'>No records to display..</td></tr>");
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "studeHome.aspx.btnClassTT_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
     //PRASHANTG-TN56760--240324
