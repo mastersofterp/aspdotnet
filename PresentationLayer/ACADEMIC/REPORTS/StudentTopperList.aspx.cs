@@ -119,8 +119,16 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
                 deptno = Session["userdeptno"].ToString();
 
             objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE '" + deptno + "' WHEN '0' THEN 0 ELSE CAST(DB.DEPTNO AS VARCHAR) END) IN (" + deptno + ")", "");
+<<<<<<< HEAD
 
 
+=======
+            HideDDLItems();
+            ddlMeritList.Items.FindByValue("0").Enabled = true;
+            ddlMeritList.Items.FindByValue("2").Enabled = true;
+            ddlMeritList.Items.FindByValue("3").Enabled = true;
+            ddlMeritList.Items.FindByValue("4").Enabled = true;
+>>>>>>> 23962d2b ( [BUGFIX] [56516] Solved Bugs)
         }
         catch (Exception ex)
         {
@@ -548,6 +556,10 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         try
         {
 
+<<<<<<< HEAD
+=======
+            int Schemeno = Convert.ToInt32(ViewState["schemeno"]);
+>>>>>>> 23962d2b ( [BUGFIX] [56516] Solved Bugs)
             //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
             //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
             //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
@@ -559,7 +571,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             //url += "&filename=" + ddlClgname.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
             url += "&path=~,Reports,Academic," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
-            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + "";
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text + ",@P_BATCHNAME=" + ddlAdmBatch.SelectedItem.Text + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "";
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -636,6 +648,12 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             spScheme.Visible = false;
 
             divAdmission.Visible = false;
+            divMerit.Visible = true;
+            HideDDLItems();
+            ddlMeritList.Items.FindByValue("0").Enabled = true;
+            ddlMeritList.Items.FindByValue("2").Enabled = true;
+            ddlMeritList.Items.FindByValue("3").Enabled = true;
+            ddlMeritList.Items.FindByValue("4").Enabled = true;
             ClearAllDropDowns();
         }
 
@@ -652,6 +670,11 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             divSession.Visible = true;
             divRange.Visible = true; // Added by shubham 
             //divAdmission.Visible = false;
+            divMerit.Visible = true;
+            HideDDLItems();
+            ddlMeritList.Items.FindByValue("0").Enabled = true;
+            ddlMeritList.Items.FindByValue("2").Enabled = true;
+            ddlMeritList.Items.FindByValue("3").Enabled = true;
             ClearAllDropDowns();
         }
         else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 3)
@@ -666,6 +689,34 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             divAdmission.Visible = true;
             divSession.Visible = true;
             divRange.Visible = false; // Added by shubham 
+<<<<<<< HEAD
+=======
+            divCourse.Visible = false;
+            divMerit.Visible = true;
+            //divAdmission.Visible = false;
+            HideDDLItems();
+            ddlMeritList.Items.FindByValue("0").Enabled = true;
+            ddlMeritList.Items.FindByValue("2").Enabled = true;
+            ddlMeritList.Items.FindByValue("3").Enabled = true;
+            ClearAllDropDowns();
+        }
+        else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 4)
+        {
+            rfvScheme.Enabled = false;
+            rfvSession.Enabled = true;
+            //rfvcourses.Enabled = false;
+
+            divBranch.Visible = false;
+            divScheme.Visible = false;
+            divSemester.Visible = true;
+            divReport.Visible = true;
+            divAdmission.Visible = true;
+            divSession.Visible = true;
+            divRange.Visible = true; // Added by shubham 
+            divCourse.Visible = true;
+            divMerit.Visible = false;
+            divAdmission.Visible = false;
+>>>>>>> 23962d2b ( [BUGFIX] [56516] Solved Bugs)
             //divAdmission.Visible = false;
             ClearAllDropDowns();
         }
@@ -886,4 +937,20 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
     //            objUCommon.ShowError(Page, "Server Unavailable.");
     //    }
     }
+<<<<<<< HEAD
+=======
+    #endregion
+    
+    /// <summary>
+    /// Added by Shubham
+    /// For Hide DDL Items on 11/04/2024
+    /// </summary>
+    private void HideDDLItems() 
+    {
+        foreach (ListItem item in ddlMeritList.Items)
+        {
+            item.Enabled = false;
+        }
+    }
+>>>>>>> 23962d2b ( [BUGFIX] [56516] Solved Bugs)
 }

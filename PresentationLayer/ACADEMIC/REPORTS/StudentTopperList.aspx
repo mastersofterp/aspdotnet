@@ -24,7 +24,8 @@
                     <div class="box box-primary">
                         <div id="div2" runat="server"></div>
                         <div class="box-header with-border">
-                            <h3 class="box-title">TOPPERS REPORT</h3>
+                            <h3 class="box-title">
+                                <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                         </div>
                         <div class="box-body">
                             <div class="col-12">
@@ -175,6 +176,23 @@
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
                                     </div>
 
+<<<<<<< HEAD
+=======
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divCourse" runat="server">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Courses </label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlCourse" runat="server"
+                                            AppendDataBoundItems="True" data-select2-enable="true">
+                                            <asp:ListItem Value="0"> Please Select </asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="rfvcourses" runat="server" ControlToValidate="ddlCourse"
+                                            Display="None" ErrorMessage="Please Select Courses" InitialValue="0"
+                                            ValidationGroup="report"></asp:RequiredFieldValidator>
+                                    </div>
+
+>>>>>>> 23962d2b ( [BUGFIX] [56516] Solved Bugs)
                                     <div id="divRange" class="form-group col-lg-3 col-md-6 col-12 " runat="server">
                                         <div class="label-dynamic">
                                             <%--<sup>* </sup>--%>
