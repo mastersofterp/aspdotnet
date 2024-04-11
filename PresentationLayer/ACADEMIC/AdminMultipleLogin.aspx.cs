@@ -271,11 +271,11 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
             StudentController studinfo = new StudentController();
             string OTP = GenerateOTP(5);
             Session["OTP"] = OTP;
-            int ret = 1; // studinfo.InsMultipleLoginReasonLog(userno, ua_Type, Purpose, loginBy, ipAddr, purposeID, OTP);
+            int ret = studinfo.InsMultipleLoginReasonLog(userno, ua_Type, Purpose, loginBy, ipAddr, purposeID, OTP);
             if (ret == 1)
             {
                 string usr = "(" + username + " / " + user_Fullname + ")";
-                usr = user_Fullname;
+                usr = username;
                 int ret1 = SendEmailSMS(userno, usr, ViewState["adminEmailID"].ToString(), ViewState["AdminMobileNo"].ToString(), OTP);
                 if (ret1 == 1)
                 {
@@ -540,12 +540,7 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
             int successFail = checkOTPSecurity(Convert.ToInt32(ViewState["userno"]), OTP);
             if (successFail == 0)
                 return ret;
-
-            string subject = "ERP || OTP for Login";
-            string message = "Your One Time Password is : ";
-            message += OTP;
-            message += " for User login : " + userName;
-            message += "<br /><br />Note :This is system generated email. Please do not reply to this email.<br />";
+           
 
             //if (email == 1)
             //{
