@@ -134,11 +134,14 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
 
                 if (Session["usertype"].ToString().Equals("2"))
                 {
+                    objCommon.DisplayUserMessage(this.Page, "Registration No. " + txtRegistrationNo.Text + " is not Eligible to View the Provisional Certificate Detail Due to Not Clear All Semester.", this.Page);
                     Response.Redirect("~/notauthorized.aspx?page=ProvisionalCertificate.aspx");
                 }
                 else
                 {
-                    objCommon.DisplayUserMessage(this.Page, "Registration No. " + txtRegistrationNo.Text + " is not Eligible to View the Provisionl Certificate Detail Due to DGPA is not Available.", this.Page);
+                    //objCommon.DisplayUserMessage(this.Page, "Registration No. " + txtRegistrationNo.Text + " is not Eligible to View the Provisionl Certificate Detail Due to DGPA is not Available.", this.Page);
+                    //return;
+                    objCommon.DisplayUserMessage(this.Page, "Registration No. " + txtRegistrationNo.Text + " is not Eligible to View the Provisional Certificate Detail Due to Not Clear All Semester.", this.Page);
                     return;
                 }
             }
