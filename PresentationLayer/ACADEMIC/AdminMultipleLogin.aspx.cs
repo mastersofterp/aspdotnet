@@ -568,6 +568,11 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
             //    ret = OutLook_Email(message, userEmail, subject);
             //}
 
+            string subject = "ERP || OTP for Login";
+            string message = "Your One Time Password is : ";
+            message += OTP;
+            message += " for User login : " + userName;
+            message += "<br /><br />Note :This is system generated email. Please do not reply to this email.<br />";
             SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
             ret = objSendEmail.SendEmail(userEmail, message, subject); //Calling Method
                                                                        
