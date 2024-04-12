@@ -41,7 +41,7 @@ stages:
             -deleteAfterPublishFiles "/APP_CODE,/website.publishproj" 
             -publishPrecompilePath "$CI_PROJECT_DIR\PrecompiledWeb\PresentationLayer\"   
             -restoreDefaultFile "true"
-            -numberOfBackups '2'
+            -numberOfBackups "2"
         
     rules:
         - if: '$CI_COMMIT_MESSAGE =~ /See merge request/'
