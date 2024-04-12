@@ -407,7 +407,7 @@
     </div>
 
     <div class="col-12">
-        <asp:ListView ID="lvGatePass" runat="server" OnItemDataBound="lvGatePass_ItemDataBound">
+        <asp:ListView ID="lvGatePass" runat="server" >  <%--OnItemDataBound="lvGatePass_ItemDataBound" Commented By Himanshu tamrakar 11-04-2024--%>
             <LayoutTemplate>
                 <div class="sub-heading">
                     <h5>List of Applied Students</h5>
@@ -426,6 +426,8 @@
                             <th>Out Date
                             </th>
                             <th>In Date
+                            </th>
+                            <th>Apply Date
                             </th>
                             <th>Purpose
                             </th>
@@ -457,10 +459,13 @@
                         <asp:Label ID="lblGatepassnno" runat="server" Text='<%# (Eval("HOSTEL_GATE_PASS_NO").ToString())=="" ? "..." : Eval("HOSTEL_GATE_PASS_NO") %>'></asp:Label>
                     </td>
                     <td>
-                        <%# Eval("OUTDATE","{0:dd/MM/yyyy hh:mm tt}") %>
+                        <asp:Label ID="lblOutdate" runat="server" Text='<%# Eval("OUTDATE","{0:dd/MM/yyyy hh:mm tt}") %>'></asp:Label>
                     </td>
                     <td>
                         <%# Eval("INDATE","{0:dd/MM/yyyy hh:mm tt}") %>
+                    </td>
+                    <td>
+                        <%# Eval("APPLY_DATE","{0:dd/MM/yyyy hh:mm tt}") %>
                     </td>
                     <td>
                         <%# Eval("PURPOSE_NAME") %>

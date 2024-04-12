@@ -163,10 +163,6 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                     BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
                     //Added by Himanshu Tamrakar 24/11/2023 for bug id 169646
                     Clear();
-                    txtFromDateSearch.Text = string.Empty;
-                    txtToDateSearch.Text = string.Empty;
-                    txtApplyDate.Text = string.Empty;
-
                 }
             }
         }
@@ -212,14 +208,14 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
         ddlAA4.SelectedIndex = 0;
         btnApprove.Visible = true;
         ddlremark.SelectedIndex = 0;
-        foreach (ListViewItem item in lvGatePass.Items)
-        {
-            CheckBox chkApprove = (CheckBox)item.FindControl("chkApprove");
-            if (chkApprove != null)
-            {
-                chkApprove.Checked = false;
-            }
-        }
+        //foreach (ListViewItem item in lvGatePass.Items)
+        //{
+        //    CheckBox chkApprove = (CheckBox)item.FindControl("chkApprove");
+        //    if (chkApprove != null)
+        //    {
+        //        chkApprove.Checked = false;
+        //    }
+        //}
     }
     protected void btnChangeApproval_Click(object sender, EventArgs e)
     {
@@ -535,24 +531,25 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
         }
     }
 
-    protected void lvGatePass_ItemDataBound(object sender, ListViewItemEventArgs e)
-    {
-        if (e.Item.ItemType == ListViewItemType.DataItem)
-        {
-            // Find the controls within the ListViewItem
-            CheckBox chkApprove = (CheckBox)e.Item.FindControl("chkApprove");
-            Label lblStatus = (Label)e.Item.FindControl("lblStatus");
-
-            if (lblStatus != null && lblStatus.Text == "APPROVED")
-            {
-                chkApprove.Enabled = false;
-            }
-            else
-            {
-                chkApprove.Enabled = true;
-            }
-        }
-    }
+    //Commented By Himanshu Tamrakar 11-04-2024
+    //protected void lvGatePass_ItemDataBound(object sender, ListViewItemEventArgs e)
+    //{
+    //    if (e.Item.ItemType == ListViewItemType.DataItem)
+    //    {
+    //        // Find the controls within the ListViewItem
+    //        CheckBox chkApprove = (CheckBox)e.Item.FindControl("chkApprove");
+    //        Label lblStatus = (Label)e.Item.FindControl("lblStatus");
+    //        Label lbloutdate = (Label)e.Item.FindControl("lblOutdate");
+    //        if (Convert.ToDateTime(lbloutdate.Text)<DateTime.Now.AddDays(-1))
+    //        {
+    //            chkApprove.Enabled = false;
+    //        }
+    //        else
+    //        {
+    //            chkApprove.Enabled = true;
+    //        }
+    //    }
+    //}
 
     protected void btnUpdatePath_Click(object sender, EventArgs e)
     {
