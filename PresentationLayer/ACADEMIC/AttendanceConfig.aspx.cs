@@ -32,7 +32,7 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
     AcdAttendanceController objAttC = new AcdAttendanceController();
     AcdAttendanceModel objAttModel = new AcdAttendanceModel();
     SessionActivityController activityController = new SessionActivityController();
-
+    AcademinDashboardController objADEController = new AcademinDashboardController();
 
 
     protected void Page_PreInit(object sender, EventArgs e)
@@ -65,6 +65,7 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
+                this.BindListViewAttConfig();
             }
             //Populate the Drop Down Lists
 
@@ -88,6 +89,7 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
         }
     }
 
+    #region Core Attendance Configuration
     //Fill Dropdowns
     private void PopulateDropDownList()
     {
@@ -115,6 +117,15 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
             ddlSemester.DataTextField = "SEMESTERNAME";
             ddlSemester.DataValueField = "SEMESTERNO";
             ddlSemester.DataBind();
+        }
+
+        DataSet dsSession = objADEController.Get_College_Session(4, Session["college_nos"].ToString());
+        if (dsSession.Tables[0].Rows.Count > 0)
+        {
+            ddlSessionAttConfig.DataSource = dsSession;
+            ddlSessionAttConfig.DataValueField = dsSession.Tables[0].Columns[0].ToString();
+            ddlSessionAttConfig.DataTextField = dsSession.Tables[0].Columns[1].ToString();
+            ddlSessionAttConfig.DataBind();
         }
     }
 
@@ -362,4 +373,291 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
         return ConfigList;
     }
 
+    #endregion
+
+    #region Global Attendance Configuration
+
+    protected void ddlSessionAttConfig_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlSessionAttConfig.SelectedIndex > 0)
+        {
+            objCommon.FillListBox(lstSemesterAttConfig, "ACD_GLOBAL_OFFERED_COURSE AS s CROSS APPLY STRING_SPLIT(s.TO_SEMESTERNO, ',') AS f INNER JOIN ACD_SEMESTER AS c ON f.value = c.SEMESTERNO", "C.SEMESTERNO", "C.SEMESTERNAME", "S.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID = " + Convert.ToInt32(ddlSessionAttConfig.SelectedValue) + ") AND ISNULL(S.GLOBAL_OFFERED,0) = 1 GROUP BY C.SEMESTERNO,C.SEMESTERNAME", "C.SEMESTERNO");
+        }
+        else
+        {
+            lstSemesterAttConfig.ClearSelection();
+        }
+
+    }
+
+    protected void btnSunmitAttConfig_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int srno = 0;
+            if (txtGlobalStartDate.Text != string.Empty && txtGlobalEndDate.Text != string.Empty)
+            {
+                if (Convert.ToDateTime(txtGlobalEndDate.Text) <= Convert.ToDateTime(txtGlobalStartDate.Text))
+                {
+                    objCommon.DisplayMessage(this, "End Date should be greater than Start Date", this.Page);
+                    return;
+                }
+                else
+                {
+                    //string Semesternnos = "";
+                    //foreach (ListItem items in lstSemesterAttConfig.Items)
+                    //{
+                    //    if (items.Selected == true)
+                    //    {
+                    //        Semesternnos += items.Value + ',';
+                    //    }
+                    //}
+                    //if (Semesternnos.Length > 0)
+                    //{
+                    //    Semesternnos = Semesternnos.Remove(Semesternnos.Length - 1);
+                    //}
+
+                    objAttModel.AttendanceStartDate = Convert.ToDateTime(txtGlobalStartDate.Text);
+                    objAttModel.AttendanceEndDate = Convert.ToDateTime(txtGlobalEndDate.Text);
+                    objAttModel.AttendanceLockDay = Convert.ToInt32(txtGlobalAttLockDay.Text);
+                    if (hfdSms.Value == "true")
+                    {
+                        objAttModel.SMSFacility = true;
+                    }
+                    else
+                    {
+                        objAttModel.SMSFacility = false;
+                    }
+
+                    if (hfdEmail.Value == "true")
+                    {
+                        objAttModel.EmailFacility = true;
+                    }
+                    else
+                    {
+                        objAttModel.EmailFacility = false;
+                    }
+
+                    if (hfdCourse.Value == "true")
+                    {
+                        objAttModel.CRegStatus = true;
+                    }
+                    else
+                    {
+                        objAttModel.CRegStatus = false;
+                    }
+
+                    if (hfdTeaching.Value == "true")
+                    {
+                        objAttModel.TeachingPlan = true;
+                    }
+                    else
+                    {
+                        objAttModel.TeachingPlan = false;
+                    }
+
+                    if (hfdActive.Value == "true")
+                    {
+                        objAttModel.ActiveStatus = true;
+                    }
+                    else
+                    {
+                        objAttModel.ActiveStatus = false;
+                    }
+                    //End
+                    objAttModel.College_code = Session["colcode"].ToString();
+                    objAttModel.Schemeno = Convert.ToInt32(ViewState["attschemeno"]);
+                    objAttModel.Sessionno = Convert.ToInt32(ddlSessionAttConfig.SelectedValue);
+                    if (ViewState["attaction"] != null && ViewState["attaction"].ToString().Equals("edit"))
+                    {
+                        ClearAttConfigControls();
+                        objCommon.DisplayMessage(this, "Configuration Updated Successfully", this.Page);
+                        //this.BindListView();
+                        this.BindListViewAttConfig();
+                    }
+                    else
+                    {
+
+                        CustomStatus cs = (CustomStatus)objAttC.AddGlobalElectiveAttendanceConfigModified(objAttModel, Convert.ToInt32(Session["OrgId"]));
+                        if (cs.Equals(CustomStatus.RecordSaved))
+                        {
+                            ClearAttConfigControls();
+                            objCommon.DisplayMessage(this, "Configuration Added Successfully", this.Page);
+                            this.BindListViewAttConfig();
+                        }
+                        else if (cs.Equals(CustomStatus.DuplicateRecord))
+                        {
+                            objCommon.DisplayMessage(this, "Configuration Already Exists !!", this.Page);
+                            ClearAttConfigControls();
+                            this.BindListViewAttConfig();
+                        }
+                        else if (cs.Equals(CustomStatus.TransactionFailed))
+                        {
+                            objCommon.DisplayMessage(this, "Transaction Failed", this.Page);
+                            ClearAttConfigControls();
+                            this.BindListViewAttConfig();
+                        }
+                    }
+
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_Global_Offered_Course.btnSunmitAttConfig_Click -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void btnCancelAttConfig_Click(object sender, EventArgs e)
+    {
+        ClearAttConfigControls();
+    }
+
+    private void ClearAttConfigControls()
+    {
+        lstSemesterAttConfig.ClearSelection();
+        txtGlobalEndDate.Text = string.Empty;
+        txtGlobalStartDate.Text = string.Empty;
+        txtGlobalAttLockDay.Text = string.Empty;
+        //txtAttLockHrs.Text = string.Empty;
+        //rdoSMSNo.Checked = true;
+        //rdoEmailNo.Checked = true;
+        //rblCRegAfter.Checked = true;
+        ViewState["attaction"] = null;
+        ddlSessionAttConfig.SelectedIndex = 0;
+    }
+    private void BindListViewAttConfig()
+    {
+        try
+        {
+            DataSet ds = objAttC.GetAllAttendanceConfigGlobalElective(Convert.ToInt32(Session["OrgId"]));
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                lvAttConfig.DataSource = ds;
+                lvAttConfig.DataBind();
+                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvAttConfig);//Set label -
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_Global_Offered_Course.BindListViewAttConfig -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void btnEditAttConfig_Click(object sender, ImageClickEventArgs e)
+    {
+        try
+        {
+            ImageButton btnEdit = sender as ImageButton;
+            int sessionid = int.Parse(btnEdit.CommandArgument);
+            ViewState["attschemeno"] = int.Parse(btnEdit.CommandArgument);
+            ViewState["edit"] = "edit";
+
+            this.ShowAttConfigDetails(sessionid);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_Global_Offered_Course.btnEditAttConfig_Click -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    private void ShowAttConfigDetails(int sessionid)
+    {
+        try
+        {
+
+            char delimiterChars = ',';
+            char delimiter = ',';
+            //SessionController objSS = new SessionController();
+            SqlDataReader dr = objAttC.GetSingleConfigurationForGlobalElective(sessionid);
+            if (dr != null)
+            {
+                if (dr.Read())
+                {
+                    //objCommon.FillListBox(lstSemesterAttConfig, "ACD_GLOBAL_OFFERED_COURSE AS s CROSS APPLY STRING_SPLIT(s.TO_SEMESTERNO, ',') AS f INNER JOIN ACD_SEMESTER AS c ON f.value = c.SEMESTERNO", "C.SEMESTERNO", "C.SEMESTERNAME", "S.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID = " + Convert.ToInt32(sessionid) + ") AND ISNULL(S.GLOBAL_OFFERED,0) = 1 GROUP BY C.SEMESTERNO,C.SEMESTERNAME", "C.SEMESTERNO");
+
+                    ////objCommon.FillListBox(lstSemesterAttConfig, "ACD_GLOBAL_OFFERED_COURSE AS s CROSS APPLY STRING_SPLIT(s.TO_SEMESTERNO, ',') AS f INNER JOIN ACD_SEMESTER AS c ON f.value = c.SEMESTERNO", "C.SEMESTERNO", "C.SEMESTERNAME", "s.SCHEMENO=" + Convert.ToInt32(schemeno) + " AND isnull(S.GLOBAL_OFFERED,0) = 1 GROUP BY C.SEMESTERNO,C.SEMESTERNAME", "C.SEMESTERNO");
+
+                    //string semesternos = dr["SEMESTERNO"] == DBNull.Value ? "0" : dr["SEMESTERNO"].ToString();
+
+                    //string[] sem = semesternos.Split(delimiterChars);
+
+                    //for (int j = 0; j < sem.Length; j++)
+                    //{
+                    //    for (int i = 0; i < lstSemesterAttConfig.Items.Count; i++)
+                    //    {
+                    //        if (sem[j] == lstSemesterAttConfig.Items[i].Value)
+                    //        {
+                    //            lstSemesterAttConfig.Items[i].Selected = true;
+                    //        }
+                    //    }
+                    //}
+
+                    ddlSessionAttConfig.SelectedValue = dr["SESSIONID"] == DBNull.Value ? "0" : dr["SESSIONID"].ToString();
+
+                    txtGlobalStartDate.Text = dr["START_DATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dr["START_DATE"].ToString()).ToString("dd/MM/yyyy");
+                    txtGlobalEndDate.Text = dr["END_DATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dr["END_DATE"].ToString()).ToString("dd/MM/yyyy");
+                    txtGlobalAttLockDay.Text = dr["LOCK_ATT_DAYS"] == null ? string.Empty : dr["LOCK_ATT_DAYS"].ToString();
+
+                    //txtAttLockHrs.Text = dr["LOCK_ATT_HOURS"] == null ? string.Empty : dr["LOCK_ATT_HOURS"].ToString();
+                    ViewState["sms"] = dr["SMS_FACILITY"].ToString();
+
+                    if (dr["TEACHING_PLAN"].ToString() == "Yes")
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "SetStatTeaching(true);", true);
+                        // ScriptManager.RegisterClientScriptBlock(updpnl, this.GetType(), "script7", "SetStatTeaching(true);", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "Src8", "SetStatTeaching(false);", true);
+                        // ScriptManager.RegisterClientScriptBlock(updpnl, this.GetType(), "script8", "SetStatTeaching(false);", true);
+                    }
+
+                    if (dr["ACTIVE"].ToString() == "Active")
+                    {
+                        //ScriptManager.RegisterClientScriptBlock(this.updpnl, GetType(), "script", "SetStatActive(true);", true);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9", "SetStatActive(true);", true);
+                    }
+                    else
+                    {
+                        //ScriptManager.RegisterClientScriptBlock(this.updpnl, GetType(), "script", "SetStatActive(false);", true);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript10", "SetStatActive(false);", true);
+                    }
+
+                }
+            }
+            if (dr != null) dr.Close();
+
+            ViewState["attconfigaction"] = "edit";
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_Global_Offered_Course.ShowAttConfigDetails -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    
+    protected void rdoConfig_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (Convert.ToInt32(rdoConfig.SelectedValue) == 1)
+        {
+            divCoreAtt.Visible = true;
+            divGlobalAtt.Visible = false;
+        }
+        else 
+        {
+            divGlobalAtt.Visible = true;
+            divCoreAtt.Visible = false;
+        }
+    }
+    #endregion
 }

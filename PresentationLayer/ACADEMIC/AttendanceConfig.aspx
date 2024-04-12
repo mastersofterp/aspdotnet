@@ -217,196 +217,424 @@
                         <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
                 <div class="box-body">
-
-                    <div class="col-12">
+                    <div class="col-lg-12 col-md-12 col-12">
                         <div class="row">
-                            <div class="form-group col-lg-12">
-
-                                <div class="row">
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlSession" runat="server" TabIndex="1"
-                                            AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"
-                                            onchange="getSelectedIds(this);"></asp:ListBox>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true">Degree</asp:Label>
-                                        </div>
-                                        <asp:ListBox ID="ddlDegree" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"></asp:ListBox>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12 ">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Scheme Type</label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlSchemeType" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="1" data-select2-enable="true">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
-                                        </div>
-                                        <asp:ListBox ID="ddlSemester" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"></asp:ListBox>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Attendance Start Date</label>
-                                        </div>
-                                        <div class="input-group">
-                                            <div class="input-group-addon" id="txtStartDate1" runat="server">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="submit" TabIndex="1" CssClass="form-control" placeholder="DD/MM/YYYY" />
-                                            <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy"
-                                                TargetControlID="txtStartDate" PopupButtonID="txtStartDate1" />
-                                            <ajaxToolKit:MaskedEditExtender ID="meeStartDate" runat="server" OnInvalidCssClass="errordate"
-                                                TargetControlID="txtStartDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
-                                                DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
-                                            <ajaxToolKit:MaskedEditValidator ID="mevStartDate" runat="server" ControlExtender="meeStartDate"
-                                                ControlToValidate="txtStartDate" EmptyValueMessage="Please Enter Attendance Start Date" IsValidEmpty="false"
-                                                InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" ErrorMessage="Start Date is Invalid (Enter dd/mm/yyyy Format)"
-                                                TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
-                                                ValidationGroup="submit" SetFocusOnError="True" />
-                                            <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" ControlToValidate="txtStartDate"
-                                                Display="None" SetFocusOnError="True"
-                                                ValidationGroup="submit" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Attendance End Date</label>
-                                        </div>
-                                        <div class="input-group">
-                                            <div class="input-group-addon" id="txtEndDate1" runat="server">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" TabIndex="1" CssClass="form-control" placeholder="DD/MM/YYYY" />
-                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"
-                                                TargetControlID="txtEndDate" PopupButtonID="txtEndDate1" />
-
-                                            <ajaxToolKit:MaskedEditExtender ID="meeEndDate" runat="server" OnInvalidCssClass="errordate"
-                                                TargetControlID="txtEndDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
-                                                DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
-                                            <ajaxToolKit:MaskedEditValidator ID="mevEndDate" runat="server" ControlExtender="meeEndDate"
-                                                ControlToValidate="txtEndDate" EmptyValueMessage="Please Enter Attendance End Date"
-                                                InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" IsValidEmpty="false"
-                                                TooltipMessage="Please Enter Attendance End Date" EmptyValueBlurredText="Empty"
-                                                InvalidValueBlurredMessage="Invalid Date" ValidationGroup="submit" SetFocusOnError="True" />
-
-                                            <asp:RequiredFieldValidator ID="rfvEndDate" runat="server" SetFocusOnError="True"
-                                                ControlToValidate="txtEndDate" Display="None"
-                                                ValidationGroup="submit" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12 ">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Attendance Lock By Day</label>
-                                        </div>
-                                        <asp:TextBox ID="txtAttLockDay" runat="server" CssClass="form-control" TabIndex="1" MaxLength="3" />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers"
-                                            TargetControlID="txtAttLockDay" />
-                                    </div>
-
-                                </div>
-                            </div>
-                            <%--(d-none) added by vipul T on date 04-03-2024 as per TNO:-55726 --%>
-                            <div class="form-group col-lg-2 col-md-6 col-6 d-none">
+                            <div class="form-group col-12">
                                 <div class="label-dynamic">
-                                    <sup>* </sup>
-                                    <label>SMS Facility</label>
                                 </div>
-                                <div class="switch form-inline">
-                                    <input type="checkbox" id="rdSMSYes" tabindex="1" name="switch" checked />
-                                    <label data-on="Yes" data-off="No" for="rdSMSYes"></label>
-                                </div>
-                            </div>
+                                <asp:RadioButtonList ID="rdoConfig" runat="server" CssClass="col-6" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdoConfig_SelectedIndexChanged" AutoPostBack="true">
+                                    <asp:ListItem Value="1" Selected="True">&nbsp;Core Attendance Configuration</asp:ListItem>
+                                    <asp:ListItem Value="2">&nbsp;Global Attendance Configuration</asp:ListItem>
 
-                            <div class="form-group col-lg-2 col-md-6 col-6 d-none">
-                                <div class="label-dynamic">
-                                    <sup>* </sup>
-                                    <label>Email Facility</label>
-                                </div>
-                                <div class="switch form-inline">
-                                    <input type="checkbox" id="rdEmailYes" tabindex="1" name="switch" checked />
-                                    <label data-on="Yes" data-off="No" for="rdEmailYes"></label>
-                                </div>
-                            </div>
-                            <%-- end --%>
-                            <div class="form-group col-lg-2 col-md-6 col-6">
-                                <div class="label-dynamic">
-                                    <sup>* </sup>
-                                    <label>Teaching Plan</label>
-                                </div>
-                                <div class="switch form-inline">
-                                    <input type="checkbox" id="rdTeachYes" tabindex="1" name="switch" checked />
-                                    <label data-on="Yes" data-off="No" for="rdTeachYes"></label>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-lg-2 col-md-6 col-6">
-                                <div class="label-dynamic">
-                                    <sup>* </sup>
-                                    <label>Check For Active</label>
-                                </div>
-                                <div class="switch form-inline">
-                                    <input type="checkbox" id="rdActive" tabindex="1" name="switch" checked />
-                                    <label data-on="Active" data-off="Inactive" for="rdActive"></label>
-                                </div>
+                                </asp:RadioButtonList>
                             </div>
                         </div>
                     </div>
+                    <div id="divCoreAtt" runat="server">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="form-group col-lg-12">
 
-                    <div class="col-12 btn-footer">
-                        <input id="btnSubmit" type="button" title="submit" value="Submit" class="btn btn-primary" tabindex="1" />
-                        <input id="btnCancel" type="button" title="Cancel" value="Cancel" class="btn btn-warning" tabindex="1" />
-                        <input id="btnReport" type="button" title="Report" value="Excel Report" class="btn btn-primary" tabindex="1" />
-                    </div>
-                    <div class="col-12">
-                        <table class="table table-striped table-bordered nowrap" id="BindDynamicTable">
-                            <thead class="bg-light-blue">
-                                <tr>
-                                    <th>Edit</th>
-                                    <th>Session</th>
-                                    <th>School/Institute</th>
-                                    <th>Scheme Type</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Att Lock Days</th>
-                                    <th class="d-none">SMS Facility</th>
-                                    <th class="d-none">Email Facility</th>
-                                    <th>Teaching Plan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlSession" runat="server" TabIndex="1"
+                                                AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
 
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"
+                                                onchange="getSelectedIds(this);"></asp:ListBox>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true">Degree</asp:Label>
+                                            </div>
+                                            <asp:ListBox ID="ddlDegree" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"></asp:ListBox>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Scheme Type</label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlSchemeType" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="1" data-select2-enable="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
+                                            </div>
+                                            <asp:ListBox ID="ddlSemester" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"></asp:ListBox>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Attendance Start Date</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="input-group-addon" id="txtStartDate1" runat="server">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="submit" TabIndex="1" CssClass="form-control" placeholder="DD/MM/YYYY" />
+                                                <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy"
+                                                    TargetControlID="txtStartDate" PopupButtonID="txtStartDate1" />
+                                                <ajaxToolKit:MaskedEditExtender ID="meeStartDate" runat="server" OnInvalidCssClass="errordate"
+                                                    TargetControlID="txtStartDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                    DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                                <ajaxToolKit:MaskedEditValidator ID="mevStartDate" runat="server" ControlExtender="meeStartDate"
+                                                    ControlToValidate="txtStartDate" EmptyValueMessage="Please Enter Attendance Start Date" IsValidEmpty="false"
+                                                    InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" ErrorMessage="Start Date is Invalid (Enter dd/mm/yyyy Format)"
+                                                    TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                    ValidationGroup="submit" SetFocusOnError="True" />
+                                                <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" ControlToValidate="txtStartDate"
+                                                    Display="None" SetFocusOnError="True"
+                                                    ValidationGroup="submit" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Attendance End Date</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="input-group-addon" id="txtEndDate1" runat="server">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" TabIndex="1" CssClass="form-control" placeholder="DD/MM/YYYY" />
+                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"
+                                                    TargetControlID="txtEndDate" PopupButtonID="txtEndDate1" />
+
+                                                <ajaxToolKit:MaskedEditExtender ID="meeEndDate" runat="server" OnInvalidCssClass="errordate"
+                                                    TargetControlID="txtEndDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                    DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                                <ajaxToolKit:MaskedEditValidator ID="mevEndDate" runat="server" ControlExtender="meeEndDate"
+                                                    ControlToValidate="txtEndDate" EmptyValueMessage="Please Enter Attendance End Date"
+                                                    InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" IsValidEmpty="false"
+                                                    TooltipMessage="Please Enter Attendance End Date" EmptyValueBlurredText="Empty"
+                                                    InvalidValueBlurredMessage="Invalid Date" ValidationGroup="submit" SetFocusOnError="True" />
+
+                                                <asp:RequiredFieldValidator ID="rfvEndDate" runat="server" SetFocusOnError="True"
+                                                    ControlToValidate="txtEndDate" Display="None"
+                                                    ValidationGroup="submit" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Attendance Lock By Day</label>
+                                            </div>
+                                            <asp:TextBox ID="txtAttLockDay" runat="server" CssClass="form-control" TabIndex="1" MaxLength="3" />
+                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers"
+                                                TargetControlID="txtAttLockDay" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <%--(d-none) added by vipul T on date 04-03-2024 as per TNO:-55726 --%>
+                                <div class="form-group col-lg-2 col-md-6 col-6 d-none">
+                                    <div class="label-dynamic">
+                                        <sup>* </sup>
+                                        <label>SMS Facility</label>
+                                    </div>
+                                    <div class="switch form-inline">
+                                        <input type="checkbox" id="rdSMSYes" tabindex="1" name="switch" checked />
+                                        <label data-on="Yes" data-off="No" for="rdSMSYes"></label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-2 col-md-6 col-6 d-none">
+                                    <div class="label-dynamic">
+                                        <sup>* </sup>
+                                        <label>Email Facility</label>
+                                    </div>
+                                    <div class="switch form-inline">
+                                        <input type="checkbox" id="rdEmailYes" tabindex="1" name="switch" checked />
+                                        <label data-on="Yes" data-off="No" for="rdEmailYes"></label>
+                                    </div>
+                                </div>
+                                <%-- end --%>
+                                <div class="form-group col-lg-2 col-md-6 col-6">
+                                    <div class="label-dynamic">
+                                        <sup>* </sup>
+                                        <label>Teaching Plan</label>
+                                    </div>
+                                    <div class="switch form-inline">
+                                        <input type="checkbox" id="rdTeachYes" tabindex="1" name="switch" checked />
+                                        <label data-on="Yes" data-off="No" for="rdTeachYes"></label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-2 col-md-6 col-6">
+                                    <div class="label-dynamic">
+                                        <sup>* </sup>
+                                        <label>Check For Active</label>
+                                    </div>
+                                    <div class="switch form-inline">
+                                        <input type="checkbox" id="rdActive" tabindex="1" name="switch" checked />
+                                        <label data-on="Active" data-off="Inactive" for="rdActive"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 btn-footer">
+                            <input id="btnSubmit" type="button" title="submit" value="Submit" class="btn btn-primary" tabindex="1" />
+                            <input id="btnCancel" type="button" title="Cancel" value="Cancel" class="btn btn-warning" tabindex="1" />
+                            <input id="btnReport" type="button" title="Report" value="Excel Report" class="btn btn-primary" tabindex="1" />
+                        </div>
+                        <div class="col-12">
+                            <table class="table table-striped table-bordered nowrap" id="BindDynamicTable">
+                                <thead class="bg-light-blue">
+                                    <tr>
+                                        <th>Edit</th>
+                                        <th>Session</th>
+                                        <th>School/Institute</th>
+                                        <th>Scheme Type</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Att Lock Days</th>
+                                        <th class="d-none">SMS Facility</th>
+                                        <th class="d-none">Email Facility</th>
+                                        <th>Teaching Plan</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="divGlobalAtt" runat="server" visible="false">
+                        <asp:UpdatePanel ID="updpanelconfig" runat="server" UpdateMode="Conditional">
+                            <ContentTemplate>
+                                <div class="col-12">
+                                    <div class="row">
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <asp:Label ID="lblDYddlSession_Tab" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlSessionAttConfig" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"
+                                                AutoPostBack="true" OnSelectedIndexChanged="ddlSessionAttConfig_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSessionAttConfig"
+                                                Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12 d-none">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Semester</label>
+                                            </div>
+                                            <asp:ListBox ID="lstSemesterAttConfig" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="4"></asp:ListBox>
+                                            <%--  <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="lstSemesterAttConfig"
+                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="" ValidationGroup="AttConfig"></asp:RequiredFieldValidator>--%>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Attendance Start Date</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="input-group-addon" id="txtGlobalStartDate1" runat="server">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <asp:TextBox ID="txtGlobalStartDate" runat="server" ValidationGroup="submit" TabIndex="5" CssClass="form-control" placeholder="DD/MM/YYYY" />
+                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd/MM/yyyy"
+                                                    TargetControlID="txtGlobalStartDate" PopupButtonID="txtGlobalStartDate1" />
+                                                <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" OnInvalidCssClass="errordate"
+                                                    TargetControlID="txtGlobalStartDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                    DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                                <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="meeStartDate"
+                                                    ControlToValidate="txtGlobalStartDate" EmptyValueMessage="Please Enter Attendance Start Date" IsValidEmpty="false"
+                                                    InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" ErrorMessage="Start Date is Invalid (Enter dd/mm/yyyy Format)"
+                                                    TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                    ValidationGroup="AttConfig" SetFocusOnError="True" />
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtGlobalStartDate"
+                                                    Display="None" SetFocusOnError="True"
+                                                    ValidationGroup="AttConfig" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Attendance End Date</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="input-group-addon" id="txtGlobalEndDate1" runat="server">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <asp:TextBox ID="txtGlobalEndDate" runat="server" ValidationGroup="submit" TabIndex="6" CssClass="form-control" placeholder="DD/MM/YYYY" />
+                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Format="dd/MM/yyyy"
+                                                    TargetControlID="txtGlobalEndDate" PopupButtonID="txtGlobalEndDate1" />
+
+                                                <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender2" runat="server" OnInvalidCssClass="errordate"
+                                                    TargetControlID="txtGlobalEndDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                    DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                                <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" ControlExtender="meeEndDate"
+                                                    ControlToValidate="txtGlobalEndDate" EmptyValueMessage="Please Enter Attendance End Date"
+                                                    InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" IsValidEmpty="false"
+                                                    TooltipMessage="Please Enter Attendance End Date" EmptyValueBlurredText="Empty"
+                                                    InvalidValueBlurredMessage="Invalid Date" ValidationGroup="AttConfig" SetFocusOnError="True" />
+
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" SetFocusOnError="True"
+                                                    ControlToValidate="txtGlobalEndDate" Display="None"
+                                                    ValidationGroup="AttConfig" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Attendance Lock By Day</label>
+                                            </div>
+                                            <asp:TextBox ID="txtGlobalAttLockDay" runat="server" CssClass="form-control" TabIndex="7" MaxLength="3" />
+                                            <asp:RequiredFieldValidator ID="rfvSessionLName" runat="server" SetFocusOnError="True"
+                                                ErrorMessage="Please Enter Attendance Lock By Day" ControlToValidate="txtGlobalAttLockDay"
+                                                Display="None" ValidationGroup="AttConfig" />
+                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" FilterType="Numbers"
+                                                TargetControlID="txtGlobalAttLockDay" />
+                                        </div>
+
+                                        <%--(d-none) added by vipul T on date 04-03-2024 as per TNO:-55726 --%>
+                                        <div class="form-group col-lg-2 col-md-6 col-6 d-none">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>SMS Facility</label>
+                                            </div>
+                                            <div class="switch form-inline">
+                                                <input type="checkbox" id="Checkbox1" name="switch" checked />
+                                                <label data-on="Yes" data-off="No" for="rdSMSYes"></label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group col-lg-2 col-md-6 col-6 d-none">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Email Facility</label>
+                                            </div>
+                                            <div class="switch form-inline">
+                                                <input type="checkbox" id="Checkbox2" name="switch" checked />
+                                                <label data-on="Yes" data-off="No" for="rdEmailYes"></label>
+                                            </div>
+                                        </div>
+                                        <%--  end--%>
+
+                                        <div class="form-group col-lg-2 col-md-6 col-6" style="display: none">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Course Registration</label>
+                                            </div>
+                                            <div class="switch form-inline">
+                                                <input type="checkbox" id="rbCRegBefore" name="switch" checked />
+                                                <label data-on="Before" data-off="After" for="rbCRegBefore"></label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group col-lg-2 col-md-6 col-6">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Teaching Plan</label>
+                                            </div>
+                                            <div class="switch form-inline">
+                                                <input type="checkbox" id="rdGlobalTeachYes" name="switch" checked />
+                                                <label data-on="Yes" data-off="No" for="rdGlobalTeachYes"></label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group col-lg-2 col-md-6 col-6">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Check For Active</label>
+                                            </div>
+                                            <div class="switch form-inline">
+                                                <input type="checkbox" id="rdGlobalActive" name="switch" checked />
+                                                <label data-on="Active" data-off="Inactive" for="rdGlobalActive"></label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="col-12 btn-footer">
+                                    <asp:Button ID="btnSunmitAttConfig" runat="server" Text="Submit" TabIndex="1" ValidationGroup="AttConfig" OnClientClick="return validate();" OnClick="btnSunmitAttConfig_Click" class="btn btn-primary" />
+                                    <asp:Button ID="btnCancelAttConfig" runat="server" Text="Cancel" CausesValidation="false" TabIndex="1" OnClick="btnCancelAttConfig_Click" class="btn btn-warning" />
+                                    <asp:ValidationSummary ID="ValidationSummary5" runat="server" ShowMessageBox="true"
+                                        ShowSummary="false" DisplayMode="List" ValidationGroup="AttConfig" />
+                                </div>
+
+                                <div class="col-12">
+                                    <asp:ListView ID="lvAttConfig" runat="server">
+                                        <LayoutTemplate>
+                                            <div id="demo-grid">
+                                                <div class="sub-heading">
+                                                    <h5>Configuration List</h5>
+                                                </div>
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tab-le">
+                                                    <thead>
+                                                        <tr class="bg-light-blue">
+                                                            <th>Edit</th>
+                                                            <th>
+                                                                <asp:Label ID="lblDYddlSession_Tab" runat="server" Font-Bold="true"></asp:Label></th>
+                                                            <%--   <th>
+                                                                        <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label></th>--%>
+
+                                                            <th>Start Date</th>
+                                                            <th>End Date</th>
+                                                            <th>Att Lock Days</th>
+                                                            <th class="d-none">SMS Facility</th>
+                                                            <th class="d-none">Email Facility</th>
+
+                                                            <th>Teaching Plan</th>
+                                                            <th>Active</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </LayoutTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td>
+                                                    <asp:ImageButton ID="btnEditAttConfig" runat="server" CausesValidation="false" CommandArgument='<%# Eval("SESSIONID")%>' ImageUrl="~/Images/edit.png" OnClick="btnEditAttConfig_Click" ToolTip="Edit Record" />
+                                                </td>
+                                                <td><%#Eval("SESSION_NAME") %></td>
+                                                <%-- <td><%#Eval("SEMESTER")%></td>--%>
+                                                <td><%#Eval("START_DATE")%></td>
+                                                <td><%#Eval("END_DATE")%></td>
+                                                <td><%#Eval("LOCK_ATT_DAYS")%></td>
+                                                <%-- <td><%#Eval("SMS_FACILITY")%></td>
+                                                        <td><%#Eval("EMAIL_FACILITY")%></td>--%>
+                                                <td><%#Eval("TEACHING_PLAN")%></td>
+                                                <td><%#Eval("ACTIVE")%></td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:ListView>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
                 </div>
             </div>
         </div>
@@ -935,6 +1163,63 @@
                 error: function (error) {
                     console.log(error);
                 }
+            });
+
+        });
+    </script>
+    <script>
+        function SetStatTeaching(val) {
+            $('#rdGlobalTeachYes').prop('checked', val);
+        }
+        function SetStatActive(val) {
+            $('#rdGlobalActive').prop('checked', val);
+        }
+
+        function validate() {
+            debugger;
+            var sessionno = document.getElementById("ctl00_ContentPlaceHolder1_ddlSessionAttConfig").value;
+            var semester = document.getElementById("ctl00_ContentPlaceHolder1_lstSemesterAttConfig").value;
+            var attLock = document.getElementById("ctl00_ContentPlaceHolder1_txtGlobalAttLockDay").value;
+            var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtGlobalStartDate").val();
+            var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtGlobalEndDate").value;
+            //if (school == "0") {
+            //    alert("Please Select School/Institute Name.");
+            //    return false;
+            //}
+            //if (schemeno == "" || schemeno == 0) {
+            //    alert("Please Select College & Scheme.");
+            //    return false;
+            //}
+            if (sessionno == "" || sessionno == 0) {
+                alert("Please Select Session.");
+                return false;
+            }
+            //if (semester == "") {
+            //    alert("Please Select at least one Semester.");
+            //    return false;
+            //}
+            if (AttStartDate == "" || AttStartDate == "DD/MM/YYYY") {
+                alert("Please Enter Attendance Start Date.");
+                return false;
+            }
+            if (AttEndDtae == "" || AttEndDtae == "DD/MM/YYYY") {
+                alert("Please Enter Attendance End Date.");
+                return false;
+            }
+            if (attLock == "") {
+                alert("Please Select Attendance Lock By Day.");
+                return false;
+            }
+
+            $('#hfdTeaching').val($('#rdGlobalTeachYes').prop('checked'));
+            $('#hfdActive').val($('#rdGlobalActive').prop('checked'));
+        }
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_endRequest(function () {
+            $(function () {
+                $('#btnSunmitAttConfig').click(function () {
+                    validate();
+                });
             });
 
         });
