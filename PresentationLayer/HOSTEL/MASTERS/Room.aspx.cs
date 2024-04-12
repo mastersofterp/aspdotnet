@@ -231,6 +231,7 @@ public partial class Hostel_Masters_Room : System.Web.UI.Page
         }
         catch (Exception ex)
         {
+
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUaimsCommon.ShowError(Page, "Room.CheckDuplicateEntryUpdate() --> " + ex.Message + " " + ex.StackTrace);
             else
