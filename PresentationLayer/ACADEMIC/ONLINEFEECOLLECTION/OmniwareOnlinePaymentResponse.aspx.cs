@@ -68,6 +68,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentResponse 
                 DataSet Orgds = null;
                 var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
                 Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                Session["OrgId"] = OrgId;
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -128,6 +129,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentResponse 
                 //}
 
                 ViewState["IDNO"] = Idno;
+                Session["IDNO"] = Idno;
                 if (Session["OrgId"].ToString() == "16")
                 {
                     degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())));

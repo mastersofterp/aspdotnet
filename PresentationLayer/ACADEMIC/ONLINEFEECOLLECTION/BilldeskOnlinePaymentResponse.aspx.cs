@@ -52,6 +52,7 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
                 DataSet Orgds = null;
                 var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
                 Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                Session["orgid"] = OrgId;
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -311,8 +312,6 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
         {
             string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'");
             int IDNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "IDNO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'"));
-            //int IDNO = Convert.ToInt32(ViewState["IDNO"]);
-            //string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
@@ -339,7 +338,6 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
 
     private void ShowReportOnline(string reportTitle, string rptFileName)
     {
