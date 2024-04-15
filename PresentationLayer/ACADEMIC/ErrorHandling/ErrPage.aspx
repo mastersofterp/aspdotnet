@@ -10,7 +10,9 @@ Version    :
 Version   Modified On   Modified By      Purpose                                  
 ---------------------------------------------------------------------------------------------------------------------------                                  
 1.0.1     12-03-2024    Anurag Baghele   [52380]-Added massage with email
---------------------------------------------------------------------------------------------------------------------------                                           
+-------------------------------------------------------------------------------------------------------------------------- 
+1.0.2     12-04-2024    Anurag Baghele   [57702]-Corrected the spelling of error message
+--------------------------------------------------------------------------------------------------------------------------                                          
 */ --%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
@@ -21,7 +23,7 @@ Version   Modified On   Modified By      Purpose
     <center><h5>Error has been occured during process.</h5></center>
     <center><h5>Please contact us and we will solve this issue ASAP.</h5></center>
     <%--<1.0.1>--%>
-     <center ><h5 runat="server" id="errormsg">Please send an Email with rror details to <asp:Label style="color: #007bff;" ID="lblemail" runat="server"></asp:Label></h5></center>
+     <center ><h5 runat="server" id="errormsg">Please send an Email with error details to <asp:Label style="color: #007bff;" ID="lblemail" runat="server"></asp:Label></h5></center> <%--<1.0.2>--%>
     <%--<center><a class="btn btn-primary"><i class="fa fa-reply" aria-hidden="true"></i> Back to Page</a></center>--%>
     <center>
         <asp:LinkButton ID="lbtnBackToPage" runat="server" CssClass="btn btn-primary" OnClick="lbtnBackToPage_Click"><i class="fa fa-reply" aria-hidden="true"></i>  Back to Page</asp:LinkButton>
