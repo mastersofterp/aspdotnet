@@ -58,7 +58,7 @@ public partial class FacilityApplication : System.Web.UI.Page
                 pnlAdd.Visible = false;
                 pnlList.Visible = true;
                 pnlbutton.Visible = false;
-               // CheckPageAuthorization();
+                // CheckPageAuthorization();
 
                 //Convert.ToInt32(Session["idno"])
                 if (Session["idno"] != null && Convert.ToInt32(Session["idno"]) != 0)
@@ -785,7 +785,7 @@ public partial class FacilityApplication : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-           objUCommon.ShowError(Page, "Facility_Management_MinorFacility.ShowDetails->" + ex.Message + "  " + ex.StackTrace);
+            objUCommon.ShowError(Page, "Facility_Management_MinorFacility.ShowDetails->" + ex.Message + "  " + ex.StackTrace);
         }
 
     }

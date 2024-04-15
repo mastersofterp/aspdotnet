@@ -71,9 +71,9 @@ public partial class homeFaculty : System.Web.UI.Page
                 //  BindQuickAccess(); // Not
 
 
-               // DataSet dsLastLoginTime = objCommon.FillDropDown("LogFile", "TOP(1) LEFT(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 1)AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
-              //  DataSet dsLastLoginForm = objCommon.FillDropDown("LogFile", "TOP(1) right(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 4) as AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
-              //PATCH UPDATED-PRASHANTG-TN56760-260324
+                // DataSet dsLastLoginTime = objCommon.FillDropDown("LogFile", "TOP(1) LEFT(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 1)AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
+                //  DataSet dsLastLoginForm = objCommon.FillDropDown("LogFile", "TOP(1) right(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 4) as AA ", "null", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
+                //PATCH UPDATED-PRASHANTG-TN56760-260324
                 DataSet ds = objCommon.FillDropDown("LogFile", "TOP(1) LEFT(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 1)AA ", "right(FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt'), Charindex(' ', FORMAT(CAST(LOGINTIME AS DATETIME),'hh:mm tt')) - 4) as BB", "UA_NAME='" + Session["username"].ToString() + "'", "LOGINTIME desc");
                 if (ds != null)
                 {
@@ -83,14 +83,14 @@ public partial class homeFaculty : System.Web.UI.Page
                         lblLastLoginForm.Text = ds.Tables[0].Rows[0]["BB"].ToString();
                     }
                 }
-              //  Show_TodaysTT();//PRASHANTG-TN56760-260324
+                //  Show_TodaysTT();//PRASHANTG-TN56760-260324
                 //  Show_ExamTT();//PRASHANTG-TN56760-260324
                 //  Show_Notice();//PRASHANTG-TN56760-260324
             }
         }
     }
 
-    protected void btnTT_Click(object sender,EventArgs e)
+    protected void btnTT_Click(object sender, EventArgs e)
     {
         Show_TodaysTT();
     }
@@ -103,7 +103,7 @@ public partial class homeFaculty : System.Web.UI.Page
     protected void btnExamTT_Click(object sender, EventArgs e)
     {
         Show_ExamTT();
-    }   
+    }
 
     private void ApproveLeaves()
     {
@@ -196,7 +196,7 @@ public partial class homeFaculty : System.Web.UI.Page
         }
         return LblName;
     }
-    
+
     [WebMethod]
     public static List<EmpInOutTIme> ShowInOutTime()
     {
@@ -240,7 +240,7 @@ public partial class homeFaculty : System.Web.UI.Page
         }
         return objList;
     }
-   
+
     [WebMethod]
     public static List<EmpNews> ShowNewsData()
     {
@@ -278,7 +278,7 @@ public partial class homeFaculty : System.Web.UI.Page
                 objCommon.ShowError(Page, "homefaculty.aspx.BindListViewNews() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
-          
+
         }
         return objNewsList;
     }
@@ -320,7 +320,7 @@ public partial class homeFaculty : System.Web.UI.Page
                 objCommon.ShowError(Page, "homefaculty.aspx.BindListViewExpiredNews() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
-           
+
         }
         return objNewsList;
     }
@@ -331,7 +331,7 @@ public partial class homeFaculty : System.Web.UI.Page
     ////    List<QuickAccessLinks> objQLList = a.BindQuickAccess();
     ////    return objQLList;
     ////}
-    
+
     [WebMethod]
     public static List<EmployeeTask> ShowEmpTasks()
     {
@@ -369,11 +369,11 @@ public partial class homeFaculty : System.Web.UI.Page
                 objCommon.ShowError(Page, "homefaculty.aspx.BindListViewTask() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
-           
+
         }
         return TaskList;
     }
-    
+
     [WebMethod]
     public static string ShowCasualBalLeaves()
     {
@@ -449,7 +449,7 @@ public partial class homeFaculty : System.Web.UI.Page
         }
         return commingHoliday;
     }
-   
+
     [WebMethod]
     public static TableList ShowTimeTable()
     {
@@ -514,7 +514,7 @@ public partial class homeFaculty : System.Web.UI.Page
         }
         return tblListData;
     }
-         
+
     //public string GetFileNamePath(object filename)
     //{
     //    if (filename != null && filename.ToString() != "")
@@ -565,7 +565,7 @@ public partial class homeFaculty : System.Web.UI.Page
                 lvActiveNotice.DataSource = ds.Tables[0];
                 lvActiveNotice.DataBind();
             }
-            if (ds.Tables.Count > 0 &&  ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+            if (ds.Tables.Count > 0 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
             {
                 lvExpNotice.DataSource = ds.Tables[1];
                 lvExpNotice.DataBind();
@@ -584,7 +584,7 @@ public partial class homeFaculty : System.Web.UI.Page
         string filename = e.CommandArgument.ToString();
         GetFileNamePath(filename);
     }
-    
+
     protected string GetFileNamePath(object filename)
     {
         string Url = string.Empty;
@@ -758,7 +758,7 @@ public partial class homeFaculty : System.Web.UI.Page
         }
     }
     #endregion BlogStorage
-      
+
     //private List<QuickAccessLinks> BindQuickAccess()
     //{
     //    List<QuickAccessLinks> LinkList = new List<QuickAccessLinks>();
@@ -831,7 +831,7 @@ public partial class homeFaculty : System.Web.UI.Page
     //    }
     //    return LinkList;
     //}
-        
+
     [WebMethod]
     public static List<FacultyQuickAccess> ShowQuickAccessData()
     {
@@ -879,7 +879,7 @@ public partial class homeFaculty : System.Web.UI.Page
         }
         return objQA;
     }
-    
+
     /*********************** Added On 30-03-2020 (TO BIND USING DATA USING JQUERY AJAX)  ************************/
     public void Show_ExamTT()
     {
@@ -906,32 +906,32 @@ public partial class homeFaculty : System.Web.UI.Page
     }
 
     public void Show_TodaysTT()
-    {        
-       // int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
+    {
+        // int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
         //Prashantg260324
         var sessNo = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()));
         int sessionno = sessNo.ToString() == string.Empty ? 0 : Convert.ToInt32(sessNo);
 
         DataSet dsShowCourse = objFetch.GetCoursesForAttendanceFromHomeFaculty(Convert.ToInt32(sessionno), Convert.ToInt32(Session["userno"]), Convert.ToInt32(Session["usertype"]));
         // List<HomeFacultyModel> objList = new List<HomeFacultyModel>();
-       if(dsShowCourse != null )
-       {
-           if (dsShowCourse.Tables.Count > 0 && dsShowCourse.Tables[0] != null && dsShowCourse.Tables[0].Rows.Count > 0)
-           {
-               //objList = (from DataRow dr in dsTodaysTimeTable.Tables[0].Rows
-               //           select new HomeFacultyModel
-               //           {
-               //               SlotIme = dr["SLOT"].ToString(),
-               //               Branch = dr["BRANCH"].ToString(),
-               //               Subject = dr["COURSENAME"].ToString(),
-               //               Semester = dr["SEMESTER"].ToString(),
-               //               Section = dr["SECTION"].ToString(),
-               //               CourseCode = dr["CCODE"].ToString(),
-               //               BranchShortName = dr["BRANCHSHORTNAME"].ToString()
-               //           }).ToList();
-               lvTodaysTT.DataSource = dsShowCourse;
-               lvTodaysTT.DataBind();
-           }
+        if (dsShowCourse != null)
+        {
+            if (dsShowCourse.Tables.Count > 0 && dsShowCourse.Tables[0] != null && dsShowCourse.Tables[0].Rows.Count > 0)
+            {
+                //objList = (from DataRow dr in dsTodaysTimeTable.Tables[0].Rows
+                //           select new HomeFacultyModel
+                //           {
+                //               SlotIme = dr["SLOT"].ToString(),
+                //               Branch = dr["BRANCH"].ToString(),
+                //               Subject = dr["COURSENAME"].ToString(),
+                //               Semester = dr["SEMESTER"].ToString(),
+                //               Section = dr["SECTION"].ToString(),
+                //               CourseCode = dr["CCODE"].ToString(),
+                //               BranchShortName = dr["BRANCHSHORTNAME"].ToString()
+                //           }).ToList();
+                lvTodaysTT.DataSource = dsShowCourse;
+                lvTodaysTT.DataBind();
+            }
         }
     }
 
@@ -954,7 +954,7 @@ public partial class homeFaculty : System.Web.UI.Page
             hdnSubjecttype.Value,hdnBatch.Value,hdnCourseno.Value,hdnSectionno.Value,hdnBatchno.Value,hdnSubId.Value};
 
         Session["arr"] = arr;
-        
+
         //ArrayList arr = new ArrayList();
         //arr.Add(hdnCoursename.Value);
         //arr.Add(hdnSchemename.Value);
