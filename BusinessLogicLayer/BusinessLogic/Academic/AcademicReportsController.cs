@@ -18,14 +18,16 @@ namespace IITMS
             {
                 string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-                public DataSet Offered_Course_Status_Excel(string sessionno)
+                //Updated by jay takalkhede on dated 03042024 add college and session both on the place of session 
+                public DataSet Offered_Course_Status_Excel(int sessionno, string college)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_COLLEGEID", college);
+                        objParams[1] = new SqlParameter("@P_SESSIONID", sessionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACADEMIC_ACTIVITY_OFFERED_COURSE_STATUS", objParams);
                     }
                     catch (Exception ex)
@@ -36,14 +38,16 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet GetSessionwiseRegistrationCount(string session)
+                //Updated by jay takalkhede on dated 03042024 add college and session both on the place of session 
+                public DataSet GetSessionwiseRegistrationCount(int sessionno, string college)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_SESSIONNO", session);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_COLLEGEID", college);
+                        objParams[1] = new SqlParameter("@P_SESSIONID", sessionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_COURSE_REGISTRATION_COUNT_ACADEMIC_REPORT", objParams);
                     }
                     catch (Exception ex)
@@ -52,15 +56,16 @@ namespace IITMS
                     }
                     return ds;
                 }
-
-                public DataSet GetCourseTeacherAllotmentStatus(string session)
+                //Updated by jay takalkhede on dated 03042024 add college and session both on the place of session 
+                public DataSet GetCourseTeacherAllotmentStatus(int sessionno, string college)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_SESSIONNO", session);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_COLLEGEID", college);
+                        objParams[1] = new SqlParameter("@P_SESSIONID", sessionno);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_COURSE_TEACHER_ALLOTMENT_ACADEMIC_REPORT_EXCEL", objParams);
                     }
@@ -70,16 +75,16 @@ namespace IITMS
                     }
                     return ds;
                 }
-
-                public DataSet GetTimeTableStatus(string session)
+                //Updated by jay takalkhede on dated 03042024 add college and session both on the place of session 
+                public DataSet GetTimeTableStatus(int sessionno, string college)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_SESSIONNO", session);
-
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_COLLEGEID", college);
+                        objParams[1] = new SqlParameter("@P_SESSIONID", sessionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_TIME_TABLE_STATUS_ACADEMIC_REPORTS", objParams);
                     }
                     catch (Exception ex)
@@ -88,15 +93,16 @@ namespace IITMS
                     }
                     return ds;
                 }
-
-                public DataSet GetTeachingPlanAttendanceStatus(string session)
+                //Updated by jay takalkhede on dated 03042024 add college and session both on the place of session 
+                public DataSet GetTeachingPlanAttendanceStatus(int sessionno, string college)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_SESSIONNO", session);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_COLLEGEID", college);
+                        objParams[1] = new SqlParameter("@P_SESSIONID", sessionno);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_TEACHINGPLAN_ATTENDANCE_STATUS_ACADEMIC_REPORTS", objParams);
                     }
@@ -106,6 +112,7 @@ namespace IITMS
                     }
                     return ds;
                 }
+
                 /// <summary>
                 /// Added By Rishabh on 31/12/2021 to get Teacher not allot data.
                 /// </summary>
@@ -129,14 +136,16 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet GetCancelTimeTableReport(string session)
+                //Updated by jay takalkhede on dated 03042024 add college and session both on the place of session 
+                public DataSet GetCancelTimeTableReport(int sessionno, string college)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_SESSIONNO", session);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_COLLEGEID", college);
+                        objParams[1] = new SqlParameter("@P_SESSIONID", sessionno);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_CANCEL_TIME_TABLE_REPORT_EXCEL", objParams);
                     }

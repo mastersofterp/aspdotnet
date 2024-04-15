@@ -268,6 +268,45 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                //Lock Unlock student profile acording to its div
+
+                public int UpdateStudentLockUnlock(TPStudent objTPStud)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[13];
+                        objParams[0] = new SqlParameter("@P_IDNO", objTPStud.IdNo);
+                        objParams[1] = new SqlParameter("@P_EXAM_LOCK_UNLOCK", objTPStud.EXAM_LOCK_UNLOCK);
+                        objParams[2] = new SqlParameter("@P_WORK_EXP_LOCK_UNLOCK", objTPStud.WORK_EXP_LOCK_UNLOCK);
+                        objParams[3] = new SqlParameter("@P_TECH_SKIL_LOCK_UNLOCK", objTPStud.TECH_SKIL_LOCK_UNLOCK);
+                        objParams[4] = new SqlParameter("@P_PROJECT_LOCK_UNLOCK", objTPStud.PROJECT_LOCK_UNLOCK);
+                        objParams[5] = new SqlParameter("@P_CERTIFICATION_LOCK_UNLOCK", objTPStud.CERTIFICATION_LOCK_UNLOCK);
+                        objParams[6] = new SqlParameter("@P_LANGUAGE_LOCK_UNLOCK", objTPStud.LANGUAGE_LOCK_UNLOCK);
+                        objParams[7] = new SqlParameter("@P_AWARD_LOCK_UNLOCK", objTPStud.AWARD_LOCK_UNLOCK);
+                        objParams[8] = new SqlParameter("@P_COMPETITION_LOCK_UNLOCK", objTPStud.COMPETITION_LOCK_UNLOCK);
+                        objParams[9] = new SqlParameter("@P_TRAINING_LOCK_UNLOCK", objTPStud.TRAINING_LOCK_UNLOCK);
+                        objParams[10] = new SqlParameter("@P_TEST_SCORE_LOCK_UNLOCK", objTPStud.TEST_SCORE_LOCK_UNLOCK);
+                        objParams[11] = new SqlParameter("@P_BUILD_RESUME_LOCK_UNLOCK", objTPStud.BUILD_RESUME_LOCK_UNLOCK);
+                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_TP_STUDENT_PROFILE_LOCK_UNLOCK", objParams, true);
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(ret); //Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else
+                            retStatus = Convert.ToInt32(ret);//Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = -99;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TPController.AddComp_Schedule-> " + ex.ToString());
+                    }
+                    return retStatus;
+
+                }
             }
         }
     }
