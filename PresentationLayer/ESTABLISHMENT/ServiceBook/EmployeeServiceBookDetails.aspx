@@ -3198,6 +3198,486 @@
                             </div>
                         </asp:Panel>
                         <%-- ================================================================== Miscellaneous Information--%>
+
+                        <%-- ================================================================== Professional Course Certification--%>
+                        <asp:Panel ID="pnlProfessional" runat="server">
+                            <div class="col-12 colapse-heading">
+                                <div class="row">
+                                    <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#div40" aria-expanded="false" aria-controls="collapsetwentysix">
+                                        <i class="more-less fas fa-plus"></i>
+                                        <div class="row">
+                                            <div class="sub-heading col-md-6 ">
+                                                <h5>Professional Course Certification
+                                                </h5>
+                                            </div>
+
+                                            <div class=" sub-heading  col-md-6">
+                                                <h5>Pending Count :
+                                                    <asp:Label ID="lblProfessional" runat="server"></asp:Label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div40" class="col-12 collapse mt-4" data-parent="#accordion">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="table20">
+                                        <asp:ListView ID="lvProfessional" runat="server">
+                                            <LayoutTemplate>
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Employee Name
+                                                        </th>
+                                                        <th>Course
+                                                        </th>
+                                                        <th>Institute
+                                                        </th>
+                                                        <th>From Date
+                                                        </th>
+                                                        <th>To Date
+                                                        </th>
+                                                        <th>Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Eval("EMPNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("COURSE")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("INST")%>
+                                                    </td>
+                                                    <td>                                                         
+                                                        <%# Eval("FDT", "{0:dd/MM/yyyy}")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("TDT", "{0:dd/MM/yyyy}")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Button ID="btnProfessionalApproval" runat="server" Text="Approve" CommandArgument='<%# Eval("PNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnProfessionalApproval_Click" />
+                                                        <asp:Button ID="btnProfessionalReject" runat="server" Text="Reject" CommandArgument='<%# Eval("PNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnProfessionalReject_Click" />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </table>
+                                    <div id="Div41" runat="server" visible="false" style="padding: 20px 20px; text-align: center; color: #000;">
+                                        No records to display.
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <%-- ================================================================== Professional Course Certification--%>
+
+                        <%-- ================================================================== AVISHKAR--%>
+                        <asp:Panel ID="pnlAvishkar" runat="server">
+                            <div class="col-12 colapse-heading">
+                                <div class="row">
+                                    <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#div42" aria-expanded="false" aria-controls="collapsetwentysix">
+                                        <i class="more-less fas fa-plus"></i>
+                                        <div class="row">
+                                            <div class="sub-heading col-md-6 ">
+                                                <h5>Avishkar
+                                                </h5>
+                                            </div>
+
+                                            <div class=" sub-heading  col-md-6">
+                                                <h5>Pending Count :
+                                                    <asp:Label ID="lblAvishkar" runat="server"></asp:Label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div42" class="col-12 collapse mt-4" data-parent="#accordion">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="table22">
+                                        <asp:ListView ID="lvAvishkar" runat="server">
+                                            <LayoutTemplate>
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Employee Name
+                                                        </th>
+                                                        <th>Title Of Paper
+                                                        </th>
+                                                        <th>Venue
+                                                        </th>
+                                                        <th>Date Received
+                                                        </th>
+                                                        <th>Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Eval("EMPNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("PAPERTITLE")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("VENUE")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DOR", "{0:dd/MM/yyyy}")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Button ID="btnAvishkarApproval" runat="server" Text="Approve" CommandArgument='<%# Eval("AVNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnAvishkarApproval_Click" />
+                                                        <asp:Button ID="btnAvishkarReject" runat="server" Text="Reject" CommandArgument='<%# Eval("AVNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnAvishkarReject_Click" />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </table>
+                                    <div id="Div43" runat="server" visible="false" style="padding: 20px 20px; text-align: center; color: #000;">
+                                        No records to display.
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <%-- ================================================================== AVISHKAR--%>
+
+                        <%-- ================================================================== Award--%>
+                        <asp:Panel ID="pnlAward" runat="server">
+                            <div class="col-12 colapse-heading">
+                                <div class="row">
+                                    <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#div44" aria-expanded="false" aria-controls="collapsetwentysix">
+                                        <i class="more-less fas fa-plus"></i>
+                                        <div class="row">
+                                            <div class="sub-heading col-md-6 ">
+                                                <h5>Award
+                                                </h5>
+                                            </div>
+
+                                            <div class=" sub-heading  col-md-6">
+                                                <h5>Pending Count :
+                                                    <asp:Label ID="lblAward" runat="server"></asp:Label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div44" class="col-12 collapse mt-4" data-parent="#accordion">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="table23">
+                                        <asp:ListView ID="lvAward" runat="server">
+                                            <LayoutTemplate>
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Employee Name
+                                                        </th>
+                                                        <th>Award Name
+                                                        </th>
+                                                        <th>Organization Address
+                                                        </th>
+                                                        <th>Date Received
+                                                        </th>
+                                                        <th>Amount
+                                                        </th>
+                                                        <th>Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Eval("EMPNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("AWARDNAME")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("ORG_ADDRESS")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DOA", "{0:dd/MM/yyyy}")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("AMOUNT_REC")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Button ID="btnAwardApproval" runat="server" Text="Approve" CommandArgument='<%# Eval("AWDNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnAwardApproval_Click" />
+                                                        <asp:Button ID="btnAwardReject" runat="server" Text="Reject" CommandArgument='<%# Eval("AWDNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnAwardReject_Click" />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </table>
+                                    <div id="Div45" runat="server" visible="false" style="padding: 20px 20px; text-align: center; color: #000;">
+                                        No records to display.
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <%-- ================================================================== Award =====================================================--%>
+
+                        <%-- ================================================================== Current Appointment--%>
+                        <asp:Panel ID="pnlCurrent" runat="server">
+                            <div class="col-12 colapse-heading">
+                                <div class="row">
+                                    <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#div46" aria-expanded="false" aria-controls="collapsetwentysix">
+                                        <i class="more-less fas fa-plus"></i>
+                                        <div class="row">
+                                            <div class="sub-heading col-md-6 ">
+                                                <h5>Current Appointment Status
+                                                </h5>
+                                            </div>
+
+                                            <div class=" sub-heading  col-md-6">
+                                                <h5>Pending Count :
+                                                    <asp:Label ID="lblCurrent" runat="server"></asp:Label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div46" class="col-12 collapse mt-4" data-parent="#accordion">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="table24">
+                                        <asp:ListView ID="lvCurrent" runat="server">
+                                            <LayoutTemplate>
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Employee Name
+                                                        </th>
+                                                        <th>From Date
+                                                        </th>
+                                                        <th>To Date
+                                                        </th>
+                                                        <th>Designation
+                                                        </th>
+                                                        <th>Appointment Date
+                                                        </th>
+                                                        <th>Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Eval("EMPNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("FDT", "{0:dd/MM/yyyy}")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("TDT", "{0:dd/MM/yyyy}")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("POST")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("APPOINTMENTDDATE")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Button ID="btnCurrentApprove" runat="server" Text="Approve" CommandArgument='<%# Eval("CANO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnCurrentApprove_Click" />
+                                                        <asp:Button ID="btnCurrentReject" runat="server" Text="Reject" CommandArgument='<%# Eval("CANO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnCurrentReject_Click" />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </table>
+                                    <div id="Div47" runat="server" visible="false" style="padding: 20px 20px; text-align: center; color: #000;">
+                                        No records to display.
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <%-- ================================================================== Current Appointment =====================================================--%>
+
+                        <%-- ================================================================== Research--%>
+                        <asp:Panel ID="pnlResearch" runat="server">
+                            <div class="col-12 colapse-heading">
+                                <div class="row">
+                                    <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#div48" aria-expanded="false" aria-controls="collapsetwentysix">
+                                        <i class="more-less fas fa-plus"></i>
+                                        <div class="row">
+                                            <div class="sub-heading col-md-6 ">
+                                                <h5>Research
+                                                </h5>
+                                            </div>
+
+                                            <div class=" sub-heading  col-md-6">
+                                                <h5>Pending Count :
+                                                    <asp:Label ID="lblResearch" runat="server"></asp:Label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div48" class="col-12 collapse mt-4" data-parent="#accordion">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="table25">
+                                        <asp:ListView ID="lvResearch" runat="server">
+                                            <LayoutTemplate>
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Employee Name
+                                                        </th>
+                                                        <th>Project Title
+                                                        </th>
+                                                        <th>Name of Principal
+                                                        </th>
+                                                        <th>Year
+                                                        </th>
+                                                        <th>Amount
+                                                        </th>
+                                                        <th>Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Eval("EMPNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("PROJECT_TITLE")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("NAME_OF_PRINCIPAL")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("YEAR")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("AMOUNT")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Button ID="btnResearchApproval" runat="server" Text="Approve" CommandArgument='<%# Eval("RESEARNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnResearchApproval_Click" />
+                                                        <asp:Button ID="btnResearchReject" runat="server" Text="Reject" CommandArgument='<%# Eval("RESEARNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnResearchReject_Click" />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </table>
+                                    <div id="Div49" runat="server" visible="false" style="padding: 20px 20px; text-align: center; color: #000;">
+                                        No records to display.
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <%-- ================================================================== Research =====================================================--%>
+
+                        <%-- ================================================================== Revenue--%>
+                        <asp:Panel ID="pnlRevenue" runat="server">
+                            <div class="col-12 colapse-heading">
+                                <div class="row">
+                                    <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#div50" aria-expanded="false" aria-controls="collapsetwentysix">
+                                        <i class="more-less fas fa-plus"></i>
+                                        <div class="row">
+                                            <div class="sub-heading col-md-6 ">
+                                                <h5>Revenue Generated
+                                                </h5>
+                                            </div>
+
+                                            <div class=" sub-heading  col-md-6">
+                                                <h5>Pending Count :
+                                                    <asp:Label ID="lblRevenue" runat="server"></asp:Label></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div50" class="col-12 collapse mt-4" data-parent="#accordion">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="table26">
+                                        <asp:ListView ID="lvRevenue" runat="server">
+                                            <LayoutTemplate>
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Employee Name
+                                                        </th>
+                                                        <th>Revenue
+                                                        </th>
+                                                        <th>RGT VAC(INR)
+                                                        </th>
+                                                        <th>RGT Events
+                                                        </th>
+                                                        <th>RGT Sponsorship
+                                                        </th>
+                                                        <th>Web Link
+                                                        </th>
+                                                        <th>Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Eval("EMPNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("YEAR")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("RGT_VAC")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("RGT_EVENT")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("RGT_SPONSOR")%>
+                                                    </td>
+                                                     <td>
+                                                        <%# Eval("WEBLINK")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Button ID="btnRevenueApproval" runat="server" Text="Approve" CommandArgument='<%# Eval("RGNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnRevenueApproval_Click" />
+                                                        <asp:Button ID="btnRevenueReject" runat="server" Text="Reject" CommandArgument='<%# Eval("RGNO")%>' TabIndex="2"
+                                                            ToolTip="Approve" CssClass="btn btn-primary" CommandName='<%# Eval("IDNO") %>' OnClick="btnRevenueReject_Click" />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </table>
+                                    <div id="Div51" runat="server" visible="false" style="padding: 20px 20px; text-align: center; color: #000;">
+                                        No records to display.
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                        <%-- ================================================================== Revenue =====================================================--%>
                     </div>
                 </div>
             </div>

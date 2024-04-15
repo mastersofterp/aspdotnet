@@ -1433,7 +1433,7 @@ namespace IITMS
                         objParams[14] = new SqlParameter("@P_GROSS", objPayRev.GROSS);
                         objParams[15] = new SqlParameter("@P_NET", objPayRev.NET);
                         objParams[16] = new SqlParameter("@P_ISBLOB", objPayRev.ISBLOB);
-                        objParams[17] = new SqlParameter("@P_FILEPATH", objPayRev.FILEPATH);                       
+                        objParams[17] = new SqlParameter("@P_FILEPATH", objPayRev.FILEPATH);
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_PAYREV", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
@@ -8252,8 +8252,8 @@ namespace IITMS
 
 
                 #region ServiceBook status Update
-            
-                public int ServiceBookstatusUpdate(int key, int IDNO,string type,string status)
+
+                public int ServiceBookstatusUpdate(int key, int IDNO, string type, string status)
                 {
                     int retstatus = 0;
                     try
@@ -8264,7 +8264,7 @@ namespace IITMS
                         objParams[0] = new SqlParameter("@P_KEY", key);
                         objParams[1] = new SqlParameter("@P_IDNO", IDNO);
                         objParams[2] = new SqlParameter("@P_type", type);
-                        objParams[3] = new SqlParameter ("@P_status",status);
+                        objParams[3] = new SqlParameter("@P_status", status);
                         objParams[4] = new SqlParameter("@P_OUT", SqlDbType.Int);
                         objParams[4].Direction = ParameterDirection.Output;
 
@@ -9061,6 +9061,140 @@ namespace IITMS
                 }
 
                 #endregion
+
+                //Added by Sonal Banode on 12-04-2024
+                public DataSet GetAllProfessionalCourseCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_PROFESSIONAL_COURSE_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllProfessionalCourseCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllAvishkarCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_AVISHKAR_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllAvishkarCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllAwardCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_AWARD_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllAwardCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllCurrentAppointmentCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_CURRENT_APPOINTMENT_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllCurrentAppointmentCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllResearchCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_RESEARCH_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllResearchCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllRevenueCount()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_SB_REVENUE_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ServiceBookController.GetAllRevenueCount-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                //
             }
 
         }
