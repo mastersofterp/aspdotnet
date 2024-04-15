@@ -1102,7 +1102,7 @@
                                         //console.log($currText);
                                         roomdynamicid = $(Userval).children('select').attr("id");
                                         //alert(roomdynamicid)
-                                        roomid = $("#" + roomdynamicid, $tds).val();//$(this).find("ddlMRoom").val();
+                                        roomid = $("#" + roomdynamicid, $tds.eq(i)).val();//$(this).find("ddlMRoom").val();
                                         
                                         if (i != 0) {
                                             DayNo = i;
@@ -1360,12 +1360,66 @@
 
     <script type="text/javascript">
         function removediv1(evt) {
-            if (confirm('Are you sure you want to delete this Faculty')) {
-                $(evt).closest('div').remove();
-                return true;
-            } else {
-                return false;
+            //debugger;
+            var ctno = evt.parentElement.title;
+            if(ctno === "")
+            {
+                if (confirm('Are you sure you want to remove this Faculty')) {
+                    $(evt).closest('div').remove();
+                    return false;
+                }
             }
+           
+            //alert(ctno);
+
+            var lbltimeElement = evt.closest('tr').querySelector('.SlotNo');
+            var slotno = lbltimeElement.getAttribute('alternatetext');
+            //alert(slotno);
+
+            var tdElement = evt.closest('td');
+            var divElement = tdElement.querySelector('div');
+            var dayno = divElement.getAttribute('title');
+            //alert(dayno);
+           
+
+            $.ajax({
+                url: '<%=Page.ResolveUrl("~/ACADEMIC/TimeTable/Revised_TimeTable.aspx/AttendanceCheck")%>',
+                data: '{ctno:' + ctno + ',Slotno:' + slotno + ', dayno:' + dayno + ', startdate:' + JSON.stringify($(<%=txtStartDate.ClientID%>).val()) + ', enddate:' + JSON.stringify($(<%=txtEndDate.ClientID%>).val()) +'}',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    var data = JSON.stringify(r.d);
+                    var x = JSON.parse(data);
+
+                    if(x !== "")
+                    {
+                        if (confirm('Attendance records has been submitted for the dates ' + x + '. Please be informed that the timetable for these dates will not undergo any further revisions.')) {
+                            $(evt).closest('div').remove();
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    else
+                        
+                    {
+                        if (confirm('Are you sure you want to remove this Faculty')) {
+                            $(evt).closest('div').remove();
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                  
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+            return false;
+
+            
         }
     </script>
 

@@ -5,7 +5,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <link href="<%=Page.ResolveClientUrl("~/plugins/newbootstrap/css/Dashboard.css")%>" rel="stylesheet" />
-
+  
     <style>
         #header-fixed {
             position: fixed;
@@ -249,6 +249,8 @@
                 <div class="x_panel in-left a1">
                     <div class="x_title">
                         <h2>Admission Year</h2>
+                        <%--PRASHANTG-TN56760-270324--%>
+                        <button id="btnAdmYear" type="button"  onclick="AdmissionYear();"  tabindex="1" class="btn float-right"><i class="fas fa-sync-alt"></i></button>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content height-250 scrollbar">
@@ -275,7 +277,9 @@
             <div class="col-lg-2 col-md-6 col-12">
                 <div class="x_panel in-left a2">
                     <div class="x_title">
-                        <h2>Staff Leaves</h2>
+                        <h2>Staff Leaves</h2>                    
+                        <button id="btnStaffLeave" type="button"  onclick="LeaveCount();"  tabindex="2" class="btn float-right"><i class="fas fa-sync-alt"></i></button>
+                        <%--PRASHANTG-TN56760-270324--%>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content height-250 scrollbar">
@@ -344,6 +348,7 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>Employee Applied Leave Details</h2>
+                                    <button id="btnApplied" type="button" onclick="LeaveApplied();" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-270324--%>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content height-250 scrollbar">
@@ -386,6 +391,7 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>Employee Approved Leave Details </h2>
+                                    <button id="btnApproved" type="button"  onclick="LeaveApproved();" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-270324--%>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content height-250 scrollbar">
@@ -426,6 +432,7 @@
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>Employee Pending Leave List</h2>
+                                     <button id="btnPending" type="button" onclick="LeavePending();" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-270324--%>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content height-250 scrollbar">
@@ -458,6 +465,7 @@
                 <div class="x_panel in-right a2">
                     <div class="x_title">
                         <h2>Quick Access</h2>
+                        <button id="btnQA" type="button"  onclick="QuickAccess();" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-270324--%>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content height-250 scrollbar small">
@@ -471,6 +479,7 @@
                 <div class="x_panel in-right a1">
                     <div class="x_title">
                         <h2>Result Analysis <span id="lblResultSession" class="text-black analy" style="display: none"></span><span class="text-red analy" style="display: none"></span></h2>
+                        <button id="btnResult" type="button"  onclick="ResultAnalysis();" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-270324--%>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content height-250 scrollbar">
@@ -616,14 +625,14 @@
                 <div class="x_panel in-left a2 academicActivities">
                     <div class="x_title">
                         <h2>Academic Activities</h2>
+                        <button id="btnActivity" type="button"  onclick="Activity();" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-270324--%>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content height-250 scrollbar">
                         <div class="table-responsive" style="height: 170px; overflow: scroll; border-top: 1px solid #e5e5e5;">
                             <table class="table table-hover small table-striped table-bordered nowrap" style="width: 100%;" id="tblAcdActivity">
-                                <thead class="bg-light-blue bg-primary" style="position: sticky; z-index: 1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
+                                <thead class="bg-light-blue bg-primary">
                                     <tr>
-
                                         <%--<th class="text-center">College</th>--%>
                                         <th>Activity</th>
                                         <th>School-Session</th>
@@ -663,6 +672,8 @@
                 <div class="x_panel in-right a2 activeNotice">
                     <div class="x_title">
                         <h2>Active Notice/News</h2>
+                      <%--PRASHANTG-TN56760-280324 --%>
+                        <button id="btnNotice" type="button" runat="server" onserverclick="btnNotice_Click" class="btn float-right"><i class="fas fa-sync-alt"></i></button>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content height-250 scrollbar">
@@ -686,13 +697,13 @@
                                             <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#GetFileName(Eval("FILENAME"))%></asp:HyperLink>--%>
 
                                             <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
-                                            <p><%#Eval("NEWSDESC") %></p>
+                                                    <p><%#Eval("NEWSDESC") %></p>
                                         </div>
                                     </article>
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
-
+                        
                     </div>
                     <div class="x_title d-none">
                         <h2>Expired Notice/News</h2>
@@ -725,40 +736,41 @@
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
-
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="<%=Page.ResolveClientUrl("~/plugins/Introjs/intro.js")%>"></script>
+    
+          
+     <script src="<%=Page.ResolveClientUrl("~/plugins/Introjs/intro.js")%>"></script>
     <script>
-        var userType = '<%=Session["usertype"] %>';
+          var userType = '<%=Session["usertype"] %>';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // setTimeout(function(){ 
-            checkTheIntro(userType);
-        //   }, 4000);
+          document.addEventListener('DOMContentLoaded', () => {
+              // setTimeout(function(){ 
+              checkTheIntro(userType);
+          //   }, 4000);
            
 
-        })
+          })
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Retrieve the parameter from the URL
             var urlParams = new URLSearchParams(window.location.search);
-            //alert('<%=Session["executeScript"] %>')
-            var executeScript = '<%=Session["executeScript"] %>';//urlParams.get('executeScript');
-            var uatype = '<%=Session["usertype"] %>';
+            var executeScript = urlParams.get('executeScript');
+            var uatype = urlParams.get('uatype');
+            debugger;
             // Check if the parameter indicates to execute the script
-            if (executeScript == 'True') {
-                //alert();
+            if (executeScript === 'true') {
                 checkTheIntroWelcome(uatype);
-                    <% Session["executeScript"] = ""; %>
-                }
+                // Modify the URL to set executeScript to false
+                history.replaceState({}, '', window.location.pathname + '?executeScript=false');
+            }
         });
-    </script>
+</script>
     <script>
         var tableOffset = $("#table-1").offset().top;
         var $header = $("#table-1 > thead").clone();
@@ -775,11 +787,47 @@
             }
         });
     </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
-            //alert('bye')
-            //this.BindLinks();
+            <%--PRASHANTG-TN56760-270324--%>
+
             $.ajax({
+                type: "POST",
+                //url: "~/principalHome.aspx/ShowMaleCount",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowCounters")%>',
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccessGetCount,
+                    failure: function (response) {
+                        //alert(response);
+                    },
+                    error: function (response) {
+                       // alert(response);
+                    }
+                });
+
+            function OnSuccessGetCount(response) {
+               
+                var StudentCount = response['d'];
+                if (StudentCount != null) {
+                    if (StudentCount.length > 0) {
+                        //var TotalCount = 0;
+                        $.each(StudentCount, function (row, item) {
+                            //TotalCount += Number(item.Count);
+
+                            $('#lblMaleCount').html(item._male);
+                            $('#lblFemaleCount').html(item._female);
+                            $('#lblOtherCount').html(item._other);
+                            $('#lblTotalStudent').html(item._total);
+                        });
+
+                    };
+                }
+            }
+            /********************************** */
+         <%--   $.ajax({
                 type: "POST",
                 //url: "~/principalHome.aspx/ShowMaleCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowMaleCount")%>',
@@ -807,13 +855,13 @@
                 type: "POST",
                 //url: "principalHome.aspx/ShowFeMaleCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowFeMaleCount")%>',
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessfeMaleCount,
-                failure: function (response) {
-                }
-            });
+                 data: '{}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: OnSuccessfeMaleCount,
+                 failure: function (response) {
+                 }
+             });
             function OnSuccessfeMaleCount(response) {
                 var femaleCount = response['d'];
 
@@ -825,19 +873,38 @@
                 type: "POST",
                 //url: "principalHome.aspx/ShowFeMaleCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowOtherCount")%>',
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessOtherCount,
-                failure: function (response) {
-                }
-            });
+                 data: '{}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: OnSuccessOtherCount,
+                 failure: function (response) {
+                 }
+             });
             function OnSuccessOtherCount(response) {
                 var otherCount = response['d'];
 
                 $('#lblOtherCount').html(otherCount);
             };
 
+           
+            //added for total student count
+            $.ajax({
+                type: "POST",
+                //url: "principalHome.aspx/TotalStudentCount",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/TotalStudentCount")%>',
+                 data: '{}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: OnSuccessTotstudentCount,
+                 failure: function (response) {
+                 }
+             });
+            function OnSuccessTotstudentCount(response) {
+                var totStudentCount = response['d'];
+                $('#lblTotalStudent').html(totStudentCount);
+            };
+
+       --%>
             //added for ACTIVE USER count
             $.ajax({
                 type: "POST",
@@ -854,266 +921,7 @@
                 var activeUserCount = response['d'];
                 $('#lblActiveUser').html(activeUserCount);
             };
-
-            //added for total student count
-            $.ajax({
-                type: "POST",
-                //url: "principalHome.aspx/TotalStudentCount",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/TotalStudentCount")%>',
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessTotstudentCount,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessTotstudentCount(response) {
-                var totStudentCount = response['d'];
-                $('#lblTotalStudent').html(totStudentCount);
-            };
-
-            // added for Students count
-            $.ajax({
-                type: "POST",
-                //url: "principalHome.aspx/BindStudentsCount",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindStudentsCount")%>',
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessStudentsCount,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessStudentsCount(response) {
-                var StudentCount = response['d'];
-                loadStudentDetails(StudentCount);
-            };
-            function loadStudentDetails(StudentCount) {
-                var html = '';
-                html += '<thead class="bg-primary"><tr><th>Year</th><th class="text-center">Count</th></tr></thead>';
-                html += '<tbody>';
-                if (StudentCount != null) {
-                    if (StudentCount.length > 0) {
-                        var TotalCount = 0;
-                        $.each(StudentCount, function (row, item) {
-                            TotalCount += Number(item.Count);
-                        });
-                        html += '</tbody>';
-                        html += '<tfoot><tr class="text-danger">';
-                        html += '<td> Total Students </td>';
-                        html += '<td class="text-right">' + TotalCount + '</td>';
-                        $.each(StudentCount, function (row, item) {
-                            TotalCount += Number(item.Count);
-                            html += '<tr>';
-                            html += '<td>' + item.Year + '</td>';
-                            html += '<td class="text-right">' + item.Count + '</td>';
-                            html += '</tr>';
-                        });
-                        html += '</tr></tfoot>';
-                    } else {
-                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr></tbody>';
-                    }
-                } else {
-                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr></tbody>';
-                }
-                $('#tblstudsCount').append(html);
-            };
-
-            //Leave count
-            $.ajax({
-
-                type: "POST",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindLeaveCount")%>',
-                //url: "principalHome.aspx/BindLeaveCount",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessLeaveDetails,
-                failure: function (response) {
-                }
-            });
-
-            function OnSuccessLeaveDetails(response) {
-                // console.log("Data", response);
-                //debugger;
-                var ToTal_Applied = response['d'].ToTal_Applied;
-                var Approve_Leave = response['d'].Approve_Leave;
-                var Pending_Leave = response['d'].Pending_Leave;
-                //loadleavecount(leavecount);
-
-                $('#lblToTal_Applied').html(ToTal_Applied);
-                //alert(ToTal_Applied);
-                $('#lblApprove_Leave').html(Approve_Leave);
-                $('#lblPending_Leave').html(Pending_Leave);
-
-            };
-
-            // added for Leave Applied Leave Model Data
-
-            $.ajax({
-                type: "POST",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapprove")%>',
-                //url: "principalHome.aspx/ShowLeaveapprove",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessApprovePendignLeaveDetails,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessApprovePendignLeaveDetails(response) {
-                var ApprovePendignLeave = response['d'];
-                loadApprovePendignLeaveDetails(ApprovePendignLeave);
-            };
-            function loadApprovePendignLeaveDetails(ApprovePendignLeave) {
-
-                var html = '';
-                if (ApprovePendignLeave != null) {
-                    if (ApprovePendignLeave.length > 0) {
-                        $.each(ApprovePendignLeave, function (row, item) {
-                            html += '<tr>';
-                            html += '<td class="text-left">' + item.EmpName + '</td>';
-                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
-                            html += '<td class="text-center">' + item.LName + '</td>';
-                            html += '<td class="text-center">' + item.From_date + '</td>';
-                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
-                            html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick="return UpdateDataLeave(' + item.LETRNO + ')" /></td>';
-                            //html += '<td class="text-center">' + '<a href="ESTABLISHMENT/LEAVES/Transactions/LeaveApprovalforprincipal.aspx" target="_self" style="text-align: right" class="buttonStyle ui-corner-all btn btn-success">Go To Approval</a>' + '</td>';
-                            html += '</tr>';
-                        });
-                    } else {
-                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                    }
-                } else {
-                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                }
-                $('#tLeaveAll').append(html);
-            };
-
-
-
-            // added for Leave Applied Leave Model Data
-
-            $.ajax({
-                type: "POST",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapproveCount")%>',
-                //url: "principalHome.aspx/ShowLeaveapproveCount",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessApproveLeaveDetails,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessApproveLeaveDetails(response) {
-                var ApproveLeaveCount = response['d'];
-                loadApproveLeaveDetails(ApproveLeaveCount);
-            };
-            function loadApproveLeaveDetails(ApproveLeaveCount) {
-
-                var html = '';
-                if (ApproveLeaveCount != null) {
-                    if (ApproveLeaveCount.length > 0) {
-                        $.each(ApproveLeaveCount, function (row, item) {
-                            html += '<tr>';
-                            html += '<td class="text-left">' + item.EmpName + '</td>';
-                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
-                            html += '<td class="text-center">' + item.LName + '</td>';
-                            html += '<td class="text-center">' + item.From_date + '</td>';
-                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
-                            html += '</tr>';
-                        });
-                    } else {
-                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                    }
-                } else {
-                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                }
-                $('#TLeaveApproved').append(html);
-            };
-
-
-            // added for Leave Applied Leave Model Data
-
-            $.ajax({
-                type: "POST",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowPendingCount")%>',
-                //url: "principalHome.aspx/ShowPendingCount",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessPendingLeaveDetails,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessPendingLeaveDetails(response) {
-                var PendingLeaveCount = response['d'];
-                loadPendingLeaveDetails(PendingLeaveCount);
-            };
-
-            function loadPendingLeaveDetails(PendingLeaveCount) {
-
-                var html = '';
-                if (PendingLeaveCount != null) {
-                    if (PendingLeaveCount.length > 0) {
-                        $.each(PendingLeaveCount, function (row, item) {
-                            html += '<tr>';
-                            html += '<td class="text-left">' + item.EmpName + '</td>';
-                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
-                            html += '<td class="text-center">' + item.LName + '</td>';
-                            html += '<td class="text-center">' + item.From_date + '</td>';
-                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
-                            html += '<td class="text-center">' + item.Pending_on + '</td>';
-                            html += '</tr>';
-                        });
-                    } else {
-                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                    }
-                } else {
-                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                }
-                $('#TPendingLeave').append(html);
-            };
-
-            // added for Activity Data
-            $.ajax({
-                type: "POST",
-                //url: "principalHome.aspx/BindActivityDetails",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindActivityDetails")%>',
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessActivityDetails,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessActivityDetails(response) {
-                var ActivityData = response['d'];
-                loadActivityDetails(ActivityData);
-            };
-            function loadActivityDetails(ActivityData) {
-                var html = '';
-
-                if (ActivityData != null) {
-                    if (ActivityData.length > 0) {
-                        $.each(ActivityData, function (row, item) {
-                            html += '<tr>';
-                            html += '<td class="text-left">' + item.ActivityName + '</td>';
-                            html += '<td class="text-center">' + item.SessionName + '</td>';
-                            html += '<td class="text-center">' + item.StartDate + '</td>';
-                            html += '<td class="text-center">' + item.EndDate + '</td>';
-                            html += '<td class="text-center">' + item.ActivityStatus + '</td>';
-                            html += '</tr>';
-                        });
-                    } else {
-                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                    }
-                } else {
-                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                }
-                $('#tbodyActivity').append(html);
-                //alert('aa');
-            };
+                   
 
             // Added For Admission Fees Data
             //$.ajax({
@@ -1204,6 +1012,264 @@
             //--------------------------------------------------------------------------------------------
 
 
+
+        });
+
+    </script>
+       <%--QuickAccess--%>
+    <script>
+        function QuickAccess() {
+            //alert('bye')
+            $.ajax({
+                type: "POST",
+                //url: "principalHome.aspx/ShowQuickAccessData",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowQuickAccessData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var data = response.d;
+                    var html = '';
+                    $('#ulQuickAccess').html("");
+                    var baseUrl = '<%= ResolveUrl("~/") %>';    //Added by kajal jaiswal on 09-04-2024
+                    var LinkCount = 1;
+                    if (data != null) {
+                        if (data.length > 0) {
+                            $.each(data, function (row, item) {
+                                //            /* *************************************************************************************************************
+                                //                Do not give the space in href
+                                //                Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
+                                //                Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
+                                //               ************************************************************************************************************* */
+                               // html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                                
+                                //Added by kajal jaiswal on 09-04-2024
+
+                                html += '<li class="list-group-item"><a href="' + baseUrl + item.Link + '?pageno=' + item.PageNo + '" target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                                LinkCount += 1;
+
+                                //html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display..</li>';
+                            });
+                        } else {
+                            html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display..</li>';
+                        }
+                    } else {
+                        html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display..</li>';
+                    }
+                    $('#ulQuickAccess').append(html);
+                },
+                failure: function (response) {
+                }
+            });
+
+        }
+    </script>
+    <%--UpdateDataLeave--%><%--PRASHANTG-TN56760-270324--%>
+    <script type="text/javascript">
+     
+            function UpdateDataLeave(id) {
+                //var resp = confirm("Are you sure want to delete?")
+                //if (resp == true) {
+                var Obj = {};
+                Obj.id = id;
+
+                // alert(id);
+                $.ajax({
+                    url: '<%=Page.ResolveUrl("~/principalHome.aspx/Approvedleave")%>',
+                    //url: "principalHome.aspx/Approvedleave",
+                    type: "POST",
+                    data: JSON.stringify(Obj),
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //$('#txttodo').val("");
+                        //$('#txttodo').css('border-color', '');
+                        // BindTodoData();
+                        alert("Leave Approve Successfully");
+                        // debugger;
+                        //$("#myModalzAppleiedLeave").hide();
+                        BinleaveCount();
+                        BindLeaveDashboard();
+
+                    },
+                    error: function (errResponse) {
+                        console.log(errResponse);
+                        alert("Something went Wrong");
+                        //$("#myModalzAppleiedLeave").hide();
+                        //$('.myModalzAppleiedLeave').hide();
+                        //BindTodoData();
+                    }
+                });
+            }
+
+        function BindLeaveDashboard() {
+                //alert('print');
+                $.ajax({
+                    type: "POST",
+                    url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapprove")%>',
+                //url: "principalHome.aspx/ShowLeaveapprove",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessApprovePendignLeaveDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessApprovePendignLeaveDetails(response) {
+                var ApprovePendignLeave = response['d'];
+                loadApprovePendignLeaveDetails2(ApprovePendignLeave);
+            };
+
+            function loadApprovePendignLeaveDetails2(ApprovePendignLeave) {
+                //$('#tLeaveAll tbody').empty();
+                $('#tLeaveAll').empty();
+                var html = '';
+                if (ApprovePendignLeave != null) {
+                    if (ApprovePendignLeave.length > 0) {
+                        $.each(ApprovePendignLeave, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left">' + item.EmpName + '</td>';
+                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
+                            html += '<td class="text-center">' + item.LName + '</td>';
+                            html += '<td class="text-center">' + item.From_date + '</td>';
+                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
+                            html += '<td class="text-center"> <input id="btn" type="button" value="Approve" class="btn btn-success" onclick="UpdateDataLeave(' + item.LETRNO + ');" /></td>';
+                            //html += '<td class="text-center">' + '<a href="ESTABLISHMENT/LEAVES/Transactions/DashboardleaveApproval.aspx" target="_self" style="text-align: right" class="buttonStyle ui-corner-all btn btn-success">Go To Approval</a>' + '</td>';
+                            //html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick=UpdateData('+item.letr+')/></td>' Leave_Approval.aspx;
+
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                    }
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                }
+                $('#tLeaveAll').append(html);
+            };
+        }
+         function BinleaveCount() {
+                //alert('print2');
+                $.ajax({
+
+                    type: "POST",
+                    url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindLeaveCount")%>',
+                //url: "principalHome.aspx/BindLeaveCount",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessLeaveDetails2,
+                failure: function (response) {
+                }
+            });
+
+            function OnSuccessLeaveDetails2(response) {
+                // console.log("Data", response);
+                //debugger;
+                var ToTal_Applied = response['d'].ToTal_Applied;
+                var Approve_Leave = response['d'].Approve_Leave;
+                var Pending_Leave = response['d'].Pending_Leave;
+                //loadleavecount(leavecount);
+
+                $('#lblToTal_Applied').html(ToTal_Applied);
+                //alert(ToTal_Applied);
+                $('#lblApprove_Leave').html(Approve_Leave);
+                $('#lblPending_Leave').html(Pending_Leave);
+
+            };
+        }           
+    </script>
+    <%--AdmissionYear--%><%--PRASHANTG-TN56760-270324--%>
+    <script type="text/javascript">
+        function AdmissionYear(){
+            // added for Students count
+            $.ajax({
+                type: "POST",
+                //url: "principalHome.aspx/BindStudentsCount",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindStudentsCount")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessStudentsCount,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessStudentsCount(response) {
+                var StudentCount = response['d'];
+                loadStudentDetails(StudentCount);
+            };
+            function loadStudentDetails(StudentCount) {
+                $('#tblstudsCount td').parent().remove();
+                $('#tblstudsCount th').parent().remove();
+                var html = '';
+                html += '<thead class="bg-primary"><tr><th>Year</th><th class="text-center">Count</th></tr></thead>';
+                html += '<tbody>';
+                if (StudentCount != null) {
+                    if (StudentCount.length > 0) {
+                        var TotalCount = 0;
+                        $.each(StudentCount, function (row, item) {
+                            TotalCount += Number(item.Count);
+                        });
+                        html += '</tbody>';
+                        html += '<tfoot><tr class="text-danger">';
+                        html += '<td> Total Students </td>';
+                        html += '<td class="text-right">' + TotalCount + '</td>';
+                        $.each(StudentCount, function (row, item) {
+                            TotalCount += Number(item.Count);
+                            html += '<tr>';
+                            html += '<td>' + item.Year + '</td>';
+                            html += '<td class="text-right">' + item.Count + '</td>';
+                            html += '</tr>';
+                        });
+                        html += '</tr></tfoot>';
+                    } else {
+                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr></tbody>';
+                    }
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr></tbody>';
+                }
+                $('#tblstudsCount').append(html);
+            };
+        }
+
+    </script>
+    <%--LeaveCount--%>
+    <script type="text/javascript">
+        function LeaveCount(){
+            //Leave count
+            $.ajax({
+
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindLeaveCount")%>',
+                //url: "principalHome.aspx/BindLeaveCount",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessLeaveDetails,
+                failure: function (response) {
+                }
+            });
+
+            function OnSuccessLeaveDetails(response) {
+                // console.log("Data", response);
+                //debugger;
+                var ToTal_Applied = response['d'].ToTal_Applied;
+                var Approve_Leave = response['d'].Approve_Leave;
+                var Pending_Leave = response['d'].Pending_Leave;
+                //loadleavecount(leavecount);
+
+                $('#lblToTal_Applied').html(ToTal_Applied);
+                //alert(ToTal_Applied);
+                $('#lblApprove_Leave').html(Approve_Leave);
+                $('#lblPending_Leave').html(Pending_Leave);
+
+            };
+        }
+    </script>
+    <%--ResultAnalysis--%><%--PRASHANTG-TN56760-270324--%>
+    <script type="text/javascript">
+        function ResultAnalysis(){
+            
             // Added For Result analysis Data
             $.ajax({
                 type: "POST",
@@ -1221,7 +1287,10 @@
                 loadReslutAnalysisDetails(resultdata);
             };
             function loadReslutAnalysisDetails(resultdata) {
+
                 $('.analy').hide();
+                $('#table-1 td').parent().remove();
+                $('#table-1 th').parent().remove();
                 var html = '';
                 if (resultdata != null) {
                     if (resultdata.tHeader.length > 0) {
@@ -1283,181 +1352,194 @@
                     placement: "top"
                 });
             };
-
-        });
-
+        }
     </script>
-
-    <script>
-        $(document).ready(function () {
-            //alert('error')
-        });
-    </script>
-    <script>
-        function QuickAccess() {
-            //alert('bye')
+    <%--Activity--%><%--PRASHANTG-TN56760-270324--%>
+    <script type ="text/javascript">
+        function Activity(){
+            // added for Activity Data
+          
             $.ajax({
                 type: "POST",
-                //url: "principalHome.aspx/ShowQuickAccessData",
-                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowQuickAccessData")%>',
+                //url: "principalHome.aspx/BindActivityDetails",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindActivityDetails")%>',
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (response) {
-                    var data = response.d;
-                    var html = '';
-                    var LinkCount = 1;
-                    if (data != null) {
-                        if (data.length > 0) {
-                            $.each(data, function (row, item) {
-                                //            /* *************************************************************************************************************
-                                //                Do not give the space in href
-                                //                Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
-                                //                Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
-                                //               ************************************************************************************************************* */
-                                html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '" "  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
-                                LinkCount += 1;
-                                //html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display..</li>';
-                            });
-                        } else {
-                            html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display..</li>';
-                        }
-                    } else {
-                        html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No records to display..</li>';
-                    }
-                    $('#ulQuickAccess').append(html);
-                },
-                failure: function (response) {
+                success: OnSuccessActivityDetails,
+                failure: function (response) {                  
                 }
             });
-
-        }
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            //alert('hii')
-
-            QuickAccess();
-
-            function UpdateDataLeave(id) {
-                //var resp = confirm("Are you sure want to delete?")
-                //if (resp == true) {
-                var Obj = {};
-                Obj.id = id;
-
-                // alert(id);
-                $.ajax({
-                    url: '<%=Page.ResolveUrl("~/principalHome.aspx/Approvedleave")%>',
-                    //url: "principalHome.aspx/Approvedleave",
-                    type: "POST",
-                    data: JSON.stringify(Obj),
-                    contentType: "application/json;charset=utf-8",
-                    dataType: "json",
-                    success: function (data) {
-                        //$('#txttodo').val("");
-                        //$('#txttodo').css('border-color', '');
-                        // BindTodoData();
-                        alert("Leave Approve Successfully");
-                        // debugger;
-                        //$("#myModalzAppleiedLeave").hide();
-                        BinleaveCount();
-                        BindLeaveDashboard();
-
-                    },
-                    error: function (errResponse) {
-                        console.log(errResponse);
-                        alert("Something went Wrong");
-                        //$("#myModalzAppleiedLeave").hide();
-                        //$('.myModalzAppleiedLeave').hide();
-                        //BindTodoData();
-                    }
-                });
-            }
-
-            var BindLeaveDashboard = function () {
-                //alert('print');
-                $.ajax({
-                    type: "POST",
-                    url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapprove")%>',
-                    //url: "principalHome.aspx/ShowLeaveapprove",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: OnSuccessApprovePendignLeaveDetails,
-                    failure: function (response) {
-                    }
-                });
-                function OnSuccessApprovePendignLeaveDetails(response) {
-                    var ApprovePendignLeave = response['d'];
-                    loadApprovePendignLeaveDetails2(ApprovePendignLeave);
-                };
-
-                function loadApprovePendignLeaveDetails2(ApprovePendignLeave) {
-                    //$('#tLeaveAll tbody').empty();
-                    $('#tLeaveAll').empty();
-                    var html = '';
-                    if (ApprovePendignLeave != null) {
-                        if (ApprovePendignLeave.length > 0) {
-                            $.each(ApprovePendignLeave, function (row, item) {
-                                html += '<tr>';
-                                html += '<td class="text-left">' + item.EmpName + '</td>';
-                                html += '<td class="text-center">' + item.SUBDEPT + '</td>';
-                                html += '<td class="text-center">' + item.LName + '</td>';
-                                html += '<td class="text-center">' + item.From_date + '</td>';
-                                html += '<td class="text-center">' + item.TO_DATE + '</td>';
-                                html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick="return UpdateDataLeave(' + item.LETRNO + ')" /></td>';
-                                //html += '<td class="text-center">' + '<a href="ESTABLISHMENT/LEAVES/Transactions/DashboardleaveApproval.aspx" target="_self" style="text-align: right" class="buttonStyle ui-corner-all btn btn-success">Go To Approval</a>' + '</td>';
-                                //html += '<td class="text-center"> <input type=button Value="Approve" class="btn btn-success" onclick=UpdateData('+item.letr+')/></td>' Leave_Approval.aspx;
-
-                                html += '</tr>';
-                            });
-                        } else {
-                            html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
-                        }
+            function OnSuccessActivityDetails(response) {
+                var ActivityData = response['d'];
+                //alert(ActivityData);
+                loadActivityDetails(ActivityData);
+            };
+            function loadActivityDetails(ActivityData) {
+                var html = '';  
+                $('#tbodyActivity td').parent().remove();
+                if (ActivityData != null) {
+                    if (ActivityData.length > 0) {
+                        $.each(ActivityData, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left">' + item.ActivityName + '</td>';
+                            html += '<td class="text-center">' + item.SessionName + '</td>';
+                            html += '<td class="text-center">' + item.StartDate + '</td>';
+                            html += '<td class="text-center">' + item.EndDate + '</td>';
+                            html += '<td class="text-center">' + item.ActivityStatus + '</td>';
+                            html += '</tr>';
+                        });
                     } else {
                         html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
                     }
-                    $('#tLeaveAll').append(html);
-                };
-            }
-            var BinleaveCount = function () {
-                //alert('print2');
-                $.ajax({
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                }
+                $('#tbodyActivity').append(html);
+                //alert('aa');
+            };
+        }
+    </script>
+    <%--LeaveApplied--%><%--PRASHANTG-TN56760-270324--%>
+    <script type="text/javascript">
+        function LeaveApplied(){
+            // added for Leave Applied Leave Model Data
+           
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapprove")%>',
+                //url: "principalHome.aspx/ShowLeaveapprove",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessApprovePendignLeaveDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessApprovePendignLeaveDetails(response) {
+                var ApprovePendignLeave = response['d'];
+                loadApprovePendignLeaveDetails(ApprovePendignLeave);
+            };
+            function loadApprovePendignLeaveDetails(ApprovePendignLeave) {
 
-                    type: "POST",
-                    url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindLeaveCount")%>',
-                    //url: "principalHome.aspx/BindLeaveCount",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: OnSuccessLeaveDetails2,
-                    failure: function (response) {
+                var html = '';
+                $('#tLeaveAll').html("");
+                if (ApprovePendignLeave != null) {
+                    if (ApprovePendignLeave.length > 0) {
+                        $.each(ApprovePendignLeave, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left">' + item.EmpName + '</td>';
+                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
+                            html += '<td class="text-center">' + item.LName + '</td>';
+                            html += '<td class="text-center">' + item.From_date + '</td>';
+                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
+                            html += '<td class="text-center"> <input id="btn" type="button" value="Approve" class="btn btn-success" onclick="UpdateDataLeave(' + item.LETRNO + ');" /></td>';
+                            //html += '<td class="text-center">' + '<a href="ESTABLISHMENT/LEAVES/Transactions/LeaveApprovalforprincipal.aspx" target="_self" style="text-align: right" class="buttonStyle ui-corner-all btn btn-success">Go To Approval</a>' + '</td>';
+                           
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
                     }
-                });
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                }
+                $('#tLeaveAll').append(html);
+            };
+        }
+    </script>
+    <%--LeaveApproved--%><%--PRASHANTG-TN56760-270324--%>
+    <script type="text/javascript">
+        function LeaveApproved(){
+            // added for Leave Applied Leave Model Data
 
-                function OnSuccessLeaveDetails2(response) {
-                    // console.log("Data", response);
-                    //debugger;
-                    var ToTal_Applied = response['d'].ToTal_Applied;
-                    var Approve_Leave = response['d'].Approve_Leave;
-                    var Pending_Leave = response['d'].Pending_Leave;
-                    //loadleavecount(leavecount);
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowLeaveapproveCount")%>',
+                //url: "principalHome.aspx/ShowLeaveapproveCount",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessApproveLeaveDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessApproveLeaveDetails(response) {
+                var ApproveLeaveCount = response['d'];
+                loadApproveLeaveDetails(ApproveLeaveCount);
+            };
+            function loadApproveLeaveDetails(ApproveLeaveCount) {
 
-                    $('#lblToTal_Applied').html(ToTal_Applied);
-                    //alert(ToTal_Applied);
-                    $('#lblApprove_Leave').html(Approve_Leave);
-                    $('#lblPending_Leave').html(Pending_Leave);
+                var html = '';
+                $('#TLeaveApproved').html("");
+                if (ApproveLeaveCount != null) {
+                    if (ApproveLeaveCount.length > 0) {
+                        $.each(ApproveLeaveCount, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left">' + item.EmpName + '</td>';
+                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
+                            html += '<td class="text-center">' + item.LName + '</td>';
+                            html += '<td class="text-center">' + item.From_date + '</td>';
+                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                    }
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                }
+                $('#TLeaveApproved').append(html);
+            };
 
-                };
-            }
 
-            /************************ Quick Access ************************/
+        }
+    </script>
+    <%--LeavePending--%><%--PRASHANTG-TN56760-270324--%>
+    <script type="text/javascript">
+        function LeavePending(){
+            // added for Leave Applied Leave Model Data
 
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowPendingCount")%>',
+                //url: "principalHome.aspx/ShowPendingCount",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessPendingLeaveDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessPendingLeaveDetails(response) {
+                var PendingLeaveCount = response['d'];
+                loadPendingLeaveDetails(PendingLeaveCount);
+            };
 
-            //function loadQLData(data) {
+            function loadPendingLeaveDetails(PendingLeaveCount) {
 
-            //}
-            /************************ Quick Access ************************/
-        });
+                var html = '';
+                $('#TPendingLeave').html("");
+                if (PendingLeaveCount != null) {
+                    if (PendingLeaveCount.length > 0) {
+                        $.each(PendingLeaveCount, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left">' + item.EmpName + '</td>';
+                            html += '<td class="text-center">' + item.SUBDEPT + '</td>';
+                            html += '<td class="text-center">' + item.LName + '</td>';
+                            html += '<td class="text-center">' + item.From_date + '</td>';
+                            html += '<td class="text-center">' + item.TO_DATE + '</td>';
+                            html += '<td class="text-center">' + item.Pending_on + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                    }
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                }
+                $('#TPendingLeave').append(html);
+            };
+        }
     </script>
 </asp:Content>

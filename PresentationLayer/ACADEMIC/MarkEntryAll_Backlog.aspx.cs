@@ -1083,7 +1083,7 @@ public partial class ACADEMIC_MarkEntryAll_Backlog : System.Web.UI.Page
                     int MaxValue = Convert.ToInt32(txtmin.Text) - 1;
                     ListViewDataItem item = lvGrades.Items[i];
                     TextBox a = (TextBox)item.FindControl("txtMax");
-                    a.Text = MaxValue.ToString();
+                    //a.Text = MaxValue.ToString();
 
                 }
                 i++;

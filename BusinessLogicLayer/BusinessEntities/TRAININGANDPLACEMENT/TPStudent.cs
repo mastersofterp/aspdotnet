@@ -38,6 +38,20 @@ namespace IITMS
                 private int _BranchNo = 0;
                 private int _PassYear = 0;
 
+
+                // TP Admin Lock Unlock tab
+                private int _EXAM_LOCK_UNLOCK = 0;
+                private int _WORK_EXP_LOCK_UNLOCK = 0;
+                private int _TECH_SKIL_LOCK_UNLOCK = 0;
+                private int _PROJECT_LOCK_UNLOCK = 0;
+                private int _CERTIFICATION_LOCK_UNLOCK = 0;
+                private int _LANGUAGE_LOCK_UNLOCK = 0;
+                private int _AWARD_LOCK_UNLOCK = 0;
+                private int _COMPETITION_LOCK_UNLOCK = 0;
+                private int _TRAINING_LOCK_UNLOCK = 0;
+                private int _TEST_SCORE_LOCK_UNLOCK = 0;
+                private int _BUILD_RESUME_LOCK_UNLOCK = 0;
+
             #endregion
 
             #region Public Properties
@@ -166,6 +180,63 @@ namespace IITMS
                 {
                     get { return _PassYear; }
                     set { _PassYear = value; }
+                }
+
+                //Admin Lock Unlock
+                public int EXAM_LOCK_UNLOCK
+                {
+                    get { return _EXAM_LOCK_UNLOCK; }
+                    set { _EXAM_LOCK_UNLOCK = value; }
+                }
+                public int WORK_EXP_LOCK_UNLOCK
+                {
+                    get { return _WORK_EXP_LOCK_UNLOCK; }
+                    set { _WORK_EXP_LOCK_UNLOCK = value; }
+                }
+                public int TECH_SKIL_LOCK_UNLOCK
+                {
+                    get { return _TECH_SKIL_LOCK_UNLOCK; }
+                    set { _TECH_SKIL_LOCK_UNLOCK = value; }
+                }
+                public int PROJECT_LOCK_UNLOCK
+                {
+                    get { return _PROJECT_LOCK_UNLOCK; }
+                    set { _PROJECT_LOCK_UNLOCK = value; }
+                }
+                public int CERTIFICATION_LOCK_UNLOCK
+                {
+                    get { return _CERTIFICATION_LOCK_UNLOCK; }
+                    set { _CERTIFICATION_LOCK_UNLOCK = value; }
+                }
+                public int LANGUAGE_LOCK_UNLOCK
+                {
+                    get { return _LANGUAGE_LOCK_UNLOCK; }
+                    set { _LANGUAGE_LOCK_UNLOCK = value; }
+                }
+                public int AWARD_LOCK_UNLOCK
+                {
+                    get { return _AWARD_LOCK_UNLOCK; }
+                    set { _AWARD_LOCK_UNLOCK = value; }
+                }
+                public int COMPETITION_LOCK_UNLOCK
+                {
+                    get { return _COMPETITION_LOCK_UNLOCK; }
+                    set { _COMPETITION_LOCK_UNLOCK = value; }
+                }
+                public int TRAINING_LOCK_UNLOCK
+                {
+                    get { return _TRAINING_LOCK_UNLOCK; }
+                    set { _TRAINING_LOCK_UNLOCK = value; }
+                }
+                public int TEST_SCORE_LOCK_UNLOCK
+                {
+                    get { return _TEST_SCORE_LOCK_UNLOCK; }
+                    set { _TEST_SCORE_LOCK_UNLOCK = value; }
+                }
+                public int BUILD_RESUME_LOCK_UNLOCK
+                {
+                    get { return _BUILD_RESUME_LOCK_UNLOCK; }
+                    set { _BUILD_RESUME_LOCK_UNLOCK = value; }
                 }
             #endregion
         }

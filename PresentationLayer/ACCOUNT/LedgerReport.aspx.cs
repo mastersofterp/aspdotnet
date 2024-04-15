@@ -101,6 +101,49 @@ public partial class LedgerReport : System.Web.UI.Page
             Session["FromYear"] = Convert.ToDateTime(dtr["COMPANY_FINDATE_FROM"]).Year.ToString();
             txtFrmDate.Text = Convert.ToDateTime(dtr["COMPANY_FINDATE_FROM"]).ToString("dd/MM/yyyy");
             txtUptoDate.Text = Convert.ToDateTime(dtr["COMPANY_FINDATE_TO"]).ToString("dd/MM/yyyy");
+
+            string Fdate = DateTime.Now.ToString();
+
+            if (Convert.ToDateTime(Session["fin_date_to"]) > Convert.ToDateTime(DateTime.Now.ToString()))
+            {
+                //added by tanu 24/02/2022
+
+                Fdate = "01/" + DateTime.Parse(Fdate).Month.ToString() + "/" + DateTime.Parse(Fdate).Year.ToString();
+                txtFrmDate.Text = Convert.ToDateTime(Fdate).ToString("dd/MM/yyyy");
+
+                if (DateTime.Compare(Convert.ToDateTime(Session["fin_date_from"]), Convert.ToDateTime(txtFrmDate.Text)) == 1)
+                {
+                    txtFrmDate.Text = Convert.ToDateTime(Session["fin_date_from"]).ToString("dd/MM/yyyy");
+                    txtFrmDate.Focus();
+                    Fdate = txtFrmDate.Text;
+
+                }
+            }
+            else
+            {
+                string Fdate1 = string.Empty;
+                Fdate = "01/" + Convert.ToDateTime(Session["fin_date_to"]).Month.ToString() + "/" + Convert.ToDateTime(Session["fin_date_to"]).Year.ToString();
+                txtFrmDate.Text = Convert.ToDateTime(Fdate).ToString("dd/MM/yyyy");
+
+                //if (DateTime.Compare(Convert.ToDateTime(Session["fin_date_from"]), Convert.ToDateTime(txtFrmDate.Text)) == 1)
+                //{
+                //    txtFrmDate.Text = Convert.ToDateTime(Session["fin_date_from"]).ToString("dd/MM/yyyy");
+                //    txtFrmDate.Focus();
+
+                //}
+            }
+
+            string Todate = DateTime.Parse(Fdate).AddMonths(1).ToString();
+            Todate = DateTime.Parse(Todate).AddDays(-1).ToString();
+            txtUptoDate.Text = Convert.ToDateTime(Todate).ToString("dd/MM/yyyy");
+            ViewState["Todate"] = txtUptoDate.Text;
+
+            if (DateTime.Compare(Convert.ToDateTime(txtUptoDate.Text), Convert.ToDateTime(Session["fin_date_to"])) == 1)
+            {
+                txtUptoDate.Text = Convert.ToDateTime(Session["fin_date_to"]).ToString("dd/MM/yyyy");
+                txtUptoDate.Focus();
+                ViewState["Todate"] = txtUptoDate.Text;
+            }
         }
         dtr.Close();
     }
@@ -3248,6 +3291,29 @@ public partial class LedgerReport : System.Web.UI.Page
         }
         txtAcc.Focus();
 
+        if (DateTime.Compare(Convert.ToDateTime(txtUptoDate.Text), Convert.ToDateTime(ViewState["Todate"])) == 1)
+        {
+            objCommon.DisplayMessage(UPDLedger, "The period of From Date and UpTo Date should not be more than one month", this.Page);
+            txtUptoDate.Text = Convert.ToDateTime(ViewState["Todate"]).ToString("dd/MM/yyyy");
+            ViewState["Todate"] = txtUptoDate.Text;
+            txtUptoDate.Focus();
+            return;
+        }
+        if (DateTime.Compare(Convert.ToDateTime(txtUptoDate.Text), Convert.ToDateTime(Session["fin_date_to"])) == 1)
+        {
+            txtUptoDate.Text = Convert.ToDateTime(Session["fin_date_to"]).ToString("dd/MM/yyyy");
+            txtUptoDate.Focus();
+            ViewState["Todate"] = txtUptoDate.Text;
+            return;
+        }
+        if (DateTime.Compare(Convert.ToDateTime(txtFrmDate.Text), Convert.ToDateTime(txtUptoDate.Text)) == 1)
+        {
+            objCommon.DisplayMessage(UPDLedger, "From Date Can Not Be Greater Than Upto Date.", this);
+            SetFinancialYear();
+            txtUptoDate.Focus();
+            return;
+        }
+
     }
     protected void txtFrmDate_TextChanged(object sender, EventArgs e)
     {
@@ -3257,6 +3323,30 @@ public partial class LedgerReport : System.Web.UI.Page
         }
         txtUptoDate.Focus();
         txtUptoDate.Text = Convert.ToDateTime(txtFrmDate.Text).AddMonths(1).ToString();
+
+        if (DateTime.Compare(Convert.ToDateTime(Session["fin_date_from"]), Convert.ToDateTime(txtFrmDate.Text)) == 1)
+        {
+            objCommon.DisplayMessage(UPDLedger, "From Date should be in financial year", this.Page);
+            txtFrmDate.Text = Convert.ToDateTime(Session["fin_date_from"]).ToString("dd/MM/yyyy");
+            txtFrmDate.Focus();
+            return;
+        }
+        string fDate = txtFrmDate.Text;
+        string ToDate = DateTime.Parse(fDate).AddMonths(1).ToString();
+        ToDate = DateTime.Parse(ToDate).AddDays(-1).ToString();
+
+        txtUptoDate.Text = Convert.ToDateTime(ToDate).ToString("dd/MM/yyyy");
+        ViewState["Todate"] = txtUptoDate.Text;
+        if (DateTime.Compare(Convert.ToDateTime(txtUptoDate.Text), Convert.ToDateTime(Session["fin_date_to"])) == 1)
+        {
+            txtUptoDate.Text = Convert.ToDateTime(Session["fin_date_to"]).ToString("dd/MM/yyyy");
+            txtUptoDate.Focus();
+            ViewState["Todate"] = txtUptoDate.Text;
+            return;
+        }
+
+
+        txtUptoDate.Focus();
     }
     protected void rdbWithNarration_CheckedChanged(object sender, EventArgs e)
     {

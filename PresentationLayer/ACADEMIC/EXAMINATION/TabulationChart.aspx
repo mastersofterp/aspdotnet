@@ -911,8 +911,10 @@
                                 <asp:Button ID="BtnGazette" Text="Gazette Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false"
                                     ValidationGroup="TRGradeReg" OnClick="BtnGazette_Click" />
                                 <asp:Button runat="server" ID="btnpassingcrft" CssClass="btn btn-info" OnClick="btnpassingcrft_Click" Text="Passing Certificate" ValidationGroup="passingCrft" Visible="false" />
-                                <asp:Button runat="server" ID="btnTabulationReport" CssClass="btn btn-info" Text="Tabulation report" TabIndex="33" OnClick="btnTabulationReport_Click"  ValidationGroup="TRReport" Visible="false" />
-                                <asp:Button runat="server" ID="btnTabulationReportDept" CssClass="btn btn-info" Text="Tabulation report Dept" TabIndex="34" OnClick="btnTabulationReportDept_Click" ValidationGroup="TRReport" Visible="false" />
+                                <asp:Button runat="server" ID="btnTabulationReport" CssClass="btn btn-info" Text="Tabulation report" TabIndex="1" OnClick="btnTabulationReport_Click" ValidationGroup="TRReport" Visible="false" />
+                                <asp:Button runat="server" ID="btnTabulationReportDept" CssClass="btn btn-info" Text="Tabulation report Dept" TabIndex="1" OnClick="btnTabulationReportDept_Click" ValidationGroup="TRReport" Visible="false" />
+                                <asp:Button ID="btnBranchwiseReport" Text="Branchwise Result Analysis Report" runat="server" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="GradeCard" OnClick="btnBranchwiseReport_Click" />
+
                                 <asp:ValidationSummary ID="ValidationSummary16" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="CPD" />
                                 <asp:ValidationSummary ID="ValidationSummary15" runat="server" DisplayMode="List"

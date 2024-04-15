@@ -378,7 +378,7 @@
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_11">Student Promotion Status</a>
                                                             </li>
                                                             <li class="nav-item" id="divMITExcel" runat="server" visible="false">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_12">Marks Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_12" onclick="return Checktabid(this)">Marks Details</a>
                                                             </li>
                                                             <li class="nav-item" id="divInternalMarks" runat="server" visible="false">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_13" onclick="return Checktabid(this)">Internal Marks</a>
@@ -2932,13 +2932,13 @@
     <script>
         function Checktabid(tabid) {
             $("#ctl00_ContentPlaceHolder1_hdfDyanamicTabId").val($(tabid).attr("href").replace('#', ''));
-
+         
         }
 
 
         function SaveUpdateStudentConfig() {
             debugger;
-            //  var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}'
+          //  var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}'
             //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
             $.ajax({
                 type: "POST",
@@ -2948,7 +2948,7 @@
                 dataType: "json",
                 success: function (data) {
                     debugger;
-                    //  var Jdata = data.d;
+                  //  var Jdata = data.d;
                     alert(Jdata);
                 },
                 failure: function (response) {
@@ -2960,27 +2960,27 @@
                     alert(response.responseText);
                 }
             });
-        }
+        }       
     </script>
 
     <script type="text/javascript">
         function check() {
-
-            $.ajax({
-                type: "POST",
-                url: "Comprehensive_Stud_Report.aspx/GetAttendanceDetails",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    alert(response.d); // Display the response in an alert (replace with your logic)
-                },
-                error: function (xhr, status, error) {
-                    console.log(xhr.responseText); // Log the error to the console
-                }
-            });
-
+          
+                $.ajax({
+                    type: "POST",
+                    url: "Comprehensive_Stud_Report.aspx/GetAttendanceDetails",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        alert(response.d); // Display the response in an alert (replace with your logic)
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText); // Log the error to the console
+                    }
+                });
+          
         }
-
+     
 </script>
       <script>
           function HideTableColumns() {

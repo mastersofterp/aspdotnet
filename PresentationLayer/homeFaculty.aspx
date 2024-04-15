@@ -861,7 +861,7 @@
                 dataType: "json",
                 success: OnSuccessTimeTable,
                 failure: function (response) {
-                    var html = '';
+                    var html = ''; $('#tblTimeTable').html("");
                     html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><th class="text-center" >No Records To Display..</th></tr>';
                     $('#tblTimeTable').html(html);
                 }
@@ -872,7 +872,7 @@
             function loadTimeTable(data) {
                 debugger;
                 if (data != null) {
-                    var html = '';
+                    var html = ''; $('#tblTimeTable').html("");
                     html += '<thead class="bg-light-blue" style="position: sticky; z-index:1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">';
                     // html += '<tr class="bg-success">';
                     html += '<tr>';
@@ -893,37 +893,37 @@
                                 html += '<td class="text-center">' + item.Slot + '</td>';
                                 if (item.Monday != '-') {
                                     var arrLec1 = item.Monday.split('-');
-                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec1 + '" data-toggle="tooltip">' + arrLec1 + '' + '</td>';
+                                    html += '<td class="text-center" data-container="body">' + arrLec1 + '' + '</td>';
                                 } else {
                                     html += '<td class="text-center" >' + item.Monday + '</td>';
                                 }
                                 if (item.Tuesday != '-') {
                                     var arrLec2 = item.Tuesday.split('-');
-                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec2 + '" data-toggle="tooltip">' + arrLec2 + '' + '</td>';
+                                    html += '<td class="text-center" data-container="body">' + arrLec2 + '' + '</td>';
                                 } else {
                                     html += '<td class="text-center" >' + item.Tuesday + '</td>';
                                 }
                                 if (item.Wednesday != '-') {
                                     var arrLec3 = item.Wednesday.split('-');
-                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec3 + '" data-toggle="tooltip">' + arrLec3 + '' + '</td>';
+                                    html += '<td class="text-center" data-container="body">' + arrLec3 + '' + '</td>';
                                 } else {
                                     html += '<td class="text-center" >' + item.Wednesday + '</td>';
                                 }
                                 if (item.Thursday != '-') {
                                     var arrLec4 = item.Thursday.split('-');
-                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec4 + '" data-toggle="tooltip">' + arrLec4 + '' + '</td>';
+                                    html += '<td class="text-center" data-container="body">' + arrLec4 + '' + '</td>';
                                 } else {
                                     html += '<td class="text-center" >' + item.Thursday + '</td>';
                                 }
                                 if (item.Friday != '-') {
                                     var arrLec5 = item.Friday.split('-');
-                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec5 + '" data-toggle="tooltip">' + arrLec5 + '' + '</td>';
+                                    html += '<td class="text-center" data-container="body">' + arrLec5 + '' + '</td>';
                                 } else {
                                     html += '<td class="text-center" >' + item.Friday + '</td>';
                                 }
                                 if (item.Saturday != '-') {
                                     var arrLec6 = item.Saturday.split('-');
-                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec6 + '" data-toggle="tooltip">' + arrLec6 + '' + '</td>';
+                                    html += '<td class="text-center" data-container="body">' + arrLec6 + '' + '</td>';
                                 } else {
                                     html += '<td class="text-center" >' + item.Saturday + '</td>';
                                 }
@@ -977,6 +977,7 @@
             };
             function loadInOutTbl(data) {
                 var html = '';
+                $('#inOutBody').html("");
                 if (data != null) {
                     if (data.length > 0) {
                         $.each(data, function (i, d) {
@@ -1017,6 +1018,7 @@
             };
             function loadETaskData(data) {
                 var html = '';
+                $('#ulEmpTask').html("");
                 var LinkCount = 1;
                 if (data != null) {
                     if (data.length > 0) {
@@ -1060,6 +1062,7 @@
             };
             function loadQLData(data) {
                 var html = '';
+                $('#ulQuickAccess').html("");
                 var LinkCount = 1;
                 if (data != null) {
                     if (data.length > 0) {

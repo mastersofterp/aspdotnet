@@ -2688,11 +2688,11 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             string[] values = collegeno.Split(',');
             if (values.Length > 1)
             {
-                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + ",@P_COUNT=" + 0;
             }
             else
             {
-                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + ",@P_COUNT=" + 0;
             }
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -2734,7 +2734,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             else if (rblcondn.SelectedValue == "3")
             {
                 //Not Register Status
-                ShowReportNRreport("NotRegisteredStatusReport", "ESTB_Not_Registered_Status.rpt");
+                //ShowReportNRreport("NotRegisteredStatusReport", "ESTB_Not_Registered_Status.rpt");
+                ShowReportNRStatusreport("NotRegisteredStatusReport", "ESTB_Not_Registered_Status.rpt");
             }
         }
         catch (Exception ex)
@@ -3201,4 +3202,66 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
         {
         }
     }
+
+    private void ShowReportNRStatusreport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string Fdate = (String.Format("{0:u}", Convert.ToDateTime(txtFromDt.Text)));
+            //Fdate = Convert.ToDateTime(txtMonthYear.Text).ToString("MMMyyyy");
+            Fdate = Fdate.Substring(0, 10);
+            string Tdate = (String.Format("{0:u}", Convert.ToDateTime(txtToDt.Text)));
+            Tdate = Tdate.Substring(0, 10);
+            int deptno = Convert.ToInt32(ddlDept.SelectedValue);
+            int idno = 0;
+
+            if (Convert.ToInt32(rblSlectionType.SelectedValue) == 1 && ddlEmp.SelectedIndex > 0)
+            {
+                idno = Convert.ToInt32(ddlEmp.SelectedValue);
+            }
+            else
+            {
+                idno = 0;
+            }
+
+
+
+            string Script = string.Empty;
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ESTABLISHMENT")));
+            url += "Reports/commonreport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + ",@P_COUNT=" + 0;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ESTABLISHMENT_LEAVES_Transactions_OD_REPORT.ShowReport->" + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server.UnAvailable");
+        }
+    }
+
 }

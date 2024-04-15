@@ -2067,14 +2067,15 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[6];
+                        objParams = new SqlParameter[7];
                         objParams[0] = new SqlParameter("@P_URID", objVM.URID);
                         objParams[1] = new SqlParameter("@P_ALLOTMENT_TABLE", objVM.ALLOTMENT_TABLE);
                         objParams[2] = new SqlParameter("@P_USER_TYPE", objVM.USER_TYPE);
                         objParams[3] = new SqlParameter("@P_IPADDRESS", objVM.IPADDRESS);
                         objParams[4] = new SqlParameter("@P_MACADDRESS", objVM.MACADDRESS);
-                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[5].Direction = ParameterDirection.Output;
+                        objParams[5] = new SqlParameter("@P_YEAR", objVM.YEAR);
+                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_VEH_BULK_USER_ALLOTMENT_IU", objParams, true);
                         if (Convert.ToInt32(ret) == -99)

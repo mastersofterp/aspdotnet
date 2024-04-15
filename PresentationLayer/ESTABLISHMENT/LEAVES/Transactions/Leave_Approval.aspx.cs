@@ -891,6 +891,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Approval : System.W
                 lblFromdt.Text = ds.Tables[0].Rows[0]["From_date"].ToString();
                 lblTodt.Text = ds.Tables[0].Rows[0]["TO_DATE"].ToString();
                 lblNodays.Text = ds.Tables[0].Rows[0]["NO_OF_DAYS"].ToString();
+                lblAlternateArrang.Text = ds.Tables[0].Rows[0]["CHARGE_HANDED"].ToString();
                 ViewState["No_of_days"] = Convert.ToDouble(ds.Tables[0].Rows[0]["NO_OF_DAYS"].ToString());
                 double NO_OF_DAYS = Convert.ToDouble(ds.Tables[0].Rows[0]["NO_OF_DAYS"]);  // ds.Tables[0].Rows[0]["NO_OF_DAYS"];
                 if (NO_OF_DAYS == 0.5)

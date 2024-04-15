@@ -4523,6 +4523,42 @@ namespace IITMS
                 return data;
             }
 
+            //<1.0.1>
+            public void BindDropDown(DropDownList ddlList, string CommandName, int ua_no, int p_id)
+            {
+                try
+                {
+                    SQLHelper objsqlhelper = new SQLHelper(_UAIMS_constr);
+                    SqlParameter[] objParams = new SqlParameter[3];
+                    objParams[0] = new SqlParameter("@P_COMMAND_TYPE", CommandName);
+                    objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
+                    objParams[2] = new SqlParameter("@P_ID", p_id);
+
+                    DataSet ds = null;
+                    ds = objsqlhelper.ExecuteDataSetSP("PKG_ACD_ADMP_GET_DROPDOWN_MASTER_DETAILS", objParams);
+
+                    ddlList.Items.Clear();
+                    ddlList.Items.Add("Please Select");
+                    ddlList.SelectedItem.Value = "0";
+
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        ddlList.DataSource = ds;
+                        ddlList.DataValueField = ds.Tables[0].Columns[0].ToString();
+                        ddlList.DataTextField = ds.Tables[0].Columns[1].ToString();
+                        ddlList.DataBind();
+                        ddlList.SelectedIndex = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new IITMSException("IITMS.Common.BindDropDown-> " + ex.ToString());
+                }
+                // return ddlList;
+            }
+            //</1.0.1>
+
+
         }//END Class Common
     }//END namespace UAIMS
 }//END namespace IITMS

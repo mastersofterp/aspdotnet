@@ -1750,6 +1750,14 @@ namespace IITMS
                 private char _USER_TYPE;
                 private DataTable _ALLOTMENT_TABLE;
                 private string _CANCEL_REMARK = string.Empty;
+                private int _YEAR = 0;
+
+
+                public int YEAR
+                {
+                    get { return _YEAR; }
+                    set { _YEAR = value; }
+                }
 
                 public DataTable ALLOTMENT_TABLE
                 {

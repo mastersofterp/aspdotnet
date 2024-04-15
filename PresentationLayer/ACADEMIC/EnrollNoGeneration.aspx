@@ -13,7 +13,7 @@
                         </div>
                         <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
                     </div>
-                </div>
+                </div> 
             </ProgressTemplate>
         </asp:UpdateProgress>
     </div>

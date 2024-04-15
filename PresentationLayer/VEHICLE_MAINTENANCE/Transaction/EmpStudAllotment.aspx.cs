@@ -637,8 +637,15 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
                 {
                     string year = objCommon.LookUp("ACD_STUDENT", "[YEAR]", "TRANSPORT=1 AND IDNO=" + hfIdNo.Value);
 
-                    //dsCheck = objCommon.FillDropDown("ACD_DCR", "IDNO", "NAME", "IDNO=" + hfIdNo.Value + " AND SEMESTERNO IN (SELECT SEMESTERNO FROM ACD_SEMESTER WHERE YEARNO = " + year + ") AND RECIEPT_CODE='TPF' AND ISNULL(RECON,0)=1 AND ISNULL(CAN,0)=0", "");
-                    dsCheck = objCommon.FillDropDown("ACD_DCR", "IDNO", "NAME", "IDNO=" + hfIdNo.Value + " AND SEMESTERNO IN (SELECT SEMESTERNO FROM ACD_SEMESTER WHERE YEARNO = " + year + ") AND RECIEPT_CODE='BFR' AND ISNULL(RECON,0)=1 AND ISNULL(CAN,0)=0", "");
+
+                    if (Session["OrgId"].ToString() == "2")
+                    {
+                        dsCheck = objCommon.FillDropDown("ACD_DCR", "IDNO", "NAME", "IDNO=" + hfIdNo.Value + " AND SEMESTERNO IN (SELECT SEMESTERNO FROM ACD_SEMESTER WHERE YEARNO = " + year + ") AND RECIEPT_CODE='BFR' AND ISNULL(RECON,0)=1 AND ISNULL(CAN,0)=0", "");
+                    }
+                    else
+                    {
+                        dsCheck = objCommon.FillDropDown("ACD_DCR", "IDNO", "NAME", "IDNO=" + hfIdNo.Value + " AND SEMESTERNO IN (SELECT SEMESTERNO FROM ACD_SEMESTER WHERE YEARNO = " + year + ") AND RECIEPT_CODE='TPF' AND ISNULL(RECON,0)=1 AND ISNULL(CAN,0)=0", "");
+                    }
                     if (dsCheck.Tables[0].Rows.Count > 0)
                     {
 

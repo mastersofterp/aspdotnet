@@ -109,6 +109,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                 {
                     sectiondv.Visible = true;
                     //rfvsection.Validate = true;
+                    rdotcpartfull.Items.Add(new ListItem("Survey Report", "3"));
                 }
                 else
                 {
@@ -139,10 +140,12 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         if (Session["usertype"].ToString() == "1")
         {
             objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
+            objCommon.FillDropDownList(ddlserveycolscheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
         }
         else if (Session["usertype"].ToString() == "8")
         {
             objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "SC.DEPTNO IN(" + Session["userdeptno"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
+            objCommon.FillDropDownList(ddlserveycolscheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "SC.DEPTNO IN(" + Session["userdeptno"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
         }
         else
         {
@@ -157,12 +160,14 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     {
         ddlClgname.Items.Clear();
         ddlClgname.Items.Add(new ListItem("Please Select", "0"));
+        ddlserveycolscheme.Items.Clear();
+        ddlserveycolscheme.Items.Add(new ListItem("Please Select", "0"));
 
         string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
         DataSet ds = new DataSet();
         SP_Name = "PKG_ACD_GET_SCHEME_FOR_FEEDBACK";
         SP_Parameters = "@P_UA_NO";
-        Call_Values = "" + Convert.ToInt32(Session["userno"]) ;
+        Call_Values = "" + Convert.ToInt32(Session["userno"]);
         ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
         if (ds.Tables[0].Rows.Count > 0 && ds.Tables != null)
         {
@@ -170,11 +175,17 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
             ddlClgname.DataTextField = "COL_SCHEME_NAME";
             ddlClgname.DataValueField = "COSCHNO";
             ddlClgname.DataBind();
+            ddlserveycolscheme.DataSource = ds;
+            ddlserveycolscheme.DataTextField = "COL_SCHEME_NAME";
+            ddlserveycolscheme.DataValueField = "COSCHNO";
+            ddlserveycolscheme.DataBind();
         }
         else
         {
             ddlClgname.DataSource = null;
             ddlClgname.DataBind();
+            ddlserveycolscheme.DataSource = null;
+            ddlserveycolscheme.DataBind();
         }
     }
     //function to check page is authorized or not
@@ -431,6 +442,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
             dvallfeedback.Visible = false;
             //divrdofeedback.Visible = false;
             ddlFeedbackReportType.SelectedValue = "0";
+            divSurveyReport.Visible = false;
         }
         if (rdotcpartfull.SelectedValue == "2")
         {
@@ -438,6 +450,14 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
             dvFaculttyFeedback.Visible = false;
             //divrdofeedback.Visible = false;
             dvFeedbackReport.Visible = false;
+            divSurveyReport.Visible = false;
+        }
+        if (rdotcpartfull.SelectedValue == "3")
+        {
+            divSurveyReport.Visible = true;
+            dvFeedbackReport.Visible = false;
+            dvFaculttyFeedback.Visible = false;
+            dvallfeedback.Visible = false;
         }
 
     }
@@ -785,5 +805,130 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
 
         ScriptManager.RegisterClientScriptBlock(this.updFeed, this.updFeed.GetType(), "controlJSScript", sb.ToString(), true);
     }
+
+    protected void ddlserveycolscheme_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlserveycolscheme.SelectedIndex > 0)
+        {
+            DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlserveycolscheme.SelectedValue));
+            //ViewState["degreeno"]
+
+            if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            {
+                ViewState["degreeno_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                ViewState["branchno_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                ViewState["college_id_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                ViewState["schemeno_sevrey"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+
+                objCommon.FillDropDownList(ddlServeySession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id_sevrey"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
+                ddlServeySession.Focus();
+            }
+        }
+        else
+        {
+            ddlServeySession.Items.Clear();
+            ddlServeySession.Items.Add(new ListItem("Please Select", "0"));
+            ddlServeySemester.Items.Clear();
+            ddlServeySemester.Items.Add(new ListItem("Please Select", "0"));
+            ddlServeyDBType.Items.Clear();
+            ddlServeyDBType.Items.Add(new ListItem("Please Select", "0"));
+            ddlserveySection.Items.Clear();
+            ddlserveySection.Items.Add(new ListItem("Please Select", "0"));
+            ddlServeySession.Focus();
+        }
+    }
+    protected void ddlServeySemester_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlServeySemester.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlserveySection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO>0 AND ISNULL(ACTIVESTATUS,0)=1", "SECTIONNO");
+            ddlserveySection.Focus();
+        }
+        else
+        {
+            ddlServeyDBType.Items.Clear();
+            ddlServeyDBType.Items.Add(new ListItem("Please Select", "0"));
+            ddlserveySection.Items.Clear();
+            ddlserveySection.Items.Add(new ListItem("Please Select", "0"));
+        }
+    }
+    protected void ddlserveySection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            if (ddlserveySection.SelectedIndex > 0)
+            {
+                objCommon.FillDropDownList(ddlServeyDBType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1 AND MODE_ID=3", "FEEDBACK_NO");
+                ddlServeyDBType.Focus();
+            }
+            else
+            {
+                ddlServeyDBType.Items.Clear();
+                ddlServeyDBType.Items.Add(new ListItem("Please Select", "0"));
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    protected void ddlServeySession_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlServeySession.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlServeySemester, "ACD_SEMESTER S INNER JOIN ACD_STUDENT_RESULT R ON (S.SEMESTERNO=R.SEMESTERNO)", "DISTINCT R.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND ISNULL(PREV_STATUS,0)=0 and R.SESSIONNO=" + ddlServeySession.SelectedValue, "R.SEMESTERNO");
+            ddlServeySemester.Focus();
+        }
+        else
+        {
+            ddlServeySemester.Items.Clear();
+            ddlServeySemester.Items.Add(new ListItem("Please Select", "0"));
+            ddlServeyDBType.Items.Clear();
+            ddlServeyDBType.Items.Add(new ListItem("Please Select", "0"));
+            ddlserveySection.Items.Clear();
+            ddlserveySection.Items.Add(new ListItem("Please Select", "0"));
+        }
+    }
+    protected void btnExportSurvey_Click(object sender, EventArgs e)
+    {
+        string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
+        DataSet ds = new DataSet();
+        SP_Name = "PKG_ACD_STUDENT_FEEDBACK_REPORT_CRESCENT";
+        SP_Parameters = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO,@P_FEEDBACK_TYPENO";
+        Call_Values = "" + Convert.ToInt32(ddlServeySession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno_sevrey"]) + "," + Convert.ToInt32(ddlServeySemester.SelectedValue) + "," + Convert.ToInt32(ddlserveySection.SelectedValue) + "," + Convert.ToInt32(ddlServeyDBType.SelectedValue);
+        ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+        ds.Tables[0].TableName = "SSS Servey Report";
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                foreach (System.Data.DataTable dt in ds.Tables)
+                {
+                    //Add System.Data.DataTable as Worksheet.
+                    wb.Worksheets.Add(dt);
+                }
+
+                //Export the Excel file.
+                Response.Clear();
+                Response.Buffer = true;
+                Response.Charset = "";
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment;filename=SSS_Survey_Report" + ".xlsx");
+                using (MemoryStream MyMemoryStream = new MemoryStream())
+                {
+                    wb.SaveAs(MyMemoryStream);
+                    MyMemoryStream.WriteTo(Response.OutputStream);
+                    Response.Flush();
+                    Response.End();
+                }
+            }
+        }
+        else
+        {
+            objCommon.DisplayMessage(updFeed, "Record Not Found.", this.Page);
+        }
+    }
+
 }
 

@@ -1,6 +1,8 @@
 ﻿//=================================================
 // CREATED : Shubham Barke
 // Date : 09-06-2023
+//MODIFIED DATE : 09-04-2024
+//MODIFIED DESC : Added For Coursewise Teaching Plan Report (Planned Vs Executed) (Mutual Class and Extra Lecture) (TkNo.56041)
 //=================================================
 
 using System;
@@ -225,7 +227,7 @@ public partial class ACADEMIC_EXAMINATION_FacultyDairyReport : System.Web.UI.Pag
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
 
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSessionAcad.SelectedValue);
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSessionAcad.SelectedValue) + ",@P_CLASS_TYPE=1";
 
             string Script = string.Empty;
 
@@ -337,4 +339,44 @@ public partial class ACADEMIC_EXAMINATION_FacultyDairyReport : System.Web.UI.Pag
         }
 
     }
+
+    #region Coursewise Teaching Plan Report (Planned Vs Executed) (Mutual Class and Extra Lecture)
+    //Added By Jay Takalkhede On dated 09042024
+    /// <summary>
+    /// Button Added For Coursewise Teaching Plan Report (Planned Vs Executed) (Mutual Class and Extra Lecture)
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    protected void btnExecutedReport_Click(object sender, EventArgs e)
+    {
+        ShowReportACADEMIC_ME("FacultyteachingPlanReport", "rptPlanned_Executed_Teachingplan_Faculty_Diary.rpt");
+    }
+
+    private void ShowReportACADEMIC_ME(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            int clg_id = Convert.ToInt32(ViewState["college_id"]);
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSessionAcad.SelectedValue) + ",@P_CLASS_TYPE=2";
+
+            string Script = string.Empty;
+
+            Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            ScriptManager.RegisterClientScriptBlock(this.Page, Page.GetType(), "Report", Script, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_FacultyDairyReport.ShowReportACADEMIC() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+    #endregion
 }

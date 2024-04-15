@@ -1811,12 +1811,13 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
             {
                 if (i < lvGrades.Items.Count - 2)
                 {
+
                     TextBox txtmin = dataRow.FindControl("txtMin") as TextBox;
                   //  int MaxValue = Convert.ToInt32(txtmin.Text) - 1;
                     double MaxValue = Convert.ToDouble(txtmin.Text) - 1;
                     ListViewDataItem item = lvGrades.Items[i];
                     TextBox a = (TextBox)item.FindControl("txtMax");
-                    a.Text = MaxValue.ToString();
+                    //a.Text = MaxValue.ToString();
 
                 }
                 i++;
@@ -1920,7 +1921,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 ListViewDataItem item3 = lvGrades.Items[7];
                 TextBox a3 = (TextBox)item3.FindControl("txtMax");
                 a3.Enabled = false;
-                ListViewDataItem item4 = lvGrades.Items[7];
+                ListViewDataItem item4 = lvGrades.Items[8];
                 TextBox a4 = (TextBox)item4.FindControl("txtMin");
                 a4.Enabled = false;
                 ListViewDataItem item5 = lvGrades.Items[8];
@@ -2611,8 +2612,14 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
             try
             {
 
+                //PKG_ACD_GRAD_ALLOTMENT_SHOW
+                string proc_name = "PKG_REPORT_GET_STUD_FOR_MARKENTRY_ENDSEM_EXCEL_CRESCENT";
+                string para_name = "@P_SESSIONNO,@P_COURSENO,@P_SECTIONNO,@P_PREV_STATUS,@P_UA_NO,@P_SEMESTERNO ";
+                string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(lblCourse.ToolTip) + "," + Convert.ToInt32(hdfSection.Value) + "," + Convert.ToInt32('0') + "," + Convert.ToInt32(Session["userno"]) + "," + Convert.ToInt32(hdfSemester.Value);
+                DataSet ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+
                 //DataSet ds = objMarksEntry.GetEndExamMarksDataExcel(Convert.ToInt32(ddlSession2.SelectedValue) , Convert.ToInt32(lblCourse.ToolTip) , Convert.ToInt32(hdfSection.Value) ,Convert.ToInt32('0'),Convert.ToInt32(Session["userno"]));
-                DataSet ds = objMarksEntry.GetEndExamMarksDataExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSection.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32('0'), Convert.ToInt32(Session["userno"]));
+               // DataSet ds = objMarksEntry.GetEndExamMarksDataExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSection.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32('0'), Convert.ToInt32(Session["userno"]));
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     //string degree = objCommon.LookUp("ACD_DEGREE", "DEGREENAME", "DEGREENO=" + ddlDegree.SelectedValue);

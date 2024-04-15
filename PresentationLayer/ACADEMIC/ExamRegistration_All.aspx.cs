@@ -119,6 +119,11 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                 this.ShowDetails();
 
 
+                                #region exam registration admission batch added as per tkno:57176 on dt:01042024
+
+                                int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(ADMBATCH,0)", "IDNO=" + idno + ""));
+
+                                #endregion
                                 foreach (ListViewDataItem dataitem in lvFailCourse.Items)
                                 {
                                     if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
@@ -131,11 +136,16 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                         {
                                             chkacc.Enabled = false;
                                         }
-                                        else if (lblExamType.ToolTip == "0")
+                                        else if (lblExamType.ToolTip == "0" || lblExamType.ToolTip == "2")
                                         {
                                             chkacc.Enabled = false;
                                         }
-                                        else
+                                        else if(lblExamType.ToolTip == "1" && admbatch>=9)
+                                        {
+                                            // chkacc.Checked = true;
+                                            chkacc.Enabled = false;
+                                        }
+                                        else 
                                         {
                                             // chkacc.Checked = true;
                                             chkacc.Enabled = true;
@@ -743,7 +753,11 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
            }
            //bindcourses();
 
+           #region exam registration admission batch added as per tkno:57176 on dt:01042024
 
+           int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(ADMBATCH,0)", "IDNO=" + idno + ""));
+
+           #endregion
            foreach (ListViewDataItem dataitem in lvFailCourse.Items)
            {
                if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
@@ -756,11 +770,15 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                    {
                        chkacc.Enabled = false;
                    }
-                   else if (lblExamType.ToolTip == "0")
+                   else if (lblExamType.ToolTip == "0" || lblExamType.ToolTip == "2")
                    {
                        chkacc.Enabled = false;
                    }
-                   else
+                   else if (lblExamType.ToolTip == "1" && admbatch>=9)
+                   {
+                       chkacc.Enabled = false;
+                   }
+                    else
                    {
                        chkacc.Enabled = true;
                    }
@@ -1255,7 +1273,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
       if (Ispaid > 0)
       {
           //btnSubmit.Enabled = false;
-          btnSubmit.Enabled = true;
+          btnSubmit.Enabled = false;
           btnPrintRegSlip.Visible = true;
           btnPrintRegSlip.Enabled = true;
       }
@@ -1726,6 +1744,14 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
 
             #endregion
 
+
+
+            #region exam registration admission batch added as per tkno:57176 on dt:01042024
+
+            int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(ADMBATCH,0)", "IDNO=" + idno + ""));
+
+            #endregion
+
             if (ret == 1)
             // if (cs == CustomStatus.RecordSaved) ///Commented by Rita M.
             {
@@ -1741,18 +1767,44 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                         HiddenField hdfexam = dataitem.FindControl("hdfExamRegistered") as HiddenField;
                         Label lblExamType = dataitem.FindControl("lblExamType") as Label;
                         
+                        //if (hdfexam.Value == "1")
+                        //{
+                        //    chkacc.Enabled = false;
+                        //}
+                        //else if (lblExamType.ToolTip == "0")
+                        //{
+                        //    chkacc.Enabled = false;
+                        //}
+                        //else
+                        //{
+                        //    chkacc.Enabled = true;
+                        //}
+
                         if (hdfexam.Value == "1")
                         {
                             chkacc.Enabled = false;
                         }
-                        else if (lblExamType.ToolTip == "0")
+                        else if (lblExamType.ToolTip == "0" || lblExamType.ToolTip == "2")
                         {
+                            chkacc.Enabled = false;
+                        }
+                        else if (lblExamType.ToolTip == "1" && admbatch >= 9)
+                        {
+                            // chkacc.Checked = true;
                             chkacc.Enabled = false;
                         }
                         else
                         {
+                            // chkacc.Checked = true;
                             chkacc.Enabled = true;
                         }
+
+
+
+
+
+
+
                         //objSR.Backlog_course = objSR.Backlog_course + (dataitem.FindControl("lblCCode") as Label).ToolTip + "$";
 
                         //// objSR.SEMESTERNOS = objSR.SEMESTERNOS + (dataitem.FindControl("lblsemester") as Label).ToolTip + "$";
@@ -2239,7 +2291,6 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                     //lblBacklogFine.Text = txtnew.Text.Trim() + objSR.CourseFee;
                 }
             }
-
             int Duartionnew = Convert.ToInt32(objCommon.LookUp("ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON (D.DEGREENO= CDB.DEGREENO)", "DISTINCT DURATION", "D.DEGREENO=" + hdfDegreeno.Value));
 
             int durationsem = Convert.ToInt32(Duartionnew) * 2;

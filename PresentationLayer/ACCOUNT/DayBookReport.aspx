@@ -164,7 +164,7 @@
                                                             <div class="input-group-addon" id="imgCal">
                                                                 <i class="fa fa-calendar text-blue"></i>
                                                             </div>
-                                                            <asp:TextBox ID="txtFrmDate" runat="server" CssClass="form-control" />
+                                                            <asp:TextBox ID="txtFrmDate" runat="server" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtFrmDate_TextChanged"/>
                                                             <ajaxToolKit:CalendarExtender ID="cetxtDepDate" runat="server" Enabled="true" EnableViewState="true"
                                                                 Format="dd/MM/yyyy" PopupButtonID="imgCal" PopupPosition="BottomLeft" TargetControlID="txtFrmDate">
                                                             </ajaxToolKit:CalendarExtender>
@@ -183,7 +183,7 @@
                                                             <div class="input-group-addon" id="imgCal1">
                                                                 <i class="fa fa-calendar text-blue"></i>
                                                             </div>
-                                                            <asp:TextBox ID="txtUptoDate" CssClass="form-control" runat="server" />
+                                                            <asp:TextBox ID="txtUptoDate" CssClass="form-control" runat="server" AutoPostBack="true" OnTextChanged="txtUptoDate_TextChanged"/>
                                                             <ajaxToolKit:CalendarExtender ID="txtUptoDate_CalendarExtender" runat="server" Enabled="true"
                                                                 EnableViewState="true" Format="dd/MM/yyyy" PopupButtonID="imgCal1" PopupPosition="BottomLeft"
                                                                 TargetControlID="txtUptoDate">

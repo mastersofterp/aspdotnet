@@ -64,10 +64,25 @@
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <%--<label>Session</label>--%>
+                                            <%--//Updated by jay takalkhede on dated 03042024 add college and session both on the place of session--%>
+                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSession" AppendDataBoundItems="true" AutoPostBack="true"
+                                            ValidationGroup="Submit" runat="server" TabIndex="1" CssClass="form-control" data-select2-enable="true"
+                                            OnSelectedIndexChanged="ddlSession_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <%--<asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
+                                    </div>
                                     <div class="form-group col-md-5 col-lg-5 col-12">
                                         <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Session</label>
+                                            <sup>* </sup>
+                                            <label>College</label>
                                         </div>
                                         <asp:DropDownList ID="ddlCollegeSession" runat="server" Visible="false" AutoPostBack="true" AppendDataBoundItems="true" TabIndex="2" ValidationGroup="show" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -87,7 +102,7 @@
                             <asp:Button ID="btnTimeTableStatus" runat="server" CssClass="btn btn-info" Text="Time Table Status" OnClick="btnTimeTableStatus_Click" />
                             <asp:Button ID="btnTeachingAttendanceStatus" runat="server" CssClass="btn btn-info" Text="Teaching Plan & Attendance Status" OnClick="btnTeachingAttendanceStatus_Click" />
                             <asp:Button ID="btnTimeTableCancel" runat="server" CssClass="btn btn-info" Text="Cancel Time Table Report(Excel)" OnClick="btnTimeTableCancel_Click" />
-
+                              <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" CssClass="btn btn-warning" />
 
                         </div>
                     </div>

@@ -373,6 +373,12 @@
                                                         </th>
                                                         <th>User Name
                                                         </th>
+                                                         <%-- added by rutuja 20-02-2024 (add the columns for  Parent type )--%>
+                                                         <div id="pdiv" runat="server" class="pdiv" visible='<%# ddlUserType.SelectedValue == "14" %>'>
+                                                        <!-- Your content here -->
+                                                        <th>Student Name</th>
+                                                        <th>Student Registration No</th>
+                                                    </div>
                                                         <%--<th style="width: 20%; text-align:left">
                                                                 Password
                                                             </th>--%>
@@ -388,7 +394,7 @@
                                             <ItemTemplate>
                                                 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                                     <ContentTemplate>
-                                                        <tr style="text-align: center;">
+                                                        <tr style="text-align: left;">
                                                             <td>
                                                                 <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit1.gif" CommandArgument='<%# Eval("UA_NO") %>'
                                                                     AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="6" />
@@ -399,6 +405,14 @@
                                                             <td>
                                                                 <%# Eval("UA_NAME")%>
                                                             </td>
+                                                         <%-- added by rutuja 20-02-2024 (add the columns for  Parent type )--%>
+                                                        <td id="tdPSname" runat="server" visible='<%#Eval("UA_TYPE").ToString()=="14"?true:false%>'>
+                                                            <asp:Label ID="lblPname" runat="server" Text='<%# Eval("STUDNAME")%>' ToolTip='<%# Eval("UA_NO")%>'></asp:Label>
+                                                        </td>
+                                                        <td id="tdPSno" runat="server" visible='<%#Eval("UA_TYPE").ToString()=="14"?true:false%>'>
+                                                            <asp:Label ID="lblPno" runat="server" Text='<%# Eval("REGNO")%>'></asp:Label>
+                                                        </td>
+                                                    
                                                             <%--<td style="width: 20%; text-align:left">
                                                             <asp:Label ID="lblUserpass" runat="server" Text='<%# Eval("UA_PWD")%>' Visible ="false"></asp:Label>
                                                         </td>--%>

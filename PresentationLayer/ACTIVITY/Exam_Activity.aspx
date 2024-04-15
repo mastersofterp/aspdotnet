@@ -6,7 +6,11 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <link href="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.js")%>"></script>
-
+    <style>
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
     <%--<link href="../plugins/multiselect/bootstrap-multiselect.css" rel="stylesheet" />--%>
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdShowStatus" runat="server" ClientIDMode="Static" />
@@ -598,6 +602,21 @@
                                                         CultureInvariantValues="true" />
                                                 </div>
                                             </div>
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label>Exam Type</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlexamtype" AppendDataBoundItems="true" runat="server" TabIndex="1" data-select2-enable="true"
+                                                    CssClass="form-control">
+                                                    <asp:ListItem Value="-1">Please Select</asp:ListItem>
+                                                    <asp:ListItem Value="0">Regular</asp:ListItem>
+                                                    <asp:ListItem Value="1">Backlog</asp:ListItem>
+                                                    <asp:ListItem Value="2">PhotoCopy/Revaluation</asp:ListItem>
+                                                    <asp:ListItem Value="3">Redo/Resit</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -714,6 +733,7 @@
                                                                 <th>Start Date </th>
                                                                 <th>End Date </th>
                                                                 <th>Show Status </th>
+                                                                <th>Exam Type</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -738,6 +758,7 @@
                                                         <td><%# (Eval("START_DATE").ToString() != string.Empty) ? (Eval("START_DATE","{0:dd-MMM-yyyy}")) : Eval("START_DATE" ,"{0:dd-MMM-yyyy}") %></td>
                                                         <td><%# (Eval("END_DATE").ToString() != string.Empty) ? (Eval("END_DATE", "{0:dd-MMM-yyyy}")) : Eval("END_DATE", "{0:dd-MMM-yyyy}")%></td>
                                                         <td><%# Eval("SHOWSTATUS")%></td>
+                                                        <td><%# Eval("EXAM_TYPE")%></td>
                                                     </tr>
                                                 </ItemTemplate>
                                             </asp:ListView>

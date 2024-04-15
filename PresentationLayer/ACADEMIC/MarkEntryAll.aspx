@@ -1936,7 +1936,7 @@
                     if (X1 == 0) {
                     }
                     else if (parseFloat(MinMark) == X1) {
-                        AssValu = Number(X1 - 1);
+                        AssValu = Number(X1 - 0.01);
                         document.getElementById('ctl00_ContentPlaceHolder1_lvGrades_ctrl' + (j + 1) + '_txtMax').value = parseFloat(AssValu);
                     }
 

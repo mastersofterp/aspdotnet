@@ -22,7 +22,8 @@
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
-                            <h3 class="box-title">Send Email And SMS</h3>
+                           <h3 class="box-title">
+                            <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                         </div>
                         <div class="box-body">
                             <div class="col-12">
@@ -61,7 +62,7 @@
                                             Display="None" ValidationGroup="Show" InitialValue="0"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <asp:RadioButtonList ID="rdoList" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" AutoPostBack="true" OnSelectedIndexChanged="rdoList_SelectedIndexChanged">
+                                        <asp:RadioButtonList ID="rdoList" runat="server" RepeatDirection="Horizontal" RepeatColumns="1" AutoPostBack="true" OnSelectedIndexChanged="rdoList_SelectedIndexChanged">
                                             <asp:ListItem Value="1" Selected="True">Application Complete &nbsp;</asp:ListItem>
                                             <asp:ListItem Value="0">Application Incomplete &nbsp;</asp:ListItem>
                                         </asp:RadioButtonList>

@@ -96,9 +96,23 @@
 
     <%--===== Data Table Script added by gaurav =====--%>
 
+    <script type="text/javascript">
+        // added by kajal jaiswal on 20-02-2024
+        function FunctionHideShow() {
+           var ActiveTab = $('#ctl00_ContentPlaceHolder1_hdftab').val();
+
+            $(".tab - pane").removeClass("active");
+            $(".tab - pane").removeClass("fade");
+            $(".tab - pane").addClass("fade");
+            $("." + ActiveTab).addClass("active");
+            $("." + ActiveTab).removeClass("fade");
+        }
+        
+    </script>
+
     <script>
         $(document).ready(function () {
-            var table = $('#divBoardGradelist').DataTable({
+             var table = $('#divBoardGradelist').DataTable({
                 responsive: true,
                 lengthChange: true,
                 scrollY: 320,
@@ -421,9 +435,10 @@
             });
         });
 
+       
     </script>
 
-
+     
     <script>
         $(document).ready(function () {
             var table = $('#divAddSubjectListlist').DataTable({
@@ -751,8 +766,7 @@
 
     </script>
 
-    </script>
-
+  
     <script lang="javascript" type="text/javascript">
        function isNumber(evt) {
            evt = (evt) ? evt : window.event;
@@ -778,59 +792,59 @@
         }
     </script>
     
-
+    
 
     <asp:UpdatePanel ID="updSession" runat="server">
         <ContentTemplate>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-12">
+                     <asp:HiddenField runat="server" id="hdftab" />
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
                             <h3 class="box-title">MASTERS DETAILS</h3>
                         </div>
 
-
-                       
                         <div id="Tabs" role="tabpanel">
                             <div id="divqualification">                               
                                 <div class="col-12">
+                                   
                                     <div class="nav-tabs-custom">
                                         <ul class="nav nav-tabs" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#tab_1">Board</a>
+                                            <li class="nav-item" id="tab1" runat="server" visible="false">
+                                                <a class="nav-link tab1" data-toggle="tab" href="#tab_1">Board</a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#tab_2">Subject</a>
+                                            <li class="nav-item" id="tab2" runat="server" visible="false">
+                                                <a class="nav-link tab2" data-toggle="tab" href="#tab_2">Subject</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab3" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_3">Group</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab4" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_4">Subject Type</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab5" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_5">Board Subject Configuration</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab6" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_6">Add Subject</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab7" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_7">Board Grade Scheme</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab8" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_8">Reservation Configuration</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab9" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_9">Qualifying Degree</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab10" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_10">Program</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab11" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_11">Test Score</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="tab12" runat="server" visible="false">
                                                 <a class="nav-link" data-toggle="tab" href="#tab_12">Gate - Non Gate</a>
                                             </li>
                                         </ul>
@@ -838,7 +852,7 @@
                                         <div class="tab-content" id="my-tab-content">
 
                                             <%-- TAB:EXAMBOARD --%>
-                                            <div class="tab-pane active" id="tab_1">
+                                            <div class="tab-pane tab1" id="tab_1">
                                                 <div class="mt-3">
                                                     <div class="row">
 
@@ -941,7 +955,7 @@
                                             </div>
 
                                             <%-- TAB:SUBJECT --%>
-                                            <div class="tab-pane fade" id="tab_2">
+                                            <div class="tab-pane tab2" id="tab_2">
                                                 <div class="mt-3">
                                                     <div class="row">
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -998,7 +1012,7 @@
                                             </div>
 
                                             <%-- TAB:GROUP --%>
-                                            <div class="tab-pane fade" id="tab_3">
+                                            <div class="tab-pane tab3" id="tab_3">
                                                 <div class="mt-3">
                                                     <div class="row">
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -1055,7 +1069,7 @@
                                             </div>
 
                                             <%-- TAB:SUBJECT TYPE --%>
-                                            <div class="tab-pane fade" id="tab_4">
+                                            <div class="tab-pane tab4" id="tab_4">
                                                 <div class="mt-3">
                                                     <div class="row">
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -1163,7 +1177,7 @@
                                             </div>
 
                                             <%-- TAB:BOARD SUBJECT CONFIGURATION --%>
-                                            <div class="tab-pane fade" id="tab_5">
+                                            <div class="tab-pane tab5" id="tab_5">
                                                 <div class="mt-3">
                                                     <div class="row">
 
@@ -1269,7 +1283,7 @@
                                             </div>
 
                                             <%-- TAB:ADD SUBJECT --%>
-                                            <div class="tab-pane fade" id="tab_6">
+                                            <div class="tab-pane tab6" id="tab_6">
                                                 <div class="mt-3">
                                                     <div class="row">
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -1443,7 +1457,7 @@
                                             </div>
 
                                             <%-- TAB:BOARD GRADE --%>
-                                            <div class="tab-pane fade" id="tab_7">
+                                            <div class="tab-pane tab7" id="tab_7">
                                                 <div class="mt-3">
                                                     <div class="row">
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -1689,7 +1703,7 @@
                                             </div>
 
                                             <%-- TAB:Reservation Configuration --%>
-                                            <div class="tab-pane fade" id="tab_8">
+                                            <div class="tab-pane tab8" id="tab_8">
                                                 <div class="mt-3">
                                                     <div class="row">
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
@@ -1804,7 +1818,7 @@
                                             </div>
 
                                             <%--Qualifying Degree--%>
-                                            <div class="tab-pane fade" id="tab_9">
+                                            <div class="tab-pane tab9" id="tab_9">
                                                 <div class="mt-3">
                                                     <div class="row">
 
@@ -1889,7 +1903,7 @@
 
 
                                             <%-- TAB:PROGRAM  --%>
-                                            <div class="tab-pane fade" id="tab_10">
+                                            <div class="tab-pane tab10" id="tab_10">
                                                 <div class="mt-3">
                                                     <div class="row">
 
@@ -2003,9 +2017,9 @@
 
                                             </div>
 
+                                          
                                             <%-- TAB:TEST SCORE  --%>
-                                            <%-- TAB:TEST SCORE  --%>
-                                            <div class="tab-pane fade" id="tab_11">
+                                            <div class="tab-pane tab11" id="tab_11">
                                                 <div class="mt-3">
 
                                                     <div class="row">
@@ -2331,7 +2345,7 @@
                                             </div>
 
                                             <%--TAB: GATE-NON GATE--%>
-                                            <div class="tab-pane fade" id="tab_12">
+                                            <div class="tab-pane tab12" id="tab_12">
                                                 <asp:UpdatePanel runat="server" ID="UpdatePanel2">
                                                     <ContentTemplate>
                                                         <div class="col-12 mt-3">
@@ -2601,6 +2615,7 @@
             });
         });
     </script>
+
     <script>
         function functionx(evt) {
             if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
@@ -2608,13 +2623,15 @@
                 return false;
             }
         }
-        function allowAlphaNumericSpace(e) {
+        function allowAlphaNumericSpace(e)
+        {
             var code = ('charCode' in e) ? e.charCode : e.keyCode;
             if (!(code == 32) && // space
               !(code == 45) && // Dash
               !(code > 47 && code < 58) && // numeric (0-9)
               !(code > 64 && code < 91) && // upper alpha (A-Z)
-              !(code > 96 && code < 123)) { // lower alpha (a-z)
+              !(code > 96 && code < 123))
+            { // lower alpha (a-z)
                 e.preventDefault();
             }
         }
@@ -2690,6 +2707,7 @@
             });
         });
     </script>
+
     <script>
         function SetPRG_Active(val) {
             $('#chkPRG_Status').prop('checked', val);
@@ -2712,24 +2730,7 @@
     </script>
 
     <script>
-        //function SetActive(val) {
-        //    $('#chkStatus').prop('checked', val);
-
-        //}
-        //function validateActive() {
-
-        //    $('#hfdActive').val($('#chkStatus').prop('checked'));
-
-        //}
-
-        //var prm = Sys.WebForms.PageRequestManager.getInstance();
-        //prm.add_endRequest(function () {
-        //    $(function () {
-        //        $('#btnSubmitQualDegree').click(function () {
-        //            validateActive();
-        //        });
-        //    });
-        //});
+        
         function SetTST_Active(val) {
             $('#chkTST_Status').prop('checked', val);
         }
@@ -2786,6 +2787,7 @@
             }
         }
     </script>
+
      <script type="text/javascript">
          $(document).ready(function () {
              $('.multi-select-demo').multiselect({

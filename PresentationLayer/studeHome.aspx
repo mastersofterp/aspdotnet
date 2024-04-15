@@ -182,9 +182,9 @@
             /******************Student Attendance Percentage*********END**************/
 
             /******************* Student Attendance *********************/
-            $.ajax({
-                type: "POST",
-                //url: "StudeHome.aspx/ShowAttendance",
+            /********below code commented by PRASHANTG-TN56760-210324-TN56760******************/
+          <%--  $.ajax({
+                type: "POST",               
                 url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowAttendance")%>',
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
@@ -224,7 +224,7 @@
                     placement: "top"
                 });
 
-            };
+            };--%>
             /******************* Student Attendance *********************/
 
 
@@ -360,7 +360,8 @@
             /************************ Bind Assignment Announcement ************************/
 
             /************************ Quick Access ************************/
-            $.ajax({
+            /************************ BELOW BLOCK COMMENTED BY PRASHANTG-TN56760-220324 ************************/
+       <%--     $.ajax({
                 type: "POST",
                 //url: "StudeHome.aspx/ShowQuickAccessData",
                 url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowQuickAccessData")%>',
@@ -396,10 +397,13 @@
                 }
                 $('#ulQuickAccess').append(html);
             }
+        --%>
             /************************ Quick Access ************************/
 
             /************************ Tasks ************************/
-            $.ajax({
+            /************************ BELOW BLOCK COMMENTED BY PRASHANTG-TN56760-220324 ************************/
+
+           <%-- $.ajax({
                 type: "POST",
                 //url: "StudeHome.aspx/ShowStudTasks",
                 url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowStudTasks")%>',
@@ -440,14 +444,16 @@
                     html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;">No records to display.. </li>';
                 }
                 $('#ulTasks').append(html);
-            }
+            }--%>
             /************************ Tasks ************************/
 
 
             /************************ Bind Time Table ************************/
 
             /*********** Comment on 03-04-2020 Bind Only Body ******************/
-            $.ajax({
+            /************************ BELOW BLOCK COMMENTED BY PRASHANTG-TN56760-240324 ************************/
+
+         <%--   $.ajax({
                 type: "POST",
                 //url: "StudeHome.aspx/ShowStudTimeTableData",
                 url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowStudTimeTableData")%>',
@@ -531,7 +537,7 @@
                 $('[data-toggle="tooltip"]').tooltip({
                     placement: "top"
                 });
-            };
+            };--%>
             /*********** Comment on 03-04-2020 Bind Only Body ******************/
 
             /************************ Bind Time Table ************************/
@@ -555,6 +561,7 @@
             animation: blink 1s linear infinite;
         }
     </style>
+
     <script>
         function AddClassTobtnoutfees() {
             $('#ctl00_ContentPlaceHolder1_btnoutfees').addClass('blink');
@@ -565,12 +572,27 @@
         <div class="container-fluid">
             <h3>
                 <marquee width="100%" direction="left" style="color: #ff0000; font-size: 18px">
-                     Due to student related ongoing activity, Students dashboard data has been off for certain period of time,It will available soon. 
+                     Due to student related ongoing activity, some dashboard fetures has been OFF for certain period of time,It will be available soon. 
                 </marquee>
             </h3>
         </div>
     </asp:Panel>
-
+    <%--PRASHANTG-TN56760-220324--%>
+    <div>
+        <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="pnlDash"
+            DynamicLayout="true" DisplayAfter="0">
+            <ProgressTemplate>
+                <div id="preloader">
+                    <div id="loader-img">
+                        <div id="loader">
+                        </div>
+                        <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                    </div>
+                </div>
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+    </div>
+        
     <div class="container-fluid">
         <section class="statistics">
             <asp:HiddenField ID="PageID" runat="server" Visible="false" />
@@ -632,15 +654,21 @@
                 </div>
             </div>
         </section>
+        <%--PRASHANTG-TN56760-220324--%>
+          <asp:UpdatePanel ID="pnlDash" runat="server">
+        <ContentTemplate>
         <div class="col-12">
             <div class="row equalHMRWrap flex gutters-sm">
+               <%--Attendance--%>
                 <div class="col-lg-3 col-md-6 col-12">
                     <div class="x_panel in-left a1">
                         <div class="x_title">
-                            <h2>Attendance</h2>
+                            <h2>Attendance</h2>    
+                              <button id="btnLoadAttend" runat="server"  onserverclick="btnLoadAttend_Click"
+                                tabindex="1" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button> <%--PRASHANTG-TN56760-220324 --%>                           
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content height-250 scrollbar">
+                        <div class="x_content height-250 scrollbar" >
                             <table class="table table-hover small table-striped table-bordered nowrap">
                                 <thead class="bg-primary">
                                     <tr>
@@ -649,60 +677,54 @@
                                         <th class="text-center">%</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbodyAtten">
+                                <tbody id="tbodyAtten" runat="server">
+                                    <td class='text-center' data-container='body' 
+                                         data-original-title='anc' 
+                                        data-toggle='tooltip'></td>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-
+                </div>         
+              <%-- Quick Access--%>
                 <div class="col-lg-2 col-md-6 col-12">
                     <div class="x_panel in-left a2">
                         <div class="x_title">
                             <h2>Quick Access</h2>
+                                <button id="btnLoadQA" runat="server"  onserverclick="btnLoadQA_Click"
+                                tabindex="2" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-220324 --%>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content height-250 scrollbar small">
-                            <ul class="list-group with-border-bottom fav-list" id="ulQuickAccess">
+                            <ul class="list-group with-border-bottom fav-list" id="ulQuickAccess" runat="server">
+                               
                             </ul>
                         </div>
                     </div>
                 </div>
-
+                <%--Tasks--%>
                 <div class="col-lg-2 col-md-6 col-12">
                     <div class="x_panel in-right a1">
                         <div class="x_title">
                             <h2>Tasks</h2>
+                            <button id="btnLoadTask" runat="server"  onserverclick="btnLoadTask_Click"
+                                tabindex="3" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-220324 --%>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content height-250 scrollbar small">
                             <asp:HiddenField ID="hftot" runat="server" />
-                            <ul class="list-group with-border-bottom fav-list" id="ulTasks">
+                            <ul class="list-group with-border-bottom fav-list" id="ulTasks" runat="server">
                             </ul>
                         </div>
                     </div>
                 </div>
-
-                <%-- Added on 02-04-2020 --%>
-                <%-- <div class="col-md-3 col-sm-4 col-xs-12 flex">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Tasks</h2>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content height-250 scrollbar small">
-                        <asp:HiddenField ID="hftot" runat="server" />
-                        <ul class="list-group with-border-bottom fav-list" id="ulTasks">
-                           
-                        </ul>
-                    </div>
-                </div>
-            </div>--%>
-                <%-- Added on 02-04-2020 --%>
+                <%--Active Notice/News--%>
                 <div class="col-lg-5 col-md-12 col-12">
                     <div class="x_panel in-right a1">
                         <div class="x_title">
                             <h2>Active Notice/News</h2>
+                             <button id="btnActNotice" runat="server"  onserverclick="btnActNotice_Click"
+                                tabindex="4" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-220324 --%>
                             <div class="clearfix"></div>
                         </div>
                         <div class="new-parent">
@@ -739,7 +761,7 @@
                                 
 
                                 <div class="x_title">
-                                    <h2>Expired Notice/News</h2>
+                                    <h2>Expired Notice/News</h2>                                   
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content scrollbar small news-jq">
@@ -778,11 +800,13 @@
                         </div>
                     </div>
                 </div>
-
+               <%-- Today's Time Table--%>
                 <div class="col-lg-2 col-md-6 col-12">
                     <div class="x_panel in-left a1">
                         <div class="x_title">
                             <h2>Today's Time Table</h2>
+                             <button id="btnTT" runat="server"  onserverclick="btnTT_Click"
+                                tabindex="5" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-220324 --%>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content height-250 scrollbar">
@@ -813,11 +837,13 @@
                         </div>
                     </div>
                 </div>
-
+                <%--Class Time Table--%>
                 <div class="col-lg-5 col-md-6 col-12">
                     <div class="x_panel in-left a2">
                         <div class="x_title">
                             <h2>Class Time Table</h2>
+                            <button id="btnClassTT" runat="server"  onserverclick="btnClassTT_Click"
+                                tabindex="6" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-220324 --%>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content height-250 scrollbar">
@@ -837,15 +863,16 @@
                                 <tbody id="tbodyStudTT">
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
-
+                <%--Exam Time Table--%>
                 <div class="col-lg-5 col-md-6 col-12">
                     <div class="x_panel in-right a2">
                         <div class="x_title">
                             <h2>Exam Time Table</h2>
+                             <button id="btnExamTT" runat="server"  onserverclick="btnExamTT_Click"
+                                tabindex="7" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-240324 --%>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content height-250 scrollbar">
@@ -894,14 +921,15 @@
                         </div>
                     </div>
                 </div>
-
                 <%-- //-----------------start----14-12-2023--%>
-
-                <div class="col-lg-7 col-md-8 col-12">
+                <%--Placement Scheduled--%>
+                <div class="col-lg-12 col-md-8 col-12">
                     <div id="divplacement" runat="server">
                         <div class="x_panel in-right a2">
                             <div class="x_title">
                                 <h2>Placement Scheduled</h2>
+                                 <button id="btnPlacement" runat="server"  onserverclick="btnPlacement_Click"
+                                tabindex="8" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-240324 --%>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content height-250 scrollbar">
@@ -939,10 +967,13 @@
                     </div>
                 </div>
                 <%--  //---------------------end------14-12-2023--%>
+           
             </div>
         </div>
-    </div>
-
+            </ContentTemplate>
+    </asp:UpdatePanel>
+    </div>    
+       
     <div class="pay-online">
         <asp:LinkButton ID="btnpayonline" runat="server" OnClick="btnpayonline_Click">
             <%--<a href="ACADEMIC/OnlinePayment.aspx">--%>

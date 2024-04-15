@@ -601,6 +601,13 @@
                                                 Font-Bold="True">0</asp:Label>
                                         </a>
                                     </li>
+                                    <li class="list-group-item"><b>Alternate Arrangement :</b>
+                                        <a class="sub-label">
+                                            <asp:Label ID="lblAlternateArrang" runat="server" TabIndex="30" ToolTip="Alternate Arrangement"
+                                                Font-Bold="True"></asp:Label>
+                                        </a>
+                                    </li>
+
 
                                     <%-- <div class="form-group col-md-12">
                                             <label>Total No.of Leaves :</label>

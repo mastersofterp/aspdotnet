@@ -16,7 +16,7 @@
                                     <tr class="bg-light-blue">
                                         <th>Action
                                         </th>
-                                         <th>Sr No.
+                                         <th  style="width:100px">Sr No.
                                         </th>
                                         <th>Param Name
                                         </th>
@@ -50,7 +50,8 @@
                               <asp:Label ID="lblparamname" runat="server" Text='<%# Eval("PARAM_NAME")%>'></asp:Label>
                             </td>
                             <td>
-                                <asp:TextBox ID="txtparamval" runat="server" Text='<%# Eval("PARAM_VALUE")%>' Enabled="false" MaxLength="3" oninput="validateInput(this)" ></asp:TextBox>
+                               <%-- <asp:TextBox ID="txtparamval" runat="server" Text='<%# Eval("PARAM_VALUE")%>' Enabled="false"   ></asp:TextBox>--%>
+                                 <asp:TextBox ID="txtparamval" runat="server" Text='<%# Eval("PARAM_VALUE")%>' Enabled="false" ></asp:TextBox>
                             </td>
                             <td>
                                  <asp:Label ID="lblparamdescription" runat="server" Text='<%# Eval("PARAM_DESCRIPTION")%>'></asp:Label>
@@ -77,7 +78,7 @@
                                     <h5 class="heading">Please enter password to access this page.</h5>
                                     <div class="row">
                                         <div class="form-group col-lg-12 col-md-12 col-12">
-                                            <%--<label>PASSWORD</label>--%>
+                                      
                                             <asp:Label ID="lblPass" runat="server" Text="ybc@123" Visible="false"></asp:Label>
                                             <asp:TextBox ID="txtPass" TextMode="Password" runat="server" TabIndex="1" ToolTip="Please Enter Password" AutoComplete="new-password"
                                                 MaxLength="50" CssClass="form-control" />
@@ -110,7 +111,7 @@
                 $('#myModalPopUp').modal('show');
             });
 </script>
-<script type="text/javascript">
+<%--<script type="text/javascript">
     function validateInput(input) {
         // Remove any non-numeric characters using a regular expression
         input.value = input.value.replace(/\D/g, '');
@@ -125,7 +126,7 @@
         }
     }
     
-</script>
+</script>--%>
 
 
 </asp:Content>

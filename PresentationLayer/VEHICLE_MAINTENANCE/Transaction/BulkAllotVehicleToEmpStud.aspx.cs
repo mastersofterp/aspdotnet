@@ -114,7 +114,19 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
     {
         try
         {
-            Label lbl = this.lvAllotment.Controls[0].FindControl("lblUserName") as Label;
+            //for (int i = 0; i < lvAllotment.Items.Count; i++)
+            //{
+            //    Label lbl = this.lvAllotment.Controls[0].FindControl("lblUserName") as Label;
+            //    if (rdbUserType.SelectedValue == "1")
+            //    {
+            //        lbl.Text = "EMPLOYEE NAME"; 
+            //    }
+            //    else
+            //    {
+            //        lbl.Text = "STUDENT NAME";
+            //    }
+
+            //}
             
             if (rdbUserType.SelectedValue == "1")
             {
@@ -126,7 +138,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
                 ddlSem.SelectedIndex = 0;
                 rdbAllotted.SelectedValue = "1";
                 BindlistView(rdbUserType.SelectedValue, rdbAllotted.SelectedValue);
-                lbl.Text = "EMPLOYEE NAME";                
+               // lbl.Text = "EMPLOYEE NAME";              
                 lvAllotment.Visible = true;
             }
             else
@@ -137,7 +149,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
                 ddlSem.SelectedIndex = 0;
                 rdbAllotted.SelectedValue = "1";
                 BindlistView(rdbUserType.SelectedValue, rdbAllotted.SelectedValue);
-                lbl.Text = "STUDENT NAME";               
+               // lbl.Text = "STUDENT NAME";              
                 lvAllotment.Visible = false;               
             }
             
@@ -265,7 +277,8 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
                 {
                     if (ddlDegree.SelectedIndex > 0 && ddlBranch.SelectedIndex > 0 && ddlSem.SelectedIndex > 0)
                     {
-                        ds = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN VEHICLE_TRANSPORT_REQUISITION_APPLICATION A ON (S.IDNO = A.STUD_IDNO)", "S.IDNO", "S.STUDNAME AS NAME", "S.TRANSPORT=1 AND A.SECOND_APPROVE_STATUS='A' AND S.IDNO NOT IN (SELECT IDNO FROM VEHICLE_USER_ROUTEALLOT WHERE USER_TYPE='S') AND S.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "AND S.BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + "AND S.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue), "S.IDNO");
+                        //ds = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN VEHICLE_TRANSPORT_REQUISITION_APPLICATION A ON (S.IDNO = A.STUD_IDNO)", "S.IDNO", "S.STUDNAME AS NAME", "S.TRANSPORT=1 AND A.SECOND_APPROVE_STATUS='A' AND S.IDNO NOT IN (SELECT IDNO FROM VEHICLE_USER_ROUTEALLOT WHERE USER_TYPE='S') AND S.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "AND S.BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + "AND S.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue), "S.IDNO");
+                        ds = objCommon.FillDropDown("ACD_STUDENT S", "S.IDNO", "S.STUDNAME AS NAME", "S.TRANSPORT=1 AND S.IDNO NOT IN (SELECT IDNO FROM VEHICLE_USER_ROUTEALLOT WHERE USER_TYPE='S') AND S.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "AND S.BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + "AND S.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue), "S.IDNO");
                         if (ds.Tables[0].Rows.Count > 0)
                         {
                             lvAllotment.Visible = true;
@@ -335,6 +348,20 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
                         return;
                     }
                 }
+
+                for (int i = 0; i < lvAllotment.Items.Count; i++)
+                {
+                    Label lbl = this.lvAllotment.Controls[0].FindControl("lblUserName") as Label;
+                    if (rdbUserType.SelectedValue == "1")
+                    {
+                        lbl.Text = "EMPLOYEE NAME";
+                    }
+                    else
+                    {
+                        lbl.Text = "STUDENT NAME";
+                    }
+
+                }
             }
         }
         catch (Exception ex)
@@ -381,7 +408,8 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
                         dr["IDNO"] = hdnID.Value;
                         dr["ROUTEID"] = ddlVeh.SelectedValue;
                         dr["STOPNO"] = ddlBP.SelectedValue;
-                        dr["SEMESTERNO"] = Convert.ToInt32(null);
+                        //dr["SEMESTERNO"] = Convert.ToInt32(null);
+                        dr["SEMESTERNO"] = Convert.ToInt32(ddlSem.SelectedValue);
 
                         AllotmentTbl.Rows.Add(dr);
                     }
@@ -476,9 +504,13 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BulkAllotVehicleToEmpStud :
     {
         ViewState["URNO"] = null;
         ViewState["action"] = "add";
-        //ddlDegree.SelectedIndex = 0;
-        //ddlBranch.SelectedIndex = 0;
-        //ddlSem.SelectedIndex = 0;  
+        ddlDegree.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlSem.SelectedIndex = 0;
+        lvAllotment.DataSource = null;
+        lvAllotment.DataBind();
+        rdbUserType.SelectedValue = "1";
+        rdbAllotted.SelectedValue = "1";
     }
 
 

@@ -1078,8 +1078,10 @@
                                                         ToolTip="Select to Report" CssClass="btn btn-primary"  OnClick="btnAttendanceReport_Click" />
                                                     <asp:Button ID="btnAttReport" runat="server" Text="Coursewise Attendance Report" ValidationGroup="Acad"
                                                         ToolTip="Select to Report" CssClass="btn btn-primary"  OnClick="btnAttReport_Click"/>   
-                                                <asp:Button ID="btnCancel" runat="server" Text="Cancel"  OnClick="btnCancel_Click"
-                                                        ToolTip="Select to Report" CssClass="btn btn-danger"  />                                            
+                                                <asp:Button ID="btnExecutedReport" runat="server" Text="Coursewise Teaching Plan Report(Mutual Class and Extra Lecture)" ValidationGroup="Acad"
+                                                     ToolTip="Select to Report" CssClass="btn btn-primary"  OnClick="btnExecutedReport_Click" />
+                                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel"  OnClick="btnCancel_Click"
+                                                        ToolTip="Select to Report" CssClass="btn btn-danger"  />                                             
                                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
                                                         ShowMessageBox="true" ShowSummary="false" ValidationGroup="Acad" />
                                                

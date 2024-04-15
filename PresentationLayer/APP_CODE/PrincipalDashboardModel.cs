@@ -14,7 +14,13 @@ public class PrincipalDashboardModel
         // TODO: Add constructor logic here
         //
     }
-
+    public class StudentCounters
+    {
+        public string _male { get; set; }
+        public string _female { get; set; }
+        public string _other { get; set; }
+        public string _total { get; set; }
+    }
     public class StudentsCount
     {
         public string BatchNo { get; set; }

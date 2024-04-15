@@ -11,6 +11,7 @@ using IITMS.SQLServer.SQLDAL;
 using System.Data.SqlClient;
 using IITMS;
 
+
 public partial class ACADEMIC_OnlineAdmissionMaster : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -99,6 +100,9 @@ public partial class ACADEMIC_OnlineAdmissionMaster : System.Web.UI.Page
                 //TAB-12 TestScore
                 FillDropDownList_NonGate();
 
+                HideShowTab();
+                string script = "<script type='text/javascript'>FunctionHideShow();</script>";
+                ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", script);
             }
         }
         catch (Exception ex)
@@ -146,6 +150,119 @@ public partial class ACADEMIC_OnlineAdmissionMaster : System.Web.UI.Page
             objCommon.ShowError(Page, "Masters.BindALLDDL() --> " + ex.Message + " " + ex.StackTrace);
         }
     }
+
+    // added by kajal jaiswal on 20-02-2024
+    public void HideShowTab()
+    {
+        string paramname = "'ALLOW_ONLINE_ADMISSION_MASTER_TAB'";
+        DataSet ds = new DataSet();
+        ds = objCommon.FillDropDown("ACD_PARAMETER", "PARAM_VALUE", "", "PARAM_NAME =" + paramname, "");
+        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+        {
+            string Paramvalue = ds.Tables[0].Rows[0]["PARAM_VALUE"].ToString();
+           
+            if (Paramvalue == "")
+            {
+                hdftab.Value = "tab1";
+                tab1.Visible = true;
+                tab2.Visible = true;
+                tab3.Visible = true;
+                tab4.Visible = true;
+                tab5.Visible = true;
+                tab6.Visible = true;
+                tab7.Visible = true;
+                tab8.Visible = true;
+                tab9.Visible = true;
+                tab10.Visible = true;
+                tab11.Visible = true;
+                tab12.Visible = true;
+
+
+            }
+            else
+            {
+                string[] values = Paramvalue.Split(',');
+                string firstValue = values[0];
+                hdftab.Value = firstValue;
+                foreach (string value in values)
+                {
+                    switch (value)
+                    {
+                        case "tab1":
+                            tab1.Visible = true;
+                       
+                            break;
+                        case "tab2":
+                            tab2.Visible = true;
+                        
+                            break;
+                        case "tab3":
+                            tab3.Visible = true;
+                         
+                            break;
+                        case "tab4":
+                            tab4.Visible = true;
+                         
+                            break;
+                        case "tab5":
+                            tab5.Visible = true;
+                         
+                            break;
+                        case "tab6":
+                            tab6.Visible = true;
+                         
+                            break;
+                        case "tab7":
+                            tab7.Visible = true;
+                         
+                            break;
+                        case "tab8":
+                            tab8.Visible = true;
+                      
+                            break;
+                        case "tab9":
+                            tab9.Visible = true;
+                           
+                            break;
+                        case "tab10":
+                            tab10.Visible = true; 
+                            break;
+                        case "tab11":
+                            tab11.Visible = true;
+                           
+                            break;
+                        case "tab12":
+                            tab12.Visible = true;
+                           
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            hdftab.Value = "tab1";
+            tab1.Visible = true;
+            tab2.Visible = true;
+            tab3.Visible = true;
+            tab4.Visible = true;
+            tab5.Visible = true;
+            tab6.Visible = true;
+            tab7.Visible = true;
+            tab8.Visible = true;
+            tab9.Visible = true;
+            tab10.Visible = true;
+            tab11.Visible = true;
+            tab12.Visible = true;
+
+           
+        }
+        return;
+    }
+
     #endregion
 
     #region Tab-1 ExamBoard
@@ -4837,5 +4954,7 @@ public partial class ACADEMIC_OnlineAdmissionMaster : System.Web.UI.Page
 
     #endregion
 
+    
 
+    
 }

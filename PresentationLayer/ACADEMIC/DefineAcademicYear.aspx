@@ -364,13 +364,15 @@
                                                             <sup>* </sup>
                                                             <asp:Label ID="lblDYddlAdmBatch" runat="server"></asp:Label>
                                                         </div>
-                                                        <asp:TextBox ID="txtAdmBatch" runat="server" MaxLength="30" AutoComplete="off" CssClass="form-control" TabIndex="1" ToolTip="Please Enter Admission Batch" />
+                                                        <asp:TextBox ID="txtAdmBatch" runat="server" MaxLength="20" AutoComplete="off" CssClass="form-control" TabIndex="1" ToolTip="Please Enter Admission Batch" />
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server"
                                                             FilterMode="InvalidChars" FilterType="Custom" InvalidChars="~`!@#$%^*_+=,./:;<>?'{}[]\|&&quot;'" TargetControlID="txtAdmBatch" />
                                                         <asp:RequiredFieldValidator ID="rfvtxtAdmBatch" runat="server" ControlToValidate="txtAdmBatch"
                                                             Display="None" ErrorMessage="Please Enter Admission Batch" SetFocusOnError="True"
                                                             ValidationGroup="AdmBatch"></asp:RequiredFieldValidator>
                                                     </div>
+
+                                                          <%--  <as per ticket no 56208 '-' has been removed as per discussion by Dr. Manoj Shanti Sir,Umesh Sir with SVS sir, >--%>
                                                     <div class="form-group col-lg-2 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <label>Status</label>
