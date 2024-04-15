@@ -1,9 +1,18 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="Acd_PageControlValidation.aspx.cs" Inherits="Acd_PageControlValidation" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+
+    <style>
+        .table-scroll {
+            height: 450px;
+            overflow: auto;
+            margin-top: 20px;
+        }
+    </style>
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updpnl_details"
             DynamicLayout="true" DisplayAfter="0">
@@ -28,19 +37,15 @@
                             <h3 class="box-title">
                                 <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                         </div>
-
                         <div class="box-body">
-
                             <div class="col-12">
-
-
                                 <div class="row">
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <span style="color: red;">* </span>
                                             <label>Page Name </label>
                                         </div>
-                                        <select id="ddlPageName" class="form-control" data-select2-enable="true" tabindex="3" name="ddlPageName" onchange="handleDropDownChange();">
+                                        <select id="ddlPageName" class="form-control" data-select2-enable="true" tabindex="1" name="ddlPageName" onchange="handleDropDownChange();">
                                         </select>
                                     </div>
                                     <div id="section" class="form-group col-lg-3 col-md-6 col-12 d-none ">
@@ -48,7 +53,7 @@
                                             <span style="color: red;">* </span>
                                             <label>Section</label>
                                         </div>
-                                        <select id="ddlsection" class="form-control" data-select2-enable="true" tabindex="3" name="ddlsection" onchange="handleDropDownChange1();">
+                                        <select id="ddlsection" class="form-control" data-select2-enable="true" tabindex="2" name="ddlsection" onchange="handleDropDownChange1();">
                                         </select>
                                     </div>
                                     <div id="Chksection" class="form-group col-lg-3 col-md-6 col-12 d-none">
@@ -60,7 +65,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="divStudentConfig" class="mt-3 d-none">
+                                <div id="divStudentConfig" class="mt-3 d-none table-scroll">
                                 </div>
                             </div>
                             <div class="col-12 btn-footer">
@@ -191,7 +196,7 @@
             $('#Chksection').addClass('d-none');
             $('#divStudentConfig').addClass('d-none');
             $('#Chkdisplay_section').prop('checked', false); 
-            getpagename();
+            acd_getpagename();
         });
     </script>
     <script type="">
@@ -239,7 +244,7 @@
                 success: function (data) 
                 {
                     var Jdata = JSON.parse(data.d);                  
-                    var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>" ;
+                    var htmlpage = "<table class='table table-striped table-bordered nowrap' id='StudentConfig'>" ;
                     htmlpage += "<thead class='bg-light-blue'><tr>";
                     htmlpage += "<th hidden>STUDCONFIG_ID</th>";
                     htmlpage += "<th>Caption Name</th>";
@@ -272,8 +277,7 @@
                         "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>"+
                         "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>"+
                         "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>");
-                   
-                     
+
                     for (var i = 0; i < output.length; i++) 
                     {
                         htmlpage =  htmlpage + output[i];
@@ -335,11 +339,11 @@
             $('#Chkdisplay_section').prop('checked', false);
 
             if (selectedvalue == 0) {
+                $("#ddlPageName").select2("close");
                 $('#section').addClass('d-none');   
                 $('#divStudentConfig').addClass('d-none');     
             }
             else {
-
                 var orgID = '<%= Session["OrgId"] %>';
                 var pageNo = "";
 
@@ -361,14 +365,12 @@
                 else if (selectedText === "Other Information") {
                     pageName = "OtherInformation.aspx";
                 }
-
                 getsection(pageName);
             }
             $('#Tabs a[href="#' + tabName + '"]').tab('show');
             $("#Tabs a").click(function () {
                 $("[id*=-]").val($(this).attr("href").replace("#", ""));
-
-            });
+            });  
         }
 
         function handleDropDownChange1() {
@@ -513,7 +515,7 @@
                         $('#divStudentConfig').removeClass('d-none');
                         sessionStorage.setItem('session', '0');
                     }
-
+                    $("#ddlPageName").select2("close");
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

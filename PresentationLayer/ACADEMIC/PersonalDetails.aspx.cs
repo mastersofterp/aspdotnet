@@ -282,6 +282,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 {
                     control.Visible = true;
                     control2.Visible = false;
+                    rdobtn_Gender.Visible = true;
                 }
                 else
                 {
@@ -422,10 +423,18 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     dropdownlist.Enabled = false;
                 }
 
-                if (ViewState["usertype"].ToString() == "2" && control is FileUpload)
+                if (control is FileUpload)
                 {
                     FileUpload fileUploadControl = (FileUpload)control;
                     fileUploadControl.Enabled = false;
+                    if (controlID == "fuSignUpload")
+                    {
+                        btnSignUpload.Enabled = false;
+                    }
+                    if (controlID == "fuPhotoUpload")
+                    {
+                        btnPhotoUpload.Enabled = false;
+                    }
                 }
             }
         }

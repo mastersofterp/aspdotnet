@@ -64,22 +64,22 @@
             padding: 0.375rem 0.15rem;
         }
     </style>
-    <script type="text/javascript" >
+    <script type="text/javascript">
         function ErrorMessage(errorString) {
             debugger;
             var errorString = errorString.replace(/,/g, '\n');
             alert(errorString)
         }
-</script>
+    </script>
     <script type="text/javascript">
         function alertmessage(commaSeparatedString) {
             debugger;
-           
+
             var parts = commaSeparatedString.split(',');
-            var errorMessage = parts.join('\n');           
+            var errorMessage = parts.join('\n');
             alert(errorMessage);
         }
-</script>
+    </script>
 
     <script type="text/javascript">
         function findTotal(val) {
@@ -268,7 +268,7 @@
             var Per2 = Percentage.toFixed(2)
             //alert(Percentage);
             document.getElementById('<%=txtPcmPerct.ClientID %>').value = Per2;
-                    document.getElementById("hfdPcmPer").value = Per2;
+            document.getElementById("hfdPcmPer").value = Per2;
 
 
             //function myFunction() {
@@ -277,7 +277,7 @@
             //    document.getElementById("demo").innerHTML = n;
             //}
 
-                }
+        }
     </script>
 
 
@@ -394,7 +394,7 @@
         }
 
     </script>
-    
+
     <asp:HiddenField ID="hdnMarksheetNo" runat="server" />
     <asp:HiddenField ID="hdnOrgId" runat="server" />
     <asp:HiddenField ID="hdnDegree" runat="server" />
@@ -598,16 +598,16 @@
                                                                 <sup id="supDivisionSsc" runat="server">* </sup>
                                                                 <label>Division</label>
                                                             </div>
-                                                             <asp:DropDownList ID="ddlDivisionSsc" runat="server" CssClass="form-control" data-select2-enable="true"
-                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
+                                                            <asp:DropDownList ID="ddlDivisionSsc" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                                AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <asp:ListItem Value="1">Distinction</asp:ListItem>
                                                                 <asp:ListItem Value="2">First Class</asp:ListItem>
-                                                                 <asp:ListItem Value="3">Second Class</asp:ListItem>
-                                                                 <asp:ListItem Value="4">Third Class</asp:ListItem>
-                                                                  <asp:ListItem Value="5">NA</asp:ListItem>
-                                                                </asp:DropDownList>  
-                                                            </div>
+                                                                <asp:ListItem Value="3">Second Class</asp:ListItem>
+                                                                <asp:ListItem Value="4">Third Class</asp:ListItem>
+                                                                <asp:ListItem Value="5">NA</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>
 
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divSscMarksObtained" runat="server">
                                                             <div class="label-dynamic">
@@ -707,11 +707,11 @@
                                                             <div class="label-dynamic">
                                                                 <sup id="supMarksheetNoSsc" runat="server">* </sup>
                                                                 <label>Marksheet Number</label>
-                                                                </div>
-                                                                    <asp:TextBox ID="txtMarksheetNoSsc" runat="server" CssClass="form-control"
+                                                            </div>
+                                                            <asp:TextBox ID="txtMarksheetNoSsc" runat="server" CssClass="form-control"
                                                                 Rows="1" ToolTip="Marksheet Number" placeholder=" Enter Marksheet Number"
                                                                 MaxLength="20" TabIndex="1" onkeypress="allowAlphaNumericSpaceHyphen(event)"></asp:TextBox>
-                                                            </div>
+                                                        </div>
 
                                                         <div class="form-group col-lg-6 col-md-6 col-12" id="divSscSchoolAddress" runat="server">
                                                             <div class="label-dynamic">
@@ -759,7 +759,7 @@
 
                                                                 <%--  <asp:TextBox ID="txtSchoolCollegeNameHssc" runat="server" CssClass="form-control"
                                                                     TabIndex="148" placeholder=" Enter School/College Name" ToolTip="Please Enter Higher Secondary/12th School/College Name" onkeydown="return((event.keyCode >= 64 && event.keyCode <= 91) || (event.keyCode==32)|| (event.keyCode==8)|| (event.keyCode==9));"></asp:TextBox>--%>
-                                                               <%--<asp:RequiredFieldValidator ID="rfvCollageName" runat="server" ControlToValidate="txtSchoolCollegeNameHssc"
+                                                                <%--<asp:RequiredFieldValidator ID="rfvCollageName" runat="server" ControlToValidate="txtSchoolCollegeNameHssc"
                                                                     Display="None" ErrorMessage="Please Enter Higher Secondary/12th School/College Name"
                                                                     SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
@@ -784,7 +784,7 @@
                                                                 <asp:TextBox ID="txtYearOfExamHssc" placeholder="Enter Year Of Exam" onkeyup="validateNumeric(this);"
                                                                     runat="server" TabIndex="150" ToolTip="Please Enter Higher Secondary/12th Year Of Exam"
                                                                     CssClass="form-control" MaxLength="4"></asp:TextBox>
-                                                               <%--<asp:RequiredFieldValidator ID="rfvExamYear" runat="server" ControlToValidate="txtYearOfExamHssc"
+                                                                <%--<asp:RequiredFieldValidator ID="rfvExamYear" runat="server" ControlToValidate="txtYearOfExamHssc"
                                                                     Display="None" ErrorMessage="Please enter Higher Secondary/12th Year Of Exam"
                                                                     SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
@@ -806,19 +806,19 @@
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divDivisionHsc" runat="server">
-                                                            <div class="label-dynamic">
-                                                                <sup id="supDivisionHsc" runat="server">* </sup>
-                                                                <label>Division</label>
-                                                            </div>
-                                                             <asp:DropDownList ID="ddlDivisionHsc" runat="server" CssClass="form-control" data-select2-enable="true"
-                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
-                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                                <asp:ListItem Value="1">Distinction</asp:ListItem>
-                                                                <asp:ListItem Value="2">First Class</asp:ListItem>
-                                                                 <asp:ListItem Value="3">Second Class</asp:ListItem>
-                                                                 <asp:ListItem Value="4">Third Class</asp:ListItem>
-                                                                  <asp:ListItem Value="5">NA</asp:ListItem>
-                                                                </asp:DropDownList>  
+                                                                <div class="label-dynamic">
+                                                                    <sup id="supDivisionHsc" runat="server">* </sup>
+                                                                    <label>Division</label>
+                                                                </div>
+                                                                <asp:DropDownList ID="ddlDivisionHsc" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                                    AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
+                                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                    <asp:ListItem Value="1">Distinction</asp:ListItem>
+                                                                    <asp:ListItem Value="2">First Class</asp:ListItem>
+                                                                    <asp:ListItem Value="3">Second Class</asp:ListItem>
+                                                                    <asp:ListItem Value="4">Third Class</asp:ListItem>
+                                                                    <asp:ListItem Value="5">NA</asp:ListItem>
+                                                                </asp:DropDownList>
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divHscSeatNo" runat="server">
@@ -1244,19 +1244,19 @@
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divDivisionDiploma" runat="server">
-                                                            <div class="label-dynamic">
-                                                                <sup id="supDivisionDiploma" runat="server">* </sup>
-                                                                <label>Division</label>
-                                                            </div>
-                                                             <asp:DropDownList ID="ddlDivisionDiploma" runat="server" CssClass="form-control" data-select2-enable="true"
-                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
-                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                                <asp:ListItem Value="1">Distinction</asp:ListItem>
-                                                                <asp:ListItem Value="2">First Class</asp:ListItem>
-                                                                 <asp:ListItem Value="3">Second Class</asp:ListItem>
-                                                                 <asp:ListItem Value="4">Third Class</asp:ListItem>
-                                                                  <asp:ListItem Value="5">NA</asp:ListItem>
-                                                                </asp:DropDownList>  
+                                                                <div class="label-dynamic">
+                                                                    <sup id="supDivisionDiploma" runat="server">* </sup>
+                                                                    <label>Division</label>
+                                                                </div>
+                                                                <asp:DropDownList ID="ddlDivisionDiploma" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                                    AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Division">
+                                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                    <asp:ListItem Value="1">Distinction</asp:ListItem>
+                                                                    <asp:ListItem Value="2">First Class</asp:ListItem>
+                                                                    <asp:ListItem Value="3">Second Class</asp:ListItem>
+                                                                    <asp:ListItem Value="4">Third Class</asp:ListItem>
+                                                                    <asp:ListItem Value="5">NA</asp:ListItem>
+                                                                </asp:DropDownList>
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaMarksObtained" runat="server">
@@ -1315,13 +1315,13 @@
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divMarksheetNoDiploma" runat="server">
-                                                            <div class="label-dynamic">
-                                                                <sup id="supMarksheetNoDiploma" runat="server">* </sup>
-                                                                <label>Marksheet Number</label>
+                                                                <div class="label-dynamic">
+                                                                    <sup id="supMarksheetNoDiploma" runat="server">* </sup>
+                                                                    <label>Marksheet Number</label>
                                                                 </div>
-                                                                    <asp:TextBox ID="txtMarksheetNoDiploma" runat="server" CssClass="form-control"
-                                                                Rows="1" ToolTip="Marksheet Number" placeholder=" Enter Marksheet Number"
-                                                                MaxLength="20" TabIndex="1" onkeypress="allowAlphaNumericSpaceHyphen(event)"></asp:TextBox>
+                                                                <asp:TextBox ID="txtMarksheetNoDiploma" runat="server" CssClass="form-control"
+                                                                    Rows="1" ToolTip="Marksheet Number" placeholder=" Enter Marksheet Number"
+                                                                    MaxLength="20" TabIndex="1" onkeypress="allowAlphaNumericSpaceHyphen(event)"></asp:TextBox>
                                                             </div>
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12 d-none">
@@ -1470,7 +1470,7 @@
 
                                                     </div>
 
-                                                   
+
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                         <div class="label-dynamic">
@@ -1520,7 +1520,7 @@
 
                                             <div class="col-md-12">
                                                 <asp:Panel ID="divEntrancequal" runat="server" ScrollBars="Auto">
-                                                    <asp:ListView ID="lvEntranceExm" runat="server" >
+                                                    <asp:ListView ID="lvEntranceExm" runat="server">
                                                         <LayoutTemplate>
                                                             <%-- <div class="vista-grid">--%>
                                                             <div id="demo-grid">
@@ -1542,8 +1542,7 @@
                                                                             </th>
                                                                             <th>Rank
                                                                             </th>
-                                                                            <th>
-                                                                                Last School/College Name as per TC/Leaving Certificate
+                                                                            <th>Last School/College Name as per TC/Leaving Certificate
                                                                             </th>
                                                                             <th style="display: none;">DGPA/CGPA
                                                                             </th>
@@ -1958,25 +1957,24 @@
                                                     </asp:ListView>
                                                 </asp:Panel>
                                             </div>
-
-                                            <div class="col-12 btn-footer">
-                                                <asp:LinkButton ID="btnSubmit" runat="server" TabIndex="193" Text="Save & Continue >>"
-                                                    ToolTip="Click to Save" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClick="btnSubmit_Click"
-                                                    ValidationGroup="Academic" OnClientClick="return validateSubjectTextBoxes();" />
-                                                <asp:ValidationSummary ID="vsAcademic" runat="server" ValidationGroup="Academic"
-                                                    DisplayMode="List" ShowMessageBox="True" ShowSummary="False" />
-                                                <button runat="server" id="btnGohome" visible="false" tabindex="194" onserverclick="btnGohome_Click"
-                                                    class="btn btn-warning btnGohome" tooltip="Click to Go Back Home">
-                                                    Go Back Home
-                                                </button>
-                                                <%-- <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
-                                                    ShowMessageBox="True" ShowSummary="False" ValidationGroup="Academic" />--%>
-                                            </div>
                                         </ContentTemplate>
                                         <Triggers>
                                             <asp:PostBackTrigger ControlID="btnSubmit" />
                                         </Triggers>
                                     </asp:UpdatePanel>
+                                </div>
+                                <div class="col-12 btn-footer">
+                                    <asp:LinkButton ID="btnSubmit" runat="server" TabIndex="193" Text="Save & Continue >>"
+                                        ToolTip="Click to Save" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClick="btnSubmit_Click"
+                                        ValidationGroup="Academic" OnClientClick="return validateSubjectTextBoxes();" />
+                                    <asp:ValidationSummary ID="vsAcademic" runat="server" ValidationGroup="Academic"
+                                        DisplayMode="List" ShowMessageBox="True" ShowSummary="False" />
+                                    <button runat="server" id="btnGohome" visible="false" tabindex="194" onserverclick="btnGohome_Click"
+                                        class="btn btn-warning btnGohome" tooltip="Click to Go Back Home">
+                                        Go Back Home
+                                    </button>
+                                    <%-- <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
+                                                    ShowMessageBox="True" ShowSummary="False" ValidationGroup="Academic" />--%>
                                 </div>
                             </div>
                             <%--student Last UG or PG Qualification--%>
@@ -2299,51 +2297,51 @@
             var vocMarksObtained = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
             var vocTotalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
             var orgid = $("#<%=hdnOrgId.ClientID %>").val();
-         var degree = $("#<%=hdnDegree.ClientID %>").val();
-             //alert(orgid + degree)
+            var degree = $("#<%=hdnDegree.ClientID %>").val();
+            //alert(orgid + degree)
             if ((orgid != "5" && orgid == "6" && degree != "MASTER OF BUSINESS ADMINISTRATION") || orgid == "19" || orgid == "20" || orgid == "21") {   // Added by Bhagyashree on 12062023 //// Added by orgid and PG validation condiation Sachin Lohakare 11092023
-                 if (numVal1 <= 0) {                                                                                                                   // Modified to Add Condition for PCEN, PJLCOE, TGPCET by Shrikant W. on 29-12-2023
-                     alert('Enter Valid Marks for Physics');
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").focus();
-                     return false;
-                 }
-                 if (numVal2 <= 0) {
-                     alert('Enter Valid Marks for Chemistry');
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtchem").focus();
-                     return false;
-                 }
-                 if (isHidden.style.display != "none") {
-                     if ((numVal3 <= 0 || numVal3 == '') && (numVal5 <= 0 || numVal5 == '')) {
-                         alert('Enter Valid Marks for Maths/Biology');
-                         document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
-                         return false;
-                     }
-                 }
-                 if (numVal4 <= 0 && numVal6 != 0) {
-                     alert('Enter Valid Marks for Vocational Subject');
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
-                     return false;
-                 }
-                 if (numVal6 != '' && numVal4 == '') {
-                     alert('Enter Valid Marks for Vocational Subject');
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
-                     return false;
-                 }
-                 if (isHidden.style.display === "none") {
-                     if (numVal3 <= 0 || numVal3 == '') {
-                         alert('Enter Valid Marks for Maths');
-                         document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
-                         return false;
-                     }
-                 }
-                 if (vocMarksObtained != '' && vocTotalMarks != '' && vocSubName == '') {
-                     alert('Enter Vocational Subject Name');
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value = '';
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").focus();
-                     return false;
-                 }
-             }
-         }
+                if (numVal1 <= 0) {                                                                                                                   // Modified to Add Condition for PCEN, PJLCOE, TGPCET by Shrikant W. on 29-12-2023
+                    alert('Enter Valid Marks for Physics');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").focus();
+                    return false;
+                }
+                if (numVal2 <= 0) {
+                    alert('Enter Valid Marks for Chemistry');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtchem").focus();
+                    return false;
+                }
+                if (isHidden.style.display != "none") {
+                    if ((numVal3 <= 0 || numVal3 == '') && (numVal5 <= 0 || numVal5 == '')) {
+                        alert('Enter Valid Marks for Maths/Biology');
+                        document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+                        return false;
+                    }
+                }
+                if (numVal4 <= 0 && numVal6 != 0) {
+                    alert('Enter Valid Marks for Vocational Subject');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
+                    return false;
+                }
+                if (numVal6 != '' && numVal4 == '') {
+                    alert('Enter Valid Marks for Vocational Subject');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
+                    return false;
+                }
+                if (isHidden.style.display === "none") {
+                    if (numVal3 <= 0 || numVal3 == '') {
+                        alert('Enter Valid Marks for Maths');
+                        document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+                        return false;
+                    }
+                }
+                if (vocMarksObtained != '' && vocTotalMarks != '' && vocSubName == '') {
+                    alert('Enter Vocational Subject Name');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value = '';
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").focus();
+                    return false;
+                }
+            }
+        }
     </script>
 
     <script>
@@ -2361,8 +2359,66 @@
                 return false;
             }
         }
-</script>
+    </script>
 
+<<<<<<< HEAD
+=======
+    <script>
+        function checkPercentageSsc() {
+            debugger;
+            var txtPer = document.getElementById("<%=txtPercentageSsc.ClientID%>");
+        var txtPerValue = txtPer.value;
+
+        var percentage = parseFloat(txtPerValue);
+
+        if (isNaN(percentage) || percentage > 100) {
+            alert("Percentage cannot be greater than 100!");
+            txtPer.value = "";
+        }
+    }
+
+    function checkPercentageDiploma() {
+        debugger;
+        var txtPer = document.getElementById("<%=txtPercentageDiploma.ClientID%>");
+        var txtPerValue = txtPer.value;
+
+        var percentage = parseFloat(txtPerValue);
+
+        if (isNaN(percentage) || percentage > 100) {
+            alert("Percentage cannot be greater than 100!");
+            txtPer.value = "";
+        }
+    }
+
+    function checkPercentageEntrance() {
+        debugger;
+        var txtPer = document.getElementById("<%=txtPer.ClientID%>");
+        var txtPerValue = txtPer.value;
+
+        var percentage = parseFloat(txtPerValue);
+
+        if (isNaN(percentage) || percentage > 100) {
+            alert("Percentile cannot be greater than 100!");
+            txtPer.value = "";
+        }
+    }
+
+    function checkPercentageQual() {
+        debugger;
+        var txtPer = document.getElementById("<%=txtPercentageQualifying.ClientID%>");
+        var txtPerValue = txtPer.value;
+
+        var percentage = parseFloat(txtPerValue);
+
+        if (isNaN(percentage) || percentage > 100) {
+            alert("Percentage cannot be greater than 100!");
+            txtPer.value = "";
+        }
+    }
+    </script>
+
+
+>>>>>>> 4a98c761 ([BUGFIX][51653][Changes in personal qualification page validation page])
     <%--  <script>
         function validateSubjectTextBoxes() {
             debugger;
