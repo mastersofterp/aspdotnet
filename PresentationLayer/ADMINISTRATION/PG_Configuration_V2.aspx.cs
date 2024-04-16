@@ -20,6 +20,8 @@ using System.Data;
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
+using IITMS.SQLServer.SQLDAL;
+using System.Data.SqlClient;
 
 public partial class ACADEMIC_PG_Configuration_V2_aspx : System.Web.UI.Page
 {
@@ -594,21 +596,33 @@ public partial class ACADEMIC_PG_Configuration_V2_aspx : System.Web.UI.Page
                                 semesterno = "0";
                             }
 
+                            // multi-select semesterNo
+                            var semesternos = "";
+                            foreach (ListItem items in ddlSemesterV2.Items)
+                            {
+                                if (items.Selected == true)
+                                    semesternos += (items.Value).Split('-')[0] + ',';
+                            }
+                            semesternos = semesternos.TrimEnd(',');
+
                             if (ViewState["ACTION3"] != null && ViewState["ACTION3"].Equals("Edit"))
                             {
                                 int PayConfig_Id = Convert.ToInt32(ViewState["PaymentGatewayMapp_ID"]);
-                                CustomStatus cs = (CustomStatus)objconfig.UpdatePaymentGatewayMappingV2(PayConfig_Id, Convert.ToInt32(ddlpaymentV2.SelectedValue),
-                                                                                               ddlReciepttypeV2.SelectedItem.Text,
-                                                                                                Convert.ToInt32(ddlActivitynameV2.SelectedValue),
-                                                                                                Convert.ToInt32(ddlPayGatewayConfigV2.SelectedValue),
-                                                                                                Convert.ToInt32(collegeid),
-                                                                                                Convert.ToInt32(degreeno),
-                                                                                                Convert.ToInt32(branchno),
-                                                                                                Convert.ToInt32(semesterno),
-                                                                                                Active_status,
-                                                                                                organizationid,
-                                                                                                Convert.ToInt32(Session["userno"])
-                                                                                                );
+                                CustomStatus cs = new CustomStatus();
+                                cs = (CustomStatus)UpdatePaymentGatewayMappingV2(PayConfig_Id, Convert.ToInt32(ddlpaymentV2.SelectedValue),
+                                                                                              ddlReciepttypeV2.SelectedItem.Text,
+                                                                                               Convert.ToInt32(ddlActivitynameV2.SelectedValue),
+                                                                                               Convert.ToInt32(ddlPayGatewayConfigV2.SelectedValue),
+                                                                                               Convert.ToInt32(collegeid),
+                                                                                               Convert.ToInt32(degreeno),
+                                                                                               Convert.ToInt32(branchno),
+                                                                                               semesternos,
+                                                                                               Active_status,
+                                                                                               organizationid,
+                                                                                               Convert.ToInt32(Session["userno"])
+                                                                                               );
+
+                            
                                 if (cs.Equals(CustomStatus.RecordUpdated))
                                 {
                                     objCommon.DisplayMessage(this.Page, "Record Updated Successfully", this.Page);
@@ -631,15 +645,15 @@ public partial class ACADEMIC_PG_Configuration_V2_aspx : System.Web.UI.Page
                             else
                             {
                                 int congfigno = 0;
-                                //string receipt_code = ddlReceiptType.SelectedItem.Text;
-                                CustomStatus cs = (CustomStatus)objconfig.InsertPaymentGatewayMappingV2(Convert.ToInt32(ddlpaymentV2.SelectedValue),
+                                CustomStatus cs = new CustomStatus();
+                                cs = (CustomStatus)InsertPaymentGatewayMappingV2(Convert.ToInt32(ddlpaymentV2.SelectedValue),
                                                                                                 ddlReciepttypeV2.SelectedItem.Text,
                                                                                                 Convert.ToInt32(ddlActivitynameV2.SelectedValue),
                                                                                                 Convert.ToInt32(ddlPayGatewayConfigV2.SelectedValue),
                                                                                                  Convert.ToInt32(collegeid),
                                                                                                 Convert.ToInt32(degreeno),
                                                                                                 Convert.ToInt32(branchno),
-                                                                                                Convert.ToInt32(semesterno),
+                                                                                                semesternos,
                                                                                                 Active_status,
                                                                                                 organizationid,
                                                                                                 Convert.ToInt32(Session["userno"])
@@ -778,11 +792,67 @@ public partial class ACADEMIC_PG_Configuration_V2_aspx : System.Web.UI.Page
                 ddlActivitynameV2.SelectedValue = dr["ACTIVITY_NO"] == null ? string.Empty : dr["ACTIVITY_NO"].ToString();
                 objCommon.FillDropDownList(ddlPayGatewayConfigV2, "ACD_PG_CONFIGURATION PGC INNER JOIN ACD_PAYMENT_GATEWAY PG ON PGC.PAY_ID = PG.PAYID", "PGC.CONFIG_ID", "CONCAT_WS('-',MERCHANT_ID,SUBMERCHANT_ID,BANKFEE_TYPE,ACCESS_CODE) AS PAY_NAME", "PGC.PAY_ID > 0  AND PGC.ACTIVE_STATUS = 1 AND  PGC.PAY_ID=" + Convert.ToInt32(ddlpaymentV2.SelectedValue), "CONFIG_ID DESC");
                 ddlPayGatewayConfigV2.SelectedValue = ((dr["PAYMENT_CONFIG_ID"].ToString() != string.Empty) ? (dr["PAYMENT_CONFIG_ID"].ToString()) : string.Empty);
-               
-                ddlDegreeV2.SelectedValue = dr["DEGREENO"] == null ? string.Empty : dr["DEGREENO"].ToString();
-                ddlCollegeV2.SelectedValue = dr["COLLEGE_ID"] == null ? string.Empty : dr["COLLEGE_ID"].ToString();
-                ddlBranchV2.SelectedValue = dr["BRANCHNO"] == null ? string.Empty : dr["BRANCHNO"].ToString();
-                ddlSemesterV2.SelectedValue = dr["SEMESTERNO"] == null ? string.Empty : dr["SEMESTERNO"].ToString();
+             
+                if (dr["COLLEGE_ID"].ToString() == "0" || dr["COLLEGE_ID"] == null)
+                {
+                    //BindCollege();
+                 }
+                else 
+                {
+                    //BindCollege();
+                    ddlCollegeV2.SelectedValue = dr["COLLEGE_ID"] == null ? string.Empty : dr["COLLEGE_ID"].ToString();
+                }
+
+                if (dr["DEGREENO"].ToString() == "0" || dr["DEGREENO"] == null)
+                {
+                    objCommon.FillListBox(ddlDegreeV2, "ACD_DEGREE D LEFT OUTER JOIN  ACD_COLLEGE_DEGREE_BRANCH CDB ON D.DEGREENO=CDB.DEGREENO", "DISTINCT D.DEGREENO", "D.DEGREENAME", "D.DEGREENO > 0 AND CDB.ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"]), "DEGREENO"); // + "AND CDB.COLLEGE_ID IN (" + Session["college_nos"] + ")"
+               }
+                else
+                {
+                    objCommon.FillListBox(ddlDegreeV2, "ACD_DEGREE D LEFT OUTER JOIN  ACD_COLLEGE_DEGREE_BRANCH CDB ON D.DEGREENO=CDB.DEGREENO", "DISTINCT D.DEGREENO", "D.DEGREENAME", "D.DEGREENO > 0 AND CDB.ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"]), "DEGREENO"); // + "AND CDB.COLLEGE_ID IN (" + Session["college_nos"] + ")"
+                    ddlDegreeV2.SelectedValue = dr["DEGREENO"] == null ? string.Empty : dr["DEGREENO"].ToString();
+                }
+
+                if (dr["BRANCHNO"].ToString() == "0" || dr["BRANCHNO"] == null)
+                {
+                    objCommon.FillListBox(ddlBranchV2, "ACD_BRANCH B LEFT OUTER JOIN  ACD_COLLEGE_DEGREE_BRANCH CDB ON B.BRANCHNO=CDB.BRANCHNO", "DISTINCT B.BRANCHNO", "B.LONGNAME", "B.BRANCHNO > 0 AND CDB.ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"]), "BRANCHNO");
+                 }
+                else
+                {
+                    objCommon.FillListBox(ddlBranchV2, "ACD_BRANCH B LEFT OUTER JOIN  ACD_COLLEGE_DEGREE_BRANCH CDB ON B.BRANCHNO=CDB.BRANCHNO", "DISTINCT B.BRANCHNO", "B.LONGNAME", "B.BRANCHNO > 0 AND CDB.ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"]), "BRANCHNO");
+                    ddlBranchV2.SelectedValue = dr["BRANCHNO"] == null ? string.Empty : dr["BRANCHNO"].ToString();
+                }
+
+                if (dr["SEMESTERNO"].ToString() == "0" || dr["SEMESTERNO"] == null)
+                {
+                    objCommon.FillListBox(ddlSemesterV2, "ACD_SEMESTER", "DISTINCT SEMESTERNO", "SEMESTERNAME", "SEMESTERNO> 0 ", "SEMESTERNO");
+                }
+                else
+                {
+                    objCommon.FillListBox(ddlSemesterV2, "ACD_SEMESTER", "DISTINCT SEMESTERNO", "SEMESTERNAME", "SEMESTERNO> 0 ", "SEMESTERNO");
+                    var selected_sem = dr["SEMESTERNO"].ToString();                 
+                    var sems = selected_sem.Split(',');
+                  
+                    // multi-select semesterNos bind
+                    foreach (ListItem Semesteritem in ddlSemesterV2.Items)
+                    {
+                        string[] semesterValues = Semesteritem.Value.Split(',');
+                        foreach (string sem in sems)
+                        {
+                            if (semesterValues[0].Trim() == sem.Trim())
+                            {
+                                Semesteritem.Selected = true;
+                                break;
+                            }
+                        }
+
+                    }
+
+                }
+                //ddlDegreeV2.SelectedValue = dr["DEGREENO"] == null ? string.Empty : dr["DEGREENO"].ToString();
+                //ddlCollegeV2.SelectedValue = dr["COLLEGE_ID"] == null ? string.Empty : dr["COLLEGE_ID"].ToString();
+                //ddlBranchV2.SelectedValue = dr["BRANCHNO"] == null ? string.Empty : dr["BRANCHNO"].ToString();
+                //ddlSemesterV2.SelectedValue = dr["SEMESTERNO"] == null ? string.Empty : dr["SEMESTERNO"].ToString();
 
                 ViewState["PaymentGatewayMapp_ID"] = dr["PGM_ID"].ToString();
                 ViewState["ACTION3"] = "Edit";
@@ -809,4 +879,92 @@ public partial class ACADEMIC_PG_Configuration_V2_aspx : System.Web.UI.Page
         }
     }
     #endregion
+
+    #region Controller Method
+    public int InsertPaymentGatewayMappingV2(int payid, string reciepttype, int activity, int payment_config_Id, int collegeId, int degreeNo, int branchNo, string semesterNo, bool active_status, int organi_id, int created_by)
+    {
+        int status = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+            SqlParameter[] objParams = null;
+
+            objParams = new SqlParameter[12];
+            objParams[0] = new SqlParameter("@P_PAY_ID", payid);
+            objParams[1] = new SqlParameter("@P_RECIEPT_TYPE", reciepttype);
+            objParams[2] = new SqlParameter("@P_ACTIVITY_NO", activity);
+            objParams[3] = new SqlParameter("@P_PAYMENT_CONFIG_ID", payment_config_Id);
+            objParams[4] = new SqlParameter("@P_COLLEGE_ID", collegeId);
+            objParams[5] = new SqlParameter("@P_DEGREENO", degreeNo);
+            objParams[6] = new SqlParameter("@P_BRANCHNO", branchNo);
+            objParams[7] = new SqlParameter("@P_SEMESTERNO", semesterNo);
+            objParams[8] = new SqlParameter("@P_ACTIVE_STATUS", active_status);
+            objParams[9] = new SqlParameter("@P_ORGANIZATION_ID", organi_id);
+            objParams[10] = new SqlParameter("@P_CREATED_BY", created_by);
+            objParams[11] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+            objParams[11].Direction = System.Data.ParameterDirection.Output;
+
+            object obj = objSQLHelper.ExecuteNonQuerySP("PKG_PG_INSERTPAYMENT_GATEWAY_MAPPING_V2", objParams, true);
+
+            if (obj != null && obj.ToString() == "1")
+                status = Convert.ToInt32(CustomStatus.RecordSaved);
+            else if (obj != null && obj.ToString() == "-99")
+                status = Convert.ToInt32(CustomStatus.RecordExist);
+            else
+                status = Convert.ToInt32(CustomStatus.Error);
+        }
+        catch (Exception ex)
+        {
+            status = Convert.ToInt32((CustomStatus.Error));
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ConfigController.InsertPaymentGatewayMappingV2-> " + ex.ToString());
+        }
+        return status;
+    }
+
+    public int UpdatePaymentGatewayMappingV2(int pgmid, int payid, string reciepttype, int activity, int payment_config_Id, int collegeId, int degreeNo, int branchNo, string semesterNo, bool active_status, int organi_id, int created_by)
+    {
+        int status = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+            SqlParameter[] objParams = null;
+
+            objParams = new SqlParameter[13];
+            objParams[0] = new SqlParameter("@P_PGM_ID", pgmid);
+            objParams[1] = new SqlParameter("@P_PAY_ID", payid);
+            objParams[2] = new SqlParameter("@P_RECIEPT_TYPE", reciepttype);
+            objParams[3] = new SqlParameter("@P_ACTIVITY_NO", activity);
+            objParams[4] = new SqlParameter("@P_PAYMENT_CONFIG_ID", payment_config_Id);
+            objParams[5] = new SqlParameter("@P_COLLEGE_ID", collegeId);
+            objParams[6] = new SqlParameter("@P_DEGREENO", degreeNo);
+            objParams[7] = new SqlParameter("@P_BRANCHNO", branchNo);
+            objParams[8] = new SqlParameter("@P_SEMESTERNO", semesterNo);
+            objParams[9] = new SqlParameter("@P_ACTIVE_STATUS", active_status);
+            objParams[10] = new SqlParameter("@P_ORGANIZATION_ID", organi_id);
+            objParams[11] = new SqlParameter("@P_CREATED_BY", created_by);
+            objParams[12] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+            objParams[12].Direction = System.Data.ParameterDirection.Output;
+
+            object obj = objSQLHelper.ExecuteNonQuerySP("PKG_PG_UPDATEPAYMENT_GATEWAY_MAPPING_V2", objParams, true);
+
+            if (obj != null && obj.ToString() == "2")
+                status = Convert.ToInt32(CustomStatus.RecordUpdated);
+            else if (obj != null && obj.ToString() == "-99")
+                status = Convert.ToInt32(CustomStatus.RecordExist);
+            else
+                status = Convert.ToInt32(CustomStatus.Error);
+        }
+        catch (Exception ex)
+        {
+            status = Convert.ToInt32((CustomStatus.Error));
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ConfigController.InsertPaymentGatewayMappingV2-> " + ex.ToString());
+        }
+        return status;
+    }
+
+    #endregion
+
+
 }
