@@ -140,22 +140,31 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 string encResponse = string.Empty;
                 DataSet dsworking = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "DISTINCT CHECKSUM_KEY", "COLLEGE_ID", "ISNULL(ACTIVE_STATUS,0)=1", "");
                 //int Count = 0;
-                for (int i = 1; i <= dsworking.Tables[0].Rows.Count; i++)
+
+                if (dsworking.Tables[0].Rows.Count > 1)
                 {
-                  //  Count++;
-                    workingKey = dsworking.Tables[0].Rows[i]["CHECKSUM_KEY"].ToString();
-                    // encResponse = ccaCrypto.Decrypt(Request.Form["encResp"], workingKey);
-                    try
+                    for (int i = 1; i <= dsworking.Tables[0].Rows.Count; i++)
                     {
-                        encResponse = ccaCrypto.Decrypt(Request.Form["encResp"], workingKey);
-                        break;
+                        //  Count++;
+                        workingKey = dsworking.Tables[0].Rows[i]["CHECKSUM_KEY"].ToString();
+                        // encResponse = ccaCrypto.Decrypt(Request.Form["encResp"], workingKey);
+                        try
+                        {
+                            encResponse = ccaCrypto.Decrypt(Request.Form["encResp"], workingKey);
+                            break;
+                        }
+                        catch (Exception Ex)
+                        {
+                            continue;
+                            //lblResponse.Text = Request.Form["encResp"].ToString();
+                        }
+
                     }
-                    catch (Exception Ex)
-                    {
-                        continue;
-                        //lblResponse.Text = Request.Form["encResp"].ToString();
-                    }
-                    
+                }
+                else
+                {
+                    workingKey = objCommon.LookUp("ACD_PG_CONFIGURATION", "DISTINCT CHECKSUM_KEY", "ISNULL(ACTIVE_STATUS,0)=1");
+                    encResponse = ccaCrypto.Decrypt(Request.Form["encResp"], workingKey);
                 }
               //  lblResponse.Text = Request.Form["encResp"].ToString();
 
