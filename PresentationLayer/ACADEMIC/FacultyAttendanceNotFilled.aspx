@@ -4,8 +4,8 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <%--===== Data Table Script added by gaurav =====--%>
-    <link href="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
-    <script src="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.js")%>"></script>
+    <link href="<%=Page.ResolveClientUrl('../plugins/multi-select/bootstrap-multiselect.css')%>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl('../plugins/multi-select/bootstrap-multiselect.js')%>"></script>
     <style>
         .dataTables_scrollHeadInner {
             width: max-content !important;
@@ -197,19 +197,22 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="form-group col-lg-12 col-md-12 col-12">
-                                        <asp:RadioButtonList ID="rdbReports" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" OnSelectedIndexChanged="rdbReports_SelectedIndexChanged" AutoPostBack="true">
-                                            <asp:ListItem Selected="True" Value="1">&nbsp;Attendance Tracker&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="2">&nbsp;Attendance Marked & Not-Marked &nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="3">&nbsp;Attendance register & Consolidated Attendance&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="4">&nbsp;Class Attendance Entry Report Of Faculty&nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                        <asp:RadioButtonList ID="rdbReports" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" 
+                                            OnSelectedIndexChanged="rdbReports_SelectedIndexChanged" AutoPostBack="true" CssClass="col-12 radio-button-list-style">
+                                            <asp:ListItem Selected="True" Value="1">&nbsp;Attendance Tracker&nbsp;</asp:ListItem>
+                                            <asp:ListItem Value="2">&nbsp;Attendance Marked & Not-Marked &nbsp;</asp:ListItem>
+                                            <asp:ListItem Value="3">&nbsp;Attendance register & Consolidated Attendance&nbsp;</asp:ListItem>
+                                            <asp:ListItem Value="4">&nbsp;Class Attendance Entry Report Of Faculty&nbsp;</asp:ListItem>
+                                        <%--  Added By jay T on dated 09-04-2024 as per Tno:-  --%>
+                                             <asp:ListItem Value="5">&nbsp;Attendance Report For Global Elective  &nbsp;&nbsp;&nbsp;</asp:ListItem>
                                         </asp:RadioButtonList>
                                         <%--Attendance register & Consolidated Attendance--%>
                                     </div>
                                     <%-- dvSession Added By Vipul T on dated 22-12-2023 as per Tno:- --%>
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="dvSession" visible="false">
-                                        <div class="">
+                                        <div class="label-dynamic">
                                             <sup>*</sup>
-                                            <asp:Label runat="server" >Session</asp:Label>
+                                            <asp:Label runat="server" Font-Bold="true" >Session</asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlSessionn" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="1" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -414,6 +417,8 @@
                                     CssClass="btn btn-info" Visible="false" OnClick="btnAttRegister_Click" />
                                 <asp:Button ID="btnConAtt" runat="server" TabIndex="6" Text="Consolidated Attendance Report" OnClientClick="return validate2();"
                                     CssClass="btn btn-info" Visible="false" OnClick="btnConAtt_Click" />
+                                  <asp:Button ID="btnGlobalAtt" runat="server" TabIndex="6" Text="Report (Excel)" OnClick="btnGlobalAtt_Click"
+                                    CssClass="btn btn-info" ValidationGroup="GlobalAtt" />
 
                                 <%-- btnExcel Added By Vipul T on dated 22-12-2023 as per Tno:- --%>
                                 <asp:Button ID="btnExcel" runat="server" TabIndex="6" Text="Report (Excel)" OnClick="btnExcel_Click" 
@@ -439,6 +444,7 @@
             <asp:PostBackTrigger ControlID="btnAttRegister" />
             <asp:PostBackTrigger ControlID="btnConAtt" />
             <asp:PostBackTrigger ControlID="btnExcel" />
+            <asp:PostBackTrigger ControlID="btnGlobalAtt" />
         </Triggers>
     </asp:UpdatePanel>
     <div id="divMsg" runat="server">

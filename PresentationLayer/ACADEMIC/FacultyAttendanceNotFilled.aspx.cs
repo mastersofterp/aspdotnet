@@ -1,12 +1,3 @@
-﻿//==============================================================================
-//PROJECT NAME  : RF-Common Code
-//MODULE NAME   : ACADEMIC (ACADEMIC REPORTS)
-//PAGE NAME     : ACADEMIC - ATTENDANCE NOT FILLED BY FACULTY REPORT
-//CREATION DATE : 12-APR-2012     
-//CREATED BY    :  UMESH K. GANORKAR 
-//MODIFIED DATE : 28-02-2024
-//MODIFIED DESC : Added Date Filter Class Attendance Entry Report Of Faculty (TkNo.51716)
-//=================================================================================
 using System;
 using System.Collections;
 using System.Configuration;
@@ -27,7 +18,20 @@ using IITMS.SQLServer.SQLDAL;
 using System.Data.SqlClient;
 using System.IO;
 using ClosedXML.Excel;
-
+//==============================================================================
+//PROJECT NAME  : RF-Common Code
+//MODULE NAME   : ACADEMIC (ACADEMIC REPORTS)
+//PAGE NAME     : ACADEMIC - ATTENDANCE NOT FILLED BY FACULTY REPORT
+//CREATION DATE : 12-APR-2012     
+//CREATED BY    : UMESH K. GANORKAR 
+// Version      : 1.0.0
+//=================================================================================
+//-----------------------------------------------------------------------------------------------------------------------------------------------------                                                                  
+//Version		Modified On		Modified By			     Purpose                                                                    
+//----------------------------------------------------------------------------------------------------------------------------------------------------                                                                    
+//1.0.1		    28-02-2024		Jay Takalkhede.			1. Added Date Filter Class Attendance Entry Report Of Faculty (TkNo.51716)
+//1.0.2	        09-04-2024		Jay Takalkhede.			1. Added report in which get Global Elective Course Attendance Data (TkNo.56806)
+//------------------------------------------- ----------------------------------------------------------------------------------------------------------
 
 public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI.Page
 {
@@ -95,7 +99,6 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             Response.Redirect("~/notauthorized.aspx?page=ResultReport.aspx");
         }
     }
-    #endregion
 
     private void FillDropDownList()
     {
@@ -148,6 +151,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+    #endregion
 
     #region Page comment
     //protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
@@ -288,6 +292,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     //}
     #endregion
 
+    #region Clear
     private void ClearControls()
     {
         ddlSession1.ClearSelection();
@@ -303,6 +308,13 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
         ddlBranch.SelectedIndex = 0;
         ddlsemester.SelectedIndex = 0;
     }
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Request.Url.ToString());
+    }
+    #endregion Clear
+
+    #region Attendance Marked & Not-Marked
     protected void btnAttReport_Click(object sender, EventArgs e)
     {
         try
@@ -365,124 +377,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             throw;
         }
     }
-    protected void btnCancel_Click(object sender, EventArgs e)
-    {
-        Response.Redirect(Request.Url.ToString());
-    }
-    protected void rdbReports_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (rdbReports.SelectedValue == "1")
-        {
-            divsession.Visible = false;
-            divCollege.Visible = true;
-            divDegree.Visible = true;
-            divBranch.Visible = true;
-            divSem.Visible = true;
-            btnAttReport.Visible = false;
-            btnAttTracker.Visible = true;
-            ddlSession1.ClearSelection();
-            txtEndDate.Text = string.Empty;
-            txtStartDate.Text = string.Empty;
-            DivSession1.Visible = false;
-            divClg.Visible = false;
-            divTeacher.Visible = false;
-            divcourse.Visible = false;
-            divSection.Visible = false;
-            btnAttRegister.Visible = false;
-            btnConAtt.Visible = false;
-            ddlSchool.SelectedIndex = 0;
-            //Added By Jay T. On dated 28022024 tkno.51716
-            DivLabel2.Visible = false;
-            DivLabel.Visible = true;
-            dvSession.Visible = false;
-            btnExcel.Visible = false;
+    #endregion Attendance Marked & Not-Marked
 
-        }
-        else if (rdbReports.SelectedValue == "2")
-        {
-            divsession.Visible = true;
-            divDegree.Visible = false;
-            divBranch.Visible = false;
-            divSem.Visible = false;
-            btnAttReport.Visible = true;
-            btnAttTracker.Visible = false;
-            txtEndDate.Text = string.Empty;
-            txtStartDate.Text = string.Empty;
-            ddlSchool.SelectedIndex = 0;
-            ddlDegree.SelectedIndex = 0;
-            ddlBranch.SelectedIndex = 0;
-            ddlsemester.SelectedIndex = 0;
-            DivSession1.Visible = true;
-            divClg.Visible = false;
-            divTeacher.Visible = false;
-            divcourse.Visible = false;
-            divSection.Visible = false;
-            btnAttRegister.Visible = false;
-            btnConAtt.Visible = false;
-            divCollege.Visible = true;
-            dvSession.Visible = false;
-            btnExcel.Visible = false;
-            //Added By Jay T. On dated 28022024 tkno.51716
-            DivLabel2.Visible = false;
-            DivLabel.Visible = true;
-        }
-        else if (rdbReports.SelectedValue == "3")
-        {
-            txtEndDate.Text = string.Empty;
-            txtStartDate.Text = string.Empty;
-            divCollege.Visible = false;
-            divDegree.Visible = false;
-            divBranch.Visible = false;
-            divSem.Visible = false;
-            divsession.Visible = false;
-            btnAttTracker.Visible = false;
-            DivSession1.Visible = true;
-            divClg.Visible = true;
-            divTeacher.Visible = true;
-            divcourse.Visible = true;
-            divSection.Visible = true;
-            btnAttReport.Visible = false;
-            btnAttRegister.Visible = true;
-            btnConAtt.Visible = true;
-            dvSession.Visible = false;
-            btnExcel.Visible = false;
-            ddlSession.SelectedIndex = 0;
-            //Added By Jay T. On dated 28022024 tkno.51716
-            DivLabel2.Visible = false;
-            DivLabel.Visible = true;
-        }
-        else if (rdbReports.SelectedValue == "4")
-        {
-            divsession.Visible = true;
-            txtEndDate.Text = string.Empty;
-            txtStartDate.Text = string.Empty;
-            divCollege.Visible = false;
-            divDegree.Visible = false;
-            divBranch.Visible = false;
-            divSem.Visible = false;
-            divsession.Visible = false;
-            btnAttTracker.Visible = false;
-            DivSession1.Visible = false;
-            divClg.Visible = false;
-            divTeacher.Visible = false;
-            divcourse.Visible = false;
-            divSection.Visible = false;
-            btnAttReport.Visible = false;
-            btnAttRegister.Visible = false;
-            btnConAtt.Visible = false;
-            txtEndDate.Visible = false;
-            calender1.Visible = false;
-            dvSession.Visible = true;
-            btnExcel.Visible = true;
-            ddlSession.SelectedIndex = 0;
-            //Added By Jay T. On dated 28022024 tkno.51716
-            DivLabel.Visible = false;
-            calender.Visible = true;
-            DivLabel2.Visible = true;
-            txtStartDate.Visible = true;
-        }
-
-    }
+    #region Attendance Tracker
     protected void btnAttTracker_Click(object sender, EventArgs e)
     {
         try
@@ -575,6 +472,168 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             throw;
         }
     }
+    #endregion Attendance Tracker
+
+    #region Bind DDL
+    protected void rdbReports_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (rdbReports.SelectedValue == "1")
+        {
+            divsession.Visible = false;
+            divCollege.Visible = true;
+            divDegree.Visible = true;
+            divBranch.Visible = true;
+            divSem.Visible = true;
+            btnAttReport.Visible = false;
+            btnAttTracker.Visible = true;
+            ddlSession1.ClearSelection();
+            txtEndDate.Text = string.Empty;
+            txtStartDate.Text = string.Empty;
+            DivSession1.Visible = false;
+            divClg.Visible = false;
+            divTeacher.Visible = false;
+            divcourse.Visible = false;
+            divSection.Visible = false;
+            btnAttRegister.Visible = false;
+            btnConAtt.Visible = false;
+            ddlSchool.SelectedIndex = 0;
+            calender1.Visible = true;
+            txtEndDate.Visible = true;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel2.Visible = false;
+            DivLabel.Visible = true;
+            dvSession.Visible = false;
+            btnExcel.Visible = false;
+            btnGlobalAtt.Visible = false;
+            //HiddenItem();
+
+        }
+        else if (rdbReports.SelectedValue == "2")
+        {
+            divsession.Visible = true;
+            divDegree.Visible = false;
+            divBranch.Visible = false;
+            divSem.Visible = false;
+            btnAttReport.Visible = true;
+            btnAttTracker.Visible = false;
+            txtEndDate.Text = string.Empty;
+            txtStartDate.Text = string.Empty;
+            ddlSchool.SelectedIndex = 0;
+            ddlDegree.SelectedIndex = 0;
+            ddlBranch.SelectedIndex = 0;
+            ddlsemester.SelectedIndex = 0;
+            calender1.Visible = true;
+            txtEndDate.Visible = true;
+            DivSession1.Visible = true;
+            divClg.Visible = false;
+            divTeacher.Visible = false;
+            divcourse.Visible = false;
+            divSection.Visible = false;
+            btnAttRegister.Visible = false;
+            btnConAtt.Visible = false;
+            divCollege.Visible = true;
+            dvSession.Visible = false;
+            btnExcel.Visible = false;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel2.Visible = false;
+            DivLabel.Visible = true;
+            btnGlobalAtt.Visible = false;
+            //HiddenItem();
+        }
+        else if (rdbReports.SelectedValue == "3")
+        {
+            txtEndDate.Text = string.Empty;
+            txtStartDate.Text = string.Empty;
+            divCollege.Visible = false;
+            divDegree.Visible = false;
+            divBranch.Visible = false;
+            divSem.Visible = false;
+            divsession.Visible = false;
+            btnAttTracker.Visible = false;
+            DivSession1.Visible = true;
+            divClg.Visible = true;
+            divTeacher.Visible = true;
+            divcourse.Visible = true;
+            divSection.Visible = true;
+            btnAttReport.Visible = false;
+            btnAttRegister.Visible = true;
+            btnConAtt.Visible = true;
+            dvSession.Visible = false;
+            btnExcel.Visible = false;
+            ddlSession.SelectedIndex = 0;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel2.Visible = false;
+            calender1.Visible = true;
+            txtEndDate.Visible = true;
+            DivLabel.Visible = true;
+            btnGlobalAtt.Visible = false;
+            //HiddenItem();
+        }
+        else if (rdbReports.SelectedValue == "4")
+        {
+            divsession.Visible = true;
+            txtEndDate.Text = string.Empty;
+            txtStartDate.Text = string.Empty;
+            divCollege.Visible = false;
+            divDegree.Visible = false;
+            divBranch.Visible = false;
+            divSem.Visible = false;
+            divsession.Visible = false;
+            btnAttTracker.Visible = false;
+            DivSession1.Visible = false;
+            divClg.Visible = false;
+            divTeacher.Visible = false;
+            divcourse.Visible = false;
+            divSection.Visible = false;
+            btnAttReport.Visible = false;
+            btnAttRegister.Visible = false;
+            btnConAtt.Visible = false;
+            txtEndDate.Visible = false;
+            calender1.Visible = false;
+            dvSession.Visible = true;
+            btnExcel.Visible = true;
+            ddlSession.SelectedIndex = 0;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel.Visible = false;
+            calender.Visible = true;
+            DivLabel2.Visible = true;
+            txtStartDate.Visible = true;
+            btnGlobalAtt.Visible = false;
+            //HiddenItem();
+        }
+        else if (rdbReports.SelectedValue == "5")
+        {
+            divsession.Visible = true;
+            txtEndDate.Text = string.Empty;
+            txtStartDate.Text = string.Empty;
+            divCollege.Visible = false;
+            divDegree.Visible = false;
+            divBranch.Visible = false;
+            divSem.Visible = false;
+            divsession.Visible = false;
+            btnAttTracker.Visible = false;
+            DivSession1.Visible = false;
+            divClg.Visible = false;
+            divTeacher.Visible = false;
+            divcourse.Visible = false;
+            divSection.Visible = false;
+            btnAttReport.Visible = false;
+            btnAttRegister.Visible = false;
+            btnConAtt.Visible = false;
+            txtEndDate.Visible = true;
+            calender1.Visible = true;
+            dvSession.Visible = true;
+            btnExcel.Visible = false;
+            ddlSession.SelectedIndex = 0;
+            //Added By Jay T. On dated 28022024 tkno.51716
+            DivLabel.Visible = true;
+            calender.Visible = true;
+            DivLabel2.Visible = false;
+            txtStartDate.Visible = true;
+            btnGlobalAtt.Visible = true;
+        }
+
+    }
     protected void ddlSchool_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (rdbReports.SelectedValue == "1")
@@ -657,6 +716,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             throw;
         }
     }
+    #endregion Bind DDL
+
+    #region Attendance register & Consolidated Attendance
     protected void btnAttRegister_Click(object sender, EventArgs e)
     {
         try
@@ -710,6 +772,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             throw;
         }
     }
+
     protected void btnConAtt_Click(object sender, EventArgs e)
     {
         try
@@ -762,6 +825,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             throw;
         }
     }
+    #endregion Attendance register & Consolidated Attendance
 
     #region class Attendance Entry Report Of Faculty
 
@@ -828,4 +892,74 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     }
 
     #endregion
+
+    #region Attendance Report For Global Elective
+    protected void btnGlobalAtt_Click(object sender, EventArgs e)
+    {
+        //string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+        //if (ua_type == "8")
+        //{
+            if (txtStartDate.Text != string.Empty && txtEndDate.Text != string.Empty)
+            {
+                if (Convert.ToDateTime(txtEndDate.Text) <= Convert.ToDateTime(txtStartDate.Text))
+                {
+                    objCommon.DisplayMessage(this, "End Date should be greater than Start Date", this.Page);
+                    return;
+                }
+                else
+                {
+                    string AttendanceStartDate = txtStartDate.Text;
+                    string AttendanceEndDate = txtEndDate.Text;
+                    //College = College.Substring(0, College.Length - 1);
+                    int session = Convert.ToInt32(ddlSessionn.SelectedValue);
+                    DataSet DS = RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(Session["userno"]), session);
+                    DataGrid dg = new DataGrid();
+
+                    if (DS.Tables[0].Rows.Count > 0)
+                    {
+                        string attachment = "attachment; filename= GLOBALELECTIVE_ATT_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+
+                        Response.ClearContent();
+                        Response.AddHeader("content-disposition", attachment);
+                        Response.ContentType = "application/" + "ms-excel";
+                        StringWriter sw = new StringWriter();
+                        HtmlTextWriter htw = new HtmlTextWriter(sw);
+                        dg.DataSource = DS.Tables[0];
+                        dg.DataBind();
+                        dg.HeaderStyle.Font.Bold = true;
+                        dg.RenderControl(htw);
+                        Response.Write(sw.ToString());
+                        Response.End();
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage("Record Not Found!!", this.Page);
+                        return;
+                    }
+                }
+            }
+    }
+    string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+    //Added by jay takalkhede on dated 10042024 Added report in which get Global Elective Course Attendance Data (TkNo.56806)
+    public DataSet RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(string AttendanceStartDate, string AttendanceEndDate, int UANO, int session)
+    {
+        DataSet ds = null;
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = new SqlParameter[4];
+            objParams[0] = new SqlParameter("@P_SESSION_ID", session);
+            objParams[1] = new SqlParameter("@P_FROMDATE", AttendanceStartDate);
+            objParams[2] = new SqlParameter("@P_TODATE", AttendanceEndDate);
+            objParams[3] = new SqlParameter("@P_UA_NO", UANO);
+            ds = objSQLHelper.ExecuteDataSetSP("ATTENDANCE_REPORT_FOR_GLOBAL_ELECTIVE_OF_HOD", objParams);
+        }
+        catch (Exception ex)
+        {
+            return ds;
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.RetrieveStudentAttDetailsExcel-> " + ex.ToString());
+        }
+        return ds;
+    }
+    #endregion Attendance Report For Global Elective
 }
