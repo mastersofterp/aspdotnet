@@ -143,6 +143,21 @@
                                                                 <h5>Student Section</h5>
                                                             </div>
                                                             <div class="row">
+<<<<<<< HEAD
+=======
+                                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                    <asp:RadioButtonList ID="rboStudent" runat="server" RepeatDirection="Horizontal" AutoPostBack="true" OnSelectedIndexChanged="rboStudent_SelectedIndexChanged">
+                                                                        <asp:ListItem Value="-1" style="display: none"> </asp:ListItem>
+                                                                        <asp:ListItem Value="1">Fees not Paid for Single Semester </asp:ListItem>
+                                                                        <asp:ListItem Value="2">Installment Wise dues not paid</asp:ListItem>
+                                                                        <asp:ListItem Value="3">Sem Promotion Admission Form</asp:ListItem>
+                                                                        <asp:ListItem Value="4">Fees not Paid for All Semester</asp:ListItem>
+                                                                        <asp:ListItem Value="5">Classes Commence From</asp:ListItem>
+                                                                    </asp:RadioButtonList>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                                     <div class="label-dynamic">
                                                                         <sup>* </sup>
@@ -197,6 +212,7 @@
                                                                     <asp:RequiredFieldValidator ID="rfvSem1" runat="server" ControlToValidate="ddlsemester"
                                                                         ErrorMessage="Select atleast one Semester " Display="None" InitialValue="0" ValidationGroup="ShowStudent"></asp:RequiredFieldValidator>
                                                                 </div>
+<<<<<<< HEAD
 
                                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                                     <asp:RadioButtonList ID="rboStudent" runat="server" RepeatDirection="Horizontal" AutoPostBack="true" OnSelectedIndexChanged="rboStudent_SelectedIndexChanged">
@@ -206,6 +222,19 @@
                                                                         <asp:ListItem Value="3">Sem Promotion Admission Form</asp:ListItem>
                                                                     </asp:RadioButtonList>
                                                                 </div>
+=======
+                                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divRType" runat="server" visible="false">
+                                                                    <div class="label-dynamic">
+                                                                        <sup>* </sup>
+                                                                        <label>Receipt Type</label>
+                                                                    </div>
+                                                                    <asp:DropDownList ID="ddlReceiptType" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" />
+                                                                    <asp:RequiredFieldValidator ID="rfvRtypr" runat="server" ControlToValidate="ddlReceiptType"
+                                                                        ErrorMessage="Select atleast one Receipt Type " Display="None" InitialValue="0" ValidationGroup="ShowStudent"></asp:RequiredFieldValidator>
+                                                                </div>
+
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                                                 <asp:Panel ID="pnldate" runat="server" Visible="false">
                                                                     <div class="row">
                                                                         <div class="form-group col-lg-6 col-md-6 col-12">
@@ -302,6 +331,28 @@
                                                                     </div>
                                                                     <%--<asp:TextBox ID="txtTemplate" runat="server" TextMode="MultiLine"  Visible="false" ></asp:TextBox>--%>
                                                                     <asp:Label ID="lblTemplate" runat="server"></asp:Label>
+                                                                </div>
+                                                                <div class="form-group col-lg-3 col-md-6 col-12" id="DivDate1" runat="server" visible="false">
+                                                                    <div class="label-dynamic">
+                                                                        <sup>*</sup>
+                                                                        <label>Date</label>
+                                                                    </div>
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-addon" id="txtDate1" runat="server">
+                                                                            <i class="fa fa-calendar"></i>
+                                                                        </div>
+                                                                        <asp:TextBox ID="txtDate" runat="server" ValidationGroup="submit" TabIndex="5" CssClass="form-control" placeholder="DD/MM/YYYY" />
+                                                                        <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd/MM/yyyy"
+                                                                            TargetControlID="txtDate" PopupButtonID="txtDate1" />
+                                                                        <ajaxToolKit:MaskedEditExtender ID="meeDate" runat="server" OnInvalidCssClass="errordate"
+                                                                            TargetControlID="txtDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                                            DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                                                        <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" ControlExtender="meeDate"
+                                                                            ControlToValidate="txtDate" EmptyValueMessage="Please Enter From Date" IsValidEmpty="false"
+                                                                            InvalidValueMessage="From Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" ErrorMessage="Start Date is Invalid (Enter dd/mm/yyyy Format)"
+                                                                            TooltipMessage="Please Enter From Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                                            ValidationGroup="submit" SetFocusOnError="True" />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </asp:Panel>
@@ -691,6 +742,74 @@
                                                     </div>
 
 
+<<<<<<< HEAD
+=======
+                                                    <div class="col-12" id="DivFeesNotPaidStudent" runat="server">
+                                                        <asp:Panel ID="PnlAllNotPaidStudent" runat="server" Visible="true">
+                                                            <asp:ListView ID="lvNotpaidAll" runat="server">
+                                                                <EmptyDataTemplate>
+                                                                    <br />
+                                                                    <asp:Label ID="lblerr" SkinID="Errorlbl" runat="server" Text="No Student To Shows" />
+                                                                </EmptyDataTemplate>
+                                                                <LayoutTemplate>
+                                                                    <div class="sub-heading">
+                                                                        <h5>Student List</h5>
+                                                                    </div>
+                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
+                                                                        <thead class="bg-light-blue">
+                                                                            <tr>
+                                                                                <th>
+                                                                                    <asp:CheckBox ID="chkSelect1" TabIndex="1" runat="server" onclick="totAllSubjects(this)" />Select
+                                                                                </th>
+                                                                                <th>Student Name
+                                                                                </th>
+                                                                                <th>Email ID
+                                                                                </th>
+                                                                                <th>Phone No.
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr id="itemPlaceholder" runat="server" />
+                                                                        </tbody>
+                                                                    </table>
+                                                                </LayoutTemplate>
+                                                                <ItemTemplate>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <asp:CheckBox ID="chkSelect1" TabIndex="1" runat="server" ToolTip='<%# Eval("IDNO") %>' />
+                                                                        </td>
+                                                                        <td>
+                                                                            <asp:Label ID="lblStudname" runat="server" Text=' <%# Eval("NAME")%>'></asp:Label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <asp:Label ID="lblEmailid" runat="server" Text='<%# Eval("STUDENT_EMAILID") %>'></asp:Label></td>
+                                                                        <td>
+                                                                            <asp:Label ID="lblStudmobile" runat="server" Text=' <%# Eval("STUDENT_MOBILE_NO")%>'></asp:Label>
+                                                                        </td>
+                                                                    </tr>
+                                                                </ItemTemplate>
+                                                                <AlternatingItemTemplate>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <asp:CheckBox ID="chkSelect1" runat="server" ToolTip='<%# Eval("IDNO") %>' />
+                                                                        </td>
+                                                                        <td>
+                                                                            <asp:Label ID="lblStudname" runat="server" Text=' <%# Eval("NAME")%>'></asp:Label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <asp:Label ID="lblEmailid" runat="server" Text='<%# Eval("STUDENT_EMAILID") %>'></asp:Label></td>
+                                                                        <td>
+                                                                            <asp:Label ID="lblStudmobile" runat="server" Text=' <%# Eval("STUDENT_MOBILE_NO")%>'></asp:Label>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                </AlternatingItemTemplate>
+                                                            </asp:ListView>
+                                                        </asp:Panel>
+                                                    </div>
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                                     <div class="col-12 mt-3">
 
                                                         <div id="divEmail" runat="server" visible="false">
@@ -734,8 +853,6 @@
 
                                                     </div>
                                                 </div>
-
-
                                                 <div id="divMsg" runat="server">
                                                 </div>
                                             </ContentTemplate>

@@ -5,8 +5,21 @@
 // CREATED BY    :  
 // Modified BY   : Jay Takalkhede
 // Modified Date : 25-08-2023
+<<<<<<< HEAD
 // Version :- 1) RFC.Enhancement.Major.1 (25-08-2023 [Maher])
+=======
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 //===============================================//
+//----------------------------------------------------------------------------------------------------------------------------------------------
+//-- Version                      Modified On        Modified By        Purpose
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+//--  RFC.Enhancement.Major.1      25-08-2023       Jay Takalkhede      Add Parents Teacher Meeting In Maher Client (Tktno. 47531) [MAHER]
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+//--  RFC.Enhancement.Major.2      15-02-2024       Jay Takalkhede     Add Parents Teacher Meeting In Maher Client (Tktno. 54075)[TGPCET] SMS  
+//----------------------------------------------------------------------------------------------------------------------------------------------
+//--  RFC.Enhancement.Major.3      12-04-2024       Jay Takalkhede     Add 	Fees not Paid for All Semester and Classes Commence From  SMS
+//                                                                          (Tktno. 57393)[TGPCET]  
+//----------------------------------------------------------------------------------------------------------------------------------------------
 
 
 using System;
@@ -206,6 +219,19 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
     {
         if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
         {
+
+        }
+        else if (Convert.ToInt32(Session["OrgId"]) == 21)
+        {
+            foreach (ListItem item in this.rdbEmailSms.Items)
+            {
+                if (item.Value == "1")
+                {
+                    // item.Attributes.CssStyle.Add("visibility", "hidden");
+                    // Or you can try to use
+                    item.Attributes.CssStyle.Add("display", "block");
+                }
+            }
         }
         else
         {
@@ -220,6 +246,27 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             }
         }
     }
+<<<<<<< HEAD
+=======
+    public void HiddenItemFeesNotPaid()
+    {
+        if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 21)
+        {
+
+        }
+        else
+        {
+            foreach (ListItem item in this.rboStudent.Items)
+            {
+                if (item.Value == "4")
+                {
+                    // Or you can try to use
+                    item.Attributes.CssStyle.Add("display", "none");
+                }
+            }
+        }
+    }
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
     public void HiddenItemParents()
     {
@@ -259,6 +306,36 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             foreach (ListItem item in this.rdbEmailSms.Items)
             {
                 if (item.Value == "3")
+                {
+                    // item.Attributes.CssStyle.Add("visibility", "hidden");
+                    // Or you can try to use
+                    item.Attributes.CssStyle.Add("display", "none");
+                }
+            }
+        }
+
+
+    }
+
+    public void HiddenClasses_Commence_From()
+    {
+        if (Session["OrgId"] == "21")
+        {
+            foreach (ListItem item in this.rdbEmailSms.Items)
+            {
+                if (item.Value == "5")
+                {
+                    // item.Attributes.CssStyle.Add("visibility", "hidden");
+                    // Or you can try to use
+                    item.Attributes.CssStyle.Add("display", "block");
+                }
+            }
+        }
+        else
+        {
+            foreach (ListItem item in this.rdbEmailSms.Items)
+            {
+                if (item.Value == "5")
                 {
                     // item.Attributes.CssStyle.Add("visibility", "hidden");
                     // Or you can try to use
@@ -363,6 +440,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+<<<<<<< HEAD
+=======
+                HiddenClasses_Commence_From();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             }
             else
             {
@@ -374,6 +457,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+<<<<<<< HEAD
+=======
+                //Added By Jay T. On dated 11042024
+                HiddenClasses_Commence_From();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             }
 
         }
@@ -385,10 +475,109 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemParents();
+<<<<<<< HEAD
+=======
+            //Added By Jay T. On dated 11042024
+            HiddenClasses_Commence_From();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
     }
     #endregion
 
+<<<<<<< HEAD
+=======
+    #region Methods
+    public DataSet GetAllFeesNotPaidStudent(string collegeid, string degree, string branch, int idno, string recieptcode)
+    {
+        DataSet ds = null;
+        try
+        {
+            string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = new SqlParameter[5];
+            objParams[0] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+            objParams[1] = new SqlParameter("@P_DEGREENO", degree);
+            objParams[2] = new SqlParameter("@P_BRANCHNO", branch);
+            objParams[3] = new SqlParameter("@P_IDNO", idno);
+            objParams[4] = new SqlParameter("@P_RECIEPT_CODE", recieptcode);
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_REPORT_OUTSTANDING_FORMAT_EXCEL_CRESCENT_EMAIL", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.GetSubjectWiseAttPer-> " + ex.ToString());
+        }
+        return ds;
+    }
+
+    public DataSet GetAllFeesNotPaidStudent_Parents(string collegeid, string degree, string branch, int idno, string recieptcode)
+    {
+        DataSet ds = null;
+        try
+        {
+            string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = new SqlParameter[5];
+            objParams[0] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+            objParams[1] = new SqlParameter("@P_DEGREENO", degree);
+            objParams[2] = new SqlParameter("@P_BRANCHNO", branch);
+            objParams[3] = new SqlParameter("@P_IDNO", idno);
+            objParams[4] = new SqlParameter("@P_RECIEPT_CODE", recieptcode);
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_REPORT_OUTSTANDING_FORMAT_EXCEL_CRESCENT_PARENTS", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.GetSubjectWiseAttPer-> " + ex.ToString());
+        }
+        return ds;
+    }
+    //Added By Sakshi M on 20012024
+    public int INSERTBULKEMAILSMS_LOG(int userno, string Activity, string mobileno, int usertype, int idno, int MSGTYPE, string emailid, string ipaddress, int Org_id)
+    {
+        int retStatus = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = null;
+
+            objParams = new SqlParameter[10];
+
+
+
+            objParams[0] = new SqlParameter("@P_USERNO", userno);
+            objParams[1] = new SqlParameter("@P_ACTIVITY", Activity);
+            objParams[2] = new SqlParameter("@P_MOBILENO", mobileno);
+            objParams[3] = new SqlParameter("@P_USERTYPE", usertype);
+            objParams[4] = new SqlParameter("@P_IDNO", idno);
+            objParams[5] = new SqlParameter("@P_MSGTYPE", MSGTYPE);
+            objParams[6] = new SqlParameter("@P_EMAIL_ID", emailid);
+            objParams[7] = new SqlParameter("@P_IPADDRESS", ipaddress);
+            objParams[8] = new SqlParameter("@P_ORG", Org_id);
+            objParams[9] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+            objParams[9].Direction = ParameterDirection.Output;
+
+            object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EMAILSMS_LOG", objParams, true);
+            if (obj != null)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+            }
+            else
+            {
+                retStatus = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            retStatus = Convert.ToInt32(CustomStatus.Error);
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.INSERTBULKEMAILSMS_LOG() --> " + ex.Message + " " + ex.StackTrace);
+        }
+        return retStatus;
+    }
+    #endregion
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
     #region Bind Listview- Student , Parents
 
     protected void btnShowStudent_Click(object sender, EventArgs e)
@@ -416,6 +605,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+<<<<<<< HEAD
+=======
+                //Added By Jay T. On dated 11042024
+                HiddenClasses_Commence_From();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             }
             else
             {
@@ -429,6 +625,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+<<<<<<< HEAD
+=======
+                //Added By Jay T. On dated 11042024 
+                HiddenClasses_Commence_From();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             }
         }
         #endregion Bind Listview- Student , Parents  (Fees not Paid  )
@@ -445,7 +648,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemSMS();
                     HiddenItemForPm();
                     HiddenItem();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
                 else
@@ -464,7 +673,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemSMS();
                             HiddenItemForPm();
                             HiddenItem();
+<<<<<<< HEAD
                             HiddenItemParents();
+=======
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         }
                         else
                         {
@@ -477,7 +692,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemSMS();
                             HiddenItemForPm();
                             HiddenItem();
+<<<<<<< HEAD
                             HiddenItemParents();
+=======
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         }
                     }
                  #endregion Bind Listview- Student (Installment Wise dues not paid )
@@ -489,6 +710,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 ds = objAttC.GetInstallmentNotpaidStusent(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToDateTime(txtStartDate.Text), Convert.ToDateTime(txtEndDate.Text));
 
 
+<<<<<<< HEAD
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
                 {
                     pnlStudentInstallment.Visible = true;
@@ -513,6 +735,39 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemForPm();
                     HiddenItem();
                     HiddenItemParents();
+=======
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+                        {
+                            pnlStudentInstallment.Visible = true;
+                            lvPaidStudentInstallment.DataSource = ds.Tables[1];
+                            lvPaidStudentInstallment.DataBind();
+                            txtsub.Text = "";
+                            txtMessage.Text = "";
+                            HiddenItemSMS();
+                            HiddenItemForPm();
+                            HiddenItem();
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                            pnlStudentInstallment.Visible = false;
+                            lvPaidStudentInstallment.DataSource = null;
+                            lvPaidStudentInstallment.DataBind();
+                            txtsub.Text = "";
+                            txtMessage.Text = "";
+                            HiddenItemSMS();
+                            HiddenItemForPm();
+                            HiddenItem();
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+                        }
+                    }
+                    #endregion Bind Listview- Parents  (Installment Wise dues not paid )
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 }
             }
             #endregion Bind Listview- Parents  (Installment Wise dues not paid )
@@ -545,7 +800,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     }
                     else
                     {
@@ -557,7 +818,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         return;
                     }
                 }
@@ -576,7 +843,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     }
                     else
                     {
@@ -588,7 +861,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         return;
                     }
                 }
@@ -605,12 +884,168 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemSMS();
                 HiddenItemForPm();
                 HiddenItem();
+<<<<<<< HEAD
                 HiddenItemParents();
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 return;
             }
         }
         #endregion Bind Listview- Student , Parents (Sem Promotion Admission Form )
 
+<<<<<<< HEAD
+=======
+        #region Bind Listview- Student , Parents  (All Semester Fees not Paid  )
+
+        else if (rboStudent.SelectedValue == "4")
+        {
+            DataSet ds = null;
+            if (rdbEmplyeStud.SelectedValue == "2")
+            {
+                ds = GetAllFeesNotPaidStudent(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), 0, ddlReceiptType.SelectedValue.ToString());
+            }
+            else if (rdbEmplyeStud.SelectedValue == "3")
+            {
+                ds = GetAllFeesNotPaidStudent_Parents(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), 0, ddlReceiptType.SelectedValue.ToString());
+            }
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                PnlAllNotPaidStudent.Visible = true;
+                lvNotpaidAll.DataSource = ds.Tables[0]; ;
+                lvNotpaidAll.DataBind();
+                txtsub.Text = "";
+                txtMessage.Text = "";
+                HiddenItemSMS();
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+                PnlAllNotPaidStudent.Visible = true;
+            }
+            else
+            {
+                objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                PnlAllNotPaidStudent.Visible = false;
+                lvNotpaidAll.DataSource = null;
+                lvNotpaidAll.DataBind();
+                txtsub.Text = "";
+                txtMessage.Text = "";
+                HiddenItemSMS();
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+                PnlAllNotPaidStudent.Visible = true;
+            }
+        }
+        #endregion Bind Listview- Student , Parents  (All Semester Fees not Paid )
+
+        #region Bind Listview- Student , Parents (Classes Commence From)
+        else if (rboStudent.SelectedValue == "5")
+        {
+            trStudent.Visible = true;
+            lvStudent.Visible = true;
+            trEmployee.Visible = false;
+            pnlstud.Visible = true;
+            if (ddlSchool.SelectedValue != "0")
+            {
+                DataSet ds = null;
+
+                #region Bind Listview- Student (Classes Commence From )
+                if (rdbEmplyeStud.SelectedValue == "2")
+                {
+                    ds = objAttC.GetFeesNotPaidStudent(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue));
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+                    {
+                        lvStudent.DataSource = ds.Tables[1];
+                        lvStudent.DataBind();
+                        txtsub.Text = "";
+                        txtMessage.Text = "";
+                        HiddenItemSMS();
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                        lvStudent.DataSource = null;
+                        lvStudent.DataBind();
+                        txtsub.Text = "";
+                        txtMessage.Text = "";
+                        HiddenItemSMS();
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+                        return;
+                    }
+                }
+                #endregion Bind Listview- Student (Classes Commence From)
+
+                #region Bind Listview-Parents (Classes Commence From)
+                if (rdbEmplyeStud.SelectedValue == "3")
+                {
+                    ds = objAttC.GetFeesNotPaidStudent(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue));
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
+                    {
+                        lvStudent.DataSource = ds.Tables[2];
+                        lvStudent.DataBind();
+                        txtsub.Text = "";
+                        txtMessage.Text = "";
+                        HiddenItemSMS();
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                        lvStudent.DataSource = null;
+                        lvStudent.DataBind();
+                        txtsub.Text = "";
+                        txtMessage.Text = "";
+                        HiddenItemSMS();
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+                        return;
+                    }
+                }
+                #endregion Bind Listview-Parents (Classes Commence From)
+
+            }
+            else
+            {
+                objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                lvStudent.DataSource = null;
+                lvStudent.DataBind();
+                txtsub.Text = "";
+                txtMessage.Text = "";
+                HiddenItemSMS();
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+                return;
+            }
+        }
+        #endregion Bind Listview-Student,Parents(Classes Commence From)
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         #region Bind Listview- Student , Parents (Normal)
         else
         {
@@ -635,7 +1070,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     }
                     else
                     {
@@ -647,7 +1088,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         return;
                     }
                 }
@@ -666,7 +1113,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     }
                     else
                     {
@@ -678,7 +1131,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
+<<<<<<< HEAD
                         HiddenItemParents();
+=======
+                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         return;
                     }
                 }
@@ -695,11 +1154,21 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemSMS();
                 HiddenItemForPm();
                 HiddenItem();
+<<<<<<< HEAD
                 HiddenItemParents();
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 return;
             }
         }
         #endregion Bind Listview-Student,Parents(Normal)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
     }
 
     #endregion
@@ -753,7 +1222,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemSMS();
                     HiddenItemForPm();
                     HiddenItem();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
             }
@@ -763,7 +1238,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemSMS();
                 HiddenItemForPm();
                 HiddenItem();
+<<<<<<< HEAD
                 HiddenItemParents();
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 return;
             }
         }
@@ -793,7 +1274,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemSMS();
                 HiddenItemForPm();
                 HiddenItem();
+<<<<<<< HEAD
                 HiddenItemParents();
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 return;
             }
             else
@@ -850,7 +1337,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         HiddenItemSMS();
                                         HiddenItemForPm();
                                         HiddenItem();
+<<<<<<< HEAD
                                         HiddenItemParents();
+=======
+                                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                        //Added By Jay T. On dated 23022024
+                                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                         cancel();
                                     }
                                     else
@@ -859,12 +1352,18 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         HiddenItemSMS();
                                         HiddenItemForPm();
                                         HiddenItem();
+<<<<<<< HEAD
                                         HiddenItemParents();
 <<<<<<< HEAD
 =======
                                         //Added By Jay T. On dated 23022024
                                      HiddenItemFeesNotPaid();
 >>>>>>> c665535e ([BUGFIX][53298][Maintain_Log_email])
+=======
+                                        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                        //Added By Jay T. On dated 23022024
+                                        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                     }
                                 }
                                 catch (Exception ex)
@@ -877,7 +1376,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemSMS();
                             HiddenItemForPm();
                             HiddenItem();
+<<<<<<< HEAD
                             HiddenItemParents();
+=======
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         }
                     }
 
@@ -924,7 +1429,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemSMS();
                     HiddenItemForPm();
                     HiddenItem();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
                 else
@@ -993,7 +1504,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
                                             // return;
                                         }
@@ -1001,7 +1518,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             //return;
                                         }
                                     }
@@ -1015,7 +1538,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                 HiddenItemSMS();
                                 HiddenItemForPm();
                                 HiddenItem();
+<<<<<<< HEAD
                                 HiddenItemParents();
+=======
+                                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                //Added By Jay T. On dated 23022024
+                                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                             }
                         }
                         catch (Exception ex)
@@ -1046,7 +1575,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
                 else
@@ -1117,7 +1652,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
                                             // return;
                                         }
@@ -1125,7 +1666,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             //return;
                                         }
                                     }
@@ -1142,7 +1689,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             }
                             HiddenItemForPm();
                             HiddenItem();
+<<<<<<< HEAD
                             HiddenItemParents();
+=======
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         }
                         catch (Exception ex)
                         {
@@ -1160,11 +1713,254 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(updCollege, "Email Service Not Available", this.Page);
                 HiddenItemSMS();
+<<<<<<< HEAD
                 HiddenItemParents();
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 return;
             }
             #endregion
 
+<<<<<<< HEAD
+=======
+            #region Email-Student (All Semester Fees not Paid)
+            else if (rboStudent.SelectedValue == "4")
+            {
+                int count = 0;
+                foreach (ListViewDataItem dataitem in lvNotpaidAll.Items)
+                {
+
+                    CheckBox cbRow = dataitem.FindControl("chkSelect1") as CheckBox;
+                    if (cbRow.Checked == true)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count == 0)
+                {
+                    objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
+                    HiddenItemSMS();
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+                    return;
+                }
+                else
+                {
+                    foreach (ListViewDataItem items in lvNotpaidAll.Items)
+                    {
+                        try
+                        {
+                            CheckBox chkSelect1 = items.FindControl("chkSelect1") as CheckBox;
+                            int idno = Convert.ToInt32(chkSelect1.ToolTip.ToString());
+                            Label lblEmailid = items.FindControl("lblEmailid") as Label;
+                            Label lblstudname = items.FindControl("lblStudname") as Label;
+                            string studname = lblstudname.Text.TrimEnd();
+
+                            if (chkSelect1.Checked)
+                            {
+                                if (lblEmailid.Text != string.Empty)
+                                {
+                                    DataSet dsconfig = null;
+
+                                    dsconfig = objCommon.FillDropDown("REFF", "SENDGRID_STATUS", "", "OrganizationId=" + Convert.ToInt32(Session["OrgId"]), string.Empty);
+                                    string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
+
+                                    string path = Server.MapPath("~/TempDocument/");
+                                    DataSet dsDetails = GetAllFeesNotPaidStudent(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), idno, ddlReceiptType.SelectedValue.ToString());
+                                    DataTable dt = (DataTable)dsDetails.Tables[0];
+                                    DataRow[] dr = dt.Select("IDNO='" + idno + "'");
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg = "<b>" + message + "</b>" + "<br/>";
+                                    msg += "<br />REGISTRAR <br />";   //bb
+                                    msg += "<br />";
+                                    //msg += "" + CollegeName + "<br /><br />";   //bb
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<table width='1000px' cellspacing='0' style='border: 1px solid #190404'><thead style='background-color: #d3cccc !important;color: #0e0e0e !important;'><tr style='border: 1px solid #190404;'><th style='border: 1px solid #190404;' scope='col'>Name</th><th style='border: 1px solid #190404;' scope='col'>RRNNo.</th>" +
+                                                   "<th style='border: 1px solid #190404;' scope='col'>Semester</th><th style='border: 1px solid #190404;' scope='col'>Fee for semester</th>" + "<th style='border: 1px solid #190404;' scope='col'>Paid for Semester</th><th style='border: 1px solid #190404;' scope='col'>Due for Semester</th></tr></thead><tbody>";
+
+                                    for (int j = 0; j < dr.Length; j++)
+                                    {
+                                        if ((dr[j][19].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>I</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][17].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][18].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][19].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][22].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>II</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][20].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][21].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][22].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][25].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>III</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][23].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][24].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][25].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][28].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IV</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][26].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][27].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][28].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][31].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>V</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][29].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][30].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][31].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][34].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VI</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][32].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][33].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][34].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][37].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][35].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][36].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][37].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][40].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VIII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][38].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][39].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][40].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][43].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IX</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][41].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][42].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][43].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][46].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>X</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][44].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][45].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][46].ToString() + "</td></tr>";
+                                        }
+
+                                    }
+                                    try
+                                    {
+                                        int status1 = 0;
+                                        string email_type = string.Empty;
+                                        string Link = string.Empty;
+                                        int sendmail = 0;
+                                        string filename = Convert.ToString(ViewState["FileName"]);
+                                        string Imgfile = string.Empty;
+                                        Byte[] Imgbytes = null;
+                                        if (filename != string.Empty)
+                                        {
+                                            path = path + filename;
+                                            string LogoPath = path;
+                                            Imgbytes = File.ReadAllBytes(LogoPath);
+                                            Imgfile = Convert.ToBase64String(Imgbytes);
+                                        }
+                                        if (filename == string.Empty)
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject); //Calling Method
+                                        }
+                                        else
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject, "", "", null, filename, Imgbytes, "image/png/pdf");
+                                        }
+                                        if (status1 == 1)
+                                        {
+                                            objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            // return;
+                                        }
+                                        else
+                                        {
+                                            objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+
+                                            //return;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    }
+                    cancel();
+                    HiddenItemFeesNotPaid();
+                }
+            }
+            #endregion
+
+            #region SMS For TGPCET (Student) Classes Commence From (11/04/2024)
+
+            else if (rboStudent.SelectedValue == "5")
+            {
+
+                objCommon.DisplayMessage(this.updDetained, "Email Template Not Found For Your Selection!", this.Page);
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemSMS();
+                HiddenItemParents();
+                //Added By Jay T. On dated 11042024
+                HiddenClasses_Commence_From();
+                DivDate1.Visible = false;
+                txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
+                return;
+            }
+
+            #endregion
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             #region Email- Student (Normal)
             else
             {
@@ -1183,7 +1979,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
                 else
@@ -1235,7 +2037,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
                                             // return;
                                         }
@@ -1243,7 +2051,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             // cancel();
                                             // return;
                                         }
@@ -1259,7 +2073,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             }
                             HiddenItemForPm();
                             HiddenItem();
+<<<<<<< HEAD
                             HiddenItemParents();
+=======
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         }
                         catch (Exception ex)
                         {
@@ -1304,7 +2124,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemSMS();
                     HiddenItemForPm();
                     HiddenItem();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
                 else
@@ -1374,7 +2200,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
 
                                             // return;
@@ -1383,7 +2215,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             //return;
                                         }
                                     }
@@ -1397,7 +2235,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                 HiddenItemSMS();
                                 HiddenItemForPm();
                                 HiddenItem();
+<<<<<<< HEAD
                                 HiddenItemParents();
+=======
+                                //Added By Jay T. On dated 23022024
+                                HiddenItemFeesNotPaid();
+                                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                             }
                         }
                         catch (Exception ex)
@@ -1428,7 +2272,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
                 else
@@ -1499,7 +2349,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
                                             // return;
                                         }
@@ -1507,7 +2363,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             //return;
                                         }
                                     }
@@ -1524,7 +2386,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             }
                             HiddenItemForPm();
                             HiddenItem();
+<<<<<<< HEAD
                             HiddenItemParents();
+=======
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         }
                         catch (Exception ex)
                         {
@@ -1541,11 +2409,256 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(updCollege, "Email Service Not Available", this.Page);
                 HiddenItemSMS();
+<<<<<<< HEAD
                 HiddenItemParents();
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 return;
             }
             #endregion
 
+<<<<<<< HEAD
+=======
+            #region Email-Student (All Semester Fees not Paid)
+            else if (rboStudent.SelectedValue == "4")
+            {
+                int count = 0;
+                foreach (ListViewDataItem dataitem in lvNotpaidAll.Items)
+                {
+
+                    CheckBox cbRow = dataitem.FindControl("chkSelect1") as CheckBox;
+                    if (cbRow.Checked == true)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count == 0)
+                {
+                    objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
+                    HiddenItemSMS();
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+                    return;
+                }
+                else
+                {
+                    foreach (ListViewDataItem items in lvNotpaidAll.Items)
+                    {
+                        try
+                        {
+                            CheckBox chkSelect1 = items.FindControl("chkSelect1") as CheckBox;
+                            int idno = Convert.ToInt32(chkSelect1.ToolTip.ToString());
+                            Label lblEmailid = items.FindControl("lblEmailid") as Label;
+                            Label lblstudname = items.FindControl("lblStudname") as Label;
+                            string studname = lblstudname.Text.TrimEnd();
+
+                            if (chkSelect1.Checked)
+                            {
+                                if (lblEmailid.Text != string.Empty)
+                                {
+                                    DataSet dsconfig = null;
+
+                                    dsconfig = objCommon.FillDropDown("REFF", "SENDGRID_STATUS", "", "OrganizationId=" + Convert.ToInt32(Session["OrgId"]), string.Empty);
+                                    string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
+
+                                    string path = Server.MapPath("~/TempDocument/");
+                                    DataSet dsDetails = GetAllFeesNotPaidStudent_Parents(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), idno, ddlReceiptType.SelectedValue.ToString());
+                                    DataTable dt = (DataTable)dsDetails.Tables[0];
+                                    DataRow[] dr = dt.Select("IDNO='" + idno + "'");
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg = "<b>" + message + "</b>" + "<br/>";
+                                    msg += "<br />REGISTRAR <br />";   //bb
+                                    msg += "<br />";
+                                    //msg += "" + CollegeName + "<br /><br />";   //bb
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<table width='1000px' cellspacing='0' style='border: 1px solid #190404'><thead style='background-color: #d3cccc !important;color: #0e0e0e !important;'><tr style='border: 1px solid #190404;'><th style='border: 1px solid #190404;' scope='col'>Name</th><th style='border: 1px solid #190404;' scope='col'>RRNNo.</th>" +
+                                          "<th style='border: 1px solid #190404;' scope='col'>Semester</th><th style='border: 1px solid #190404;' scope='col'>Fee for semester</th>" + "<th style='border: 1px solid #190404;' scope='col'>Paid for Semester</th><th style='border: 1px solid #190404;' scope='col'>Due for Semester</th></tr></thead><tbody>";
+
+                                    for (int j = 0; j < dr.Length; j++)
+                                    {
+                                        if ((dr[j][19].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>I</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][17].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][18].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][19].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][22].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>II</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][20].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][21].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][22].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][25].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>III</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][23].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][24].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][25].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][28].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IV</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][26].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][27].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][28].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][31].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>V</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][29].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][30].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][31].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][34].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VI</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][32].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][33].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][34].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][37].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][35].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][36].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][37].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][40].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VIII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][38].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][39].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][40].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][43].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IX</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][41].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][42].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][43].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][46].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>X</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][44].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][45].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][46].ToString() + "</td></tr>";
+                                        }
+
+                                    }
+
+                                    try
+                                    {
+                                        int status1 = 0;
+                                        string email_type = string.Empty;
+                                        string Link = string.Empty;
+                                        int sendmail = 0;
+                                        string filename = Convert.ToString(ViewState["FileName"]);
+                                        string Imgfile = string.Empty;
+                                        Byte[] Imgbytes = null;
+                                        if (filename != string.Empty)
+                                        {
+                                            path = path + filename;
+                                            string LogoPath = path;
+                                            Imgbytes = File.ReadAllBytes(LogoPath);
+                                            Imgfile = Convert.ToBase64String(Imgbytes);
+                                        }
+                                        if (filename == string.Empty)
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject); //Calling Method
+                                        }
+                                        else
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject, "", "", null, filename, Imgbytes, "image/png/pdf");
+                                        }
+                                        if (status1 == 1)
+                                        {
+                                            objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            //HiddenItemFeesNotPaid();
+                                            //cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            // return;
+                                        }
+                                        else
+                                        {
+                                            objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            //HiddenItemFeesNotPaid();
+                                            //return;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    }
+                    HiddenItemFeesNotPaid();
+                    cancel();
+                }
+            }
+            #endregion
+
+            #region SMS For TGPCET (Student) Classes Commence From (11/04/2024)
+
+            else if (rboStudent.SelectedValue == "5")
+            {
+
+                objCommon.DisplayMessage(this.updDetained, "Email Template Not Found For Your Selection!", this.Page);
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemSMS();
+                HiddenItemParents();
+                //Added By Jay T. On dated 11042024
+                HiddenClasses_Commence_From();
+                DivDate1.Visible = false;
+                txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
+                return;
+            }
+
+            #endregion
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             #region Email - Parents (Normal)
             else
             {
@@ -1564,7 +2677,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
+<<<<<<< HEAD
                     HiddenItemParents();
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     return;
                 }
                 else
@@ -1616,7 +2735,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
                                             // return;
                                         }
@@ -1624,7 +2749,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                         }
                                     }
                                     catch (Exception ex)
@@ -1638,7 +2769,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             }
                             HiddenItemForPm();
                             HiddenItem();
+<<<<<<< HEAD
                             HiddenItemParents();
+=======
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                         }
                         catch (Exception ex)
                         {
@@ -1656,11 +2793,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
     #endregion  Send Email Service
 
-    #region SMS (27/07/2023 )
+    #region SMS
     //Added By JAY TAKALKHEDE 27/07/2023  For SMS
     protected void btnSndSms_Click(object sender, EventArgs e)
     {
         int MSGTYPE = 0;
+
         #region SMS For RCPIPER
         if (Convert.ToInt32(Session["OrgId"]) == 6)
         {
@@ -1688,9 +2826,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     {
                         objCommon.DisplayMessage(this.updCollege, "Please Select atleast one Student For Send SMS", this);
                         return;
+                        HiddenItemSMS();
                         HiddenItemForPm();
                         HiddenItem();
-                        HiddenItemSMS();
+                        HiddenItemParents();
+                        HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                     }
                     else
                     {
@@ -1737,7 +2879,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(this.updCollege, "SMS Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
                                         }
                                         else
@@ -1745,6 +2893,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send SMS", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+<<<<<<< HEAD
+=======
+                                            HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                         }
 
                                     }
@@ -1772,6 +2926,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                    HiddenItemForPm();
+                    HiddenItem();
+                    HiddenItemSMS();
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 11042024
+                    HiddenClasses_Commence_From();
+                    return;
                 }
             }
             #endregion
@@ -1848,14 +3009,26 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         {
                                             objCommon.DisplayUserMessage(this.updCollege, "SMS Sent Successfully.", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                             cancel();
                                         }
                                         else
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send SMS", this.Page);
                                             HiddenItemSMS();
+<<<<<<< HEAD
                                             HiddenItemParents();
+=======
+                                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                         }
 
                                     }
@@ -1881,14 +3054,528 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                    HiddenItemForPm();
+                    HiddenItem();
+                    HiddenItemSMS();
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 11042024
+                    HiddenClasses_Commence_From();
+                    return;
                 }
             }
             #endregion
             else
             {
                 objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemSMS();
+                HiddenItemParents();
+                //Added By Jay T. On dated 11042024
+                HiddenClasses_Commence_From();
+                return;
 
             }
+        }
+        #endregion
+
+        #region SMS For TGPCET
+        else if (Convert.ToInt32(Session["OrgId"]) == 21)
+        {
+            #region SMS For TGPCET (Student)
+            if (rdbEmplyeStud.SelectedValue == "2")
+            {
+                #region SMS For TGPCET (Student) Fees not Paid for All Semester (11/04/2024)
+                if (rboStudent.SelectedValue == "4")
+                {
+                    if (txtDate.Text != string.Empty)
+                    {
+                        if (Convert.ToDateTime(DateTime.Now) > Convert.ToDateTime(txtDate.Text))
+                        {
+                            objCommon.DisplayMessage(this.updCollege, "Date should be greater than Today's date", this.Page);
+                            HiddenItemSMS();
+                            HiddenItemForPm();
+                            HiddenItem();
+                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+
+                            return;
+                        }
+                        else
+                        {
+
+                            MSGTYPE = 1;
+                            string TemplateID = string.Empty;
+                            string TEMPLATE = string.Empty;
+                            string message = string.Empty;
+                            string template = string.Empty;
+                            int status1 = 0;
+                            int count = 0;
+                            foreach (ListViewDataItem dataitem in lvNotpaidAll.Items)
+                            {
+                                CheckBox cbRow = dataitem.FindControl("chkSelect1") as CheckBox;
+                                if (cbRow.Checked == true)
+                                    count++;
+                            }
+                            if (count <= 0)
+                            {
+                                objCommon.DisplayMessage(this.updCollege, "Please Select atleast one Student For Send SMS", this);
+                                HiddenItemSMS();
+                                HiddenItemForPm();
+                                HiddenItem();
+                                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                //Added By Jay T. On dated 23022024
+                                HiddenItemFeesNotPaid();
+                                return;
+                            }
+                            else
+                            {
+                                foreach (ListViewDataItem items in lvNotpaidAll.Items)
+                                {
+                                    try
+                                    {
+                                        CheckBox chkSelect1 = items.FindControl("chkSelect1") as CheckBox;
+                                        int idno = Convert.ToInt32(chkSelect1.ToolTip.ToString());
+                                        Label lblStudMobile = items.FindControl("lblStudmobile") as Label;
+                                        Label lblstudname = items.FindControl("lblStudname") as Label;
+                                        string studname = lblstudname.Text.TrimEnd();
+
+
+                                        if (chkSelect1.Checked)
+                                        {
+                                            string ToMobileNo = objCommon.LookUp("ACD_STUDENT", "STUDENTMOBILE", "IDNO=" + chkSelect1.ToolTip);
+                                            string ACADEMIC_YEAR = objCommon.LookUp("acd_student S inner join ACD_ACADEMIC_YEAR Y on(S.ACADEMIC_YEAR_ID=Y.ACADEMIC_YEAR_ID)", "Y.ACADEMIC_YEAR_NAME", "IDNO=" + chkSelect1.ToolTip);
+                                            string date = txtDate.Text;
+                                            string mobile = "91" + ToMobileNo;
+                                            if (ToMobileNo != string.Empty)
+                                            {
+                                                if (lblStudMobile.Text != string.Empty)
+                                                {
+                                                    string templatename = "Fees not Paid for All Semester";
+                                                    DataSet ds = objUC.GetSMSTemplate(0, templatename);
+                                                    if (ds.Tables[0].Rows.Count > 0)
+                                                    {
+                                                        TEMPLATE = ds.Tables[0].Rows[0]["TEMPLATE"].ToString();
+                                                        TemplateID = ds.Tables[0].Rows[0]["TEM_ID"].ToString();
+                                                    }
+                                                    else
+                                                    {
+                                                        objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                                                        HiddenItemForPm();
+                                                        HiddenItem();
+                                                        HiddenItemSMS();
+                                                        return;
+                                                    }
+                                                    message = TEMPLATE;
+                                                    message = message.Replace("{#var#}", ACADEMIC_YEAR);
+                                                    message = message.Replace("{#var1#}", date);
+
+                                                    // Create a StringBuilder and append the template
+                                                    StringBuilder stringBuilder = new StringBuilder();
+                                                    stringBuilder.Append(message);
+                                                    // Get the final message string
+                                                    template = stringBuilder.ToString();
+                                                    //this.SendSMS(lblStudMobile.Text.Trim(), template, TemplateID);
+                                                    status1 = SendSMS_Admission(lblStudMobile.Text.Trim(), template, TemplateID);
+                                                }
+                                            }
+                                            if (status1 == 1)
+                                            {
+                                                objCommon.DisplayUserMessage(this.updCollege, "SMS Sent Successfully.", this.Page);
+                                                HiddenItemSMS();
+                                                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                                //Added By Jay T. On dated 23022024
+                                                HiddenItemFeesNotPaid();
+                                                cancel();
+                                                //Added By Sakshi M on 20012024 to maintain log 
+                                                CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Fees not Paid for All Semester(Student)", lblStudMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            }
+                                            else
+                                            {
+                                                objCommon.DisplayMessage(this.updCollege, "Failed To send SMS", this.Page);
+                                                HiddenItemSMS();
+                                                HiddenItemParents();
+                                                HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                                //Added By Jay T. On dated 23022024
+                                                HiddenItemFeesNotPaid();
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            objCommon.DisplayMessage(this.updCollege, "Sorry..! Didn't found Mobile no. for some Students(s)", this.Page);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        if (Convert.ToBoolean(Session["error"]) == true)
+                                            objUCommon.ShowError(Page, "Academic_SendSmstoParents.btnSndSms_Click-> " + ex.Message + " " + ex.StackTrace);
+                                        else
+                                        {
+                                            objCommon.DisplayMessage(this.updCollege, "Server UnAvailable", this.Page);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this.updDetained, "Please Select Date !", this.Page);
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemSMS();
+                        return;
+                    }
+                }
+                #endregion
+
+                #region SMS For TGPCET (Student) Classes Commence From (11/04/2024)
+                else
+                    if (rboStudent.SelectedValue == "5")
+                    {
+                        if (txtDate.Text != string.Empty)
+                        {
+                            if (Convert.ToDateTime(DateTime.Now) > Convert.ToDateTime(txtDate.Text))
+                            {
+                                objCommon.DisplayMessage(this.updCollege, "Date should be greater than Today's date", this.Page);
+                                HiddenItemSMS();
+                                HiddenItemForPm();
+                                HiddenItem();
+                                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                //Added By Jay T. On dated 23022024
+                                HiddenItemFeesNotPaid();
+
+                                return;
+                            }
+                            else
+                            {
+
+                                MSGTYPE = 1;
+                                string TemplateID = string.Empty;
+                                string TEMPLATE = string.Empty;
+                                string message = string.Empty;
+                                string template = string.Empty;
+                                int status1 = 0;
+                                int count = 0;
+                                foreach (ListViewDataItem dataitem in lvStudent.Items)
+                                {
+                                    CheckBox cbRow = dataitem.FindControl("chkSelect1") as CheckBox;
+                                    if (cbRow.Checked == true)
+                                        count++;
+                                }
+                                if (count <= 0)
+                                {
+                                    objCommon.DisplayMessage(this.updCollege, "Please Select atleast one Student For Send SMS", this);
+                                    HiddenItemSMS();
+                                    HiddenItemForPm();
+                                    HiddenItem();
+                                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                    //Added By Jay T. On dated 23022024
+                                    HiddenItemFeesNotPaid();
+                                    return;
+                                }
+                                else
+                                {
+                                    foreach (ListViewDataItem items in lvStudent.Items)
+                                    {
+                                        try
+                                        {
+                                            CheckBox chkSelect1 = items.FindControl("chkSelect1") as CheckBox;
+                                            int idno = Convert.ToInt32(chkSelect1.ToolTip.ToString());
+                                            Label lblStudMobile = items.FindControl("lblStudmobile") as Label;
+                                            Label lblstudname = items.FindControl("lblStudname") as Label;
+                                            string studname = lblstudname.Text.TrimEnd();
+
+
+                                            if (chkSelect1.Checked)
+                                            {
+                                                string ToMobileNo = objCommon.LookUp("ACD_STUDENT", "STUDENTMOBILE", "IDNO=" + chkSelect1.ToolTip);
+                                                string Semester = objCommon.LookUp("acd_student S inner join acd_semester Y on(S.semesterno=Y.semesterno)", "Y.SEMESTERNAME", "IDNO=" + chkSelect1.ToolTip);
+                                                string date = txtDate.Text;
+                                                string mobile = "91" + ToMobileNo;
+                                                if (ToMobileNo != string.Empty)
+                                                {
+                                                    if (lblStudMobile.Text != string.Empty)
+                                                    {
+                                                        string templatename = "Classes Commence From";
+                                                        DataSet ds = objUC.GetSMSTemplate(0, templatename);
+                                                        if (ds.Tables[0].Rows.Count > 0)
+                                                        {
+                                                            TEMPLATE = ds.Tables[0].Rows[0]["TEMPLATE"].ToString();
+                                                            TemplateID = ds.Tables[0].Rows[0]["TEM_ID"].ToString();
+                                                        }
+                                                        else
+                                                        {
+                                                            objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                                                            HiddenItemForPm();
+                                                            HiddenItem();
+                                                            HiddenItemSMS();
+                                                            return;
+                                                        }
+                                                        message = TEMPLATE;
+                                                        message = message.Replace("{#var#}", Semester);
+                                                        message = message.Replace("{#var1#}", date);
+
+                                                        // Create a StringBuilder and append the template
+                                                        StringBuilder stringBuilder = new StringBuilder();
+                                                        stringBuilder.Append(message);
+                                                        // Get the final message string
+                                                        template = stringBuilder.ToString();
+                                                        //this.SendSMS(lblStudMobile.Text.Trim(), template, TemplateID);
+                                                        status1 = SendSMS_Admission(lblStudMobile.Text.Trim(), template, TemplateID);
+                                                    }
+                                                }
+                                                if (status1 == 1)
+                                                {
+                                                    objCommon.DisplayUserMessage(this.updCollege, "SMS Sent Successfully.", this.Page);
+                                                    HiddenItemSMS();
+                                                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                                    //Added By Jay T. On dated 23022024
+                                                    HiddenItemFeesNotPaid();
+                                                    //cancel();
+                                                    //Added By Sakshi M on 20012024 to maintain log 
+                                                    CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Classes Commence From(Student)", lblStudMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                                }
+                                                else
+                                                {
+                                                    objCommon.DisplayMessage(this.updCollege, "Failed To send SMS", this.Page);
+                                                    HiddenItemSMS();
+                                                    HiddenItemParents();
+                                                    HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                                    //Added By Jay T. On dated 23022024
+                                                    HiddenItemFeesNotPaid();
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                objCommon.DisplayMessage(this.updCollege, "Sorry..! Didn't found Mobile no. for some Students(s)", this.Page);
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            if (Convert.ToBoolean(Session["error"]) == true)
+                                                objUCommon.ShowError(Page, "Academic_SendSmstoParents.btnSndSms_Click-> " + ex.Message + " " + ex.StackTrace);
+                                            else
+                                            {
+                                                objCommon.DisplayMessage(this.updCollege, "Server UnAvailable", this.Page);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(this.updDetained, "Please Select Date !", this.Page);
+                            HiddenItemForPm();
+                            HiddenItem();
+                            HiddenItemSMS();
+                            return;
+                        }
+                    }
+                #endregion
+
+                    else
+                    {
+                        objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemSMS();
+                        HiddenItemParents();
+                        //Added By Jay T. On dated 11042024
+                        HiddenClasses_Commence_From();
+                        return;
+                    }
+            }
+            #endregion
+
+            #region SMS For TGPCET (Parents)
+            else
+                if (rdbEmplyeStud.SelectedValue == "3")
+                {
+
+                    if (rboStudent.SelectedValue == "4")
+                    {
+                        objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemSMS();
+                        HiddenItemParents();
+                        //Added By Jay T. On dated 11042024
+                        HiddenClasses_Commence_From();
+                        return;
+                        #region SMS For TGPCET (Student) Fees not Paid for All Semester (11/04/2024)
+                        //if (txtDate.Text != string.Empty)
+                        //{
+                        //    if (Convert.ToDateTime(DateTime.Now) > Convert.ToDateTime(txtDate.Text))
+                        //    {
+                        //        objCommon.DisplayMessage(this.updCollege, "Date should be greater than Today's date", this.Page);
+                        //        HiddenItemSMS();
+                        //        HiddenItemForPm();
+                        //        HiddenItem();
+                        //        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //        //Added By Jay T. On dated 23022024
+                        //        HiddenItemFeesNotPaid();
+                        //        return;
+                        //    }
+                        //    else
+                        //    {
+
+                        //        MSGTYPE = 1;
+                        //        string TemplateID = string.Empty;
+                        //        string TEMPLATE = string.Empty;
+                        //        string message = string.Empty;
+                        //        string template = string.Empty;
+                        //        int status1 = 0;
+                        //        int count = 0;
+                        //        foreach (ListViewDataItem dataitem in lvNotpaidAll.Items)
+                        //        {
+                        //            CheckBox cbRow = dataitem.FindControl("chkSelect1") as CheckBox;
+                        //            if (cbRow.Checked == true)
+                        //                count++;
+                        //        }
+                        //        if (count <= 0)
+                        //        {
+                        //            objCommon.DisplayMessage(this.updCollege, "Please Select atleast one Student For Send SMS", this);
+                        //            HiddenItemSMS();
+                        //            HiddenItemForPm();
+                        //            HiddenItem();
+                        //            HiddenItemParents();
+                        //            HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //            //Added By Jay T. On dated 23022024
+                        //            HiddenItemFeesNotPaid();
+                        //            return;                              
+                        //        }
+                        //        else
+                        //        {
+                        //            foreach (ListViewDataItem items in lvNotpaidAll.Items)
+                        //            {
+                        //                try
+                        //                {
+                        //                    CheckBox chkSelect1 = items.FindControl("chkSelect1") as CheckBox;
+                        //                    int idno = Convert.ToInt32(chkSelect1.ToolTip.ToString());
+                        //                    Label lblStudMobile = items.FindControl("lblStudmobile") as Label;
+                        //                    Label lblstudname = items.FindControl("lblStudname") as Label;
+                        //                    string studname = lblstudname.Text.TrimEnd();
+
+
+                        //                    if (chkSelect1.Checked)
+                        //                    {
+                        //                        string ToMobileNo = objCommon.LookUp("ACD_STUDENT", "STUDENTMOBILE", "IDNO=" + chkSelect1.ToolTip);
+                        //                        string ACADEMIC_YEAR = objCommon.LookUp("acd_student S inner join ACD_ACADEMIC_YEAR Y on(S.ACADEMIC_YEAR_ID=Y.ACADEMIC_YEAR_ID)", "Y.ACADEMIC_YEAR_NAME", "IDNO=" + chkSelect1.ToolTip);
+                        //                        string date = txtDate.Text;
+                        //                        string mobile = "91" + ToMobileNo;
+                        //                        if (ToMobileNo != string.Empty)
+                        //                        {
+                        //                            if (lblStudMobile.Text != string.Empty)
+                        //                            {
+                        //                                string templatename = "Fees not Paid for All Semester";
+                        //                                DataSet ds = objUC.GetSMSTemplate(0, templatename);
+                        //                                if (ds.Tables[0].Rows.Count > 0)
+                        //                                {
+                        //                                    TEMPLATE = ds.Tables[0].Rows[0]["TEMPLATE"].ToString();
+                        //                                    TemplateID = ds.Tables[0].Rows[0]["TEM_ID"].ToString();
+                        //                                }
+                        //                                else
+                        //                                {
+                        //                                    objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                        //                                    HiddenItemForPm();
+                        //                                    HiddenItem();
+                        //                                    HiddenItemSMS();
+                        //                                    return;
+                        //                                }
+                        //                                message = TEMPLATE;
+                        //                                message = message.Replace("{#var#}", ACADEMIC_YEAR);
+                        //                                message = message.Replace("{#var1#}", date);
+
+                        //                                // Create a StringBuilder and append the template
+                        //                                StringBuilder stringBuilder = new StringBuilder();
+                        //                                stringBuilder.Append(message);
+                        //                                // Get the final message string
+                        //                                template = stringBuilder.ToString();
+                        //                                //this.SendSMS(lblStudMobile.Text.Trim(), template, TemplateID);
+                        //                                status1 = SendSMS_Admission(lblStudMobile.Text.Trim(), template, TemplateID);
+                        //                            }
+                        //                        }
+                        //                        if (status1 == 1)
+                        //                        {
+                        //                            objCommon.DisplayUserMessage(this.updCollege, "SMS Sent Successfully.", this.Page);
+                        //                            HiddenItemSMS();
+                        //                            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //                            //Added By Jay T. On dated 23022024
+                        //                            HiddenItemFeesNotPaid();
+                        //                            //Added By Sakshi M on 20012024 to maintain log 
+                        //                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Fees not Paid for All Semester(Parents)", lblStudMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                        //                        }
+                        //                        else
+                        //                        {
+                        //                            objCommon.DisplayMessage(this.updCollege, "Failed To send SMS.", this.Page);
+                        //                            HiddenItemSMS();
+                        //                            HiddenItemParents();
+                        //                            HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                        //                            //Added By Jay T. On dated 23022024
+                        //                            HiddenItemFeesNotPaid();
+                        //                        }
+
+                        //                    }
+                        //                    else
+                        //                    {
+                        //                        objCommon.DisplayMessage(this.updCollege, "Sorry..! Didn't found Mobile no. for some Parents(s)", this.Page);
+                        //                    }
+                        //                }
+                        //                catch (Exception ex)
+                        //                {
+                        //                    if (Convert.ToBoolean(Session["error"]) == true)
+                        //                        objUCommon.ShowError(Page, "Academic_SendSmstoParents.btnSndSms_Click-> " + ex.Message + " " + ex.StackTrace);
+                        //                    else
+                        //                    {
+                        //                        objCommon.DisplayMessage(this.updCollege, "Server UnAvailable", this.Page);
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    objCommon.DisplayMessage(this.updDetained, "Please Select Date !", this.Page);
+                        //    HiddenItemForPm();
+                        //    HiddenItem();
+                        //    HiddenItemSMS();
+                        //    return;
+                        //}
+                        #endregion
+                    }
+                    else if (rboStudent.SelectedValue == "5")
+                    {
+                        #region SMS For TGPCET (Student) Classes Commence From (11/04/2024)
+                        #endregion
+                        objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemSMS();
+                        HiddenItemParents();
+                        //Added By Jay T. On dated 11042024
+                        HiddenClasses_Commence_From();
+                        return;
+                    }
+
+                    else
+                    {
+                        objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemSMS();
+                        HiddenItemParents();
+                        //Added By Jay T. On dated 11042024
+                        HiddenClasses_Commence_From();
+                        return;
+                    }
+                }
+            #endregion
         }
         #endregion
 
@@ -1896,6 +3583,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         else
         {
             objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
+            HiddenItemSMS();
+            HiddenItemForPm();
+            HiddenItem();
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            return;
 
         }
         #endregion
@@ -2057,7 +3751,47 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 status = reader.ReadToEnd();
                 if (status == "")
                 {
+<<<<<<< HEAD
                     ret = 0;
+=======
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + text;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + Mobile;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                    if (status == "")
+                    {
+                        ret = 0;
+                    }
+                    else
+                    {
+                        ret = 1;
+                    }
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 }
                 else
                 {
@@ -2138,6 +3872,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             pnldate.Visible = false;
             PnlNotPaidStudent.Visible = false;
             pnlStudentInstallment.Visible = false;
+
             HiddenItemSMS();
         }
         else if (rdbEmplyeStud.SelectedValue == "2")
@@ -2168,7 +3903,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
             HiddenItemSMS();
+<<<<<<< HEAD
             HiddenItemParents();
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
         }
 
@@ -2187,6 +3928,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         lvStudent.DataSource = null;
         lvStudent.DataBind();
         rdbEmailSms.SelectedValue = "-1";
+        DivDate1.Visible = false;
+        txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
         divEmail.Visible = false;
         HiddenItemSMS();
         HiddenItemForPm();
@@ -2197,7 +3940,16 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         lvTemplate.Visible = false;
         btnSndMessg.Enabled = false;
         btnSndSms.Enabled = false;
+        DivDate1.Visible = false;
+        txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
         HiddenItemParents();
+<<<<<<< HEAD
+=======
+        HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+        //Added By Jay T. On dated 23022024
+        ddlReceiptType.SelectedIndex = 0;
+        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
     }
 
     #endregion
@@ -2210,7 +3962,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         ddlsemester.SelectedIndex = 0;
         objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_BRANCH B ON(CDB.BRANCHNO = B.BRANCHNO)", "DISTINCT (CDB.BRANCHNO)", "B.LONGNAME", "CDB.COLLEGE_ID=" + ddlSchool.SelectedValue + " AND CDB.DEGREENO =" + ddlDegree.SelectedValue + " AND CDB.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "CDB.BRANCHNO");
         HiddenItemSMS();
+<<<<<<< HEAD
         HiddenItemParents();
+=======
+        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "A.BRANCHNO", "A.LONGNAME", "B.DEGREENO="+ddlDegree.SelectedValue+" AND A.BRANCHNO>0", "A.BRANCHNO");
     }
 
@@ -2224,7 +3982,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             objCommon.FillDropDownList(ddlDegree, "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_DEGREE D ON(CDB.DEGREENO = D.DEGREENO)", "DISTINCT (CDB.DEGREENO)", "D.DEGREENAME", "CDB.COLLEGE_ID=" + ddlSchool.SelectedValue + " AND CDB.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "CDB.DEGREENO");
         }
         HiddenItemSMS();
-        HiddenItemParents();
+        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
     }
 
     #endregion
@@ -2344,6 +4102,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             pnlStudentInstallment.Visible = false;
             rboStudent.SelectedValue = "-1";
             rdbEmailSms.SelectedValue = "-1";
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
             pnldate.Visible = false;
             ddlDegree.SelectedIndex = 0;
             ddlBranch.SelectedIndex = 0;
@@ -2360,8 +4120,23 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             lvTemplate.Visible = false;
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = false;
+<<<<<<< HEAD
             HiddenItemParents();
 
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            supSem.Visible = true;
+            divsemester1.Visible = true;
+            divRType.Visible = false;
+            ddlsemester.Visible = true;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rdbEmplyeStud.SelectedValue == "2")
         {
@@ -2372,6 +4147,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             PnlNotPaidStudent.Visible = false;
             rboStudent.SelectedValue = "-1";
             rdbEmailSms.SelectedValue = "-1";
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
             ddlDegree.SelectedIndex = 0;
             ddlBranch.SelectedIndex = 0;
             txtMessage.Text = "";
@@ -2386,7 +4163,22 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             lvTemplate.Visible = false;
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = false;
+<<<<<<< HEAD
             HiddenItemParents();
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            supSem.Visible = true;
+            divsemester1.Visible = true;
+            divRType.Visible = false;
+            ddlsemester.Visible = true;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 and OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
 
@@ -2399,6 +4191,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             ddlDepartment.SelectedIndex = 0;
             PnlNotPaidStudent.Visible = false;
             rboStudent.SelectedValue = "-1";
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
             rdbEmailSms.SelectedValue = "-1";
             ddlDegree.SelectedIndex = 0;
             ddlBranch.SelectedIndex = 0;
@@ -2413,8 +4207,24 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             lvTemplate.Visible = false;
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = false;
+<<<<<<< HEAD
             HiddenItemParents();
             pnldate.Visible = false;
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            pnldate.Visible = false;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            supSem.Visible = true;
+            divsemester1.Visible = true;
+            divRType.Visible = false;
+            ddlsemester.Visible = true;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 and OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
 
@@ -2428,6 +4238,24 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         {
             HiddenItemSMS();
             //----------------------------//
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
+            {
+                if (rboStudent.SelectedValue == "4" || rboStudent.SelectedValue == "5")
+                {
+                    txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+                    DivDate1.Visible = true;
+                }
+                else
+                {
+                    DivDate1.Visible = false;
+                    txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+                }
+            }
+            else
+            {
+                DivDate1.Visible = false;
+                txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+            }
             divmbody.Visible = false;
             divTtype.Visible = false;
             divEmail.Visible = false;
@@ -2435,6 +4263,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = true;
             HiddenItemParents();
+<<<<<<< HEAD
+=======
+            HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rdbEmailSms.SelectedValue == "0")
         {
@@ -2446,6 +4280,60 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnSndSms.Enabled = false;
             HiddenItemSMS();
             HiddenItemParents();
+<<<<<<< HEAD
+=======
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
+            DivDate1.Visible = false;
+            HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+        }
+        else
+        {
+            HiddenItemSMS();
+            //----------------------------//
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
+            {
+                if (rboStudent.SelectedValue == "4")
+                {
+                    txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
+                    DivDate1.Visible = false;
+                }
+                else
+                {
+                    DivDate1.Visible = false;
+                    txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
+                }
+            }
+            else
+            {
+                DivDate1.Visible = false;
+                txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
+            }
+            divmbody.Visible = false;
+            divTtype.Visible = false;
+            divEmail.Visible = false;
+            lvTemplate.Visible = false;
+            btnSndMessg.Enabled = false;
+            btnSndSms.Enabled = false;
+            HiddenItemParents();
+            HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            divmbody.Visible = false;
+            divTtype.Visible = false;
+            divEmail.Visible = false;
+            lvTemplate.Visible = false;
+            btnSndMessg.Enabled = false;
+            btnSndSms.Enabled = false;
+            HiddenItemSMS();
+            HiddenItemParents();
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 23022024
+            DivDate1.Visible = false;
+            HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
 
     }
@@ -2504,7 +4392,27 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
             HiddenItemSMS();
+<<<<<<< HEAD
             HiddenItemParents();
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = true;
+            divRType.Visible = false;
+            divsemester1.Visible = true;
+            rdbEmailSms.SelectedValue = "-1";
+            rdbEmailSms_SelectedIndexChanged(rdbEmailSms.SelectedValue, e); //Added By Jay T. On dated 12042024
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+            ddlsemester.Visible = true;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rboStudent.SelectedValue == "2")
         {
@@ -2514,7 +4422,27 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             trEmployee.Visible = false;
             PnlNotPaidStudent.Visible = false;
             HiddenItemSMS();
+<<<<<<< HEAD
             HiddenItemParents();
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = true;
+            divRType.Visible = false;
+            rdbEmailSms.SelectedValue = "-1";
+            rdbEmailSms_SelectedIndexChanged(rdbEmailSms.SelectedValue, e); //Added By Jay T. On dated 12042024
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+            divsemester1.Visible = true;
+            ddlsemester.Visible = true;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rboStudent.SelectedValue == "3")
         {
@@ -2525,9 +4453,81 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             PnlNotPaidStudent.Visible = false;
             pnlStudentInstallment.Visible = false;
             txtStartDate.Text = string.Empty;
+            rdbEmailSms.SelectedValue = "-1";
+            rdbEmailSms_SelectedIndexChanged(rdbEmailSms.SelectedValue, e); //Added By Jay T. On dated 12042024
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+            txtEndDate.Text = string.Empty;
+            HiddenItemSMS();
+<<<<<<< HEAD
+            HiddenItemParents();
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = true;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            divsemester1.Visible = true;
+            ddlsemester.Visible = true;
+            divRType.Visible = false;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+        }
+        else if (rboStudent.SelectedValue == "4")
+        {
+            pnldate.Visible = false;
+            trStudent.Visible = false;
+            lvStudent.Visible = false;
+            trEmployee.Visible = false;
+            PnlNotPaidStudent.Visible = false;
+            HiddenItemSMS();
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = false;
+            divsemester1.Visible = false;
+            rdbEmailSms.SelectedValue = "-1";
+            rdbEmailSms_SelectedIndexChanged(rdbEmailSms.SelectedValue, e); //Added By Jay T. On dated 12042024
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+            divRType.Visible = true;
+            ddlsemester.Visible = false;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
+        }
+        else if (rboStudent.SelectedValue == "5")  //Added By Jay T. On dated 12042024
+        {
+            pnldate.Visible = false;
+            trStudent.Visible = false;
+            lvStudent.Visible = false;
+            rdbEmailSms.SelectedValue = "-1";
+            rdbEmailSms_SelectedIndexChanged(rdbEmailSms.SelectedValue, e); //Added By Jay T. On dated 12042024
+            DivDate1.Visible = false;
+            txtDate.Text = string.Empty;  //Added By Jay T. On dated 12042024
+            trEmployee.Visible = false;
+            pnlStudentInstallment.Visible = false;
+            txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
             HiddenItemSMS();
             HiddenItemParents();
+            HiddenClasses_Commence_From(); //Added By Jay T. On dated 12042024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = true;
+            divRType.Visible = false;
+            divsemester1.Visible = true;
+            ddlsemester.Visible = true;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
         }
 
     }
@@ -3487,6 +5487,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
         }
         else if (rdbFormat.SelectedValue == "2")
@@ -3501,6 +5507,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rdbFormat.SelectedValue == "3")
         {
@@ -3515,6 +5527,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemSMS();
             HiddenItemSMSmark();
             GetMarksList();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
 
         }
@@ -3532,6 +5550,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
         }
         else if (rdbFormat.SelectedValue == "5")
@@ -3548,6 +5572,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
         }
     }
@@ -3574,6 +5604,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             lstAttSecondsms.DataSource = null;
             lstAttSecondsms.DataBind();
             lstAttSecondsms.Visible = false;
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else
         {
@@ -3587,7 +5623,14 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divAttStatus.Visible = false;
             pnlfirst.Visible = false;
             divFirstsms.Visible = false;
+<<<<<<< HEAD
             objCommon.DisplayMessage(this.updDetained, "Attendance Not Mark For Your Selection!", this.Page);
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            objCommon.DisplayMessage(this.updDetained, "No Absentees Found For Your Selection!", this.Page);
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
 
         foreach (ListViewDataItem dataitem in lvfirstsms.Items)
@@ -3655,6 +5698,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divattendancesecondsms.Visible = true;
             pnlsecond.Visible = true;
             TODAYATT();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else
         {
@@ -3664,7 +5713,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divattendancesecondsms.Visible = false;
             pnlsecond.Visible = false;
             TODAYATT();
+<<<<<<< HEAD
 
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
             pnlfirst.Visible = false;
             divFirstsms.Visible = false;
@@ -3685,11 +5740,23 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             lvfirstsms.DataBind();
             hftot.Value = lvfirstsms.Items.Count.ToString();
             TODAYATT();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else
         {
             objCommon.DisplayMessage(this.updDetained, "No Record Found For Your Selection!", this.Page);
             TODAYATT();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
     }
 
@@ -3719,6 +5786,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else
         {
@@ -3726,6 +5799,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             //TODAYATT();
             HiddenItemForPm();
             HiddenItem();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             HiddenItemSMS();
         }
 
@@ -3744,11 +5823,23 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 lvTodayAtt.DataSource = dstoday;
                 lvTodayAtt.DataBind();
                 hftot.Value = lvTodayAtt.Items.Count.ToString();
+<<<<<<< HEAD
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 //  TODAYATT();
             }
             else
             {
                 objCommon.DisplayMessage(this.updDetained, "No Record Found For Your Selection!", this.Page);
+<<<<<<< HEAD
+=======
+                HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 //  TODAYATT();
             }
         }
@@ -3825,6 +5916,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         HiddenItemForPm();
         HiddenItem();
         HiddenItemSMS();
+<<<<<<< HEAD
+=======
+        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         string slotname = objCommon.LookUp("ACD_TIME_SLOT", "TIMEFROM+' - '+TIMETO AS SLOTNAME", "SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue));
         string SubOtp = objCommon.LookUp("REFF", "SUBJECT_OTP", "");
 
@@ -3914,6 +6012,18 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     HiddenItem();
                                     HiddenItemSMS();
                                     HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+                                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                                    //Added By Jay T. On dated 23022024
+                                    HiddenItemFeesNotPaid();
+
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    ////CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+                                    CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                                 }
                                 else
                                 {
@@ -3942,6 +6052,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         #endregion
 
@@ -4117,6 +6233,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         #endregion
 
@@ -4242,6 +6364,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         #endregion
 
@@ -4415,6 +6543,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
 
         #endregion
@@ -4595,6 +6729,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         #endregion
     }
@@ -4608,6 +6748,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         txtSmsSend.Text = string.Empty;
         txtSmsNotSend.Text = string.Empty;
         txtSmsSend.Visible = false;
+<<<<<<< HEAD
+=======
+        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         txtSmsNotSend.Visible = false;
     }
 
@@ -4681,6 +6827,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             // btnAttSms.Visible = false;
             btnSubmitSmsEmail.Visible = true;
             btnWhatsAppAtt.Visible = false;
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
                 if (rdbFormat.SelectedValue == "4")
@@ -4699,6 +6851,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemSMS();
                     //   HiddenItemForPm();
                     btnWhatsAppAtt.Visible = false;
+<<<<<<< HEAD
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 }
                 else
                 {
@@ -4706,12 +6864,24 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItem();
                     HiddenItemSMS();
                     //  HiddenItemForPm();
+<<<<<<< HEAD
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 }
             }
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rdbFormat.SelectedValue == "2")
         {
@@ -4728,6 +6898,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             dvexam.Visible = false;   //added by parfull on 18052023
 
             DIVBRANCH.Visible = true;
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             DIVSEM.Visible = true;
             btnSubmitSmsEmail.Visible = true;
             DIVSECTION.Visible = true;
@@ -4762,17 +6938,35 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItem();
                     HiddenItemSMS();
                     btnWhatsAppAtt.Visible = false;
+<<<<<<< HEAD
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 }
                 else
                 {
                     btnWhatsAppAtt.Visible = false;
                     HiddenItem();
+<<<<<<< HEAD
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     HiddenItemSMS();
                 }
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rdbFormat.SelectedValue == "3")
         {
@@ -4805,6 +6999,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnEmailSms.Visible = true;
             DivSemPM.Visible = false;
             // btnAttSms.Visible = false;
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             btnWhatsAppAtt.Visible = false;
             if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
@@ -4833,6 +7033,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
             //added by prafull 18052023
 
@@ -4875,6 +7081,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         }
         else if (rdbFormat.SelectedValue == "5")
         {
@@ -4889,7 +7101,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
             dvexam.Visible = false;          //added by parfull on 18052023
             divatt.Visible = true;         //added by parfull on 18052023
+<<<<<<< HEAD
 
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
 
             DIVBRANCH.Visible = true;
             DIVSEM.Visible = false;
@@ -4927,6 +7145,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItem();
                     HiddenItemSMS();
                     btnWhatsAppAtt.Visible = false;
+<<<<<<< HEAD
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                 }
                 else
                 {
@@ -4958,6 +7182,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
         lvfirstsms.DataSource = null;
         lvfirstsms.DataBind();
+<<<<<<< HEAD
+=======
+        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         lvfirstsms.Visible = false;
         lstAttSecondsms.DataSource = null;
         lstAttSecondsms.DataBind();
@@ -5516,7 +7746,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     if (status1 == 1)
                                     {
 
-                                       // cs = objAttC.INSERTPARENTEMAILLOG(Convert.ToInt32(Session["userno"]), message, useremail, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), IPaddress, Convert.ToDateTime(txtFromDat.Text));
+                                        // cs = objAttC.INSERTPARENTEMAILLOG(Convert.ToInt32(Session["userno"]), message, useremail, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), IPaddress, Convert.ToDateTime(txtFromDat.Text));
                                         objCommon.DisplayMessage(this.updDetained, "Email Send Successfully", this.Page);
                                         // chek.Checked = false;
                                         pnlfirst.Visible = true;
@@ -5787,6 +8017,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         {
             HiddenItemForPm();
             HiddenItemSMS();
+<<<<<<< HEAD
+=======
+            HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
             int count = 0;
             string MailSendStatus = string.Empty;
             string MailNotSendStatus = string.Empty;
@@ -5890,6 +8126,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     }
                     HiddenItemForPm();
                     HiddenItemSMS();
+<<<<<<< HEAD
+=======
+                    HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
                     HiddenItem();
                 }
                 catch (Exception ex)
@@ -5930,6 +8172,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         string secondvar = string.Empty;
         string thirdvar = string.Empty;
         string fourtvar = string.Empty;
+<<<<<<< HEAD
+=======
+        HiddenItemParents(); HiddenClasses_Commence_From(); //Added By Jay T. On dated 23022024
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
+>>>>>>> 93735f6d ([ENHANCEMENT] [57398] [SMS Integration])
         string inputString = "aDSD"; // Replace with your own string value
 
 
