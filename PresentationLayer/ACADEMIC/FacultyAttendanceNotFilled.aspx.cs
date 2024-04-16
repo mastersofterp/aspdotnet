@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 ﻿//==============================================================================
 //PROJECT NAME  : RF-Common Code
@@ -16,6 +17,9 @@
 //------------------------------------------- ----------------------------------------------------------------------------------------------------------
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
 using System;
+=======
+﻿using System;
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -88,69 +92,15 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                 DivLabel.Visible = true;
                 //Set the Page Title
                 this.Page.Title = Session["coll_name"].ToString();
-                string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+
                 //Load Page Help
                 if (Request.QueryString["pageno"] != null)
-                    if (ua_type == "8")
-                    {
-                        divHOD.Visible = true;
-                        divAdmin.Visible = false;
-                        divAdminMain.Visible = false;
-                        divHODMain.Visible = true;
-                        btnAttReport.Visible = false;
-                        btnAttTracker.Visible = false;
-                        btnAttRegister.Visible = false;
-                        btnConAtt.Visible = false;
-                        btnExcel.Visible = false;
-                        divAdminMainButton.Visible = false;
-                        divHODMainButton.Visible = true;
-                        divSessionHOD.Visible = true;
-                        //divMClg.Visible = true;
-                        divSDHOD.Visible = true;
-                        divSDHOD1.Visible = true;
-                    }
-                    else
-                    {
-                        divAdmin.Visible = true;
-                        divHOD.Visible = false;
-                        divAdminMain.Visible = true;
-                        divHODMain.Visible = false;
-                        divAdminMainButton.Visible = true;
-                        divHODMainButton.Visible = false;
-                        //calender1.Visible = true;
-                    }
-                FillDropDownList();
+                    //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
+                    FillDropDownList();
+                //   ddlCollege.Focus();
             }
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -  Added By Rishabh on 03/01/2022
             objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  -  Added By Rishabh on 03/01/2022
-        }
-    }
-    public void HiddenItem()
-    {
-        string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"]));
-        if (ua_type == "8")
-        {
-
-            foreach (ListItem item in this.rdbReports.Items)
-            {
-                if (item.Value == "1" || item.Value == "2" || item.Value == "3" || item.Value == "4")
-                {
-                    // Or you can try to use
-                    item.Attributes.CssStyle.Add("display", "none");
-                }
-            }
-        }
-        else
-        {
-            foreach (ListItem item in this.rdbReports.Items)
-            {
-                if (item.Value == "5")
-                {
-                    // item.Attributes.CssStyle.Add("visibility", "hidden");
-                    // Or you can try to use
-                    item.Attributes.CssStyle.Add("display", "none");
-                }
-            }
         }
     }
 
@@ -173,8 +123,11 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
 
+=======
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
     private void FillDropDownList()
     {
         try
@@ -189,10 +142,12 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "DISTINCT SECTIONNO", "SECTIONNAME", "SECTIONNO>0 and ISNULL(ACTIVESTATUS,0)=1", "SECTIONNO");
             objCommon.FillDropDownList(ddlSessionn, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_PNAME", "SESSIONID>0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONID");
-            objCommon.FillDropDownList(ddlSessionHOD, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_PNAME", "SESSIONID>0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONID");
+            //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
+            //objCommon.FillDropDownList(ddlSession, "ACd_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO = SR.SESSIONNO)", "DISTINCT SR.SESSIONNO", "SM.SESSION_NAME", "SM.SESSIONNO > 0 AND SM.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
+            //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENAME DESC");
             try
             {
-                if (Session["usertype"].ToString() != "1") // prog co-ordinator / faculty
+                if (Session["usertype"].ToString() != "1")// prog co-ordinator / faculty
                 {
                     objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (SC.DEPTNO IN(" + Session["userdeptno"].ToString() + "))", "COSCHNO");
                 }
@@ -200,10 +155,6 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                 {
                     objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
                 }
-
-                //lboddlCollege.ClearSelection();
-                //objCommon.FillListBox(lboddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 and OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
-                //lboddlCollege.Focus();
             }
             catch
             {
@@ -228,8 +179,11 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+<<<<<<< HEAD
     #endregion
 
+=======
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
     #endregion
 
     #region Page comment
@@ -461,6 +415,71 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
 =======
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
 
+    #region Attendance Marked & Not-Marked
+    protected void btnAttReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (txtStartDate.Text != string.Empty && txtEndDate.Text != string.Empty)
+            {
+                DateTime startDate = Convert.ToDateTime(txtStartDate.Text);
+                DateTime EndDate = Convert.ToDateTime(txtEndDate.Text);
+                TimeSpan dt = Convert.ToDateTime(txtEndDate.Text) - Convert.ToDateTime(txtStartDate.Text);
+                if (dt.TotalDays > 31)
+                {
+                    objCommon.DisplayMessage(this, "You can only select dates within 31 days", this.Page);
+                    return;
+                }
+                else
+                {
+                    if (Convert.ToDateTime(txtEndDate.Text) < Convert.ToDateTime(txtStartDate.Text))
+                    {
+                        objCommon.DisplayMessage(this, "End Date should be greater than Start Date", this.Page);
+                        return;
+                    }
+                    else
+                    {
+                        string AttendanceStartDate = txtStartDate.Text;
+                        string AttendanceEndDate = txtEndDate.Text;
+                        int Sessionnos = Convert.ToInt32(ddlSession.SelectedValue);
+                        int College_code = Convert.ToInt32(ddlSchool.SelectedValue);
+                        DataSet ds = acdatt.RetrieveStudentAttDetailsMarkedExcel(AttendanceStartDate, AttendanceEndDate, Sessionnos, College_code);
+                        DataGrid dg = new DataGrid();
+
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            string attachment = "attachment; filename= AttendanceDetails Attendance Marked-Not Marked Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+
+                            Response.ClearContent();
+                            Response.AddHeader("content-disposition", attachment);
+                            Response.ContentType = "application/" + "ms-excel";
+                            StringWriter sw = new StringWriter();
+                            HtmlTextWriter htw = new HtmlTextWriter(sw);
+                            dg.DataSource = ds.Tables[0];
+                            dg.DataBind();
+                            dg.HeaderStyle.Font.Bold = true;
+                            dg.RenderControl(htw);
+                            Response.Write(sw.ToString());
+                            Response.End();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage("Record Not Found!!", this.Page);
+                            return;
+                        }
+                        ClearControls();
+                    }
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+    #endregion Attendance Marked & Not-Marked
+
     #region Attendance Tracker
     protected void btnAttTracker_Click(object sender, EventArgs e)
     {
@@ -557,6 +576,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     #endregion Attendance Tracker
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     #region Attendance Marked & Not-Marked
     protected void btnAttReport_Click(object sender, EventArgs e)
@@ -624,6 +644,8 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     #endregion  Attendance Marked & Not-Marked
 
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
+=======
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
     #region Bind DDL
     protected void rdbReports_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -655,9 +677,13 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             dvSession.Visible = false;
             btnExcel.Visible = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
             btnGlobalAtt.Visible = false;
 =======
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
+=======
+            btnGlobalAtt.Visible = false;
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
             //HiddenItem();
 
         }
@@ -691,9 +717,13 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             DivLabel2.Visible = false;
             DivLabel.Visible = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
             btnGlobalAtt.Visible = false;
 =======
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
+=======
+            btnGlobalAtt.Visible = false;
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
             //HiddenItem();
         }
         else if (rdbReports.SelectedValue == "3")
@@ -723,9 +753,13 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             txtEndDate.Visible = true;
             DivLabel.Visible = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
             btnGlobalAtt.Visible = false;
 =======
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
+=======
+            btnGlobalAtt.Visible = false;
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
             //HiddenItem();
         }
         else if (rdbReports.SelectedValue == "4")
@@ -758,6 +792,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             DivLabel2.Visible = true;
             txtStartDate.Visible = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
             btnGlobalAtt.Visible = false;
             //HiddenItem();
         }
@@ -792,10 +829,13 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             txtStartDate.Visible = true;
             btnGlobalAtt.Visible = true;
         }
+<<<<<<< HEAD
 =======
             //HiddenItem();
         }
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
+=======
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
 
     }
     protected void ddlSchool_SelectedIndexChanged(object sender, EventArgs e)
@@ -1049,7 +1089,6 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             }
             else
             {
-
                 objCommon.DisplayMessage(this, "Record Not Found!!", this.Page);
                 return;
             }
@@ -1058,6 +1097,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
 
     #endregion
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     #region Attendance Report For Global Elective
     protected void btnGlobalAtt_Click(object sender, EventArgs e)
@@ -1132,89 +1172,84 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     #region Attendance Report For Global Elective Of HOD
 
 
+=======
+    #region Attendance Report For Global Elective
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
     protected void btnGlobalAtt_Click(object sender, EventArgs e)
     {
-        //string College = string.Empty;
-        //int count = 0;
-        //foreach (ListItem Item in lboddlCollege.Items)
+        //string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+        //if (ua_type == "8")
         //{
-        //    if (Item.Selected)
-        //    {
-        //        College += Item.Value + ",";
-        //        count++;
-        //    }
-        //}
-        //if (count > 0)
-        //{
-
-            string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"]));
-            if (ua_type == "8")
+            if (txtStartDate.Text != string.Empty && txtEndDate.Text != string.Empty)
             {
-                if (txtStartDateHOD.Text != string.Empty && txtEndDateHOD.Text != string.Empty)
+                if (Convert.ToDateTime(txtEndDate.Text) <= Convert.ToDateTime(txtStartDate.Text))
                 {
-                    if (Convert.ToDateTime(txtEndDateHOD.Text) <= Convert.ToDateTime(txtStartDateHOD.Text))
+                    objCommon.DisplayMessage(this, "End Date should be greater than Start Date", this.Page);
+                    return;
+                }
+                else
+                {
+                    string AttendanceStartDate = txtStartDate.Text;
+                    string AttendanceEndDate = txtEndDate.Text;
+                    //College = College.Substring(0, College.Length - 1);
+                    int session = Convert.ToInt32(ddlSessionn.SelectedValue);
+                    DataSet DS = RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(Session["userno"]), session);
+                    DataGrid dg = new DataGrid();
+
+                    if (DS.Tables[0].Rows.Count > 0)
                     {
-                        objCommon.DisplayMessage(this, "End Date should be greater than Start Date", this.Page);
-                        return;
+                        string attachment = "attachment; filename= GLOBALELECTIVE_ATT_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+
+                        Response.ClearContent();
+                        Response.AddHeader("content-disposition", attachment);
+                        Response.ContentType = "application/" + "ms-excel";
+                        StringWriter sw = new StringWriter();
+                        HtmlTextWriter htw = new HtmlTextWriter(sw);
+                        dg.DataSource = DS.Tables[0];
+                        dg.DataBind();
+                        dg.HeaderStyle.Font.Bold = true;
+                        dg.RenderControl(htw);
+                        Response.Write(sw.ToString());
+                        Response.End();
                     }
                     else
                     {
-                        string AttendanceStartDate = txtStartDateHOD.Text;
-                        string AttendanceEndDate = txtEndDateHOD.Text;
-                        //College = College.Substring(0, College.Length - 1);
-                        int session = Convert.ToInt32(ddlSessionHOD.SelectedValue);
-                        DataSet DS = acdatt.RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(Session["userno"]), session);
-                        DataGrid dg = new DataGrid();
-
-                        if (DS.Tables[0].Rows.Count > 0)
-                        {
-                            string attachment = "attachment; filename= GLOBALELECTIVE_ATT_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-
-                            Response.ClearContent();
-                            Response.AddHeader("content-disposition", attachment);
-                            Response.ContentType = "application/" + "ms-excel";
-                            StringWriter sw = new StringWriter();
-                            HtmlTextWriter htw = new HtmlTextWriter(sw);
-                            dg.DataSource = DS.Tables[0];
-                            dg.DataBind();
-                            dg.HeaderStyle.Font.Bold = true;
-                            dg.RenderControl(htw);
-                            Response.Write(sw.ToString());
-                            Response.End();
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage("Record Not Found!!", this.Page);
-                            return;
-                        }
+                        objCommon.DisplayMessage("Record Not Found!!", this.Page);
+                        return;
                     }
                 }
             }
-        //}
-        //else
-        //{
-        //    objCommon.DisplayMessage(this, "Please Select At least One College", this.Page);
-        //    return;
-        //    College = "0";
-
-        //}
-
     }
-
-    protected void rbdReportsHOD_SelectedIndexChanged(object sender, EventArgs e)
+    string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+    //Added by jay takalkhede on dated 10042024 Added report in which get Global Elective Course Attendance Data (TkNo.56806)
+    public DataSet RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(string AttendanceStartDate, string AttendanceEndDate, int UANO, int session)
     {
-        if (rbdReportsHOD.SelectedValue == "1")
+        DataSet ds = null;
+        try
         {
-            divSessionHOD.Visible = true;
-            //divMClg.Visible = true;
-            divSDHOD.Visible = true;
-            divSDHOD1.Visible = true;
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = new SqlParameter[4];
+            objParams[0] = new SqlParameter("@P_SESSION_ID", session);
+            objParams[1] = new SqlParameter("@P_FROMDATE", AttendanceStartDate);
+            objParams[2] = new SqlParameter("@P_TODATE", AttendanceEndDate);
+            objParams[3] = new SqlParameter("@P_UA_NO", UANO);
+            ds = objSQLHelper.ExecuteDataSetSP("ATTENDANCE_REPORT_FOR_GLOBAL_ELECTIVE_OF_HOD", objParams);
         }
+        catch (Exception ex)
+        {
+            return ds;
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.RetrieveStudentAttDetailsExcel-> " + ex.ToString());
+        }
+        return ds;
     }
+<<<<<<< HEAD
     protected void btnCancelHOD_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
     }
     #endregion Attendance Report For Global Elective Of HOD
 >>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
+=======
+    #endregion Attendance Report For Global Elective
+>>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
 }
