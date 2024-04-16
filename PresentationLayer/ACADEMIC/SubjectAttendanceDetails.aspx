@@ -362,22 +362,22 @@
                                                 <%# Eval("COURSENAME") %>
                                             </td>
                                             <td>
-                                                <%# Eval("Total Classes (Available Slots)") %>
+                                                <%# Eval("TOTAL_LECTURE") %>
                                             </td>
                                             <td>
-                                                <%# Eval("Present Classes (Marked Slots)") %>
+                                                <%# Eval("Present") %>
                                             </td>
                                             <td>
-                                                <%# Eval("Absent Classes (Unmarked Slots)") %>
+                                                <%# Eval("Absent") %>
                                             </td>
                                             <td>
-                                                <%# Eval("OD Classes") %>
+                                                <%# Eval("OD_Classes") %>
                                             </td>
                                             <td>
-                                                <%# Eval("Without OD %") %>
+                                                <%# Eval("Without_OD") %>
                                             </td>
                                             <td>
-                                                <%# Eval("With OD %") %>
+                                                <%# Eval("With_OD") %>
                                             </td>
                                         </tr>
                                     </ItemTemplate>
