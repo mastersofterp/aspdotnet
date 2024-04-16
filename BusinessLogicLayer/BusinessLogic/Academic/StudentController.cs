@@ -21577,6 +21577,194 @@ namespace IITMS
                     return dtr;
                 }
 
+<<<<<<< HEAD
+=======
+
+                // Added By Vaishnavi B. On Date 22-03-2024
+
+                public DataSet GetAllDeptApprovedStudList(Student objStud, int UANO, string collegeNo, int userType, string passbatch)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_PASSOUT_BATCH", passbatch);
+                        objParams[1] = new SqlParameter("@P_UANO", UANO);
+                        objParams[2] = new SqlParameter("@P_COLLEGE_NO", collegeNo);
+                        objParams[3] = new SqlParameter("@P_UA_TYPE", userType);
+                        // objParams[4] = new SqlParameter("@P_STATUS", status);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_BULKNODUES_APPROVAL_STUD_LIST_ADMIN", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetApprovedStudList->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                // Added By Vaishnavi Belekar Date on 30-03-2024
+                public DataSet GetAllUANO_AuthorityMaster(string collegeNo)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+
+                        objParams[0] = new SqlParameter("@P_COLLEGE_NO", collegeNo);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("ACD_GET_UANO_AUTHORITY_APPROVAL_MASTER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetApprovedStudList->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                // Added By Vaishnavi Belekar Date on 30-03-2024
+                public DataSet GetAllDept_NoDuesAppproval_(int IDNO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+
+                        objParams[0] = new SqlParameter("@P_IDNO", IDNO);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("ACD_GET_ALLDEPT_APPROVAL_ACD_NO_DUES_STATUS", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetApprovedStudList->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                // Added By Vaishnavi B. 28/03/2024   -- for random student 
+
+                public DataSet GetApprovedStudListRandom(Student objStud, int UANO, string collegeNo, int userType, string passbatch, int status)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[5];
+                        objParams[0] = new SqlParameter("@P_PASSOUT_BATCH", passbatch);
+                        objParams[1] = new SqlParameter("@P_UANO", UANO);
+                        objParams[2] = new SqlParameter("@P_COLLEGE_NO", collegeNo);
+                        objParams[3] = new SqlParameter("@P_UA_TYPE", userType);
+                        objParams[4] = new SqlParameter("@P_STATUS", status);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_NODUES_APPROVAL_STUD_LIST_Random", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetApprovedStudList->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                 
+// ADDED BY VAISHNAVI B. ON DATE - 11/04/2024
+                public DataSet GetAllYearStudents(int AcademicYear)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_ACADEMIC_YEAR_ID", AcademicYear);
+                        //objParams[1] = new SqlParameter("@P_YEAR", year);
+                       
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_ALL_YEAR_STUDENT_DATA", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetStudentStrengthDetails() -->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                // ADDED BY VAISHNAVI B. ON DATE - 11/04/2024
+                public DataSet GetStudentEnrollForm(int AcademicYear, int year,int degree)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_ACADEMIC_YEAR_ID", AcademicYear);
+                        objParams[1] = new SqlParameter("@P_YEAR", year);
+                        objParams[2] = new SqlParameter("@P_DEGREE", degree);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_ENROLLMENT_FORM", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetStudentStrengthDetails() -->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                // ADDED BY VAISHNAVI B. ON DATE - 11/04/2024
+                public DataSet GetStudentAdmRegister(int AcademicYear, int year, int degree )
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_ACADEMIC_YEAR_ID", AcademicYear);
+                        objParams[1] = new SqlParameter("@P_YEAR", year);
+                        objParams[2] = new SqlParameter("@P_DEGREE", degree);
+                        //objParams[3] = new SqlParameter("@P_BRANCH", branch);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_ADMISSION_REGISTER", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetStudentStrengthDetails() -->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                // ADDED BY VAISHNAVI B. ON DATE - 11/04/2024
+                public DataSet GetStudentEnrollRegister(int AcademicYear, int year,int degree)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_ACADEMIC_YEAR_ID", AcademicYear);
+                        objParams[1] = new SqlParameter("@P_YEAR", year);
+                        objParams[2] = new SqlParameter("@P_DEGREE", degree);
+                        //objParams[3] = new SqlParameter("@P_BRANCH", branch);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_ENROLLMENT_REGISTER", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetStudentStrengthDetails() -->" + ex.ToString());
+                    }
+                    return ds;
+                } // TILL 
+>>>>>>> d7a7ee57 ([ENHANCEMENT] [57603] ADD NEW PAGE FOR ACADEMIC REPORTS)
             }
 
 
