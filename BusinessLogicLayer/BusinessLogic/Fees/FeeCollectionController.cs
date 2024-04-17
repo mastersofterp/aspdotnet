@@ -7312,5 +7312,94 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
+        //Added by Saurabh S. on 02042024
+        public DataSet Get_Fee_Details_Student_Master_Fees_Report(string rectype, int Academicyear)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {                                                            
+                
+                    new SqlParameter("@P_RECEIPT_TYPE", rectype),  
+                    new SqlParameter("@P_ACADEMIC_YEAR_ID", Academicyear),
+                   
+                };
+                ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_STUDENT_MASTER_FEES_REPORT", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_Fee_Details_Student_Master_Fees_Report() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
+        //Added by Saurabh S. on 02042024
+        public DataSet Get_Fee_Details_Fees_Cross_Check_Report(string rectype, DateTime from_dt, DateTime to_date)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {                                                            
+                    new SqlParameter("@P_RECIEPT_TYPE", rectype),
+                    new SqlParameter("@P_FROM_DATE", from_dt),
+                    new SqlParameter("@P_TODATE", to_date),                                      
+                };
+                ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_FEES_CROSS_CHECK_REPORT", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_STUDENT_FOR_FEE_PAYMENT_WITH_HEADS_DEMANDWISE() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
+        //Added by Saurabh S. on 02042024
+        public DataSet Get_Fee_Details_Student_Outstanding_Fees_Report(string rectype, int Academicyear)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {                                                            
+                    new SqlParameter("@P_RECEIPT_TYPE", rectype),  
+                    new SqlParameter("@P_ACADEMIC_YEAR_ID", Academicyear),
+                   
+                };
+                ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_STUDENT_OUTSTANDING_FEES_REPORT", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_STUDENT_FOR_FEE_PAYMENT_WITH_HEADS_DEMANDWISE() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
+        //Added by Saurabh S. on 02042024
+        public DataSet Get_Fee_Details_Academic_Yearwise_Balance_Report_RCPIT()
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {                                                            
+                   
+                };
+                ds = objDataAccess.ExecuteDataSetSP("PKG_ACD_ACADEMIC_YEARWISE_BALANCE_REPORT", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_STUDENT_FOR_FEE_PAYMENT_WITH_HEADS_DEMANDWISE() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
+
     }
 }
