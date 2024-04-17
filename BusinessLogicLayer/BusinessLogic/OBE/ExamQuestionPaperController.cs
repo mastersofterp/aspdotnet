@@ -609,5 +609,32 @@ namespace IITMS.NITPRM.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
+        #region  ADDED BY ROHIT 17_04_2024
+        public int QuestionPaper_Unlock(string QuestionPaperId, int Userid)
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            object ret = 0;
+            try
+            {
+
+                SqlParameter[] objParams = null;
+                //Changing Parameters for each form.
+                objParams = new SqlParameter[3];
+                objParams[0] = new SqlParameter("@P_QuestionPaperId", QuestionPaperId);
+                objParams[1] = new SqlParameter("@P_USERID", Userid);
+                objParams[2] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[2].Direction = ParameterDirection.Output;
+                ret = objSQLHelper.ExecuteNonQuerySP("sptblExamQuestionPaper_Unlock", objParams, true); //sptblExamQuestionPaper_Unlock
+                return Convert.ToInt32(ret);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamQuestionPaperController.QuestionPaper_Unlock-> " + ex.ToString());
+
+            }
+        }
+
+        #endregion 
     }
 }
