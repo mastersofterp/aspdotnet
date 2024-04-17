@@ -15,9 +15,11 @@ Version   Modified On   Modified By      Purpose
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <asp:HiddenField ID="hfdShowErr" runat="server" ClientIDMode="Static" />
+<%--    <asp:HiddenField ID="hfdShowErr" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdTableStatus" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdFeedback" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfdReset" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfenrolmentno" runat="server" ClientIDMode="Static" />--%>
     <%--<div style="z-index: 1; position: absolute; top: 10px; left: 600px;">
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updReff"
             DynamicLayout="true" DisplayAfter="0">
@@ -118,7 +120,7 @@ Version   Modified On   Modified By      Purpose
                                                 </label>
                                             </div>
                                         </div>--%>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <%--<div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Show Error</label>
@@ -126,6 +128,16 @@ Version   Modified On   Modified By      Purpose
                                         <div class="switch form-inline Size">
                                             <input type="checkbox" id="rdShowErr" name="switch" checked />
                                             <label data-on="Developer" data-off="Client" for="rdShowErr"></label>
+                                        </div>
+                                    </div>--%>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Show Error</label>
+                                        </div>
+                                        <div class="switch form-inline Size">
+                                            <asp:CheckBox ID="rdShowErr" runat="server" Checked="true" />
+                                            <asp:Label ID="lblerror" runat="server" AssociatedControlID="rdShowErr" CssClass="switch-label" data-on="Developer" data-off="Client" />
                                         </div>
                                     </div>
 
@@ -143,7 +155,7 @@ Version   Modified On   Modified By      Purpose
                                         <div class="label-dynamic">
                                             <label>Govt.</label>
                                         </div>
-                                        <asp:TextBox ID="txtGovt" runat="server" MaxLength="200" ValidationGroup="reference"
+                                        <asp:TextBox ID="txtGovt" runat="server" MaxLength="100" ValidationGroup="reference"
                                             CssClass="form-control" Wrap="False" />
                                         <asp:RequiredFieldValidator ID="rfvGovt" runat="server" ControlToValidate="txtGovt"
                                             Display="None" ErrorMessage="Govt. Name Required"
@@ -291,7 +303,7 @@ Version   Modified On   Modified By      Purpose
                                 </asp:RadioButtonList>
                             </div>
 
-                            <div class="form-group col-lg-4 col-md-6 col-12">
+                            <%-- <div class="form-group col-lg-4 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <label>Enrollment/ Registration No.</label>
                                 </div>
@@ -299,8 +311,8 @@ Version   Modified On   Modified By      Purpose
                                     <asp:CheckBox ID="chkEnroll" runat="server" AutoPostBack="True" Checked="true" OnCheckedChanged="chkEnroll_CheckedChanged"
                                         Text="Manual Enrollment/Registration No." TextAlign="Right" Font-Bold="false" />
                                 </div>
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12 show-error">
+                            </div>--%>
+                            <%--<div class="form-group col-lg-3 col-md-6 col-12 show-error">
                                 <div class="label-dynamic">
                                     <sup></sup>
                                     <label>Enrollment/ Registration No.</label>
@@ -309,15 +321,37 @@ Version   Modified On   Modified By      Purpose
                                     <input type="checkbox" id="rdEnrollment" name="switch" checked />
                                     <label data-on="Manual" data-off="Automatic" for="rdEnrollment"></label>
                                 </div>
+                            </div>--%>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12 show-error">
+                                <div class="label-dynamic">
+                                    <sup></sup>
+                                    <label>Enrollment/ Registration No.</label>
+                                </div>
+                                <div class="switch form-inline Size">
+                                    <asp:CheckBox ID="rdEnrollment" runat="server" Checked="true" />
+                                    <asp:Label ID="lblenroll" runat="server" AssociatedControlID="rdEnrollment" CssClass="switch-label" data-on="Automatic" data-off="Manual" />
+                                </div>
                             </div>
+
+                            <%--<div class="form-group col-lg-3 col-md-6 col-12 show-error">
+                                <div class="label-dynamic">
+                                    <sup></sup>
+                                    <label>Reset Counter</label>
+                                </div>
+                                <div class="switch form-inline Size">
+                                    <input type="checkbox" id="chkResetCounter" name="switch" checked/>
+                                    <label data-on="Yes" data-off="No" for="chkResetCounter"></label>
+                                </div>
+                            </div>--%>
                             <div class="form-group col-lg-3 col-md-6 col-12 show-error">
                                 <div class="label-dynamic">
                                     <sup></sup>
                                     <label>Reset Counter</label>
                                 </div>
                                 <div class="switch form-inline Size">
-                                    <input type="checkbox" id="chkResetCounter" name="switch" checked />
-                                    <label data-on="Yes" data-off="No" for="chkResetCounter"></label>
+                                    <asp:CheckBox ID="chkResetCounter" runat="server" Checked="true" />
+                                    <asp:Label ID="lblResetCounter" runat="server" AssociatedControlID="chkResetCounter" CssClass="switch-label" data-on="Yes" data-off="No" />
                                 </div>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -355,26 +389,7 @@ Version   Modified On   Modified By      Purpose
                                 <asp:DropDownList ID="ddlUpdMigrationExamData" TabIndex="3" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" ToolTip="Please Select Update Old Exam Data Migration">
                                 </asp:DropDownList>
                             </div>
-
-                            <%-- <div class="form-group col-lg-3 col-md-6 col-12">
-                                <div class="label-dynamic">
-                                    <label>Time Table Status</label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <asp:RadioButton ID="rdbHorizontal" runat="server" Text="" TextAlign="Right"
-                                            GroupName="Time" ValidationGroup="reference" />
-                                        Horizontal
-                                    </label>
-                                    <label>
-                                        <asp:RadioButton ID="rdbVerticle" runat="server" Text="" TextAlign="Right" GroupName="Time"
-                                            ValidationGroup="reference" />
-                                        Vertical
-                                    </label>
-                                </div>
-                            </div>--%>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12 show-error">
+                           <%-- <div class="form-group col-lg-3 col-md-6 col-12 show-error">
                                 <div class="label-dynamic">
                                     <sup></sup>
                                     <label>Time Table Status</label>
@@ -383,31 +398,27 @@ Version   Modified On   Modified By      Purpose
                                     <input type="checkbox" id="rdTableStatus" name="switch" checked />
                                     <label data-on="Horizontal" data-off="Vertical" for="rdTableStatus"></label>
                                 </div>
-                            </div>
-
-                            <%-- <div class="form-group col-lg-3 col-md-6 col-12">
-                                <div class="label-dynamic">
-                                    <label>Feedback Compulsory for fees</label>
-                                </div>
-                                <asp:RadioButtonList ID="rdbFeedback" runat="server" RepeatDirection="Horizontal">
-                                    <asp:ListItem Value="True">&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                    <asp:ListItem Value="False">&nbsp;&nbsp;&nbsp;No&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                </asp:RadioButtonList>
                             </div>--%>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
+                             <div class="form-group col-lg-3 col-md-6 col-12 show-error">
+                                <div class="label-dynamic">
+                                    <sup></sup>
+                                    <label>Time Table Status</label>
+                                </div>
+                                <div class="switch form-inline Size">
+				              <asp:CheckBox ID="rdTableStatus" runat="server" Checked="true" />
+                                    <asp:Label ID="Label1" runat="server" AssociatedControlID="rdTableStatus" CssClass="switch-label" data-on="Horizontal" data-off="Vertical" />
+                                </div>
+                            </div>
+                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <sup></sup>
                                     <label>Feedback Compulsory for fees</label>
                                 </div>
                                 <div class="switch form-inline">
-                                    <input type="checkbox" id="rdFeedback" name="switch" checked />
-                                    <label data-on="Yes" data-off="No" for="rdFeedback"></label>
+				    <asp:CheckBox ID="rdFeedback" runat="server" Checked="true" />
+                                    <asp:Label ID="lblfeedback" runat="server" AssociatedControlID="rdFeedback" CssClass="switch-label" data-on="Yes" data-off="No" />
                                 </div>
                             </div>
-
-
-
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <label>Allow Logout Popup</label>
@@ -753,15 +764,15 @@ Version   Modified On   Modified By      Purpose
                 alert("Please enter popup message!!!");
                 return false;
             }
+            //else
+            //{
+            $('#hfdShowErr').val($('#rdShowErr').prop('checked'));
+            $('#hfdTableStatus').val($('#rdTableStatus').prop('checked'));
+            $('#hfdFeedback').val($('#rdFeedback').prop('checked'));
+            $('#hfdReset').val($('#chkResetCounter').prop('checked'));
+            $('#hfenrolmentno').val($('#rdEnrollment').prop('checked'));
 
-
-            {
-
-                $('#hfdShowErr').val($('#rdShowErr').prop('checked'));
-                $('#hfdTableStatus').val($('#rdTableStatus').prop('checked'));
-                $('#hfdFeedback').val($('#rdFeedback').prop('checked'));
-
-            }
+            //}
             var prm = Sys.WebForms.PageRequestManager.getInstance();
             prm.add_endRequest(function () {
                 $(function () {
@@ -850,7 +861,6 @@ Version   Modified On   Modified By      Purpose
 
             return false;
         }
-
     </script>
     <%--Added By Rishabh On 08/11/2021--%>
     <script>
@@ -863,7 +873,12 @@ Version   Modified On   Modified By      Purpose
         function SetFeedback(val) {
             $('#rdFeedback').prop('checked', val);
         }
-
+        function SetResetCounter(val) {
+            $('#chkResetCounter').prop('checked', val);
+        }
+        function SetEnrollment(val) {
+            $('#rdEnrollment').prop('checked', val);
+        }
         //added by tanu for clg banner 08/12/2022
         function LoadBanner() {
             document.getElementById("ctl00_ContentPlaceHolder1_Imagebenner").src = document.getElementById("ctl00_ContentPlaceHolder1_fuCollegeBanner").value;
