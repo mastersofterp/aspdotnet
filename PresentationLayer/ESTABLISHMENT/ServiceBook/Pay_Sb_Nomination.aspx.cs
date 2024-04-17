@@ -24,7 +24,7 @@ using Microsoft.WindowsAzure.Storage;
 
 public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI.Page
 {
-    //CREATING OBJECTS OF CLASS FILES COMMON,UAIMS_COMMON,PAYCONTROLLER
+    //CREATING OBJECTS OF CLASS FILES COMMON,UAIMS_COMMON,PAYCONTROLLER//
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     ServiceBookController objServiceBook = new ServiceBookController();
