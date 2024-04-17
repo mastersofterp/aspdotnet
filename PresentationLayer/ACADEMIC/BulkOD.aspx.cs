@@ -153,9 +153,9 @@ public partial class ACADEMIC_BulkOD : System.Web.UI.Page
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
             AcademinDashboardController objADEController = new AcademinDashboardController();
             DataSet ds = objADEController.Get_College_Session(2, Session["college_nos"].ToString());
-            ViewState["CollegeId"] = ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
             if (ds.Tables[0].Rows.Count > 0)
             {
+                ViewState["CollegeId"] = ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
                 ddlSession1.DataSource = ds;
                 ddlSession1.DataValueField = "SESSIONNO";
                 ddlSession1.DataTextField = "COLLEGE_SESSION";
