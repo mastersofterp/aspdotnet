@@ -1235,6 +1235,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
     protected void btnBulkCancel_Click(object sender, EventArgs e)
     {
         ClearAllFields();
+        
     }
     protected void ClearAllFields()
     {
@@ -1252,6 +1253,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
         ddlClgname.SelectedIndex = 0;
         btnBulkSubmit.Enabled = false;
         DivMultipleSelect.Visible = false;
+        txtTotStud.Text = string.Empty;
         //btnBulkReport.Visible = false;
     }
 
