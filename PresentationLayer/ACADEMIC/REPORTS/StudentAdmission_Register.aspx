@@ -200,9 +200,9 @@
 
                               <%--  OnClientClick="return validationAdmBatch();"--%>
 
-                                <asp:Button ID="btnAdmissionRegReport"  runat="server" Text="TOTAL APPLICABLE FEE REPORT(DEV,TUITION,GOVT)" OnClick="btnAdmissionRegReport_Click" TabIndex="14"  ValidationGroup="RegisterReport" CssClass="btn btn-info"  Visible="false"  />
+                                <asp:Button ID="btnAdmissionRegReport"  runat="server" Text="Admission Register Student Data (Excel Format II)" OnClick="btnAdmissionRegReport_Click" TabIndex="14"  ValidationGroup="RegisterReport" CssClass="btn btn-info"  Visible="false"  />
                                 
-                                 <asp:Button ID="btnAdmissionRegStuDataExcelReport" runat="server" Text="Admission Register Student Data (Excel Format II)" OnClick="btnAdmissionRegStuDataExcelReport_Click" ValidationGroup="RegisterReport" TabIndex="16" CssClass="btn btn-info"  Visible="false" />
+                                 <asp:Button ID="btnAdmissionRegStuDataExcelReport" runat="server" Text="TOTAL APPLICABLE FEE REPORT(DEV,TUITION,GOVT)" OnClick="btnAdmissionRegStuDataExcelReport_Click" ValidationGroup="RegisterReport" TabIndex="16" CssClass="btn btn-info"  Visible="false" />
 
                                 <asp:Button ID="btnstudcount" runat="server" Text="Student Count Excel Report" OnClick="btnstudcount_Click" TabIndex="15" ValidationGroup="Excel" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnMothFathNotAlive" runat="server" Text="Mother/Father is not Alive Report" OnClick="btnMothFathNotAlive_Click" TabIndex="16" ValidationGroup="Excel" CssClass="btn btn-info" Visible="false"  />

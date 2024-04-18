@@ -75,7 +75,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
                     {
                         divd.Visible = false;
                         divadmrounf.Visible = true;
-                        btnBranchcount.Visible = true;
+                        //btnBranchcount.Visible = true;
                     }
 
                     this.PopulateDropDownList();
@@ -87,11 +87,11 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
                         btnAdmissionRegReport.Visible = true;
                         btnAdmissionRegStuDataExcelReport.Visible = true;
                         rfcvacdyear.Visible = true;
+                        btnBranchcount.Visible = true;
                     }   
                
                     //txtToDate.Text = DateTime.Now.ToShortDateString();
                     //Focus on From Date
-
                     //txtFromDate.Focus();
                 }
                 objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label
