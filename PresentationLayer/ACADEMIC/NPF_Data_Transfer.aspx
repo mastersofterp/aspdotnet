@@ -62,7 +62,8 @@
                                     <asp:Button ID="btnSampleDownload" runat="server" Text="Sample Excel Download" ToolTip="Download Sample Excel" TabIndex="2" CssClass="btn btn-primary" OnClick="btnSampleDownload_Click" />
                                     <asp:Button ID="btnSubmit" runat="server" TabIndex="3" ToolTip="Submit" Text="Submit" CssClass="btn btn-primary" OnClick="btnSubmit_Click" />
                                     <asp:Button ID="btnShow" runat="server" TabIndex="4" ToolTip="Show" Text="Show Existing Record" CssClass="btn btn-info" OnClick="btnShow_Click" />
-                                    <asp:Button ID="btnCancel" runat="server" TabIndex="5" ToolTip="Cancel" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+                                     <asp:Button ID="btnShowDataDownload" runat="server" TabIndex="5" ToolTip="Show" Text="Existing Record Excel Download" CssClass="btn btn-info" OnClick="btnShowDataDownload_Click" />
+                                    <asp:Button ID="btnCancel" runat="server" TabIndex="6" ToolTip="Cancel" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
                                 </div>
                             </div>
                         </div>
@@ -78,9 +79,16 @@
                                                         <thead class="bg-light-blue">
                                                             <tr>
                                                                 <th>SR.No</th>
+<<<<<<< HEAD
                                                                 <th>NPF_Discipline</th>
                                                                 <th>NPF_Programme</th>
                                                                 <th>NPF_Specialization</th>
+=======
+                                                                <th>Discipline</th>
+                                                                <th>Programme</th>
+                                                                <th>SpecializationID</th>
+                                                                <th>Specialization</th>
+>>>>>>> 2224cdb3 ([ENHANCEMENT] [57395] RFC | HITS | JECRC | CPU | NPF Data Mapping Page Changes.)
                                                                 <th>School Name</th>
                                                                 <th>Degree</th>
                                                                 <th>Programme/Branch Name</th>
@@ -190,7 +198,7 @@
             <asp:PostBackTrigger ControlID="btnShow" />
             <asp:PostBackTrigger ControlID="btnSampleDownload" />
             <asp:PostBackTrigger ControlID="btnUpload" />
-
+            <asp:PostBackTrigger ControlID="btnShowDataDownload" />
         </Triggers>
     </asp:UpdatePanel>
 
