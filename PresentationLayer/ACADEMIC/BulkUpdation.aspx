@@ -660,7 +660,7 @@
                                                             <asp:ListItem Value="16">Merit Number</asp:ListItem>
                                                             <asp:ListItem Value="17">Father Mobile Number</asp:ListItem>
                                                             <asp:ListItem Value="18">Mother Mobile Number</asp:ListItem>
-                                                            <asp:ListItem Value="19">ABCC ID</asp:ListItem>
+                                                            <asp:ListItem Value="19">ABC ID</asp:ListItem>
                                                             <asp:ListItem Value="20">DTE Application ID</asp:ListItem>  <%-- Added by Gunesh Mohane On Date : 19-03-2024--%>
 
 
@@ -1061,7 +1061,7 @@
                                                                     <asp:ListItem Value="16">Merit Number</asp:ListItem>
                                                                     <asp:ListItem Value="17">Father Mobile Number</asp:ListItem>
                                                                     <asp:ListItem Value="18">Mother Mobile Number</asp:ListItem>
-                                                                    <asp:ListItem Value="19">ABCC ID</asp:ListItem>
+                                                                    <asp:ListItem Value="19">ABC ID</asp:ListItem>
                                                                     <asp:ListItem Value="20">DTE Application ID</asp:ListItem>
                                                                 </asp:ListBox>
                                                                 <asp:RequiredFieldValidator ID="rfvFilter1" runat="server" Display="None" ErrorMessage="Please Select Data"
@@ -1155,7 +1155,7 @@
                                                 <asp:ListItem Value="16">Merit Number</asp:ListItem>
                                                 <asp:ListItem Value="17">Father Mobile Number</asp:ListItem>
                                                 <asp:ListItem Value="18">Mother Mobile Number</asp:ListItem>
-                                                <asp:ListItem Value="19">ABCC ID</asp:ListItem>
+                                                <asp:ListItem Value="19">ABC ID</asp:ListItem>
 
 
                                             </asp:DropDownList>
