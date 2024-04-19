@@ -131,7 +131,18 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         ddlSession.SelectedIndex = 1;
                     }
                     divStudent.Visible = true;
-                    divMITExcel.Visible = true;
+
+                    if (Convert.ToInt32(Session["OrgId"]) == 8)
+                    {
+                        divMITExcel.Visible = true;
+                    }
+                    else
+                    {
+                        divMITExcel.Visible = false;
+                    }
+
+
+
                     ShowDetails();
 
                 }
