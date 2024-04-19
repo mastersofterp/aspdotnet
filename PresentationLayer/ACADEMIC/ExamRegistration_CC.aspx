@@ -432,10 +432,10 @@
 
 
         // ENDS HERE NEW SCRIPTS BY NARESH BEERLA ON DT 01/07/2022 AS PER NEW REQUIREMENT 
-
+       
 
     </script>
-
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <%-- <asp:UpdatePanel ID="updStudent" runat="server">
         <ContentTemplate>--%>
     <div id="dvMain" runat="server">
