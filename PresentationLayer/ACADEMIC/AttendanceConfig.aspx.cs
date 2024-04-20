@@ -470,10 +470,26 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
                     objAttModel.Sessionno = Convert.ToInt32(ddlSessionAttConfig.SelectedValue);
                     if (ViewState["attaction"] != null && ViewState["attaction"].ToString().Equals("edit"))
                     {
-                        ClearAttConfigControls();
-                        objCommon.DisplayMessage(this, "Configuration Updated Successfully", this.Page);
-                        //this.BindListView();
-                        this.BindListViewAttConfig();
+                        CustomStatus cs = (CustomStatus)objAttC.AddGlobalElectiveAttendanceConfigModified(objAttModel, Convert.ToInt32(Session["OrgId"]));
+                        if (cs.Equals(CustomStatus.RecordSaved))
+                        {
+                            ClearAttConfigControls();
+                            objCommon.DisplayMessage(this, "Configuration Updated Successfully", this.Page);
+                            //this.BindListView();
+                            this.BindListViewAttConfig();
+                        }
+                        else if (cs.Equals(CustomStatus.DuplicateRecord))
+                        {
+                            objCommon.DisplayMessage(this, "Configuration Already Exists !!", this.Page);
+                            ClearAttConfigControls();
+                            this.BindListViewAttConfig();
+                        }
+                        else if (cs.Equals(CustomStatus.TransactionFailed))
+                        {
+                            objCommon.DisplayMessage(this, "Transaction Failed", this.Page);
+                            ClearAttConfigControls();
+                            this.BindListViewAttConfig();
+                        }
                     }
                     else
                     {
@@ -527,6 +543,7 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
         //rblCRegAfter.Checked = true;
         ViewState["attaction"] = null;
         ddlSessionAttConfig.SelectedIndex = 0;
+        btnSunmitAttConfig.Text = "Submit";
     }
     private void BindListViewAttConfig()
     {
@@ -555,7 +572,8 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
             ImageButton btnEdit = sender as ImageButton;
             int sessionid = int.Parse(btnEdit.CommandArgument);
             ViewState["attschemeno"] = int.Parse(btnEdit.CommandArgument);
-            ViewState["edit"] = "edit";
+            ViewState["attaction"] = "edit";
+            btnSunmitAttConfig.Text = "Update";
 
             this.ShowAttConfigDetails(sessionid);
         }
