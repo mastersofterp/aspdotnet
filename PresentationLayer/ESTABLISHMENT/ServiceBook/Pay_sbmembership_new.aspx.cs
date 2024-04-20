@@ -357,11 +357,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sbmembership_new : System.Web
             ImageButton btnDel = sender as ImageButton;
             int MPNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_MembershipinProfessional", "*", "", "MPNO=" + MPNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_MembershipinProfessional", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "MPNO=" + MPNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

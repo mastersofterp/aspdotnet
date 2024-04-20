@@ -533,16 +533,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
             ImageButton btnDel = sender as ImageButton;
             int prNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_PAYREV", "*", "", "PRNO=" + prNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_PAYREV", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "PRNO=" + prNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

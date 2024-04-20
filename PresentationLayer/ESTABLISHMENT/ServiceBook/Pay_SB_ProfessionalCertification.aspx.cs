@@ -530,16 +530,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
             ImageButton btnDel = sender as ImageButton;
             int pNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_PROFESSIONAL_COURSE", "*", "", "PNO=" + pNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_PROFESSIONAL_COURSE", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "PNO=" + pNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

@@ -460,16 +460,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
             ImageButton btnDel = sender as ImageButton;
             int RGNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_REVENUE_GENERATED", "*", "", "RGNO=" + RGNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_REVENUE_GENERATED", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "RGNO=" + RGNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

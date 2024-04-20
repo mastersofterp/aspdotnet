@@ -504,16 +504,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_Patent : System.Web.UI.Pag
             ImageButton btnDel = sender as ImageButton;
             int PCNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_Patent", "*", "", "PCNO=" + PCNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_Patent", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "PCNO=" + PCNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

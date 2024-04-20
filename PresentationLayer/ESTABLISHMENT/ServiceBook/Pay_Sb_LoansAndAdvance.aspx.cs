@@ -532,16 +532,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_LoansAndAdvance : System.W
             ImageButton btnDel = sender as ImageButton;
             int lNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_LOAN", "*", "", "LNO=" + lNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_LOAN", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "LNO=" + lNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

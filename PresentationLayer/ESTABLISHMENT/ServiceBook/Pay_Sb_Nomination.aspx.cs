@@ -743,16 +743,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             ImageButton btnDel = sender as ImageButton;
             int nfNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_NOMINIFOR", "*", "", "NFNO=" + nfNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_NOMINIFOR", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "NFNO=" + nfNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

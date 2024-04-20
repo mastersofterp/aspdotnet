@@ -826,16 +826,16 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
             ImageButton btnDel = sender as ImageButton;
             int PUBTRXNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_PUBLICATION_DETAILS", "*", "", "PUBTRXNO=" + PUBTRXNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_PUBLICATION_DETAILS", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS,", "", "PUBTRXNO=" + PUBTRXNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

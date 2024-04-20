@@ -460,16 +460,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
             ImageButton btnDel = sender as ImageButton;
             int deNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_DEPTEXAM", "*", "", "DENO=" + deNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_DEPTEXAM", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "DENO=" + deNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved You Cannot Edit.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

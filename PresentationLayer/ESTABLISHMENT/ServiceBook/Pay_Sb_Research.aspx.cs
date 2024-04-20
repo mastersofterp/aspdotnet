@@ -277,16 +277,16 @@ public partial class ESTABLISHMENT_SERVICEBOOK_Pay_Sb_Research : System.Web.UI.P
             int RESEARNO = int.Parse(btnDel.CommandArgument);
             int IDNO = _idnoEmp;
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAY_SB_RESEARCH", "*", "", "RESEARNO=" + RESEARNO, "");
+            ds = objCommon.FillDropDown("PAY_SB_RESEARCH", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "RESEARNO=" + RESEARNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

@@ -398,16 +398,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Stafffunded : System.Web.U
             ImageButton btnDel = sender as ImageButton;
             int SFNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_StaffFunded", "*", "", "SFNO=" + SFNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_StaffFunded", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "SFNO=" + SFNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

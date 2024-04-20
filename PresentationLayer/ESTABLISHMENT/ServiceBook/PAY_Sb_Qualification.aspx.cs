@@ -523,16 +523,16 @@ public partial class ESTABLISHMENT_ServiceBook_PAY_Sb_Qualification : System.Web
             ImageButton btnDel = sender as ImageButton;
             int qNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_QUALI", "*", "", "QNO=" + qNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_QUALI", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "QNO=" + qNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

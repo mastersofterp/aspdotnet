@@ -58,6 +58,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Academic_Responsibilities 
         BlobDetails();
         BindListViewAcademicResponsibilities();
         GetConfigForEditAndApprove();
+        btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
     }
 
     private void CheckPageAuthorization()
@@ -393,16 +394,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Academic_Responsibilities 
             ImageButton btnDel = sender as ImageButton;
             int ACDNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_ACADEMIC_RESPONSIBILITIES", "*", "", "ACDNO=" + ACDNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_ACADEMIC_RESPONSIBILITIES", "LTRIM(RTRIM(isnull(APPROVE_STATUS,''))) as APPROVE_STATUS", "", "ACDNO=" + ACDNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved You Cannot Edit.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
 
@@ -444,6 +445,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Academic_Responsibilities 
         ViewState["IsEditable"] = null;
         ViewState["IsApprovalRequire"] = null;
         btnSubmit.Enabled = true;
+        txtToDate.Enabled = true;
     }
 
     public string GetFileNamePath(object filename, object ACDNO, object idno)

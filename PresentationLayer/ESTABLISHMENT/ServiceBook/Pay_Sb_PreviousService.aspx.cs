@@ -901,16 +901,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
             ImageButton btnDel = sender as ImageButton;
             int psNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_PRESERVICE", "*", "", "PSNO=" + psNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_PRESERVICE", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "PSNO=" + psNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

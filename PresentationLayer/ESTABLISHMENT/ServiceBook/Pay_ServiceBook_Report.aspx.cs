@@ -604,6 +604,15 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
         {
             param += ",@P_IDNO=-1*Pay_Award.rpt";
         }
+
+        if (chkAcademicResponsibilities.Checked)
+        {
+            param += ",@P_IDNO=" + idno + "*Pay_Academic_Responsibilites.rpt";
+        }
+        else
+        {
+            param += ",@P_IDNO=-1*Pay_Academic_Responsibilites.rpt";
+        }
         return param;
     }
 
@@ -940,6 +949,10 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
                 if (TITLE == "Revenue Generated")
                 {
                     chkRevenue.Visible = true;
+                }
+                if (TITLE == "Academic Responsibilities")
+                {
+                    chkAcademicResponsibilities.Visible = true;
                 }
             }
         }

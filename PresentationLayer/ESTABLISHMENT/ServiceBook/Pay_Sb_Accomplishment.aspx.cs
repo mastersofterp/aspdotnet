@@ -70,6 +70,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Accomplishment : System.We
         BindListViewAchiement();
         BlobDetails();
         GetConfigForEditAndApprove();
+        btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
     }
 
     private void BindListViewAchiement()
@@ -379,16 +380,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Accomplishment : System.We
             ImageButton btnDel = sender as ImageButton;
             int ACNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_Accomplishment", "*", "", "ACNO=" + ACNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_Accomplishment", "LTRIM(RTRIM(isnull(APPROVE_STATUS,''))) as APPROVE_STATUS", "", "ACNO=" + ACNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved You Cannot Edit.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

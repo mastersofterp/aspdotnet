@@ -829,16 +829,16 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
             ImageButton btnDel = sender as ImageButton;
             int MOSNO = int.Parse(btnDel.CommandArgument);
              DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_MIS_OTHER", "*", "", "MOSNO=" + MOSNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_MIS_OTHER", "LTRIM(RTRIM(isnull(APPROVE_STATUS,''))) as APPROVE_STATUS", "", "MOSNO=" + MOSNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved You Cannot Edit.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

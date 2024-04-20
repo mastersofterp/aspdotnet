@@ -62,6 +62,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
         BlobDetails();
         BindListViewAdminResponsiblities();
         GetConfigForEditAndApprove();
+        btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
     }
 
     private void CheckPageAuthorization()
@@ -421,11 +422,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
             ImageButton btnDel = sender as ImageButton;
             int ADMINTRXNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_ADMIN_RESPONSIBILITIES", "*", "", "ADMINTRXNO=" + ADMINTRXNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_ADMIN_RESPONSIBILITIES", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "ADMINTRXNO=" + ADMINTRXNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

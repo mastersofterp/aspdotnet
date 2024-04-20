@@ -594,16 +594,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Current_Appointment_Status
             ImageButton btnDel = sender as ImageButton;
             int caNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_CURRENT_APPOINTMENT", "*", "", "CANO=" + caNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_CURRENT_APPOINTMENT", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "CANO=" + caNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved You Cannot Edit.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

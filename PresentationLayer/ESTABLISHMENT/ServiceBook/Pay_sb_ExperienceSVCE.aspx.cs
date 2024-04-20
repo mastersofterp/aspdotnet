@@ -554,16 +554,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
             ImageButton btnDel = sender as ImageButton;
             int SVCNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("Payroll_sb_expsvce", "*", "", "SVCNO=" + SVCNO, "");
+            ds = objCommon.FillDropDown("Payroll_sb_expsvce", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "SVCNO=" + SVCNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved you cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else

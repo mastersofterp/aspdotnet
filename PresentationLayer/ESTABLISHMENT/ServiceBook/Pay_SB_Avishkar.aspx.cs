@@ -257,16 +257,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_Avishkar : System.Web.UI.P
             ImageButton btnDel = sender as ImageButton;
             int AVNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_AVISHKAR", "*", "", "AVNO=" + AVNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_AVISHKAR", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "AVNO=" + AVNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved You Cannot Edit.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
                 return;
             }
             else if (STATUS == "R")
             {
-                MessageBox("Your Details are Rejected You Cannot Edit.");
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else
