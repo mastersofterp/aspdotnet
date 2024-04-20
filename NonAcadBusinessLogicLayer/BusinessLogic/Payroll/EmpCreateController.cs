@@ -1638,6 +1638,26 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                public DataSet GetHITSEmployeeCode(int Deptno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_DEPTNO", Deptno);
+                        ds = objSQLHelper.ExecuteDataSetSP("GET_EMPLOYEECODE_DEPTWISE", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.Masters.GetEmployeeCode-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
                 #region
                 public int InsertDAHEADMaster(int DAHEADID, string DAHEADDescription, int CollegeNo, int CreatedBy, int OrganizationId)
                 {
