@@ -65,7 +65,8 @@
                         <div class="box box-primary">
                             <div id="div1" runat="server"></div>
                             <div class="box-header with-border">
-                                <h3 class="box-title">Direct Grading System</h3>
+                                <%--<h3 class="box-title">Direct Grading System</h3>--%>
+                                 <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                             </div>
 
                             <div class="box-body">
@@ -77,7 +78,8 @@
                                                 <div class="form-group col-lg-12 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
-                                                        <label>College Scheme</label>
+                                                        <%--<label>College Scheme</label>--%>
+                                                       <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlCollegeScheme" runat="server" CssClass="form-control" AppendDataBoundItems="true" data-select2-enable="true" Visible="false" TabIndex="1">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -91,7 +93,8 @@
                                                 <div class="form-group col-lg-12 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
-                                                        <label>Level</label>
+                                                        <%--<label>Level</label>--%>
+                                                        <asp:Label ID="lblDYddlLevel" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlLevel" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="2" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlLevel_SelectedIndexChanged">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>

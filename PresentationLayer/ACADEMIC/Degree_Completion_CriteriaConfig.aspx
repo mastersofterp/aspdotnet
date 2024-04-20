@@ -17,7 +17,8 @@
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
                 <div class="box-header with-border">
-                    <h3 class="box-title">Degree Completion Criteria Configuration</h3>
+                    <%--<h3 class="box-title">Degree Completion Criteria Configuration</h3>--%>
+                     <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                 </div>
                 <div class="box-body">
                     <div>
@@ -41,7 +42,8 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Scheme</label>
+                                            <%--<label>Scheme</label>--%>
+                                            <asp:Label ID="lblDYddlScheme" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlScheme" runat="server" CssClass="form-control" TabIndex="0" AutoPostBack="true" OnSelectedIndexChanged="ddlScheme_SelectedIndexChanged" data-select2-enable="true" AppendDataBoundItems="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -52,7 +54,8 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
-                                            <label>Min Credit Required</label>
+                                            <%--<label>Min Credit Required</label>--%>
+                                            <asp:Label ID="lblDYtxtMinCreditRequired" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:TextBox ID="txtminCredit" runat="server" CssClass="form-control" TabIndex="0"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfcmincredit" runat="server" ControlToValidate="txtminCredit" SetFocusOnError="true" Display="None" ErrorMessage="Please Enter Minimum Credit." ValidationGroup="submit"></asp:RequiredFieldValidator>
@@ -61,7 +64,8 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
-                                            <label>Core Courses</label>
+                                            <%--<label>Core Courses</label>--%>
+                                            <asp:Label ID="lblDYddlpreSubjects" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:ListBox ID="ddlpreSubjects" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" TabIndex="0"></asp:ListBox>
                                         <asp:RequiredFieldValidator ID="rfcprereq" runat="server" ControlToValidate="ddlpreSubjects" SetFocusOnError="true" Display="None" ErrorMessage="Please Select Prerequisites Subjects." ValidationGroup="submit"></asp:RequiredFieldValidator>

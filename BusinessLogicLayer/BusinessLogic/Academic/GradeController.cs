@@ -375,6 +375,69 @@ namespace BusinessLogicLayer.BusinessLogic.Academic
            }
            return status;
        }
+
+
+        public int AddCourseActivityMaster(int activityno, string activityname, int ret)
+       {
+           int status = 0;
+           try
+           {
+               SQLHelper objSQLHelper = new SQLHelper(connectionString);
+               SqlParameter[] sqlParams = new SqlParameter[]
+                {
+                    new SqlParameter("@P_ACTIVITY_TYPE_NO",activityno),
+                    new SqlParameter("@P_ACTIVITY_NAME", activityname),
+                    new SqlParameter("@P_ISACTIVE",ret),
+                    new SqlParameter("@P_OUT", status)
+                };
+               sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
+
+               object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_COURSE_ACTIVITY", sqlParams, true);
+
+               if (obj != null && obj.ToString() != "-99" && obj.ToString() != "-1001")
+                   status = Convert.ToInt32(CustomStatus.RecordSaved);
+               else
+                   status = Convert.ToInt32(CustomStatus.Error);
+           }
+           catch (Exception ex)
+           {
+               status = Convert.ToInt32(CustomStatus.Error);
+               throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.AddBatch() --> " + ex.Message + " " + ex.StackTrace);
+           }
+           return status;
+       }
+
+       public int UpdateCourseActivityMaster(int activityno, string activityname, int ret)
+       {
+           int status = 0;
+           try
+           {
+               SQLHelper objSQLHelper = new SQLHelper(connectionString);
+               SqlParameter[] sqlParams = new SqlParameter[]
+                {                    
+                     new SqlParameter("@P_ACTIVITY_TYPE_NO",activityno),
+                    new SqlParameter("@P_ACTIVITY_NAME", activityname),
+                    new SqlParameter("@P_ISACTIVE",ret),
+                    new SqlParameter("@P_OUT",status)
+                };
+               sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
+
+               object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_COURSE_ACTIVITY", sqlParams, true);
+
+               if (obj != null && obj.ToString() != "-99" && obj.ToString() != "-1001")
+                   status = Convert.ToInt32(CustomStatus.RecordUpdated);
+               else
+                   status = Convert.ToInt32(CustomStatus.Error);
+           }
+           catch (Exception ex)
+           {
+               status = Convert.ToInt32(CustomStatus.Error);
+               throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.UpdateBatch() --> " + ex.Message + " " + ex.StackTrace);
+           }
+           return status;
+       }
+ 
+    }
     }
     
 }

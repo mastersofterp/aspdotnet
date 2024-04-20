@@ -45,20 +45,20 @@
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">GRADE ENTRY</h3>
-                            <%--<h4> <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h4>--%>
+                            <%--<h3 class="box-title">GRADE ENTRY</h3>--%>
+                            <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                         </div>
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
 
-                                    <asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>
+                                    
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Programme Type</label>
-                                            <%-- <asp:Label ID="lblDYUAddlSection" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            <%--<label>Programme Type</label>--%>
+                                             <asp:Label ID="lblDYddlProgrammeType" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true"
                                             ToolTip="Please Select Programme Type" data-select2-enable="true" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged" AutoPostBack="true">
@@ -89,7 +89,8 @@
                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>College/Scheme</label>
+                                            <%--<label>College/Scheme</label>--%>
+                                           <asp:Label ID="lblDYddlcollege" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:ListBox ID="ddlcollege" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo"
                                             OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged1" AutoPostBack="true"></asp:ListBox>
@@ -101,8 +102,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Grade Type </label>
-                                            <%--<asp:Label ID="lblDYddlGradeType" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            <%--<label>Grade Type </label>--%>
+                                            <asp:Label ID="lblDYddlGradeType" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlGradeType" runat="server" AppendDataBoundItems="true"
                                             ToolTip="Please Select Grade Type" data-select2-enable="true" OnSelectedIndexChanged="ddlGradeType_SelectedIndexChanged" AutoPostBack="true">
@@ -134,7 +135,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Subject Type</label>
+                                            <%--<label>Subject Type</label>--%>
+                                            <asp:Label ID="lblDYddlSubtype" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:ListBox ID="ddlSubType" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo"
                                             OnSelectedIndexChanged="ddlSubType_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
@@ -145,7 +147,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Programme Type</label>
+                                            <%--<label>Programme Type</label>--%>
+                                            <asp:Label ID="lblDYddlProgrammeType_TAB" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:ListBox ID="ddlALType" runat="server" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"
                                             SelectionMode="multiple" ClientIDMode="Static"></asp:ListBox>

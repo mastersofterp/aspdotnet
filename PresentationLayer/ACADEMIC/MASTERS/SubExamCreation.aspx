@@ -64,19 +64,21 @@
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
-                            <h3 class="box-title">SUB EXAM CREATION</h3>
+                            <%--<h3 class="box-title">SUB EXAM CREATION</h3>--%>
+                             <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                         </div>
 
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>
+                                        <%--<asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>--%>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Exam Pattern</label>
+                                            <%--<label>Exam Pattern</label>--%>
+                                            <asp:Label ID="lblDYddlExamPattern" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlExamPattern" runat="server" data-select2-enable="true" AppendDataBoundItems="true" TabIndex="1" CssClass="form-control" OnSelectedIndexChanged="ddlExamPattern_SelectedIndexChanged" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -88,7 +90,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Exam Name</label>
+                                            <%--<label>Exam Name</label>--%>
+                                            <label><asp:Label ID="lblDYddlExamName" runat="server" Font-Bold="true"></asp:Label> </label>
                                         </div>
                                         <asp:DropDownList ID="ddlExamName" runat="server" data-select2-enable="true" AppendDataBoundItems="true" TabIndex="2" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlExamName_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -101,7 +104,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Subject Type</label>
+                                            <%--<label>Subject Type</label>--%>
+                                            <label><asp:Label ID="lblDYddlSubtype" runat="server" Font-Bold="true"></asp:Label> </label>
                                         </div>
                                         <asp:DropDownList ID="ddlSubID" runat="server" data-select2-enable="true" AppendDataBoundItems="true" TabIndex="3" CssClass="form-control"
                                             AutoPostBack="true" OnSelectedIndexChanged="ddlSubID_SelectedIndexChanged">
@@ -115,7 +119,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Sub Exam Name</label>
+                                           <%-- <label>Sub Exam Name</label>--%>
+                                            <label><asp:Label ID="lblDYtxtSubExamName" runat="server" Font-Bold="true"></asp:Label></label>
                                         </div>
                                         <asp:TextBox ID="txtsubExamName" runat="server" TabIndex="4" CssClass="form-control"
                                             ToolTip="Please Enter Sub Exam Name " placeholder="Enter Sub Exam Name." />
@@ -127,7 +132,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Field Name</label>
+                                            <%--<label>Field Name</label>--%>
+                                            <label><asp:Label ID="lblDYtxtFieldName" runat="server" Font-Bold="true"></asp:Label></label>
                                         </div>
                                         <asp:TextBox ID="txtFieldName" runat="server" TabIndex="4" CssClass="form-control"
                                             MaxLength="10" ToolTip="Please Enter Field Name " placeholder="Enter Field name." />
@@ -139,6 +145,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
+                                            <%--<label>Max Mark</label>--%>
                                             <label>Max Mark</label>
                                         </div>
                                         <asp:TextBox ID="txtMaxMark" runat="server" TabIndex="5" CssClass="form-control"
@@ -153,7 +160,8 @@
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                            <label>Status</label>
+                                            <%--<label>Status</label>--%>
+                                            <label><asp:Label ID="lblDYStatus" runat="server"></asp:Label></label>
                                         </div>
                                         <div class="switch form-inline">
                                             <input type="checkbox" id="rdActivetimeslot" name="switch" checked />
