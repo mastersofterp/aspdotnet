@@ -372,7 +372,7 @@ public partial class ACADEMIC_MASTERS_SubExamCreation : System.Web.UI.Page
     protected void Clear()
     {
         txtsubExamName.Text = string.Empty;
-        Label1.Text = string.Empty;
+        //Label1.Text = string.Empty;
         ddlExamPattern.SelectedIndex = 0;
         ddlExamPattern.Enabled = true;
         ddlExamName.SelectedIndex = 0;
@@ -455,7 +455,7 @@ public partial class ACADEMIC_MASTERS_SubExamCreation : System.Web.UI.Page
         {
             ImageButton btnEdit = sender as ImageButton;
             subexamno = int.Parse(btnEdit.CommandArgument);
-            Label1.Text = string.Empty;
+           // Label1.Text = string.Empty;
 
             ShowDetail(subexamno);
             ViewState["action"] = "edit";
