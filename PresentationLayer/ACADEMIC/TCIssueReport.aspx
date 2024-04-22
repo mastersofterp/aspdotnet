@@ -35,7 +35,7 @@ width: max-content !important;
                        <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divBranch">
                                         <div class="label-dynamic">
                                             <sup></sup>
                                             <%--<label>Branch</label>--%>
@@ -50,7 +50,7 @@ width: max-content !important;
                                         </asp:RequiredFieldValidator>--%>
                                     </div>
 
-                                  <div class="form-group col-lg-3 col-md-6 col-12">
+                                  <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divFromDate">
                                       <label><span style="color: red;">*</span> From Date</label>
                                       <div class="input-group">
                                    <div class="input-group-addon">
@@ -74,7 +74,7 @@ width: max-content !important;
                                         </div>
                                     </div>
                                    
-                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivToDate">
                                         <label><span style="color: red;">*</span> To Date</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -100,6 +100,24 @@ width: max-content !important;
                                 </div>
                                     </div>
 
+                                    <%-- added by vipul on date 11-04-2024 as per Tno:-57607 --%>
+                                      <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divAdmBatch">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <%--<label>Branch</label>--%>
+                                            <asp:Label ID="lblAdmBatch" runat="server" Font-Bold="true">Admission Batch</asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlAdmBatch" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Admission Batch" AutoPostBack="true"
+                                            CssClass="form-control" data-select2-enable="true" ValidationGroup="Show" TabIndex="1">
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlAdmBatch"
+                                            Display="None" ErrorMessage="Please Select Admission Batch." InitialValue="0" SetFocusOnError="true"
+                                            ValidationGroup="Excel">
+                                        </asp:RequiredFieldValidator>
+                                    </div>
+
+
+
 
                                 </div>                      
                         </div>
@@ -107,10 +125,15 @@ width: max-content !important;
                        <div class="col-12 btn-footer">
                                 <asp:Button ID="btnShow" runat="server" Text="Show" CssClass="btn btn-primary" TabIndex="4" ValidationGroup="Show" OnClick="btnShow_Click" />
                                  <asp:Button ID="btnReport" runat="server" Text="Report"
-                                    TabIndex="3" ValidationGroup="Show" CssClass="btn btn-info" OnClick="btnReport_Click"/>
+                                    TabIndex="3" ValidationGroup="Excel" CssClass="btn btn-info" OnClick="btnReport_Click"/>
+                                <asp:Button ID="btnExcelreport" runat="server" Text="Excel" OnClick="btnExcelreport_Click"
+                                    TabIndex="3" ValidationGroup="Show" CssClass="btn btn-info"/>
+                                  
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning"  TabIndex="5" OnClick="btnCancel_Click"/>
                                
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Show"
+                                    ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                             <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="Excel"
                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                               
                             </div>
@@ -210,6 +233,7 @@ width: max-content !important;
         </ContentTemplate>
            <Triggers>
           <asp:PostBackTrigger ControlID="btnReport" />
+          <asp:PostBackTrigger ControlID="btnExcelreport" />
       </Triggers>
     </asp:UpdatePanel>
     
