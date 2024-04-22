@@ -97,6 +97,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                     divSemester.Visible = false;
                     divddlSchlWiseBulk.Visible = false;
                     divddlSort.Visible = false;
+                    divddlPaymentType.Visible = false;
                 }
                 else
                 {
@@ -107,6 +108,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                     divddlSchlWiseBulk.Visible = true;
                     lblYearMandatory.Visible = true;
                     divddlSort.Visible = true;
+                    divddlPaymentType.Visible = true;
                 }
 
             }
@@ -157,6 +159,8 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
             objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0", "YEAR");
             objCommon.FillDropDownList(ddlScholarShipsType, "ACD_SCHOLORSHIPTYPE", "SCHOLORSHIPTYPENO", "SCHOLORSHIPNAME", "SCHOLORSHIPTYPENO > 0  AND ACTIVESTATUS=1 ", "SCHOLORSHIPTYPENO");  // added on 2020 feb 11
             objCommon.FillDropDownList(ddlAcdYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ACTIVE_STATUS=1", "ACADEMIC_YEAR_ID DESC");
+            objCommon.FillDropDownList(ddlPaymenttype, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO>0 AND ACTIVESTATUS=1", "PAYTYPENO");
+
             // FILL DROPDOWN ADMISSION BATCH
         }
         catch (Exception ex)
@@ -200,6 +204,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
         {
             DataSet ds;
             int Sort = 0;
+            int PaymentType = 0;
             int sessionno = Convert.ToInt32(Session["currentsession"]);
 
             if (rbRegEx.SelectedIndex == 0)
@@ -217,16 +222,16 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
             int AmtPercent = txtschAmt.Text == string.Empty ? 0 : Convert.ToInt32(txtschAmt.Text);
 
             Sort = Convert.ToInt32(ddlSort.SelectedValue);
-
+            PaymentType = Convert.ToInt32(ddlPaymenttype.SelectedValue);
             //ds = studCont.GetStudentListForAdmitCardNoDues(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue));
             //ds = studCont.GetStudentScholershipDetails(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlYear.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue));
             if (ddlSchlWiseBulk.SelectedValue == "1")
             {
-                ds = studCont.GetStudentScholershipDetailsSemWise(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlYear.SelectedValue), Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlAcdYear.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue), Convert.ToInt32(ddlScholarShipsType.SelectedValue), ScholarshipMode, AmtPercent, Sort);
+                ds = studCont.GetStudentScholershipDetailsSemWise(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlYear.SelectedValue), Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlAcdYear.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue), Convert.ToInt32(ddlScholarShipsType.SelectedValue), ScholarshipMode, AmtPercent, Sort, PaymentType);
             }
             else
             {
-                ds = studCont.GetStudentScholershipDetails(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlYear.SelectedValue), Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlAcdYear.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue), Convert.ToInt32(ddlScholarShipsType.SelectedValue), ScholarshipMode, AmtPercent, Sort);
+                ds = studCont.GetStudentScholershipDetails(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlYear.SelectedValue), Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlAcdYear.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue), Convert.ToInt32(ddlScholarShipsType.SelectedValue), ScholarshipMode, AmtPercent, Sort, PaymentType);
             }
 
 
@@ -1155,6 +1160,8 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                             lblSingCollege.ToolTip = dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
                             lblYear.Text = dsStudent.Tables[0].Rows[0]["YEARNAME"].ToString();
                             lblYear.ToolTip = dsStudent.Tables[0].Rows[0]["YEAR"].ToString();
+                            lblScholershipApplied.Text = dsStudent.Tables[0].Rows[0]["APPLIED_SCHOLERSHIP"].ToString();
+                            lblPaymentType.Text = dsStudent.Tables[0].Rows[0]["PAYTYPENAME"].ToString();
                             //GridView GV = new GridView();                                                   
                             //imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dsStudent.Tables[0].Rows[0]["IDNO"].ToString() + "&type=student";
 
@@ -1269,7 +1276,6 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                     foreach (DataRow dr in dtdata.Rows)
                     {
                         string amt = dr["SCHL_AMOUNT"].ToString();
-
                         string semno = string.Empty;
                         string count = string.Empty;
                         string dcrno = string.Empty;
@@ -1306,7 +1312,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                                 dcrno = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + ViewState["idno"] + " AND BRANCHNO=" + lblBranch.ToolTip + " AND DEGREENO=" + lblDegrreno.ToolTip + " AND SEMESTERNO=" + semno + " AND SCHOLARSHIP_ID=" + Scholarshipid + " AND PAY_MODE_CODE='SA' AND RECON=1 AND CAN=0 ");
                             }
                         }
-
+                         
                         if (ddlSchlWise.SelectedValue == "2")
                         {
                             allotCount = objCommon.LookUp("ACD_STUDENT_SCHOLERSHIP", "COUNT(1)", "IDNO=" + ViewState["idno"] + " AND BRANCHNO=" + lblBranch.ToolTip + " AND DEGREENO=" + lblDegrreno.ToolTip + " AND SEMESTERNO=" + yearsem + " AND SCHOLARSHIP_ID=" + Scholarshipid);
@@ -1809,8 +1815,5 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
 
     }
 
-
-
     #endregion
-
 }

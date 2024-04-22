@@ -9889,20 +9889,20 @@ namespace IITMS
 
                 //New Methods By Amit k on 19-02-2020
                 //Updated by Saurabh S. 25082022
-                public DataSet GetStudentScholershipDetails(int degreeno, int branchno, int year, int admbatch, int semesterno, int prev_status, int yearID, int colg, int Scholarshipid, int SchMode, int AmtPercent, int sort)
+                //Modified by Saurabh S. 22042024
+                public DataSet GetStudentScholershipDetails(int degreeno, int branchno, int year, int admbatch, int semesterno, int prev_status, int yearID, int colg, int Scholarshipid, int SchMode, int AmtPercent, int sort, int paymenttype)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[13];
                         objParams[0] = new SqlParameter("@P_DEGREENO", degreeno);
                         objParams[1] = new SqlParameter("@P_BRANCHNO", branchno);
                         objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
                         objParams[3] = new SqlParameter("@P_YEAR", year);   //added by saurabh s
                         objParams[4] = new SqlParameter("@P_ADMBATCH", admbatch);
-
                         objParams[5] = new SqlParameter("@P_ACADEMIC_YEAR_ID", yearID);
                         objParams[6] = new SqlParameter("@P_COLLEGE_ID", colg);
                         objParams[7] = new SqlParameter("@P_SCHOLERSHIPTYPENO", Scholarshipid);//added by saurabh s
@@ -9910,6 +9910,7 @@ namespace IITMS
                         objParams[9] = new SqlParameter("@P_SCH_MODE", SchMode);
                         objParams[10] = new SqlParameter("@P_SCH_AMT_PER", AmtPercent);
                         objParams[11] = new SqlParameter("@P_SORTBY", sort);
+                        objParams[12] = new SqlParameter("@P_PAYMENT_TYPE", paymenttype);
 
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_STUDENT_SCHOLARSHIP_DETAILS", objParams);
@@ -9921,21 +9922,22 @@ namespace IITMS
                     return ds;
                 }
 
-                // Modify by Saurabh sonar on dated 21062023
-                public DataSet GetStudentScholershipDetailsSemWise(int degreeno, int branchno, int year, int admbatch, int semesterno, int prev_status, int yearID, int colg, int Scholarshipid, int SchMode, int AmtPercent, int sort)
+
+                //New Methods By Amit k on 19-02-2020
+                //Updated by Saurabh S. 25082022
+                public DataSet GetStudentScholershipDetails(int degreeno, int branchno, int year, int admbatch, int semesterno, int prev_status, int yearID, int colg, int Scholarshipid, int SchMode, int AmtPercent, int sort, int paymenttype)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[13];
                         objParams[0] = new SqlParameter("@P_DEGREENO", degreeno);
                         objParams[1] = new SqlParameter("@P_BRANCHNO", branchno);
                         objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
                         objParams[3] = new SqlParameter("@P_YEAR", year);   //added by saurabh s
                         objParams[4] = new SqlParameter("@P_ADMBATCH", admbatch);
-
                         objParams[5] = new SqlParameter("@P_ACADEMIC_YEAR_ID", yearID);
                         objParams[6] = new SqlParameter("@P_COLLEGE_ID", colg);
                         objParams[7] = new SqlParameter("@P_SCHOLERSHIPTYPENO", Scholarshipid);//added by saurabh s
@@ -9943,7 +9945,7 @@ namespace IITMS
                         objParams[9] = new SqlParameter("@P_SCH_MODE", SchMode);
                         objParams[10] = new SqlParameter("@P_SCH_AMT_PER", AmtPercent);
                         objParams[11] = new SqlParameter("@P_SORTBY", sort);
-
+                        objParams[12] = new SqlParameter("@P_PAYMENT_TYPE", paymenttype);
 
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_STUDENT_SCHOLARSHIP_DETAILS", objParams);
@@ -21764,7 +21766,157 @@ namespace IITMS
                     }
                     return ds;
                 } // TILL 
+<<<<<<< HEAD
 >>>>>>> d7a7ee57 ([ENHANCEMENT] [57603] ADD NEW PAGE FOR ACADEMIC REPORTS)
+=======
+
+                // ADDED BY VAISHNAVI B. ON DATE - 17/04/2024
+                public DataSet GetStudentCancelScholershipAllotment(int degreeno, int branchno, int year, int semesterno, int admbatch, int prev_status, int yearID, int colg, int ScholarshipId)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[8];
+                        objParams[0] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParams[1] = new SqlParameter("@P_BRANCHNO", branchno);
+                        objParams[2] = new SqlParameter("@P_YEAR", year);
+                        objParams[3] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParams[4] = new SqlParameter("@P_ADMBATCH", admbatch);
+                        objParams[5] = new SqlParameter("@P_ACADEMIC_YEAR_ID", yearID);
+                        objParams[6] = new SqlParameter("@P_COLLEGE_ID", colg);
+                        objParams[7] = new SqlParameter("@P_SCHOLARSHIP_ID", ScholarshipId);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_STUDENT_CANCEL_SCHOLARSHIP_ALLOTMENT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.EmpCreateController.GetStudentCancelScholershipAllotment-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+
+                // ADDED BY VAISHNAVI B. ON DATE - 17/04/2024
+                public int DeleteCancelScholarshipAllotment(Student objS, int Schlshipno)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[10];
+                        objParams[0] = new SqlParameter("@P_IDNO", objS.IdNo);
+                        objParams[1] = new SqlParameter("@P_SCHLSHPNO", Schlshipno);
+                        objParams[2] = new SqlParameter("@P_DEGREENO", objS.DegreeNo);
+                        objParams[3] = new SqlParameter("@P_BRANCHNO", objS.BranchNo);
+                        objParams[4] = new SqlParameter("@P_SEMESTERNO", objS.SemesterNo);
+                        objParams[5] = new SqlParameter("@P_ADMBATCH", objS.AdmBatch);
+                        objParams[6] = new SqlParameter("@P_SCHOLERSHIPTYPENO", objS.ScholershipTypeNo);
+                        objParams[7] = new SqlParameter("@P_UANO", objS.Uano);
+                        objParams[8] = new SqlParameter("@P_IPADDRESS", objS.IPADDRESS);
+                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[9].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_DELETE_CANCEL_SCHOLARSHIP_ALLOTMENT", objParams, true);
+
+                        if (Convert.ToInt32(ret) == 3)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordDeleted);
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddFailSubjects-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+
+                // ADDED BY VAISHNAVI B. ON DATE - 17/04/2024
+                public string InsertStudentCancelScholershipDetailsSemWise(Student objS, int academicyearid, int schlMode, int Percentage)
+                {
+                    string retStatus = string.Empty;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add New student
+                        objParams = new SqlParameter[14];
+                        objParams[0] = new SqlParameter("@P_IDNO", objS.IdNo);
+                        objParams[1] = new SqlParameter("@P_DEGREENO", objS.DegreeNo);
+                        objParams[2] = new SqlParameter("@P_BRANCHNO", objS.BranchNo);
+                        objParams[3] = new SqlParameter("@P_IPADDRESS", objS.IPADDRESS);
+                        objParams[4] = new SqlParameter("@P_UANO", objS.Uano);
+                        objParams[5] = new SqlParameter("@P_ADMBATCH", objS.AdmBatch);
+                        objParams[6] = new SqlParameter("@P_SCHOLERSHIPTYPENO", objS.ScholershipTypeNo);
+                        objParams[7] = new SqlParameter("@P_SEMESTERNO", objS.SemesterNo);
+                        objParams[8] = new SqlParameter("@P_SEMESTERAMOUNT", objS.Amount);
+                        objParams[9] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                        objParams[10] = new SqlParameter("@P_ACADEMIC_YEAR_ID", academicyearid);
+                        objParams[11] = new SqlParameter("@P_SCHL_MODE", schlMode);
+                        objParams[12] = new SqlParameter("@P_SCH_AMT_PER", Percentage);
+                        objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_STUDENT_CANCEL_SCHOLERSHIP_DETAILS_SEMWISE", objParams, true);
+
+                        retStatus = ret.ToString();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = "0";
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertStudentScholershipDetails-> " + ex.ToString());
+                    }
+
+                    return retStatus;
+                }
+
+
+
+                // ADDED BY VAISHNAVI B. ON DATE - 17/04/2024
+                public string InsertStudentCancelScholershipDetails(Student objS, int academicyearid, int schlMode, int Percentage)
+                {
+                    string retStatus = string.Empty;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add New student
+                        objParams = new SqlParameter[14];
+                        objParams[0] = new SqlParameter("@P_IDNO", objS.IdNo);
+                        objParams[1] = new SqlParameter("@P_DEGREENO", objS.DegreeNo);
+                        objParams[2] = new SqlParameter("@P_BRANCHNO", objS.BranchNo);
+                        objParams[3] = new SqlParameter("@P_IPADDRESS", objS.IPADDRESS);
+                        objParams[4] = new SqlParameter("@P_UANO", objS.Uano);
+                        objParams[5] = new SqlParameter("@P_ADMBATCH", objS.AdmBatch);
+                        objParams[6] = new SqlParameter("@P_SCHOLERSHIPTYPENO", objS.ScholershipTypeNo);
+                        objParams[7] = new SqlParameter("@P_SEMESTERNO", objS.SemesterNo);
+                        objParams[8] = new SqlParameter("@P_SEMESTERAMOUNT", objS.Amount);
+                        objParams[9] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                        objParams[10] = new SqlParameter("@P_ACADEMIC_YEAR_ID", academicyearid);
+                        objParams[11] = new SqlParameter("@P_SCHL_MODE", schlMode);
+                        objParams[12] = new SqlParameter("@P_SCH_AMT_PER", Percentage);
+                        objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_STUDENT_CANCEL_SCHOLERSHIP_DETAILS", objParams, true);
+
+                        retStatus = ret.ToString();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = "0";
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertStudentScholershipDetails-> " + ex.ToString());
+                    }
+
+                    return retStatus;
+                }
+>>>>>>> 46f47684 ([ENHANCEMENT] [56356] ENHANCEMENT OF PAYMENT TYPE)
             }
 
 

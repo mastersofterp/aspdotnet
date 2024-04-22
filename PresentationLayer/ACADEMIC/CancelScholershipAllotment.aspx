@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="BulkScholershipUpdate.aspx.cs" Inherits="ACADEMIC_BulkScholershipUpdate" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="CancelScholershipAllotment.aspx.cs" Inherits="ACADEMIC_CancelScholershipAllotment" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -45,316 +45,8 @@
                         </div>
 
                         <div class="box-body">
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="form-group col-lg-6 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Search By</label>
-                                        </div>
-                                        <asp:RadioButton ID="rdoSingleStudent" runat="server" Text="Single Student" GroupName="search" Checked="true" AutoPostBack="true" OnCheckedChanged="rdoSingleStudent_CheckedChanged" />
-                                        <asp:RadioButton ID="rdoBulkStudent" runat="server" Text="Bulk Student" GroupName="search" AutoPostBack="true" OnCheckedChanged="rdoBulkStudent_CheckedChanged" />
-                                        <asp:RadioButton ID="rdoIdno" runat="server" Text="Id No." Checked="true" GroupName="search" Visible="false" />
-                                    </div>
-                                </div>
-                            </div>
 
-                            <asp:Panel ID="pnlSingleStud" runat="server" Visible="false">
-                                <div id="pnlSearch" runat="server" class="col-12">
-                                    <div class="row">
-                                        <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
-                                            <div class="label-dynamic">
-                                                <label>Session Name</label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlSessionSingleStud" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            </asp:DropDownList>
-
-                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Please Select Session"
-                                                ControlToValidate="ddlSessionSingleStud" Display="None" ValidationGroup="search" InitialValue="0" />--%>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <label>Enter </label>
-                                                <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
-                                            </div>
-                                            <asp:TextBox ID="txtEnrollno" runat="server" CssClass="form-control" ToolTip="Enter text to search."></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="valSearchText" runat="server" ControlToValidate="txtEnrollno"
-                                                Display="None" ErrorMessage="Please enter Reg.No." SetFocusOnError="true"
-                                                ValidationGroup="search" />
-                                        </div>
-
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <label></label>
-                                            </div>
-                                            <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
-                                                ShowSummary="false" ValidationGroup="search" />
-                                            <asp:Button ID="btnSearch" runat="server" OnClick="btnProceed_Click" Text="Show" ValidationGroup="search" CssClass="btn btn-primary" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="divCourses" runat="server" visible="false">
-                                    <div runat="server" id="noDuesSingleStud" class="col-12">
-                                        <div class="row mb-3">
-                                            <div class="col-lg-5 col-md-6 col-12">
-                                                <ul class="list-group list-group-unbordered">
-                                                    <li class="list-group-item"><b>Student Name :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblName" runat="server" Font-Bold="false" />
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-group-item"><b>
-                                                        <asp:Label ID="lblDYlvEnrollmentNo" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblEnrollNo" runat="server" Font-Bold="false"></asp:Label></a>
-                                                    </li>
-                                                    <li class="list-group-item"><b>
-                                                        <asp:Label ID="lblDYlvAdmBatch" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblAdmBatch" runat="server" Font-Bold="false"></asp:Label></a>
-                                                    </li>
-
-                                                    <li class="list-group-item"><b>
-                                                        <asp:Label ID="Label1" Text="Year" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblYear" runat="server" Font-Bold="false"></asp:Label>
-                                                        </a>
-                                                    </li>
-
-                                                     <li class="list-group-item"><b>
-                                                        <asp:Label ID="lblDYPaymentType" Text="Payment Type" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblPaymentType" runat="server" Font-Bold="false"></asp:Label>
-                                                        </a>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                            <div class="col-lg-7 col-md-6 col-12">
-                                                <ul class="list-group list-group-unbordered">
-
-                                                    <li class="list-group-item"><b>
-                                                        <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true"></asp:Label>-<asp:Label ID="lblDYddlBranch" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblBranch" runat="server" Font-Bold="false"></asp:Label>
-                                                            <asp:Label ID="lblDegrreno" runat="server" Font-Bold="false"></asp:Label>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-group-item"><b>
-                                                        <asp:Label ID="lblDYtxtScheme" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblScheme" runat="server" Font-Bold="false"></asp:Label></a>
-                                                    </li>
-
-                                                    <li class="list-group-item"><b>
-                                                        <asp:Label ID="lblDYtxtSchoolname" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblSingCollege" runat="server" Font-Bold="false"></asp:Label>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-group-item d-none"><b>
-                                                        <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblSemester" runat="server" Font-Bold="false"></asp:Label>
-                                                        </a>
-                                                    </li>
-
-                                                    <li class="list-group-item"><b>
-                                                        <asp:Label ID="lblDYddlScholarshiptype" runat="server" Text="Scholarship Applied"  Font-Bold="true"></asp:Label>
-                                                        :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblScholershipApplied" runat="server" Font-Bold="false"></asp:Label>
-                                                        </a>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                            <%--<div class="col-lg-4 col-md-6 col-12">
-                                                <ul class="list-group list-group-unbordered">
-                                                   
-                                                </ul>
-                                            </div>--%>
-                                        </div>
-
-                                        <div class="row mt-3">
-                                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                                <div class="label-dynamic">
-                                                    <sup>* </sup>
-                                                    <label>Scholorship Type</label>
-                                                </div>
-                                                <asp:DropDownList ID="ddlScholorshipType" runat="server" AppendDataBoundItems="True" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlScholorshipType_SelectedIndexChanged" data-select2-enable="true">
-                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-
-
-                                            <div class="form-group col-lg-3 col-md-6 col-12 " id="divSchlWise" runat="server">
-                                                <div class="label-dynamic">
-                                                    <sup>*</sup>
-                                                    <label>Scholarship Category</label>
-                                                </div>
-
-                                                <asp:DropDownList ID="ddlSchlWise" runat="server" AppendDataBoundItems="True" ToolTip="Please Select " CssClass="form-control" data-select2-enable="true" TabIndex="5" AutoPostBack="true" OnSelectedIndexChanged="ddlSchlWise_SelectedIndexChanged">
-                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    <asp:ListItem Value="1">SemesterWise</asp:ListItem>
-                                                    <asp:ListItem Value="2">YearWise</asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-
-                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divModeSingl" runat="server">
-                                                <div class="label-dynamic">
-                                                    <sup id="sup1" runat="server">* </sup>
-                                                    <label>Scholarship Mode</label>
-                                                </div>
-                                                <div>
-                                                    <asp:DropDownList ID="ddlSchlModeSingle" runat="server" TabIndex="32" AppendDataBoundItems="true"
-                                                        CssClass="form-control" data-select2-enable="true" ToolTip="Please Select Scholarship Mode" AutoPostBack="true" OnSelectedIndexChanged="ddlSchlModeSingle_SelectedIndexChanged">
-                                                        <asp:ListItem Value="0">Please select</asp:ListItem>
-                                                        <asp:ListItem Value="1">Percentage Wise</asp:ListItem>
-                                                        <asp:ListItem Value="2">Amount Wise</asp:ListItem>
-                                                    </asp:DropDownList>
-
-                                                    <asp:RequiredFieldValidator ID="rfvddlSchlModeSingle" runat="server" ControlToValidate="ddlSchMode"
-                                                        Display="None" ErrorMessage="Please Select Scholarship Mode" ValidationGroup="show" InitialValue="0"
-                                                        SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divamtSingl" runat="server" visible="false">
-                                                <div class="label-dynamic">
-                                                    <sup id="sup2" runat="server">*</sup>
-                                                    <asp:Label runat="server" ID="Label2" Font-Bold="true">Enter Percentage</asp:Label>
-                                                </div>
-
-                                                <div>
-                                                    <asp:TextBox runat="server" ID="txtPerAmountSingStud" TabIndex="27" onkeyup="validateNumericAndNotZero(this);"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="rfvtxtPerAmountSingStud" runat="server" ControlToValidate="txtPerAmountSingStud"
-                                                        Display="None" ErrorMessage="Please Enter Percentage" ValidationGroup="show"
-                                                        SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                                </div>
-                                            </div>
-
-
-
-
-
-                                            <div class="form-group col-lg-3 col-md-6 col-12 d-none">
-                                                <div class="label-dynamic">
-                                                    <label>No Dues Status</label>
-                                                </div>
-                                                <asp:RadioButton ID="rdoYesSingle" runat="server" GroupName="Sex" TabIndex="10" Text="Complete" Style="color: green"></asp:RadioButton>
-                                                <asp:RadioButton ID="rdoNoSingle" runat="server" GroupName="Sex" TabIndex="11" Text="Pending" Style="color: red"></asp:RadioButton>
-                                            </div>
-                                            <div class="form-group col-lg-3 col-md-6 col-12 d-none">
-                                                <div class="label-dynamic">
-                                                    <label></label>
-                                                </div>
-                                                <asp:Label ID="lblFatherName" runat="server" Font-Bold="False" />&nbsp;
-                                                <asp:Label ID="lblMotherName" runat="server" Font-Bold="False" />
-                                            </div>
-
-
-                                            <%--     <div class="form-group col-lg-3 col-md-6 col-12">
-                                                <div class="label-dynamic">
-                                                    <label>Photo</label>
-                                                </div>
-                                                <asp:Image ID="imgPhoto" runat="server" Width="50%" Height="80%" />
-                                            </div>--%>
-                                            <div class="form-group col-lg-3 col-md-6 col-12 " id="divShowPerButton" runat="server">
-                                                <div class="label-dynamic">
-                                                    <label></label>
-                                                </div>
-                                                <asp:Button ID="btnShowSchMode" runat="server" OnClick="btnShowSchMode_Click" Text="Calculate" CssClass="btn btn-primary" />
-                                            </div>
-                                        </div>
-
-
-
-                                        <div class="col-12">
-                                            <asp:GridView ID="gvSemesters" runat="server" ShowFooter="false" Width="100%" class="table table-bordered" OnRowDataBound="gvSemesters_RowDataBound"
-                                                AutoGenerateColumns="false">
-                                                <Columns>
-                                                    <asp:TemplateField HeaderText="SrNo." ControlStyle-Font-Bold="true" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-Width="10%" HeaderStyle-VerticalAlign="Middle">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblSemestersNo" runat="server" Text='<%# Eval("SemesterNo")%>'></asp:Label>
-                                                        </ItemTemplate>
-                                                        <HeaderStyle BackColor="#758aa8" ForeColor="#ffffff" />
-                                                    </asp:TemplateField>
-
-                                                    <asp:TemplateField HeaderText="Year/Semester" ControlStyle-Font-Bold="true" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-Width="13%" HeaderStyle-VerticalAlign="Middle">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblSemesters" runat="server" Text='<%# Eval("RowNumber")%>'></asp:Label>
-                                                        </ItemTemplate>
-                                                        <HeaderStyle BackColor="#758aa8" ForeColor="#ffffff" />
-                                                    </asp:TemplateField>
-
-                                                    <asp:TemplateField HeaderText="Academic Year" ControlStyle-Font-Bold="true" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-Width="20%" HeaderStyle-VerticalAlign="Middle">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblAcadYear" runat="server" Text='<%# Eval("AcadYear") %>' Visible="false"  />
-                                                            <asp:DropDownList ID="ddlAcadYear" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" >
-                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                        </ItemTemplate>
-                                                        <HeaderStyle BackColor="#758aa8" ForeColor="#ffffff" />
-                                                    </asp:TemplateField>
-
-                                                    <asp:TemplateField HeaderText="Amount" ControlStyle-Font-Bold="true" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-Width="17%" HeaderStyle-VerticalAlign="Middle">
-                                                        <ItemTemplate>
-                                                            <asp:TextBox ID="txtSemestersAmount" runat="server" MaxLength="10" onKeyUp="numericFilter(this);"></asp:TextBox>
-                                                            <%--<asp:RequiredFieldValidator ID="rfvSemAmt" runat="server" InitialValue="" ControlToValidate="txtSemestersAmount"
-                                                                Display="Dynamic" ErrorMessage="Please Enter Semester Amount">
-                                                            </asp:RequiredFieldValidator>--%>
-                                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftbe" runat="server"
-                                                                TargetControlID="txtSemestersAmount" ValidChars="1234567890." />
-                                                        </ItemTemplate>
-                                                        <HeaderStyle BackColor="#758aa8" ForeColor="#ffffff" />
-                                                    </asp:TemplateField>
-
-                                                    <asp:TemplateField ControlStyle-Font-Bold="true" HeaderText="Remove Scholarship Allotment" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-Width="20%" HeaderStyle-VerticalAlign="Middle">
-                                                        <ItemTemplate>
-                                                            <asp:ImageButton ID="btnDeleteAllotment" runat="server" AlternateText="Delete Allotment" ImageUrl="~/images/delete.png"
-                                                                OnClick="btnDeleteAllotment_Click" OnClientClick="return showConfirmAllotment();" Visible="false" />
-                                                            <asp:Label ID="lblTxt2" runat="server" Visible="true" Text="Scholarship Allotment not found"></asp:Label>
-                                                        </ItemTemplate>
-                                                        <HeaderStyle BackColor="#758aa8" ForeColor="#ffffff" />
-                                                    </asp:TemplateField>
-
-                                                    <asp:TemplateField ControlStyle-Font-Bold="true" HeaderText="Remove Scholarship Adjustment" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-Width="20%" HeaderStyle-VerticalAlign="Middle">
-                                                        <ItemTemplate>
-                                                            <asp:ImageButton ID="btnDelete" runat="server" AlternateText="Delete Adjustment" ImageUrl="~/images/delete.png"
-                                                                OnClick="btnDelete_Click" OnClientClick="return showConfirm();" Visible="false" />
-                                                            <asp:Label ID="lblTxt" runat="server" Visible="true" Text="Scholarship Adjustment not found"></asp:Label>
-                                                        </ItemTemplate>
-                                                        <HeaderStyle BackColor="#758aa8" ForeColor="#ffffff" />
-                                                    </asp:TemplateField>
-
-                                                </Columns>
-                                            </asp:GridView>
-                                        </div>
-
-                                        <div class="col-12 btn-footer">
-                                            <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="backsem"
-                                                ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-
-                                            <asp:Button ID="btnSubmitForSingleStu" runat="server" CssClass="btn btn-primary" Font-Bold="true" OnClick="btnSubmitForSingleStu_Click" Text="Submit" ValidationGroup="SingleSubmit" />
-                                            <asp:Button ID="btnCancel1" runat="server" CssClass="btn btn-warning" Font-Bold="true" OnClick="btnCancel1_Click" Text="Cancel" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </asp:Panel>
-
-                            <asp:Panel ID="pnlBulkStud" runat="server" Visible="false">
+                            <asp:Panel ID="pnlBulkStud" runat="server">
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="form-group col-lg-3 col-md-6 col-12 ">
@@ -364,13 +56,14 @@
                                                 <asp:Label ID="lblDYddlAdmBatch" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
                                             <asp:DropDownList ID="ddlAdmBatch" runat="server" AppendDataBoundItems="True" TabIndex="1" CssClass="form-control" data-select2-enable="true"
-                                                ToolTip="Please Select Session" OnSelectedIndexChanged="ddlAdmBatch_SelectedIndexChanged">
+                                                ToolTip="Please Select Session">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <%--<asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlAdmBatch"
                                                 Display="None" ErrorMessage="Please Select Admission Batch" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>--%>
                                         </div>
 
+                                        <asp:HiddenField ID="txtSemesterAmountEnabledHidden" runat="server" />
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
@@ -465,7 +158,7 @@
                                                 <sup>*</sup>
                                                 <label>Scholarship Type</label>
                                             </div>
-                                            <asp:DropDownList ID="ddlScholarShipsType" runat="server" AutoPostBack="true" AppendDataBoundItems="True" CssClass="form-control" OnSelectedIndexChanged="ddlScholarShipsType_SelectedIndexChanged" data-select2-enable="true"
+                                            <asp:DropDownList ID="ddlScholarShipsType" runat="server" AutoPostBack="true" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
                                                 ToolTip="Please Select ScholarShip Type">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
@@ -554,24 +247,13 @@
                                                 <label>Sort By</label>
                                             </div>
                                             <asp:DropDownList ID="ddlSort" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
-                                                ValidationGroup="show" >
+                                                ValidationGroup="show">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                 <asp:ListItem Value="1">Regno</asp:ListItem>
                                                 <asp:ListItem Value="2">Category</asp:ListItem>
                                                 <asp:ListItem Value="3">Payment Type</asp:ListItem>
-                                                <asp:ListItem Value="4">Student Name</asp:ListItem>		
-                                            </asp:DropDownList>                                       
-                                        </div>
-
-                                          <div class="form-group col-lg-3 col-md-6 col-12 " id="divddlPaymentType" runat="server" visible="false">
-                                            <div class="label-dynamic">
-                                                <sup></sup>
-                                                <label>Payment Type/Seat Type </label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlPaymenttype" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
-                                                ValidationGroup="show" >
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>                                             	
-                                            </asp:DropDownList>                                       
+                                                <asp:ListItem Value="4">Student Name</asp:ListItem>
+                                            </asp:DropDownList>
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12 d-none">
@@ -584,7 +266,7 @@
                                             </asp:RadioButtonList>
                                         </div>
 
-                                      <%--   <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                        <%--   <div class="form-group col-lg-3 col-md-6 col-12 ">
                                             <div class="label-dynamic">
                                                 <label>Scholership Apply Type </label>
                                                  <asp:DropDownList ID="DropDownList1" runat="server" AppendDataBoundItems="True" AutoPostBack="true" CssClass="form-control" data-select2-enable="true"
@@ -597,11 +279,11 @@
                                             
                                         </div>--%>
 
-                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divamount"  runat="server" Visible="false">
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divamount" runat="server" visible="false">
                                             <div class="label-dynamic">
-                                                <label>Amount</label>                                          
+                                                <label>Amount</label>
                                             </div>
-                                             <asp:TextBox ID="txtAmountsch" runat="server" onkeyup="return IsNumeric(this);" MaxLength="9"></asp:TextBox>
+                                            <asp:TextBox ID="txtAmountsch" runat="server" onkeyup="return IsNumeric(this);" MaxLength="9"></asp:TextBox>
                                         </div>
 
                                         <div class="col-12 btn-footer">
@@ -609,13 +291,13 @@
                                                 ToolTip="Shows Students under Selected Criteria." ValidationGroup="show" CssClass="btn btn-primary" />
 
                                             <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" TabIndex="9"
-                                                ValidationGroup="show" CssClass="btn btn-primary" OnClientClick="return validateAssign();" CausesValidation="false" />
+                                                ValidationGroup="show" CssClass="btn btn-primary" CausesValidation="false" />
 
-                                            <asp:Button ID="btnPrintReport" runat="server" Text="Admit Card" TabIndex="999" CssClass="btn btn-info"
+                                            <%--                                            <asp:Button ID="btnPrintReport" runat="server" Text="Admit Card" TabIndex="999" CssClass="btn btn-info"
                                                 OnClick="btnPrintReport_Click" ToolTip="Print Card under Selected Criteria." ValidationGroup="show" Visible="false" />
 
                                             <asp:Button ID="btnSendEmail" runat="server" Text="Send To Email" TabIndex="10" CssClass="btn btn-primary"
-                                                OnClick="btnSendEmail_Click1" ToolTip="Send Card By Email" ValidationGroup="show" Visible="false" />
+                                                OnClick="btnSendEmail_Click1" ToolTip="Send Card By Email" ValidationGroup="show" Visible="false" />--%>
 
                                             <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" TabIndex="11"
                                                 ToolTip="Cancel Selected under Selected Criteria." CssClass="btn btn-warning" />
@@ -635,7 +317,7 @@
                                 </div>
                                 <div class="col-12">
                                     <asp:Panel ID="Panel1" runat="server">
-                                        <asp:ListView ID="lvStudentRecords" runat="server" OnItemDataBound="lvStudentRecords_ItemDataBound" PageSize="10">
+                                        <asp:ListView ID="lvStudentRecords" runat="server" PageSize="10">
                                             <LayoutTemplate>
                                                 <div class="sub-heading">
                                                     <h5>Student List</h5>
@@ -655,12 +337,14 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="table-responsive" style="height: 500px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                <div class="table-responsive" style="height: 250px; overflow: scroll; border-top: 1px solid #e5e5e5;">
                                                     <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudent">
                                                         <thead class="bg-light-blue">
                                                             <tr id="Tr1" runat="server">
-                                                                <th>
-                                                                    <asp:CheckBox ID="chkIdentityCard" runat="server" onClick="SelectAll(this);" ToolTip="Select or Deselect All Records" Visible="true" />
+
+                                                                <th>Edit
+                                                                </th>
+                                                                <th>Cancel
                                                                 </th>
                                                                 <th>
                                                                     <asp:Label ID="lblDYRRNo" runat="server" Font-Bold="true"></asp:Label>
@@ -670,7 +354,7 @@
                                                                 </th>
                                                                 <th style="display: none">Student Email
                                                                 </th>
-                                                                 <th>Payment Type</th>
+                                                                <th>Payment Type</th>
                                                                 <th>Category
                                                                 </th>
                                                                 <th>
@@ -678,6 +362,7 @@
                                                                 Year
                                                                 </th>
                                                                 <th>Scholarship Amount</th>
+                                                                <th>Status</th>
                                                                 <%-- <th>Scholarship Type</th>--%>
                                                             </tr>
                                                         </thead>
@@ -692,9 +377,19 @@
                                                 <%--  <asp:UpdatePanel runat="server" ID="updList">
                                                 <ContentTemplate>--%>
                                                 <tr>
+
                                                     <td>
-                                                        <asp:CheckBox ID="chkReport" runat="server" onClick="totStudents(this);" ToolTip='<%# Eval("IDNO") %>' />
+                                                        <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit.png"
+                                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClientClick="return Editbtn(this);" />
+
+                                                    </td>
+
+                                                    <td>
+                                                        <asp:ImageButton ID="btnDeleteAllotment" runat="server" AlternateText="Delete Allotment" ImageUrl="~/images/delete.png"
+                                                            OnClick="btnDeleteAllotment_Click" OnClientClick="return showConfirmAllotment();" />
                                                         <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("IDNO") %>' />
+
+                                                        <asp:HiddenField ID="hfSchlshipno" runat="server" Value='<%# Eval("SCHLSHPNO") %>' />
                                                     </td>
 
                                                     <td>
@@ -708,15 +403,14 @@
                                                         <asp:HiddenField ID="hdfAppliid" runat="server" Value='<%# Eval("STUDNAME") %>' />
                                                         <asp:HiddenField ID="hdfBranchno" runat="server" Value='<%# Eval("BRANCHNO") %>' />
                                                         <asp:HiddenField ID="hdfdegreeno" runat="server" Value='<%# Eval("DEGREENO") %>' />
-                                                        <%--<asp:HiddenField ID="hdfadmbatch" runat="server" Value='<%# Eval("ADMBATCH") %>' />--%>
-                                                        <asp:HiddenField ID="hdfAcademicYearId" runat="server" Value='<%# Eval("ACADEMIC_YEAR_ID") %>' />
+
                                                     </td>
 
                                                     <td style="display: none">
                                                         <%--<%# Eval("EMAILID_INS")%>--%>
                                                         <%--<asp:HiddenField ID="Hdfemail" runat="server" Value='<%# Eval("EMAILID_INS") %>' />--%>
                                                     </td>
-                                                     <td>
+                                                    <td>
                                                         <%# Eval("PAYTYPENAME")%>
                                                     </td>
                                                     <td>
@@ -726,28 +420,17 @@
                                                         <%# Eval("YEAR")%>
 
                                                         <asp:Label ID="lblschamt" runat="server" Text='<%# Eval("YEAR") %>' ToolTip='<%# Eval("DEGREENO") %>' Visible="false"></asp:Label>
-                                                        <asp:HiddenField ID="hfdAdmbatch" runat="server" Value='<%# Eval("ADMBATCH") %>' />
+
                                                     </td>
                                                     <td>
-                                                        <asp:TextBox ID="txtSemesterAmount" runat="server" Text='<%# Eval("SCHL_AMOUNT") %>'></asp:TextBox>
+                                                        <asp:TextBox ID="txtSemesterAmount" runat="server" MaxLength="10" onKeyUp="numericFilter(this);" Text='<%# Eval("SCHL_AMOUNT") %>'></asp:TextBox>
+                                                        <ajaxToolKit:FilteredTextBoxExtender ID="ftbe" runat="server"
+                                                            TargetControlID="txtSemesterAmount" ValidChars="1234567890." />
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("STATUS")%>
                                                     </td>
 
-                                                    <%--<td>
-                                                        <asp:Label ID="lblDDLData" runat="server" Text='<%# Eval("SCHOLARSHIP_ID") %>' Visible="false"></asp:Label>
-
-                                                        <asp:DropDownList ID="ddlScholarShipsType" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
-                                                            ToolTip="Please Select ScholarShip Type">
-                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                        </asp:DropDownList>
-                                                    </td>--%>
-                                                </tr>
-
-                                                <%--</ContentTemplate>
-                                                <Triggers>
-                                                        <asp:PostBackTrigger ControlID="rdoYes" />
-                                                        <asp:PostBackTrigger ControlID="rdoNo" />
-                                                </Triggers>
-                                            </asp:UpdatePanel>--%>
                                             </ItemTemplate>
                                         </asp:ListView>
                                     </asp:Panel>
@@ -765,7 +448,7 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="lvStudentRecords" />
             <asp:PostBackTrigger ControlID="btnShow" />
-           <%-- <asp:PostBackTrigger ControlID="gvSemesters" />--%>
+            <%-- <asp:PostBackTrigger ControlID="gvSemesters" />--%>
         </Triggers>
 
         <%--<Triggers>   
@@ -773,17 +456,9 @@
             <asp:PostBackTrigger ControlID="btnSubmit" />
                <asp:PostBackTrigger ControlID="btnShow" />
         </Triggers>--%>
-
     </asp:UpdatePanel>
     <script type="text/javascript">
-        function showConfirm() {
-            var ret = confirm('Do You Really Want  To  Remove Scholarship Adjustment ?');
-            if (ret == true)
-                return true;
-            else
-                return false;
-        }
-
+        
         function showConfirmAllotment() {
             var ret = confirm('Do You Really Want To  Remove Scholarship Allotment ?');
             if (ret == true)
@@ -791,105 +466,31 @@
             else
                 return false;
         }
+
+        
+        function Editbtn(btn) {
+            var row = btn.parentNode.parentNode;
+            var txtSemesterAmount = row.querySelector('[id$="txtSemesterAmount"]');
+            if (txtSemesterAmount) {
+                txtSemesterAmount.disabled = false;
+                document.getElementById('<%= txtSemesterAmountEnabledHidden.ClientID %>').value = "true";
+    }
+    return false; // Prevent postback
+}
+
+
+
+
     </script>
     <script type="text/javascript">
-        function SelectAll(chk) {
-            var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
-            var hftot = document.getElementById('<%= hftot.ClientID %>');
-            for (i = 0; i < hftot.value; i++) {
-
-                var lst = document.getElementById('ctl00_ContentPlaceHolder1_lvStudentRecords_ctrl' + i + '_chkReport');
-                if (lst.type == 'checkbox') {
-                    if (chk.checked == true) {
-                        lst.checked = true;
-                        txtTot.value = hftot.value;
-
-                        //document.getElementById('ctl00_ContentPlaceHolder1_lvStudentRecords_ctrl' + i + '_rdoYes').disabled = false;
-                        //document.getElementById('ctl00_ContentPlaceHolder1_lvStudentRecords_ctrl' + i + '_rdoNo').disabled = false;
-                    }
-                    else {
-                        lst.checked = false;
-                        txtTot.value = 0;
-
-                        //document.getElementById('ctl00_ContentPlaceHolder1_lvStudentRecords_ctrl' + i + '_rdoYes').disabled = true;
-                        //document.getElementById('ctl00_ContentPlaceHolder1_lvStudentRecords_ctrl' + i + '_rdoNo').disabled = true;
-
-                        //$('#ctl00_ContentPlaceHolder1_lvStudentRecords_ctrl' + i + '_rdoYes').prop('checked', false);
-                        //$('#ctl00_ContentPlaceHolder1_lvStudentRecords_ctrl' + i + '_rdoNo').prop('checked', false);
-                    }
-                }
-
-            }
-        }
-
-
-        function validateNumericAndNotZero(txt) {
-            if (isNaN(txt.value)) {
-                txt.value ='';
-                alert('Only Numeric Characters Allowed!');
-                txt.focus();
-                return false;
-            }
-            if (txt.value == '0') {
-                txt.value = '';
-                alert('Please Enter Values Greater Than Zero!');
-                txt.focus();
-                return false;
-            }
-
-        }
-
-        function validateAssign() {
-            var txtTot = document.getElementById('<%= txtTotStud.ClientID %>').value;
-            if (txtTot == 0) {
-                alert('Please Check atleast one student ');
-                return false;
-            }
-            else 
-            {
-
-                var chk = document.forms[0];
-                for (var i = 0; i < chk.length; i++) {
-                    if (chk.checked == true) {
-                        var text = document.getElementById("txtSemestersAmount").value;
-                        var selected = document.getElementById("ddlScholorshipType");
-
-                        if (text == "" || selected.value == 0) {
-                            alert("Please Enter Amount and Scholarship Type");
-                            return false;
-                        }
-                        else
-                            return true;
-                    }
-                }
-                return true;
-            }
-        }
-
+        
+       
+       
         function LoadImage() {
             document.getElementById("ctl00_ContentPlaceHolder1_imgCollegeLogo").src = document.getElementById("ctl00_ContentPlaceHolder1_fuCollegeLogo").value;
         }
 
 
-        function IsNumeric(txt) {
-            var ValidChars = ".0123456789";
-            var num = true;
-            var mChar;
-            cnt = 0
-
-            for (i = 0; i < txt.value.length && num == true; i++) {
-                mChar = txt.value.charAt(i);
-
-                if (ValidChars.indexOf(mChar) == -1) {
-                    num = false;
-                    txt.value = '';
-                    alert("Please enter Numeric values only")
-                    txt.select();
-                    txt.focus();
-                }
-            }
-            return num;
-        }
     </script>
 
     <script type="text/javascript">
@@ -963,22 +564,7 @@
             txb.value = txb.value.replace(/[^\0-9]/ig, "");
         }
 
-        function validScholarship() {
-            debugger;
-            var chk = document.forms[0];
-            for (var i = 0; i < chk.length; i++) {
-                if (chk.checked == true) {
-                    var text = document.getElementById("txtSemestersAmount").value;
-                    var selected = document.getElementById("ddlScholorshipType").value;
-
-                    if (text == "" || selected.value == 0) {
-                        alert("Please Enter Amount and Scholarship Type");
-                        return false;
-                    }
-                }
-
-            }
-        }
+        
 
 
     </script>
