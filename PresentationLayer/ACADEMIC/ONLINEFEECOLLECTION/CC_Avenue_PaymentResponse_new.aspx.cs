@@ -138,12 +138,12 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
 
                 CCACrypto ccaCrypto = new CCACrypto();
                 string encResponse = string.Empty;
-                DataSet dsworking = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "DISTINCT CHECKSUM_KEY", "COLLEGE_ID", "ISNULL(ACTIVE_STATUS,0)=1", "");
+                DataSet dsworking = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "DISTINCT CHECKSUM_KEY" ,"","ISNULL(ACTIVE_STATUS,0)=1", "");
                 //int Count = 0;
 
                 if (dsworking.Tables[0].Rows.Count > 1)
                 {
-                    for (int i = 1; i <= dsworking.Tables[0].Rows.Count; i++)
+                    for (int i = 0; i <dsworking.Tables[0].Rows.Count; i++)
                     {
                         //  Count++;
                         workingKey = dsworking.Tables[0].Rows[i]["CHECKSUM_KEY"].ToString();

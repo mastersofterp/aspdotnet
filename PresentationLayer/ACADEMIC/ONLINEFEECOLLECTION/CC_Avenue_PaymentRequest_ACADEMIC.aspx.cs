@@ -83,7 +83,7 @@ public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
                 int payId = Convert.ToInt32(Session["paymentId"]);
                 lblYear.Text = Session["YEARNO"].ToString();
                 DataSet ds1 = new DataSet();
-                if (degreeno == 2)
+                if (degreeno == 2 && Convert.ToInt32(Session["OrgId"])==16)
                 {
                      ds1 = objFees.GetOnlinePaymentConfigurationDetails_WithDegree(Convert.ToInt32(Session["OrgId"]), payId, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
                 }
