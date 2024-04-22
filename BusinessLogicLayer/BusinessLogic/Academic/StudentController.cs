@@ -9923,9 +9923,8 @@ namespace IITMS
                 }
 
 
-                //New Methods By Amit k on 19-02-2020
-                //Updated by Saurabh S. 25082022
-                public DataSet GetStudentScholershipDetails(int degreeno, int branchno, int year, int admbatch, int semesterno, int prev_status, int yearID, int colg, int Scholarshipid, int SchMode, int AmtPercent, int sort, int paymenttype)
+                // Modify by Saurabh sonar on dated 21062023
+                public DataSet GetStudentScholershipDetailsSemWise(int degreeno, int branchno, int year, int admbatch, int semesterno, int prev_status, int yearID, int colg, int Scholarshipid, int SchMode, int AmtPercent, int sort, int paymenttype)
                 {
                     DataSet ds = null;
                     try
@@ -9938,6 +9937,7 @@ namespace IITMS
                         objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
                         objParams[3] = new SqlParameter("@P_YEAR", year);   //added by saurabh s
                         objParams[4] = new SqlParameter("@P_ADMBATCH", admbatch);
+
                         objParams[5] = new SqlParameter("@P_ACADEMIC_YEAR_ID", yearID);
                         objParams[6] = new SqlParameter("@P_COLLEGE_ID", colg);
                         objParams[7] = new SqlParameter("@P_SCHOLERSHIPTYPENO", Scholarshipid);//added by saurabh s
@@ -9946,6 +9946,7 @@ namespace IITMS
                         objParams[10] = new SqlParameter("@P_SCH_AMT_PER", AmtPercent);
                         objParams[11] = new SqlParameter("@P_SORTBY", sort);
                         objParams[12] = new SqlParameter("@P_PAYMENT_TYPE", paymenttype);
+
 
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_STUDENT_SCHOLARSHIP_DETAILS", objParams);
