@@ -916,11 +916,6 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
         Response.End();
     }
 
-
-
-
-
-
     protected void btnRoomWiseReport_Click(object sender, EventArgs e)
     {
         ShowReportRoomWise("Timetable_Report", "rptAcadRoomWiseReport.rpt");
@@ -1034,8 +1029,6 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
             throw;
         }
     }
-
-
 
     protected void ddlFloor_SelectedIndexChanged(object sender, EventArgs e)
     {

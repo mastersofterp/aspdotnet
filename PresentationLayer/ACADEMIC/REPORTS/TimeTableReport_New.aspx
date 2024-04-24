@@ -35,6 +35,7 @@
                                 <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                         </div>
 
+
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
