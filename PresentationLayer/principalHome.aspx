@@ -203,48 +203,7 @@
         </section>
 
         <div class="row equalHMRWrap flex gutters-sm generalAnalysis">
-            <div style="display: none">
-                <div class="col-lg-2 col-md-6 col-12">
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2>Today's Time Table</h2>
-
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="x_content height-250 scrollbar">
-
-                            <table class="table table-hover small table-striped table-bordered nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Subject</th>
-                                        <th>Branch</th>
-                                        <th>Semester</th>
-                                        <th>Section</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>10:00 am</td>
-                                        <td>Applied Mathematics</td>
-                                        <td>Electronics</td>
-                                        <td>1<sup>st</sup> Sem</td>
-                                        <td>Sec A</td>
-                                    </tr>
-                                    <tr>
-                                        <td>12:00 am</td>
-                                        <td>Applied Mathematics</td>
-                                        <td>Mechanical</td>
-                                        <td>1<sup>st</sup> Sem</td>
-                                        <td>Sec C</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+           
             <div class="col-lg-2 col-md-6 col-12">
                 <div class="x_panel in-left a1">
                     <div class="x_title">
@@ -489,63 +448,6 @@
                 </div>
             </div>
 
-            <div style="display: none">
-                <div class="col-lg-4 col-md-6 col-12">
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2>In / Out Time</h2>
-
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="x_content height-250 scrollbar">
-
-                            <table class="table table-hover small table-striped table-bordered nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>Day</th>
-                                        <th>In-Time</th>
-                                        <th>Out-Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Mon</td>
-                                        <td>10:00 am</td>
-                                        <td>5:00 pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tue</td>
-                                        <td>10:00 am</td>
-                                        <td>5:00 pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Wed</td>
-                                        <td>10:00 am</td>
-                                        <td>5:00 pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Thur</td>
-                                        <td>10:00 am</td>
-                                        <td>5:00 pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fri</td>
-                                        <td>10:00 am</td>
-                                        <td>5:00 pm</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sat</td>
-                                        <td>10:00 am</td>
-                                        <td>5:00 pm</td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div style="display: none">
                 <div class="col-lg-4 col-md-6 col-12">
@@ -584,40 +486,7 @@
 
                     </div>
                 </div>
-            </div>
-
-            <div style="display: none">
-                <div class="col-lg-4 col-md-6 col-12">
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2>Notice</h2>
-
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="x_content">
-                            <article class="media event">
-
-                                <div class="media-body">
-                                    <a class="title" href="#">Placement</a>
-                                    <p>15 students from IT got selected in top MNC's.</p>
-                                </div>
-                            </article>
-                            <article class="media event">
-                                <div class="media-body">
-                                    <a class="title" href="#">Item Two Title</a>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </article>
-                            <article class="media event">
-                                <div class="media-body">
-                                    <a class="title" href="#">Item Two Title</a>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </div>           
         </div>
 
         <div class="row equalHMRWrap flex gutters-sm">
@@ -628,12 +497,11 @@
                         <button id="btnActivity" type="button"  onclick="Activity();" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-270324--%>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content height-250 scrollbar">
-                        <div class="table-responsive" style="height: 170px; overflow: scroll; border-top: 1px solid #e5e5e5;">
-                            <table class="table table-hover small table-striped table-bordered nowrap" style="width: 100%;" id="tblAcdActivity">
-                                <thead class="bg-light-blue bg-primary">
-                                    <tr>
-                                        <%--<th class="text-center">College</th>--%>
+                    <div class="x_content height-350 scrollbar">
+                        <div class="table-responsive" style="height:300px;overflow: scroll; border-top: 1px solid #e5e5e5;" >
+                            <table class="table table-hover small table-striped table-bordered nowrap" style="width: 100%;" id="tblAcdActivity">                               
+                                 <thead class="bg-light-blue bg-primary">
+                                    <tr>                                       
                                         <th>Activity</th>
                                         <th>School-Session</th>
                                         <th>Start Date</th>
@@ -672,71 +540,68 @@
                 <div class="x_panel in-right a2 activeNotice">
                     <div class="x_title">
                         <h2>Active Notice/News</h2>
-                      <%--PRASHANTG-TN56760-280324 --%>
-                        <button id="btnNotice" type="button" runat="server" onserverclick="btnNotice_Click" class="btn float-right"><i class="fas fa-sync-alt"></i></button>
+                        <%--PRASHANTG-TN56760-280324 --%>
+                        <%--<button id="btnNotice" type="button" runat="server" onserverclick="btnNotice_Click" class="btn float-right"><i class="fas fa-sync-alt"></i></button>--%>
+                        <%--<button id="btnActiveN" type="button" onclick="ActiveNotice1();" class="btn float-right"><i class="fas fa-sync-alt"></i></button>--%>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content height-250 scrollbar">
-                        <asp:ListView ID="lvActiveNotice" runat="server">
-                            <LayoutTemplate>
-                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblNotice">
-                                    <tbody>
-                                        <tr id="itemPlaceholder" runat="server" />
-                                    </tbody>
-                                </table>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <article class="media event">
-                                        <a class="pull-left date">
-                                            <p class="month"><%#Eval("MM")%></p>
-                                            <p class="day"><%#Eval("DD")%></p>
-                                        </a>
-                                        <div class="media-body">
-                                            <%--<p><%#Eval("NEWSDESC") %></p>
-                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#GetFileName(Eval("FILENAME"))%></asp:HyperLink>--%>
+                    <div class="x_content height-150 scrollbar"> 
+                         <asp:ListView ID="lvActiveNotice" runat="server">
+                                            <LayoutTemplate>
+                                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblNotice">
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
 
-                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
-                                                    <p><%#Eval("NEWSDESC") %></p>
-                                        </div>
-                                    </article>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
-                        
+                                                </table>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <article class="media event">
+                                                        <a class="pull-left date">
+                                                            <p class="month"><%#Eval("MM")%></p>
+                                                            <p class="day"><%#Eval("DD")%></p>
+                                                        </a>
+                                                        <div class="media-body">
+                                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
+                                                            <p><%#Eval("NEWSDESC") %></p>
+                                                        </div>
+                                                    </article>
+                                                </tr>
+
+                                            </ItemTemplate>
+                                        </asp:ListView>
                     </div>
-                    <div class="x_title d-none">
+                    <div class="x_title ">
                         <h2>Expired Notice/News</h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content height-150 scrollbar d-none">
-                        <asp:ListView ID="lvExpNotice" runat="server">
-                            <LayoutTemplate>
-                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblExpNotice">
-                                    <tbody>
-                                        <tr id="itemPlaceholder" runat="server" />
-                                    </tbody>
-                                </table>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <article class="media event">
-                                        <a class="pull-left date">
-                                            <p class="month"><%#Eval("MM")%></p>
-                                            <p class="day"><%#Eval("DD")%></p>
-                                        </a>
-                                        <div class="media-body">
-                                            <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
-                                            <p><%#Eval("NEWSDESC") %></p>--%>
+                    <div class="x_content height-150 scrollbar">
+                      <asp:ListView ID="lvExpNotice" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-hover small table-striped table-bordered nowrap" id="tblExpNotice">
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
 
-                                            <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
-                                            <p><%#Eval("NEWSDESC") %></p>
-                                        </div>
-                                    </article>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
-                        
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <article class="media event">
+                                                            <a class="pull-left date">
+                                                                <p class="month"><%#Eval("MM")%></p>
+                                                                <p class="day"><%#Eval("DD")%></p>
+                                                            </a>
+                                                            <div class="media-body">                                                             
+                                                                <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
+                                                                <p><%#Eval("NEWSDESC") %></p>
+                                                            </div>
+                                                        </article>
+                                                    </tr>
+
+                                                </ItemTemplate>
+                                            </asp:ListView>
                     </div>
                 </div>
             </div>
@@ -754,7 +619,7 @@
           //   }, 4000);
            
 
-          })
+        });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -762,7 +627,7 @@
             var urlParams = new URLSearchParams(window.location.search);
             var executeScript = urlParams.get('executeScript');
             var uatype = urlParams.get('uatype');
-            debugger;
+          //  debugger;
             // Check if the parameter indicates to execute the script
             if (executeScript === 'true') {
                 checkTheIntroWelcome(uatype);
@@ -789,7 +654,7 @@
     </script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
+      $(document).ready(function () {
             <%--PRASHANTG-TN56760-270324--%>
 
             $.ajax({
@@ -827,7 +692,7 @@
                 }
             }
             /********************************** */
-         <%--   $.ajax({
+            <%--   $.ajax({
                 type: "POST",
                 //url: "~/principalHome.aspx/ShowMaleCount",
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowMaleCount")%>',
@@ -1009,14 +874,14 @@
             //      }
             //      $('#newsDiv').html(html);
             //  };
-            //--------------------------------------------------------------------------------------------
-
-
-
+          //--------------------------------------------------------------------------------------------
+         
         });
 
+       
     </script>
-       <%--QuickAccess--%>
+       
+    <%--QuickAccess--%>
     <script>
         function QuickAccess() {
             //alert('bye')
@@ -1123,7 +988,8 @@
             function loadApprovePendignLeaveDetails2(ApprovePendignLeave) {
                 //$('#tLeaveAll tbody').empty();
                 $('#tLeaveAll').empty();
-                var html = '';
+
+                var html = ''; $('#tLeaveAll').html("");
                 if (ApprovePendignLeave != null) {
                     if (ApprovePendignLeave.length > 0) {
                         $.each(ApprovePendignLeave, function (row, item) {
@@ -1357,29 +1223,38 @@
     <%--Activity--%><%--PRASHANTG-TN56760-270324--%>
     <script type ="text/javascript">
         function Activity(){
-            // added for Activity Data
-          
+            // added for Activity Data    
+            //PRASHANTG-170424-BUGFIX-ACTIVITY WAS NOT LOADED - FIXED SP CONDITION
             $.ajax({
-                type: "POST",
-                //url: "principalHome.aspx/BindActivityDetails",
+                type: "POST",              
                 url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindActivityDetails")%>',
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
-                dataType: "json",
+                dataType: "json", 
+              //  async: false,
                 success: OnSuccessActivityDetails,
-                failure: function (response) {                  
+                complete: function(){                   
+                },
+                failure: function (response) {  
+                    
                 }
             });
             function OnSuccessActivityDetails(response) {
-                var ActivityData = response['d'];
-                //alert(ActivityData);
-                loadActivityDetails(ActivityData);
+                try { 
+                    var ActivityData = response['d'];                                        
+                    loadActivityDetails(ActivityData);
+                }
+                catch(err) {
+                    alert(err.message);
+                }
             };
             function loadActivityDetails(ActivityData) {
-                var html = '';  
-                $('#tbodyActivity td').parent().remove();
+                var html = '';                
+                $('#tbodyActivity').html("");
+             //  $('#tbodyActivity td').parent().remove();
                 if (ActivityData != null) {
-                    if (ActivityData.length > 0) {
+                    if (ActivityData.length > 0)
+                    {
                         $.each(ActivityData, function (row, item) {
                             html += '<tr>';
                             html += '<td class="text-left">' + item.ActivityName + '</td>';
@@ -1387,19 +1262,73 @@
                             html += '<td class="text-center">' + item.StartDate + '</td>';
                             html += '<td class="text-center">' + item.EndDate + '</td>';
                             html += '<td class="text-center">' + item.ActivityStatus + '</td>';
-                            html += '</tr>';
-                        });
-                    } else {
-                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                            html += '</tr>';                     
+                        });                        
+                    } 
+                    else 
+                    {
+                        html += '<tr><td colspan="4" style="font-weight:bold"> No records available </td></tr>';
                     }
-                } else {
-                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                } 
+                else 
+                {
+                    html += '<tr><td colspan="4" style="font-weight:bold"> No records available </td></tr>';
                 }
-                $('#tbodyActivity').append(html);
-                //alert('aa');
+                $('#tbodyActivity').append(html);               
             };
         }
     </script>
+
+      <%--Activ Notice--%><%--PRASHANTG-TN56760-160424--%>
+  <script type="text/javascript">
+      function ActiveNotice1() {
+          // added for Activity Data
+         // alert('hi');
+          $.ajax({
+              type: "POST",
+              //url: "principalHome.aspx/BindActivityDetails",
+              url: '<%=Page.ResolveUrl("~/principalHome.aspx/BindActiveNotice")%>',
+              data: '{}',
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              success: OnSuccessActiveNoticeDetails,
+              failure: function (response) {
+              }
+          });
+          function OnSuccessActiveNoticeDetails(response) {
+              var ActivNData = response['d'];         
+              loadActivNDetails(ActivNData);
+          };
+          function loadActivNDetails(ActivNData) {
+              var html = '';
+              alert('hi');
+            //  $('#tbodyActiveNotice').html("");
+             // $('#tbodyActiveNotice td').parent().remove();
+              if (ActivNData != null) {
+                  if (ActivNData.length > 0) {
+                      $.each(ActivNData, function (row, item) { 
+                          html += "<tr>";
+                          html += "<article class='media event'>";
+                          html += "<a class='pull-left date' >";
+                          html += "<p class='month'>" + item.MM + "</p>";
+                          html += "<p class='day'>" + item.DD + "</p>";
+                          html += "</a>";
+                          html += "<div class='media-body'>";
+                          html += "<p>" + item.NEWSDESC + "</p>";
+                          html += "</div>";
+                          html += "</article >";
+                          html += "</tr > ";
+                      });
+                  } else {
+                      html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                  }
+              } else {
+                  html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+              }
+              $('#tbodyActiveNotice').append(html);              
+          };
+      }
+  </script>
     <%--LeaveApplied--%><%--PRASHANTG-TN56760-270324--%>
     <script type="text/javascript">
         function LeaveApplied(){

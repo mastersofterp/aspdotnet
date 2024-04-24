@@ -129,6 +129,23 @@
             background: #e5e5e5;
         }*/
     </style>
+    <style>
+        @keyframes blink {
+            0%, 100% {
+                border: solid 2px #3F06FF;
+            }
+
+            50% {
+                border: solid 2px #f10a0b;
+            }
+        }
+
+        .blink {
+            border: #f10a0b;
+            color: white;
+            animation: blink 1s linear infinite;
+        }
+    </style>
 
     <script>            // Added By Shrikant W. on 12-12-2023
         $(document).on('click', '#ulTasks a', function(event) {
@@ -166,12 +183,7 @@
                 success: OnSuccessAttPer,
                 failure: function (response) {
                 }
-            });
-            //function OnSuccessAttPer(response) {
-            //    //console.log("Label :",response['d']);
-            //    var AttnPer = response['d'] + ' %';
-            //    $('#lblAttPer').html(AttnPer);
-            //};
+            });           
             function OnSuccessAttPer(response) {
                 //console.log("Label :",response['d']);
                 var AttnPer = response['d'] + ' %';
@@ -181,9 +193,65 @@
             };
             /******************Student Attendance Percentage*********END**************/
 
+        });
+    </script>
+
+   <%-- QuickAccess -- PRASHANTG-220324----%>
+    <script type ="text/javascript">
+        function QuickAccess()
+        {
+            /************************ Quick Access ************************/
+            /************************ PRASHANTG-TN56760-180424 ************************/
+               $.ajax({
+                type: "POST",
+                //url: "StudeHome.aspx/ShowQuickAccessData",
+                url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowQuickAccessData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessQL,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessQL(response) {           
+                loadQLData(response['d']);
+            };
+            function loadQLData(data) {
+                var html = ''; $('#ulQuickAccess').html("");
+                var LinkCount = 1;
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            /* *************************************************************************************************************
+                                Do not give the space in href
+                                Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
+                                Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
+                               ************************************************************************************************************* */                          
+                            html += '<li class="list-group-item"><a href="' + item.Link == null ? '#' : item.Link + '?pageno=' + item.PageNo + '"  runat="server"  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                           // item.Link is already binded with the iif logic and resolveurl
+                            //html += '<li class="list-group-item"><a href="' + item.Link + '"  runat="server"  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                          
+                            LinkCount += 1;
+                        });
+                    } else {
+                        html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;">No records to display.. </li>';
+                    }
+                } else {
+                    html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;">No records to display.. </li>';
+                }
+                $('#ulQuickAccess').append(html);
+            }
+        
+            /************************ Quick Access ************************/
+        }
+    </script>
+   <%-- ShowAttendance -- PRASHANTG-180424--%>
+    <script type="text/javascript">
+        function ShowAttendance(){
             /******************* Student Attendance *********************/
-            /********below code commented by PRASHANTG-TN56760-210324-TN56760******************/
-          <%--  $.ajax({
+            /******** PRASHANTG-TN56760-180424-TN56760******************/
+           
+            $.ajax({
                 type: "POST",               
                 url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowAttendance")%>',
                 data: '{}',
@@ -191,16 +259,18 @@
                 dataType: "json",
                 success: OnSuccessStudAtt,
                 failure: function (response) {
-                    var html = '';
+                    var html = ''; $('#tbodyAtten').html("");
                     html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No records to display..</td></tr>';
                     $('#tbodyAtten').html(html);
                 }
-            });
+              });
             function OnSuccessStudAtt(response) {
+              
                 loadStudAtt(response['d']);
             };
             function loadStudAtt(data) {
                 var html = '';
+                $('#tbodyAtten').html("");
                 if (data != null) {
                     //if (data.AttendancePercent != null) {
                     //    $('#lblAttPer').text(data.AttendancePercent + '%');
@@ -212,6 +282,7 @@
                             html += '<td class="text-center">' + d.Attendance + '</td>';
                             html += '<td class="text-center">' + d.AttendancePerc + '</td>';
                             html += '</tr>';
+                     
                         });
                     } else {
                         html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No records to display..</td></tr>';
@@ -224,186 +295,20 @@
                     placement: "top"
                 });
 
-            };--%>
+            };
             /******************* Student Attendance *********************/
 
-
-            /************************ comment Bind Notice ************************/
-            //  $.ajax({
-            //      type: "POST",
-            //      //url: "StudeHome.aspx/ShowNewsData",
-            //      url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowNewsData")%>',
-            //      data: '{}',
-            //      contentType: "application/json; charset=utf-8",
-            //      dataType: "json",
-            //      success: OnSuccessNews,
-            //      failure: function (response) {
-            //          var html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No records to display..</div>';
-            //          $('#noticeDiv').html(html);
-            //      }
-            //  });
-            //
-            //  function OnSuccessNews(response) {
-            //      loadNewsData(response['d']);
-            //  };
-            //  function loadNewsData(data) {
-            //      var html = '';
-            //      if (data != null) {
-            //          if (data.length > 0) {
-            //              $.each(data, function (row, item) {
-            //                  if (item.Link != '') {
-            //                      html += '<article class="media event"><a class="pull-left date"><p class="month">' + item.Month + '</p><p class="day">' + item.Day + '</p></a><div class="media-body"><a class="title" target="_blank" href=' + item.Link + '>' + item.Title + '</a><p>' + item.NewsDesc + '</p></div></article>';
-            //
-            //                      //html += '<article class="media event"><a class="pull-left date"><p class="month">' + item.Month + '</p><p class="day">' + item.Day + '</p></a>';
-            //                      //html += '<div class="media-body"><a class="title" target="_blank" href=' + item.Link + '>' + item.Title + '</a><p>' + item.NewsDesc + '</p></div></article>';
-            //                  }
-            //                  else {
-            //                      html += '<article class="media event"><a class="pull-left date"><p class="month">' + item.Month + '</p><p class="day">' + item.Day + '</p></a><div class="media-body"><a class="title" href="#">' + item.Title + '</a><p>' + item.NewsDesc + '</p></div></article>';
-            //
-            //                  }
-            //              });
-            //          } else {
-            //              html += '<div style="font-size:15px" class="text-center" class="info" >No records to display..</div>';
-            //          }
-            //      } else {
-            //          html += '<div style="font-size:15px" class="text-center" class="info">No records to display..</div>';
-            //      }
-            //      $('#noticeDiv').html(html);
-            //  };
-            // ----------------------------------------------
-            //function OnSuccessNoticeAnnoun(response) {
-            //    loadNoticeData(response['d']);
-            //};
-            //function loadNoticeData(data) {
-            //    var html = '';
-            //    if (data != null) {
-            //        $('#lblAnnouncement').text(data.Announcement);
-            //        $('#lblTaskCount').text(data.Assignment);
-            //        if (data.NoticeList != null) {
-            //            if (data.NoticeList.length > 0) {
-            //                $.each(data.NoticeList, function (row, item) {
-            //                    html += '<article class="media event"><div class="media-body"><a class="title" href=' + item.Link + '>' + item.Title + '</a><p>' + item.NewsDescription + '</p></div></article>';
-            //                });
-            //            } else {
-            //                html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No records to display..</div>';
-            //            }
-            //        } else {
-            //            html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No records to display..</div>';
-            //        }
-            //        $('#noticeDiv').html(html);
-            //    }
-            //};
-            /************************ Bind Notice ************************/
-            ///************************ Bind Notice ************************/
-            //$.ajax({
-            //    type: "POST",
-            //    url: "StudeHome.aspx/ShowNoticeAnnData",
-            //    data: '{}',
-            //    contentType: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    success: OnSuccessNoticeAnnoun,
-            //    failure: function (response) {
-            //        var html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No records to display..</div>';
-            //        //$('#noticeDiv').html(html);
-            //    }
-            //});
-            //function OnSuccessNoticeAnnoun(response) {
-            //    loadNoticeData(response['d']);
-            //};
-            //function loadNoticeData(data) {
-            ////    var html = '';
-            //    if (data != null) {
-            //        $('#lblAnnouncement').text(data.Announcement);
-            //        $('#lblTaskCount').text(data.Assignment);
-            //        if (data.NoticeList != null) {
-            //            if (data.NoticeList.length > 0) {
-            //                $.each(data.NoticeList, function (row, item) {
-            //                    html += '<article class="media event"><div class="media-body"><a class="title" href=' + item.Link + '>' + item.Title + '</a><p>' + item.NewsDescription + '</p></div></article>';
-            //                });
-            //            } else {
-            //                html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No records to display..</div>';
-            //            }
-            //        } else {
-            //            html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No records to display..</div>';
-            //        }
-            //        //$('#noticeDiv').html(html);
-            //    }
-            //};
-            ///************************ Bind Notice ************************/
-
-
-            /************************ Bind Assignment Announcement ************************/
-            // As discussed with Shrikant A. and Umesh G. on dated 03/11/2022 where this methnod is commented in .cs page so that commented here by Rishabh B.
-            //$.ajax({
-            //    type: "POST",
-            //url: "StudeHome.aspx/ShowNAnnAssData",
-            //url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowNAnnAssData")%>',
-            //data: '{}',
-            //    contentType: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    success: OnSuccessNoticeAnnoun,
-            //    failure: function (response) {
-            //        var html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No records to display..</div>';
-            //        $('#noticeDiv').html(html);
-            //    }
-            //});
-            //function OnSuccessNoticeAnnoun(response) {
-            //    loadNoticeData(response['d']);
-            //};
-            //function loadNoticeData(data) {
-            //    var html = '';
-            //    if (data != null) {
-            //        $('#lblAnnouncement').text(data.Announcement);
-            //        $('#lblTaskCount').text(data.Assignment);
-            //    }
-            //};
-            /************************ Bind Assignment Announcement ************************/
-
-            /************************ Quick Access ************************/
-            /************************ BELOW BLOCK COMMENTED BY PRASHANTG-TN56760-220324 ************************/
-       <%--     $.ajax({
-                type: "POST",
-                //url: "StudeHome.aspx/ShowQuickAccessData",
-                url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowQuickAccessData")%>',
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessQL,
-                failure: function (response) {
-                }
-            });
-            function OnSuccessQL(response) {
-                loadQLData(response['d']);
-            };
-            function loadQLData(data) {
-                var html = '';
-                var LinkCount = 1;
-                if (data != null) {
-                    if (data.length > 0) {
-                        $.each(data, function (row, item) {
-                            /* *************************************************************************************************************
-                                Do not give the space in href
-                                Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
-                                Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
-                               ************************************************************************************************************* */
-                            html += '<li class="list-group-item"><a href="' + item.Link == null ? '#' : item.Link + '?pageno=' + item.PageNo + '"  runat="server"  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
-                            LinkCount += 1;
-                        });
-                    } else {
-                        html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;">No records to display.. </li>';
-                    }
-                } else {
-                    html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;">No records to display.. </li>';
-                }
-                $('#ulQuickAccess').append(html);
-            }
-        --%>
-            /************************ Quick Access ************************/
-
+        }
+    </script>
+  
+    <%--LoadTask-- PRASHANTG-180424----%> 
+    <script type="text/javascript">
+        function LoadTask()
+        {
             /************************ Tasks ************************/
             /************************ BELOW BLOCK COMMENTED BY PRASHANTG-TN56760-220324 ************************/
 
-           <%-- $.ajax({
+           $.ajax({
                 type: "POST",
                 //url: "StudeHome.aspx/ShowStudTasks",
                 url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowStudTasks")%>',
@@ -424,7 +329,7 @@
             function loadTaskData(data) {
                 debugger;
                 console.log("On Load Task : ", data);
-                var html = '';
+                var html = '';  $('#ulTasks').html("");
                 var LinkCount = 1;
                 if (data != null) {
                     if (data.length > 0) {
@@ -444,25 +349,27 @@
                     html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;">No records to display.. </li>';
                 }
                 $('#ulTasks').append(html);
-            }--%>
+            }
             /************************ Tasks ************************/
 
+        }
+    </script>
 
-            /************************ Bind Time Table ************************/
+   <%-- ClassTT-- PRASHANTG-180424------%>
+    <script type="text/javascript">
+        function ClassTT()
+        {
+            /************************  PRASHANTG-TN56760-180424 ************************/
 
-            /*********** Comment on 03-04-2020 Bind Only Body ******************/
-            /************************ BELOW BLOCK COMMENTED BY PRASHANTG-TN56760-240324 ************************/
-
-         <%--   $.ajax({
-                type: "POST",
-                //url: "StudeHome.aspx/ShowStudTimeTableData",
+           $.ajax({
+                type: "POST",          
                 url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowStudTimeTableData")%>',
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: OnSuccessTT,
                 failure: function (response) {
-                    var html = '';
+                    var html = '';   $('#tbodyStudTT').html("");
                     html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="7">No records to display..</td></tr>';
                     $('#tbodyStudTT').html(html);
                 }
@@ -471,7 +378,7 @@
                 loadTimeTableData(response['d']);
             };
             function loadTimeTableData(data) {
-                var html = '';
+                var html = '';   $('#tbodyStudTT').html("");
                 if (data != null) {
                     if (data.length > 0) {
                         $.each(data, function (row, item) {
@@ -528,39 +435,177 @@
                             //html += '</tr>';
                         });
                     } else {
-                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="8">No records to display..</td></tr>';
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="7">No records to display..</td></tr>';
                     }
                 } else {
-                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="8">No records to display..</td></tr>';
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="7">No records to display..</td></tr>';
                 }
                 $('#tbodyStudTT').html(html);
                 $('[data-toggle="tooltip"]').tooltip({
                     placement: "top"
                 });
-            };--%>
+            };
             /*********** Comment on 03-04-2020 Bind Only Body ******************/
 
             /************************ Bind Time Table ************************/
-        });
+        }
     </script>
 
-    <style>
-        @keyframes blink {
-            0%, 100% {
-                border: solid 2px #3F06FF;
-            }
+    <%-- TodayTT-- PRASHANTG-180424------%>
+    <script type="text/javascript">
+        function TodayTT()
+        {
+            /************************  PRASHANTG-TN56760-180424 ************************/
 
-            50% {
-                border: solid 2px #f10a0b;
-            }
-        }
+            $.ajax({
+                type: "POST",          
+                url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowTodayTimeTableData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessTodayTT,
+                failure: function (response) {
+                    var html = ''; $('#tbodyTodaysTimeTable').html("");
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No records to display..</td></tr>';
+                    $('#tbodyTodaysTimeTable').html(html);
+                }
+           });
+            function OnSuccessTodayTT(response) {
+                loadTodayTimeTableData(response['d']);
+            };
+            function loadTodayTimeTableData(data) {
+                var html = '';
+                $('#tbodyTodaysTimeTable').html("");
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left" >' + item.Slot + '</td>';    
+                            html += '<td class="text-center" >' + item.SlotNo + '</td>';    
+                            html += '<td class="text-center" >' + item.CCode + '</td>';   
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No records to display..</td></tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No records to display..</td></tr>';
+                }
+                $('#tbodyTodaysTimeTable').html(html);
+                $('[data-toggle="tooltip"]').tooltip({
+                    placement: "top"
+                });
+            };
+            /*********** Comment on 03-04-2020 Bind Only Body ******************/
 
-        .blink {
-            border: #f10a0b;
-            color: white;
-            animation: blink 1s linear infinite;
+            /************************ Bind Time Table ************************/
         }
-    </style>
+    </script>
+
+     <%-- ExamTT-- PRASHANTG-200424------%>
+    <script type="text/javascript">
+        function ExamTT()
+        {
+            /************************  PRASHANTG-TN56760-20424 ************************/
+
+            $.ajax({
+                type: "POST",          
+                url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowExamTimeTableData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessExamTT,
+                failure: function (response) {
+                    var html = ''; $('#tbodyExamTimeTable').html("");
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="6">No records to display..</td></tr>';
+                    $('#tbodyExamTimeTable').html(html);
+                }
+            });
+            function OnSuccessExamTT(response) {
+                loadExamTimeTableData(response['d']);
+            };
+            function loadExamTimeTableData(data) {
+                var html = '';
+                $('#tbodyExamTimeTable').html("");
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left" >' + item.ExamDate + '</td>';    
+                            html += '<td class="text-center" >' + item.Slot + '</td>';    
+                            html += '<td class="text-center" >' + item.CCode + '</td>';  
+                            html += '<td class="text-left" >' + item.Course + '</td>';    
+                            html += '<td class="text-center" >' + item.Semester + '</td>';    
+                            html += '<td class="text-center" >' + item.Backlog + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="6">No records to display..</td></tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="6">No records to display..</td></tr>';
+                }
+                $('#tbodyExamTimeTable').html(html);
+                $('[data-toggle="tooltip"]').tooltip({
+                    placement: "top"
+                });
+            };
+           
+            /************************ Bind examTime Table ************************/
+        }
+    </script>
+
+      <%-- Placement-- PRASHANTG-200424------%>
+    <script type="text/javascript">
+        function Placement()
+        {
+            /************************  PRASHANTG-TN56760-20424 ************************/
+
+            $.ajax({
+                type: "POST",          
+                url: '<%=Page.ResolveUrl("~/StudeHome.aspx/ShowPlacementData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessPlacement,
+                failure: function (response) {
+                    var html = ''; $('#tbodyPlacement').html("");
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="5">No records to display..</td></tr>';
+                    $('#tbodyPlacement').html(html);
+                }
+            });
+            function OnSuccessPlacement(response) {
+                loadPlacementData(response['d']);
+            };
+            function loadPlacementData(data) {
+                var html = '';
+                $('#tbodyPlacement').html("");
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-left" >' + item.Company + '</td>';    
+                            html += '<td class="text-center" >' + item.SchDate + '</td>';    
+                            html += '<td class="text-center" >' + item.Salary + '</td>';  
+                            html += '<td class="text-left" >' + item.Criteria + '</td>';    
+                            html += '<td class="text-center" >' + item.Course + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="5">No records to display..</td></tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="5">No records to display..</td></tr>';
+                }
+                $('#tbodyPlacement').html(html);
+                $('[data-toggle="tooltip"]').tooltip({
+                    placement: "top"
+                });
+            };
+           
+            /************************ Bind examTime Table ************************/
+        }
+    </script>
 
     <script>
         function AddClassTobtnoutfees() {
@@ -572,7 +617,7 @@
         <div class="container-fluid">
             <h3>
                 <marquee width="100%" direction="left" style="color: #ff0000; font-size: 18px">
-                     Due to student related ongoing activity, some dashboard fetures has been OFF for certain period of time,It will be available soon. 
+                     Due to student related ongoing activity, some dashboard fetures has been OFF for certain period of time, It will be available soon. 
                 </marquee>
             </h3>
         </div>
@@ -655,51 +700,284 @@
             </div>
         </section>
         <%--PRASHANTG-TN56760-220324--%>
-          <asp:UpdatePanel ID="pnlDash" runat="server">
-        <ContentTemplate>
-        <div class="col-12">
-            <div class="row equalHMRWrap flex gutters-sm">
-               <%--Attendance--%>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <div class="x_panel in-left a1">
-                        <div class="x_title">
-                            <h2>Attendance</h2>    
-                              <button id="btnLoadAttend" runat="server"  onserverclick="btnLoadAttend_Click"
-                                tabindex="1" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button> <%--PRASHANTG-TN56760-220324 --%>                           
-                            <div class="clearfix"></div>
+        <asp:UpdatePanel ID="pnlDash" runat="server">
+            <ContentTemplate>
+                <div class="col-12">
+                    <div class="row equalHMRWrap flex gutters-sm">
+                        <%--Attendance--%>
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <div class="x_panel in-left a1">
+                                <div class="x_title">
+                                    <h2>Attendance</h2>
+                                    <button id="btnLoadAttend" runat="server" onclick="ShowAttendance();"
+                                        tabindex="1" type="button" class="btn float-right">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    <%--PRASHANTG-TN56760-220324 --%>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content height-250 scrollbar">
+                                    <table class="table table-hover small table-striped table-bordered nowrap">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th class="text-center">Subject</th>
+                                                <th class="text-center">Lectures</th>
+                                                <th class="text-center">%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyAtten" >
+                                            <td class='text-center' data-container='body'
+                                                data-original-title='anc'
+                                                data-toggle='tooltip'></td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="x_content height-250 scrollbar" >
-                            <table class="table table-hover small table-striped table-bordered nowrap">
-                                <thead class="bg-primary">
-                                    <tr>
-                                        <th class="text-center">Subject</th>
-                                        <th class="text-center">Lectures</th>
-                                        <th class="text-center">%</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbodyAtten" runat="server">
-                                    <td class='text-center' data-container='body' 
-                                         data-original-title='anc' 
-                                        data-toggle='tooltip'></td>
-                                </tbody>
-                            </table>
+                        <%-- Quick Access--%>
+                        <div class="col-lg-2 col-md-6 col-12">
+                            <div class="x_panel in-left a2">
+                                <div class="x_title">
+                                    <h2>Quick Access</h2>
+                                    <button id="btnLoadQA" runat="server" onclick="QuickAccess();"
+                                        tabindex="2" type="button" class="btn float-right">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    <%--PRASHANTG-TN56760-220324 --%>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content height-250 scrollbar small">
+                                    <ul class="list-group with-border-bottom fav-list" id="ulQuickAccess">
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>         
-              <%-- Quick Access--%>
-                <div class="col-lg-2 col-md-6 col-12">
-                    <div class="x_panel in-left a2">
-                        <div class="x_title">
-                            <h2>Quick Access</h2>
-                                <button id="btnLoadQA" runat="server"  onserverclick="btnLoadQA_Click"
-                                tabindex="2" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760-220324 --%>
-                            <div class="clearfix"></div>
+                        <%--Tasks--%>
+                        <div class="col-lg-2 col-md-6 col-12">
+                            <div class="x_panel in-right a1">
+                                <div class="x_title">
+                                    <h2>Tasks</h2>
+                                    <button id="btnLoadTask" runat="server" onclick="LoadTask();"
+                                        tabindex="3" type="button" class="btn float-right">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    <%--PRASHANTG-TN56760-220324 --%>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content height-250 scrollbar small">
+                                    <asp:HiddenField ID="hftot" runat="server" />
+                                    <ul class="list-group with-border-bottom fav-list" id="ulTasks">
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div class="x_content height-250 scrollbar small">
-                            <ul class="list-group with-border-bottom fav-list" id="ulQuickAccess" runat="server">
-                               
-                            </ul>
+                        <%--Active Notice/News--%>
+                        <div class="col-lg-5 col-md-12 col-12">
+                            <div class="x_panel in-right a1">
+                                <div class="x_title">
+                                    <h2>Active Notice/News</h2>
+                                  <%--  <button id="btnActNotice" runat="server" onserverclick="btnActNotice_Click"
+                                        tabindex="4" type="button" class="btn float-right">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>--%>
+                                    <%--PRASHANTG-TN56760-220324 --%>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="new-parent">
+                                    <div class="x_content scrollbar small news-jq">
+                                        <asp:ListView ID="lvActiveNotice" runat="server">
+                                            <LayoutTemplate>
+                                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblNotice">
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+
+                                                </table>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <article class="media event">
+                                                        <a class="pull-left date">
+                                                            <p class="month"><%#Eval("MM")%></p>
+                                                            <p class="day"><%#Eval("DD")%></p>
+                                                        </a>
+                                                        <div class="media-body">
+                                                            <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                    <p><%#Eval("NEWSDESC") %></p>--%>
+
+                                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
+                                                            <p><%#Eval("NEWSDESC") %></p>
+                                                        </div>
+                                                    </article>
+                                                </tr>
+
+                                            </ItemTemplate>
+                                        </asp:ListView>
+
+                                        <div class="x_title">
+                                            <h2>Expired Notice/News</h2>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="x_content scrollbar small news-jq">
+                                            <asp:ListView ID="lvExpNotice" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-hover small table-striped table-bordered nowrap" id="tblExpNotice">
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <article class="media event">
+                                                            <a class="pull-left date">
+                                                                <p class="month"><%#Eval("MM")%></p>
+                                                                <p class="day"><%#Eval("DD")%></p>
+                                                            </a>
+                                                            <div class="media-body">
+                                                                <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                        <p><%#Eval("NEWSDESC") %></p>--%>
+
+                                                                <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
+                                                                <p><%#Eval("NEWSDESC") %></p>
+                                                            </div>
+                                                        </article>
+                                                    </tr>
+
+                                                </ItemTemplate>
+                                            </asp:ListView>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <%-- Today's Time Table--%>
+                        <div class="col-lg-2 col-md-6 col-12">
+                            <div class="x_panel in-left a1">
+                                <div class="x_title">
+                                    <h2>Today's Time Table</h2>
+                                    <button id="btnTT" runat="server" onclick="TodayTT();"
+                                        tabindex="5" type="button" class="btn float-right">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    <%--PRASHANTG-TN56760-220324 --%>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content height-250 scrollbar">
+                                   
+                                            <table class="table table-hover small table-striped table-bordered nowrap" id="tblTodaysTimeTable">
+                                                <thead class="bg-primary">
+                                                    <tr>
+                                                        <%--<th class="text-center">Time</th>
+                                                        <th class="text-center">Subject</th>--%>
+                                                        <th class="text-center">Slot</th>
+                                                        <th class="text-center">SlotNo</th>
+                                                        <th class="text-center">CCode</th>
+                                                </thead>
+                                                <tbody  id="tbodyTodaysTimeTable" >
+                                                   
+                                                </tbody>
+                                            </table>                                       
+                                </div>
+                            </div>
+                        </div>
+                        <%--Class Time Table--%>
+                        <div class="col-lg-5 col-md-6 col-12">
+                            <div class="x_panel in-left a2">
+                                <div class="x_title">
+                                    <h2>Class Time Table</h2>
+                                    <button id="btnClassTT" runat="server" onclick="ClassTT();"
+                                        tabindex="6" type="button" class="btn float-right">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    <%--PRASHANTG-TN56760-220324 --%>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content height-250 scrollbar">
+                                    <table class="table table-hover small table-striped table-bordered nowrap">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th style="width: 14%" class="text-center">Time/ Day</th>
+                                                <th class="text-center">Monday</th>
+                                                <th class="text-center">Tuesday</th>
+                                                <th class="text-center">Wednesday</th>
+                                                <th class="text-center">Thursday</th>
+                                                <th class="text-center">Friday</th>
+                                                <th class="text-center">Saturday</th>
+                                                <%-- <th class="text-center">Sunday</th>--%>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyStudTT">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <%--Exam Time Table--%>
+                        <div class="col-lg-5 col-md-6 col-12">
+                            <div class="x_panel in-right a2">
+                                <div class="x_title">
+                                    <h2>Exam Time Table</h2>
+                                    <button id="btnExamTT" runat="server" onclick="ExamTT();"
+                                        tabindex="7" type="button" class="btn float-right">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    <%--PRASHANTG-TN56760-240324 --%>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content height-250 scrollbar">                             
+                                            <table class="table table-hover small table-striped table-bordered nowrap" id="tblExamTimeTable">
+                                                <thead class="bg-primary">
+                                                    <tr>
+                                                        <th style="width: 14%" class="text-center">EXAMDATE</th>
+                                                        <th class="text-center">SLOTNAME</th>
+                                                        <th class="text-center">CCODE</th>
+                                                        <th class="text-center">COURSENAME</th>
+                                                        <th class="text-center">SEMESTERNAME</th>
+                                                        <th class="text-center">REGULAR_BACKLOG</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbodyExamTimeTable">                                                 
+                                                </tbody>
+                                            </table>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <%--Placement Scheduled--%>
+                        <div class="col-lg-12 col-md-8 col-12">
+                            <div id="divplacement" runat="server">
+                                <div class="x_panel in-right a2">
+                                    <div class="x_title">
+                                        <h2>Placement Scheduled</h2>
+                                        <button id="btnPlacement" runat="server" onclick="Placement();"
+                                            tabindex="8" type="button" class="btn float-right">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                        <%--PRASHANTG-TN56760-240324 --%>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content height-250 scrollbar">                                    
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblPlacement">
+                                                    <thead class="bg-light-blue">
+                                                        <tr>
+                                                            <th>Company Name</th>
+                                                            <th>Scheduled Date</th>
+                                                            <th>Salary/Stipend</th>
+                                                            <th>Eligibility</th>
+                                                            <th>Degree & Branch</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyPlacement">                                                      
+                                                    </tbody>
+                                                </table>                                         
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                      
                     </div>
                 </div>
                 <%--Tasks--%>

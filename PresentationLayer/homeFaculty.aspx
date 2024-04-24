@@ -149,57 +149,7 @@
                 var AttnPer = response['d'] + '%';
                 $('#lblAttPer').html(AttnPer);
             };
-            <%-- PRASHANTG-TN56760--260324- ttbody not found in page
-            $.ajax({
-                type: "POST",
-                //url: "homeFaculty.aspx/BindTodaysTimeTbl",
-                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/BindTodaysTimeTbl")%>',
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: OnSuccessTT,
-                failure: function (response) {
-                    var html = '';
-                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display.. </td></tr>';
-                    $('#ttbody').html(html);
-                }
-            });
-            function OnSuccessTT(response) {
-                loadTable(response['d']);
-            };--%>
-            //function loadTable(data) {debugger
-            //    var html = '';
-            //    if (data != null) {
-            //        if (data.length > 0) {
-            //            $.each(data, function (i, d) {
-            //                if (d.SlotIme != '-') {
-            //                    html += '<tr>';
-            //                    html += '<td class="text-center">' + d.SlotIme + '</td>';
-            //                    html += '<td class="text-center"> <a id="llnkbutton" href="Academic/AttendenceByFaculty.aspx?pageno=112"' + d.CourseCode + ' - ' + d.Subject + ' (BRANCH-' + d.BranchShortName + ', SEM-' + d.Semester + ', SEC-' + d.Section + ') " data-toggle="tooltip" >' + d.CourseCode + '</td>';
-            //                        //'</td>  data-container="body"  data-original-title="' + d.CourseCode + ' - ' + d.Subject + ' (BRANCH-' + d.BranchShortName + ', SEM-' + d.Semester + ', SEC-' + d.Section + ') " data-toggle="tooltip" >' + d.CourseCode + '</td>'
-            //                    html += '</tr>';
-            //                } else {
-            //                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
-            //                }
-            //                // html += '<td class="text-center"  data-container="body" data-original-title="' + d.CourseCode + ' - ' + d.Subject + '" data-toggle="tooltip" >' + d.CourseCode + '</td>';
-            //                //html += '<td class="text-center"  data-container="body"  data-original-title="' + d.BranchShortName + ' - ' + d.Branch + '" data-toggle="tooltip">' + d.BranchShortName + '</td>';
-            //                //html += '<td class="text-center">' + d.Semester + '</td>';
-            //                //html += '<td class="text-center">' + d.Section + '</td>';
-
-            //            });
-            //        } else {
-            //            html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
-            //        }
-            //    } else {
-            //        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
-            //    }
-            //    $('#ttbody').html(html);
-
-            //    $('[data-toggle="tooltip"]').tooltip({
-            //        placement: "top"
-            //    });
-            //};
-
+       
           
             // -------------------comment notice---------------------
             //  $.ajax({
@@ -296,6 +246,10 @@
             };
 
             //GetAttendancePerCourseWise();
+
+            //-------------------------
+
+           
         });
 
     </script>
@@ -376,63 +330,68 @@
         
          <%--PRASHANTG-TN56760--260324--%>
         <asp:UpdatePanel ID="pnlDash" runat="server">
-        <ContentTemplate>
-     
-        <div class="row equalHMRWrap flex gutters-sm">
-            <%-- Today's Time Table--%>
-            <div class="col-lg-4 col-md-6 col-12">
-                <div class="x_panel in-left a1">
-                    <div class="x_title">
-                        <h2>Today's Time Table</h2>
-                         <button id="btnTT" runat="server"  onserverclick="btnTT_Click" 
-                                tabindex="1" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760--260324 --%>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content height-250 scrollbar">
-                        <asp:ListView ID="lvTodaysTT" runat="server">
-                            <LayoutTemplate>
-                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblTodaysTimeTable">
-                                    <thead class="bg-primary">
-                                        <tr>
-                                            <th class="text-center">Slot</th>
-                                            <th class="text-center">Subject</th>
-                                            <%--<th class="text-center">Branch</th>
-                                    <th class="text-center">Semester</th>
-                                    <th class="text-center">Section</th>--%>
-                                        </tr>
-                                        <%-- <tr>
+            <ContentTemplate>
+
+                <div class="row equalHMRWrap flex gutters-sm">
+                    <%-- Today's Time Table--%>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="x_panel in-left a1">
+                            <div class="x_title">
+                                <h2>Today's Time Table</h2>
+                                <button id="btnTT" runat="server" onclick="TodaysTT();"
+                                    tabindex="1" type="button" class="btn float-right">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <%--PRASHANTG-TN56760--260324 --%>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content height-250 scrollbar">
+                               <%-- <asp:ListView ID="lvTodaysTT" runat="server">
+                                    <LayoutTemplate>--%>
+                                        <table class="table table-hover small table-striped table-bordered nowrap" id="tblTodaysTT">
+                                            <thead class="bg-primary">
+                                                <tr>
+                                                    <th class="text-center">Slot</th>
+                                                    <th class="text-center">Subject</th>
+                                                    <%--<th class="text-center">Branch</th>
+                                                        <th class="text-center">Semester</th>
+                                                        <th class="text-center">Section</th>--%>
+                                                </tr>
+                                                <%-- <tr>
                                             <td>
                                                 <asp:LinkButton ID="lnk" runat="server" Text="2"></asp:LinkButton>
                                             </td>
                                         </tr>--%>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="itemPlaceholder" runat="server" />
-                                    </tbody>
+                                            </thead>
+                                            <tbody id="ttbody">
+                                               <%-- <tr id="itemPlaceholder" runat="server" />--%>
+                                            </tbody>
 
-                                </table>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td style="text-align: left">
-                                        <%#Eval("SLOTNAME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("CCODE") %>
-                                        <asp:LinkButton ID="lnkCourse" runat="server" Text='<%#Eval("CCODE") %>' CommandArgument='<%# Eval("COURSENO")%>' OnClick="lnkCourse_Click" Visible="false"></asp:LinkButton>
-                                    </td>
-                                    <asp:HiddenField ID="hdnSchemename" runat="server" Value='<%# Eval("SCHEMENAME")%>' />
-                                    <asp:HiddenField ID="hdnCoursename" runat="server" Value='<%# Eval("COURSENAME")%>' />
-                                    <asp:HiddenField ID="hdnBatch" runat="server" Value='<%# Eval("BATCHNAME")%>' />
-                                    <asp:HiddenField ID="hdnSectionname" runat="server" Value='<%# Eval("SECTION")%>' />
-                                    <asp:HiddenField ID="hdnSubjecttype" runat="server" Value='<%# Eval("SUBJECTTYPE")%>' />
-                                    <asp:HiddenField ID="hdnCourseno" runat="server" Value='<%# Eval("COURSENO")%>' />
-                                    <asp:HiddenField ID="hdnSectionno" runat="server" Value='<%# Eval("SECTIONNO")%>' />
-                                    <asp:HiddenField ID="hdnBatchno" runat="server" Value='<%# Eval("BATCH")%>' />
-                                    <asp:HiddenField ID="hdnSubId" runat="server" Value='<%# Eval("SUBID")%>' />
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
+                                        </table>
+                                    <%--</LayoutTemplate>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td style="text-align: left">
+                                                <%#Eval("SLOTNAME") %>
+                                            </td>
+                                            <td class="text-center">
+                                                <%#Eval("CCODE") %>
+                                                <asp:LinkButton ID="lnkCourse" runat="server" Text='<%#Eval("CCODE") %>' CommandArgument='<%# Eval("COURSENO")%>' OnClick="lnkCourse_Click" Visible="false"></asp:LinkButton>
+                                            </td>
+                                            <asp:HiddenField ID="hdnSchemename" runat="server" Value='<%# Eval("SCHEMENAME")%>' />
+                                            <asp:HiddenField ID="hdnCoursename" runat="server" Value='<%# Eval("COURSENAME")%>' />
+                                            <asp:HiddenField ID="hdnBatch" runat="server" Value='<%# Eval("BATCHNAME")%>' />
+                                            <asp:HiddenField ID="hdnSectionname" runat="server" Value='<%# Eval("SECTION")%>' />
+                                            <asp:HiddenField ID="hdnSubjecttype" runat="server" Value='<%# Eval("SUBJECTTYPE")%>' />
+                                            <asp:HiddenField ID="hdnCourseno" runat="server" Value='<%# Eval("COURSENO")%>' />
+                                            <asp:HiddenField ID="hdnSectionno" runat="server" Value='<%# Eval("SECTIONNO")%>' />
+                                            <asp:HiddenField ID="hdnBatchno" runat="server" Value='<%# Eval("BATCH")%>' />
+                                            <asp:HiddenField ID="hdnSubId" runat="server" Value='<%# Eval("SUBID")%>' />
+                                        </tr>
+                                    </ItemTemplate>
+                                </asp:ListView>--%>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -459,73 +418,75 @@
                                 tabindex="3" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760--260324 --%>
                         <div class="clearfix"></div>
                     </div>
+                    <%--Active Notice/News--%>
+                    <div class="col-lg-4 col-md-6 col-12 new-parent">
+                        <div class="x_panel in-right a2  scrollbar">
+                             <div class="x_title">
+                        <h2>Active Notice/News</h2>
+                        <%--PRASHANTG-TN56760-280324 --%>
+                        <%--<button id="btnActiveN" type="button" onclick="ActiveNotice();" class="btn float-right"><i class="fas fa-sync-alt"></i></button>--%>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-150 scrollbar"> 
+                         <div class="table-responsive" style="height: 170px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                            <asp:ListView ID="lvActiveNotice" runat="server">
+                                            <LayoutTemplate>
+                                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblNotice">
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <article class="media event">
+                                                        <a class="pull-left date">
+                                                            <p class="month"><%#Eval("MM")%></p>
+                                                            <p class="day"><%#Eval("DD")%></p>
+                                                        </a>
+                                                        <div class="media-body">                                                         
+                                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
+                                                            <p><%#Eval("NEWSDESC") %></p>
+                                                        </div>
+                                                    </article>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                         </div>
+                    </div>
+                    <div class="x_title ">
+                        <h2>Expired Notice/News</h2>
+                        <%--  <button id="btnExpNotice" type="button" onclick="ExpNotice();" class="btn float-right"><i class="fas fa-sync-alt"></i></button>--%>
+                        <div class="clearfix"></div>
+                    <div class="x_content height-150 scrollbar">
+                      <asp:ListView ID="lvExpNotice" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-hover small table-striped table-bordered nowrap" id="tblExpNotice">
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
 
-                    <div class="x_content  scrollbar small">
-                        <asp:ListView ID="lvActiveNotice" runat="server">
-                            <LayoutTemplate>
-                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblNotice">
-                                    <tbody>
-                                        <tr id="itemPlaceholder" runat="server" />
-                                    </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <article class="media event">
+                                                            <a class="pull-left date">
+                                                                <p class="month"><%#Eval("MM")%></p>
+                                                                <p class="day"><%#Eval("DD")%></p>
+                                                            </a>
+                                                            <div class="media-body">
+                                                                <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
+                                                                <p><%#Eval("NEWSDESC") %></p>
+                                                            </div>
+                                                        </article>
+                                                    </tr>
 
-                                </table>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <article class="media event">
-                                        <a class="pull-left date">
-                                            <p class="month"><%#Eval("MM")%></p>
-                                            <p class="day"><%#Eval("DD")%></p>
-                                        </a>
-                                        <div class="media-body">
-                                            <%--<p><%#Eval("NEWSDESC") %></p>
-                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>--%>
-
-                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
-                                            <p><%#Eval("NEWSDESC") %></p>
-                                        </div>
-                                    </article>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
-
-                        <div class="x_title">
-                            <h2>Expired Notice/News</h2>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="x_content height-250 scrollbar small news-jq">
-                            <asp:ListView ID="lvExpNotice" runat="server">
-                                <LayoutTemplate>
-                                    <table class="table table-hover small table-striped table-bordered nowrap" id="tblExpNotice">
-                                        <tbody>
-                                            <tr id="itemPlaceholder" runat="server" />
-                                        </tbody>
-
-                                    </table>
-                                </LayoutTemplate>
-                                <ItemTemplate>
-                                    <tr>
-                                        <article class="media event">
-                                            <a class="pull-left date">
-                                                <p class="month"><%#Eval("MM")%></p>
-                                                <p class="day"><%#Eval("DD")%></p>
-                                            </a>
-                                            <div class="media-body">
-                                                <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
-                                                <p><%#Eval("NEWSDESC") %></p>--%>
-
-                                                <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
-                                                <p><%#Eval("NEWSDESC") %></p>
-                                            </div>
-                                        </article>
-                                    </tr>
-
-                                </ItemTemplate>
-                            </asp:ListView>
-
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                    </div>
                         </div>
                     </div>
-
                 </div>
             </div>
            
@@ -547,52 +508,34 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-            <%--Invigilation Schedule(No logic written)--%>
-            <%--Added by shubham on TID : 56240--%>
-            <div class="col-lg-5 col-md-6 col-12">
-                <div class="x_panel in-right a2">
-                    <div class="x_title">
-                        <h2>Invigilation Schedule</h2> 
-                         <button id="btnInvigi" runat="server" onserverclick="btnInvigi_ServerClick" 
-                                 type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760--260324 --%>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content height-250 scrollbar">
-                         <asp:ListView ID="lvInvgi" runat="server">
-                            <LayoutTemplate>
-                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblExamTimeTable">
-                                    <thead class="bg-primary">
-                                        <tr>
-                                            <th class="text-center">Exam Date</th>
-                                            <th class="text-center">Exam Time Slots</th>
-                                            <th class="text-center">Exam Name</th>
-                                            <th class="text-center">Room Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="itemPlaceholder" runat="server" />
-                                    </tbody>
-                                </table>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td class="text-center">
-                                        <%#Eval("EXAMDATE") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("SLOTIME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("EXAMNAME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("ROOMNAME") %>
-                                    </td>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
+                    <%--Invigilation ScheduleUpdated by PrashantG-200424)--%>
+                    <%--Added by shubham on TID : 56240--%>
+                    <div class="col-lg-5 col-md-6 col-12">
+                        <div class="x_panel in-right a2">
+                            <div class="x_title">
+                                <h2>Invigilation Schedule</h2>
+                                <button id="btnInvigi" runat="server" onclick="Invigilation();"
+                                    type="button" class="btn float-right">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <%--PRASHANTG-TN56760--260324 --%>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content height-250 scrollbar">                            
+                                        <table class="table table-hover small table-striped table-bordered nowrap" id="tblInvigilation">
+                                            <thead class="bg-primary">
+                                                <tr>
+                                                    <th class="text-center">Exam Date</th>
+                                                    <th class="text-center">Exam Time Slots</th>
+                                                    <th class="text-center">Exam Name</th>
+                                                    <th class="text-center">Room Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyIng">                                              
+                                            </tbody>
+                                        </table>                                 
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -607,73 +550,83 @@
                     </div>
                     <div class="x_content height-250 scrollbar">
 
-                        <asp:Panel ID="pnlAttachmentList" runat="server">
-                            <table class="table table-hover small table-striped table-bordered nowrap" id="tblTodaysTimeTable">
-                                <thead class="bg-primary">
-                                    <tr>
-                                        <th>Day</th>
-                                        <th class="text-center">In-Time</th>
-                                        <th class="text-center">Out-Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="inOutBody">
-                                </tbody>
-                            </table>
-                        </asp:Panel>
+                                <asp:Panel ID="pnlAttachmentList" runat="server">
+                                    <table class="table table-hover small table-striped table-bordered nowrap" id="tblInOut">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th>Day</th>
+                                                <th class="text-center">In-Time</th>
+                                                <th class="text-center">Out-Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="inOutBody">
+                                        </tbody>
+                                    </table>
+                                </asp:Panel>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <%--Exam Time Table--%>
-            <div class="col-lg-8 col-md-6 col-12 ">
-                <div class="x_panel in-right a2">
-                    <div class="x_title">
-                        <h2>Exam Time Table</h2>
-                         <button id="btnExamTT" runat="server" onserverclick="btnExamTT_Click"
-                                tabindex="6" type="button" class="btn float-right"><i class="fas fa-sync-alt"></i></button><%--PRASHANTG-TN56760--260324 --%>
-                        <div class="clearfix"></div>
+                    <%--Exam Time Table--%>
+                    <div class="col-lg-8 col-md-6 col-12 ">
+                        <div class="x_panel in-right a2">
+                            <div class="x_title">
+                                <h2>Exam Time Table</h2>
+                                <button id="btnExamTT" runat="server" onclick="ExamTT();"
+                                    tabindex="6" type="button" class="btn float-right">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <%--PRASHANTG-TN56760--260324 --%>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content height-250 scrollbar">                               
+                                        <table class="table table-hover small table-striped table-bordered nowrap" id="tblExamTT">
+                                            <thead class="bg-primary">
+                                                <tr>
+                                                    <th class="text-center">EXAMDATE</th>
+                                                    <th class="text-center">SLOTNAME</th>
+                                                    <th class="text-center">CCODE</th>
+                                                    <th class="text-center">COURSENAME</th>
+                                                    <th class="text-center">SEMESTERNAME</th>
+                                                    <th class="text-center">REGULAR_BACKLOG</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyExamtt">                                            
+                                            </tbody>
+                                        </table>                                  
+                            </div>
+                        </div>
                     </div>
-                    <div class="x_content height-250 scrollbar">
-                        <asp:ListView ID="lvExamTT" runat="server">
-                            <LayoutTemplate>
-                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblExamTimeTable">
-                                    <thead class="bg-primary">
-                                        <tr>
-                                            <th style="width: 14%" class="text-center">EXAMDATE</th>
-                                            <th class="text-center">SLOTNAME</th>
-                                            <th class="text-center">CCODE</th>
-                                            <th class="text-center">COURSENAME</th>
-                                            <th class="text-center">SEMESTERNAME</th>
-                                            <th class="text-center">REGULAR_BACKLOG</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="itemPlaceholder" runat="server" />
-                                    </tbody>
-                                </table>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td class="text-center">
-                                        <%#Eval("EXAMDATE") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("SLOTNAME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("CCODE") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("COURSENAME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("SEMESTERNAME") %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%#Eval("REGULAR_BACKLOG") %>
-                                    </td>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
+                    <%--Quick Access--%>
+                    <div class="col-lg-2 col-md-6 col-12">
+                        <div class="x_panel in-right a2">
+                            <div class="x_title">
+                                <h2>Quick Access</h2>
+                                <button id="btnQA" type="button" onclick="QuickAccess();" class="btn float-right"><i class="fas fa-sync-alt"></i></button>
+                                <%--PRASHANTG-TN56760--260324 --%>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content height-250 scrollbar small">
+                                <ul class="list-group with-border-bottom fav-list" id="ulQuickAccess">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <%--Tasks--%>
+                    <div class="col-lg-2 col-md-6 col-12">
+                        <div class="x_panel in-right a1">
+                            <div class="x_title">
+                                <h2>Tasks</h2>
+                                <button id="btnTask" type="button" onclick="LoadTask();" class="btn float-right"><i class="fas fa-sync-alt"></i></button>
+                                <%--PRASHANTG-TN56760--260324 --%>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content height-250 scrollbar small">
+                                <asp:HiddenField ID="HiddenField1" runat="server" />
+                                <ul class="list-group with-border-bottom fav-list" id="ulEmpTask">
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -730,6 +683,63 @@
             }
         }
     </script>
+   <%-- TodaysTT - PRASHANTG-TN56760--170424--%>
+    <script type="text/javascript">
+        function TodaysTT()
+        {
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/BindTodaysTimeTbl",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/BindTodaysTimeTbl")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessTT,
+                failure: function (response) {
+                    var html = ''; $('#ttbody').html("");
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display.. </td></tr>';
+                    $('#ttbody').html(html);
+                }
+              });
+            function OnSuccessTT(response) {
+                loadTable(response['d']);
+            };
+            function loadTable(data) {
+                var html = '';
+                
+                $('#ttbody').html("");
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (i, d) {
+                            if (d.SlotIme != '-') {
+                                html += '<tr>';
+                                html += '<td class="text-center">' + d.SlotIme + '</td>';
+                                html += '<td class="text-center"> <a id="llnkbutton" href="Academic/AttendenceByFaculty.aspx?pageno=112"' + d.CourseCode + ' - ' + d.Subject + ' (BRANCH-' + d.BranchShortName + ', SEM-' + d.Semester + ', SEC-' + d.Section + ') " data-toggle="tooltip" >' + d.CourseCode + '</td>';
+                                //'</td>  data-container="body"  data-original-title="' + d.CourseCode + ' - ' + d.Subject + ' (BRANCH-' + d.BranchShortName + ', SEM-' + d.Semester + ', SEC-' + d.Section + ') " data-toggle="tooltip" >' + d.CourseCode + '</td>'
+                                html += '</tr>';
+                            } else {
+                                html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
+                            }
+                            // html += '<td class="text-center"  data-container="body" data-original-title="' + d.CourseCode + ' - ' + d.Subject + '" data-toggle="tooltip" >' + d.CourseCode + '</td>';
+                            //html += '<td class="text-center"  data-container="body"  data-original-title="' + d.BranchShortName + ' - ' + d.Branch + '" data-toggle="tooltip">' + d.BranchShortName + '</td>';
+                            //html += '<td class="text-center">' + d.Semester + '</td>';
+                            //html += '<td class="text-center">' + d.Section + '</td>';
+
+                        });
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
+                }
+                $('#ttbody').html(html);
+
+                $('[data-toggle="tooltip"]').tooltip({
+                    placement: "top"
+                });
+            };
+        }
+    </script>
 
     <%--BindChart--%> <%--PRASHANTG-TN56760--260324--%>
     <script>
@@ -761,7 +771,6 @@
                     plugins: {
                         legend: {
                             display: false
-
                         },
                         //title:{
                         //    display:true,
@@ -771,37 +780,33 @@
                             anchor: 'end', // remove this line to get label in middle of the bar
                             align: 'end',
                             display: 'auto',
-                            formatter: (val) => (`${val}`)
-            labels: {
-                    value: {
-
-                        font: { family: 'open_sansregular',
-                                size: '11px' }
-                    }
-
-            }   
-      
-            scales: {
-                    x:{
-                        ticks:{
+                            formatter: (val) => (`${val}`),
+                            labels: {},
+                            value: {},
+                            font:{ family: 'open_sansregular',
+                                size: '11px'}
+                        }                    
+                    },         
+                    scales: {
+                        x:{
+                            ticks:{
                                 font:{
                                     family: 'open_sansregular',
                                     size:'11px'
                                 }
-                        }
-                    },
-                y:{                ticks:{
-                            font:{
-                            family: 'open_sansregular',
-                            size:11
                             }
-                }}
-            }
-
+                        },
+                        y:{                ticks:{
+                            font:{
+                                family: 'open_sansregular',
+                                size:11
+                            }
+                        }}
+                    }
+                }
+            });           
         }
-        });
         
-        }
     </script>
 
     <%--GetAttendancePerCourseWise--%> <%--PRASHANTG-TN56760--260324--%>
@@ -967,7 +972,7 @@
                 dataType: "json",
                 success: OnSuccessInOut,
                 failure: function (response) {
-                    var html = '';
+                    var html = ''; $('#inOutBody').html("");
                     html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No Records To Display..</td></tr>';
                     $('#inOutBody').html(html);
                 }
@@ -1086,4 +1091,213 @@
             /************************ Quick Access ************************/
         }
     </script>
-</asp:Content>
+
+    <%--ExamTT--%> <%--PRASHANTG-TN56760--1804324--%>
+    <script type="text/javascript">
+        function ExamTT(){
+            /************************ Quick Access ************************/
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowQuickAccessData",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowExamTT")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessExamDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessExamDetails(response) {
+                loadExData(response['d']);
+            };
+            function loadExData(data) {
+                var html = '';
+                $('#tbodyExamtt').html("");              
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-center">' + item.ExamDate + '</td>';
+                            html += '<td class="text-center">' + item.SlotName + '</td>';
+                            html += '<td class="text-center">' + item.CCode + '</td>';
+                            html += '<td class="text-center">' + item.Course + '</td>';
+                            html += '<td class="text-center">' + item.Semester + '</td>';
+                            html += '<td class="text-center">' + item.Backlog + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="6">No Records To Display..</td></tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="6">No Records To Display..</td></tr>';
+                }
+                $('#tbodyExamtt').append(html);
+            }
+            /************************ ExamTT ************************/
+        }
+    </script>
+
+    <%--Invigilation--%> <%--PRASHANTG-TN56760--2004324--%>
+    <script type="text/javascript">
+        function Invigilation(){
+            /************************ Invigilation ************************/
+            $.ajax({
+                type: "POST",            
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowInvigilation")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessInvigilationDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessInvigilationDetails(response) {
+                loadIngData(response['d']);
+            };
+            function loadIngData(data) {
+                var html = '';
+                $('#tbodyIng').html("");              
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            html += '<tr>';
+                            html += '<td class="text-center">' + item.Examdt + '</td>';
+                            html += '<td class="text-center">' + item.ExamName + '</td>';
+                            html += '<td class="text-center">' + item.ExamTm + '</td>';
+                            html += '<td class="text-center">' + item.RoomName + '</td>';                          
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="6">No Records To Display..</td></tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="6">No Records To Display..</td></tr>';
+                }
+                $('#tbodyIng').append(html);
+            }
+            /************************ ExamTT ************************/
+        }
+    </script>
+
+    <%--ActiveNotice--%> <%--PRASHANTG-TN56760--1804324--%>
+    <script type="text/javascript">
+        function ActiveNotice(){
+            $.ajax({
+                type: "POST",
+                //url: "principalHome.aspx/BindActivityDetails",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowNewsData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessActiveNoticeDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessActiveNoticeDetails(response) {
+                var ActivNData = response['d'];         
+                loadActivNDetails(ActivNData);
+            };
+            function loadActivNDetails(ActivNData) {
+                var html = '';             
+                $('#tblActiveNotice').html("");
+                // $('#tbodyActiveNotice td').parent().remove();
+                if (ActivNData != null) {
+                    if (ActivNData.length > 0) {
+                        $.each(ActivNData, function (row, item) {                           
+                            //html += "<tr>";
+                            //html += "<td class='media event'>";
+                            //html += "<a class='pull-left date' >";
+                            //html += "<p class='month'>" + item.Month + "</p>";
+                            //html += "<p class='day'>" + item.Day + "</p>";
+                            //html += "</a>";   
+                            //html += "</td >";
+                            //html += "<td class='media-body'><a class='title' target='_blank' href='" + item.NewsLink + "'>" + item.Title +"</a><p>" + item.NewsDescription+ "</p></td>";
+                        
+                            //html += "<td class='text-left'>" + item.Status + "</td>";                         
+                            //// html += "<td >";
+                            //// html += "<asp:LinkButton ID='lnkDownloadActive' runat='server' Text='" + item.TITLE + "' CommandArgument='" + item.FILENAME + "' OnCommand='GetFileNamePathEventForActiveNotice'></asp:LinkButton>";
+                            //// html += "<a id='btndownload' href = 'javascript:;' onclick ='CallButtonEvent("+ item.FILENAME+")' target='_blank'>"+ item.TITLE +"</a>";
+                            ////html += "</td >";
+                            //html += "</tr> ";
+                            html+="<tr>";
+                            html+=" <article class='media event'>";
+                            html+="  <a class='pull-left date'>";
+                            html+=" <p class='month'>" + item.Month + "</p>";
+                            html+=" <p class='day'>" + item.Day + "</p>";
+                            html+=" </a>";
+                            html+=" <div class='media-body'>";
+                            html+="  <asp:LinkButton ID='lnkDownloadNotice' runat='server' Text='" + item.TITLE + "' CommandArgument='" + item.FILENAME + "' OnCommand='GetFileNamePathEventForActiveNotice'></asp:LinkButton>";
+                            html+=" <p>" + item.NewsDescription+ "</p>";
+                            html+=" </div>";
+                            html+="</article>";
+                            html+=  " </tr>";
+                            alert(html);
+                        });
+                    } else {
+                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                    }
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                }
+                $('#tblActiveNotice').append(html);              
+            };
+        }
+    </script> 
+
+    <%--ExpNotice--%> <%--PRASHANTG-TN56760--1804324--%>
+    <script type="text/javascript">
+
+        //PRASHANTG-170424-BUGFIX-NOTICE WAS NOT LOADED
+        //Show Expired Notice
+        function ExpNotice(){
+            $.ajax({
+                type: "POST",
+                //url: "principalHome.aspx/BindActivityDetails",
+                url: '<%=Page.ResolveUrl("~/principalHome.aspx/ShowExpiredNewsData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessExpNoticeDetails,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessExpNoticeDetails(response) {
+                var ExpNData = response['d'];         
+                loadExpDetails(ExpNData);
+            };
+            function loadExpDetails(ExpNData) {
+                var html = '';             
+                $('#tbodyExpNotice').html("");
+                // $('#tbodyActiveNotice td').parent().remove();
+                if (ExpNData != null) {
+                    if (ExpNData.length > 0) {
+                        $.each(ExpNData, function (row, item) { 
+                            html += "<tr>";
+                            html += "<td class='media event'>";
+                            html += "<a class='pull-left date' >";
+                            html += "<p class='month'>" + item.Month + "</p>";
+                            html += "<p class='day'>" + item.Day + "</p>";
+                            html += "</a>";
+                            html += "</td>";
+                            html += "<td class='media-body'>";
+                            html += "<p>" + item.NewsDescription + "</p>"; 
+                            html += "</td >";
+                            //  html += "<td >";
+                            // html += "<a id='btndownloadExp' href = 'javascript:;' onclick ='CallButtonEvent("+ item.FILENAME+")' target='_blank'>"+ item.TITLE +"</a>";
+                            // html += "</td >";
+                            html += "</tr> ";
+                        });
+                    } else {
+                        html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                    }
+                } else {
+                    html += '<tr><td colspan="2" style="font-weight:bold"> No records available </td></tr>';
+                }
+                $('#tbodyExpNotice').append(html);              
+            };
+        }
+            //--------------------------
+    </script>
+
+
+        </asp:Content>

@@ -68,7 +68,8 @@ public partial class principalHome : System.Web.UI.Page
                     }
 
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
-                   // Show_Notice();//PRASHANTG-TN56760-tn56760
+                    Show_Notice();//PRASHANTG-TN56760-180424
+                    BindListViewNotice();
                 }
             }
         }
@@ -95,12 +96,12 @@ public partial class principalHome : System.Web.UI.Page
             {
                 if (ds.Tables.Count > 0 && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    lvActiveNotice.DataSource = ds.Tables[0];
-                    lvActiveNotice.DataBind();
+                     lvActiveNotice.DataSource = ds.Tables[0];
+                     lvActiveNotice.DataBind();
                 }
                 if (ds.Tables.Count > 0 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
                 {
-                    lvExpNotice.DataSource = ds.Tables[1];
+                     lvExpNotice.DataSource = ds.Tables[1];
                     lvExpNotice.DataBind();
                 }
             }
@@ -134,8 +135,8 @@ public partial class principalHome : System.Web.UI.Page
         else
             return "None";
     }
-
-    protected void GetFileNamePathEventForActiveNotice(object sender, CommandEventArgs e)
+        
+    public  void GetFileNamePathEventForActiveNotice(object sender, CommandEventArgs e)
     {
         string filename = e.CommandArgument.ToString();
         GetFileNamePath(filename);
@@ -235,7 +236,7 @@ public partial class principalHome : System.Web.UI.Page
         }
         return retIfExists;
     }
-   //Method Added by PRASHANTG-TN56760-TN56760-290324-Aggregated 3 counters
+    //Method Added by PRASHANTG-TN56760-TN56760-290324-fetched 3 counters
     [WebMethod]
     public static List<PrincipalDashboardModel.StudentCounters> ShowCounters()
     {
@@ -451,7 +452,98 @@ public partial class principalHome : System.Web.UI.Page
         return objActivity;
     }
 
+    // TO GET ACADEMIC ACTIVE NOTICE  
+    [WebMethod]
+    public static List<PrincipalDashboardModel.ActiveNotice> BindActiveNotice()
+    {
+        principalHome p = new principalHome();
+        List<PrincipalDashboardModel.ActiveNotice> objActivN = new List<PrincipalDashboardModel.ActiveNotice>();
+        objActivN = p.GetActiveNotice();
+        return objActivN;
+    }
 
+    public List<PrincipalDashboardModel.ActiveNotice> GetActiveNotice()
+    {
+        List<PrincipalDashboardModel.ActiveNotice> objActivN = new List<PrincipalDashboardModel.ActiveNotice>();
+        try
+        {
+            DataSet ds = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
+            if (ds != null)
+            {
+                if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    objActivN = (from DataRow dr in ds.Tables[0].Rows
+                                   select new PrincipalDashboardModel.ActiveNotice
+                                   {
+                                       MM = dr["MM"].ToString(),
+                                       DD = dr["DD"].ToString(),
+                                       TITLE = dr["TITLE"].ToString(),
+                                       FILENAME = dr["FILENAME"].ToString(),
+                                       NEWSDESC = dr["NEWSDESC"].ToString()
+                                   }).ToList();
+                }
+                else
+                {
+                    objActivN = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetActivityNotice() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return objActivN;
+    }
+
+    // TO GET ACADEMIC EXPIRED NOTICE  
+    [WebMethod]
+    public static List<PrincipalDashboardModel.ActiveNotice> BindExpNotice()
+    {
+        principalHome p = new principalHome();
+        List<PrincipalDashboardModel.ActiveNotice> objExpN = new List<PrincipalDashboardModel.ActiveNotice>();
+        objExpN = p.GetExpNotice();
+        return objExpN;
+    }
+
+    public List<PrincipalDashboardModel.ActiveNotice> GetExpNotice()
+    {
+        List<PrincipalDashboardModel.ActiveNotice> objExpN = new List<PrincipalDashboardModel.ActiveNotice>();
+        try
+        {
+            DataSet ds = objNc.GetUserTypeWiseNews(Convert.ToInt32(Session["usertype"]));
+            if (ds != null)
+            {
+                if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                {
+                    objExpN = (from DataRow dr in ds.Tables[1].Rows
+                                 select new PrincipalDashboardModel.ActiveNotice
+                                 {
+                                     MM = dr["MM"].ToString(),
+                                     DD = dr["DD"].ToString(),
+                                     TITLE = dr["TITLE"].ToString(),
+                                     FILENAME = dr["FILENAME"].ToString(),
+                                     NEWSDESC = dr["NEWSDESC"].ToString()
+                                 }).ToList();
+                }
+                else
+                {
+                    objExpN = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "principalHome.aspx.GetExpNotice() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return objExpN;
+    }
+    
     // TO GET ADMISSION FEES DETAILS 
     //[WebMethod]
     //public static List<PrincipalDashboardModel.AdmFeesDeatils> BindAdmFeesDetails()
@@ -737,7 +829,7 @@ public partial class principalHome : System.Web.UI.Page
                              {
                                  PageNo = Convert.ToInt32(dr[0].ToString()),
                                  LinkName = dr[1].ToString(),
-                                 Link = dr[2].ToString()
+                                 Link = ResolveUrl(dr[2].ToString())
                              }).ToList();
                 }
                 else

@@ -66,7 +66,32 @@ public class StudentHomeModel
         public string Saturday { get; set; }
         public string Sunday { get; set; }
     }
-
+//PRASHANTG-200424
+    public class TodaysTimeTable
+    {
+        public string Slot { get; set; }
+        public string SlotNo { get; set; }
+        public string CCode { get; set; }
+    }
+    //PRASHANTG-200424
+    public class ExamTimeTable
+    {
+        public string ExamDate { get; set; }  
+        public string CCode { get; set; }
+        public string Slot { get; set; }
+        public string Course { get; set; }
+        public string Backlog { get; set; }
+        public string Semester { get; set; }
+    }
+    //PRASHANTG-200424
+    public class Placement
+    {
+        public string Company { get; set; }
+        public string SchDate { get; set; }
+        public string Salary { get; set; }
+        public string Criteria { get; set; }
+        public string Course { get; set; }      
+    }
     public class TimeTableHeader
     {
         public string Slot { get; set; }

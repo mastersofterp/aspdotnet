@@ -85,7 +85,7 @@ public partial class StudeHome : System.Web.UI.Page
                     //lblLastLoginForm.Text = dsLastLoginForm.Tables[0].Rows[0]["AA"].ToString();
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     // Show_ExamTT();//PRASHANTG-TN56760--220324
-                    //  Show_Notice();//PRASHANTG-TN56760--220324
+                      Show_Notice();//PRASHANTG-TN56760--180424
                     //  Show_TodaysTT();//PRASHANTG-TN56760--240324
                     // Show_placement();//PRASHANTG-TN56760--240324
                   
@@ -221,7 +221,7 @@ public partial class StudeHome : System.Web.UI.Page
                 sb.Append("<tr style='text-align:center; font-size:15px; font-weigth:bold' class='info'><td colspan='3'>No records to display..</td></tr>");
             }
 
-            tbodyAtten.InnerHtml = sb.ToString();
+           // tbodyAtten.InnerHtml = sb.ToString();
         }
         catch (Exception ex)
         {
@@ -267,7 +267,7 @@ public partial class StudeHome : System.Web.UI.Page
             {
                 sb.Append("<li class='list-group-item text-center info' style='text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;'>No records to display.. </li>");
             }
-            ulQuickAccess.InnerHtml = sb.ToString();
+           // ulQuickAccess.InnerHtml = sb.ToString();
         }
         catch (Exception ex)
         {
@@ -306,7 +306,7 @@ public partial class StudeHome : System.Web.UI.Page
             {
                 sb.Append("<li class='list-group-item text-center info' style='text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;'>No records to display.. </li>");
             }
-            ulTasks.InnerHtml = sb.ToString();
+           // ulTasks.InnerHtml = sb.ToString();
         }
         catch (Exception ex)
         {
@@ -468,8 +468,8 @@ public partial class StudeHome : System.Web.UI.Page
             {
                 if (dsTimeTable.Tables.Count > 0 && dsTimeTable != null && dsTimeTable.Tables[0] != null && dsTimeTable.Tables[0].Rows.Count > 0)
                 {
-                    lvTodaysTT.DataSource = dsTimeTable;
-                    lvTodaysTT.DataBind();
+                    //lvTodaysTT.DataSource = dsTimeTable;
+                    //lvTodaysTT.DataBind();
                 }
             }
         }
@@ -519,8 +519,8 @@ public partial class StudeHome : System.Web.UI.Page
             {
                 if (ds.Tables.Count > 0 && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    lvExamTT.DataSource = ds;
-                    lvExamTT.DataBind();
+                   // lvExamTT.DataSource = ds;
+                   // lvExamTT.DataBind();
                 }
             }
         }
@@ -545,8 +545,8 @@ public partial class StudeHome : System.Web.UI.Page
                 {
                     if (ds.Tables.Count > 0 && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        LvPlacement.DataSource = ds.Tables[0];
-                        LvPlacement.DataBind();
+                       // LvPlacement.DataSource = ds.Tables[0];
+                       // LvPlacement.DataBind();
                         divplacement.Visible = true;
                     }
                 }
@@ -941,7 +941,7 @@ public partial class StudeHome : System.Web.UI.Page
 
     
     /***************************************** ADDED ON 02-04-2020 **********************************************/
-    //Not in use //prashantg-290324
+    //prashantg-200424
     [WebMethod]
     public static StudentHomeModel.StudAttendance ShowAttendance()
     {
@@ -956,14 +956,14 @@ public partial class StudeHome : System.Web.UI.Page
         try
         {
             DataSet dsAttendance = new DataSet();
-          int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + Convert.ToInt32(Session["idno"] + ""))) == '0' ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + Convert.ToInt32(Session["idno"] + "")));
-            int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(SES.FLOCK,0)=1 AND SES.COLLEGE_ID=" + college_id + "") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(SES.FLOCK,0)=1 AND SES.COLLEGE_ID=" + college_id + ""));
+            int idno = Convert.ToInt32(Session["idno"].ToString()); //prashantg-200424
+          int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + idno.ToString()+ "")) == '0' ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + idno.ToString() + ""));
+          int sessionno = objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + idno.ToString() + " AND ISNULL(SES.FLOCK,0)=1 AND SES.COLLEGE_ID=" + college_id + "") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + idno.ToString() + " AND ISNULL(SES.FLOCK,0)=1 AND SES.COLLEGE_ID=" + college_id + ""));
             Session["sessionno"] = sessionno;
-            int schemeno = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+            int schemeno = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + idno.ToString()) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + idno.ToString()));
             Session["schemeno"] = schemeno;
-            int semesterno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + "AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())));
+            int semesterno = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + idno.ToString() + " AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + idno.ToString() + "AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())));
             Session["semesterno"] = semesterno;
-            int idno = Convert.ToInt32(Session["idno"].ToString());
             // Added on 07-04-2020
             int sectionNo = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "IDNO=" + idno + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "IDNO=" + idno + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno));
             // Added on 07-04-2020
@@ -999,57 +999,7 @@ public partial class StudeHome : System.Web.UI.Page
         }
         return objstudAttData;
     }
-    
-    //[WebMethod]
-    //public static StudentHomeModel.GetNoticeData ShowNoticeAnnData()
-    //{
-    //    StudeHome a = new StudeHome();
-    //    StudentHomeModel.GetNoticeData NoticeAnnData = a.BindListViewNotice();
-    //    return NoticeAnnData;
-    //}
-    //private StudentHomeModel.GetNoticeData BindListViewNotice()
-    //{
-    //    StudentHomeModel.GetNoticeData objGetNoticeAnnouncementData = new StudentHomeModel.GetNoticeData();
-    //    try
-    //    {
-    //        List<StudentHomeModel.StudentNotice> NoticeList = new List<StudentHomeModel.StudentNotice>(); 
-
-    //        NewsController objNc = new NewsController();
-    //        DataSet dsNews = objNc.GetAllNews("PKG_NEWS_SP_ALL_NOTICE");
-
-    //        DataSet dsGetAnnouncementCount = objSC.GetAnnouncementCount(Convert.ToInt32(Session["idno"].ToString()));
-    //        DataSet dsGetAssignmentCount = objSC.GetAssignmentCount(Convert.ToInt32(Session["idno"].ToString()));
-    //        if (dsGetAnnouncementCount != null)
-    //        {
-    //            if (dsNews != null && dsNews.Tables[0] != null && dsNews.Tables[0].Rows.Count > 0)
-    //            {
-    //                NoticeList = (from DataRow dr in dsNews.Tables[0].Rows
-    //                              select new StudentHomeModel.StudentNotice
-    //                              {
-    //                                  Link = dr["LINK"].ToString(),
-    //                                  Title = dr["TITLE"].ToString(),
-    //                                  NewsDescription = dr["NEWSDESC"].ToString()
-    //                              }).ToList();
-    //            }
-    //            else
-    //            {
-    //                NoticeList = null;
-    //            }
-    //            objGetNoticeAnnouncementData.NoticeList = NoticeList;
-    //            objGetNoticeAnnouncementData.Announcement = Convert.ToInt32(dsGetAnnouncementCount.Tables[0].Rows[0]["ANNOUNCEMENT"]).ToString("00");
-    //            objGetNoticeAnnouncementData.Assignment = Convert.ToInt32(dsGetAssignmentCount.Tables[0].Rows[0]["ASSIGNMENT"]).ToString("00");
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        if (Convert.ToBoolean(Session["error"]) == true)
-    //            objCommon.ShowError(Page, "news.BindListViewNews-> " + ex.Message + " " + ex.StackTrace);
-    //        else
-    //            objCommon.ShowError(Page, "Server UnAvailable");
-    //    }
-    //    return objGetNoticeAnnouncementData;
-    //}
-
+      
     [WebMethod]
     public static List<StudentHomeModel.StudentNews> ShowNewsData()
     {
@@ -1135,8 +1085,8 @@ public partial class StudeHome : System.Web.UI.Page
         }
         return ExpirednewsList;
     }
-    /****** Bind Body of Time Table ************/
-    //not in use prashantg-290324
+    /****** Bind Body of class Time Table ************/
+    //prashantg-180424
     [WebMethod]
     public static List<StudentHomeModel.StudentTimeTable> ShowStudTimeTableData()
     {
@@ -1150,10 +1100,11 @@ public partial class StudeHome : System.Web.UI.Page
         try
         {
             DataSet dsTimeTable = new DataSet();
-            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + Convert.ToInt32(Session["idno"] + ""))) == '0' ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + Convert.ToInt32(Session["idno"] + "")));
-            Session["sessionno"] = objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(SES.FLOCK,0)=1 AND COLLEGE_ID=" + college_id + "") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(SES.FLOCK,0)=1 AND COLLEGE_ID=" + college_id + ""));
-            Session["schemeno"] = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
-            Session["semesterno"] = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + "AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())));
+               int idno = Convert.ToInt32(Session["idno"].ToString());
+            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" +idno.ToString() + "")) == '0' ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(COLLEGE_ID,0)", "IDNO=" + idno.ToString() + ""));
+            Session["sessionno"] = objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + idno.ToString() + " AND ISNULL(SES.FLOCK,0)=1 AND SR.COLLEGE_ID=" + college_id + "") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT SR INNER JOIN ACD_SESSION_MASTER SES ON (SES.SESSIONNO=SR.SESSIONNO)", "MAX(SR.SESSIONNO)", "SR.IDNO=" + idno.ToString() + " AND ISNULL(SES.FLOCK,0)=1 AND SR.COLLEGE_ID=" + college_id + ""));
+            Session["schemeno"] = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + idno.ToString()) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT SCHEMENO", "IDNO=" + idno.ToString()));
+            Session["semesterno"] = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + idno.ToString() + " AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SEMESTERNO)", "IDNO=" + idno.ToString()+ "AND SESSIONNO=" + Convert.ToInt32(Session["sessionno"].ToString())));
             if (Session["sessionno"].ToString() == null)
             {
                 Response.Redirect("~/default.aspx");
@@ -1161,7 +1112,7 @@ public partial class StudeHome : System.Web.UI.Page
             int sessionno = Convert.ToInt32(Session["sessionno"].ToString());
             int schemeno = Convert.ToInt32(Session["schemeno"].ToString());
             int semesterno = Convert.ToInt32(Session["semesterno"].ToString());
-            int idno = Convert.ToInt32(Session["idno"].ToString());
+        
             // Added on 07-04-2020
             int sectionNo = objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "IDNO=" + idno + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SectionNo)", "IDNO=" + idno + " AND SESSIONNO=" + sessionno + " AND SCHEMENO=" + schemeno + " AND SEMESTERNO=" + semesterno));
             // Added on 07-04-2020
@@ -1199,47 +1150,147 @@ public partial class StudeHome : System.Web.UI.Page
         }
         return objTTList;
     }
-    /****** Bind Body of Time Table ************/
+    /****** Bind Body of todays Time Table ************/
+    //prashantg-180424
+    [WebMethod]
+    public static List<StudentHomeModel.TodaysTimeTable> ShowTodayTimeTableData()
+    {
+        StudeHome a = new StudeHome();
+        List<StudentHomeModel.TodaysTimeTable> studTTData = a.BindTodayTimeTable();
+        return studTTData;
+    }
+    private List<StudentHomeModel.TodaysTimeTable> BindTodayTimeTable()
+    {
+        List<StudentHomeModel.TodaysTimeTable> objTTList = new List<StudentHomeModel.TodaysTimeTable>();
+        try
+        {
+            DataSet dsTimeTable = new DataSet();
+            int idno = Convert.ToInt32(Session["idno"].ToString());
+            dsTimeTable = objSC.GetTodaysTimeTableForStudent(idno);
+            if (dsTimeTable != null)
+            {
+                if (dsTimeTable.Tables[0] != null && dsTimeTable.Tables[0].Rows.Count > 0)
+                {
+                    objTTList = (from DataRow dr in dsTimeTable.Tables[0].Rows
+                                 select new StudentHomeModel.TodaysTimeTable
+                                 {
+                                     //
+                                     Slot = dr["SLOTNAME"].ToString(),
+                                     SlotNo = dr["SLOTNO"].ToString(),
+                                     CCode = dr["CCODE"].ToString()
 
-    /****** Bind  Assignment and Announcement ************/
-    //[WebMethod]
-    //public static StudentHomeModel.GetNoticeData ShowNAnnAssData()
-    //{
-    //    StudeHome a = new StudeHome();
-    //    StudentHomeModel.GetNoticeData AssignAnnouncmentData = a.BindAssignAnnouncment();
-    //    return AssignAnnouncmentData;
-    //}
-    //private StudentHomeModel.GetNoticeData BindAssignAnnouncment()
-    //{
-    //    StudentHomeModel.GetNoticeData objGetNoticeAnnouncementData = new StudentHomeModel.GetNoticeData();
-    //    try
-    //    {
-    //        List<StudentHomeModel.StudentNotice> NoticeList = new List<StudentHomeModel.StudentNotice>();
+                                 }).ToList();
+                }
+                else
+                {
+                    objTTList = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "studeHome.aspx.BindTodayTimeTable-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+        return objTTList;
+    }
 
-    //        NewsController objNc = new NewsController();
+    /***********Exam TT*****************/
+    //prashantg-180424
+    [WebMethod]
+    public static List<StudentHomeModel.ExamTimeTable> ShowExamTimeTableData()
+    {
+        StudeHome a = new StudeHome();
+        List<StudentHomeModel.ExamTimeTable> studTTData = a.BindExamTimeTable();
+        return studTTData;
+    }
+    private List<StudentHomeModel.ExamTimeTable> BindExamTimeTable()
+    {
+        List<StudentHomeModel.ExamTimeTable> objTTList = new List<StudentHomeModel.ExamTimeTable>();
+        try
+        {
+            DataSet dsTimeTable = new DataSet();
+            int idno = Convert.ToInt32(Session["idno"].ToString());
+            dsTimeTable = objExamController.GetStudentExamTimeTable(Convert.ToInt32(Session["currentsession"]), 0, Convert.ToInt32(Session["idno"]));
+            if (dsTimeTable != null)
+            {
+                if (dsTimeTable.Tables[0] != null && dsTimeTable.Tables[0].Rows.Count > 0)
+                {
+                    objTTList = (from DataRow dr in dsTimeTable.Tables[0].Rows
+                                 select new StudentHomeModel.ExamTimeTable
+                                 {                                   
+                                     Slot = dr["SLOTNAME"].ToString(),
+                                     ExamDate = dr["EXAMDATE"].ToString(),
+                                     CCode = dr["CCODE"].ToString(),
+                                     Course = dr["COURSENAME"].ToString(),
+                                     Semester = dr["SEMESTERNAME"].ToString(),
+                                     Backlog = dr["REGULAR_BACKLOG"].ToString()
 
-
-    //        DataSet dsGetAnnouncementCount = objSC.GetAnnouncementAssignmentCount(Convert.ToInt32(Session["idno"].ToString()));
-
-    //        if (dsGetAnnouncementCount != null)
-    //        {
-
-    //            // objGetNoticeAnnouncementData.NoticeList = NoticeList;
-    //            objGetNoticeAnnouncementData.Announcement = Convert.ToInt32(dsGetAnnouncementCount.Tables[1].Rows[0]["ANNOUNCEMENT"]).ToString("00");
-    //            objGetNoticeAnnouncementData.Assignment = Convert.ToInt32(dsGetAnnouncementCount.Tables[0].Rows[0]["ASSIGNMENT"]).ToString("00");
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-
-    //        if (Convert.ToBoolean(Session["error"]) != true)
-    //            objCommon.ShowError(Page, "news.BindListViewNews-> " + ex.Message + " " + ex.StackTrace);
-    //        else
-    //            objCommon.ShowError(Page, "Server UnAvailable");
-    //    }
-    //    return objGetNoticeAnnouncementData;
-    //}
-    /****** Bind  Assignment and Announcement ************/
+                                 }).ToList();
+                }
+                else
+                {
+                    objTTList = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "studeHome.aspx.BindExamTimeTable-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+        return objTTList;
+    }
+    /***********Placement*****************/
+    [WebMethod]
+    public static List<StudentHomeModel.Placement> ShowPlacementData()
+    {
+        StudeHome a = new StudeHome();
+        List<StudentHomeModel.Placement> studTTData = a.BindPlacement();
+        return studTTData;
+    }
+    private List<StudentHomeModel.Placement> BindPlacement()
+    {
+        List<StudentHomeModel.Placement> objPlacementList = new List<StudentHomeModel.Placement>();
+        try
+        {
+            if (Convert.ToInt32(Session["usertype"]) == 2)
+            {
+                DataSet ds = objTpcontroller.GetPlacement(Convert.ToInt32(Session["userno"]));
+                if (ds != null)
+                {
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        objPlacementList = (from DataRow dr in ds.Tables[0].Rows
+                                            select new StudentHomeModel.Placement
+                                            {
+                                                Company = dr["COMPNAME"].ToString(),
+                                                SchDate = dr["SCHEDULEDATE"].ToString(),
+                                                Salary = dr["Salary"].ToString(),
+                                                Course = dr["CourseStream"].ToString(),
+                                                Criteria = dr["CRITERIA"].ToString()
+                                            }).ToList();
+                    }
+                    else
+                    {
+                        objPlacementList = null;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "studeHome.aspx.BindPlacement-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+        return objPlacementList;
+    }   
 
     /******************* FOR QUICK ACCESS *********************/
     [WebMethod]
@@ -1261,13 +1312,15 @@ public partial class StudeHome : System.Web.UI.Page
             if (ds != null)
             {
                 if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    objQA = (from DataRow dr in ds.Tables[0].Rows
+                {                   
+                    objQA = (from DataRow dr in ds.Tables[0].Rows                            
                              select new StudentHomeModel.StudQuickAccess
-                             {
+                             {                                 
                                  PageNo = Convert.ToInt32(dr[0].ToString()),
                                  LinkName = dr[1].ToString(),
-                                 Link = dr[2].ToString()
+                                 //Link = ResolveUrl(dr[2].ToString() == null ? "#" : dr[2].ToString() + "?pageno=" + dr[0].ToString())
+                                 Link =ResolveUrl( dr[2].ToString())
+
                              }).ToList();
                 }
                 else
@@ -1289,8 +1342,7 @@ public partial class StudeHome : System.Web.UI.Page
         }
         return objQA;
     }
-    /******************* FOR QUICK ACCESS *********************/
-
+ 
     /********************FOR STUDENT TASKS**************************/
     [WebMethod]
     public static List<StudentHomeModel.StudentTask> ShowStudTasks()
@@ -1352,14 +1404,15 @@ public partial class StudeHome : System.Web.UI.Page
             string AttPer = "0.00";
             try
             {
-                int userno = Convert.ToInt32(Session["idno"]);
+                int userno = Convert.ToInt32(Session["userno"].ToString());// Convert.ToInt32(Session["idno"]); //prashantg-180424
 
                 if (userno > 0)
                 {
                     ds = objSC.GetStudentAttPerDashboard(userno);
-                    if (ds != null && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                    if (ds != null)
                     {
-                        AttPer = ds.Tables[0].Rows[0]["PER"].ToString();
+                        if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
+                            AttPer = ds.Tables[0].Rows[0]["PER"].ToString();
                     }
                     else
                     {

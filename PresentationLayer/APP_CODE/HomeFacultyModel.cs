@@ -23,7 +23,16 @@ public class HomeFacultyModel
 
 
 }
-
+//PRASHANTG-200424
+public class ExamTimeTable
+{
+    public string ExamDate { get; set; }
+    public string SlotName { get; set; }
+    public string CCode { get; set; }
+    public string Course { get; set; }
+    public string Semester { get; set; }
+    public string Backlog { get; set; }
+}
 public class EmpInOutTIme
 {
     public string Day { get; set; }
@@ -105,7 +114,15 @@ public class CourseList
 
 }
 
+//PRASHANTG-200424
+public class Invigilation
+{
+    public string Examdt { get; set; }
+    public string ExamTm { get; set; }
+    public string ExamName { get; set; }
+    public string RoomName { get; set; }
 
+}
 public class FacultyQuickAccess
 {
     public string Link { get; set; }

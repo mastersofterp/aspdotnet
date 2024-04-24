@@ -27,7 +27,14 @@ public class PrincipalDashboardModel
         public string Year { get; set; }
         public string Count { get; set; }
     }
-
+    public class ActiveNotice
+    {
+        public string MM { get; set; }
+        public string DD { get; set; }
+        public string TITLE { get; set; }
+        public string FILENAME { get; set; }
+        public string NEWSDESC { get; set; }
+    }
     public class ActivityDetails
     {
         public string ActivityName { get; set; }
