@@ -117,9 +117,12 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
             {
                 objCommon.FillDropDownList(ddlInstitute, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO) INNER JOIN ACD_SESSION_MASTER S ON(S.COLLEGE_ID=DB.COLLEGE_ID) INNER JOIN ACD_COURSE_TEACHER CT ON (SM.COLLEGE_ID = CT.COLLEGE_ID AND CT.SCHEMENO=SC.SCHEMENO AND CT.SESSIONNO=S.SESSIONNO)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 and  s.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "and UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + "AND ISNULL(CT.CANCEL,0)=0", "COL_SCHEME_NAME");
 <<<<<<< HEAD
+<<<<<<< HEAD
                // objCommon.FillDropDownList(ddlInstitute, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)INNER JOIN ACD_SESSION_MASTER S ON(S.COLLEGE_ID=DB.COLLEGE_ID)INNER JOIN ACD_COURSE_TEACHER CT ON (SM.COLLEGE_ID = CT.COLLEGE_ID)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 and  s.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "and UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + "AND ISNULL(CT.CANCEL,0)=0", "COL_SCHEME_NAME");
 
 =======
+=======
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
                 // objCommon.FillDropDownList(ddlInstitute, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO) INNER JOIN ACD_SESSION_MASTER S ON(S.COLLEGE_ID=DB.COLLEGE_ID) INNER JOIN ACD_COURSE_TEACHER CT ON (SM.COLLEGE_ID = CT.COLLEGE_ID AND CT.SCHEMENO=SC.SCHEMENO AND CT.SESSIONNO=S.SESSIONNO)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 and  s.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "and UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + "AND ISNULL(CT.CANCEL,0)=0", "COL_SCHEME_NAME");
                 #region commented by vipul
                 //DataSet ds = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO) INNER JOIN ACD_SESSION_MASTER S ON(S.COLLEGE_ID=DB.COLLEGE_ID) INNER JOIN ACD_COURSE_TEACHER CT ON (SM.COLLEGE_ID = CT.COLLEGE_ID AND CT.SCHEMENO=SC.SCHEMENO AND CT.SESSIONNO=S.SESSIONNO)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 and  s.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "and UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + "AND ISNULL(CT.CANCEL,0)=0", "COL_SCHEME_NAME");
@@ -183,6 +186,7 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
             ddlCourse.SelectedIndex = 0;
             ddlSubjectType.SelectedIndex = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
             txtFromDate.Text = string.Empty;
             txtTodate.Text = string.Empty;
             if (ddlInstitute.SelectedIndex > 0)
@@ -190,6 +194,45 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                 DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlInstitute.SelectedValue));
                 //ViewState["degreeno"]
 
+=======
+            ddlSubjectType.Items.Clear();
+            ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
+            ddlSem.Items.Clear();
+            ddlSem.Items.Add(new ListItem("Please Select", "0"));
+            ddlSem.SelectedIndex = 0;
+            if (ddlSession.SelectedIndex > 0)
+            {
+                int College_id = Convert.ToInt32(objCommon.LookUp("ACD_COURSE_TEACHER", "COLLEGE_ID", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
+                ViewState["clg_id"] = College_id;
+                int sessionno = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + ddlSession.SelectedValue + "and COLLEGE_ID=" + College_id));
+                ViewState["Session"] = sessionno;
+
+                objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) ", "DISTINCT CT.COURSENO", "C.CCODE+' - '+C.COURSE_NAME AS COURSE_NAME", "CT.SESSIONNO=" + sessionno, "CT.COURSENO");
+                objCommon.FillDropDownList(ddlSection, "ACD_COURSE_TEACHER SR INNER JOIN ACD_SECTION SC ON SR.SECTIONNO = SC.SECTIONNO", "DISTINCT SR.SECTIONNO", "SC.SECTIONNAME", "(SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + "OR 0=" + 0 + ") AND (SR.SEMESTERNO =" + ddlSem.SelectedValue + "OR 0=" + 0 + ") AND SR.SESSIONNO =" + sessionno + " AND SR.SECTIONNO > 0 AND SR.COLLEGE_ID=" + College_id + "AND SR.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND ISNULL(SR.CANCEL,0)=0 ", "SC.SECTIONNAME");
+                // txtFromDate.Text = string.Empty;
+                // txtTodate.Text = string.Empty;
+            }
+            else
+            {
+                ddlSem.SelectedIndex = 0;
+                ddlSection.SelectedIndex = 0;
+                ddlCourse.SelectedIndex = 0;
+                ddlSubjectType.SelectedIndex = 0;
+                ddlSubjectType.Items.Clear();
+                ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
+                ddlCourse.Items.Clear();
+                ddlCourse.Items.Add(new ListItem("Please Select", "0"));
+                ddlSection.Items.Clear();
+                ddlSection.Items.Add(new ListItem("Please Select", "0"));
+                ddlSem.Items.Clear();
+                ddlSem.Items.Add(new ListItem("Please Select", "0"));
+                txtFromDate.Text = string.Empty;
+                txtTodate.Text = string.Empty;
+            }
+            if (ddlInstitute.SelectedIndex > 0)
+            {
+                DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlInstitute.SelectedValue));
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
 =======
             ddlSubjectType.Items.Clear();
             ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
@@ -247,6 +290,7 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                 ddlCourse.SelectedIndex = 0;
                 ddlSubjectType.SelectedIndex = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
                 txtFromDate.Text = string.Empty;
                 txtTodate.Text = string.Empty;
             }
@@ -262,6 +306,44 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                     ViewState["clg_id"] = College_id;
                     int sessionno = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + ddlSession.SelectedValue + "and COLLEGE_ID=" + College_id));
                     ViewState["Session"] = sessionno;
+=======
+                ddlSubjectType.Items.Clear();
+                ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
+                ddlSem.Items.Clear();
+                ddlSem.Items.Add(new ListItem("Please Select", "0"));
+                ddlSem.SelectedIndex = 0;
+                if (ddlSession.SelectedIndex > 0)
+                {
+                    int College_id = Convert.ToInt32(objCommon.LookUp("ACD_COURSE_TEACHER", "COLLEGE_ID", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
+                    ViewState["clg_id"] = College_id;
+                    int sessionno = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + ddlSession.SelectedValue + "and COLLEGE_ID=" + College_id));
+                    ViewState["Session"] = sessionno;
+
+                    objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) ", "DISTINCT CT.COURSENO", "C.CCODE+' - '+C.COURSE_NAME AS COURSE_NAME", "CT.SESSIONNO=" + sessionno, "CT.COURSENO");
+                    objCommon.FillDropDownList(ddlSection, "ACD_COURSE_TEACHER SR INNER JOIN ACD_SECTION SC ON SR.SECTIONNO = SC.SECTIONNO", "DISTINCT SR.SECTIONNO", "SC.SECTIONNAME", "(SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + "OR 0=" + 0 + ") AND (SR.SEMESTERNO =" + ddlSem.SelectedValue + "OR 0=" + 0 + ") AND SR.SESSIONNO =" + sessionno + " AND SR.SECTIONNO > 0 AND SR.COLLEGE_ID=" + College_id + "AND SR.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND ISNULL(SR.CANCEL,0)=0 ", "SC.SECTIONNAME");
+                    // txtFromDate.Text = string.Empty;
+                    // txtTodate.Text = string.Empty;
+                }
+                else
+                {
+                    ddlSem.SelectedIndex = 0;
+                    ddlSection.SelectedIndex = 0;
+                    ddlCourse.SelectedIndex = 0;
+                    ddlSubjectType.SelectedIndex = 0;
+                    ddlSubjectType.Items.Clear();
+                    ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
+                    ddlCourse.Items.Clear();
+                    ddlCourse.Items.Add(new ListItem("Please Select", "0"));
+                    ddlSection.Items.Clear();
+                    ddlSection.Items.Add(new ListItem("Please Select", "0"));
+                    ddlSem.Items.Clear();
+                    ddlSem.Items.Add(new ListItem("Please Select", "0"));
+                    txtFromDate.Text = string.Empty;
+                    txtTodate.Text = string.Empty;
+                }
+            }
+
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
 
                     objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO) ", "DISTINCT CT.COURSENO", "C.CCODE+' - '+C.COURSE_NAME AS COURSE_NAME", "CT.SESSIONNO=" + sessionno, "CT.COURSENO");
                     objCommon.FillDropDownList(ddlSection, "ACD_COURSE_TEACHER SR INNER JOIN ACD_SECTION SC ON SR.SECTIONNO = SC.SECTIONNO", "DISTINCT SR.SECTIONNO", "SC.SECTIONNAME", "(SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + "OR 0=" + 0 + ") AND (SR.SEMESTERNO =" + ddlSem.SelectedValue + "OR 0=" + 0 + ") AND SR.SESSIONNO =" + sessionno + " AND SR.SECTIONNO > 0 AND SR.COLLEGE_ID=" + College_id + "AND SR.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND ISNULL(SR.CANCEL,0)=0 ", "SC.SECTIONNAME");
@@ -325,9 +407,12 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
         {
             ddlSubjectType.SelectedIndex = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
             txtFromDate.Text = string.Empty;
             txtTodate.Text = string.Empty;
 =======
+=======
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
             ddlSubjectType.Items.Clear();
             ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
             if (ddlSession.SelectedIndex > 0)
@@ -359,6 +444,9 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                 txtFromDate.Text = string.Empty;
                 txtTodate.Text = string.Empty;
             }
+<<<<<<< HEAD
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
+=======
 >>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
             if (ddlSem.SelectedIndex > 0)
             {
@@ -370,6 +458,9 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                 int College_id = Convert.ToInt32(objCommon.LookUp("ACD_COURSE_TEACHER", "COLLEGE_ID", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
                 int sessionno = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "SESSIONID=" + ddlSession.SelectedValue + "and COLLEGE_ID=" + College_id));
 
+<<<<<<< HEAD
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
+=======
 >>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
                 objCommon.FillDropDownList(ddlCourse, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (C.COURSENO=CT.COURSENO)", "DISTINCT CT.COURSENO", "C.CCODE+' - '+C.COURSE_NAME AS COURSE_NAME", "CT.SESSIONNO=" + sessionno + " AND CT.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND CT.SEMESTERNO=" + ddlSem.SelectedValue + " AND ISNULL(CT.CANCEL,0)=0 AND ISNULL(C.GLOBALELE,0)=0 AND CT.UA_NO=" + Convert.ToInt32(Session["userno"]), "CT.COURSENO");
                 objCommon.FillDropDownList(ddlSection, "ACD_COURSE_TEACHER SR INNER JOIN ACD_SECTION SC ON SR.SECTIONNO = SC.SECTIONNO", "DISTINCT SR.SECTIONNO", "SC.SECTIONNAME", "SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND SR.SEMESTERNO =" + ddlSem.SelectedValue + " AND SR.SESSIONNO =" + sessionno + " AND SR.SECTIONNO > 0 AND SR.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND SR.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND ISNULL(SR.CANCEL,0)=0 ", "SC.SECTIONNAME");
@@ -379,9 +470,12 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
             {
                 ddlSubjectType.SelectedIndex = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
                 txtFromDate.Text = string.Empty;
                 txtTodate.Text = string.Empty;
 =======
+=======
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
                 if (ddlSession.SelectedIndex > 0)
                 {
                     int College_id = Convert.ToInt32(objCommon.LookUp("ACD_COURSE_TEACHER", "COLLEGE_ID", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString())));
@@ -412,6 +506,9 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                     ddlSem.Items.Add(new ListItem("Please Select", "0"));
                 }
 
+<<<<<<< HEAD
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
+=======
 >>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
             }
         }
@@ -423,8 +520,13 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
     protected void ddlSubjectType_SelectedIndexChanged(object sender, EventArgs e)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         txtFromDate.Text = string.Empty;
         txtTodate.Text = string.Empty;
+=======
+        //  txtFromDate.Text = string.Empty;
+        // txtTodate.Text = string.Empty;
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
 =======
         //  txtFromDate.Text = string.Empty;
         // txtTodate.Text = string.Empty;
@@ -434,6 +536,7 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
     {
         try
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             txtFromDate.Text = string.Empty;
             txtTodate.Text = string.Empty;
@@ -458,6 +561,19 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                 // txtFromDate.Text = string.Empty;
                 //  txtTodate.Text = string.Empty;
 >>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
+=======
+            //  txtFromDate.Text = string.Empty;
+            //  txtTodate.Text = string.Empty;
+            if (ddlCourse.SelectedIndex > 0)
+            {
+                objCommon.FillDropDownList(ddlSubjectType, "ACD_OFFERED_COURSE OC INNER JOIN ACD_COURSE C ON OC.COURSENO=C.COURSENO INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID)", "DISTINCT C.SUBID", "S.SUBNAME", "C.SUBID<>9 and (OC.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + "OR 0=" + 0 + ") AND ( OC.SEMESTERNO = " + ddlSem.SelectedValue + "OR 0=" + 0 + ")AND  OC.COURSENO=" + ddlCourse.SelectedValue, "C.SUBID");
+                objCommon.FillDropDownList(ddlBatch, "ACD_ATTENDANCE A INNER JOIN ACD_BATCH AB ON (A.BATCHNO=AB.BATCHNO)", "DISTINCT A.BATCHNO", "AB.BATCHNAME", "A.SESSIONNO=" + ViewState["Session"] + " AND A.COURSENO=" + ddlCourse.SelectedValue, "A.BATCHNO");
+            }
+            else
+            {
+                // txtFromDate.Text = string.Empty;
+                //  txtTodate.Text = string.Empty;
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
             }
         }
         catch
@@ -469,8 +585,13 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
     protected void ddlSection_SelectedIndexChanged(object sender, EventArgs e)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         txtFromDate.Text = string.Empty;
         txtTodate.Text = string.Empty;
+=======
+        // txtFromDate.Text = string.Empty;
+        // txtTodate.Text = string.Empty;
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
 =======
         // txtFromDate.Text = string.Empty;
         // txtTodate.Text = string.Empty;
@@ -550,6 +671,9 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                     //ds = objAttController.GetDayWiseData(Convert.ToInt32(sessionno), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtTodate.Text), CourseType, batch, ccode.ToString(), sem);
                    //////  Added by Vipul T on date 05-04-2023 as per Tno:- 56047
                      ds = GetDayWiseData(Convert.ToInt32(sessionno), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtTodate.Text), CourseType, batch, ccode.ToString(), sem);
+<<<<<<< HEAD
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
+=======
 >>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
                     if (ds.Tables[0].Rows.Count > 1)
                     {
@@ -635,8 +759,13 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
         try
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             txtFdate.Text = string.Empty;
             txtTdate.Text = string.Empty;
+=======
+            //  txtFdate.Text = string.Empty;
+            //   txtTdate.Text = string.Empty;
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
 =======
             //  txtFdate.Text = string.Empty;
             //   txtTdate.Text = string.Empty;
@@ -659,6 +788,9 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
 
 
 
+<<<<<<< HEAD
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
+=======
 >>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
             }
             else
@@ -678,8 +810,13 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
         try
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             txtFdate.Text=string.Empty;
             txtTdate.Text = string.Empty;
+=======
+            //  txtFdate.Text=string.Empty;
+            // txtTdate.Text = string.Empty;
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
 =======
             //  txtFdate.Text=string.Empty;
             // txtTdate.Text = string.Empty;
@@ -725,8 +862,13 @@ public partial class ACADEMIC_Attendance_register_report_faculty : System.Web.UI
                 int Section = 0;
                 int Subid = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
                 degree = objCommon.LookUp("ACD_SCHEME", "DBO.FN_DESC('DEGREENAME',DEGREENO)DEGREE", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
                 branch = objCommon.LookUp("ACD_SCHEME", "DBO.FN_DESC('BRANCHLNAME',BRANCHNO)BRANCH", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
+=======
+                //   degree = objCommon.LookUp("ACD_SCHEME", "DBO.FN_DESC('DEGREENAME',DEGREENO)DEGREE", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
+                //    branch = objCommon.LookUp("ACD_SCHEME", "DBO.FN_DESC('BRANCHLNAME',BRANCHNO)BRANCH", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
+>>>>>>> 140243b6 ([HOTFIX] [24042024] [Attendance Register Report])
 =======
                 //   degree = objCommon.LookUp("ACD_SCHEME", "DBO.FN_DESC('DEGREENAME',DEGREENO)DEGREE", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
                 //    branch = objCommon.LookUp("ACD_SCHEME", "DBO.FN_DESC('BRANCHLNAME',BRANCHNO)BRANCH", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
