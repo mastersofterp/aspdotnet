@@ -47,6 +47,8 @@ public class EmpNews
     public string Title { get; set; }
     public string NewsDescription { get; set; }
     public string NewsLink { get; set; }
+
+    public string Status { get; set; }
 }
 
 public class QuickAccessLinks
