@@ -193,6 +193,7 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
             //string tdate = Todate[1] + "/" + Todate[0] + "/" + Todate[2];
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ACADEMIC")));
+
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;

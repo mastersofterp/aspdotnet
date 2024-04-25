@@ -361,6 +361,7 @@
                                             <td>
                                                 <%# Eval("COURSENAME") %>
                                             </td>
+
                                             <td>
                                                 <%# Eval("TOTAL_LECTURE") %>
                                             </td>
