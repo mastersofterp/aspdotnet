@@ -127,6 +127,14 @@
                                                         </a>
                                                     </li>
 
+                                                     <li class="list-group-item"><b>
+                                                        <asp:Label ID="lblDYPaymentType" Text="Payment Type" runat="server" Font-Bold="true"></asp:Label>
+                                                        :</b>
+                                                        <a class="sub-label">
+                                                            <asp:Label ID="lblPaymentType" runat="server" Font-Bold="false"></asp:Label>
+                                                        </a>
+                                                    </li>
+
                                                 </ul>
                                             </div>
                                             <div class="col-lg-7 col-md-6 col-12">
@@ -161,6 +169,15 @@
                                                             <asp:Label ID="lblSemester" runat="server" Font-Bold="false"></asp:Label>
                                                         </a>
                                                     </li>
+
+                                                    <li class="list-group-item"><b>
+                                                        <asp:Label ID="lblDYddlScholarshiptype" runat="server" Text="Scholarship Applied"  Font-Bold="true"></asp:Label>
+                                                        :</b>
+                                                        <a class="sub-label">
+                                                            <asp:Label ID="lblScholershipApplied" runat="server" Font-Bold="false"></asp:Label>
+                                                        </a>
+                                                    </li>
+
                                                 </ul>
                                             </div>
                                             <%--<div class="col-lg-4 col-md-6 col-12">
@@ -260,8 +277,6 @@
                                                 </div>
                                                 <asp:Button ID="btnShowSchMode" runat="server" OnClick="btnShowSchMode_Click" Text="Calculate" CssClass="btn btn-primary" />
                                             </div>
-
-
                                         </div>
 
 
@@ -545,6 +560,17 @@
                                                 <asp:ListItem Value="2">Category</asp:ListItem>
                                                 <asp:ListItem Value="3">Payment Type</asp:ListItem>
                                                 <asp:ListItem Value="4">Student Name</asp:ListItem>		
+                                            </asp:DropDownList>                                       
+                                        </div>
+
+                                          <div class="form-group col-lg-3 col-md-6 col-12 " id="divddlPaymentType" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>Payment Type/Seat Type </label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlPaymenttype" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                                ValidationGroup="show" >
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>                                             	
                                             </asp:DropDownList>                                       
                                         </div>
 

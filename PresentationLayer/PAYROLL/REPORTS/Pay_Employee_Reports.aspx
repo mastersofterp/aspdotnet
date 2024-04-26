@@ -3,7 +3,8 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-
+     <asp:UpdatePanel runat="server" ID="UPDLedger">
+        <ContentTemplate>
     <asp:Panel ID="pnDisplay" runat="server">
 
 
@@ -179,7 +180,13 @@
 
 
     </asp:Panel>
+              </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnReport" />
+        </Triggers>
+    </asp:UpdatePanel>
     <div id="divMsg" runat="server">
     </div>
+
 </asp:Content>
 

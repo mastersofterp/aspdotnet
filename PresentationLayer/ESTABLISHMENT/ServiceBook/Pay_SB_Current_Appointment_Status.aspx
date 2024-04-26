@@ -47,7 +47,7 @@
                                                     </div>
                                                     <%--  <asp:TextBox ID="txtAppMode" runat="server" CssClass="form-control" TabIndex="2"
                                                         ToolTip="Enter Appointment Details " onkeypress="return CheckAlphabet(event,this);" MaxLength="120"></asp:TextBox>--%>
-                                                    <asp:DropDownList ID="ddlAppMode" runat="server" CssClass="form-control" TabIndex="1" ToolTip="Select Appointment Mode">
+                                                    <asp:DropDownList ID="ddlAppMode" runat="server" CssClass="form-control" TabIndex="1" ToolTip="Select Appointment Mode" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         <asp:ListItem Value="1">Advertise</asp:ListItem>
                                                         <asp:ListItem Value="2">Internet </asp:ListItem>
@@ -320,7 +320,7 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <label>Experience Type:</label>
-                                            <asp:DropDownList ID="ddlExpTyp" runat="server" CssClass="form-control" TabIndex="15" ToolTip="Enter Experience Type">
+                                            <asp:DropDownList ID="ddlExpTyp" runat="server" CssClass="form-control" TabIndex="15" ToolTip="Enter Experience Type" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                 <asp:ListItem Value="1">Industrial</asp:ListItem>
                                                 <asp:ListItem Value="2">Teaching </asp:ListItem>

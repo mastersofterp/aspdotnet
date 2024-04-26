@@ -119,14 +119,6 @@
                                                             <asp:Label ID="lblRollNo" runat="server" Font-Bold="true">Roll Number</asp:Label>
                                                         </div>
 
-
-
-
-
-
-
-
-
                                                         <div class="switch form-inline">
                                                             <input type="checkbox" id="rdRollNo" name="rdRollNo" onclick="return SetStat(this);" />
                                                             <label data-on="Yes" class="newAddNew Tab" tabindex="2" data-off="No" for="rdRollNo"></label>
@@ -331,6 +323,16 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label38" runat="server" Font-Bold="true">Admission Link</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:TextBox ID="txtlink" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+
                                                     <%-- New code added by -Gopal M 02102023--%>
 
                                                     <div class="col-12">
@@ -360,7 +362,6 @@
                                                             <%-- <input type="text" id="txtOutstandingMessage" class="form-control" placeholder="Enter Outstanding Message"  />--%>
                                                         </div>
                                                     </div>
-
 
                                                     <div class="col-12">
                                                         <div class="sub-heading">
@@ -624,7 +625,7 @@
                                                             <label data-on="Yes" tabindex="22" data-off="No" for="chkhosteltypeop"></label>
                                                         </div>
                                                     </div>
-                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
                                                             <asp:Label ID="lblpartialpayment" runat="server" Font-Bold="true"> Yes, If Allow to Activate Partial Payment for Student</asp:Label>
@@ -635,16 +636,43 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-lg-4 col-md-3 col-12" id="DivMinamount" style="visibility:hidden" runat="server">
-                                                        <div class="form-group col-md-12">
-                                                           <%-- <sup>*</sup>--%>
-                                                            <label><span style="color: red;">*</span>Minimum Amount Configuration for Partial Payment</Label>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12" id="DivMinamount" style="visibility: hidden" runat="server">
+                                                        <%-- <div class="form-group col-md-12">--%>
+                                                        <div class="label-dynamic">
+                                                            <%--<sup>*</sup>--%>
+                                                            <label><span style="color: red;">*</span>Minimum Amount Configuration for Partial Payment</label>
+                                                        </div>
+
+                                                        <%-- <sup>*</sup>--%>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
                                                             <asp:TextBox ID="txtMinAmount" runat="server" CssClass="form-control" TabIndex="3" ToolTip="Please Enter Minimum Amount for Partial Payment Configuration"
-                                                            MaxLength="10" AutoComplete="true" onkeyup="validateAmount()" />
-                                                         <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtMinAmount" ValidChars="1234567890." />
-                                                        </div>                                                      
-                                                       
-                                              
+                                                                MaxLength="10" AutoComplete="true" onkeyup="validateAmount()" />
+                                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtMinAmount" ValidChars="1234567890." />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblOnlinePaymentApplicableFees" runat="server" Font-Bold="true">Yes,If Allow to Display Applicable Fees on Online Payment Page.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="switch form-inline">
+                                                                <input type="checkbox" id="chkOnlinePaymentApplicableFees" name="chkOnlinePaymentApplicableFees" />
+                                                                <label data-on="Yes" data-off="No" for="chkOnlinePaymentApplicableFees"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label37" runat="server" Font-Bold="true">Yes if Allow to show Single Online Fee Receipt to User</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chksinglFeeReceipt" name="chksinglFeeReceipt" />
+                                                            <label data-on="Yes" tabindex="8" data-off="No" for="chksinglFeeReceipt"></label>
+                                                        </div>
                                                     </div>
 
                                                     <div class="col-12">
@@ -706,7 +734,6 @@
                                                             <asp:ListBox ID="ddlAttendanceuser" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
 
                                                         </div>
-
 
                                                     </div>
                                                     <div class="form-group col-lg-6 col-md-6 col-12">
@@ -838,7 +865,7 @@
                                                     </div>
 
                                                     <%-- Added By Vipul Tichakule on date 24-01-2024 --%>
-                                                     <div class="col-12">
+                                                    <div class="col-12">
                                                         <div class="sub-heading">
                                                             <h5>Related to Android </h5>
                                                         </div>
@@ -849,16 +876,17 @@
                                                             <asp:Label ID="lblMarkingAttenstudisp" runat="server" Font-Bold="true">Marking Attendance Student Display/Sort Option.</asp:Label>
                                                         </div>
                                                         <div class="form-group col-lg-6 col-md-6 col-12">
-                                                            <asp:DropDownList ID="ddlMarkingAttendance" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">                       
+                                                            <asp:DropDownList ID="ddlMarkingAttendance" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <asp:ListItem Value="1">Registration No.</asp:ListItem>
                                                                 <asp:ListItem Value="2">Roll No.</asp:ListItem>
                                                                 <asp:ListItem Value="3">Enrollment No.</asp:ListItem>
-                                                            </asp:DropDownList>                                                          
+                                                            </asp:DropDownList>
                                                         </div>
-                                                    </div>   <%-- end--%>
+                                                    </div>
+                                                    <%-- end--%>
                                                     <%-- Added By Jay Takalkhed on date 17-02-2024 --%>
-                                                     <div class="col-12">
+                                                    <div class="col-12">
                                                         <div class="sub-heading">
                                                             <h5>Receipt Send on Parent/Student Email</h5>
                                                         </div>
@@ -869,15 +897,16 @@
                                                             <asp:Label ID="lblSendParentsEmail" runat="server" Font-Bold="true">Fees Receipt to be send on Parent/Student Email</asp:Label>
                                                         </div>
                                                         <div class="form-group col-lg-6 col-md-6 col-12">
-                                                            <asp:DropDownList ID="ddlSendParentsEmail" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">                       
+                                                            <asp:DropDownList ID="ddlSendParentsEmail" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <asp:ListItem Value="1">None </asp:ListItem>
                                                                 <asp:ListItem Value="2">Student</asp:ListItem>
                                                                 <asp:ListItem Value="3">Parent</asp:ListItem>
                                                                 <asp:ListItem Value="4">Both (Parent and Student)</asp:ListItem>
-                                                            </asp:DropDownList>                                                          
+                                                            </asp:DropDownList>
                                                         </div>
-                                                    </div>   <%-- end--%>
+                                                    </div>
+                                                    <%-- end--%>
 
                                                     <div class="col-12">
                                                         <div class="sub-heading">
@@ -896,6 +925,62 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <%-- Added By Vaishnavi Belekar on date 01-04-2024 --%>
+                                                    <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to Late Fine Defined On Percent</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblLateFine" runat="server" Font-Bold="true">Yes, Is Late Fine Defined on Percent </asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="switch form-inline">
+                                                                <input type="checkbox" id="chkLateFineDefinedOnPercentage" name="chkLateFineDefinedOnPercentage" />
+                                                                <label data-on="Yes" data-off="No" for="chkLateFineDefinedOnPercentage"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to No Dues </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblNoduesCount" runat="server" Font-Bold="true">For NoDues Approval Count.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:DropDownList ID="ddlNoduesCount" runat="server" CssClass="form-control" data-select2-enable="true" AutoPostBack="false">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">1</asp:ListItem>
+                                                                <asp:ListItem Value="2">2</asp:ListItem>
+                                                                <asp:ListItem Value="3">3</asp:ListItem>
+                                                                <asp:ListItem Value="4">4</asp:ListItem>
+                                                                <asp:ListItem Value="5">5</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblNoduesFlow" runat="server" Font-Bold="true">For NoDues Approval Flow .</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:DropDownList ID="ddlNoduesFlow" runat="server" CssClass="form-control" data-select2-enable="true" AutoPostBack="false">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Sequence</asp:ListItem>
+                                                                <asp:ListItem Value="2">Random</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" OnClientClick="return validate();" TabIndex="6" Text="Submit"
@@ -906,9 +991,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <%-- <div class="tab-pane" id="tab_2" style="visibility:hidden;">
-                                        Faculty
-                                    </div>--%>
                                     <div class="tab-pane" id="tab_3">
                                         <div class="col-12">
                                             <div id="demo-grid">
@@ -916,58 +998,41 @@
                                                     <h5>Student Configuration</h5>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <label>Page Name </label>
+                                                <div class="row">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <span style="color: red;">* </span>
+                                                            <label>Page Name </label>
+                                                        </div>
+                                                        <select id="ddlPageName" class="form-control" data-select2-enable="true" tabindex="3" name="ddlPageName" onchange="handleDropDownChange();">
+                                                        </select>
                                                     </div>
-                                                    <asp:UpdatePanel ID="updStudentC" runat="server">
-                                                        <ContentTemplate>
-                                                            <asp:DropDownList ID="ddlPageName" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false" onchange="handleDropDownChange();">
-                                                                <%--                                                            <asp:DropDownList ID="ddlPageName" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="true" OnSelectedIndexChanged="ddlPageName_SelectedIndexChanged">--%>
-                                                                <asp:ListItem Value="0">Add Student</asp:ListItem>
-                                                                <asp:ListItem Value="1">Personal Details</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                        </ContentTemplate>
-                                                        <Triggers>
-                                                            <asp:AsyncPostBackTrigger ControlID="ddlPageName" EventName="SelectedIndexChanged" />
-                                                        </Triggers>
-                                                    </asp:UpdatePanel>
-                                                </div>
+                                                    <div id="section" class="form-group col-lg-3 col-md-6 col-12 d-none ">
+                                                        <div class="label-dynamic">
+                                                            <span style="color: red;">* </span>
+                                                            <label>Section</label>
+                                                        </div>
+                                                        <select id="ddlsection" class="form-control" data-select2-enable="true" tabindex="3" name="ddlsection" onchange="handleDropDownChange1();">
+                                                        </select>
+                                                    </div>
+                                                    <div id="Chksection" class="form-group col-lg-3 col-md-6 col-12 d-none">
+                                                        <label>Active</label>
 
-                                                <div id="divStudentConfig" class="mt-3">
+                                                        <div class='switch form-inline'>
+                                                            <input type='checkbox' id='Chkdisplay_section' name='switch' onclick='return SetSectionCheckbox(this);' onchange="ddlpagedisplay(this);" />
+                                                            <label data-on='Yes' class='newAddNew Tab' data-off='No' for='Chkdisplay_section'></label>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <%-- <table class="table table-striped table-bordered nowrap display" id="StudentConfig">
-                                                    <thead>
-                                                        <tr>
-                                                            <th hidden>STUDCONFIG_ID
-                                                            </th>
-                                                            <th>Caption Name
-                                                            </th>
-                                                            <th>Field Name
-                                                            </th>
-                                                            <th style="text-align:center">Is    Active
-                                                            </th>
-                                                            <th>Is Mandatory
-                                                            </th>
-                                                            <th hidden>Organization ID
-                                                            </th>
-                                                            <th hidden>Page No
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>--%>
+                                                <div id="divStudentConfig" class="mt-3 d-none">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 btn-footer">
+                                                <input type="button" value="Submit" id="btnStudentSubmit" class="btn btn-primary" runat="server" />
+                                                <input type="button" value="Reset" id="btnReset" class="btn btn-warning" />
                                             </div>
                                         </div>
-                                        <div class="col-12 btn-footer">
-                                            <input type="button" value="Submit" id="btnStudentSubmit" class="btn btn-primary" runat="server" />
-                                            <input type="button" value="Reset" id="btnReset" class="btn btn-warning" />
-                                        </div>
-
                                     </div>
-
-
 
                                     <div class="tab-pane" id="tab_4">
                                         <div class="box-body">
@@ -979,15 +1044,6 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-lg-6 col-md-6 col-12">
-                                                        <%-- <div class="form-group col-md-12">
-                                                            <asp:CheckBox ID="chkSelectCollege" runat="server" TextAlign="Left" OnCheckedChanged="ShowCollege(this)" /> <%-- OnCheckedChanged="ShowCollege(this);" />
-                                                              <input type="checkbox" id="Checkbox1" name="rdRegSame" onclick="return SetStat(this);" />
-                                                            <label data-on="Yes" class="newAddNew Tab" tabindex="4" data-off="No" for="rdRegSame"></label>
-                                                            <label>
-                                                                Select to Configure on College Level
-                                                            </label>
-                                                        </div>--%>
-
                                                         <div class="label-dynamic">
                                                             <asp:Label ID="Label8" runat="server" Font-Bold="true">Do you want to Configure on College Level</asp:Label>
                                                         </div>
@@ -1383,7 +1439,7 @@
                         </div>
                     </div>
                 </div>
-                <asp:HiddenField ID="TabName" runat="server" />
+            <asp:HiddenField ID="TabName" runat="server" />
                 <asp:HiddenField ID="hfdregno" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfRollNo" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfenroll" runat="server" ClientIDMode="Static" />
@@ -1431,6 +1487,9 @@
                 <asp:HiddenField ID="hftxtFeeReceiptCopies" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfchkScholarshipConAdj" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hdnAddNoteFeedback" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchkLateFineDefinedOnPercentage" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchkOnlinePaymentApplicableFees" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchksinglFeeReceipt" runat="server" ClientIDMode="Static" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -1438,7 +1497,6 @@
             <asp:PostBackTrigger ControlID="ddlCollege" />
             <asp:PostBackTrigger ControlID="btnCourseExamReg" />
             <%--<asp:PostBackTrigger ControlID="txtMinAmount" />--%>
-
         </Triggers>
     </asp:UpdatePanel>
 
@@ -1484,66 +1542,85 @@
     </div>
 
     <script type="text/javascript">
-        $("#ctl00_ContentPlaceHolder1_btnStudentSubmit").click(function(){
-            //function submit(){
-            debugger;
-            var arrItems = [];
-            $('#StudentConfig').find('tr').each(function () {
-                var objArray= {};
-                var row = $(this);
-                var _studconfig_id,_caption_name,_field_name,_isactive,_ismandatory,_organization_id,_page_no,_page_name;
+        $("#ctl00_ContentPlaceHolder1_btnStudentSubmit").click(function()
+        {
+           
+            if(pagenamevalid() == true)
+            {
+                var arrItems = [];
+                $('#StudentConfig').find('tr').each(function () 
+                {
+                    
+                    var objArray= {};
+                    var row = $(this);
 
-                _studconfig_id = row.find('td').eq(0).text();
-                _caption_name = row.find('td').eq(1).text();
-                _field_name = row.find('td').eq(2).text();
-                _isactive = row.find("#rdISACTIVE" + row.find('td').eq(0).text()).is(":checked")
-                _ismandatory = row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
-                _organization_id = row.find('td').eq(4).text();
-                _page_no = row.find('td').eq(5).text();
-                _page_name = row.find('td').eq(6).text();
+                    var _studconfig_id,_caption_name,_field_name,_isactive,_ismandatory,_iseditable,_organization_id,_page_no,_page_name,_displaysection;
 
-                if (_studconfig_id != '') {
-                    objArray["studconfig_id"] = _studconfig_id;
-                    objArray["caption_name"] = _caption_name;
-                    objArray["isactive"] = _isactive;
-                    objArray["ismandatory"] = _ismandatory;
-                    objArray["organization_id"] = _organization_id;
-                    objArray["page_no"] = _page_no;
-                    objArray["pagename"] = _page_name;
-                    //var item =  row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
-                    arrItems.push(objArray);
-                }
-            });
-            SaveUpdateStudentConfig(arrItems);
-            //}
+                    _studconfig_id = row.find('td').eq(0).text();
+                    _caption_name = row.find('td').eq(1).text();
+                    _field_name = row.find('td').eq(2).text();
+                    _isactive = row.find("#rdISACTIVE" + row.find('td').eq(0).text()).is(":checked")
+                    _ismandatory = row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
+                    _iseditable = row.find("#rdISEDITABLE" + row.find('td').eq(0).text()).is(":checked")
+                    _organization_id = row.find('td').eq(5).text();
+                    _page_no = row.find('td').eq(6).text();
+                    _page_name = row.find('td').eq(7).text();
+                
+
+                    if(document.getElementById('Chkdisplay_section').checked) 
+                    {
+                        _displaysection = true;
+                    } 
+                    else 
+                    {
+                        _displaysection = false;
+                    }
+                    if (_studconfig_id != '') 
+                    {
+                        objArray["studconfig_id"] = _studconfig_id;
+                        objArray["caption_name"] = _caption_name;
+                        objArray["isactive"] = _isactive;
+                        objArray["ismandatory"] = _ismandatory;
+                        objArray["iseditable"] = _iseditable;
+                        objArray["organization_id"] = _organization_id;
+                        objArray["page_no"] = _page_no;
+                        objArray["pagename"] = _page_name;
+                        objArray["displaysection"] = _displaysection;
+                        arrItems.push(objArray);
+                    }
+                });
+                SaveUpdateStudentConfig(arrItems);
+            }
         });
 
         function SaveUpdateStudentConfig(_studentConfig)
         {
-            debugger;
-            var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
-            //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
+           
+            var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) + '}';
+
             $.ajax({
                 type: "POST",
                 url: '<%= ResolveUrl("ModuleConfig.aspx/SaveUpdateStudentconfig") %>',
                 data: JData,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (data) {
-                    debugger;
+                success: function (data) 
+                {
                     var Jdata = data.d;
                     alert(Jdata);
                 },
-                failure: function (response) {
+                failure: function (response)
+                {
                     alert("failure");
                 },
-                error: function (response) {
-                    //debugger
+                error: function (response)
+                {
                     alert("error");
                     alert(response.responseText);
                 }
             });
         }
+
     </script>
     <script type="text/javascript">
         $(function () {
@@ -2179,7 +2256,7 @@
         }
 
         function ShowPartAmount(){
-            debugger;
+        
             //if ($('#ctl00_ContentPlaceHolder1_chkSelectCollege').is(":checked"))
             if ($('#chkpartialPayment').is(":checked"))
             {
@@ -2228,40 +2305,67 @@
         }); 
     </script>
     <script>
-        $(document).ready(function () {
+        function ddlpagedisplay(Chksection)  
+        {
+            if (Chksection.checked)
+            {
+                $('#divStudentConfig').removeClass('d-none');
+            } else {
+                $('#divStudentConfig').addClass('d-none');
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function ()
+        {
+            getpagename();
+        })
+
+        function getpagename()
+        {
+    
+            $("#ddlPageName").empty(); 
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("ModuleConfig.aspx/Getpagename") %>',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data)
+                {        
+                    var Jdata = JSON.parse(data.d);
+                    $("#ddlPageName").append($("<option></option>").val(0).html('Please Select'));
+                    $.each(Jdata, function (key, value) 
+                    {
+                        if(value.DISPLAYPAGENAME!=null)
+                        {
+                            $("#ddlPageName").append($("<option></option>").val(value.ORGANIZATION_ID).html(value.DISPLAYPAGENAME));
+                        }
+                    });
+                },
+                error: function (xhr, status, error)
+                {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function ()
+        {
             var sessionvalue = "<%=Session["OrgId"]%>";
             BindStudentconfig(sessionvalue,"","AddressDetails.aspx");
         });
         function BindStudentconfig(OrgID_,PageNo_,PageName_)
         {
-            debugger;
-            //var OrgID_="";
-            //var PageNo_="";
-            //var PageName_="";
-
-            //if(name=="a")
-            //{
-            //    OrgID_=2;
-            //    PageNo_="73";
-            //    PageName_="NULL";
-            //}
-            //else if(name=="p")
-            //{
-            //    OrgID_=2;
-            //    PageNo_="";
-            //    PageName_="PersonalDetails.aspx";
-            //}
-          
-            debugger;
             $.ajax({
                 type: "POST",
-
                 url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',               
-                data: JSON.stringify({ OrgID:OrgID_, PageNo:PageNo_, PageName:PageName_}),
+                data: JSON.stringify({ OrgID:OrgID_, PageNo:PageNo_, PageName:PageName_,SectionName:""}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (data) {
-                    debugger;
+                success: function (data) 
+                {
                     var Jdata = JSON.parse(data.d);                  
                     var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>" ;
                     htmlpage += "<thead class='bg-light-blue'><tr>";
@@ -2269,59 +2373,72 @@
                     htmlpage += "<th>Caption Name</th>";
                     htmlpage += "<th>Is Active</th>";
                     htmlpage += "<th>Is Mandatory</th>";
+                    htmlpage += "<th>Is Editable</th>";
                     htmlpage += "<th hidden>Organization ID</th>";
                     htmlpage += "<th hidden>Page No</th>";
                     htmlpage += "<th hidden>Page Name</th>";
                     htmlpage += "</tr></thead><tbody>";
-                        
-                   
-                    var output = Jdata.map(i =>
-                    "<tr>"+
-                    "<td hidden>" + i.STUDCONFIG_ID +  "</td>" +
-                    "<td>" + i.CAPTION_NAME + "</td>" + 
-                    "<td class='text-center; vertical-align:middle'><div class='switch form-inline'>" +
-                    "<input type='checkbox' id='rdISACTIVE"+ i.STUDCONFIG_ID +"' name='switch' onclick='return SetStudent("+ i.STUDCONFIG_ID +");' "+ i.ISACTIVE +"/>" +
-                    "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISACTIVE"+ i.STUDCONFIG_ID +"' ></label></td>"+
-                    "<td><div class='switch form-inline'>" +
-                    "<input type='checkbox' id='rdISMANDATORY"+ i.STUDCONFIG_ID +"' name='switch' onclick='return SetStudentCheckbox(this);' "+ i.ISMANDATORY +"/>" +
-                    "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISMANDATORY"+ i.STUDCONFIG_ID +"' ></label></td>"+
-                    "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>"+
-                    "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>"+
-                    "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>");
-                    debugger;
-                     
-                    for (var i = 0; i < output.length; i++) {
-                        htmlpage =  htmlpage + output[i];
                        
-                    }
-                    debugger;
-                    htmlpage = (htmlpage + '</tbody></table>');
-
-                    //$("#StudentConfig").html(output);
-                    $('#divStudentConfig').html('');
-                    $('#divStudentConfig').append(htmlpage);
-                    debugger;
-                    for (var i = 0; i < Jdata.length; i++) {
-                        if (Jdata[i].ISMANDATORY != 'checked' && Jdata[i].ISACTIVE != 'checked' ) {
-                            $('#rdISMANDATORY' + Jdata[i].STUDCONFIG_ID).prop('checked', false);
-                            $("#rdISMANDATORY" + Jdata[i].STUDCONFIG_ID).attr("disabled", true);
+                    var output = Jdata.map(function (i) 
+                    {
+                        var IS_EDITABLE="";
+                        if(i.ISACTIVE==true)
+                        {
+                            IS_EDITABLE="checked";
                         }
-                    }
+                        "<tr>"+
+                        "<td hidden>" + i.STUDCONFIG_ID +  "</td>" +
+                        "<td>" + i.CAPTION_NAME + "</td>" + 
+                        "<td class='text-center; vertical-align:middle'><div class='switch form-inline'>" +
+                        "<input type='checkbox' id='rdISACTIVE"+ i.STUDCONFIG_ID +"' name='switch' onclick='return SetStudent("+ i.STUDCONFIG_ID +");' "+ i.ISACTIVE +"/>" +
+                        "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISACTIVE"+ i.STUDCONFIG_ID +"' ></label></td>"+
+                        "<td><div class='switch form-inline'>" +
+                        "<input type='checkbox' id='rdISMANDATORY"+ i.STUDCONFIG_ID +"' name='switch' onclick='return SetStudentCheckbox(this);' "+ i.ISMANDATORY +"/>" +
+                        "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISMANDATORY"+ i.STUDCONFIG_ID +"' ></label></td>"+
+                        "<td><div class='switch form-inline'>" +
+                        "<input type='checkbox' id='rdEDITABLE"+ i.STUDCONFIG_ID +"' name='switch' onclick='return SetStudentCheckbox(this);' "+ IS_EDITABLE +"/>" +
+                        "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdEDITABLE"+ i.STUDCONFIG_ID +"' ></label></td>"+
+                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>"+
+                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>"+
+                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>");
+                   
+                     
+                        for (var i = 0; i < output.length; i++) 
+                        {
+                            htmlpage =  htmlpage + output[i];
+                       
+                        }
+                    
+                        htmlpage = (htmlpage + '</tbody></table>');
 
-                },
-                failure: function (response) {
+                        $('#divStudentConfig').html('');
+                        $('#divStudentConfig').append(htmlpage);
+                 
+                        for (var i = 0; i < Jdata.length; i++)
+                        {
+                            if (Jdata[i].ISMANDATORY != 'checked' && Jdata[i].ISACTIVE != 'checked' ) 
+                            {
+                                $('#rdISMANDATORY' + Jdata[i].STUDCONFIG_ID).prop('checked', false);
+                                $("#rdISMANDATORY" + Jdata[i].STUDCONFIG_ID).attr("disabled", true);
+                            }
+                        }    
+                    }
+                    },
+                failure: function (response) 
+                {
                     alert("failure");
                 },
                 error: function (response) {
-                    //debugger
+                  
                     alert("error");
                     alert(response.responseText);
                 }
             });
         }
         function SetStudent(val) {
-            //var chk = val.id;
-            if ($('#rdISACTIVE' + val)[0].checked == false) {
+            
+            if ($('#rdISACTIVE' + val)[0].checked == false) 
+            {
                 $('#rdISMANDATORY' + val).prop('checked', false);
                 $("#rdISMANDATORY" + val).attr("disabled", true);
             }
@@ -2332,14 +2449,21 @@
             }
            
         }
-        function SetStudentCheckbox(val) {
+        function SetStudentCheckbox(val)
+        {
             var chk = val.id;
             
         }
-        $('#btnReset').click(function(){
-            BindStudentconfig(OrgID_,PageNo_,PageName_);
+    </script>
+    <script>
+        document.getElementById("btnReset").addEventListener("click", function () 
+        {
+            $('#section').addClass('d-none');
+            $('#Chksection').addClass('d-none');
+            $('#divStudentConfig').addClass('d-none');
+            $('#Chkdisplay_section').prop('checked', false); 
+            getpagename();
         });
-
     </script>
 
     <script>     
@@ -2487,6 +2611,23 @@
         function newAddNoteFeedback(val) {
             $('[id*=chkAddNoteFeedback]').prop('checked', val);
         }
+
+        function Latefinedefined(val)
+        {
+            $('[id*=chkLateFineDefinedOnPercentage]').prop('checked', val);       
+        }
+
+        function OnlinePaymentApplicableFees(val)
+        {
+            $('[id*=chkOnlinePaymentApplicableFees]').prop('checked', val);       
+        }
+
+        function SinglFeeReceipt(val)
+        {
+            $('[id*=chksinglFeeReceipt]').prop('checked', val);       
+        }
+
+
        
         function validate() {
             $('#hfchknewstudentemail').val($('#chknewstudentemail').prop('checked'));
@@ -2528,6 +2669,9 @@
             $('#hfchkFeeHeadGroup').val($('#chkFessHeadGroup').prop('checked'));
             $('#hfchkScholarshipConAdj').val($('#chkScholarshipConAdj').prop('checked'));
             $('#hdnAddNoteFeedback').val($('#chkAddNoteFeedback').prop('checked'));
+            $('#hfchkLateFineDefinedOnPercentage').val($('#chkLateFineDefinedOnPercentage').prop('checked'));
+            $('#hfchkOnlinePaymentApplicableFees').val($('#chkOnlinePaymentApplicableFees').prop('checked'));
+            $('#hfchksinglFeeReceipt').val($('#chksinglFeeReceipt').prop('checked'));
             var numCopies =document.getElementById("<%=txtFeeReceiptCopies.ClientID %>").value;
             if(numCopies > 3 || numCopies == 0)
             {
@@ -2648,9 +2792,7 @@
 
     <script type="text/javascript">
         function handleDropDownChange() {
-            debugger;
-            var selectedText = document.getElementById('<%= ddlPageName.ClientID %>').options[document.getElementById('<%= ddlPageName.ClientID %>').selectedIndex].text.trim();
-
+            var selectedText = document.getElementById(ddlPageName).options[document.getElementById(ddlPageName).selectedIndex].text.trim();
             var orgID = '<%= Session["OrgId"] %>';
             var pageNo = "";
             var pageName = "";
@@ -2684,7 +2826,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    debugger;
+                  
                     var Jdata = JSON.parse(data.d);
 
                     var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>";
@@ -2745,6 +2887,242 @@
         }
     </script>
 
+    <input type="hidden" id="Hidden1" value="<%= Session["OrgId"] %>" />
+
+    <script type="text/javascript">
+        var pageName = "";
+        function handleDropDownChange() 
+        {    
+           
+            var selectElement = document.getElementById("ddlPageName");
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var selectedText = selectedOption.text;
+            var selectedvalue= $('#ddlPageName').val();
+
+            if(selectedvalue==0)
+            {
+                $('#section').addClass('d-none');
+                $('#Chksection').addClass('d-none');
+                $('#divStudentConfig').addClass('d-none'); 
+                $('#Chkdisplay_section').prop('checked', false);
+
+            }
+            else{
+
+                var orgID = '<%= Session["OrgId"] %>';
+                var pageNo = "";
+
+                if (selectedText === "New Student") 
+                {
+                    pageNo = "73";
+                } 
+                else if (selectedText === "Personal Details") 
+                {
+                    pageName = "PersonalDetails.aspx";
+                }
+                else if(selectedText === "Admission Details")
+                {
+                    pageName = "AdmissionDetails.aspx";
+                }
+                else if(selectedText === "Address Details")
+                {
+                    pageName = "AddressDetails.aspx";
+                }
+                else if(selectedText === "Qualification Details")
+                {
+                    pageName = "QualificationDetails.aspx";
+                }
+                else if(selectedText === "Other Information")
+                {
+                    pageName = "OtherInformation.aspx";
+                }
+
+                getsection(pageName);
+            }
+            $('#Tabs a[href="#' + tabName + '"]').tab('show');
+            $("#Tabs a").click(function () {
+                $("[id*=-]").val($(this).attr("href").replace("#", ""));
+            
+            });
+        }
+
+        function handleDropDownChange1() 
+        {
+           
+            var selectedvalue= $('#ddlsection').val();
+            if(selectedvalue==0)
+            {   
+                $('#Chkdisplay_section').prop('checked', false); 
+                $('#divStudentConfig').addClass('d-none');
+                $('#Chksection').addClass('d-none');
+            }
+            else
+            {
+                var orgID = '<%= Session["OrgId"] %>';
+                var pageNo = "";
+                var pagename = '<%= Session["PageName"] %>';
+                var sectionName =  $("#ddlsection option:selected").text();
+                $('#Chksection').removeClass('d-none');
+                BindStudnetConfiguration(orgID,pageNo,pageName,sectionName)
+            }
+        }
+
+        function BindStudnetConfiguration(orgID,pageNo,pageName,sectionName)
+        {
+            $.ajax({
+                
+                type: "POST",
+                url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',
+                data: JSON.stringify({ OrgID: orgID, PageNo: pageNo, PageName: pageName ,SectionName: sectionName}),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data)
+                {
+                    
+                    var Jdata = JSON.parse(data.d);
+                    if(Jdata!="")
+                    {
+                        if(Jdata[0].IS_DISPLAY_SECTION_NAME ==true )
+                        {
+                            $('#Chkdisplay_section').prop('checked', true); 
+                            $('#divStudentConfig').removeClass('d-none');
+                        }
+                        else
+                        {
+                            if(Jdata[0].SECTIONNAME==null)
+                            {
+                                $('#divStudentConfig').removeClass('d-none');
+                            }
+                            else
+                            {
+                                $('#Chkdisplay_section').prop('checked', false); 
+                                $('#divStudentConfig').addClass('d-none');
+                            }
+                        }
+                        var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>";
+                        htmlpage += "<thead class='bg-light-blue'><tr>";
+                        htmlpage += "<th hidden>STUDCONFIG_ID</th>";
+                        htmlpage += "<th>Caption Name</th>";
+                        htmlpage += "<th>Is Active</th>";
+                        htmlpage += "<th>Is Mandatory</th>";
+                        htmlpage += "<th>Is Editable</th>";
+                        htmlpage += "<th hidden>Organization ID</th>";
+                        htmlpage += "<th hidden>Page No</th>";
+                        htmlpage += "<th hidden>Page Name</th>";
+                        htmlpage += "</tr></thead><tbody>";
+                   
+                        var output = Jdata.map(function (i)
+                        {
+                       
+                            var IS_EDITABLE="";
+                            if(i.IS_EDITABLE==true)
+                            {
+                                IS_EDITABLE="checked";
+                           
+                            }
+
+                            return "<tr>" +
+                                "<td hidden>" + i.STUDCONFIG_ID + "</td>" +
+                                "<td>" + i.CAPTION_NAME + "</td>" +
+                                "<td class='text-center; vertical-align:middle'><div class='switch form-inline'>" +
+                                "<input type='checkbox' id='rdISACTIVE" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudent(" + i.STUDCONFIG_ID + ");' " + i.ISACTIVE + "/>" +
+                                "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISACTIVE" + i.STUDCONFIG_ID + "' ></label></td>" +
+                                "<td><div class='switch form-inline'>" +
+                                "<input type='checkbox' id='rdISMANDATORY" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudentCheckbox(this);' " + i.ISMANDATORY + "/>" +
+                                "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISMANDATORY" + i.STUDCONFIG_ID + "' ></label></td>" +
+                                 "<td><div class='switch form-inline'>" +
+                            "<input type='checkbox' id='rdISEDITABLE" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudentCheckbox(this);' " + IS_EDITABLE + "/>" +
+                                "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISEDITABLE" + i.STUDCONFIG_ID + "' ></label></td>" +
+                                "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>" +                                        
+                                "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>" +
+                                "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>";
+                        });
+                        for (var i = 0; i < output.length; i++) 
+                        {
+                            htmlpage += output[i];
+                        }
+
+                        htmlpage += '</tbody></table>';
+
+                        $('#divStudentConfig').html('');
+                        $('#divStudentConfig').append(htmlpage);
+
+                        for (var i = 0; i < Jdata.length; i++) 
+                        {
+                            if (Jdata[i].ISMANDATORY !== 'checked' && Jdata[i].ISACTIVE !== 'checked') 
+                            {
+                                $('#rdISMANDATORY' + Jdata[i].STUDCONFIG_ID).prop('checked', false);
+                                $("#rdISMANDATORY" + Jdata[i].STUDCONFIG_ID).attr("disabled", true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $('#Chkdisplay_section').prop('checked', false); 
+                        $('#divStudentConfig').addClass('d-none');
+                    }
+
+                },
+                failure: function (response)
+                {
+                    alert("failure");
+                },
+                error: function (response)
+                {
+                    alert("error");
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function getsection(pageName) 
+        {
+            $("#ddlsection").empty(); 
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("ModuleConfig.aspx/Getsection") %>',
+                data: JSON.stringify({ PageName: pageName }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data)
+                {       
+                    var Jdata = JSON.parse(data.d);
+                    if(Jdata!="")
+                    {
+                        $("#ddlsection").append($("<option></option>").val(0).html('Please Select'));
+                        $.each(Jdata, function (key, value)
+                        {
+                            if(value.SECTIONNAME!=null)
+                            {
+                                $("#ddlsection").append($("<option></option>").val(value.ORGANIZATION_ID).html(value.SECTIONNAME));
+                            }
+                        });
+                        $('#section').removeClass('d-none');
+                        $('#divStudentConfig').addClass('d-none');
+                        sessionStorage.setItem('session', '1');                    
+                    }
+                    else
+                    {
+                    
+                        var orgID = '<%= Session["OrgId"] %>';
+                        var pagename = '<%= Session["PageName"] %>';
+                        BindStudnetConfiguration(orgID,"",pageName,"")
+                        $('#section').addClass('d-none');
+                        $('#Chksection').addClass('d-none');
+                        $('#divStudentConfig').removeClass('d-none');          
+                        sessionStorage.setItem('session', '0');
+                    }
+                  
+                },
+                error: function (xhr, status, error) 
+                {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    </script>
+
     <script>
 
         function getactivestatus() {
@@ -2773,7 +3151,7 @@
         }
 
     </script>
-<%--    <script>
+    <%--    <script>
         function validateAmount() {
             var amountTextBox = document.getElementById('<%= txtMinAmount.ClientID %>');
         var amount = amountTextBox.value;
@@ -2797,38 +3175,56 @@
     <script>
         function validateAmount() {
             var amountTextBox = document.getElementById('<%= txtMinAmount.ClientID %>');
-        var amount = amountTextBox.value;
+            var amount = amountTextBox.value;
 
-        // Check if the amount is a valid number with up to two decimal places
-        if (/^\d+(\.\d{1,2})?$/.test(amount)) {
-            // Check if the first digit is not zero
-            if (amount.charAt(0) !== '0') {
-                // Valid amount
-                amountTextBox.style.border = ""; // Remove any custom styling
-                return true;
-            } else {
-                alert("Amount cannot start with zero.");
+            // Check if the amount is a valid number with up to two decimal places
+            if (/^\d+(\.\d{1,2})?$/.test(amount)) {
+                // Check if the first digit is not zero
+                if (amount.charAt(0) !== '0') {
+                    // Valid amount
+                    amountTextBox.style.border = ""; // Remove any custom styling
+                    return true;
+                } else {
+                    alert("Amount cannot start with zero.");
+                    amountTextBox.focus();
+                    amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
+                    return false;
+                }
+            }
+            else if(amount.charAt(0) !== ' ')
+            {
+                alert("Please enter a valid amount.");
+                amountTextBox.focus();
+                amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
+                return false;
+            }
+            else {
+                // Invalid amount
+                alert("Please enter a valid amount.");
                 amountTextBox.focus();
                 amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
                 return false;
             }
         }
-        else if(amount.charAt(0) !== ' ')
+    </script>
+    <script>
+        function pagenamevalid()
         {
-            alert("Please enter a valid amount.");
-            amountTextBox.focus();
-            amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
-            return false;
+  
+            var section = sessionStorage.getItem('session');
+            if ($('#ddlPageName').val() == 0) 
+            {
+                alert("Please Select Page Name");
+                return false;
+            } 
+            else if(section=="1" && $('#ddlsection').val() == 0)
+            {
+                alert("Please Select Section");
+                return false;
+            }
+            return true;
         }
-        else {
-            // Invalid amount
-            alert("Please enter a valid amount.");
-            amountTextBox.focus();
-            amountTextBox.style.border = "1px solid red"; // Apply red border to indicate error
-            return false;
-        }
-    }
-</script>
+    </script>
 
 
 </asp:Content>

@@ -61,7 +61,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
         }
         BlobDetails();
         BindListViewAdminResponsiblities();
-
+        GetConfigForEditAndApprove();
+        btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
     }
 
     private void CheckPageAuthorization()
@@ -377,14 +378,25 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
                 {                
                     txtToDate.Enabled = true;
                 }
-                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-                if (STATUS == "A")
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
                 {
-                    MessageBox("Your Details are Approved you cannot edit.");
-                    return;
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
                 }
                 else
                 {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
                 }
             }
         }
@@ -410,11 +422,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
             ImageButton btnDel = sender as ImageButton;
             int ADMINTRXNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_ADMIN_RESPONSIBILITIES", "*", "", "ADMINTRXNO=" + ADMINTRXNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_ADMIN_RESPONSIBILITIES", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "ADMINTRXNO=" + ADMINTRXNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else
@@ -440,6 +457,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -451,6 +469,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
         txtFromDate.Text = string.Empty;
         ViewState["action"] = "add";
         chkIsCurrent.Checked = false;
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     public string GetFileNamePath(object filename, object ADMINTRXNO, object idno)
@@ -569,5 +590,55 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
             throw;
         }
     }
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Administrative Responsibilities";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
     #endregion
 }

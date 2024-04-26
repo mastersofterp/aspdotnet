@@ -84,7 +84,7 @@
                                 </div>
 
 
-                                    <div class="col-12 btn-footer" runat ="server" visible="false">
+                                    <div id="Div2" class="col-12 btn-footer" runat ="server" visible="false">
                                         <%--<asp:Button ID="btnReport" runat="server" Text="Report(Excel)"
                                     TabIndex="12" CssClass="btn btn-info" OnClick="btnReport_Click1" ValidationGroup="Report"  />--%>
                                         <asp:Button ID="btnreport" runat="server" Text="Report(Excel)" TabIndex="6"

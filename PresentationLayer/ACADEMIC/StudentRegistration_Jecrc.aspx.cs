@@ -818,12 +818,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-
-        //if (Session["OrgId"].ToString().Equals("1") || Session["OrgId"].ToString().Equals("6"))
-        //{
-        //    this.ShowReport("Admission_Slip_Report", "rptStudAdmSlip_New.rpt", "0");
-        //}
-
+       
         if (Session["OrgId"].ToString().Equals("5"))
         {
             this.ShowReportnew("Admission Offer Letter", "AllotmentOfferLetter.rpt", "0");
@@ -832,11 +827,14 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         {
             this.ShowReportnew("Admission Offer Letter", "AllotmentOfferLetter_HITS.rpt", "0");
         }
+        else if (Session["OrgId"].ToString().Equals("16"))
+        {
+            this.ShowReportnew("Admission Offer Letter", "AllotmentOfferLetter_Maher.rpt", "0");
+        }
         else
         {
             this.ShowReportnew("Admission Offer Letter", "AllotmentOfferLetterNew_CPU.rpt", "0");
         }
-
     }
 
     private string GetNewReceiptNo()
@@ -3468,26 +3466,42 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             int status = 0;
             string templateText = string.Empty;
             string IDNO = Session["IDNO"].ToString();
-
+            string Name = string.Empty;
+            string Semester = string.Empty;
+            string EmailID = string.Empty;
+            int UGPGOT = 0;
             int IDNOnew = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "IDNO", "APPLICATIONID='" + Convert.ToString(txtREGNo.Text) + "'"));
 
             string DAmount = Convert.ToString(objCommon.LookUp("ACD_DEMAND", "ISNULL(TOTAL_AMT,0) TOTAL_AMT", "IDNO=" + IDNOnew));
 
             string MISLink = objCommon.LookUp("ACD_MODULE_CONFIG", "ONLINE_ADM_LINK", "OrganizationId=" + Session["OrgId"]);
 
+            DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON (S.COLLEGE_ID=CDB.COLLEGE_ID and S.DEGREENO=CDB.DEGREENO and S.BRANCHNO=CDB.BRANCHNO)", "S.COLLEGE_ID,S.DEGREENO,S.BRANCHNO,S.STUDNAME,S.EMAILID,S.SEMESTERNO", "ISNULL(CDB.UGPGOT,0) as UGPGOT ", "S.IDNO = " + IDNOnew + "", string.Empty);
+
+            if (dsStudent.Tables[0].Rows.Count > 0)
+            {
+
+                 Name = dsStudent.Tables[0].Rows[0]["STUDNAME"].ToString();
+                 Semester = dsStudent.Tables[0].Rows[0]["SEMESTERNO"].ToString();
+                 EmailID = dsStudent.Tables[0].Rows[0]["EMAILID"].ToString();
+                 UGPGOT = Convert.ToInt32(dsStudent.Tables[0].Rows[0]["UGPGOT"].ToString());
+            }
+            
+            
             string Username = string.Empty;
             string Password = string.Empty;
 
-            string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + IDNOnew);
-            string Semester = objCommon.LookUp("ACD_STUDENT", "ISNULL(SEMESTERNO,0) SEMESTERNO", "IDNO=" + IDNOnew);
+           // string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + IDNOnew);
+          //  string Semester = objCommon.LookUp("ACD_STUDENT", "ISNULL(SEMESTERNO,0) SEMESTERNO", "IDNO=" + IDNOnew);
             string Branchname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_DEGREE D ON (S.DEGREENO=D.DEGREENO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO=S.BRANCHNO)", "B.LONGNAME", "IDNO=" + IDNOnew);
 
             string Userno = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + IDNOnew);
-            string EmailID = objCommon.LookUp("ACD_STUDENT", "EMAILID", "IDNO=" + IDNOnew);
+            //string EmailID = objCommon.LookUp("ACD_STUDENT", "EMAILID", "IDNO=" + IDNOnew);
             string college = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_COLLEGE_MASTER M ON(S.COLLEGE_ID=M.COLLEGE_ID)", "M.COLLEGE_NAME", "IDNO=" + IDNOnew);
             Username = objCommon.LookUp("USER_ACC", "UA_NAME", " UA_TYPE=2 AND UA_IDNO=" + Convert.ToInt32(IDNOnew));
             Password = objCommon.LookUp("USER_ACC", "UA_PWD", " UA_TYPE=2 AND UA_IDNO=" + Convert.ToInt32(IDNOnew));
             string CollegeName = objCommon.LookUp("REFF", "CODE_STANDARD", "");
+
 
             Password = clsTripleLvlEncyrpt.ThreeLevelDecrypt(Password.ToString());
             // int TemplateTypeId = 0;
@@ -3631,6 +3645,104 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             BCCEmailID = "abc@gmail.com";
                         }
                     }
+                    else if (Convert.ToInt32(Session["OrgId"]) == 16)
+                    {                      
+                        subject = "Provisional Admission Confirmation Payment Link.";
+                        message = templateText;
+                        message += "<p><b> Dear  " + Name + "</b> </p>";
+                        message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + " (Semester - " + Semester + ").</b> The fee payment should be made within 7 days of receiving this mail/letter.<br><br>You have to pay Registration Fees using the following Link and credentials. </td><p style=font-weight:bold;>ERP Link : " + MISLink + "<br>Username   : " + Username + " <br/>Password   :  " + Password + "</p><p><b>Registration for Provisional Admission, Fee Details:</b> <br/>Payable Amount: Rs. " + DAmount + "<br></p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University. The Registration Fee (at the time of Provisional Admission) paid by you shall be adjusted in the initial fee payable at the time of admission.</p><p><b>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</b></p>";
+                        if (UGPGOT == 1)
+                        {
+                            message += " <p><b>LIST OF ENCLOSURES FOR UG</b></p>";
+                            message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
+                            message += " <tr >";
+                            message += " <td style='border: 1px solid black;'>";
+                            message += " Photocopy of 10th, 11th and 12th Mark Sheets</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Transfer Certificate</td></tr>";
+                            message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> Photocopy of Conduct Certificate </td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Community Certificate</td> </tr>";
+                            message += "<tr></tr><tr><td style='border: 1px solid black;'> Photocopy of the Income Certificate of the parent</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Student's Aadhaar card</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Photocopy of the Father's Aadhaar card</td>";
+                            message += "<td> Photocopy of the Mother's Aadhaar card</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Photocopy of Migration Certificate (For all except Tamil Nadu State Board Students)</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of Nativity / Domicile Certificate (If applicable)</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Recent Four Passport size colour photographs</td>";
+                            message += "<td style='border: 1px solid black;'> Certificate of Disability from competent authority (If applicable)</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Proof of Parent's service in the Indian Defence Force (If applicable)</td>";
+                            message += "<td style='border: 1px solid black;'></td></tr>";
+                            message += "</table>";
+                        }
+                        else if (UGPGOT == 2)
+                        {
+                            message += " <p><b>LIST OF ENCLOSURES FOR PG</b></p>";
+                            message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
+                            message += " <tr >";
+                            message += " <td style='border: 1px solid black;'> Photocopy of 10th, 11th and 12th Mark Sheets</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of UG Mark Sheets*</td></tr>";
+                            message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> Photocopy of UG Degree Certificate* </td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of minimum one year Clinical Experience Certificate (for Nursing Students)</td> </tr>";
+                            message += "<tr></tr><tr><td style='border: 1px solid black;'> Photocopy of State Nursing Council Registration Certificate (for Nursing Students)</td>";
+                            message += "<td style='border: 1px solid black;'> Applicants from other States must produce an NOC and license issued by the Tamil Nadu Nurses and Midwives Council (for Nursing Students)</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Photocopy of the Transfer Certificate from the previous Institution*</td>";
+                            message += "<td>Photocopy of Conduct Certificate*</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Photocopy of the Community Certificate (for SC/ST/BC/OBC)</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Income Certificate of the parent*</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Photocopy of the Student's Aadhaar card</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Father's Aadhaar card</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Photocopy of the Mother's Aadhaar card</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of Migration Certificate (For all except Tamil Nadu State Board Students)*</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Photocopy of Nativity / Domicile Certificate (If applicable)</td>";
+                            message += "<td style='border: 1px solid black;'> Four Passport size colour photographs</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'> Certificate of Disability (If applicable)</td>";
+                            message += "<td style='border: 1px solid black;'> Proof of Parents' service in the Indian Defence Force (If applicable)</td></tr>";
+                            message += "</table>";
+
+                        }
+                        else
+                        {
+                            message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
+                            message += " <tr >";
+                            message += " <td style='border: 1px solid black;'>";
+                            message += "Photocopy of 10th, 11th and 12th Mark Sheets</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Transfer Certificate</td></tr>";
+                            message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> Photocopy of Conduct Certificate </td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Community Certificate</td> </tr>";
+                            message += "<tr></tr><tr><td style='border: 1px solid black;'>Photocopy of the Income Certificate of the parent</td>";
+                            message += "<td style='border: 1px solid black;'> Photocopy of the Student's Aadhaar card</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'>Photocopy of the Father's Aadhaar card</td>";
+                            message += "<td>Photocopy of the Mother's Aadhaar card</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'>Photocopy of Migration Certificate (For all except Tamil Nadu State Board Students)</td>";
+                            message += "<td style='border: 1px solid black;'>Photocopy of Nativity / Domicile Certificate (If applicable)</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'>Recent Four Passport size colour photographs</td>";
+                            message += "<td style='border: 1px solid black;'>Certificate of Disability from competent authority (If applicable)</td></tr>";
+                            message += "<tr><td style='border: 1px solid black;'>Proof of Parent's service in the Indian Defence Force (If applicable)</td>";
+                            message += "<td style='border: 1px solid black;'></td></tr>";
+                            message += "</table>";
+                        }
+
+                        message += "<p><b>In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</b></p><p><b>Note:</b></p>";
+                        message += "<p>1.Provisional Admission Registration fee shall be adjusted against the fee payable at the time of admission.<br>";
+                        message += "2.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
+                        message += "3.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
+                        message += "4.In case of addmission withdrawal fee refund will be as per the University's Policy.<br/>";
+                        message += "5.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> <br>Academic Menu-->>Student Related-->>Online Payment.<br/>";
+                        message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>" + CollegeName + "</p>";
+
+                        // +MISLink + " Username: " + Username + " Password: " + Password;
+                        //message = "
+                        objS.EmailID = txtStudEmail.Text.ToString();
+                        string BCCEmailID = string.Empty;
+                        string BCCEMAIL = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(BBC_MAIL_NEW_STUD_ENTRY,0) as BBC_MAIL_NEW_STUD_ENTRY", "");
+                        if (BCCEMAIL != "0")
+                        {
+                            BCCEmailID = BCCEMAIL;
+                        }
+                        else
+                        {
+                            BCCEmailID = "abc@gmail.com";
+                        }                   
+                    }
                     else
                     {
                         subject = "Provisional Admission Confirmation Payment Link.";
@@ -3739,7 +3851,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             //    UA_ACC = "0,500,76";
             //    IDNO = Convert.ToInt32(Session["IDNO"]);
             //}
-            if (Convert.ToInt32(Session["OrgId"].ToString()) == 5 || Convert.ToInt32(Session["OrgId"].ToString()) == 3 ||  Convert.ToInt32(Session["OrgId"].ToString()) == 4 ||Convert.ToInt32(Session["OrgId"].ToString()) == 18)
+            if (Convert.ToInt32(Session["OrgId"].ToString()) == 5 || Convert.ToInt32(Session["OrgId"].ToString()) == 3 ||  Convert.ToInt32(Session["OrgId"].ToString()) == 4 ||Convert.ToInt32(Session["OrgId"].ToString()) == 18|| Convert.ToInt32(Session["OrgId"].ToString())!=0)
             {
 
                 IDNO = Convert.ToInt32(Session["IDNO"]);

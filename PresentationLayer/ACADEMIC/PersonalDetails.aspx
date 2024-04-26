@@ -206,9 +206,9 @@
                                         </aside>
                                     </div>
 
-                                    <div class="col-lg-10 col-md-8 col-12" id="divGeneralInfo" style="display: block;">
+                                    <div class="col-lg-10 col-md-8 col-12" id="divGeneralInfo" style="display: block;" runat="server">
                                         <div class="col-12 pl-0 pr-0 pl-lg-2 pr-lg-2">
-                                            <div class="row">
+                                            <div class="row" id="DivStudPerDetails" runat="server">
 
                                                 <div class="col-md-12">
                                                     <div class="sub-heading">
@@ -666,7 +666,7 @@
 
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row" id="divstudinfo" runat="server" >
                                                 <div class="form-group col-lg-1 col-md-4 col-6 pr-md-0" id="divHosteller" runat="server">
                                                     <div class="label-dynamic">
                                                         <sup id="supHosteller" runat="server">* </sup>

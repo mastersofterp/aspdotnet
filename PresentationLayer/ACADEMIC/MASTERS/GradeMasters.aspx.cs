@@ -179,7 +179,7 @@ public partial class ACADEMIC_MASTERS_GradeMaster : System.Web.UI.Page
     {
         txtGradeName.Text = string.Empty;
         //txtGradeType.Text = string.Empty;
-        Label1.Text = string.Empty;
+        //Label1.Text = string.Empty;
 
     }
 
@@ -243,7 +243,7 @@ public partial class ACADEMIC_MASTERS_GradeMaster : System.Web.UI.Page
         {
             ImageButton btnEdit = sender as ImageButton;
             int gradeNo = int.Parse(btnEdit.CommandArgument);
-            Label1.Text = string.Empty;
+            //Label1.Text = string.Empty;
 
             ShowDetail(gradeNo);
             ViewState["action"] = "edit";

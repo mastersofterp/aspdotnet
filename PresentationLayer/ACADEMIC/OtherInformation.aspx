@@ -416,7 +416,7 @@
                                                     </asp:Panel>
                                                 </div>
 
-                                                <div class="row mt-3">
+                                                <div class="row mt-3" id="DivBankdetails" runat="server">
                                                     <div class="col-md-12">
                                                         <div class="sub-heading">
                                                             <h5><b>Bank Details</b></h5>
@@ -510,7 +510,7 @@
 
                                                     </div>
                                                 </asp:Panel>
-                                                <div class="row mt-3">
+                                                <div class="row mt-3" id="divSports" runat="server">
                                                     <div class="col-md-12">
                                                         <div class="sub-heading">
                                                             <h5><b>Sports / Cultural Achievement Information</b></h5>

@@ -222,9 +222,9 @@ public partial class ACADEMIC_FacultyFeedbackReport : System.Web.UI.Page
                     DataSet ds = new DataSet();
                     SP_Name = "PKG_ACD_STUDENT_FACULTY_WISE_FEEDBACK_REPORT";
                     SP_Parameters = "@P_SESSIONID,@P_FUA_NO";
-                    Call_Values = "" + Convert.ToInt32(SessionID) + "," + Faculty_UA_NO ;
+                    Call_Values = "" + Convert.ToInt32(SessionID) + "," + Faculty_UA_NO;
                     ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
-                    
+
 
                     string param = string.Empty;
                     if (Session["usertype"].ToString() == "1")

@@ -26,17 +26,19 @@
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">GRADE TYPE</h3>
+                            <%--<h3 class="box-title">GRADE TYPE</h3>--%>
+                             <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                         </div>
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
-                                    <asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>
+                                   <%-- <asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>--%>
 
                                     <div class="form-group col-md-3">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Grade Name</label>
+                                           <%-- <label>Grade Name</label>--%>
+                                         <asp:Label ID="lblDYGradeName" runat="server"  Font-Bold="true" ></asp:Label>
                                         </div>
                                         <asp:TextBox ID="txtGradeName" runat="server" TabIndex="1" placeholder="Enter Grade Name"
                                             MaxLength="50" ToolTip="Please Enter Grade Name" />
@@ -46,7 +48,8 @@
                                     </div>
 
                                     <div class="form-group col-md-2">
-                                    <label>Status</label>
+                                    <%--<label>Status</label>--%>
+                                        <asp:Label ID="lblDYStatus" runat="server" Font-Bold="true" ></asp:Label>
 
                                     <div class="switch form-inline">
                                         <input type="checkbox" id="rdActivegarde" name="switch" checked tabindex="2" />

@@ -6,6 +6,7 @@
 // Modified BY   : Jay Takalkhede
 // Modified Date : 25-08-2023
 // Version :- 1) RFC.Enhancement.Major.1 (25-08-2023 [Maher])
+//2) RFC.Enhancement.Major.2 Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
 //===============================================//
 
 
@@ -147,7 +148,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
     public void HiddenItem()
     {
 
-        if (Convert.ToInt32(Session["OrgId"]) == 1 )
+        if (Convert.ToInt32(Session["OrgId"]) == 1)
         {
             foreach (ListItem item in this.rdbFormat.Items)
             {
@@ -175,8 +176,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
     public void HiddenItemForPm()
     {
-        //RFC.Enhancement.Major.1 (25-08-2023 [Maher]) Add Parents Teacher Meeting In Maher Client (Tktno. 47531)
-        if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 16)
+        //RFC.Enhancement.Major.1 (25-08-2023 [Maher]) Add Parents Teacher Meeting In Maher Client (Tktno. 47531) 
+        //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+        if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 16 || Convert.ToInt32(Session["OrgId"]) == 21)
         {
             foreach (ListItem item in this.rdbFormat.Items)
             {
@@ -214,6 +216,24 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 if (item.Value == "1")
                 {
                     // item.Attributes.CssStyle.Add("visibility", "hidden");
+                    // Or you can try to use
+                    item.Attributes.CssStyle.Add("display", "none");
+                }
+            }
+        }
+    }
+    public void HiddenItemFeesNotPaid()
+    {
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        {
+
+        }
+        else
+        {
+            foreach (ListItem item in this.rboStudent.Items)
+            {
+                if (item.Value == "4")
+                {
                     // Or you can try to use
                     item.Attributes.CssStyle.Add("display", "none");
                 }
@@ -313,6 +333,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
             }
+            objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN (3,4,5,6,7,9,10,11,12,13,14,15,16,17,18)", "RCPTTYPENO");
         }
 
         catch (Exception ex)
@@ -363,6 +384,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
             }
             else
             {
@@ -374,6 +397,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
             }
 
         }
@@ -385,12 +410,102 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
     }
     #endregion
 
-    #region Bind Listview- Student , Parents
+    #region Methods  
+    public DataSet GetAllFeesNotPaidStudent(string collegeid, string degree, string branch, int idno, string recieptcode)
+    {
+        DataSet ds = null;
+        try
+        {
+            string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = new SqlParameter[5];
+            objParams[0] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+            objParams[1] = new SqlParameter("@P_DEGREENO", degree);
+            objParams[2] = new SqlParameter("@P_BRANCHNO", branch);
+            objParams[3] = new SqlParameter("@P_IDNO", idno);
+            objParams[4] = new SqlParameter("@P_RECIEPT_CODE", recieptcode);
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_REPORT_OUTSTANDING_FORMAT_EXCEL_CRESCENT_EMAIL", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.GetSubjectWiseAttPer-> " + ex.ToString());
+        }
+        return ds;
+    }
 
+    public DataSet GetAllFeesNotPaidStudent_Parents(string collegeid, string degree, string branch, int idno, string recieptcode)
+    {
+        DataSet ds = null;
+        try
+        {
+            string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = new SqlParameter[5];
+            objParams[0] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+            objParams[1] = new SqlParameter("@P_DEGREENO", degree);
+            objParams[2] = new SqlParameter("@P_BRANCHNO", branch);
+            objParams[3] = new SqlParameter("@P_IDNO", idno);
+            objParams[4] = new SqlParameter("@P_RECIEPT_CODE", recieptcode);
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_REPORT_OUTSTANDING_FORMAT_EXCEL_CRESCENT_PARENTS", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.GetSubjectWiseAttPer-> " + ex.ToString());
+        }
+        return ds;
+    }
+    //Added By Sakshi M on 20012024
+    public int INSERTBULKEMAILSMS_LOG(int userno, string Activity, string mobileno, int usertype, int idno, int MSGTYPE, string emailid, string ipaddress, int Org_id)
+    {
+        int retStatus = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = null;
+
+            objParams = new SqlParameter[10];
+
+
+
+            objParams[0] = new SqlParameter("@P_USERNO", userno);
+            objParams[1] = new SqlParameter("@P_ACTIVITY", Activity);
+            objParams[2] = new SqlParameter("@P_MOBILENO", mobileno);
+            objParams[3] = new SqlParameter("@P_USERTYPE", usertype);
+            objParams[4] = new SqlParameter("@P_IDNO", idno);
+            objParams[5] = new SqlParameter("@P_MSGTYPE", MSGTYPE);
+            objParams[6] = new SqlParameter("@P_EMAIL_ID", emailid);
+            objParams[7] = new SqlParameter("@P_IPADDRESS", ipaddress);
+            objParams[8] = new SqlParameter("@P_ORG", Org_id);
+            objParams[9] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+            objParams[9].Direction = ParameterDirection.Output;
+
+            object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EMAILSMS_LOG", objParams, true);
+            if (obj != null)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+            }
+            else
+            {
+                retStatus = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            retStatus = Convert.ToInt32(CustomStatus.Error);
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.INSERTBULKEMAILSMS_LOG() --> " + ex.Message + " " + ex.StackTrace);
+        }
+        return retStatus;
+    }
+    #endregion
+
+    #region Bind Listview- Student , Parents
     protected void btnShowStudent_Click(object sender, EventArgs e)
     {
         #region Bind Listview- Student , Parents  (Fees not Paid  )
@@ -416,6 +531,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
             }
             else
             {
@@ -429,6 +546,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
             }
         }
         #endregion Bind Listview- Student , Parents  (Fees not Paid  )
@@ -446,6 +565,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemForPm();
                     HiddenItem();
                     HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     return;
                 }
                 else
@@ -465,6 +586,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
                         }
                         else
                         {
@@ -478,46 +601,52 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
                         }
                     }
-                 #endregion Bind Listview- Student (Installment Wise dues not paid )
+                    #endregion Bind Listview- Student (Installment Wise dues not paid )
 
                     #region Bind Listview- Parents  (Installment Wise dues not paid )
 
-            else if (rdbEmplyeStud.SelectedValue == "3")
-            {
-                ds = objAttC.GetInstallmentNotpaidStusent(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToDateTime(txtStartDate.Text), Convert.ToDateTime(txtEndDate.Text));
+                    else if (rdbEmplyeStud.SelectedValue == "3")
+                    {
+                        ds = objAttC.GetInstallmentNotpaidStusent(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToDateTime(txtStartDate.Text), Convert.ToDateTime(txtEndDate.Text));
 
 
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
-                {
-                    pnlStudentInstallment.Visible = true;
-                    lvPaidStudentInstallment.DataSource = ds.Tables[1];
-                    lvPaidStudentInstallment.DataBind();
-                    txtsub.Text = "";
-                    txtMessage.Text = "";
-                    HiddenItemSMS();
-                    HiddenItemForPm();
-                    HiddenItem();
-                    HiddenItemParents();
-                }
-                else
-                {
-                    objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
-                    pnlStudentInstallment.Visible = false;
-                    lvPaidStudentInstallment.DataSource = null;
-                    lvPaidStudentInstallment.DataBind();
-                    txtsub.Text = "";
-                    txtMessage.Text = "";
-                    HiddenItemSMS();
-                    HiddenItemForPm();
-                    HiddenItem();
-                    HiddenItemParents();
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+                        {
+                            pnlStudentInstallment.Visible = true;
+                            lvPaidStudentInstallment.DataSource = ds.Tables[1];
+                            lvPaidStudentInstallment.DataBind();
+                            txtsub.Text = "";
+                            txtMessage.Text = "";
+                            HiddenItemSMS();
+                            HiddenItemForPm();
+                            HiddenItem();
+                            HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                            pnlStudentInstallment.Visible = false;
+                            lvPaidStudentInstallment.DataSource = null;
+                            lvPaidStudentInstallment.DataBind();
+                            txtsub.Text = "";
+                            txtMessage.Text = "";
+                            HiddenItemSMS();
+                            HiddenItemForPm();
+                            HiddenItem();
+                            HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
+                        }
+                    }
+                    #endregion Bind Listview- Parents  (Installment Wise dues not paid )
                 }
             }
-            #endregion Bind Listview- Parents  (Installment Wise dues not paid )
-            }
-           }
         }
         #endregion Bind Listview- Student , Parents  (Installment Wise dues not paid )
 
@@ -546,6 +675,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                     }
                     else
                     {
@@ -558,6 +689,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                         return;
                     }
                 }
@@ -577,6 +710,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                     }
                     else
                     {
@@ -589,6 +724,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                         return;
                     }
                 }
@@ -606,10 +743,59 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 return;
             }
         }
         #endregion Bind Listview- Student , Parents (Sem Promotion Admission Form )
+
+        #region Bind Listview- Student , Parents  (All Semester Fees not Paid  )
+
+        else if (rboStudent.SelectedValue == "4")
+        {
+            DataSet ds = null;
+            if (rdbEmplyeStud.SelectedValue == "2")
+            {
+                ds = GetAllFeesNotPaidStudent(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), 0, ddlReceiptType.SelectedValue.ToString());
+            }
+            else if (rdbEmplyeStud.SelectedValue == "3")
+            {
+                ds = GetAllFeesNotPaidStudent_Parents(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), 0, ddlReceiptType.SelectedValue.ToString());
+            }
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                PnlAllNotPaidStudent.Visible = true;
+                lvNotpaidAll.DataSource = ds.Tables[0]; ;
+                lvNotpaidAll.DataBind();
+                txtsub.Text = "";
+                txtMessage.Text = "";
+                HiddenItemSMS();
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+                PnlAllNotPaidStudent.Visible = true;
+            }
+            else
+            {
+                objCommon.DisplayMessage(updCollege, "Record Not Found For Your Selection!", this.Page);
+                PnlAllNotPaidStudent.Visible = false;
+                lvNotpaidAll.DataSource = null;
+                lvNotpaidAll.DataBind();
+                txtsub.Text = "";
+                txtMessage.Text = "";
+                HiddenItemSMS();
+                HiddenItemForPm();
+                HiddenItem();
+                HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
+                PnlAllNotPaidStudent.Visible = true;
+            }
+        }
+        #endregion Bind Listview- Student , Parents  (All Semester Fees not Paid )
 
         #region Bind Listview- Student , Parents (Normal)
         else
@@ -636,6 +822,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                     }
                     else
                     {
@@ -648,6 +836,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                         return;
                     }
                 }
@@ -667,6 +857,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                     }
                     else
                     {
@@ -679,6 +871,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemParents();
+                        //Added By Jay T. On dated 23022024
+                        HiddenItemFeesNotPaid();
                         return;
                     }
                 }
@@ -696,10 +890,14 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 return;
             }
         }
         #endregion Bind Listview-Student,Parents(Normal)
+
+
     }
 
     #endregion
@@ -710,6 +908,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
     protected void btnSndMessg_Click(object sender, EventArgs e)
     {
+        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
         string folderPath = Server.MapPath("~/TempDocument/");
         //Check whether Directory (Folder) exists.
         if (!Directory.Exists(folderPath))
@@ -753,6 +952,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemSMS();
                     HiddenItemForPm();
                     HiddenItem();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     HiddenItemParents();
                     return;
                 }
@@ -764,6 +965,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 return;
             }
         }
@@ -794,6 +997,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 HiddenItemForPm();
                 HiddenItem();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 return;
             }
             else
@@ -806,6 +1011,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     {
                         CheckBox chek = item.FindControl("chkSelect") as CheckBox;
                         Label lblEmail = item.FindControl("lblEmail") as Label;
+                        int ua_no = Convert.ToInt32(chek.ToolTip.ToString());
 
                         if (chek.Checked)
                         {
@@ -851,7 +1057,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         HiddenItemForPm();
                                         HiddenItem();
                                         HiddenItemParents();
+                                        //Added By Jay T. On dated 23022024
+                                        HiddenItemFeesNotPaid();
                                         cancel();
+                                        //Added By Sakshi M on 20012024 to maintain log 
+                                        //CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Employee Section", "", Convert.ToInt32(Session["usertype"]), ua_no, 1, email, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                        CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Employee Section", "", Convert.ToInt32(Session["usertype"]), ua_no, 1, email, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                     }
                                     else
                                     {
@@ -860,6 +1071,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         HiddenItemForPm();
                                         HiddenItem();
                                         HiddenItemParents();
+                                        //Added By Jay T. On dated 23022024
+                                     HiddenItemFeesNotPaid();
                                     }
                                 }
                                 catch (Exception ex)
@@ -872,6 +1085,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemSMS();
                             HiddenItemForPm();
                             HiddenItem();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
                             HiddenItemParents();
                         }
                     }
@@ -920,6 +1135,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemForPm();
                     HiddenItem();
                     HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     return;
                 }
                 else
@@ -929,6 +1146,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         try
                         {
                             CheckBox chek3 = items.FindControl("chkSelect3") as CheckBox;
+                            int idno = Convert.ToInt32(chek3.ToolTip.ToString());
                             Label lblEmailid3 = items.FindControl("lblEmailid3") as Label;
                             Label lblPaid = items.FindControl("lblPaid") as Label;
                             Label lblNotpaid = items.FindControl("lblNotpaid") as Label;
@@ -949,14 +1167,19 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
 
                                     string path = Server.MapPath("~/TempDocument/");
-                                    string msg = "<h1>Greetings !!</h1>";
-                                    msg += "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg = "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
                                     msg += "<br />";
                                     msg += "<br />";
                                     msg += "<b>" + message + "</b>" + "<br/><br/>";
-                                    msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
-                                    msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
-                                    msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    ////msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
+                                    //msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
+                                    //msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    //Email Template has been change as per ticket 52890 and discuss with Shubham M. 
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<b>Fees to be paid:" + Total + "</b>" + "<br/>";//b
+                                    msg += "<b>Paid fees:" + PAID + "</b>" + "<br/>";//b
+                                    msg += "<b>Outstanding fees:" + Outstanding + "</b>" + "<br/>";//b
                                     msg += "This is an auto generated response to your email. Please do not reply to this mail.";
                                     msg += "<br /><br /><br /><br />Regards,<br />";   //bb
                                     msg += "" + CollegeName + "<br /><br />";   //bb
@@ -989,7 +1212,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid3.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid3.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                             // return;
                                         }
                                         else
@@ -997,6 +1225,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             //return;
                                         }
                                     }
@@ -1011,6 +1241,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                 HiddenItemForPm();
                                 HiddenItem();
                                 HiddenItemParents();
+                                //Added By Jay T. On dated 23022024
+                                HiddenItemFeesNotPaid();
                             }
                         }
                         catch (Exception ex)
@@ -1042,6 +1274,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
                     HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     return;
                 }
                 else
@@ -1051,6 +1285,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         try
                         {
                             CheckBox chek2 = items.FindControl("chkSelect2") as CheckBox;
+                            int idno = Convert.ToInt32(chek2.ToolTip.ToString());
                             Label lblEmailid1 = items.FindControl("lblEmailid1") as Label;
                             Label lblduedate = items.FindControl("lblduedate") as Label;
                             Label lblInstallmentno = items.FindControl("lblInstallmentno") as Label;
@@ -1113,7 +1348,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Installment Wise dues not paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid1.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Installment Wise dues not paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid1.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                             // return;
                                         }
                                         else
@@ -1121,6 +1361,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             //return;
                                         }
                                     }
@@ -1138,6 +1380,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
                         }
                         catch (Exception ex)
                         {
@@ -1156,7 +1400,224 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 objCommon.DisplayMessage(updCollege, "Email Service Not Available", this.Page);
                 HiddenItemSMS();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 return;
+            }
+            #endregion
+
+            #region Email-Student (All Semester Fees not Paid)
+            else if (rboStudent.SelectedValue == "4")
+            {
+                int count = 0;
+                foreach (ListViewDataItem dataitem in lvNotpaidAll.Items)
+                {
+
+                    CheckBox cbRow = dataitem.FindControl("chkSelect1") as CheckBox;
+                    if (cbRow.Checked == true)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count == 0)
+                {
+                    objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
+                    HiddenItemSMS();
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+                    return;
+                }
+                else
+                {
+                    foreach (ListViewDataItem items in lvNotpaidAll.Items)
+                    {
+                        try
+                        {
+                            CheckBox chkSelect1 = items.FindControl("chkSelect1") as CheckBox;
+                            int idno = Convert.ToInt32(chkSelect1.ToolTip.ToString());
+                            Label lblEmailid = items.FindControl("lblEmailid") as Label;
+                            Label lblstudname = items.FindControl("lblStudname") as Label;
+                            string studname = lblstudname.Text.TrimEnd();
+
+                            if (chkSelect1.Checked)
+                            {
+                                if (lblEmailid.Text != string.Empty)
+                                {
+                                    DataSet dsconfig = null;
+
+                                    dsconfig = objCommon.FillDropDown("REFF", "SENDGRID_STATUS", "", "OrganizationId=" + Convert.ToInt32(Session["OrgId"]), string.Empty);
+                                    string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
+
+                                    string path = Server.MapPath("~/TempDocument/");
+                                    DataSet dsDetails = GetAllFeesNotPaidStudent(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), idno, ddlReceiptType.SelectedValue.ToString());
+                                    DataTable dt = (DataTable)dsDetails.Tables[0];
+                                    DataRow[] dr = dt.Select("IDNO='" + idno + "'");
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg = "<b>" + message + "</b>" + "<br/>";
+                                    msg += "<br />REGISTRAR <br />";   //bb
+                                    msg += "<br />";
+                                    //msg += "" + CollegeName + "<br /><br />";   //bb
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<table width='1000px' cellspacing='0' style='border: 1px solid #190404'><thead style='background-color: #d3cccc !important;color: #0e0e0e !important;'><tr style='border: 1px solid #190404;'><th style='border: 1px solid #190404;' scope='col'>Name</th><th style='border: 1px solid #190404;' scope='col'>RRNNo.</th>" +
+                                                   "<th style='border: 1px solid #190404;' scope='col'>Semester</th><th style='border: 1px solid #190404;' scope='col'>Fee for semester</th>" + "<th style='border: 1px solid #190404;' scope='col'>Paid for Semester</th><th style='border: 1px solid #190404;' scope='col'>Due for Semester</th></tr></thead><tbody>";
+
+                                    for (int j = 0; j < dr.Length; j++)
+                                    {
+                                        if ((dr[j][19].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>I</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][17].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][18].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][19].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][22].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>II</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][20].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][21].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][22].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][25].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>III</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][23].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][24].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][25].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][28].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IV</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][26].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][27].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][28].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][31].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>V</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][29].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][30].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][31].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][34].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VI</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][32].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][33].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][34].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][37].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][35].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][36].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][37].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][40].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VIII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][38].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][39].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][40].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][43].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IX</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][41].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][42].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][43].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][46].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>X</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][44].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][45].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][46].ToString() + "</td></tr>";
+                                        }
+
+                                    }
+                                    try
+                                    {
+                                        int status1 = 0;
+                                        string email_type = string.Empty;
+                                        string Link = string.Empty;
+                                        int sendmail = 0;
+                                        string filename = Convert.ToString(ViewState["FileName"]);
+                                        string Imgfile = string.Empty;
+                                        Byte[] Imgbytes = null;
+                                        if (filename != string.Empty)
+                                        {
+                                            path = path + filename;
+                                            string LogoPath = path;
+                                            Imgbytes = File.ReadAllBytes(LogoPath);
+                                            Imgfile = Convert.ToBase64String(Imgbytes);
+                                        }
+                                        if (filename == string.Empty)
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject); //Calling Method
+                                        }
+                                        else
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject, "", "", null, filename, Imgbytes, "image/png/pdf");
+                                        }
+                                        if (status1 == 1)
+                                        {
+                                            objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            // return;
+                                        }
+                                        else
+                                        {
+                                            objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                           
+                                            //return;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    }
+                    cancel();
+                    HiddenItemFeesNotPaid();
+                }
             }
             #endregion
 
@@ -1179,6 +1640,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
                     HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     return;
                 }
                 else
@@ -1190,6 +1653,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         {
                             CheckBox chek1 = items.FindControl("chkSelect1") as CheckBox;
                             Label lblEmailid = items.FindControl("lblEmailid") as Label;
+                            int idno = Convert.ToInt32(chek1.ToolTip.ToString());
 
                             if (chek1.Checked)
                             {
@@ -1231,14 +1695,21 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
                                             // return;
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Normal)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Normal)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             // cancel();
                                             // return;
                                         }
@@ -1255,6 +1726,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
                         }
                         catch (Exception ex)
                         {
@@ -1300,6 +1773,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemForPm();
                     HiddenItem();
                     HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     return;
                 }
                 else
@@ -1309,6 +1784,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         try
                         {
                             CheckBox chek3 = items.FindControl("chkSelect3") as CheckBox;
+                            int idno = Convert.ToInt32(chek3.ToolTip.ToString());
                             Label lblEmailid3 = items.FindControl("lblEmailid3") as Label;
                             Label lblPaid = items.FindControl("lblPaid") as Label;
                             Label lblNotpaid = items.FindControl("lblNotpaid") as Label;
@@ -1329,14 +1805,19 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
 
                                     string path = Server.MapPath("~/TempDocument/");
-                                    string msg = "<h1>Greetings !!</h1>";
-                                    msg += "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg = "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
                                     msg += "<br />";
                                     msg += "<br />";
                                     msg += "<b>" + message + "</b>" + "<br/><br/>";
-                                    msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
-                                    msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
-                                    msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    ////msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
+                                    //msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
+                                    //msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    //Email Template has been change as per ticket 52890 and discuss with Shubham M. 
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<b>Fees to be paid:" + Total + "</b>" + "<br/>";//b
+                                    msg += "<b>Paid fees:" + PAID + "</b>" + "<br/>";//b
+                                    msg += "<b>Outstanding fees:" + Outstanding + "</b>" + "<br/>";//b
                                     msg += "This is an auto generated response to your email. Please do not reply to this mail.";
                                     msg += "<br /><br /><br /><br />Regards,<br />";   //bb
                                     msg += "" + CollegeName + "<br /><br />";   //bb
@@ -1370,8 +1851,12 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
-
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parent (Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid3.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parent (Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid3.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                             // return;
                                         }
                                         else
@@ -1379,6 +1864,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             //return;
                                         }
                                     }
@@ -1392,6 +1879,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                 HiddenItemSMS();
                                 HiddenItemForPm();
                                 HiddenItem();
+                                //Added By Jay T. On dated 23022024
+                                HiddenItemFeesNotPaid();
                                 HiddenItemParents();
                             }
                         }
@@ -1424,6 +1913,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
                     HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     return;
                 }
                 else
@@ -1433,6 +1924,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         try
                         {
                             CheckBox chek2 = items.FindControl("chkSelect2") as CheckBox;
+                            int idno = Convert.ToInt32(chek2.ToolTip.ToString());
                             Label lblEmailid1 = items.FindControl("lblEmailid1") as Label;
                             Label lblduedate = items.FindControl("lblduedate") as Label;
                             Label lblInstallmentno = items.FindControl("lblInstallmentno") as Label;
@@ -1495,14 +1987,21 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
                                             // return;
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parents (Installment Wise dues not paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid1.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parents (Installment Wise dues not paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid1.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             //return;
                                         }
                                     }
@@ -1520,6 +2019,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
                         }
                         catch (Exception ex)
                         {
@@ -1537,7 +2038,226 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 objCommon.DisplayMessage(updCollege, "Email Service Not Available", this.Page);
                 HiddenItemSMS();
                 HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 return;
+            }
+            #endregion
+
+            #region Email-Student (All Semester Fees not Paid)
+            else if (rboStudent.SelectedValue == "4")
+            {
+                int count = 0;
+                foreach (ListViewDataItem dataitem in lvNotpaidAll.Items)
+                {
+
+                    CheckBox cbRow = dataitem.FindControl("chkSelect1") as CheckBox;
+                    if (cbRow.Checked == true)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count == 0)
+                {
+                    objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
+                    HiddenItemSMS();
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
+                    return;
+                }
+                else
+                {
+                    foreach (ListViewDataItem items in lvNotpaidAll.Items)
+                    {
+                        try
+                        {
+                            CheckBox chkSelect1 = items.FindControl("chkSelect1") as CheckBox;
+                            int idno = Convert.ToInt32(chkSelect1.ToolTip.ToString());
+                            Label lblEmailid = items.FindControl("lblEmailid") as Label;
+                            Label lblstudname = items.FindControl("lblStudname") as Label;
+                            string studname = lblstudname.Text.TrimEnd();
+
+                            if (chkSelect1.Checked)
+                            {
+                                if (lblEmailid.Text != string.Empty)
+                                {
+                                    DataSet dsconfig = null;
+
+                                    dsconfig = objCommon.FillDropDown("REFF", "SENDGRID_STATUS", "", "OrganizationId=" + Convert.ToInt32(Session["OrgId"]), string.Empty);
+                                    string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
+
+                                    string path = Server.MapPath("~/TempDocument/");
+                                    DataSet dsDetails = GetAllFeesNotPaidStudent_Parents(ddlSchool.SelectedValue.ToString(), ddlDegree.SelectedValue.ToString(), ddlBranch.SelectedValue.ToString(), idno, ddlReceiptType.SelectedValue.ToString());
+                                    DataTable dt = (DataTable)dsDetails.Tables[0];
+                                    DataRow[] dr = dt.Select("IDNO='" + idno + "'");
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg = "<b>" + message + "</b>" + "<br/>";
+                                    msg += "<br />REGISTRAR <br />";   //bb
+                                    msg += "<br />";
+                                    //msg += "" + CollegeName + "<br /><br />";   //bb
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<table width='1000px' cellspacing='0' style='border: 1px solid #190404'><thead style='background-color: #d3cccc !important;color: #0e0e0e !important;'><tr style='border: 1px solid #190404;'><th style='border: 1px solid #190404;' scope='col'>Name</th><th style='border: 1px solid #190404;' scope='col'>RRNNo.</th>" +
+                                          "<th style='border: 1px solid #190404;' scope='col'>Semester</th><th style='border: 1px solid #190404;' scope='col'>Fee for semester</th>" + "<th style='border: 1px solid #190404;' scope='col'>Paid for Semester</th><th style='border: 1px solid #190404;' scope='col'>Due for Semester</th></tr></thead><tbody>";
+
+                                    for (int j = 0; j < dr.Length; j++)
+                                    {
+                                        if ((dr[j][19].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>I</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][17].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][18].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][19].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][22].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>II</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][20].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][21].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][22].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][25].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>III</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][23].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][24].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][25].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][28].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IV</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][26].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][27].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][28].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][31].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>V</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][29].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][30].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][31].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][34].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VI</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][32].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][33].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][34].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][37].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][35].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][36].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][37].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][40].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>VIII</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][38].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][39].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][40].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][43].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>IX</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][41].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][42].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][43].ToString() + "</td></tr>";
+                                        }
+                                        if ((dr[j][46].ToString()) != "0.00")
+                                        {
+                                            msg += "<tr style='border: 1px solid #190404;'><td style='border: 1px solid #190404;text-align:center;'> " + dr[j][5].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][3].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404; text-align:center;'>X</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][44].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][45].ToString() + "</td>";
+                                            msg += "<td style='border: 1px solid #190404;text-align:center;'> " + dr[j][46].ToString() + "</td></tr>";
+                                        }
+
+                                    }
+  
+                                    try
+                                    {
+                                        int status1 = 0;
+                                        string email_type = string.Empty;
+                                        string Link = string.Empty;
+                                        int sendmail = 0;
+                                        string filename = Convert.ToString(ViewState["FileName"]);
+                                        string Imgfile = string.Empty;
+                                        Byte[] Imgbytes = null;
+                                        if (filename != string.Empty)
+                                        {
+                                            path = path + filename;
+                                            string LogoPath = path;
+                                            Imgbytes = File.ReadAllBytes(LogoPath);
+                                            Imgfile = Convert.ToBase64String(Imgbytes);
+                                        }
+                                        if (filename == string.Empty)
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject); //Calling Method
+                                        }
+                                        else
+                                        {
+                                            status1 = objSendEmail.SendEmail(lblEmailid.Text, msg, Subject, "", "", null, filename, Imgbytes, "image/png/pdf");
+                                        }
+                                        if (status1 == 1)
+                                        {
+                                            objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            //HiddenItemFeesNotPaid();
+                                            //cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (All Semester Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            // return;
+                                        }
+                                        else
+                                        {
+                                            objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
+                                            HiddenItemSMS();
+                                            HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            //HiddenItemFeesNotPaid();
+                                            //return;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    }
+                    HiddenItemFeesNotPaid();
+                    cancel();
+                }
             }
             #endregion
 
@@ -1560,6 +2280,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     objCommon.DisplayMessage(updCollege, "Please Select atleast one Student!!", this.Page);
                     HiddenItemSMS();
                     HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     return;
                 }
                 else
@@ -1571,7 +2293,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         {
                             CheckBox chek1 = items.FindControl("chkSelect1") as CheckBox;
                             Label lblEmailid = items.FindControl("lblEmailid") as Label;
-
+                            int idno = Convert.ToInt32(chek1.ToolTip.ToString());
                             if (chek1.Checked)
                             {
                                 if (lblEmailid.Text != string.Empty)
@@ -1612,14 +2334,21 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(updCollege, "Mail Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
                                             // return;
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parents (Normal)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parents (Normal)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send email", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                         }
                                     }
                                     catch (Exception ex)
@@ -1634,6 +2363,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemParents();
+                            //Added By Jay T. On dated 23022024
+                            HiddenItemFeesNotPaid();
                         }
                         catch (Exception ex)
                         {
@@ -1655,6 +2386,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
     //Added By JAY TAKALKHEDE 27/07/2023  For SMS
     protected void btnSndSms_Click(object sender, EventArgs e)
     {
+        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
         int MSGTYPE = 0;
         #region SMS For RCPIPER
         if (Convert.ToInt32(Session["OrgId"]) == 6)
@@ -1694,6 +2426,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             try
                             {
                                 CheckBox chek = item.FindControl("chkSelect1") as CheckBox;
+                                int idno = Convert.ToInt32(chek.ToolTip.ToString());
                                 Label lblStudMobile = item.FindControl("lblStudmobile") as Label;
 
                                 if (chek.Checked)
@@ -1733,13 +2466,20 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(this.updCollege, "SMS Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Sem Promotion Admission Form (Student)", lblStudMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Sem Promotion Admission Form (Student)", lblStudMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send SMS", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                         }
 
                                     }
@@ -1806,6 +2546,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             {
                                 CheckBox chek = item.FindControl("chkSelect1") as CheckBox;
                                 Label lblParentsMobile = item.FindControl("lblStudmobile") as Label;
+                                int idno = Convert.ToInt32(chek.ToolTip.ToString());
 
                                 if (chek.Checked)
                                 {
@@ -1844,13 +2585,20 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             objCommon.DisplayUserMessage(this.updCollege, "SMS Sent Successfully.", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Sem Promotion Admission Form (Parent)", lblParentsMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Sem Promotion Admission Form (Parent)", lblParentsMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
                                             objCommon.DisplayMessage(this.updCollege, "Failed To send SMS", this.Page);
                                             HiddenItemSMS();
                                             HiddenItemParents();
+                                            //Added By Jay T. On dated 23022024
+                                            HiddenItemFeesNotPaid();
                                         }
 
                                     }
@@ -1966,44 +2714,95 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
     public void SendSMS(string Mobile, string text, string TemplateID)
     {
-        string status = "";
-        int ret = 0;
         try
         {
-            string Message = string.Empty;
-            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-            if (ds.Tables[0].Rows.Count > 0)
+            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
-                request.ContentType = "text/xml; charset=utf-8";
-                request.Method = "POST";
+                string status = "";
+                int ret = 0;
 
-                string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                postDate += "&";
-                postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                postDate += "&";
-                postDate += "PhNo=91" + Mobile;
-                postDate += "&";
-                postDate += "Text=" + text;
-                postDate += "&";
-                postDate += "TemplateID=" + TemplateID;
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
 
-                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                request.ContentType = "application/x-www-form-urlencoded";
+                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + text;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + Mobile;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
 
-                request.ContentLength = byteArray.Length;
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Close();
-                WebResponse _webresponse = request.GetResponse();
-                dataStream = _webresponse.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                status = reader.ReadToEnd();
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                }
+                else
+                {
+                    status = "0";
+
+                }
             }
             else
             {
-                status = "0";
 
+                string status = "";
+                int ret = 0;
+
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "PhNo=91" + Mobile;
+                    postDate += "&";
+                    postDate += "Text=" + text;
+                    postDate += "&";
+                    postDate += "TemplateID=" + TemplateID;
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                }
+                else
+                {
+                    status = "0";
+
+                }
             }
 
         }
@@ -2021,49 +2820,96 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         int ret = 0;
         try
         {
-            string Message = string.Empty;
-            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-            if (ds.Tables[0].Rows.Count > 0)
+            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
-                request.ContentType = "text/xml; charset=utf-8";
-                request.Method = "POST";
 
-                string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                postDate += "&";
-                postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                postDate += "&";
-                postDate += "PhNo=91" + Mobile;
-                postDate += "&";
-                postDate += "Text=" + text;
-                postDate += "&";
-                postDate += "TemplateID=" + TemplateID;
-
-                byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                request.ContentLength = byteArray.Length;
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Close();
-                WebResponse _webresponse = request.GetResponse();
-                dataStream = _webresponse.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                status = reader.ReadToEnd();
-                if (status == "")
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
                 {
-                    ret = 0;
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + text;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + Mobile;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
                 }
                 else
                 {
-                    ret = 1;
-                }
+                    status = "0";
 
+                }
             }
             else
             {
-                ret = 0;
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?"));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
 
+                    string postDate = "ID=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "Pwd=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "PhNo=91" + Mobile;
+                    postDate += "&";
+                    postDate += "Text=" + text;
+                    postDate += "&";
+                    postDate += "TemplateID=" + TemplateID;
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                    if (status == "")
+                    {
+                        ret = 0;
+                    }
+                    else
+                    {
+                        ret = 1;
+                    }
+
+                }
+                else
+                {
+                    ret = 0;
+
+                }
             }
 
         }
@@ -2080,30 +2926,79 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
     {
         try
         {
-            string url = string.Empty;
-            string uid = string.Empty;
-            string pass = string.Empty;
-            DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
-            if (ds.Tables[0].Rows.Count > 0)
+            //RFC.Enhancement.Major.2 (15-02-2024 [TGPCET]) Add Parents Teacher Meeting In Maher Client (Tktno. 54075) 
+            if (Convert.ToInt32(Session["OrgId"]) == 21)
             {
-                url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
-                //url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
-                uid = ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
-                pass = ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
-                WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
-                WebResponse response = request.GetResponse();
-                System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
-                string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
-                //return urlText;  
-                Session["result"] = 1;
+                string status = "";
+                int ret = 0;
+
+                string Message = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("" + ds.Tables[0].Rows[0]["SMSProvider"].ToString()));
+                    request.ContentType = "text/xml; charset=utf-8";
+                    request.Method = "POST";
+
+                    string postDate = "username=" + ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    postDate += "&";
+                    postDate += "pass=" + ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    postDate += "&";
+                    postDate += "senderid=GPGNGP";
+                    postDate += "&";
+                    postDate += "message=" + message;
+                    postDate += "&";
+                    postDate += "dest_mobileno=91" + mobno;
+                    postDate += "&";
+                    postDate += "msgtype=TXT";
+                    postDate += "&";
+                    postDate += "response=Y";
+
+                    byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(postDate);
+                    request.ContentType = "application/x-www-form-urlencoded";
+
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse _webresponse = request.GetResponse();
+                    dataStream = _webresponse.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    status = reader.ReadToEnd();
+                }
+                else
+                {
+                    status = "0";
+
+                }
+            }
+            else
+            {
+                string url = string.Empty;
+                string uid = string.Empty;
+                string pass = string.Empty;
+                DataSet ds = objCommon.FillDropDown("Reff", "SMSProvider", "SMSSVCID,SMSSVCPWD", "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
+                    //url = string.Format(ds.Tables[0].Rows[0]["SMSProvider"].ToString() + "?");
+                    uid = ds.Tables[0].Rows[0]["SMSSVCID"].ToString();
+                    pass = ds.Tables[0].Rows[0]["SMSSVCPWD"].ToString();
+                    WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
+                    WebResponse response = request.GetResponse();
+                    System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
+                    //return urlText;  
+                    Session["result"] = 1;
 
 
-                //WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
-                //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                //System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
-                //string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
-                //return urlText;
-                //Session["result"] = 1;
+                    //WebRequest request = HttpWebRequest.Create("" + url + "ID=" + uid + "&PWD=" + pass + "&PHNO=" + mobno + "&TEXT=" + message + "&TemplateID=" + TemplateID + "");
+                    //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    //System.IO.StreamReader reader = new StreamReader(response.GetResponseStream());
+                    //string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need      
+                    //return urlText;
+                    //Session["result"] = 1;
+                }
             }
         }
         catch (Exception)
@@ -2125,6 +3020,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         if (rdbEmplyeStud.SelectedValue == "1")
         {
             ddlDepartment.SelectedIndex = 0;
+            ddlReceiptType.SelectedIndex = 0;
             empPanel.Enabled = true;
             Studpanel.Enabled = false;
             lvEmployee.Visible = false;
@@ -2140,11 +3036,13 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             ddlBranch.SelectedIndex = 0;
             ddlDegree.SelectedIndex = 0;
             ddlSchool.SelectedIndex = 0;
+            ddlReceiptType.SelectedIndex = 0;
             Studpanel.Enabled = false;
             empPanel.Enabled = true;
             lvStudent.Visible = false;
             trStudent.Visible = false;
             pnldate.Visible = false;
+            ddlReceiptType.SelectedIndex = 0;
             txtStartDate.Text = string.Empty;
             txtEndDate.Text = string.Empty;
             HiddenItemSMS();
@@ -2155,6 +3053,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             ddlBranch.SelectedIndex = 0;
             ddlDegree.SelectedIndex = 0;
             ddlSchool.SelectedIndex = 0;
+            ddlReceiptType.SelectedIndex = 0;
             Studpanel.Enabled = false;
             empPanel.Enabled = true;
             lvStudent.Visible = false;
@@ -2164,6 +3063,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             txtEndDate.Text = string.Empty;
             HiddenItemSMS();
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
         }
 
@@ -2181,6 +3082,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         lvnotpaid.DataBind();
         lvStudent.DataSource = null;
         lvStudent.DataBind();
+        lvNotpaidAll.DataSource = null;
+        lvNotpaidAll.DataBind();
         rdbEmailSms.SelectedValue = "-1";
         divEmail.Visible = false;
         HiddenItemSMS();
@@ -2193,6 +3096,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         btnSndMessg.Enabled = false;
         btnSndSms.Enabled = false;
         HiddenItemParents();
+        //Added By Jay T. On dated 23022024
+        ddlReceiptType.SelectedIndex = 0;
+        HiddenItemFeesNotPaid();
     }
 
     #endregion
@@ -2206,6 +3112,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_BRANCH B ON(CDB.BRANCHNO = B.BRANCHNO)", "DISTINCT (CDB.BRANCHNO)", "B.LONGNAME", "CDB.COLLEGE_ID=" + ddlSchool.SelectedValue + " AND CDB.DEGREENO =" + ddlDegree.SelectedValue + " AND CDB.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "CDB.BRANCHNO");
         HiddenItemSMS();
         HiddenItemParents();
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
         //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "A.BRANCHNO", "A.LONGNAME", "B.DEGREENO="+ddlDegree.SelectedValue+" AND A.BRANCHNO>0", "A.BRANCHNO");
     }
 
@@ -2356,7 +3264,17 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = false;
             HiddenItemParents();
-
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            supSem.Visible = true;
+            divsemester1.Visible = true;
+            divRType.Visible = false;
+            ddlsemester.Visible = true;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
         }
         else if (rdbEmplyeStud.SelectedValue == "2")
         {
@@ -2382,6 +3300,17 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = false;
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            supSem.Visible = true;
+            divsemester1.Visible = true;
+            divRType.Visible = false;
+            ddlsemester.Visible = true;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
             objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 and OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
 
@@ -2409,7 +3338,18 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = false;
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
             pnldate.Visible = false;
+               lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            supSem.Visible = true;
+            divsemester1.Visible = true;
+            divRType.Visible = false;
+            ddlsemester.Visible = true;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
             objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 and OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
 
@@ -2430,6 +3370,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnSndMessg.Enabled = false;
             btnSndSms.Enabled = true;
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else if (rdbEmailSms.SelectedValue == "0")
         {
@@ -2441,6 +3383,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnSndSms.Enabled = false;
             HiddenItemSMS();
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
 
     }
@@ -2500,6 +3444,16 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             txtEndDate.Text = string.Empty;
             HiddenItemSMS();
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = true;
+            divRType.Visible = false;
+            divsemester1.Visible = true;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
         }
         else if (rboStudent.SelectedValue == "2")
         {
@@ -2510,6 +3464,16 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             PnlNotPaidStudent.Visible = false;
             HiddenItemSMS();
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = true;
+            divRType.Visible = false;
+            divsemester1.Visible = true;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
         }
         else if (rboStudent.SelectedValue == "3")
         {
@@ -2523,6 +3487,37 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             txtEndDate.Text = string.Empty;
             HiddenItemSMS();
             HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = true;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            divsemester1.Visible = true;
+            divRType.Visible = false;
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
+        }
+        else if (rboStudent.SelectedValue == "4")
+        {
+            pnldate.Visible = false;
+            trStudent.Visible = false;
+            lvStudent.Visible = false;
+            trEmployee.Visible = false;
+            PnlNotPaidStudent.Visible = false;
+            HiddenItemSMS();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            supSem.Visible = false;
+            divsemester1.Visible = false;
+            divRType.Visible = true;
+            ddlsemester.Visible = false;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+            lvnotpaid.DataSource = null;
+            lvnotpaid.DataBind();
+            PnlAllNotPaidStudent.Visible = false;
         }
 
     }
@@ -2826,6 +3821,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
     #region Visible false
     protected void btnSmsToParents_Click(object sender, EventArgs e)
     {
+        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
         string mobile = string.Empty;
         string smsMessage = string.Empty;
         string idno = string.Empty;
@@ -2845,7 +3841,6 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 Label lblTotalattendance = item.FindControl("lblTotalattendance") as Label;
                 Label lblPercentage = item.FindControl("lblPercentage") as Label;
                 Label lblRegno = item.FindControl("lblRegno") as Label;
-
 
                 if (chk.Checked == true)
                 {
@@ -2868,9 +3863,11 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
                     smsMessage = "Student Attendance Session: " + SessionName + "\n" + "Enroll No: " + Sregno + "\n" + "Total Class-" + TClass + "\n" + "Total Attendance-" + TAttendance + "\n" + "Percentage-" + TPercentage + "\n" + "Regards\n" + "Sarala Birla University, Ranchi";
 
-                    // this.SendSMSAtdEmail(mobile, smsMessage);//For sending SMS
+                    //this.SendSMSAtdEmail(mobile, smsMessage);//For sending SMS
                     objCommon.DisplayMessage(updReport, "SMS sent Succesfully!", this.Page);
-
+                    //Added By Sakshi M on 20012024 to maintain log 
+                    //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Send Attendance (Parent)", mobile, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                    CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Send Attendance (Parent)", mobile, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
 
                     //smsMessage = txtSms.Text;
                     if (mobile == string.Empty)
@@ -2923,7 +3920,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 SmsURL = ds.Tables[0].Rows[0]["COMPANY_SMS_URL"].ToString();
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    WebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("http://" + SmsURL + "?username=" + user + "&msg_token=" + Password + "&sender_id=" + sender + "&message=" + Msg + "&mobile=" + MobileNumber));
+                    WebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("https://" + SmsURL + "?username=" + user + "&msg_token=" + Password + "&sender_id=" + sender + "&message=" + Msg + "&mobile=" + MobileNumber));
                     WebResponse response = request.GetResponse();
                     StreamReader reader = new StreamReader(response.GetResponseStream());
                     string urlText = reader.ReadToEnd();
@@ -2942,6 +3939,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         // return result;
         //return result;
     }
+
     protected void btnSmsToStudent_Click(object sender, EventArgs e)
     {
         string smsMessage = string.Empty;
@@ -2994,44 +3992,48 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     string mobile = "91" + ToMobileNo;
                     if (ToMobileNo != string.Empty)
                     {
-                            string templatename = "Bulk Email Attendance Sending";
-                            DataSet ds = objUC.GetSMSTemplate(0, templatename);
-                            if (ds.Tables[0].Rows.Count > 0)
-                            {
-                                TEMPLATE = ds.Tables[0].Rows[0]["TEMPLATE"].ToString();
-                                TemplateID = ds.Tables[0].Rows[0]["TEM_ID"].ToString();
-                            }
-                            else
-                            {
-                                objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
-                                HiddenItemForPm();
-                                HiddenItem();
-                                HiddenItemSMS();
-                                HiddenItemSMSmark();
-                                return;
-                            }
-                            message = TEMPLATE;
-                            message = message.Replace("{#var#}", SessionName);
-                            message = message.Replace("{#var1#}", Sregno);
-                            message = message.Replace("{#var2#}", TClass);
-                            message = message.Replace("{#var3#}", TAttendance);
-                            message = message.Replace("{#var4#}", TPercentage);
-
-                            // Create a StringBuilder and append the template
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.Append(message);
-                            // Get the final message string
-                            template = stringBuilder.ToString();
-                        
-                    }
-                    if (ToMobileNo != string.Empty)
-                    {
-                            this.SendSMS(ToMobileNo, template, TemplateID);
-                            objCommon.DisplayUserMessage(this.updDetained, "SMS Successfully Send To Parent(s)", this.Page);
+                        string templatename = "Bulk Email Attendance Sending";
+                        DataSet ds = objUC.GetSMSTemplate(0, templatename);
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            TEMPLATE = ds.Tables[0].Rows[0]["TEMPLATE"].ToString();
+                            TemplateID = ds.Tables[0].Rows[0]["TEM_ID"].ToString();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(this.updDetained, "SMS Template Not Found For Your Selection!", this.Page);
                             HiddenItemForPm();
                             HiddenItem();
                             HiddenItemSMS();
                             HiddenItemSMSmark();
+                            return;
+                        }
+                        message = TEMPLATE;
+                        message = message.Replace("{#var#}", SessionName);
+                        message = message.Replace("{#var1#}", Sregno);
+                        message = message.Replace("{#var2#}", TClass);
+                        message = message.Replace("{#var3#}", TAttendance);
+                        message = message.Replace("{#var4#}", TPercentage);
+
+                        // Create a StringBuilder and append the template
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.Append(message);
+                        // Get the final message string
+                        template = stringBuilder.ToString();
+
+                    }
+                    if (ToMobileNo != string.Empty)
+                    {
+                        this.SendSMS(ToMobileNo, template, TemplateID);
+                        objCommon.DisplayUserMessage(this.updDetained, "SMS Successfully Send To Parent(s)", this.Page);
+                        HiddenItemForPm();
+                        HiddenItem();
+                        HiddenItemSMS();
+                        HiddenItemSMSmark();
+                        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
+                        //Added By Sakshi M on 20012024 to maintain log 
+                        //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Send Attendance (Parent)", ToMobileNo, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                        CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Send Attendance (Parent)", ToMobileNo, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                     }
                     else
                     {
@@ -3106,7 +4108,6 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             if (lblTotalclass.Text == "")
                             {
                                 TClass = "0";
-
                             }
                             else
                             {
@@ -3139,6 +4140,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             {
                                 WhatsappAtt(studname, mobile, SessionName, Sregno, TClass, TAttendance, TPercentage, message);
                                 MailSendStatus += chkBox.ToolTip + ',';
+                                string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
+                                //Added By Sakshi M on 20012024 to maintain log 
+                                //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Send Attendance (WhatsApp)", mobile, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 3, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Send Attendance (WhatsApp)", mobile, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 3, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                             }
                             else
                             {
@@ -3183,6 +4188,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         lblMailSendTo.Visible = true;
                         lblMailSendTo.Text = "WhatsApp  Message Send Student List - " + "\n" + MailSendTo.ToString().TrimEnd(',');
                         lblMailNorSendTo.Text = "WhatsApp  Message Not Send Student List - " + "\n" + MailNotSendTo.ToString().TrimEnd(',');
+
                         txtMessageAtdEmail.Text = string.Empty;
                     }
                     else
@@ -3273,6 +4279,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                             //txtSubject.Text = string.Empty;
                             //txtMessageAtdEmail.Text = string.Empty;
                             //int status = SendMailBYSendgrid(nbody, useremail, subject); for email sending
+                            string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
+                            //Added By Sakshi M on 20012024 to maintain log 
+                            //CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Send Attendance (Email)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 1, useremail, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                            CustomStatus cs = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Send Attendance (Email)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 1, useremail, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                             MailSendStatus += chkBox.ToolTip + ',';
                         }
                         else
@@ -3438,7 +4448,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             uid = objCommon.LookUp("REFF", "SMSSVCID", "");
             password = objCommon.LookUp("REFF", "SMSSVCPWD", "");
             HttpStatusCode result = default(HttpStatusCode);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("http://www.SMSnMMS.co.in/sms.aspx?"));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("https://www.SMSnMMS.co.in/sms.aspx?"));
             request.ContentType = "text/xml; charset=utf-8";
             request.Method = "POST";
             string postDate = "ID=" + uid;   //ghrce4116@gmail.com";
@@ -3482,6 +4492,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
         }
         else if (rdbFormat.SelectedValue == "2")
@@ -3496,6 +4509,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else if (rdbFormat.SelectedValue == "3")
         {
@@ -3510,6 +4526,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemSMS();
             HiddenItemSMSmark();
             GetMarksList();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
 
         }
@@ -3527,6 +4546,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
         }
         else if (rdbFormat.SelectedValue == "5")
@@ -3543,6 +4565,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
         }
     }
@@ -3569,6 +4594,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             lstAttSecondsms.DataSource = null;
             lstAttSecondsms.DataBind();
             lstAttSecondsms.Visible = false;
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else
         {
@@ -3582,7 +4610,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divAttStatus.Visible = false;
             pnlfirst.Visible = false;
             divFirstsms.Visible = false;
-            objCommon.DisplayMessage(this.updDetained, "Attendance Not Mark For Your Selection!", this.Page);
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
+            objCommon.DisplayMessage(this.updDetained, "No Absentees Found For Your Selection!", this.Page);
         }
 
         foreach (ListViewDataItem dataitem in lvfirstsms.Items)
@@ -3650,6 +4681,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divattendancesecondsms.Visible = true;
             pnlsecond.Visible = true;
             TODAYATT();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else
         {
@@ -3659,7 +4693,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divattendancesecondsms.Visible = false;
             pnlsecond.Visible = false;
             TODAYATT();
-
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
             pnlfirst.Visible = false;
             divFirstsms.Visible = false;
@@ -3680,11 +4716,17 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             lvfirstsms.DataBind();
             hftot.Value = lvfirstsms.Items.Count.ToString();
             TODAYATT();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else
         {
             objCommon.DisplayMessage(this.updDetained, "No Record Found For Your Selection!", this.Page);
             TODAYATT();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
     }
 
@@ -3714,6 +4756,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else
         {
@@ -3721,6 +4766,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             //TODAYATT();
             HiddenItemForPm();
             HiddenItem();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
             HiddenItemSMS();
         }
 
@@ -3739,11 +4787,17 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 lvTodayAtt.DataSource = dstoday;
                 lvTodayAtt.DataBind();
                 hftot.Value = lvTodayAtt.Items.Count.ToString();
+                HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 //  TODAYATT();
             }
             else
             {
                 objCommon.DisplayMessage(this.updDetained, "No Record Found For Your Selection!", this.Page);
+                HiddenItemParents();
+                //Added By Jay T. On dated 23022024
+                HiddenItemFeesNotPaid();
                 //  TODAYATT();
             }
         }
@@ -3752,6 +4806,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         }
 
     }
+
 
     private void GetParentsMeeting()
     {
@@ -3820,6 +4875,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         HiddenItemForPm();
         HiddenItem();
         HiddenItemSMS();
+        HiddenItemParents();
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
+
         string slotname = objCommon.LookUp("ACD_TIME_SLOT", "TIMEFROM+' - '+TIMETO AS SLOTNAME", "SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue));
         string SubOtp = objCommon.LookUp("REFF", "SUBJECT_OTP", "");
 
@@ -3909,6 +4968,15 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     HiddenItem();
                                     HiddenItemSMS();
                                     HiddenItemSMSmark();
+                                    HiddenItemParents();
+                                    //Added By Jay T. On dated 23022024
+                                    HiddenItemFeesNotPaid();
+
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    ////CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+                                    CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+
                                 }
                                 else
                                 {
@@ -3937,6 +5005,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         #endregion
 
@@ -4084,6 +5155,11 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     HiddenItem();
                                     HiddenItemSMS();
                                     HiddenItemSMSmark();
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Attendance Percentage (Subject Wise)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+                                    CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Attendance Percentage (Subject Wise)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+
                                 }
                                 else
                                 {
@@ -4112,6 +5188,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         #endregion
 
@@ -4200,7 +5279,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                 HiddenItem();
                                 HiddenItemSMS();
                                 HiddenItemSMSmark();
-
+                                //Added By Sakshi M on 20012024 to maintain log 
+                                string IPaddress = Session["ipAddress"].ToString();
+                                //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "CAT Marks (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+                                CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "CAT Marks (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
                             }
                             else
                             {
@@ -4237,6 +5319,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         #endregion
 
@@ -4326,6 +5411,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     SendSMS_today(lblParMobile.Text.Trim(), template, TemplateID);
                                     //  CustomStatus cs = (CustomStatus)excol.INSERTPARENTSMSLOG(Convert.ToInt32(Session["userno"]), message, lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), MSGTYPE);
                                     MailSendStatus += hdnidno1.Value + ',';
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Todays Students Attendance list", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
 
                                 }
                                 else
@@ -4378,6 +5466,8 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                         HiddenItem();
                         HiddenItemSMS();
                         HiddenItemSMSmark();
+
+
                     }
                     else
                     {
@@ -4404,6 +5494,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
 
         #endregion
@@ -4502,7 +5595,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     SendSMS_today(lblParMobile.Text.Trim(), template, TemplateID);
                                     CustomStatus cs = (CustomStatus)excol.INSERTPARENTSMSLOG(Convert.ToInt32(Session["userno"]), message, lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), MSGTYPE);
                                     MailSendStatus += hdnidno1.Value + ',';
-
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parent Teacher Meeting", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+                                    CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parent Teacher Meeting", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
                                 }
                                 else
                                 {
@@ -4584,6 +5680,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         #endregion
     }
@@ -4597,6 +5696,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         txtSmsSend.Text = string.Empty;
         txtSmsNotSend.Text = string.Empty;
         txtSmsSend.Visible = false;
+        HiddenItemParents();
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
         txtSmsNotSend.Visible = false;
     }
 
@@ -4670,6 +5772,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             // btnAttSms.Visible = false;
             btnSubmitSmsEmail.Visible = true;
             btnWhatsAppAtt.Visible = false;
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
             if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
                 if (rdbFormat.SelectedValue == "4")
@@ -4688,6 +5793,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItemSMS();
                     //   HiddenItemForPm();
                     btnWhatsAppAtt.Visible = false;
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                 }
                 else
                 {
@@ -4695,12 +5803,18 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItem();
                     HiddenItemSMS();
                     //  HiddenItemForPm();
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                 }
             }
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else if (rdbFormat.SelectedValue == "2")
         {
@@ -4717,6 +5831,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             dvexam.Visible = false;   //added by parfull on 18052023
 
             DIVBRANCH.Visible = true;
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
             DIVSEM.Visible = true;
             btnSubmitSmsEmail.Visible = true;
             DIVSECTION.Visible = true;
@@ -4751,17 +5868,26 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItem();
                     HiddenItemSMS();
                     btnWhatsAppAtt.Visible = false;
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                 }
                 else
                 {
                     btnWhatsAppAtt.Visible = false;
                     HiddenItem();
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     HiddenItemSMS();
                 }
             HiddenItemForPm();
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else if (rdbFormat.SelectedValue == "3")
         {
@@ -4794,6 +5920,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             btnEmailSms.Visible = true;
             DivSemPM.Visible = false;
             // btnAttSms.Visible = false;
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
             btnWhatsAppAtt.Visible = false;
             if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
@@ -4822,6 +5951,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
             //added by prafull 18052023
 
@@ -4864,6 +5996,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             HiddenItem();
             HiddenItemSMS();
             HiddenItemSMSmark();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
         }
         else if (rdbFormat.SelectedValue == "5")
         {
@@ -4878,7 +6013,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
             dvexam.Visible = false;          //added by parfull on 18052023
             divatt.Visible = true;         //added by parfull on 18052023
-
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
 
             DIVBRANCH.Visible = true;
             DIVSEM.Visible = false;
@@ -4916,6 +6053,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     HiddenItem();
                     HiddenItemSMS();
                     btnWhatsAppAtt.Visible = false;
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                 }
                 else
                 {
@@ -4947,6 +6087,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
 
         lvfirstsms.DataSource = null;
         lvfirstsms.DataBind();
+        HiddenItemParents();
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
         lvfirstsms.Visible = false;
         lstAttSecondsms.DataSource = null;
         lstAttSecondsms.DataBind();
@@ -5481,31 +6624,11 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string email_type = string.Empty;
                                     string Link = string.Empty;
                                     int sendmail = 0;
-                                    //  DataSet ds = getModuleConfig();
-                                    //if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                                    //{
-                                    //    email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
-                                    //    Link = ds.Tables[0].Rows[0]["LINK"].ToString();
-                                    //}
-
-                                    //if (email_type == "1" && email_type != "")
-                                    //{
-                                    //    status = sendEmail(message, useremail, subject);
-                                    //}
-                                    //else if (email_type == "2" && email_type != "")
-                                    //{
-                                    //    Task<int> task = Execute(message, useremail, subject);
-                                    //    status = task.Result;
-                                    //}
-                                    //if (email_type == "3" && email_type != "")
-                                    //{
-                                    //    status = OutLook_Email(message, useremail, subject);
-                                    //}
                                     status1 = objSendEmail.SendEmail(useremail, message, subject); //Calling Method
                                     if (status1 == 1)
                                     {
 
-                                        cs = objAttC.INSERTPARENTEMAILLOG(Convert.ToInt32(Session["userno"]), message, useremail, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), IPaddress, Convert.ToDateTime(txtFromDat.Text));
+                                       // cs = objAttC.INSERTPARENTEMAILLOG(Convert.ToInt32(Session["userno"]), message, useremail, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), IPaddress, Convert.ToDateTime(txtFromDat.Text));
                                         objCommon.DisplayMessage(this.updDetained, "Email Send Successfully", this.Page);
                                         // chek.Checked = false;
                                         pnlfirst.Visible = true;
@@ -5518,6 +6641,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                         HiddenItemForPm();
                                         HiddenItemSMS();
                                         HiddenItem();
+                                        //Added By Sakshi M on 20012024 to maintain log 
+                                        string IPaddress1 = Session["ipAddress"].ToString();
+                                        //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress1, Convert.ToInt32(Session["OrgId"]));
+                                        CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress1, Convert.ToInt32(Session["OrgId"]));
                                         //  return;
 
                                     }
@@ -5636,6 +6763,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                             HiddenItemForPm();
                                             GetStudListAttPer();
                                             TODAYATT();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            // string IPaddress1 = Session["ipAddress"].ToString();
+                                            //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Attendance Percentage (Subject Wise)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress, Convert.ToInt32(Session["OrgId"]));
+                                            CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Attendance Percentage (Subject Wise)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress, Convert.ToInt32(Session["OrgId"]));
                                             // return;
                                         }
                                         else
@@ -5709,7 +6840,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
                     var bodys = @"{""apiKey"":" + '"' + API_KEY.ToString() + '"' + "," + "\n" +
-                        @"""campaignName"":""erpattendance_rcpit""," + "\n" +
+                        @"""campaignName"":""23022024_erpattendance_rcpit""," + "\n" +
                         @"""destination"":" + '"' + ToMobileNo.ToString() + '"' + "," + "\n" +
                         @"""userName"":" + '"' + UserName.ToString() + '"' + "," + "\n" +
                         @"""templateParams"":[" + '"' + Name.ToString() + '"' + "," + '"' + att.ToString() + '"' + "," + '"' + course.ToString() + '"' + "," + '"' + Dept.ToString() + '"' + "]}";
@@ -5776,6 +6907,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         {
             HiddenItemForPm();
             HiddenItemSMS();
+            HiddenItemParents();
+            //Added By Jay T. On dated 23022024
+            HiddenItemFeesNotPaid();
             int count = 0;
             string MailSendStatus = string.Empty;
             string MailNotSendStatus = string.Empty;
@@ -5822,6 +6956,10 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                 {
                                     AisensyWhatsaapIntergrationForAttendance(lblParMobile.Text.ToString(), Att.ToString(), Dept.ToString(), course.ToString(), lblname.Text.ToString());
                                     MailSendStatus += hdnIDNO.Value + ',';
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Todays Students Attendance list", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnIDNO.Value), 3, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
+                                    CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Todays Students Attendance list", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnIDNO.Value), 3, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
                                 }
                                 else
                                 {
@@ -5879,6 +7017,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                     }
                     HiddenItemForPm();
                     HiddenItemSMS();
+                    HiddenItemParents();
+                    //Added By Jay T. On dated 23022024
+                    HiddenItemFeesNotPaid();
                     HiddenItem();
                 }
                 catch (Exception ex)
@@ -5919,6 +7060,9 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         string secondvar = string.Empty;
         string thirdvar = string.Empty;
         string fourtvar = string.Empty;
+        HiddenItemParents();
+        //Added By Jay T. On dated 23022024
+        HiddenItemFeesNotPaid();
         string inputString = "aDSD"; // Replace with your own string value
 
 

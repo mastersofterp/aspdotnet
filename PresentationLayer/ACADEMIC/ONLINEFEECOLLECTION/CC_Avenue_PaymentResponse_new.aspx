@@ -38,6 +38,22 @@
 
     <%--<script src='steps.js' type='text/javascript'></script>--%>
 
+    <script>
+        function confirmmsg() {
+            if (confirm("Payment Successfull Your New Login Credentials has been sent to Your Registered Email Please Check Your Email for futher process.")) {
+
+                
+            }
+            else {
+                //document.getElementById('<%=btnBack.ClientID%>').click();
+                // window.location.reload(true);
+                //$('#divStudInfo').css("display", "none");
+                //$('#divSearchPanel').style.display='block'
+                //$('#divtxt').style.display = "block";
+            }
+        }
+
+    </script>
     <style>
         .box-header .img-logo {
             height: 100px;

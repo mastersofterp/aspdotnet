@@ -2,8 +2,21 @@
 using System.Data;
 using System.Data.SqlClient;
 using IITMS.SQLServer.SQLDAL;
-
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Created By  : 
+Created On  : 
+Purpose     :  
+Version     : 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Version     Modified On     Modified By       Purpose
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1.0.1       27-02-2024      Anurag Baghele    [53807]-Added the parameters in AddDocument and UpdateDocument for submitting DocNO
+------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
+1.0.2       28-02-2024      Anurag Baghele    [53807]-Created the InsUpdDocumentName and GetAllDocumentName Method
+------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------
+*/
 
 namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 {
@@ -20,6 +33,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SqlParameter[] sqlParams = new SqlParameter[]
                 {
                     new SqlParameter("@P_DOCUMENT_NAME",objDocument.Documentname),
+                    new SqlParameter("@P_DOC_NO",objDocument.DocNo),//<1.0.1>
                     new SqlParameter("@P_DEGREE", objDocument.Degree),
                     new SqlParameter("@P_COLLEGE_CODE", objDocument.CollegeCode),
                     new SqlParameter("@P_IDTYPE", objDocument.Idtype),
@@ -48,7 +62,6 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return status;
         }
 
-
         public int UpdateDocument(DocumentAcad objDocument, string category, string nationality, string admCategory)
         {
             int status = 0;
@@ -58,6 +71,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SqlParameter[] sqlParams = new SqlParameter[]
                 {                    
                     new SqlParameter("@P_DOCUMENT_NAME",objDocument.Documentname),
+                    new SqlParameter("@P_DOC_NO",objDocument.DocNo),//<1.0.1>
                     new SqlParameter("@P_DEGREE", objDocument.Degree),
                     new SqlParameter("@P_COLLEGE_CODE", objDocument.CollegeCode),
                     new SqlParameter("@P_IDTYPE", objDocument.Idtype),
@@ -120,5 +134,49 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return dr;
         }
+
+        //<1.0.2>
+        public int InsUpdDocumentName(DocumentAcad objDocument)
+        {
+            int status = 0;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[4];
+
+                objParams[0] = new SqlParameter("@P_DOC_ID", objDocument.DocId);
+                objParams[1] = new SqlParameter("@P_DOCUMENT_NAME", objDocument.Documentname);
+                objParams[2] = new SqlParameter("@P_ACTIVE_STATUS", objDocument.chkstatus);
+                objParams[3] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[3].Direction = ParameterDirection.Output;
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_DOCUMENT_NAME_INS_UPD", objParams, true);
+                status = Convert.ToInt32(ret);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic-> " + ex.ToString());
+            }
+            return status;
+        }
+
+        public DataSet GetAllDocumentName()
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                SqlParameter[] objParams = new SqlParameter[0];
+
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_GET_DOCUMENT_NAME_ALL", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.DocumentController.GetAllDocument() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+        //</1.0.2>
     }
 }

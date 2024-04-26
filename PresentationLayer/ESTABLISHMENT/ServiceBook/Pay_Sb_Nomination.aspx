@@ -7,7 +7,7 @@
     <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
     <%-- <link href="../Css/master.css" rel="stylesheet" type="text/css" />
     <link href="../Css/Theme1.css" rel="stylesheet" type="text/css" />--%>
-
+    <%--  --%>
     <asp:UpdatePanel ID="updImage" runat="server">
         <ContentTemplate>
 

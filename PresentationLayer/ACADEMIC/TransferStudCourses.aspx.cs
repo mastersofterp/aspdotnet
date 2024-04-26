@@ -762,7 +762,19 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
     {
         if (ddlSemester.SelectedIndex > 0)
         {
-            int exist = objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0"));
+            //int exist = objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0"));
+
+            string proc_name = "PKG_ACD_CHECK_COUNT_FOR_SUBJECT_EQUIVALENCE";
+            string param = "@P_SEMESTERNO,@P_SESSIONNO,@P_IDNO,@P_TRANSFERED";
+            string call_values = "" + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(ddlEquivalence.SelectedValue) + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values); //DataGrid dg = new DataGrid();
+
+            int exist = 0;
+            if (ds.Tables.Count > 0)
+            {
+                exist = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+            }
+
             if (exist == 0)
             {
                 SetInitialRow();
@@ -779,6 +791,9 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
         }
         else
         {
+            ddlSemester.Items.Add("Please Select");
+            ddlSemester.SelectedIndex = 0;
+
             divlv.Visible = false;
             btnSubmit.Enabled = false;
         }
@@ -803,6 +818,8 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
         {
             ddlSemester.Items.Clear();
             ddlSemester.Items.Add("Please Select");
+            //ddlSemester.SelectedIndex = 0;
+            ddlSemester.SelectedItem.Value = "0";
         }
     }
 
@@ -885,20 +902,23 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
         //                                    Convert.ToInt32(0), Convert.ToInt32(Session["userno"].ToString()), 0, string.Empty, string.Empty, string.Empty, string.Empty, 0,
         //                                    string.Empty, string.Empty);
 
-        ret = objMarkEntryC.ProcessResultAll(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["SCHEMENO"].ToString()), Convert.ToInt32(ddlSemester.SelectedValue),
-                                            ViewState["idno"].ToString(), Convert.ToInt32(prev_status), Convert.ToString(Session["ipAddress"].ToString()), Convert.ToInt32(ViewState["COLLEGE_ID"]),
-                                             Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ViewState["Org_Id"]));
-
-        ret = objSReg.AddTransferedStudentRecord(SESSIONNOS, objSR, EQUIGRADES, TRANSDATE);
-
         if (!ret.Equals(-99))
         {
-            objCommon.DisplayMessage(this.updGradePattern, "Details Saved Successfully !!", this.Page);
+            ret = objMarkEntryC.ProcessResultAll(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["SCHEMENO"].ToString()), Convert.ToInt32(ddlSemester.SelectedValue),
+                                                ViewState["idno"].ToString(), Convert.ToInt32(prev_status), Convert.ToString(Session["ipAddress"].ToString()), Convert.ToInt32(ViewState["COLLEGE_ID"]),
+                                                 Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ViewState["Org_Id"]));
+
+            ret = objSReg.AddTransferedStudentRecord(SESSIONNOS, objSR, EQUIGRADES, TRANSDATE);
+
+            //if (!ret.Equals(-99))
+            //{
+            objCommon.DisplayMessage(this.updGradePattern, "Details Saved Successfully!!", this.Page);
             Clear();
         }
         else
         {
-
+            objCommon.DisplayMessage(this.updGradePattern, "Something went wrong.", this.Page);
+            return;
         }
     }
 
@@ -929,13 +949,13 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
         StoreCurrentData();
     }
 
-    private void ShowReport(string reportTitle, string rptFileName, int reportno)
+    private void ShowReportForGrade(string reportTitle, string rptFileName, int reportno)
     {
         try
         {
             string procedure = "PKG_ACD_GET_TRANSFER_COURSE_EQUI_DETAILS";
-            string parameter = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_SUB_EQUI";
-            string values = "" + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlEquivalence.SelectedValue) + "";
+            string parameter = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_SUB_EQUI,@P_PATTERN";
+            string values = "" + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlEquivalence.SelectedValue) + "," + 1 + "";
             DataSet ds = objCommon.DynamicSPCall_Select(procedure, parameter, values);
 
             if (ds.Tables[0].Rows.Count > 0)
@@ -945,9 +965,11 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
 
+                string college_id = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + "");
+
                 if (reportno == 1)
                 {
-                    url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SUB_EQUI=" + Convert.ToInt32(ddlEquivalence.SelectedValue) + "";
+                    url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_COLLEGE_CODE=" + college_id + ",@P_SUB_EQUI=" + Convert.ToInt32(ddlEquivalence.SelectedValue) + ",@P_PATTERN=" + 1 + "";
                 }
 
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -972,7 +994,7 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-        ShowReport("TransferStudentSubjectEquiDetails", "rptTransferStudentSubjectEquiDetails.rpt", 1);
+        ShowReportForGrade("TransferStudentSubjectGradeEquiDetails", "rptTransferStudentSubjectEquiDetails.rpt", 1);
     }
 
     protected void ddlExamType_SelectedIndexChanged(object sender, EventArgs e)
@@ -1768,25 +1790,72 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
         //                                    Convert.ToInt32(0), Convert.ToInt32(Session["userno"].ToString()), 0, string.Empty, string.Empty, string.Empty, string.Empty, 0,
         //                                    string.Empty, string.Empty);
 
-        ret = objMarkEntryC.ProcessResultAll(Convert.ToInt32(ddlSession1.SelectedValue), Convert.ToInt32(ViewState["SCHEMENO"].ToString()), Convert.ToInt32(ddlSemester1.SelectedValue),
-                                            ViewState["idno"].ToString(), Convert.ToInt32(prev_status), Convert.ToString(Session["ipAddress"].ToString()), Convert.ToInt32(ViewState["COLLEGE_ID"]),
-                                             Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ViewState["Org_Id"]));
-
-        ret = objSReg.AddTransferedStudentRecord(SESSIONNOS, objSR, EQUIGRADES, TRANSDATE);
-
         if (!ret.Equals(-99))
         {
+            ret = objMarkEntryC.ProcessResultAll(Convert.ToInt32(ddlSession1.SelectedValue), Convert.ToInt32(ViewState["SCHEMENO"].ToString()), Convert.ToInt32(ddlSemester1.SelectedValue),
+                                                ViewState["idno"].ToString(), Convert.ToInt32(prev_status), Convert.ToString(Session["ipAddress"].ToString()), Convert.ToInt32(ViewState["COLLEGE_ID"]),
+                                                 Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ViewState["Org_Id"]));
+
+            ret = objSReg.AddTransferedStudentRecord(SESSIONNOS, objSR, EQUIGRADES, TRANSDATE);
+
+            //if (!ret.Equals(-99))
+            //{
             objCommon.DisplayMessage(this.updMarksPattern, "Details Saved Successfully !!", this.Page);
-            Clear();
+            ClearM();
         }
         else
         {
-
+            objCommon.DisplayMessage(this.updGradePattern, "Something went wrong.", this.Page);
+            return;
         }
     }
+
     protected void btnReport1_Click(object sender, EventArgs e)
     {
-        ShowReport("TransferStudentSubjectMarksDetails", "rptTransferStudentSubjectMarkDetails.rpt", 1);
+        ShowReportForMark("TransferStudentSubjectMarksDetails", "rptTransferStudentSubjectMarkDetails.rpt", 1);
+    }
+
+    private void ShowReportForMark(string reportTitle, string rptFileName, int reportno)
+    {
+        try
+        {
+            string procedure = "PKG_ACD_GET_TRANSFER_COURSE_EQUI_DETAILS";
+            string parameter = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_SUB_EQUI,@P_PATTERN";
+            string values = "" + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(ddlSession1.SelectedValue) + "," + Convert.ToInt32(ddlSemester1.SelectedValue) + "," + Convert.ToInt32(ddlEquivalence1.SelectedValue) + "," + 2 + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(procedure, parameter, values);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+
+                string college_id = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + "");
+
+                if (reportno == 1)
+                {
+                    url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession1.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester1.SelectedValue) + ",@P_COLLEGE_CODE=" + college_id + ",@P_SUB_EQUI=" + Convert.ToInt32(ddlEquivalence1.SelectedValue) + ",@P_PATTERN=" + 2 + "";
+                }
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updGradePattern, this.updGradePattern.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updGradePattern, "No Data Found for this selection.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_CourseRegistration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
     }
     protected void btnCancel1_Click(object sender, EventArgs e)
     {
@@ -1828,13 +1897,27 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
         {
             ddlSemester1.Items.Clear();
             ddlSemester1.Items.Add("Please Select");
+            //ddlSemester1.SelectedIndex = 0;
+            ddlSemester1.SelectedItem.Value = "0";
         }
     }
     protected void ddlSemester1_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlSemester1.SelectedIndex > 0)
         {
-            int exist = objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester1.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession1.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester1.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession1.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0"));
+            //int exist = objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester1.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession1.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "SEMESTERNO=" + Convert.ToInt32(ddlSemester1.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession1.SelectedValue) + " AND IDNO=" + Convert.ToInt32(Session["idno"].ToString()) + " AND ISNULL(CANCEL,0)=0"));
+
+            string proc_name = "PKG_ACD_CHECK_COUNT_FOR_SUBJECT_EQUIVALENCE";
+            string param = "@P_SEMESTERNO,@P_SESSIONNO,@P_IDNO,@P_TRANSFERED";
+            string call_values = "" + Convert.ToInt32(ddlSemester1.SelectedValue) + "," + Convert.ToInt32(ddlSession1.SelectedValue) + "," + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(ddlEquivalence1.SelectedValue) + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values); //DataGrid dg = new DataGrid();
+
+            int exist = 0;
+            if (ds.Tables.Count > 0)
+            {
+                exist = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+            }
+
             if (exist == 0)
             {
                 SetInitialRowMarksPattern();
@@ -1851,6 +1934,10 @@ public partial class ACADEMIC_TransferStudCourses : System.Web.UI.Page
         }
         else
         {
+            //ddlSemester1.Items.Clear();
+            ddlSemester1.Items.Add("Please Select");
+            ddlSemester1.SelectedIndex = 0;
+
             divlvM.Visible = false;
             btnSubmit1.Enabled = false;
         }

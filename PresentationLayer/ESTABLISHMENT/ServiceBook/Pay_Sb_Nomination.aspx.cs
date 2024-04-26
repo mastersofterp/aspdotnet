@@ -24,7 +24,7 @@ using Microsoft.WindowsAzure.Storage;
 
 public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI.Page
 {
-    //CREATING OBJECTS OF CLASS FILES COMMON,UAIMS_COMMON,PAYCONTROLLER
+    //CREATING OBJECTS OF CLASS FILES COMMON,UAIMS_COMMON,PAYCONTROLLER//
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     ServiceBookController objServiceBook = new ServiceBookController();
@@ -54,7 +54,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             }
             //By default setting ViewState["action"] to add
             ViewState["action"] = "add";
-            DeleteDirecPath(Docpath + "TEMP_CONDUCTTRAINING_FILES\\" + _idnoEmp + "\\APP_0");
+            DeleteDirecPath(Docpath + "TEMP_NOMINATION_FILES\\" + _idnoEmp + "\\APP_0");
             FillDropDown();
 
 
@@ -69,6 +69,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
         BlobDetails();
         BindListViewNominee();
         btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
+        GetConfigForEditAndApprove();
     }
 
     private void CheckPageAuthorization()
@@ -413,7 +414,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                         {
                             if (ViewState["DESTINATION_PATH"] != null)
                             {
-                                string TNO = objCommon.LookUp("PAYROLL_SB_TRAINING_CONDUCTED", "MAX(TNO)", "");
+                                string TNO = objCommon.LookUp("PAYROLL_SB_NOMINIFOR", "MAX(NFNO)", "");
                                 AddDocuments(Convert.ToInt32(TNO));
                             }
                         }
@@ -449,7 +450,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                             {
                                 if (ViewState["DESTINATION_PATH"] != null)
                                 {
-                                    string TNO = objCommon.LookUp("PAYROLL_SB_TRAINING_CONDUCTED", "MAX(TNO)", "");
+                                    string TNO = objCommon.LookUp("PAYROLL_SB_NOMINIFOR", "MAX(NFNO)", "");
                                     AddDocuments(Convert.ToInt32(TNO));
                                 }
                             }
@@ -563,7 +564,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 //else
                 //{
                 //}
-               
+
                 if (Convert.ToInt32(ds.Tables[1].Rows.Count) > 0)
                 {
                     int rowCount = ds.Tables[1].Rows.Count;
@@ -573,11 +574,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                     {
                         DataRow dr = dtM.NewRow();
                         dr["FUID"] = ds.Tables[1].Rows[i]["FUID"].ToString();
-                        dr["FILEPATH"] = Docpath + "TRAINING" + ViewState["idno"] + "\\APP_" + nfNo;
+                        dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_" + nfNo;
                         dr["GETFILE"] = ds.Tables[1].Rows[i]["GETFILE"].ToString();
                         dr["DisplayFileName"] = ds.Tables[1].Rows[i]["DisplayFileName"].ToString();
                         dr["IDNO"] = ds.Tables[1].Rows[i]["IDNO"].ToString();
-                        dr["FOLDER"] = "TRAINING_CONDUCTED";
+                        dr["FOLDER"] = "NOMINATION";
                         dr["APPID"] = nfNo.ToString();
                         dr["FILENAME"] = ds.Tables[1].Rows[i]["FILENAME"].ToString();
                         dtM.Rows.Add(dr);
@@ -601,14 +602,25 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                     lvCompAttach.DataSource = null;
                     lvCompAttach.DataBind();
                 }
-                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-                if (STATUS == "A")
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
                 {
-                    MessageBox("Your Details are Approved you cannot edit.");
-                    return;
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
                 }
                 else
                 {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
                 }
             }
         }
@@ -702,11 +714,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             ImageButton btnDel = sender as ImageButton;
             int nfNo = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_NOMINIFOR", "*", "", "NFNO=" + nfNo, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_NOMINIFOR", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "NFNO=" + nfNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else
@@ -734,6 +751,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -765,6 +783,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
         //pnlfiles.Visible = false;
         pnlAttachmentList.Visible = false;
         ViewState["FILE1"] = null;
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     private void FillDropDown()
@@ -996,9 +1017,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                         }
                     }
 
-                    string file = Docpath + "TEMP_CONDUCTTRAINING_FILES\\" + idno + "\\APP_0";
+                    string file = Docpath + "TEMP_NOMINATION_FILES\\" + idno + "\\APP_0";
                     ViewState["SOURCE_FILE_PATH"] = file;
-                    string PATH = Docpath + "TRAINING_CONDUCTED\\" + idno;
+                    string PATH = Docpath + "NOMINATION\\" + idno;
                     ViewState["DESTINATION_PATH"] = PATH;
                     if (lblBlobConnectiontring.Text == "")
                     {
@@ -1021,7 +1042,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                             //filename = objSevBook.IDNO + "_familyinfo" + ext;
                             //string name = DateTime.Now.ToString("ddMMyyyy_hhmmss");
                             string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
-                            filename = IdNo + "_trainingconducted_" + time + ext;
+                            filename = IdNo + "_nomination_" + time + ext;
                             objSevBook.ATTACHMENTS = filename;
                             objSevBook.FILEPATH = "Blob Storage";
 
@@ -1034,7 +1055,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                                 if (result == true)
                                 {
 
-                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_trainingconducted_" + time, flupld);
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_nomination_" + time, flupld);
                                     if (retval == 0)
                                     {
                                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
@@ -1114,11 +1135,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
             dr["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
             //dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_";
-            dr["FILEPATH"] = Docpath + "NOMINATION" + "\\" +_idnoEmp + "\\APP_";
+            dr["FILEPATH"] = Docpath + "NOMINATION" + "\\" + _idnoEmp + "\\APP_";
             dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
             dr["DisplayFileName"] = flupld.FileName;
             dr["IDNO"] = _idnoEmp;
-            dr["FOLDER"] = "TEMP_CONDUCTTRAINING_FILES";
+            dr["FOLDER"] = "TEMP_NOMINATION_FILES";
             dr["APPID"] = 0;
             dr["FILENAME"] = filename;
             dt.Rows.Add(dr);
@@ -1140,7 +1161,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
             dr["DisplayFileName"] = flupld.FileName;
             dr["IDNO"] = _idnoEmp;
-            dr["FOLDER"] = "TEMP_CONDUCTTRAINING_FILES";
+            dr["FOLDER"] = "TEMP_NOMINATION_FILES";
             dr["APPID"] = 0;
             dr["FILENAME"] = filename;
             ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
@@ -1246,11 +1267,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             int appid = Convert.ToInt32(btnDelete.AlternateText);
             if (appid != 0)
             {
-                path = Docpath + "TRAINING_CONDUCTED" + "\\" + idno + "\\APP_" + Convert.ToInt32(ViewState["nfNo"].ToString());
+                path = Docpath + "NOMINATION" + "\\" + idno + "\\APP_" + Convert.ToInt32(ViewState["nfNo"].ToString());
             }
             else
             {
-                path = Docpath + "TEMP_CONDUCTTRAINING_FILES" + "\\" + idno + "\\APP_" + appid;
+                path = Docpath + "TEMP_NOMINATION_FILES" + "\\" + idno + "\\APP_" + appid;
             }
 
             if (ViewState["FILE1"] != null && ((DataTable)ViewState["FILE1"]) != null)
@@ -1401,4 +1422,54 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
         }
 
     }
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Nomination";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
+    #endregion
 }

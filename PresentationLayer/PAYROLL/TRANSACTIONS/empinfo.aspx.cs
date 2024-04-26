@@ -20,6 +20,8 @@ public partial class payroll_empinfo : System.Web.UI.Page
     int OrganizationId;
     bool IsGradepayApplicable;
     bool IsRetirmentDateCalculation, IsEnableEmpSignatureinEmpPage;
+    int Deptno;
+
 
     #region Page Load
 
@@ -293,9 +295,19 @@ public partial class payroll_empinfo : System.Web.UI.Page
 
                     // ddlshiftno.SelectedValue.Text = dtr["SHIFTNAME"].ToString();
 
-
+                    OrganizationId = Convert.ToInt32(Session["OrgId"]);
+                    if (OrganizationId == 18)
+                    {
+                        txtPersonalFileNo.Text = dtr["PFILENO"] == null ? string.Empty : dtr["PFILENO"].ToString();
+                        txtPersonalFileNo.Enabled = false;
+                    }
+                    else
+                    {
+                        txtPersonalFileNo.Text = dtr["PFILENO"] == null ? string.Empty : dtr["PFILENO"].ToString();
+                        txtPersonalFileNo.Enabled = true;
+                    }
                     
-                    txtPersonalFileNo.Text = dtr["PFILENO"] == null ? string.Empty : dtr["PFILENO"].ToString();
+                   // txtPersonalFileNo.Text = dtr["PFILENO"] == null ? string.Empty : dtr["PFILENO"].ToString();
                     txtNationalUniqueIDNo.Text = dtr["NUNIQUEID"] == null ? string.Empty : dtr["NUNIQUEID"].ToString();
 
                     txtLocalAddress.Text = dtr["RESADD1"] == null ? string.Empty : dtr["RESADD1"].ToString();
@@ -1843,7 +1855,18 @@ public partial class payroll_empinfo : System.Web.UI.Page
     {
         try
         {
-            ShowReport("EMployee_Report", "rptEmployee_Report.rpt");
+            OrganizationId = OrganizationId = Convert.ToInt32(Session["OrgId"]);
+            if (OrganizationId == 18)
+            {
+                ShowReport("EMployee_Report", "rptEmployee_Report_HITS.rpt");
+            }
+            else
+            {
+                
+                ShowReport("EMployee_Report", "rptEmployee_Report.rpt");
+
+            }
+            
         }
         catch (Exception ex)
         {
@@ -1926,6 +1949,22 @@ public partial class payroll_empinfo : System.Web.UI.Page
 
             int deptno = Convert.ToInt32(ddlDepartment.SelectedValue);
             objCommon.FillDropDownList(ddlDivision, "PAYROLL_DIVISION", "DIVIDNO", "DIVNAME", "DIVIDNO > 0 and SUBDEPT="+deptno, "DIVIDNO ASC");
+            EmpCreateController objECC = new EmpCreateController();
+            OrganizationId = Convert.ToInt32(Session["OrgId"]);
+           // OrganizationId = 18;
+            if (OrganizationId == 18)
+            {
+                Deptno = Convert.ToInt32(ddlDepartment.SelectedValue);
+                // GetEmployeeCodeDEPT(Deptno);
+                DataSet ds = null;
+                ds = objECC.GetHITSEmployeeCode(Deptno);
+                txtPersonalFileNo.Text = ds.Tables[0].Rows[0]["EmployeeCode"].ToString();
+                txtPersonalFileNo.Enabled = false;
+            }
+            else
+            {
+                txtPersonalFileNo.Enabled = true;
+            }
         }
         catch (Exception ex)
         {

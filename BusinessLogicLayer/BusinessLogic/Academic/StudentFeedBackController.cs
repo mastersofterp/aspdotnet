@@ -1356,6 +1356,29 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
+
+                // Added by Gopal M 01032024 Ticket#55046
+                public DataSet GetFacultyWiseFeedbackData(int sessionId, int fua_no)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = new SqlParameter[]
+                        {
+                            new SqlParameter("@P_SESSIONID",sessionId),
+                            new SqlParameter("@P_FUA_NO",fua_no),
+                        };
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_FACULTY_WISE_FEEDBACK_REPORT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentFeedbackController.GetSubjectFeedbackCommonData-> " + ex.ToString());
+                    }
+                    return ds;
+                }
             }
         }
     }

@@ -14,6 +14,18 @@ using System.Collections.Generic;
 using IITMS.SQLServer.SQLDAL;
 using System.Data.SqlClient;
 using System.Web.UI.HtmlControls;
+/*                                                  
+---------------------------------------------------------------------------------------------------------------------------                                                          
+Created By :                                                      
+Created On :                         
+Purpose    :                                     
+Version    : 1.0.0                                                
+---------------------------------------------------------------------------------------------------------------------------                                                            
+Version     Modified On     Modified By            Purpose                                                            
+---------------------------------------------------------------------------------------------------------------------------                                                            
+1.0.1      28-03-2024      Ashutosh Dhobe        Added  CheckDisplaySection                
+------------------------------------------- -------------------------------------------------------------------------------                             
+*/
 
 public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
 {
@@ -21,6 +33,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
     ModuleConfigController objConfig = new ModuleConfigController();
+    PageControlValidationController objVC = new PageControlValidationController();
 
     List<string> validationErrors = new List<string>();
 
@@ -87,8 +100,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     FillDropDown();
                     ShowStudentDetails();
                     divhome.Visible = false;
-
-                  
+                    
 
                     string status = objCommon.LookUp("ACD_ADMISSION_STATUS_LOG", "STATUS", "IDNO=" + Convert.ToInt32(Session["idno"]));
                     DataSet dsinfo = objCommon.FillDropDown("ACD_ADM_STUD_INFO_SUBMIT_LOG", "PERSONAL_INFO,ADDRESS_INFO,DOC_INFO,QUAL_INFO,OTHER_INFO,FINAL_SUBMIT", "ADMBATCH", "IDNO=" + Convert.ToInt32(Session["idno"]) + "", string.Empty);
@@ -229,11 +241,12 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                
             }
 
+            CheckDisplaySection();
+            CheckIsEditable();
         }
         //divStudentLastQualification.Visible=false;
         //SSC_10TH_QUALIFICATION();   
         //HSC_12TH_QUALIFICATION();
-
     }
 
     
@@ -272,7 +285,8 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "QualificationDetails.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        string section = string.Empty;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -333,7 +347,139 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
             }
         }
     }
+    //<1.0.1>
+    private void CheckDisplaySection()
+    {
+        DataSet ds = null;
+        string section = string.Empty;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "QualificationDetails.aspx";
+        section = "Entrance Exam Scores";
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                divEntranceExamScores.Visible = true;
+            }
+            else
+            {
+                divEntranceExamScores.Visible = false;
+            }
+        }
+        section = "Student Last Qualification Details (Only for PG students)";
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                upEditQualExm.Visible = true;
+                trLastQual.Visible = true;
 
+            }
+            else
+            {
+                upEditQualExm.Visible = false;
+                trLastQual.Visible = false;
+            }
+        }
+        section = "Higher Secondary/12th Marks / Diploma Marks";
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                DivHigherEdu.Visible = true;
+            }
+            else
+            {
+                DivHigherEdu.Visible = false;
+            }
+
+        }
+
+        section = "Secondary/10th Marks";
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                divSecMArks.Visible = true;
+            }
+            else
+            {
+                divSecMArks.Visible = false;
+            }
+        }
+    }
+    //</1.0.1>
+
+    //<1.0.2>
+    public string CheckIsEditable()
+    {
+        DataSet ds = null;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "QualificationDetails.aspx";
+        string idno = string.Empty;
+        string section = string.Empty;
+        Boolean isEditable = true;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+
+        if (ViewState["usertype"].ToString() == "2")
+        {
+            idno = (Session["idno"]).ToString();
+        }
+        else
+        {
+            idno = (Session["stuinfoidno"]).ToString();
+        }
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+
+            if (row["IS_EDITABLE"].ToString() != string.Empty)
+            {
+                isEditable = Convert.ToBoolean(row["IS_EDITABLE"].ToString());
+            }
+            // Boolean isEditable =Convert.ToBoolean( row["IS_EDITABLE"]);
+            string controlID = string.Empty;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+            }
+
+            if (isEditable == false && !string.IsNullOrEmpty(controlID))
+            {
+                Control control = FindControlRecursive(Page, controlID);
+
+                if (control is TextBox)
+                {
+                    TextBox textBox = (TextBox)control;
+                    textBox.ReadOnly = true;
+                }
+
+                if (control is DropDownList)
+                {
+                    DropDownList dropdownlist = (DropDownList)control;
+                    dropdownlist.Enabled = false;
+                }
+
+                if (ViewState["usertype"].ToString() == "2" && control is FileUpload)
+                {
+                    FileUpload fileUploadControl = (FileUpload)control;
+                    fileUploadControl.Enabled = false;
+                }
+            }
+        }
+        return string.Empty;
+    }
+    //</1.0.2>
     private Control FindControlRecursive(Control parentControl, string controlId)
     {
         if (parentControl == null)
@@ -382,15 +528,21 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "QualificationDetails.aspx";
-
+        string section = string.Empty;
+        Boolean isDisplaySection = false;
         // Filter data based on the provided keyword
-        ds = FilterDataByKeyword(objConfig.GetStudentConfigData(orgID, pageNo, pageName), keyword);
+        ds = FilterDataByKeyword(objVC.GetStudentConfigData(orgID, pageNo, pageName, section), keyword);  
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
             string captionName = row["CAPTION_NAME"].ToString();
             string controlToHide = row["CONTROL_TO_HIDE"].ToString();
             string isMandatory = row["ISMANDATORY"].ToString();
+            if (row["IS_DISPLAY_SECTION_NAME"].ToString() != string.Empty)
+            {
+                isDisplaySection = Convert.ToBoolean(row["IS_DISPLAY_SECTION_NAME"].ToString());
+            }
+
             string controlID = string.Empty;
             string[] values = controlToHide.Split(',');
 
@@ -399,7 +551,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 controlID = values[0].Trim();
             }
 
-            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID))
+            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID) && isDisplaySection == true)
             {
                 Control control = FindControlRecursive(Page, controlID);
 

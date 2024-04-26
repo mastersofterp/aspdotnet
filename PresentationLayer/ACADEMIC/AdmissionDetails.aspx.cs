@@ -10,12 +10,25 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 using System.Linq;
+/*                                                  
+---------------------------------------------------------------------------------------------------------------------------                                                          
+Created By :                                                      
+Created On :                         
+Purpose    :                                     
+Version    : 1.0.0                                                
+---------------------------------------------------------------------------------------------------------------------------                                                            
+Version     Modified On     Modified By          Purpose                                                            
+---------------------------------------------------------------------------------------------------------------------------                                                            
+1.0.1      29-03-2024      Ashutosh Dhobe        Pass section name blank                
+------------------------------------------- -------------------------------------------------------------------------------                             
+*/
 
 public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     ModuleConfigController objConfig = new ModuleConfigController();
+    PageControlValidationController objVC = new PageControlValidationController();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -99,6 +112,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 
                 this.FillDropDown();
                 ShowStudentDetails();
+
                 StudentConfiguration();
             }
 
@@ -113,7 +127,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "AdmissionDetails.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, string.Empty); // <1.0.1> 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {

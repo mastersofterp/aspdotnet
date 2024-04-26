@@ -899,45 +899,45 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
         //string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"]));
         //if (ua_type == "8")
         //{
-            if (txtStartDate.Text != string.Empty && txtEndDate.Text != string.Empty)
+        if (txtStartDate.Text != string.Empty && txtEndDate.Text != string.Empty)
+        {
+            if (Convert.ToDateTime(txtEndDate.Text) <= Convert.ToDateTime(txtStartDate.Text))
             {
-                if (Convert.ToDateTime(txtEndDate.Text) <= Convert.ToDateTime(txtStartDate.Text))
+                objCommon.DisplayMessage(this, "End Date should be greater than Start Date", this.Page);
+                return;
+            }
+            else
+            {
+                string AttendanceStartDate = txtStartDate.Text;
+                string AttendanceEndDate = txtEndDate.Text;
+                //College = College.Substring(0, College.Length - 1);
+                int session = Convert.ToInt32(ddlSessionn.SelectedValue);
+                DataSet DS = RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(Session["userno"]), session);
+                DataGrid dg = new DataGrid();
+
+                if (DS.Tables[0].Rows.Count > 0)
                 {
-                    objCommon.DisplayMessage(this, "End Date should be greater than Start Date", this.Page);
-                    return;
+                    string attachment = "attachment; filename= GLOBALELECTIVE_ATT_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+
+                    Response.ClearContent();
+                    Response.AddHeader("content-disposition", attachment);
+                    Response.ContentType = "application/" + "ms-excel";
+                    StringWriter sw = new StringWriter();
+                    HtmlTextWriter htw = new HtmlTextWriter(sw);
+                    dg.DataSource = DS.Tables[0];
+                    dg.DataBind();
+                    dg.HeaderStyle.Font.Bold = true;
+                    dg.RenderControl(htw);
+                    Response.Write(sw.ToString());
+                    Response.End();
                 }
                 else
                 {
-                    string AttendanceStartDate = txtStartDate.Text;
-                    string AttendanceEndDate = txtEndDate.Text;
-                    //College = College.Substring(0, College.Length - 1);
-                    int session = Convert.ToInt32(ddlSessionn.SelectedValue);
-                    DataSet DS = RETRIEVE_GLOBAL_ELECTIVE_ATT_REPORT(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(Session["userno"]), session);
-                    DataGrid dg = new DataGrid();
-
-                    if (DS.Tables[0].Rows.Count > 0)
-                    {
-                        string attachment = "attachment; filename= GLOBALELECTIVE_ATT_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-
-                        Response.ClearContent();
-                        Response.AddHeader("content-disposition", attachment);
-                        Response.ContentType = "application/" + "ms-excel";
-                        StringWriter sw = new StringWriter();
-                        HtmlTextWriter htw = new HtmlTextWriter(sw);
-                        dg.DataSource = DS.Tables[0];
-                        dg.DataBind();
-                        dg.HeaderStyle.Font.Bold = true;
-                        dg.RenderControl(htw);
-                        Response.Write(sw.ToString());
-                        Response.End();
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage("Record Not Found!!", this.Page);
-                        return;
-                    }
+                    objCommon.DisplayMessage("Record Not Found!!", this.Page);
+                    return;
                 }
             }
+        }
     }
     string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     //Added by jay takalkhede on dated 10042024 Added report in which get Global Elective Course Attendance Data (TkNo.56806)

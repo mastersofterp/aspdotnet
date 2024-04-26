@@ -30,27 +30,25 @@
  
 
       <script>
-        function SetParticipation(val) {
-          
-            $('#rdActive').prop('checked', val);
+          function SetParticipation(val) {
 
-        }
-        function validate() {
-            $('#hfdActive').val($('#rdActive').prop('checked'));
-        }
+              $('#rdActive').prop('checked', val);
 
-        var prm = Sys.WebForms.PageRequestManager.getInstance();
-        prm.add_endRequest(function () {
-            $(function () {
-                $('#btnSubmit').click(function () {
-                    validate();
-                });
-            });
-        });
+          }
+          function validate() {
+              $('#hfdActive').val($('#rdActive').prop('checked'));
+          }
+
+          var prm = Sys.WebForms.PageRequestManager.getInstance();
+          prm.add_endRequest(function () {
+              $(function () {
+                  $('#btnSubmit').click(function () {
+                      validate();
+                  });
+              });
+          });
     </script>
-    <script>
-      
-    </script>
+   
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
 
     <asp:UpdatePanel ID="updSession" runat="server">
@@ -128,7 +126,7 @@
                                             Display="None" ErrorMessage="Please Select Degree" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="lsbranch">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Branch</label>
@@ -156,7 +154,8 @@
                                             <sup>* </sup>
                                             <label>Office Report End Date</label>
                                         </div>
-                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
+                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" 
+                                            OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtOfficeVisitEndDate"
                                             Display="None" ErrorMessage="Please Select Office Report End Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -250,13 +249,18 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 btn-footer">
+                            <div class="col-12 btn-footer"> 
+                                   <asp:Button ID="btnShow" runat="server" Text="Show"  CssClass="btn btn-primary"  onclick="btnShow_Click"/> 
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClientClick="validate();" CssClass="btn btn-primary" ValidationGroup="Academic" OnClick="btnSubmit_Click" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="false" ValidationGroup="Academic" />
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false" OnClick="btnCancel_Click" />
+                                
+                            
+                                   <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false" OnClick="btnCancel_Click"  /> 
+                                <asp:Button ID="btnReport" runat="server" Text="Report"  CssClass="btn btn-primary"  Onclick="btnReport_Click" />
+                              
                             </div>
 
-                            <div class="col-12 mt-3" style="overflow-y: auto; max-height: 500px;">
+                            <div class="col-12 mt-3" style="overflow-y: auto; max-height: 500px;" runat="server" id="lvPaymentConfiguration" visible="false">
                                 <div class="sub-heading">
                                     <h5>Fee Payment Configuration List</h5>
                                 </div>
@@ -275,7 +279,7 @@
                                                         <th>Payment Start Date</th>
                                                         <th>Payment End Date</th>
                                                         <th>Payment Category</th>
-                                                        <th>Amount/Percentage</th>
+                                                        <th>Amount / Percentage</th>
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
@@ -337,6 +341,8 @@
 
             <asp:PostBackTrigger ControlID="btnSubmit" />
             <asp:PostBackTrigger ControlID="btnCancel" />
+            <asp:PostBackTrigger ControlID="btnReport" /> 
+              <asp:PostBackTrigger ControlID="btnShow" />
 
         </Triggers>
     </asp:UpdatePanel>
@@ -378,18 +384,18 @@
         function ValidateDate() {
             $('#<%= txtStartDate.ClientID %>').click(function () {
                 var endDate = $('#<%= txtOfficeVisitEndDate.ClientID %>').val();
-                 var startDate = $(this).val();
+                var startDate = $(this).val();
 
-                 if (endDate === '') {
-                     alert('Please Select Office Report End Date First');
-                     $('#<%= txtOfficeVisitEndDate.ClientID %>').focus();
-                    $(this).val(''); // Clear the value of Start Date textbox
-                }
-             });
+                if (endDate === '') {
+                    alert('Please Select Office Report End Date First');
+                    $('#<%= txtOfficeVisitEndDate.ClientID %>').focus();
+                     $(this).val(''); // Clear the value of Start Date textbox
+                 }
+            });
 
 
 
-            $('#<%= txtOfficeVisitEndDate.ClientID %>').click(function () {
+             $('#<%= txtOfficeVisitEndDate.ClientID %>').click(function () {
                 var startDate = $('#<%= txtOfficeVisitStartDate.ClientID %>').val();
 
                 if (startDate === '') {
@@ -402,12 +408,11 @@
 
             $('#<%= txtEndDate.ClientID %>').click(function () {
                 var startDate = $('#<%= txtStartDate.ClientID %>').val();
-                var endDate = $(this).val();
 
                 if (startDate === '') {
                     alert('Please Select Payment Start Date first');
                     $('#<%= txtStartDate.ClientID %>').focus();
-                    $(this).val(''); 
+                    $(this).val('');
                 }
             });
 
@@ -419,7 +424,7 @@
                 if (endDate === '') {
                     alert('Please Select Payment End Date first');
                     $('#<%= txtEndDate.ClientID %>').focus();
-                    $(this).val(''); // Clear the value of Payment Valid Date textbox
+                    $(this).val('');
                 }
             });
         }

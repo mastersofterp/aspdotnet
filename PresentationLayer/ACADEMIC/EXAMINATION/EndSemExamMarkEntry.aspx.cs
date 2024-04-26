@@ -5,7 +5,7 @@
 // CREATED BY    : ROHIT KUMAR TIWARI                                            
 // MODIFIED BY   :                                                  
 // MODIFIED DESC : 
-//=================================================================================
+////=================================================================================
 
 using System;
 using System.Collections;
@@ -251,6 +251,13 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         Subexam = ddlSubExamName.SelectedValue;
                         SubExamComponentName = ddlSubExamName.SelectedItem.Text;
                     } 
+               
+                    else 
+                    {
+                        Subexam = ddlSubExamName.SelectedValue;
+                        SubExamComponentName = ddlSubExamName.SelectedItem.Text;
+                    }
+
                 }
                 else
                 {
@@ -751,7 +758,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         else
         {
             Exam = ddlExam.SelectedValue.Split('-');
-            if ((ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 0) || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")
+            if ((ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 0) || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5" || ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
             {
                 Subexam = ddlSubExamName.SelectedValue;
             }
@@ -788,6 +795,20 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
+
+        if (ddlSession.SelectedIndex > 0)
+        {
+            string DegreeNo = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) INNER JOIN ACD_DEGREE A ON (A.DEGREENO IN(SELECT VALUE FROM DBO.Split( SA.DEGREENO,','))) INNER JOIN ACD_COLLEGE_DEGREE B ON A.DEGREENO=B.DEGREENO INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON CDB.DEGREENO=A.DEGREENO", "DISTINCT SA.DEGREENO", "STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ISNULL(AM.ACTIVESTATUS,0)=1 AND SESSION_NO="+ddlSession.SelectedValue+""); // Added by Sagar Mankar on Date 26022024 with Ticket No 55171
+            objCommon.FillDropDownList(ddldegree, "SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) INNER JOIN ACD_DEGREE A ON (A.DEGREENO IN(SELECT VALUE FROM DBO.Split( SA.DEGREENO,','))) INNER JOIN ACD_COLLEGE_DEGREE B ON A.DEGREENO=B.DEGREENO INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON CDB.DEGREENO=A.DEGREENO", "DISTINCT A.DEGREENO", "A.DEGREENAME", "B.COLLEGE_ID=" + ddlcollege.SelectedValue + " and A.DEGREENO IN(SELECT VALUE FROM DBO.SPLIT( '" + DegreeNo + "',',')) and sa.SESSION_NO=" + ddlSession.SelectedValue + "", "A.degreeno"); // Added by Sagar Mankar on Date 26022024 with Ticket No 55171
+
+            ddldegree.Focus();
+        }
+        else
+        {
+            ddldegree.Items.Clear();
+            ddldegree.Items.Add(new ListItem("Please Select", "0"));
+        }
+
         //ddlcollege.Items.Clear();
         //ddlcollege.Items.Add(new ListItem("Please Select", "0"));
         //ddldegree.Items.Clear();
@@ -1026,6 +1047,33 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 
                 divSubExamName.Visible = true;
             }
+            else if (ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "15")
+            {
+                string ENDSEMCOMPONENT = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(MULTIPALE_END_SEM_COMPONENT,0)", "");
+                ViewState["ENDSEMCOMPONENT"] = ENDSEMCOMPONENT.ToString();
+
+                string MULTI_EXTERNAL_EXAM = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(MULTI_EXTERNAL_EXAM,0)", "");
+                ViewState["SUBJECTFORMARK"] = MULTI_EXTERNAL_EXAM.ToString();
+
+
+                ViewState["SubType"] = "0";
+
+                foreach (string items in ViewState["SUBJECTFORMARK"].ToString().Split(','))
+                {
+                    if (ddlSubjectType.SelectedValue.ToString() == items)
+                    {
+                        ViewState["SubType"] = items.ToString();
+                        divSubExamName.Visible = true;
+                        objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND ISNULL(RULE1,0)>0 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND SN.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+
+                    }
+                }
+
+
+                //objCommon.FillDropDownList(ddlSubExamName, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + "", "");
+
+               
+            }
 
             else
             {
@@ -1159,7 +1207,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             objCommon.DisplayMessage(this,"Exam Rule for End Sem Exam is Defined For Multiple Subexam..Please Check The Examination Rule Or Contact to Admin!! ", this.Page);
             return;
         }
-        else if (examrule_count > 2 && ddlSubjectType.SelectedValue != "1" && Is_Specialcase != 1)
+        else if (examrule_count > 1 && (ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16") && Is_Specialcase != 1)
+        {
+            //objCommon.DisplayMessage(this, "Exam Rule for End Sem Exam is Defined For Multiple Subexam..Please Check The Examination Rule Or Contact to Admin!! ", this.Page);
+            //return;
+        }
+        else if (examrule_count > 2 && ddlSubjectType.SelectedValue != "1"  && Is_Specialcase != 1)
         {
             objCommon.DisplayMessage(this, "Exam Rule for End Sem Exam is Defined For Multiple Subexam..Please Check The Examination Rule Or Contact to Admin!! ", this.Page);
             return;
@@ -1447,7 +1500,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 
             }
             //DataSet ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO="+Convert.ToInt32(ddlscheme.SelectedValue) +" AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
-            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "5" || ddlSubjectType.SelectedValue == "14")
+            if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "5" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
             {
                 //ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO IN(SELECT DISTINCT SUBEXAMNO FROM ACD_SUBEXAM_NAME WHERE ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[0] + ") AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ddlscheme.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", "");
                 ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExamName.SelectedValue).Split('-')[1] + "AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ddlscheme.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + "", ""); 
@@ -1561,6 +1614,10 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     int z = 0;
                     int lockcount = 0;
                    
+
+                    int final_lock = 0;
+
+
                     for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
                     {
                         if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["LOCK"]) == true)
@@ -1568,6 +1625,17 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                             lockcount++;
                         }
                     }
+                    if (ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
+                    {
+                        for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                        {
+                            if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["FINAL_LOCK"]) == true)
+                            {
+                                final_lock++;
+                            }
+                        }
+                    }
+
                     //int Studentcount=
 
 
@@ -1656,7 +1724,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
                             if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")        //Added subid12 dt on 10022023 as per client req.
                             {
-
 
                                 if (lockcount == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
                                 {
@@ -1844,8 +1911,26 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     }
                                     else
                                     {
-                                        btnGrade.Enabled = true;
-                                        btnGrade.Visible = true;
+                                        if (ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
+                                        {
+                                            if (final_lock == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                            {
+                                                gvStudent.Columns[5].Visible = true;
+                                                btnGrade.Enabled = true;
+                                                btnGrade.Visible = true;
+                                            }
+                                            else
+                                            {
+                                                gvStudent.Columns[5].Visible = false;
+                                                btnGrade.Enabled = false;
+                                                btnGrade.Visible = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = true;
+                                            btnGrade.Visible = true;
+                                        }
                                     }
                                     btnMarksModifyReport.Visible = true;
                                     ///
@@ -2000,8 +2085,27 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                 }
                                 else
                                 {
-                                    btnGrade.Visible = true;
-                                    btnGrade.Enabled = true;
+                                    //btnGrade.Visible = true;
+                                    //btnGrade.Enabled = true;
+
+                                    if (ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
+                                    {
+                                        if (final_lock == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                        {
+                                            btnGrade.Enabled = true;
+                                            btnGrade.Visible = true;
+                                        }
+                                        else
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+                                    }
 
                                 }
                                 btnMarksModifyReport.Visible = true;
@@ -2034,8 +2138,27 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                 }
                                 else
                                 {
-                                    btnReGrade.Enabled = true;
-                                    btnReGrade.Visible = true;
+                                    //btnReGrade.Enabled = true;
+                                    //btnReGrade.Visible = true;
+
+                                    if (ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
+                                    {
+                                        if (final_lock == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                        {
+                                           btnReGrade.Enabled = true;
+                                           btnReGrade.Visible = true;
+                                        } 
+                                        else
+                                        {
+                                           btnReGrade.Enabled = false;
+                                        }  btnReGrade.Visible = false;
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+                                    }
+
                                 }
                                 btnMarksModifyReport.Visible = true;
                                 btnfinalmarkentry.Visible = true;
@@ -2145,7 +2268,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                 btnfinalmarkentry.Visible = false;
                                 btnmarkexcel.Visible = false;
                             }
-                        
+
                         }
                     }
                     else
@@ -2164,8 +2287,24 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                             }
                             else
                             {
-                                btnGrade.Enabled = true;
-                                btnGrade.Visible = true;
+                                if (ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
+                                {
+                                    if (final_lock == Convert.ToInt32(dsStudent.Tables[0].Rows.Count.ToString()))
+                                    {
+                                        btnGrade.Enabled = true;
+                                        btnGrade.Visible = true;
+                                    }
+                                    else
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                    }
+                                }
+                                else
+                                {
+                                    btnGrade.Enabled = true;
+                                    btnGrade.Visible = true;
+                                }
                             }
                         }
                         else
@@ -2535,7 +2674,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
            // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[0]);
 
             Exam = ddlExam.SelectedValue.Split('-');
-            if ((ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 0) || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5")
+            if ((ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 0) || ddlSubjectType.SelectedValue == "11" || ddlSubjectType.SelectedValue == "12" || ddlSubjectType.SelectedValue == "13" || ddlSubjectType.SelectedValue == "14" || ddlSubjectType.SelectedValue == "5" || ddlSubjectType.SelectedValue == "15" || ddlSubjectType.SelectedValue == "16")
             {
                 Subexam = ddlSubExamName.SelectedValue;
             }
@@ -2755,6 +2894,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         }
         else
         {
+            
             Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME SN INNER JOIN ACAD_EXAM_RULE ER ON ER.EXAMNO=SN.SUBEXAMNO AND ER.SUB_ID=SN.SUBEXAM_SUBID AND COURSENO=" + ddlCourse.SelectedValue + "", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "ACTIVESTATUS=1 AND ISNULL(RULE1,0)>0 AND SN.EXAMNO=" + Exam[0]);
         }
         string Username = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"].ToString()));

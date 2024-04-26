@@ -275,6 +275,7 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
             if (ret == 1)
             {
                 string usr = "(" + username + " / " + user_Fullname + ")";
+                usr = username;
                 int ret1 = SendEmailSMS(userno, usr, ViewState["adminEmailID"].ToString(), ViewState["AdminMobileNo"].ToString(), OTP);
                 if (ret1 == 1)
                 {
@@ -539,12 +540,7 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
             int successFail = checkOTPSecurity(Convert.ToInt32(ViewState["userno"]), OTP);
             if (successFail == 0)
                 return ret;
-
-            string subject = "ERP || OTP for Login";
-            string message = "Your One Time Password is : ";
-            message += OTP;
-            message += " for User login : " + userName;
-            message += "<br /><br />Note :This is system generated email. Please do not reply to this email.<br />";
+           
 
             //if (email == 1)
             //{
@@ -572,11 +568,14 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
             //    ret = OutLook_Email(message, userEmail, subject);
             //}
 
+            string subject = "ERP || OTP for Login";
+            string message = "Your One Time Password is : ";
+            message += OTP;
+            message += " for User login : " + userName;
+            message += "<br /><br />Note :This is system generated email. Please do not reply to this email.<br />";
             SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
             ret = objSendEmail.SendEmail(userEmail, message, subject); //Calling Method
-                                                                       //}
-                                                                       //else
-                                                                       //{
+                                                                       
             if (mobileNo != string.Empty && mobileNo.Length == 10)
             {
                 #region commented code by SRK on dated 04.07.2023
@@ -605,7 +604,8 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
                 DataSet TDeley = objCommon.FillDropDown("[dbo].[Reff]", "OTPDeleyMin", "OTPAttempt", "", "");
                 int Attempcnt = Convert.ToInt32((TDeley.Tables[0].Rows[0]["OTPAttempt"].ToString()));
                 int DelayTim = Convert.ToInt32((TDeley.Tables[0].Rows[0]["OTPDeleyMin"].ToString()));
-                TEMPLATE = "	Your One Time Password is: {#var#} for User login: {#var1#}.\r\n OTP is valid for {#var2#} Minutes or {#var3#} Successful Attempt.\r\n\r\nRegards,\r\nMSERP. \r\n";
+               // TEMPLATE = "	Your One Time Password is: {#var#} for User login: {#var1#}.\r\n OTP is valid for {#var2#} Minutes or {#var3#} Successful Attempt.\r\n\r\nRegards,\r\nMSERP. \r\n";
+                TEMPLATE = "Your One Time Password is: {#var#} for User login: {#var1#}. OTP is valid for {#var2#} Minutes or {#var3#} Successful Attempt.Regards,MSERP.";                  
                 TemplateID = "1007118898664574270";
                 message = TEMPLATE;
                 message = message.Replace("{#var#}", OTP.ToString());

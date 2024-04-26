@@ -1,11 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="ProvisionalCertificate.aspx.cs" Inherits="ACADEMIC_EXAMINATION_ProvisionalCertificate" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <div>
-        <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updUpdate"
+    <%--<div>
+        <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updFacAllot"
             DynamicLayout="true" DisplayAfter="0">
             <ProgressTemplate>
                 <div id="preloader">
@@ -37,6 +38,57 @@
                                                 <label>Registration No</label>
                                             </div>
                                             <asp:TextBox CssClass="form-control" runat="server" ID="txtRegistrationNo" data-select2-enable="true"></asp:TextBox>
+    </div>--%>
+    <div>
+        <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updFacAllot"
+            DynamicLayout="true" DisplayAfter="0">
+            <ProgressTemplate>
+                <div id="preloader">
+                    <div id="loader-img">
+                        <div id="loader">
+                        </div>
+                        <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                    </div>
+                </div>
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+    </div>
+    <asp:UpdatePanel runat="server" ID="updFacAllot">
+        <ContentTemplate>
+            <div runat="server" id="divDetails">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-12">
+                        <div class="box box-primary">
+                            <div id="div2" runat="server"></div>
+                            <div class="box-header with-border">
+                                <h3 class="box-title">
+                                    <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
+                            </div>
+                            <div class="box-body">
+                                <%--<div>
+                                    <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updUpdate"
+                                        DynamicLayout="true" DisplayAfter="0">
+                                        <ProgressTemplate>
+                                            <div id="preloader">
+                                                <div id="loader-img">
+                                                    <div id="loader">
+                                                    </div>
+                                                    <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                                                </div>
+                                            </div>
+                                        </ProgressTemplate>
+                                    </asp:UpdateProgress>
+                                </div>--%>
+                                <%--<asp:UpdatePanel ID="updUpdate" runat="server">
+                                    <ContentTemplate>--%>
+                                <div class="col-12">
+                                    <div class="row" runat="server" id="divRegistrationNo" visible="false">
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>Registration No</label>
+                                            </div>
+                                            <asp:TextBox CssClass="form-control" runat="server" ID="txtRegistrationNo"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="rfvRegistrationNo" runat="server" ControlToValidate="txtRegistrationNo"
                                                 Display="None" ErrorMessage="Please Enter Registration No." InitialValue="" ValidationGroup="report"></asp:RequiredFieldValidator>
                                         </div>
@@ -70,7 +122,6 @@
                                                             <asp:Label ID="lblMobileNo" runat="server" Text="" Font-Bold="true"></asp:Label>
                                                         </a>
                                                     </li>
-                                                   
                                                 </ul>
                                             </div>
                                             <div class="col-lg-4 col-md-6 col-12">
@@ -87,35 +138,44 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                             <div class="col-lg-4 col-md-6 col-12">
+
+                                            <div class="col-lg-4 col-md-6 col-12">
                                                 <ul class="list-group list-group-unbordered">
                                                     <li class="list-group-item"><b>DGPA :</b>
-                                                        <a class="sub-label">
-                                                            <asp:Label ID="lblDGPA" runat="server" Text="" Font-Bold="true"></asp:Label>
-                                                        </a>
-                                                    </li>
-                                                  
-                                                </ul>
+
+                                                        <div class="col-lg-4 col-md-6 col-12">
+                                                            <ul class="list-group list-group-unbordered">
+                                                                <li class="list-group-item"><b>SGPA :</b>
+
+                                                                    <a class="sub-label">
+                                                                        <asp:Label ID="lblDGPA" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
+                                                        </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12 btn-footer">
-                                        <asp:HiddenField ID="hdfSessionno" runat="server" />
-                                        <asp:Button ID="btnPrint" Visible="false" runat="server" OnClick="btnPrint_Click"
-                                            Text="Print Provisional Certificate" CssClass="btn btn-info" ValidationGroup="report" />
+                                        <div class="col-12 btn-footer">
+                                            <asp:HiddenField ID="hdfSessionno" runat="server" />
+                                            <asp:Button ID="btnPrint" Visible="false" runat="server" OnClick="btnPrint_Click"
+                                                Text="Print Provisional Certificate" CssClass="btn btn-info" ValidationGroup="report" />
+                                        </div>
                                     </div>
                                 </div>
-                            </ContentTemplate>
-                            <Triggers>
-                                <asp:PostBackTrigger ControlID="btnPrint" />
-                            </Triggers>
-                        </asp:UpdatePanel>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
-        <div id="divMsg" runat="server">
-        </div>
+        </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnPrint" />
+        </Triggers>
+    </asp:UpdatePanel>
+
+    <div id="divMsg" runat="server">
+    </div>
+
 </asp:Content>
 

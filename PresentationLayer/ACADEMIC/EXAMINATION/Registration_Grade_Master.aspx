@@ -41,17 +41,19 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><b>GRADE REGISTRATION</b></h3>
+                            <%--<h3 class="box-title"><b>GRADE REGISTRATION</b></h3>--%>
+                             <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                         </div>
 
                         <div class="box-body">
 
                             <div class="col-md-12">
-                                <asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>
+                                <%--<asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>--%>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label><span style="color: red;">*</span> Activity Name</label><br />
+                                    <%--<label><span style="color: red;">*</span> Activity Name</label><br />--%>
+                                    <label><span style="color: red;">*</span><asp:Label ID="lblDYActivityName" runat="server" Font-Bold="true"></asp:Label></label><br />
                                     <asp:DropDownList ID="ddlActivityName" runat="server" TabIndex="1" ToolTip="Please Select Activity Name" data-select2-enable="true" AppendDataBoundItems="true"  AutoPostBack="True" OnSelectedIndexChanged="ddlActivityName_SelectedIndexChanged">
                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                     </asp:DropDownList>
@@ -61,7 +63,8 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label><span style="color: red;">*</span> Grade</label><br />
+                                    <%--<label><span style="color: red;">*</span> Grade</label><br />--%>
+                                    <label><span style="color: red;">*</span><asp:Label ID="lblDYddlGrade" runat="server" Font-Bold="true"></asp:Label></label><br />
                                     <asp:ListBox ID="ddlGrade" runat="server" SelectionMode="Multiple" TabIndex="1"
                                         CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
 
@@ -75,7 +78,8 @@
                                 <div class="col-md-4">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
-                                        <label>Status</label>
+                                        <%--<label>Status</label>--%>
+                                        <asp:Label ID="lblDYStatus" runat="server" Font-Bold="true"></asp:Label>
                                     </div>
                                     <div class="switch form-inline">
                                         <input type="checkbox" id="rdActive" tabindex="1" checked />

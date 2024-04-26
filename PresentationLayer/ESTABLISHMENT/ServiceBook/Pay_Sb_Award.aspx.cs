@@ -63,6 +63,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
             _idnoEmp = Convert.ToInt32(Session["serviceIdNo"].ToString().Trim());
         }
         BindListViewAchiement();
+        GetConfigForEditAndApprove();
     }
 
     private void BindListViewAchiement()
@@ -82,7 +83,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
         }
     }
 
-  
+
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         {
@@ -94,7 +95,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
                     dt = (DataTable)ViewState["FILE1"];
                 }
 
-              
+
                 ServiceBook objSevBook = new ServiceBook();
                 objSevBook.IDNO = _idnoEmp;
                 objSevBook.AwardName = txtAward.Text;
@@ -145,7 +146,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
                                 string SFNO = objCommon.LookUp("PAYROLL_SB_AWARD", "MAX(AWDNO)", "");
                                 AddDocuments(Convert.ToInt32(SFNO));
                             }
-                            
+
                             this.Clear();
                             this.BindListViewAchiement();
                             MessageBox("Record Saved Successfully");
@@ -160,7 +161,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
                     {
                         //Edit
                         if (ViewState["AWDNO"] != null)
-                        {                            
+                        {
                             objSevBook.AWDNO = Convert.ToInt32(ViewState["AWDNO"].ToString());
                             CustomStatus cs = (CustomStatus)objServiceBook.UpdateAward(objSevBook, dt);
                             if (cs.Equals(CustomStatus.RecordUpdated))
@@ -171,10 +172,10 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
                                     AddDocuments(Convert.ToInt32(SCNO));
                                 }
 
-                               
+
                                 ViewState["action"] = "add";
                                 ViewState["AWDNO"] = null;
-                               
+
                                 this.Clear();
                                 this.BindListViewAchiement();
                                 MessageBox("Record Updated Successfully");
@@ -187,7 +188,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
 
                         }
                     }
-                  
+
                 }
 
             }
@@ -203,7 +204,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
         }
 
     }
-  
+
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
         try
@@ -275,6 +276,26 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
                 LVFiles.DataSource = null;
                 LVFiles.DataBind();
             }
+            if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
+            {
+                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                if (STATUS == "A")
+                {
+                    MessageBox("Your Details Are Approved You Cannot Edit.");
+                    btnSubmit.Enabled = false;
+                    return;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+                GetConfigForEditAndApprove();
+            }
+            else
+            {
+                btnSubmit.Enabled = true;
+                GetConfigForEditAndApprove();
+            }
         }
         catch (Exception ex)
         {
@@ -294,14 +315,30 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
             //lblFamilymsg.Text = string.Empty;
             ImageButton btnDel = sender as ImageButton;
             int AWDNO = int.Parse(btnDel.CommandArgument);
-            CustomStatus cs = (CustomStatus)objServiceBook.DeleteAward(AWDNO);
-            if (cs.Equals(CustomStatus.RecordDeleted))
+            DataSet ds = new DataSet();
+            ds = objCommon.FillDropDown("PAYROLL_SB_AWARD", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "AWDNO=" + AWDNO, "");
+            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+            if (STATUS == "A")
             {
-                MessageBox("Record Deleted Successfully");
-                BindListViewAchiement();
-                //lblFamilymsg.Text = "Record Deleted Successfully";
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
+                return;
+            }
+            else
+            {
+                CustomStatus cs = (CustomStatus)objServiceBook.DeleteAward(AWDNO);
+                if (cs.Equals(CustomStatus.RecordDeleted))
+                {
+                    MessageBox("Record Deleted Successfully");
+                    BindListViewAchiement();
+                    //lblFamilymsg.Text = "Record Deleted Successfully";
 
-                ViewState["action"] = "add";
+                    ViewState["action"] = "add";
+                }
             }
         }
         catch (Exception ex)
@@ -316,6 +353,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
     {
         Clear();
         DeleteDirecPath(Docpath + "TEMP_AWDFILES\\" + _idnoEmp + "\\APP_0");
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -330,6 +368,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
         ViewState["FILE1"] = null;
         ddlAward.SelectedIndex = 0;
         txtIssueOrg.Text = string.Empty;
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     public string GetFileNamePath(object filename, object AWDNO, object idno)
@@ -500,7 +541,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
     private bool FileTypeValid(string FileExtention)
     {
         bool retVal = false;
-        string[] Ext = { ".jpg", ".JPG", ".bmp", ".BMP", ".gif", ".GIF", ".png", ".PNG", ".pdf", ".PDF"};
+        string[] Ext = { ".jpg", ".JPG", ".bmp", ".BMP", ".gif", ".GIF", ".png", ".PNG", ".pdf", ".PDF" };
         foreach (string ValidExt in Ext)
         {
             if (FileExtention == ValidExt)
@@ -705,4 +746,54 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Award : System.Web.UI.Page
             }
         }
     }
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Award";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
+    #endregion
 }

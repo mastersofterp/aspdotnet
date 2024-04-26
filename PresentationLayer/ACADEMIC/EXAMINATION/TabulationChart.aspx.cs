@@ -350,6 +350,42 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             {
                 btnCertificate.Visible = true; // Added for degree certificate by shubham
             }
+            #region For KGIT added on 15/04/2024 by Tejas Thakre
+            else if (Convert.ToInt32(Session["OrgId"]) == 24) //added by Tejas Thakre for KGIT Client
+            {
+                tab_year.Visible = true;
+                btncoursegrade.Visible = false;
+                btngraderange.Visible = false;
+                btnExcel.Visible = false;
+                btnExamFeesPaid.Visible = false;
+                btnConvocationExcelReport.Visible = false;
+                Yearid.Visible = false;
+                btnConsolidateGradeCard.Visible = false;
+                Dateissue.Visible = false;
+                btnConsoli.Visible = false;
+                btnConsoliA4.Visible = false;
+                btnLedgerReport.Visible = false;
+
+                btnProgrssionrpt.Visible = false;
+                pre_eleven.Visible = false;
+
+                DatePublish.Visible = false;
+
+                btnResultStatistics.Visible = false;
+                pre_eight.Visible = false;
+                btnSRNo.Visible = false;
+                btnProvisionalDegree.Visible = true;
+                txtScrutinized.Visible = false;
+                lblScrutinized.Visible = false;
+                btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = false;
+                btnTabulationReport.Visible = false;
+                btnTabulationReportDept.Visible = false;
+
+                btnCount.Visible = true; // Added by Sagar M on Date 01042024 for HITS Result Analysis Report with TKT No 57093
+
+            }
+            #endregion
             else
             {
                 tab_year.Visible = true;
@@ -5491,6 +5527,11 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             }
 
         }
+        else if (Convert.ToInt32(Session["OrgId"]) == 24) //Addded By Tejas thakre as on 03_04_2024 TID-56787
+        {
+            ShowPrvisionalDegree("Provisional Degree", "Provisional_Degree_Certificate_KGIT.rpt");
+        }
+
     }
 
     private void ShowPrvisionalDegree(string reportTitle, string rptFileName)
@@ -5503,9 +5544,20 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             url += "&path=~,Reports,Academic," + rptFileName;
             // url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SCHEMENO=" + 0 + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_ORDER_BY=1,@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
-            if (Convert.ToInt32(ViewState["degreeno"]) == 13)
+            if (Convert.ToInt32(Session["OrgId"]) == 3)
             {
-                url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + ViewState["schemeno"].ToString() + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                if (Convert.ToInt32(ViewState["degreeno"]) == 13)
+                {
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + ViewState["schemeno"].ToString() + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                }
+                else
+                {
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + ViewState["schemeno"].ToString() + ",@P_IDNO=" + GetIDNO();
+                }
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 24)
+            {
+                url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + ViewState["schemeno"].ToString() + ",@P_IDNO=" + GetIDNOS_NEW();
             }
             else
             {

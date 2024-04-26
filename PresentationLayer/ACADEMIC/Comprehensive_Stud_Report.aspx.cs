@@ -50,6 +50,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
     decimal addition1 = 0;
     decimal addition2 = 0;
     int Internalflag_subexam = 0;
+    int Internalflag_Assess = 0;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -105,6 +106,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
                 //CHECK THE STUDENT LOGIN
                 Internalflag_subexam = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(SubExam_Internal_mark_Student,0)", ""));
+                Internalflag_Assess = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(INT_MARKS_ASSESSMENT_WISE,0)", ""));
                 ViewState["Internalflag_subexam"] = Internalflag_subexam;
                 string ua_type = objCommon.LookUp("User_Acc", "UA_TYPE", "UA_IDNO=" + Convert.ToInt32(Session["idno"]) + " and ua_no=" + Convert.ToInt32(Session["userno"]));
                 ViewState["usertype"] = ua_type;
@@ -119,6 +121,11 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                     getstudentinternalcourse();
                     //getinternalmarks1();
                 }
+                else if (Internalflag_Assess == 1)
+                {
+                    divInternalMarks.Visible = true;
+                    getstudentinternalcourse();
+                }
 
 
                 if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
@@ -131,7 +138,18 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         ddlSession.SelectedIndex = 1;
                     }
                     divStudent.Visible = true;
-                    divMITExcel.Visible = true;
+
+                    if (Convert.ToInt32(Session["OrgId"]) == 8)
+                    {
+                        divMITExcel.Visible = true;
+                    }
+                    else
+                    {
+                        divMITExcel.Visible = false;
+                    }
+
+
+
                     ShowDetails();
 
                 }
@@ -925,6 +943,12 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 getstudentinternalcourse();
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
             }
+            else if (Internalflag_Assess == 1)
+            {
+                getstudentinternalcourse();
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
+
+            }
             else if (Convert.ToInt32(Session["OrgId"]) == 9)
             {
 
@@ -942,7 +966,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
 
             }
-          
+
             else if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 if (ddlSession.SelectedIndex == 0)
@@ -3304,6 +3328,48 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
             string para_name = "@P_IDNO,@P_SESSIONNO,@P_COURSENO";
             string call_values = "" + idno + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Int32.Parse(lnkmark.CommandArgument) + "";
+            ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                LvinternalData2.DataSource = ds;
+                LvinternalData2.DataBind();
+                lblCoursename.Text = ds.Tables[0].Rows[0]["COURSE_NAME"].ToString();
+                lblCCode.Text = ds.Tables[0].Rows[0]["CCODE"].ToString();
+                lblSessionname.Text = ds.Tables[0].Rows[0]["SESSION_NAME"].ToString();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalInternal();", true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+            }
+        }
+
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
+    }
+    protected void lnkmark1_Click(object sender, EventArgs e)
+    {
+        getFixedDetails();
+        int idno = 0;
+        if (ViewState["usertype"].ToString() == "2")
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(ViewState["idno"]);
+            //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollmentSearch.Text.Trim());
+            //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + idno, "R.SESSIONNO DESC");                                
+        }
+        string regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + idno + " ");
+        LinkButton lnkmark1 = sender as LinkButton;
+        if (lnkmark1.CommandArgument != string.Empty)
+        {
+            DataSet ds = null;
+
+            string proc_name = "PKG_GET_SUBEXAMNAME_BY_PARTICULATUR_IDNO_SESSION";
+
+            string para_name = "@P_IDNO,@P_SESSIONNO,@P_COURSENO";
+            string call_values = "" + idno + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Int32.Parse(lnkmark1.CommandArgument) + "";
             ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {

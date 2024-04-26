@@ -23,9 +23,8 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-                <div class="box-header with-border" style="display: flex;">
-                    <h3 class="box-title">Hostel In/Out Request(s)</h3>
-                    <%--                    <asp:Button ID="btnAddGatepass" runat="server" Text="Add Gate Pass" Height="20%" />--%>
+                <div class="box-header with-border">  <%--lblDynamicPageTitle Added By Himanshu tamrakar 23-02-2024--%>
+                    <h3 class="box-title" style="text-transform:uppercase;" ><asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
 
                 <div class="box-body">
@@ -80,7 +79,7 @@
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
-                                    <label>Out Date </label>
+                                    <sup>* </sup><label>From Date </label>
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -93,18 +92,18 @@
                                     <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" TargetControlID="txtOutDate"
                                         Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
                                         MaskType="Date" ErrorTooltipEnabled="false" />
-                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" EmptyValueMessage="Please enter date."
+                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" EmptyValueMessage="Please Enter From Date."
                                         ControlExtender="MaskedEditExtender1" ControlToValidate="txtOutDate" IsValidEmpty="false"
                                         InvalidValueMessage="Out Date  is invalid" Display="None" TooltipMessage="Input a date"
                                         ErrorMessage="Please Select Out Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
-                                        ValidationGroup="submit" SetFocusOnError="true" />
+                                        ValidationGroup="search" SetFocusOnError="true" />
                                 </div>
                             </div>
                         </div>
                         <div class="row" runat="server">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
-                                    <label>In Date </label>
+                                    <sup>* </sup><label>To Date </label>
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -117,11 +116,11 @@
                                     <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" TargetControlID="txtInDate"
                                         Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
                                         MaskType="Date" ErrorTooltipEnabled="false" />
-                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator4" runat="server" EmptyValueMessage="Please enter In Date."
+                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator4" runat="server" EmptyValueMessage="Please Enter To Date."
                                         ControlExtender="MaskedEditExtender1" ControlToValidate="txtInDate" IsValidEmpty="false"
                                         InvalidValueMessage="In Date  is invalid" Display="None" TooltipMessage="Input a In Date"
                                         ErrorMessage="Please Select In Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
-                                        ValidationGroup="submit" SetFocusOnError="true" />
+                                        ValidationGroup="search" SetFocusOnError="true" />
                                 </div>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -140,10 +139,12 @@
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="row">
-                                <asp:Button ID="btnSearch" runat="server" Text="Search" Width="30%" OnClick="btnSearch_Click"
-                                    CssClass="btn btn-primary" />
+                                
+                                <asp:Button ID="btnSearch" runat="server" Text="Search" Width="30%" OnClick="btnSearch_Click" ValidationGroup="search"
+                                    CssClass="btn btn-info" />
                                 <asp:Button ID="btnBack" runat="server" Text="Back" Width="30%" OnClick="btnBack_Click"
                                     CssClass="btn btn-danger" />
+                                <asp:ValidationSummary ID="search" DisplayMode="List" runat="server" ValidationGroup="search" ShowMessageBox="true" ShowSummary="false" />
                                 </div>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -158,7 +159,7 @@
                             <div class="sub-heading">
                                 <h5>Requests List</h5>
                             </div>
-                            <table class="table table-striped table-bordered nowrap dt-responsive " style="width: 100%">
+                            <table class="table table-striped table-bordered display dt-responsive " style="width: 100%">
                                 <thead class="bg-light-blue">
                                     <tr>
                                         <th style="width: 2%;">
@@ -216,6 +217,7 @@
                             </td>
                             <td>
                                 <asp:DropDownList ID="ddlparentapproval" runat="server">
+                                    <asp:ListItem Value=" ">Pending</asp:ListItem>
                                     <asp:ListItem Value="Y">Yes</asp:ListItem>
                                     <asp:ListItem Value="N">No</asp:ListItem>
                                 </asp:DropDownList>
@@ -404,11 +406,11 @@
                     var ThirdApprovalStatus = data.d[i].Thirdapprovalstatus;
                     var FourthApprovalStatus = data.d[i].Fourthapprovalstatus;
 
-                    // Determine the text color based on the status
-                    var ftextColor = (firstApprovalStatus === 'Pending') ? 'red' : 'green';
-                    var stextColor = (SecondApprovalStatus === 'Pending') ? 'red' : 'green';
-                    var ttextColor = (ThirdApprovalStatus === 'Pending') ? 'red' : 'green';
-                    var fotextColor = (FourthApprovalStatus === 'Pending') ? 'red' : 'green';
+                    // Determine the text color based on the status  Cond Added By Himanshu Tmk 12/03/2024
+                    var ftextColor = (firstApprovalStatus === 'Pending') ? 'red' : (firstApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';
+                    var stextColor = (SecondApprovalStatus === 'Pending') ? 'red' : (SecondApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';;
+                    var ttextColor = (ThirdApprovalStatus === 'Pending') ? 'red' : (ThirdApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';
+                    var fotextColor = (FourthApprovalStatus === 'Pending') ? 'red' : (FourthApprovalStatus === 'Approved') ? 'green' : (firstApprovalStatus === 'Direct Approved By Admin') ? 'green' : 'red';
 
 
 

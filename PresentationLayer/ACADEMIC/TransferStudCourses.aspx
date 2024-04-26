@@ -25,7 +25,9 @@
             <div class="col-md-12 col-sm-12 col-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Student Subject Equivalence</h3>
+                        <%--<h3 class="box-title">Student Subject Equivalence</h3>--%>
+                        <h3 class="box-title">
+                            <asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                     </div>
                     <div class="box-body">
                         <div class="nav-tabs-custom" id="Tabs" role="tabpanel">

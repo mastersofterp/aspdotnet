@@ -783,4 +783,62 @@ public partial class ACADEMIC_NPF_Data_Transfer : System.Web.UI.Page
     #endregion
 
 
+    protected void btnShowDataDownload_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            DataTable dt1 = new DataTable();
+            DataSet ds = new DataSet();
+            SqlDataReader dr = objStud.DisplayNpfMapping();
+            if (dr.HasRows != null)
+            {
+                dt1.Load(dr);
+
+                dt1.Columns.RemoveAt(15);
+                dt1.Columns.RemoveAt(14);
+                dt1.Columns.RemoveAt(13);
+                dt1.Columns.RemoveAt(12);
+                dt1.AcceptChanges();
+
+                ds.Tables.Add(dt1);
+            }
+            ds.Tables[0].TableName = "NPF Data Mapping";
+
+            //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[1].Rows.Count > 0 && ds.Tables[2].Rows.Count > 0 && ds.Tables[3].Rows.Count > 0 && ds.Tables[4].Rows.Count > 0 && ds.Tables[5].Rows.Count > 0)
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    foreach (System.Data.DataTable dt in ds.Tables)
+                    {
+                        //Add System.Data.DataTable as Worksheet.
+                        wb.Worksheets.Add(dt);
+                    }
+
+                    //Export the Excel file.
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=NPF_Data_Mapping.xlsx");
+                    using (MemoryStream MyMemoryStream1 = new MemoryStream())
+                    {
+                        wb.SaveAs(MyMemoryStream1);
+                        MyMemoryStream1.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                    }
+                }
+            }
+            else
+            {
+                //objCommon.DisplayMessage(this.UPDCOURSE, "Please Define All Masters!!", this.Page);
+                Response.Write("<script>alert('Please Define All Masters')</script>");
+            }
+        }
+        catch (Exception ex)
+        { }
+
+
+    }
 }

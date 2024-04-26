@@ -347,7 +347,7 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
     protected void Clear()
     {
         
-        Label1.Text = string.Empty;
+        //Label1.Text = string.Empty;
         ddlSection.SelectedIndex = 0;
         ddlGradeType.SelectedIndex = 0;
         lvGrade.Visible = false;

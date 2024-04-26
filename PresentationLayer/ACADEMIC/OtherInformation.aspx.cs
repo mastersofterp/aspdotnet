@@ -19,6 +19,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
     ModuleConfigController objConfig = new ModuleConfigController();
+    PageControlValidationController objVC = new PageControlValidationController();
 
     List<string> validationErrors = new List<string>();
 
@@ -181,12 +182,142 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                 this.ShowStudentDetails();
                 this.bindexpdetails();
                 this.bindSportDetails();
+
                 StudentConfiguration();
+                CheckIsEditable();
+                CheckDisplaySection();
                
             }
         }
         //  this.FillDropDown();
     }
+
+    //<1.0.2>
+    public string CheckIsEditable()
+    {
+        DataSet ds = null;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "OtherInformation.aspx";
+        string idno = string.Empty;
+        string section = string.Empty;
+        Boolean isEditable = true;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+
+        if (ViewState["usertype"].ToString() == "2")
+        {
+            idno = (Session["idno"]).ToString();
+        }
+        else
+        {
+            idno = (Session["stuinfoidno"]).ToString();
+        }
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+
+            if (row["IS_EDITABLE"].ToString() != string.Empty)
+            {
+                isEditable = Convert.ToBoolean(row["IS_EDITABLE"].ToString());
+            }
+            // Boolean isEditable =Convert.ToBoolean( row["IS_EDITABLE"]);
+            string controlID = string.Empty;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+            }
+
+            if (isEditable == false && !string.IsNullOrEmpty(controlID))
+            {
+                Control control = FindControlRecursive(Page, controlID);
+
+                if (control is TextBox)
+                {
+                    TextBox textBox = (TextBox)control;
+                    textBox.ReadOnly = true;
+                }
+
+                if (control is DropDownList)
+                {
+                    DropDownList dropdownlist = (DropDownList)control;
+                    dropdownlist.Enabled = false;
+                }
+
+                if (ViewState["usertype"].ToString() == "2" && control is FileUpload)
+                {
+                    FileUpload fileUploadControl = (FileUpload)control;
+                    fileUploadControl.Enabled = false;
+                }
+            }
+        }
+        return string.Empty;
+    }
+    //</1.0.2>
+
+    //<1.0.1>
+    private void CheckDisplaySection()
+    {
+        DataSet ds = null;
+        string section = string.Empty;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "OtherInformation.aspx";
+
+        section = "Sports / Cultural Achievement Information";
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                divSports.Visible = true;
+            }
+            else
+            {
+                divSports.Visible = false;
+            }
+        }
+
+        section = "Bank Details";
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                DivBankdetails.Visible = true;
+            }
+            else
+            {
+                DivBankdetails.Visible = false;
+            }
+        }
+        section = "Other Personal Information";
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+            {
+                divMotherTongue.Visible = true;
+                divOtherLanguage.Visible = true;
+                divIdentificationMark.Visible = true;
+                divHeight.Visible = true;
+                divWeight.Visible = true;
+            }
+            else
+            {
+                divMotherTongue.Visible = false;
+                divOtherLanguage.Visible = false;
+                divIdentificationMark.Visible = false;
+                divHeight.Visible = false;
+                divWeight.Visible = false;
+            }
+        }
+
+    }
+    //<//1.0.1>
 
     private DataSet FilterDataByKeyword(DataSet originalDataSet, string keyword)
     {
@@ -233,7 +364,8 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "OtherInformation.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        string section = string.Empty;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -339,8 +471,9 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "OtherInformation.aspx";
+        string section = string.Empty;
 
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         var filteredRows = ds.Tables[0].AsEnumerable().Where(row => !row.Field<string>("CAPTION_NAME").ToLower().Contains(keyword)).CopyToDataTable();
 
@@ -401,8 +534,9 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "OtherInformation.aspx";
+        string section = string.Empty;
 
-        ds = FilterDataByKeyword(objConfig.GetStudentConfigData(orgID, pageNo, pageName), keyword);
+        ds = FilterDataByKeyword(objVC.GetStudentConfigData(orgID, pageNo, pageName, section), keyword); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {

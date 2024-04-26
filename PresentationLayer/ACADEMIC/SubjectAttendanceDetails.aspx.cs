@@ -4,10 +4,15 @@
 // PAGE NAME     : Faculty wise Attendance Report
 // CREATION DATE : 06-DECEMBER-2021                                                    
 // CREATED BY    : JAY S. TAKALKHEDE                                                      
-// MODIFIED DATE : 18-March-2024
-// MODIFIED BY   : Jay S. Takalkhede
-// MODIFIED DESC : Version RFC.1.1 1) 1) Add vistate session condition in Excel report 
 //=======================================================================================
+//----------------------------------------------------------------------------------------------------------------------------------------------
+//-- Version      Modified On        Modified By        Purpose
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+//--  RFC.1.1    18-March-2024       Jay Takalkhede      Add vistate session condition in Excel report  (Tktno. 56508)                                                                  (Tktno. 57393)[TGPCET]  
+//----------------------------------------------------------------------------------------------------------------------------------------------
+//--  RFC.1.2    16-April-2024       Jay Takalkhede      Add OD related Colummn in Excel report and Listview  (Tktno.56806)                                                                  (Tktno. 57393)[TGPCET]  
+//----------------------------------------------------------------------------------------------------------------------------------------------
+
 
 using System;
 using System.Collections;
@@ -32,6 +37,8 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentAttendanceController objAtt = new StudentAttendanceController();
+
+    #region Page Load 
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -91,6 +98,9 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
             Response.Redirect("~/notauthorized.aspx?page=SessionCreate.aspx");
         }
     }
+    #endregion
+
+    #region Page Load
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlSession.SelectedIndex > 0)
@@ -117,7 +127,21 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
         {
         }
     }
+    protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //if (ddlCollege.SelectedIndex > 0)
+        //{
+        //    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + " AND COLLEGE_ID = "+ Convert.ToInt32(ddlCollege.SelectedValue), "SESSIONNO DESC");
+        //}
+        //else
+        //{
+        //    ddlSession.Items.Clear();
+        //    ddlSession.Items.Add(new ListItem("Please Select", "0"));
+        //}
+    }
+    #endregion
 
+    #region BindListview
     protected void btnReport_Click(object sender, EventArgs e)
     {
         if (ddlCollege.SelectedIndex > 0)
@@ -125,7 +149,7 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
             // Added By Jay Takalkhede On dated 18/03/2024 (TkNo.56508)
             ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
 
-            DataSet ds = objAtt.GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);
+            DataSet ds = GetStudAttDetails(Convert.ToInt32(ViewState["sessionno"].ToString()), Convert.ToInt32(ddlFaculty.SelectedValue), txtFromDate.Text, txtToDate.Text);
             if (ds != null && ds.Tables.Count > 0)
             {
                 if (ds.Tables[0].Rows.Count > 0)
@@ -134,7 +158,6 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
                     lvStudAttendance.DataBind();
                     objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudAttendance);//Set label -
                     divlvStudentHeading.Visible = true;
-                    // this.ShowReport("Attendance_Report", "rptAttSubjectWiseReport.rpt");
                 }
                 else
                 {
@@ -156,6 +179,9 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
            
         }
     }
+    #endregion BindListview
+
+    #region ShowReport
     private void ShowReport(string reportTitle, string rptFileName)
     {
         try
@@ -167,6 +193,7 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
             //string tdate = Todate[1] + "/" + Todate[0] + "/" + Todate[2];
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ACADEMIC")));
+
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
@@ -188,23 +215,16 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
             throw;
         }
     }
+    #endregion ShowReport
 
+    #region Cancel
     protected void btnCancel_Click1(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
     }
-    protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        //if (ddlCollege.SelectedIndex > 0)
-        //{
-        //    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + " AND COLLEGE_ID = "+ Convert.ToInt32(ddlCollege.SelectedValue), "SESSIONNO DESC");
-        //}
-        //else
-        //{
-        //    ddlSession.Items.Clear();
-        //    ddlSession.Items.Add(new ListItem("Please Select", "0"));
-        //}
-    }
+    #endregion Cancel
+
+    #region Excel
     protected void btnExcel_Click(object sender, EventArgs e)
     {
         ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
@@ -231,4 +251,38 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "Attendance Not Found", this.Page);
         }
     }
+    #endregion
+
+    #region Method
+    /// <summary>
+    /// Added by S.Patil = 29082019
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="uaNo"></param>
+    /// <param name="fdate"></param>
+    /// <param name="todate"></param>
+    /// <returns></returns>
+     string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+    public DataSet GetStudAttDetails(int session, int uaNo, string fdate, string todate)
+    {
+        DataSet ds = null;
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(connectionString);
+
+            SqlParameter[] objParams = new SqlParameter[4];
+            objParams[0] = new SqlParameter("@P_SESSIONNO", session);
+            objParams[1] = new SqlParameter("@P_UA_NO", uaNo);
+            objParams[2] = new SqlParameter("@P_FROMDATE", fdate);
+            objParams[3] = new SqlParameter("@P_TODATE", todate);
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_REPORT_STU_ATTENDANCE_FACULTY_SUBJECTWISE_Listview", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentAttendanceController.GetStudAttDetails-> " + ex.ToString());
+        }
+
+        return ds;
+    }
+    #endregion
 }

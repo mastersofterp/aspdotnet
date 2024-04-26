@@ -481,7 +481,7 @@ public partial class LevelFeedback : System.Web.UI.Page
 
 
 
-    private void FillCourseQuestion(int SubID, int semesterno,int courseno)
+    private void FillCourseQuestion(int SubID, int semesterno, int courseno)
     {
         objSEB.CTID = Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
         objSEB.SubId = SubID;
@@ -785,21 +785,27 @@ public partial class LevelFeedback : System.Web.UI.Page
                     }
                     else
                     {
-                        if (Convert.ToInt32(hdnIsMandatory.Value) == 1)
+                        //if (Convert.ToInt32(hdnIsMandatory.Value) == 1)
+                        //{
+                        if (hfOPTION_TYPE.Value == "R")
                         {
-                            if (hfOPTION_TYPE.Value == "R")
+                            //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            if (!string.IsNullOrEmpty(rblCourse.SelectedValue))
                             {
-                                //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
-                                //objSEB.QuestionIds += lblCourse.Text + ",";
                                 dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
                             }
-                            else if (hfOPTION_TYPE.Value == "T")
+                        }
+                        else if (hfOPTION_TYPE.Value == "T")
+                        {
+                            //objSEB.AnswerIds += txtcourse.Text + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            if (!string.IsNullOrEmpty(txtcourse.Text))
                             {
-                                //objSEB.AnswerIds += txtcourse.Text + ",";
-                                //objSEB.QuestionIds += lblCourse.Text + ",";
                                 dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
                             }
                         }
+                        //}
                     }
                 }
 
@@ -864,9 +870,9 @@ public partial class LevelFeedback : System.Web.UI.Page
                         DataSet dsFromViewState = ViewState["lvSelected"] as DataSet;
                         //lblcrse.Text = dsFromViewState.Tables[0].Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["TEACHER"].ToString() + "</span>]";
 
-                        DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() 
-                                           where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) && 
-                                           Convert.ToInt32(r["UA_NO"]) == Convert.ToInt32(ViewState["TeacherNo"]) 
+                        DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable()
+                                           where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) &&
+                                           Convert.ToInt32(r["UA_NO"]) == Convert.ToInt32(ViewState["TeacherNo"])
                                            select r).CopyToDataTable();
 
                         lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
@@ -948,7 +954,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             txtAnyComments.Text = string.Empty;
             ViewState["Semester"] = lnk.CommandName;
             HiddenField hdnserialno = lnk.FindControl("hdnserialno") as HiddenField;
-            int sequenceNumber = Convert.ToInt32( hdnserialno.Value);
+            int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
             if (sequenceNumber != 1)
             {
                 btnPrevious.Visible = true;
@@ -1301,7 +1307,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             {
                 pnlSubmit.Visible = true;
                 pnlFinalSumbit.Visible = false;
-                
+
                 Panel1.Visible = false;
                 FillQuestion(1, Convert.ToInt32(lblSemester.ToolTip));
                 //if (Session["OrgId"].ToString() == "2")
@@ -1725,7 +1731,7 @@ public partial class LevelFeedback : System.Web.UI.Page
         int SelectedCourseNo = Convert.ToInt32(ViewState["SelectedCourse"]);
         string count = "-1";
         lblcrse.Text = string.Empty;
-     
+
         if (ViewState["dataTableHist"] != null)
         {
             DataTable dataTable = (DataTable)ViewState["dataTableHist"];
@@ -1761,7 +1767,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             DataSet dsFromViewState = ViewState["lvSelected"] as DataSet;
             //lblcrse.Text = dsFromViewState.Tables[0].Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["TEACHER"].ToString() + "</span>]";
 
-            DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() 
+            DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable()
                                where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) &&
                                Convert.ToInt32(r["UA_NO"]) == Convert.ToInt32(ViewState["TeacherNo"])
                                select r).CopyToDataTable();
@@ -1772,7 +1778,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             {
                 HiddenField hdnserialno = dataitem.FindControl("hdnserialno") as HiddenField;
                 LinkButton lnkbtnCourse = dataitem.FindControl("lnkbtnCourse") as LinkButton;
-                int courseno = Convert.ToInt32( lnkbtnCourse.CommandArgument);
+                int courseno = Convert.ToInt32(lnkbtnCourse.CommandArgument);
                 int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
                 int ua_no = Convert.ToInt32(lnkbtnCourse.ToolTip);
                 if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()) && ua_no == Convert.ToInt32(xdata.Rows[0]["ua_no"].ToString()))
@@ -1795,7 +1801,7 @@ public partial class LevelFeedback : System.Web.UI.Page
 
             //}
 
-            FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]),Convert.ToInt32(ViewState["SelectedCourse"]));
+            FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]), Convert.ToInt32(ViewState["SelectedCourse"]));
         }
     }
     protected void btnSave_Click(object sender, EventArgs e)
@@ -1835,28 +1841,32 @@ public partial class LevelFeedback : System.Web.UI.Page
 
                     }
 
-                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true && Convert.ToInt32( hdnIsMandatory.Value) == 1) || (txtcourse.Text == "" && txtcourse.Visible == true && Convert.ToInt32( hdnIsMandatory.Value) == 1))
+                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true && Convert.ToInt32(hdnIsMandatory.Value) == 1) || (txtcourse.Text == "" && txtcourse.Visible == true && Convert.ToInt32(hdnIsMandatory.Value) == 1))
                     {
                         objCommon.DisplayMessage("You must have to answer all the questions", this.Page);
                         return;
                     }
                     else
                     {
-                        if (Convert.ToInt32(hdnIsMandatory.Value) == 1)
+                        if (hfOPTION_TYPE.Value == "R")
                         {
-                            if (hfOPTION_TYPE.Value == "R")
+                            //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            if (!string.IsNullOrEmpty(rblCourse.SelectedValue))
                             {
-                                //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
-                                //objSEB.QuestionIds += lblCourse.Text + ",";
                                 dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
                             }
-                            else if (hfOPTION_TYPE.Value == "T")
+                        }
+                        else if (hfOPTION_TYPE.Value == "T")
+                        {
+                            //objSEB.AnswerIds += txtcourse.Text + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            if (!string.IsNullOrEmpty(txtcourse.Text))
                             {
-                                //objSEB.AnswerIds += txtcourse.Text + ",";
-                                //objSEB.QuestionIds += lblCourse.Text + ",";
                                 dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
                             }
                         }
+
                     }
                 }
 

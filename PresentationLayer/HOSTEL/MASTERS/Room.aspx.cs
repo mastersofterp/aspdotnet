@@ -195,7 +195,9 @@ public partial class Hostel_Masters_Room : System.Web.UI.Page
         {
             //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + " AND FLOOR_NO=" + ddlFloor.SelectedValue + " AND ROOM_NAME='" + txtRoomName.Text + "'");
             //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "'");
-            string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---OrganizationId filter added by Saurabh L on 24/05/2022
+            //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---OrganizationId filter added by Saurabh L on 24/05/2022
+            //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + " AND FLOOR_NO=" + ddlFloor.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---Floor Cond  added by Himanshu Tamrakar on 28/02/2024
+            string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "HBNO="+Convert.ToInt32(ddlHostel.SelectedValue)+" AND BLOCK_NO=" + ddlBlock.SelectedValue + " AND FLOOR_NO=" + ddlFloor.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // --- Cond  added by Himanshu Tamrakar on 16/03/2024
             if (roomno != null && roomno != string.Empty)
             {
                 flag = true;
@@ -216,7 +218,8 @@ public partial class Hostel_Masters_Room : System.Web.UI.Page
         bool flag = false;
         try
         {
-            string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "ROOM_NO !="+ roomid + " AND BLOCK_NO=" + ddlBlock.SelectedValue + " AND ROOM_NAME ='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---OrganizationId filter added by Saurabh L on 24/05/2022
+            //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "ROOM_NO !="+ roomid + " AND BLOCK_NO=" + ddlBlock.SelectedValue + " AND ROOM_NAME ='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---OrganizationId filter added by Saurabh L on 24/05/2022
+            string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "ROOM_NO !="+ roomid +" AND HBNO=" + Convert.ToInt32(ddlHostel.SelectedValue) + " AND BLOCK_NO=" + ddlBlock.SelectedValue + " AND FLOOR_NO=" + ddlFloor.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---cond added by Himanshu Tamrakar on 16/03/2024
             if (roomno != null && roomno != string.Empty)
             {
                 flag = true;
@@ -224,6 +227,7 @@ public partial class Hostel_Masters_Room : System.Web.UI.Page
         }
         catch (Exception ex)
         {
+
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUaimsCommon.ShowError(Page, "Room.CheckDuplicateEntryUpdate() --> " + ex.Message + " " + ex.StackTrace);
             else

@@ -4,10 +4,12 @@ using IITMS.NITPRM.BusinessLayer.BusinessLogic;
 using IITMS.UAIMS;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using mastersofterp_MAKAUAT;
 
 public partial class OBE_OBE_Configue : System.Web.UI.Page
 {
@@ -160,4 +162,46 @@ public partial class OBE_OBE_Configue : System.Web.UI.Page
         }
 
     }
+    #region Need Password before access the Page.
+    protected void btnConnect_Click(object sender, EventArgs e)
+    {
+        
+        DataSet ds = objCommon.FillDropDown("reff", "DEV_PASS", "", "", "");
+        string pass = ds.Tables[0].Rows[0]["DEV_PASS"].ToString();
+        string db_pwd = clsTripleLvlEncyrpt.DecryptPassword(pass);
+        if (txtPass.Text.Trim() == db_pwd)
+        {
+            popup.Visible = false;
+            
+            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "window", "javascript:window.close();", true);
+        }
+        else
+            objCommon.DisplayMessage("Password does not match!", this.Page);
+
+
+    }
+    protected void btnCancel1_Click(object sender, EventArgs e)
+    {    
+        if (Session["usertype"].ToString() == "1")
+        {
+            Response.Redirect("~/principalHome.aspx", false);
+        }
+        else if (Session["usertype"].ToString() == "2" || Session["usertype"].ToString() == "14")
+        {
+            Response.Redirect("~/studeHome.aspx", false);
+        }
+        else if (Session["usertype"].ToString() == "3")
+        {
+            Response.Redirect("~/homeFaculty.aspx", false);
+        }
+        else if (Session["usertype"].ToString() == "5")
+        {
+            Response.Redirect("~/homeNonFaculty.aspx", false);
+        }
+        else
+        {
+            Response.Redirect("~/home.aspx", false);
+        }
+    }
+    #endregion
 }

@@ -275,7 +275,8 @@
                                                             <div class="row">
                                                                 <div class="form-group col-lg-12 col-md-6 col-12">
                                                                     <asp:RadioButtonList ID="rdbEmailSms" runat="server" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdbEmailSms_SelectedIndexChanged" AutoPostBack="true" onclick="RadioClicked()">
-                                                                        <asp:ListItem Value="0">Email &nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                                                         <asp:ListItem Value="-1" style="display: none"> </asp:ListItem>
+                                                                         <asp:ListItem Value="0">Email &nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                                         <asp:ListItem Value="1">SMS</asp:ListItem>
                                                                     </asp:RadioButtonList>
                                                                 </div>
@@ -1112,7 +1113,7 @@
                                                                     OnSelectedIndexChanged="rdbFormat_SelectedIndexChanged1" AutoPostBack="true">
                                                                     <asp:ListItem Value="1">&nbsp;SMS/Email - First Hour Absent&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                                     <asp:ListItem Value="2">&nbsp;SMS/Email - Attendance Percentage (Subject Wise)&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                                                    <%--<asp:ListItem Value="3">&nbsp;SMS - CAT Marks&nbsp;&nbsp;&nbsp;</asp:ListItem>--%>
+                                                                    <asp:ListItem Value="3">&nbsp;SMS - CAT Marks&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                                                     <asp:ListItem Value="4">&nbsp;SMS/Email - Todays Students Attendance list </asp:ListItem>
                                                                     <asp:ListItem Value="5">&nbsp;SMS/Email - Parent Teacher Meeting </asp:ListItem>
                                                                 </asp:RadioButtonList>
@@ -1120,6 +1121,87 @@
                                                                     Display="None" ErrorMessage="Please Select SMS Format" ValidationGroup="report"></asp:RequiredFieldValidator>
                                                             </div>
                                                             <div class="form-group col-lg-6 col-md-12 col-12"></div>
+
+                                                             <%--added by prafull--%>
+
+                                                            <div class="col-12">
+                                                                <div id="dvexam" runat="server" visible="false" class="row">
+                                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                        <div class="label-dynamic">
+                                                                            <sup>* </sup>
+                                                                            <label>College & Scheme</label>
+                                                                        </div>
+                                                                        <asp:DropDownList ID="ddlclg" runat="server" AppendDataBoundItems="True" TabIndex="3" ToolTip="Please Select College & Scheme" OnSelectedIndexChanged="ddlclg_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true" AutoPostBack="true">
+                                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlclg" SetFocusOnError="true"
+                                                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="report"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                        <div class="label-dynamic">
+                                                                            <sup>* </sup>
+                                                                            <label>Session</label>
+                                                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                                                        </div>
+                                                                        <asp:DropDownList ID="ddlsessionexam" runat="server" Font-Bold="True" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlsessionexam_SelectedIndexChanged" AppendDataBoundItems="true" AutoPostBack="true">
+                                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="ddlsessionexam"
+                                                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="SubPercentage"></asp:RequiredFieldValidator>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="ddlsessionexam"
+                                                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Report"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                        <div class="label-dynamic">
+                                                                            <sup>* </sup>
+                                                                            <label>Semester</label>
+                                                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                                                        </div>
+                                                                        <asp:DropDownList ID="ddlsemexam" runat="server" Font-Bold="True" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlsemexam_SelectedIndexChanged" AppendDataBoundItems="true" AutoPostBack="true">
+                                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlsemexam"
+                                                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="SubPercentage"></asp:RequiredFieldValidator>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ControlToValidate="ddlsessionexam"
+                                                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Report"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                        <div class="label-dynamic">
+                                                                            <sup>* </sup>
+                                                                            <label>Section</label>
+                                                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                                                        </div>
+                                                                        <asp:DropDownList ID="ddlsectionexam" runat="server" Font-Bold="True" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlsectionexam_SelectedIndexChanged" AppendDataBoundItems="true" AutoPostBack="true">
+                                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ControlToValidate="ddlsectionexam"
+                                                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="SubPercentage"></asp:RequiredFieldValidator>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlsectionexam"
+                                                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Report"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                    <div id="Div7" class="form-group col-lg-3 col-md-6 col-12" runat="server">
+                                                                        <div class="label-dynamic">
+                                                                            <sup>* </sup>
+                                                                            <label>Exam Name</label>
+                                                                        </div>
+
+                                                                        <asp:DropDownList ID="ddlexamnew" runat="server" AppendDataBoundItems="True" TabIndex="6" CssClass="form-control" data-select2-enable="true" ValidationGroup="report">
+                                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+
+                                                                        </asp:DropDownList>
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ControlToValidate="ddlexamnew"
+                                                                            Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" ValidationGroup="report"></asp:RequiredFieldValidator>
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-12">
+                                                                <div id="divatt" class="row" runat="server" visible="true">
+
+                                                                    <%--prafull added end here--%>
+
 
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">

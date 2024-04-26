@@ -153,7 +153,7 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
         //    divPublisher.Visible = false; divSub.Visible = false;
 
         //}
-
+        GetConfigForEditAndApprove();
     }
 
     private void CheckPageAuthorization()
@@ -781,14 +781,25 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
                     lvAuthorList.DataBind();
                 }
 
-                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-                if (STATUS == "A")
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
                 {
-                    MessageBox("Your Details are Approved you cannot edit.");
-                    return;
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
                 }
                 else
                 {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
                 }
 
             }
@@ -815,11 +826,16 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
             ImageButton btnDel = sender as ImageButton;
             int PUBTRXNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_PUBLICATION_DETAILS", "*", "", "PUBTRXNO=" + PUBTRXNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_PUBLICATION_DETAILS", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS,", "", "PUBTRXNO=" + PUBTRXNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else
@@ -846,6 +862,7 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -896,7 +913,9 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
         btnSubmit.Enabled = true;
         ddlAuthorRole.SelectedValue = "0";
         txtAffiliation.Text = string.Empty;
-
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
     public string GetFileNamePath(object filename, object pubtrxno, object idno)
     {
@@ -1192,5 +1211,55 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
             throw;
         }
     }
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Publication Details";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
     #endregion
 }

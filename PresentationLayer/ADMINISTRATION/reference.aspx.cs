@@ -54,7 +54,7 @@ public partial class error : System.Web.UI.Page
             }
 
             //Page Authorization
-            CheckPageAuthorization();
+           // CheckPageAuthorization();
 
             //Set the Page Title
             Page.Title = Session["coll_name"].ToString();
@@ -78,7 +78,7 @@ public partial class error : System.Web.UI.Page
                 //fuCollegeLogo.Enabled = false;       -- Commented by Shrikant W. After Discussion with Manoj Shanti Sir to enable Collge Logo Upload for all Admin User
                 txtCollegeCode.Enabled = false;
                 txtFacUserType.Enabled = false;
-                chkEnroll.Enabled = false;
+                //chkEnroll.Enabled = false;
                 txtLateFee.Enabled = true;
                 //rdbFeedback.Enabled = false;
                 //rdbHorizontal.Enabled = false;
@@ -97,7 +97,6 @@ public partial class error : System.Web.UI.Page
             GetAdminTypeUser(); //Addded Mahesh on Dated 23/06/2021
             objCommon.FillDropDownList(ddlCancelLateFineAuthorityPerson, "User_acc", "UA_NO", "UA_NAME", "UA_TYPE IN(1,5) AND UA_STATUS=0 AND UA_FIRSTLOG=1", "UA_NO");
             ShowDetails();
-
             //Comment by Mahesh on Dated 23/06/2021
 
             //txtEmailsvcpwd.Attributes.Add("onfocus", "enterTextBox();");
@@ -134,13 +133,14 @@ public partial class error : System.Web.UI.Page
                     //    rdbClient.Checked = true;
                     //else
                     //    rdbDeveloper.Checked = true;
+                    string error = dr["Errors"].ToString();
                     if (dr["Errors"].ToString() == "1")
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetShowError(true);", true);
+                        rdShowErr.Checked = true;
                     }
                     else
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetShowError(false);", true);
+                        rdShowErr.Checked = false;
                     }
 
                     txtGovt.Text = dr["GOVT"].ToString();
@@ -156,49 +156,47 @@ public partial class error : System.Web.UI.Page
                     txtEmailID.Text = dr["EMAIL"].ToString();
                     txtFacUserType.Text = dr["FAC_USERTYPE"].ToString();
                     txtLateFee.Text = dr["ADM_LATE_FEE_AMT"].ToString();
+                    string feedback = dr["Feedback_Status"].ToString();
                     if (dr["Feedback_Status"].ToString().Equals("False"))
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "Src1", "SetFeedback(false);", true);
-
+                        rdFeedback.Checked = false;
                     }
                     else
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "Src1", "SetFeedback(true);", true);
+                        rdFeedback.Checked = true;
                     }
-
                     //rdbFeedback.SelectedValue = dr["Feedback_Status"].ToString(); 
+                    string timetable = dr["Time_table_status"].ToString();
                     if (dr["Time_table_status"].ToString() == "1")
                     {
-                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "SetTableStatus(true);", true);
+                        rdTableStatus.Checked = true;
                     }
                     else
                     {
-                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "script", "SetTableStatus(false);", true);
+                        rdTableStatus.Checked = false;
                     }
 
                     txtStartYear.Text = Convert.ToDateTime(dr["Start_Year"].ToString()).ToString("dd/MMM/yyyy");
                     txtEndYear.Text = Convert.ToDateTime(dr["End_Year"].ToString()).ToString("dd/MMM/yyyy");
                     txtNumBckAttensAllow.Text = dr["NOS_BK_ATTENDS_ALLOW"].ToString();
+                    string resetcounter = dr["Reset_Counter"].ToString();
+                    if (dr["Reset_Counter"].ToString() == "True")
+                    {
+                        chkResetCounter.Checked = true;
+                    }
+                    else
+                    {
+                        chkResetCounter.Checked = false;
+                    }
 
-                    if (Convert.ToBoolean(dr["Reset_Counter"]))
+                    string enrollmentno = dr["EnrollmentNo"].ToString();
+                    if (dr["EnrollmentNo"].ToString() == "True")
                     {
-                        //chkResetCounter.Checked = true;
-                        //chkResetCounter.Text = "Counter is Already Reset";
+                        rdEnrollment.Checked = true;
                     }
                     else
                     {
-                        //chkResetCounter.Checked = false;
-                        //chkResetCounter.Text = "Counter is Not Reset/Checked If You Want to Reset Counter";
-                    }
-                    if (Convert.ToBoolean(dr["ENROLLMENTNO"]))
-                    {
-                        chkEnroll.Checked = true;
-                        chkEnroll.Text = "Manual Enrollment/Registration No. of Student";
-                    }
-                    else
-                    {
-                        chkEnroll.Checked = false;
-                        chkEnroll.Text = "Automatic Enrollment/Registration No. of Student";
+                        rdEnrollment.Checked = false;
                     }
                     txtEmailsvc.Text = dr["EMAILSVCID"].ToString();
                     //txtEmailsvcpwd.Text = Common.DecryptPassword(dr["EMAILSVCPWD"].ToString());
@@ -342,20 +340,11 @@ public partial class error : System.Web.UI.Page
     {
         try
         {
-            //int timetable = 0;
-            int chk = 0;
             ReferenceController objEc = new ReferenceController();
             Reference objRef = new Reference();
-            //char valerr;
-            //if (rdbDeveloper.Checked == true)
-            //    valerr = '1';
-            //else
-            //    valerr = '0';
-
-            //objRef.Errors = valerr;
 
             //Added By Rishabh B. on 08/11/2021
-            if (hfdShowErr.Value == "true")
+            if (rdShowErr.Checked==true)
             {
                 objRef.Errors = true;
             }
@@ -364,11 +353,10 @@ public partial class error : System.Web.UI.Page
                 objRef.Errors = false;
             }
 
-
             //  string Symb = "!@#$%^&*()_+";
             objRef.CollegeName = txtName.Text.Trim().Replace(",", ",");
             objRef.CollegeAddress = txtCollegeAddress.Text.Trim();
-
+            objRef.Gov = txtGovt.Text.Trim();
             if (fuCollegeLogo.HasFile)
             {
                 HttpPostedFile FileSize = fuCollegeLogo.PostedFile;
@@ -397,15 +385,25 @@ public partial class error : System.Web.UI.Page
             }
 
             objRef.CollegeCode = txtCollegeCode.Text.Trim();
-            objRef.EnrollmentNo = chkEnroll.Checked;
+          
+           
+            if (rdEnrollment.Checked==true)
+            {
+                objRef.EnrollmentNo = true;
+            }
+            else
+            {
+                objRef.EnrollmentNo = false;
+            }  
             objRef.Fac_UserType = txtFacUserType.Text.Trim();
             objRef.Phone = txtPhoneNo.Text.Trim();
             objRef.EmailID = txtEmailID.Text.Trim();
             objRef.Admlatefee = Convert.ToDouble(txtLateFee.Text.Trim());
+           
             //objRef.Feedback = Convert.ToBoolean(rdbFeedback.SelectedValue);
 
             //Added By Rishabh B. on 08/11/2021
-            if (hfdFeedback.Value == "true")
+            if (rdFeedback.Checked==true)
             {
                 objRef.Feedback = true;
             }
@@ -442,27 +440,18 @@ public partial class error : System.Web.UI.Page
             {
                 objRef.Course_Reg_B_Time_Table = false;
             }
-            //if (chkResetCounter.Checked == true)
-            //{
-            //    chk = 0;
-            //}
-            //else
-            //{
-            //    chk = 1;
-            //}
-            objRef.ResetCounter = Convert.ToBoolean(chk);
 
-            //if (rdbHorizontal.Checked == true)
-            //{
-            //    timetable = 1;
-            //}
-            //else
-            //{
-            //    timetable = 2;
-            //}
 
-            //Added By Rishabh B. on 08/11/2021
-            if (hfdTableStatus.Value == "true")
+            if (chkResetCounter.Checked==true)
+            {
+                objRef.ResetCounter = true;
+            }
+            else
+            {
+                objRef.ResetCounter = false;
+            }  
+
+            if (rdTableStatus.Checked==true)
             {
                 objRef.Timetable = 1;
             }
@@ -625,7 +614,7 @@ public partial class error : System.Web.UI.Page
                 else
                     objCommon.DisplayMessage("Error!!", this.Page);
             }
-
+            ShowDetails();
         }
         catch (Exception ex)
         {
@@ -658,10 +647,10 @@ public partial class error : System.Web.UI.Page
 
     protected void chkEnroll_CheckedChanged(object sender, EventArgs e)
     {
-        if (chkEnroll.Checked == true)
-            chkEnroll.Text = "Manual Enrollment/Registration No. of Student";
-        else
-            chkEnroll.Text = "Automatic Enrollment/Registration No. of Student";
+    //    if (chkEnroll.Checked == true)
+    //        chkEnroll.Text = "Manual Enrollment/Registration No. of Student";
+    //    else
+    //        chkEnroll.Text = "Automatic Enrollment/Registration No. of Student";
     }
 
     private void GetAdminTypeUser()

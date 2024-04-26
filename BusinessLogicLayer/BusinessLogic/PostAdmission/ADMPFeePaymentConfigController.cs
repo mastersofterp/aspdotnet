@@ -16,8 +16,10 @@ Version     :
 ---------------------------------------------------------------------------------------------------------------------------                                                                        
 Version   Modified On   Modified By        Purpose                                                                        
 ---------------------------------------------------------------------------------------------------------------------------                                                                        
-1.0.1     14-03-2024    Isha               Added Branch and Start/End Payment Date and Provision Admission Date                         
-------------------------------------------- -------------------------------------------------------------------------------                                                                                                                     
+1.0.1     14-03-2024    Isha Kanojiya      Added Branch and Start/End Payment Date and Provision Admission Date                         
+------------------------------------------- -------------------------------------------------------------------------------  
+1.0.2     29-03-2024    Isha Kanojiya      Added Admbatch,Programtype and Degreeno
+--------------------------------------------------------------------------------------------------------------------------- 
  */
 namespace BusinessLogicLayer.BusinessLogic.PostAdmission
 {
@@ -26,7 +28,7 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
     {
         private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-         public string InsertADMPFeePayConfig(ADMPFeePaymentConfigEntity objafpc)
+        public string InsertADMPFeePayConfig(ADMPFeePaymentConfigEntity objafpc)
         {
             string retStatus = string.Empty;
             try
@@ -131,14 +133,19 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
             }
         }
 
-        public DataSet GetRetADMPFeePayConfigListData(int FeePayConfig_ID)
+        public DataSet GetRetADMPFeePayConfigListData(ADMPFeePaymentConfigEntity objafpc, int FeePayConfig_ID)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                SqlParameter[] sqlParams = new SqlParameter[1];
+                SqlParameter[] sqlParams = new SqlParameter[4];
                 sqlParams[0] = new SqlParameter("@P_CONFIGID", FeePayConfig_ID);
+                //<1.0.2>
+                sqlParams[1] = new SqlParameter("@P_ADMBATCH ", objafpc.Admbatch);
+                sqlParams[2] = new SqlParameter("@P_PROGRAMTYPE", objafpc.Programtype);
+                sqlParams[3] = new SqlParameter("@P_DEGREENO ", objafpc.Degreeno);
+                //</1.0.2>
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_RET_ALL_ADMP_FEE_PAYMENT_CONFIG", sqlParams);
             }
             catch (Exception ex)
@@ -147,6 +154,5 @@ namespace BusinessLogicLayer.BusinessLogic.PostAdmission
             }
             return ds;
         }
-
     }
 }

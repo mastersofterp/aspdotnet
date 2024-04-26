@@ -34,7 +34,7 @@
                                                 <sup>* </sup>
                                                 <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlcollege" TabIndex="2" runat="server" CssClass="form-control" AppendDataBoundItems="true" ToolTip="Please Select Institute" data-select2-enable="true"
+                                            <asp:DropDownList ID="ddlcollege" TabIndex="1" runat="server" CssClass="form-control" AppendDataBoundItems="true" ToolTip="Please Select Institute" data-select2-enable="true"
                                                 AutoPostBack="True" OnSelectedIndexChanged="ddlcollege_SelectedIndexChanged">
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvcollege" runat="server" ControlToValidate="ddlcollege"
@@ -63,7 +63,7 @@
                                                 <sup>* </sup>
                                                 <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlsemester" TabIndex="6" runat="server" CssClass="form-control" AppendDataBoundItems="true"
+                                            <asp:DropDownList ID="ddlsemester" TabIndex="1" runat="server" CssClass="form-control" AppendDataBoundItems="true"
                                                 AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlsemester_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
@@ -81,7 +81,7 @@
                                             </div>
                                             <asp:DropDownList ID="ddlSubjectType" runat="server" AppendDataBoundItems="True"
                                                 AutoPostBack="True" data-select2-enable="true"
-                                                TabIndex="7" CssClass="form-control" OnSelectedIndexChanged="ddlSubjectType_SelectedIndexChanged">
+                                                TabIndex="1" CssClass="form-control" OnSelectedIndexChanged="ddlSubjectType_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvSubjectType" runat="server" ControlToValidate="ddlSubjectType"
@@ -95,7 +95,7 @@
                                                 <asp:Label ID="lblDYddlCourse" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
                                             <asp:DropDownList ID="ddlCourse" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
-                                                CssClass="form-control" AutoPostBack="True" TabIndex="8">
+                                                CssClass="form-control" AutoPostBack="True" TabIndex="1">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvCourse" runat="server" ControlToValidate="ddlCourse"
@@ -108,7 +108,7 @@
                                                 <asp:Label ID="lblDYddlExam" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
                                             <asp:DropDownList ID="ddlExam" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
-                                                CssClass="form-control" TabIndex="9" AutoPostBack="True">
+                                                CssClass="form-control" TabIndex="1" AutoPostBack="True">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <%--<asp:RequiredFieldValidator ID="rfvExam" runat="server" ControlToValidate="ddlExam"

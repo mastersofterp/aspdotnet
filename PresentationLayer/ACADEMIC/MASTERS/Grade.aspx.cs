@@ -316,7 +316,7 @@ public partial class ACADEMIC_MASTERS_Grade : System.Web.UI.Page
         //txtMaxMark.Text = string.Empty;
         //txtMinMark.Text = string.Empty;
         //txtGradeDesc.Text = string.Empty;
-        Label1.Text = string.Empty;
+        //Label1.Text = string.Empty;
         ddlSection.SelectedIndex = 0;
         ddlGradeType.SelectedIndex = 0;
         lvGrade.Visible = false;

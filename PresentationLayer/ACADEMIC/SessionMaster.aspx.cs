@@ -403,7 +403,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                                                                     WHERE S.SESSIONID=" + Session_No + ")"));
 
                     txtSLongName.Enabled = sessionRegdCount > 0 ? false : true;
-                    txtSShortName.Enabled = sessionRegdCount > 0 ? false : true;
+                  //  txtSShortName.Enabled = sessionRegdCount > 0 ? false : true;
 
                     ddlAcademicYear.SelectedValue = dr["ACADEMIC_YEAR_ID"].ToString();
                     ddlStudyPattern.SelectedValue = dr["STUDY_PATTERN"].ToString();
@@ -464,7 +464,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
         ddlAcademicYear.SelectedIndex = 0;
         ddlStudyPattern.SelectedIndex = 0;
         txtSLongName.Enabled = true;
-        txtSShortName.Enabled = true;
+        //txtSShortName.Enabled = true;
     }
 
     protected void btnReport_Click(object sender, EventArgs e)

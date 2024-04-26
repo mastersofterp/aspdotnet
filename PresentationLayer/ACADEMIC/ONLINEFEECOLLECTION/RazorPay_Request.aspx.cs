@@ -15,9 +15,10 @@ using System.Data.SqlClient;
 public partial class RazorPay_Request : System.Web.UI.Page
 {
     Common objCommon = new Common();
-    public string orderId;
+    public string Raz_orderId;
     public string MerchantId = "0";
     public string ApplicationId = "0";
+    
     FeeCollectionController objFees = new FeeCollectionController();
     //RazorPayController ObjRPC = new RazorPayController();
 
@@ -42,8 +43,9 @@ public partial class RazorPay_Request : System.Web.UI.Page
             if (dr.Read())
             {
                 College_ShortName = dr["CODE_STANDARD"].ToString();
+                Session["CollegeNm"] = College_ShortName;
             }
-        }  
+        }
 
         int userno = Convert.ToInt32(Session["userno"]);
         DataSet ds = new DataSet();
@@ -55,91 +57,96 @@ public partial class RazorPay_Request : System.Web.UI.Page
 
         string order_ID = Session["Order_ID"].ToString();
 
-   
+
         double Amount = 0.00;
         string udf9 = string.Empty;
 
         //*********ITERATE THROUGH EACH REQUIRED COLUMN VALUE AND SET TO HIDDENT FIELDS AND PROPERTIES**************
         //foreach (DataRow dr in ds.Tables[0].Rows)
         //{
-            Amount = Convert.ToDouble(Session["studAmt"]);
 
-            hdnKey.Value = Convert.ToString(Session["RAZORPAYKEY"]);
-            Session["RazKey"] = Convert.ToString(Session["RAZORPAYKEY"]);
-            Session["Secrets"] = Convert.ToString(Session["RAZORPAYSECRET"]);
-            hdnCurrency.Value = "INR";
-            hdnStudentEmail.Value = Convert.ToString(Session["studEmail"]);
-            hdnMobileNumber.Value = Convert.ToString(Session["studPhone"]);
-            Session["MOBILENO"] = Convert.ToString(Session["studPhone"]);
-            hdnStudentName.Value = Convert.ToString(Session["payStudName"]);
-            Session["STUDENT_NAME"] = Convert.ToString(Session["payStudName"]);
-            //Session["PGTranId"] = TransactionId.ToString();
-            hdnAmount.Value = Session["studAmt"].ToString();
-            MerchantId = Session["regno"].ToString();
-            ApplicationId = Convert.ToString("admin");
-            hdnMerchantName.Value = College_ShortName;
+        //hdnCurrency.Value = "INR";
+        //hdnStudentEmail.Value = Convert.ToString(Session["studEmail"]);
+        //hdnMobileNumber.Value = Convert.ToString(Session["studPhone"]);
+        //hdnKey.Value = Convert.ToString(Session["RAZORPAYKEY"]);
+        //hdnStudentName.Value = Convert.ToString(Session["payStudName"]);
+        //Session["PGTranId"] = TransactionId.ToString();
+        //hdnAmount.Value = Session["studAmt"].ToString();
+        //hdnMerchantName.Value = College_ShortName;
 
-            Session["TranAmt"] = Convert.ToDecimal(Session["studAmt"]).ToString();
+        Amount = Convert.ToDouble(Session["studAmt"]);
+        Session["RazKey"] = Convert.ToString(Session["RAZORPAYKEY"]);
+        Session["Secrets"] = Convert.ToString(Session["RAZORPAYSECRET"]);
+        Session["MOBILENO"] = Convert.ToString(Session["studPhone"]);
+        Session["STUDENT_NAME"] = Convert.ToString(Session["payStudName"]);
+        var InstallmentNo = Session["Installmentno"].ToString();
+        Session["Desc"] = InstallmentNo;
+        MerchantId = Session["regno"].ToString();
+        ApplicationId = Convert.ToString("admin");
 
-            Dictionary<string, object> input = new Dictionary<string, object>();
+        Session["studAddr"] = "Nagpur";
+        Session["TranAmt"] = Convert.ToDecimal(Session["studAmt"]).ToString();
+        Session["Callback_Url"] = Session["ResponseURL"].ToString();
+        //"http://localhost:62868/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/RazorPayOnlinePaymentResponse.aspx";
+        Session["Cancel_url"] = "https://example.com/payment-cancel";
 
-            //for sending notes details
-            Dictionary<string, object> notes = new Dictionary<string, object>();
-            notes.Add("Order_ID", order_ID);
-            //
+        Dictionary<string, object> input = new Dictionary<string, object>();
 
-            input.Add("amount", Convert.ToInt32(Math.Round(Amount * 100))); // this amount should be same as transaction amount && AMOUNT SHOULD BE IN PAISA
-            input.Add("currency", "INR");
-            //input.Add("receipt", Convert.ToString(TransactionId));
-            input.Add("payment_capture", 1);
-            input.Add("notes", notes);
+        //for sending notes details
+        Dictionary<string, object> notes = new Dictionary<string, object>();
+        notes.Add("Order_ID", order_ID);
+        //
 
-            //************string key = "<Enter your Api Key here>";*************
-            //************string secret = "<Enter your Api Secret here>";********
-            string key = Convert.ToString(Session["RAZORPAYKEY"]);
-            string secret = Convert.ToString(Session["RAZORPAYSECRET"]);
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;//added on date 24/07/2018 as per discussed with Prashant Gawali sir..
-            RazorpayClient client = new RazorpayClient(key, secret);//added on date 24/07/2018 as per discussed with Prashant Gawali sir..
+        input.Add("amount", Convert.ToInt32(Math.Round(Amount * 100))); // this amount should be same as transaction amount && AMOUNT SHOULD BE IN PAISA
+        input.Add("currency", "INR");
+        //input.Add("receipt", Convert.ToString(TransactionId));
+        input.Add("payment_capture", 1);
+        input.Add("notes", notes);
 
-            Razorpay.Api.Order order = client.Order.Create(input);
+        //************string key and secret = "<Enter your Api Key and Secret here>";*************
+        string key = Convert.ToString(Session["RAZORPAYKEY"]);
+        string secret = Convert.ToString(Session["RAZORPAYSECRET"]);
+        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;  //added on date 24/07/2018 as per discussed with Prashant Gawali sir..
+        RazorpayClient client = new RazorpayClient(key, secret);   //added on date 24/07/2018 as per discussed with Prashant Gawali sir..
 
-            orderId = order["id"].ToString();
-            hdnRazorId.Value = order["id"].ToString();
+        Razorpay.Api.Order order = client.Order.Create(input);
 
-            //
-            
-            //Razorpay.Api.Customer customer = client.Customer.Create(input);
-            //Razorpay.Api.Payment payment = client.Payment.Capture(input);
+        Raz_orderId = order["id"].ToString();
+        // hdnRazorId.Value = order["id"].ToString();
+        Session["RazOrder_Id"] = order["id"].ToString();
 
-            //
+        //
+        //Razorpay.Api.Customer customer = client.Customer.Create(input);
+        //Razorpay.Api.Payment payment = client.Payment.Capture(input);
+        //
 
-            string s1 = order["id"].ToString();
+        string s1 = order["id"].ToString();
 
-            int SessionNo; int UserNo; string RazorPayId; double dAmount; double Fee; double Tax; string OrderId; string RazorPayOrderId; string IP_Address; double RazorPay_Amount;
-            SessionNo = 0;
-            UserNo = Convert.ToInt32(Session["USERNO"].ToString());
-            RazorPayId = "";
-            dAmount = Convert.ToDouble(Session["studAmt"]);
-            RazorPay_Amount = Amount;
-            Fee = 0;
-            Tax = 0;
-            OrderId = Session["Order_ID"].ToString();
-            RazorPayOrderId = orderId;
-            IP_Address = Request.ServerVariables["REMOTE_HOST"].ToString();
+        int SessionNo; int UserNo; string RazorPayId; double dAmount; double Fee; double Tax; string OrderId; string RazorPayOrderId; string IP_Address; double RazorPay_Amount;
+        SessionNo = 0;
+        UserNo = Convert.ToInt32(Session["USERNO"].ToString());
+        RazorPayId = "";
+        dAmount = Convert.ToDouble(Session["studAmt"]);
+        RazorPay_Amount = Amount;
+        Fee = 0;
+        Tax = 0;
+        OrderId = Session["Order_ID"].ToString();
+        RazorPayOrderId = Raz_orderId;
+        IP_Address = Request.ServerVariables["REMOTE_HOST"].ToString();
 
-            int Result = 0;
-            Result = objFees.InsertRazorPayNotCaptureTransaction(SessionNo, UserNo, RazorPayId, dAmount, RazorPay_Amount, Fee, Tax, OrderId, RazorPayOrderId, IP_Address);
-             
+        int Result = 0;
+        Result = objFees.InsertRazorPayNotCaptureTransaction(SessionNo, UserNo, RazorPayId, dAmount, RazorPay_Amount, Fee, Tax, OrderId, RazorPayOrderId, IP_Address);
+
 
         //}
     }
 
-    protected void hdnPaymentId_ValueChanged(object sender, EventArgs e)
-    {
-        string payid = hdnPaymentId.Value;
-        Session["PaymentId"] = hdnPaymentId.Value;
-        Response.Redirect("RazorPayOnlinePaymentRequest.aspx");
-    }
+    //protected void hdnPaymentId_ValueChanged(object sender, EventArgs e)
+    //{
+    //    string payid = hdnPaymentId.Value;
+    //    Session["PaymentId"] = hdnPaymentId.Value;
+    //    Response.Redirect("RazorPayOnlinePaymentRequest.aspx");
+    //}
 
     //*********GENERATE UNIQUE TRANSACTION ID***********
     //public string RandomDigits(int length)

@@ -18,6 +18,10 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
     HostelGatePassRequestApprovalController Hgp = new HostelGatePassRequestApprovalController();
     HostelGatePassRequestApproval ObjHgp = new HostelGatePassRequestApproval();
 
+    //Below code added by Himanshu Tamrakar 05042024
+    DateTime Fromdate = DateTime.Now.AddDays(-1);
+    DateTime Todate = DateTime.Now.AddDays(7);
+
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -44,7 +48,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
                 }
-                BindListView();
+                //objCommon.FillDropDownList(ddlPurposeSearch, "ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME", "ISACTIVE=1", "");
+                BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
                 //MoreDetails();
             }
 
@@ -75,18 +80,20 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
         }
     }
 
-    private void BindListView()
+    //Below cond added by Himanshu Tamrakar 05042024
+    private void BindListView(string Applydate, int Purpose, string Todate, string Fromdate, string Status)
     {
         try
         {
             DataSet ds = null;
             if (Convert.ToInt32(Session["usertype"]) == 1)
             {
-                ds = Hgp.GetAllRequests(0);
+
+                ds = Hgp.GetAllRequests(0, Applydate, Purpose, Todate, Fromdate, Status);
             }
             else
             {
-                ds = Hgp.GetAllRequests(Convert.ToInt32(Session["userno"]));
+                ds = Hgp.GetAllRequests(Convert.ToInt32(Session["userno"]), Applydate, Purpose, Todate, Fromdate, Status);
             }
             lvReq.DataSource = ds;
             lvReq.DataBind();
@@ -313,15 +320,15 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
     {
         try
         {
-             string imageUrl = Imageurl.Value;
+            string imageUrl = Imageurl.Value;
 
-             if (!string.IsNullOrEmpty(imageUrl))
+            if (!string.IsNullOrEmpty(imageUrl))
             {
                 // Construct the file path on the server
                 string filePath = ResolveUrl(imageUrl);
-            
+
                 // Register a client-side script to open the file in a new window
-                string script = "window.open('"+filePath+"', '_blank');";
+                string script = "window.open('" + filePath + "', '_blank');";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "OpenFileScript", script, true);
             }
             else
@@ -338,10 +345,43 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
         }
     }
 
+    //below code added by Himanshu tamrakar 05042024
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        this.BindListView();   //Added By Himanshu tamrakar 22-11-2023
+
+        this.BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
+        //Added By Himanshu tamrakar 22-11-2023
         DivShowRequestDetails.Visible = false;
         DivShowRequest.Visible = true;
+    }
+
+    //below code added by Himanshu tamrakar 05042024
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        if (Convert.ToDateTime(txtFromDateSearch.Text) > Convert.ToDateTime(txtToDateSearch.Text))
+        {
+            objCommon.DisplayMessage("To Date is Greater Than From date.", this);
+            txtToDateSearch.Text = string.Empty;
+            txtFromDateSearch.Text = string.Empty;
+            return;
+        }
+        string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? null : DateTime.Parse(txtApplyDate.Text).ToString("yyyy-MM-dd");
+        //int Purpose = string.IsNullOrEmpty(ddlPurposeSearch.SelectedValue) ? 0 : Convert.ToInt32(ddlPurposeSearch.SelectedValue);
+        string Todate = string.IsNullOrEmpty(txtToDateSearch.Text) ? null : DateTime.Parse(txtToDateSearch.Text).ToString("yyyy-MM-dd");
+        string Fromdate = string.IsNullOrEmpty(txtFromDateSearch.Text) ? null : DateTime.Parse(txtFromDateSearch.Text).ToString("yyyy-MM-dd");
+        //string Status = string.IsNullOrEmpty(ddlStatusSearch.SelectedValue) ? null : ddlStatusSearch.SelectedValue;
+        this.BindListView(Applydate, 0, Todate, Fromdate, "0");
+    }
+
+    //below code added by Himanshu tamrakar 05042024
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
+        txtApplyDate.Text = string.Empty;
+        //ddlPurposeSearch.SelectedValue = "0";
+        txtToDateSearch.Text = string.Empty;
+        txtFromDateSearch.Text = string.Empty;
+        ddlStatus.SelectedValue = "0";
+        BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
+
     }
 }

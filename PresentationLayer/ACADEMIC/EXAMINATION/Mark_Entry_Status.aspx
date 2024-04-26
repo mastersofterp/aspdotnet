@@ -40,20 +40,21 @@
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Mark Entry Status</h3>
+                            <%--<h3 class="box-title">Mark Entry Status</h3>--%>
+                             <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
 
                         </div>
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
 
-                                    <asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>
+                                    <%--<asp:Label ID="Label1" runat="server" Font-Bold="True" Style="color: Red"></asp:Label>--%>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Code Description</label>
-
+                                            <%--<label>Code Description</label>--%>
+                                            <asp:Label ID="lblDYtxtCodeDescription" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:TextBox ID="txtCodeDesc" runat="server" Placeholder="Enter Code Description" ToolTip="Enter Code Description" TabIndex="1" CssClass="form-control multi-select-demo" MaxLength="15"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvCodeDesc" runat="server" ControlToValidate="txtCodeDesc"
@@ -66,7 +67,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Code Value</label>
+                                            <%--<label>Code Value</label>--%>
+                                            <asp:Label ID="lblDYtxtCodeValue" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:TextBox ID="txtCodeValue" runat="server" Placeholder="Enter Code Value" ToolTip="Enter Code Value" TabIndex="2" CssClass="form-control multi-select-demo" MaxLength="3"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvCodeValue" runat="server" ControlToValidate="txtCodeValue"
@@ -82,7 +84,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Short Name </label>
+                                            <%--<label>Short Name </label>--%>
+                                            <asp:Label ID="lblDYtxtShortName" runat="server" Font-Bold="true"></asp:Label>
 
                                         </div>
                                         <asp:TextBox ID="txtShortname" runat="server" Placeholder="Enter Short Name" ToolTip="Enter Short Name" TabIndex="3" CssClass="form-control multi-select-demo" MaxLength="5"></asp:TextBox>
@@ -97,7 +100,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Final Grade </label>
+                                            <%--<label>Final Grade </label>--%>
+                                            <asp:Label ID="lblDYtxtFinalGrade" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:TextBox ID="txtFinalGrade" runat="server" Placeholder="Enter Final Grade" ToolTip="Enter Final Grade" TabIndex="4" CssClass="form-control multi-select-demo" MaxLength="3" onkeyup="convertToUpperCase(this)"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvFinalGrade" runat="server" ControlToValidate="txtFinalGrade"
@@ -112,7 +116,9 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 ">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Grade Point</label>
+                                            <%--<label>Grade Point</label>--%>
+                                            <asp:Label ID="lblDYtxtGradePoint" runat="server" Font-Bold="true"></asp:Label>
+
                                         </div>
                                         <asp:TextBox ID="txtGradePoint" runat="server" Placeholder="Enter Grade Point" ToolTip="Enter Grade Point" TabIndex="5" CssClass="form-control multi-select-demo" MaxLength="5"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvGradePoint" runat="server" ControlToValidate="txtGradePoint"

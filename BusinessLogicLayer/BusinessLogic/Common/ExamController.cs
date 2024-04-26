@@ -7943,6 +7943,83 @@ namespace IITMS
 
 
 
+                #region Added by Pallavi M. dt on 16032024
+                public int Add_ExamGraceRule(int SrNo, string GraceType, decimal GraceMarksdata, int GraceMarks, int MaxCourse, decimal MaxCoursedata, int PerCourseMarks, decimal PerCourseMarksdata, int PercentMarks, decimal PercentMarksdata, int Status)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParam = new SqlParameter[12];
+                        objParam[0] = new SqlParameter("@P_SRNO", SrNo);
+                        objParam[1] = new SqlParameter("@P_GRACE_CATEGORY", GraceType);
+                        objParam[2] = new SqlParameter("@P_GRACE_MARKS_DATA", GraceMarksdata);
+                        objParam[3] = new SqlParameter("@P_GRACE_MARKS", GraceMarks);
+                        objParam[4] = new SqlParameter("@P_MAX_GRACE_MARKS", MaxCourse);
+                        objParam[5] = new SqlParameter("@P_MAX_GRACE_MARKS_DATA", MaxCoursedata);
+                        objParam[6] = new SqlParameter("@P_PER_COURSE_GRACE_MARKS", PerCourseMarks);
+                        objParam[7] = new SqlParameter("@P_PER_COURSE_GRACE_MARKS_DATA", PerCourseMarksdata);
+                        objParam[8] = new SqlParameter("@P_PERCENT_OF_MAX_MARKS", PercentMarks);
+                        objParam[9] = new SqlParameter("@P_PERCENT_OF_MAX_MARKS_DATA", PercentMarksdata);
+                        objParam[10] = new SqlParameter("@P_STATUS", Status);
+                        objParam[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParam[11].Direction = ParameterDirection.Output;
+
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_INSERT_GRACE_RULE", objParam, true);
+
+                        if (obj != null && obj.ToString() != "-99" && obj.ToString() != "-1001" && obj.ToString() != "-2" && obj.ToString() != "2")
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else if (obj.ToString().Equals("2"))
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                        else
+                        {
+                            status = Convert.ToInt32(CustomStatus.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.Add_ExamConfiguration() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
+                public DataSet Get_Grace_Data()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_EXAM_GRACE_CONFIG", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Common.GetAttendanceData-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                public SqlDataReader GetAllGraceData(int SrNo)
+                {
+                    SqlDataReader dr = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[] { new SqlParameter("@P_SRNO", SrNo) };
+                        dr = objSQLHelper.ExecuteReaderSP("PKG_ACD_ALL_GRACE_CONFIG", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.BatchController.GetBatchByNo() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return dr;
+                }
+                #endregion
+
+
                 //added by prafull on dt:23112023 
                 public int UpdateStudentByGrade(int Schemeno, int Sessionno, int Semester, int Courseno, string Ccode, string Idno, string ABgrade, string Igrade, string UFMgrade, string OldGrade, int UA_NO)
                 {

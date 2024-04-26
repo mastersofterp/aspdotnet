@@ -23,6 +23,11 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     HostelInOutRequestsController ObjInOut = new HostelInOutRequestsController();
     HostelInOutReq ObjHReq = new HostelInOutReq();
+
+    //below code added by Himanshu Tamrakar 05042024
+    DateTime Fromdate = DateTime.Now.AddDays(-1);
+    DateTime Todate = DateTime.Now.AddDays(7);
+
     private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
     #region Page Events
@@ -62,8 +67,10 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
                     }
                 }
                 objCommon.FillDropDownList(ddlPurpose, "ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME", "ISACTIVE=1", "PURPOSE_NO");
-                BindListView();
-                //MoreDetails();
+                //commented and added by Himanshu Tamrakar 06042024
+                //BindListView():
+                BindListView(Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")));
+
             }
             
         }
@@ -92,14 +99,14 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
             Response.Redirect("~/notauthorized.aspx?page=HostelInOutRequests.aspx");
         }
     }
-    private void BindListView()
+    private void BindListView(string Todate, string Fromdate)
     {
         try
         {
             string applydate = null;
-            string indate = null;
-            string outdate = null;
-            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq, applydate, indate, outdate);
+            //string indate = null;
+            //string outdate = null;
+            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq,applydate, Todate, Fromdate);
             lvRequests.DataSource = ds;
             lvRequests.DataBind();
             foreach (ListViewDataItem lv in lvRequests.Items)
@@ -134,6 +141,13 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
     {
         try
         {
+            if (Convert.ToDateTime(txtOutDate.Text) > Convert.ToDateTime(txtInDate.Text))
+            {
+                objCommon.DisplayMessage("To Date is Greater Than From date.", this);
+                txtInDate.Text = string.Empty;
+                txtOutDate.Text = string.Empty;
+                return;
+            }
             //string applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? null : txtApplyDate.Text;
             //ObjHReq.Purpose = ddlPurpose.SelectedValue;
             //ObjHReq.Gatepassno = txtGatePassCode.Text;
@@ -143,10 +157,10 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
             string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? null : DateTime.Parse(txtApplyDate.Text).ToString("yyyy-MM-dd");
             ObjHReq.Purpose = ddlPurpose.SelectedValue;
             ObjHReq.Gatepassno = txtGatePassCode.Text;
-            string Indate = string.IsNullOrEmpty(txtInDate.Text) ? null : DateTime.Parse(txtInDate.Text).ToString("yyyy-MM-dd");
-            string Outdate = string.IsNullOrEmpty(txtOutDate.Text) ? null : DateTime.Parse(txtOutDate.Text).ToString("yyyy-MM-dd");
+            string Fromdate = string.IsNullOrEmpty(txtOutDate.Text) ? null : DateTime.Parse(txtOutDate.Text).ToString("yyyy-MM-dd");
+            string Todate = string.IsNullOrEmpty(txtInDate.Text) ? null : DateTime.Parse(txtInDate.Text).ToString("yyyy-MM-dd");
             ObjHReq.Status = string.IsNullOrEmpty(ddlStatus.SelectedValue) ? null : ddlStatus.SelectedValue;
-            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq, Applydate, Indate, Outdate);
+            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq, Applydate, Todate, Fromdate);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)   //Added By Himanshu tamrakar 22/11/2023
             {
                 lvRequests.DataSource = ds;
@@ -367,7 +381,11 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
             if (i >= 2)
             {
                 objCommon.DisplayMessage("Records Updated Sucessfully.", this.Page);
-                this.BindListView();
+                //commented and added by Himanshu Tamrakar 06042024
+                //BindListView():
+                BindListView(Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")));
+
+
             }
             else
             {

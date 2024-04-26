@@ -67,8 +67,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_ImageUpload : System.Web.U
             _idnoEmp = Convert.ToInt32(Session["serviceIdNo"].ToString().Trim());
         }
         this.BindListViewEmpImage();
-
-
+        GetConfigForEditAndApprove();
     }
 
     private void BindListViewEmpImage()
@@ -281,6 +280,26 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_ImageUpload : System.Web.U
                 string base64String = Convert.ToBase64String(bytes, 0, bytes.Length);
                 Image1.ImageUrl = String.Format("data:image/jpg;base64,{0}", base64String);
                 Image1.Attributes.Add("src", "data:image/png;base64," + base64String);
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
+                {
+                    //string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    //if (STATUS == "A")
+                    //{
+                    //    MessageBox("Your Details Are Approved You Cannot Edit.");
+                    //    btnSubmit.Enabled = false;
+                    //    return;
+                    //}
+                    //else
+                    //{
+                    //    btnSubmit.Enabled = true;
+                    //}
+                    GetConfigForEditAndApprove();
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
+                }
             }
         }
         catch (Exception ex)
@@ -342,18 +361,20 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_ImageUpload : System.Web.U
         //lvEmpImage.DataSource = null;
         //lvEmpImage.DataBind();
         //lvEmpImage.Enabled = false;
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
     {
-
         ddlImageType.SelectedValue = "0";
         ViewState["action"] = "add";
         Image1.Attributes.Clear();
         Image1.ImageUrl = "~/IMAGES/" + "nophoto.jpg";
         ViewState["File"] = null;
         Session["IMAGE"] = null;
-
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     private void FillDropDown()
@@ -413,4 +434,54 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_ImageUpload : System.Web.U
     {
 
     }
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Image Upload";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
+    #endregion
 }

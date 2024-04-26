@@ -172,7 +172,7 @@
                                 <table id="table2" class="table table-striped table-bordered nowrap display" style="width: 100%">
                                     <thead class="bg-light-blue">
                                         <tr>
-                                            <th>RRN Number
+                                            <th>Reg no
                                             </th>
                                             <th>Student Name
                                             </th>

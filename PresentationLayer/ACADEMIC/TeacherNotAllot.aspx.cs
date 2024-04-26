@@ -191,8 +191,8 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             else if (ddlReport.SelectedValue == "3")
             {
                 ds = objAllot.GetCourseTeacherAllotmentDoneExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSemester.SelectedValue));
-                ds.Tables[0].TableName = "Course Teacher Allot";
-                ds.Tables[1].TableName = "Summery Course Teacher Report";
+                ds.Tables[0].TableName = "Course Teacher Allotment";
+                ds.Tables[1].TableName = "Summary Course Teacher Report";
                 filename = "Course Teacher Allot";
             }
             // Added By Jay T. On dated 27032024 (TkNo.55317)  Add Session Condition In Excel 

@@ -12,6 +12,18 @@ using System.Linq;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 using System.Collections.Generic;
+/*                                                  
+---------------------------------------------------------------------------------------------------------------------------                                                          
+Created By :                                                      
+Created On :                         
+Purpose    :                                     
+Version    : 1.0.0                                                
+---------------------------------------------------------------------------------------------------------------------------                                                            
+Version     Modified On     Modified By            Purpose                                                            
+---------------------------------------------------------------------------------------------------------------------------                                                            
+1.0.1      28-03-2024      Ashutosh Dhobe        Added  CheckDisplaySection                
+------------------------------------------- -------------------------------------------------------------------------------                             
+*/
 
 public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 {
@@ -19,6 +31,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
     ModuleConfigController objConfig = new ModuleConfigController();
+    PageControlValidationController objVC = new PageControlValidationController();
 
     List<string> validationErrors = new List<string>();
 
@@ -36,14 +49,14 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             else
             {
                 //Page Authorization
-                //  CheckPageAuthorization();
+                // CheckPageAuthorization();
                 ViewState["usertype"] = Session["usertype"];
 
                 this.FillDropDown();
                 ShowStudentDetails();
                 StudentConfiguration();
                 rdoParents.Visible = true;                         //Added by sachin on 19-07-2022
-
+               
                 int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "ORGANIZATIONID", ""));
 
                 if (rdofatheralive.SelectedValue == "1")
@@ -208,6 +221,9 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             {
                 ManagePageControlsModule.ManagePageControls(Page, filepath);
             }
+
+            CheckDisplaySection();
+            CheckIsEditable();
         }
     }
 
@@ -219,7 +235,8 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "PersonalDetails.aspx";
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        string section = string.Empty;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -265,6 +282,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 {
                     control.Visible = true;
                     control2.Visible = false;
+                    rdobtn_Gender.Visible = true;
                 }
                 else
                 {
@@ -280,6 +298,149 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             }
         }
     }
+    //<1.0.1>
+    private void CheckDisplaySection()
+    {
+        DataSet ds = null;
+        string section = string.Empty;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "PersonalDetails.aspx";
+       
+            section = "Father Details";
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Convert.ToBoolean( ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"])==true)
+                {
+                    FatherSection.Visible = true;
+                }
+                else 
+                {
+                    FatherSection.Visible = false;
+                }
+
+            }
+            section = "Mother Details";
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+                {
+                    MotherSection.Visible = true;
+                }
+                else 
+                {
+                    MotherSection.Visible = false;
+                }
+            }
+            section = "Student Personal Details";
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+                {
+                    DivStudPerDetails.Visible = true;
+                    divstudinfo.Visible = true;
+                    divApplicationId.Visible = true;
+                }
+                else
+                {
+                    DivStudPerDetails.Visible = false;
+                    divstudinfo.Visible=false;
+                    divApplicationId.Visible = false;
+                }
+            }
+            section = "Photo & Signature Details";
+            ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Convert.ToBoolean(ds.Tables[0].Rows[0]["IS_DISPLAY_SECTION_NAME"]) == true)
+                {
+                    divPhotoandSign.Visible = true;
+
+                }
+                else
+                {
+                    divPhotoandSign.Visible = false;
+                }
+            }
+   }
+    //</1.0.1>
+
+    //<1.0.2>
+    public string CheckIsEditable()
+    {
+        DataSet ds = null;
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "PersonalDetails.aspx";
+        string idno = string.Empty;
+        string section = string.Empty;
+        Boolean isEditable = true;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section);
+
+        //if (ViewState["usertype"].ToString() == "2")
+        //{
+        //    idno = (Session["idno"]).ToString();
+        //}
+        //else
+        //{
+        //    idno = (Session["stuinfoidno"]).ToString();
+        //}
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+
+            if (row["IS_EDITABLE"].ToString() != string.Empty)
+            {
+                isEditable = Convert.ToBoolean(row["IS_EDITABLE"].ToString());
+            }
+            // Boolean isEditable =Convert.ToBoolean( row["IS_EDITABLE"]);
+            string controlID = string.Empty;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+            }
+
+            if (isEditable == false && !string.IsNullOrEmpty(controlID))
+            {
+                Control control = FindControlRecursive(Page, controlID);
+
+                if (control is TextBox)
+                {
+                    TextBox textBox = (TextBox)control;
+                    textBox.ReadOnly = true;
+                }
+
+                if (control is DropDownList)
+                {
+                    DropDownList dropdownlist = (DropDownList)control;
+                    dropdownlist.Enabled = false;
+                }
+
+                if (control is FileUpload)
+                {
+                    FileUpload fileUploadControl = (FileUpload)control;
+                    fileUploadControl.Enabled = false;
+                    if (controlID == "fuSignUpload")
+                    {
+                        btnSignUpload.Enabled = false;
+                    }
+                    if (controlID == "fuPhotoUpload")
+                    {
+                        btnPhotoUpload.Enabled = false;
+                    }
+                }
+            }
+        }
+        return string.Empty;
+    }
+    //</1.0.2>
 
     private Control FindControlRecursive(Control parentControl, string controlId)
     {
@@ -325,7 +486,9 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         string pageNo = "";
         string pageName = "PersonalDetails.aspx";
         string idno = string.Empty;
-        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+        string section = string.Empty;
+        Boolean isDisplaySection = false;
+        ds = objVC.GetStudentConfigData(orgID, pageNo, pageName, section); 
 
         if (ViewState["usertype"].ToString() == "2")
         {
@@ -346,6 +509,11 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             string captionName = row["CAPTION_NAME"].ToString();
             string controlToHide = row["CONTROL_TO_HIDE"].ToString();
             string isMandatory = row["ISMANDATORY"].ToString();
+            if (row["IS_DISPLAY_SECTION_NAME"].ToString() != string.Empty)
+            {
+                isDisplaySection = Convert.ToBoolean(row["IS_DISPLAY_SECTION_NAME"].ToString());
+            }
+
             string controlID = string.Empty;
             string[] values = controlToHide.Split(',');
 
@@ -354,7 +522,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 controlID = values[0].Trim();
             }
 
-            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID))
+            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID) && isDisplaySection == true)
             {
                 Control control = FindControlRecursive(Page, controlID);
 

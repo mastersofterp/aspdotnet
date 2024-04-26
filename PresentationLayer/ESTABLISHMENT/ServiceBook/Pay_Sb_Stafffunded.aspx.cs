@@ -76,6 +76,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Stafffunded : System.Web.U
         }
         txtweblink.Attributes.Add("maxlength", txtweblink.MaxLength.ToString());
         BlobDetails();
+        GetConfigForEditAndApprove();
     }
 
 
@@ -360,14 +361,25 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Stafffunded : System.Web.U
                 LVFiles.DataSource = null;
                 LVFiles.DataBind();
             }
-            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-            if (STATUS == "A")
+            if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
             {
-                MessageBox("Your Details are Approved you cannot edit.");
-                return;
+                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                if (STATUS == "A")
+                {
+                    MessageBox("Your Details Are Approved You Cannot Edit.");
+                    btnSubmit.Enabled = false;
+                    return;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+                GetConfigForEditAndApprove();
             }
             else
             {
+                btnSubmit.Enabled = true;
+                GetConfigForEditAndApprove();
             }
         }
         catch (Exception ex)
@@ -386,11 +398,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Stafffunded : System.Web.U
             ImageButton btnDel = sender as ImageButton;
             int SFNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_StaffFunded", "*", "", "SFNO=" + SFNO, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_StaffFunded", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "SFNO=" + SFNO, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else
@@ -418,6 +435,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Stafffunded : System.Web.U
     {
         Clear();
         DeleteDirecPath(Docpath + "TEMP_FUNDFILES\\" + _idnoEmp + "\\APP_0");
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -442,7 +460,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Stafffunded : System.Web.U
         ddlCoInvestigator.SelectedIndex = 0;
         txtweblink.Text = string.Empty;
         ddlProjectStatus.SelectedIndex = 0;
-
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
     public void MessageBox(string msg)
     {
@@ -1012,6 +1032,56 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Stafffunded : System.Web.U
         catch (Exception ex)
         {
             throw;
+        }
+    }
+
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Staff Funded/Funded Project";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
         }
     }
 

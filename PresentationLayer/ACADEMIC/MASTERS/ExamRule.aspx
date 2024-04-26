@@ -28,7 +28,12 @@
             <div class="col-md-12 col-sm-12 col-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
+<<<<<<< HEAD
                         <h3 class="box-title">EXAM RULE</h3>
+=======
+                        <%--<h3 class="box-title">EXAM RULE</h3>--%>
+                         <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
+>>>>>>> f47b83fb ([ENHANCEMENT] [58131] Add Dynamic Label to Masters)
                     </div>
                     <div class="box-body">
                         <div class="nav-tabs-custom" id="Tabs" role="tabpanel">

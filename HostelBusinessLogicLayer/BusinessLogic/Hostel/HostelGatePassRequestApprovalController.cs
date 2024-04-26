@@ -16,14 +16,21 @@ namespace HostelBusinessLogicLayer.BusinessLogic.Hostel
     {
         string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-        public DataSet GetAllRequests(int uano)
+        public DataSet GetAllRequests(int uano, string Applydate, int Purpose, string Todate, string Fromdate, string Status)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                SqlParameter[] objParams = new SqlParameter[1];
+                SqlParameter[] objParams = new SqlParameter[6];
                 objParams[0] = new SqlParameter("@P_UA_NO", uano);
+
+                //Added By Himanshu Tamrakar 02042024
+                objParams[1] = new SqlParameter("@P_TODATE", Todate); 
+                objParams[2] = new SqlParameter("@P_FROMDATE", Fromdate);
+                objParams[3] = new SqlParameter("@P_PURPOSE", Purpose);
+                objParams[4] = new SqlParameter("@P_APPLYDATE", Applydate);
+                objParams[5] = new SqlParameter("@P_STATUS", Status);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_GET_APPROVAL_REQUEST", objParams);
             }
             catch (Exception ex)

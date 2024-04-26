@@ -418,7 +418,8 @@
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">EXAM NAME CREATION</h3>
+                            <%--<h3 class="box-title">EXAM NAME CREATION</h3>--%>
+                             <h3 class="box-title"><asp:Label ID="lblDynamicPageTitle" runat="server" Font-Bold="true"></asp:Label></h3>
                         </div>
 
                         <div class="box-body">
@@ -427,7 +428,8 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Exam Pattern</label>
+                                           <%-- <label>Exam Pattern</label>--%>
+                                            <asp:Label ID="lblDYddlExamPattern" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlExamPattern" runat="server" AppendDataBoundItems="true" data-select2-enable="true" CssClass="form-control" OnSelectedIndexChanged="ddlExamPattern_SelectedIndexChanged" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -435,7 +437,9 @@
                                     </div>
 
                                     <div class="form-group col-md-2" style="display: none;">
-                                        <label>Status</label>
+                                        <%--<label>Status</label>--%>
+                                        <asp:Label ID="lblDYStatus" runat="server" Font-Bold="true"></asp:Label>
+                                        
 
                                         <div class="switch form-inline">
                                             <input type="checkbox" id="rdActivetimeslot" name="switch" checked />

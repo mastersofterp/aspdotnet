@@ -304,7 +304,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
                 lblNom.Text = dsNom.Tables[0].Rows[0]["PENDING COUNT"].ToString();
                 Rep_Nomination.DataSource = dsNom.Tables[0];
                 Rep_Nomination.DataBind();
-                
+
                 if (lblBlobConnectiontring.Text != "")
                 {
                     Control ctrHeader = Rep_Nomination.FindControl("divFolder");
@@ -1354,8 +1354,179 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
             }
             #endregion
 
+            #region AcademicList
 
+            DataSet dsAcademicResp = objServiceBook.GetAllAcademicResponsibilitiesCount();
+            if (dsAcademicResp.Tables[0].Rows.Count > 0)
+            {
+                lblAcademic.Text = dsAcademicResp.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvAcademic.DataSource = dsAcademicResp.Tables[0];
+                lvAcademic.DataBind();
 
+                if (lblBlobConnectiontring.Text != "")
+                {
+                    Control ctrHeader = lvAcademic.FindControl("divFolder");
+                    Control ctrHead1 = lvAcademic.FindControl("divBlob");
+                    ctrHeader.Visible = false;
+                    ctrHead1.Visible = true;
+
+                    foreach (ListViewItem lvRow in lvAcademic.Items)
+                    {
+                        Control ckBox = (Control)lvRow.FindControl("tdFolder");
+                        Control ckattach = (Control)lvRow.FindControl("tdBlob");
+                        ckBox.Visible = false;
+                        ckattach.Visible = true;
+                    }
+                }
+                else
+                {
+                    Control ctrHeader = lvAcademic.FindControl("divFolder");
+                    Control ctrHead1 = lvAcademic.FindControl("divBlob");
+                    ctrHeader.Visible = true;
+                    ctrHead1.Visible = false;
+
+                    foreach (ListViewItem lvRow in lvAcademic.Items)
+                    {
+                        Control ckBox = (Control)lvRow.FindControl("tdFolder");
+                        Control ckattach = (Control)lvRow.FindControl("tdBlob");
+                        ckBox.Visible = true;
+                        ckattach.Visible = false;
+                    }
+                }
+            }
+            else
+            {
+                lblAcademic.Text = "0";
+                lvAcademic.DataSource = null;
+                lvAcademic.DataBind();
+            }
+            #endregion
+
+            #region Miscellaneous Detail
+
+            DataSet dsMiscellaneous = objServiceBook.GetAllMiscellaneousCount();
+            if (dsMiscellaneous.Tables[0].Rows.Count > 0)
+            {
+                lblMiscellaneous.Text = dsMiscellaneous.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvMiscellaneous.DataSource = dsMiscellaneous.Tables[0];
+                lvMiscellaneous.DataBind();
+
+            }
+            else
+            {
+                lblMiscellaneous.Text = "0";
+                lvMiscellaneous.DataSource = null;
+                lvMiscellaneous.DataBind();
+            }
+            #endregion
+
+            #region Professional Course
+
+            DataSet dsProfessional = objServiceBook.GetAllProfessionalCourseCount();
+            if (dsProfessional.Tables[0].Rows.Count > 0)
+            {
+                lblProfessional.Text = dsProfessional.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvProfessional.DataSource = dsProfessional.Tables[0];
+                lvProfessional.DataBind();
+
+            }
+            else
+            {
+                lblProfessional.Text = "0";
+                lvProfessional.DataSource = null;
+                lvProfessional.DataBind();
+            }
+            #endregion
+
+            #region Avishkar
+
+            DataSet dsAvishkar = objServiceBook.GetAllAvishkarCount();
+            if (dsAvishkar.Tables[0].Rows.Count > 0)
+            {
+                lblAvishkar.Text = dsAvishkar.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvAvishkar.DataSource = dsAvishkar.Tables[0];
+                lvAvishkar.DataBind();
+
+            }
+            else
+            {
+                lblAvishkar.Text = "0";
+                lvAvishkar.DataSource = null;
+                lvAvishkar.DataBind();
+            }
+            #endregion
+
+            #region Award
+
+            DataSet dsAward = objServiceBook.GetAllAwardCount();
+            if (dsAward.Tables[0].Rows.Count > 0)
+            {
+                lblAward.Text = dsAward.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvAward.DataSource = dsAward.Tables[0];
+                lvAward.DataBind();
+
+            }
+            else
+            {
+                lblAward.Text = "0";
+                lvAward.DataSource = null;
+                lvAward.DataBind();
+            }
+            #endregion
+
+            #region Current Appointment
+
+            DataSet dsCurrent = objServiceBook.GetAllCurrentAppointmentCount();
+            if (dsCurrent.Tables[0].Rows.Count > 0)
+            {
+                lblCurrent.Text = dsCurrent.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvCurrent.DataSource = dsCurrent.Tables[0];
+                lvCurrent.DataBind();
+
+            }
+            else
+            {
+                lblCurrent.Text = "0";
+                lvCurrent.DataSource = null;
+                lvCurrent.DataBind();
+            }
+            #endregion
+
+            #region Research
+
+            DataSet dsResearch = objServiceBook.GetAllResearchCount();
+            if (dsResearch.Tables[0].Rows.Count > 0)
+            {
+                lblResearch.Text = dsResearch.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvResearch.DataSource = dsResearch.Tables[0];
+                lvResearch.DataBind();
+
+            }
+            else
+            {
+                lblResearch.Text = "0";
+                lvResearch.DataSource = null;
+                lvResearch.DataBind();
+            }
+            #endregion
+
+            #region Revenue Generated
+
+            DataSet dsRevenue = objServiceBook.GetAllRevenueCount();
+            if (dsRevenue.Tables[0].Rows.Count > 0)
+            {
+                lblRevenue.Text = dsRevenue.Tables[0].Rows[0]["PENDING COUNT"].ToString();
+                lvRevenue.DataSource = dsRevenue.Tables[0];
+                lvRevenue.DataBind();
+
+            }
+            else
+            {
+                lblRevenue.Text = "0";
+                lvRevenue.DataSource = null;
+                lvRevenue.DataBind();
+            }
+            #endregion
         }
         catch (Exception ex)
         {
@@ -1523,7 +1694,7 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
     #endregion
 
 
-
+    #region Previous Exp Document
     public string GetFileNamePath(object filename, object PSNO, object idno)
     {
         string[] extension = filename.ToString().Split('.');
@@ -1532,6 +1703,18 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
         else
             return "";
     }
+    #endregion
+
+    #region AcademicResponsibiltyDocument
+    public string GetFileNameAcademicPath(object filename, object ACDNO, object idno)
+    {
+        string[] extension = filename.ToString().Split('.');
+        if (filename != null && filename.ToString() != string.Empty)
+            return ("~/ESTABLISHMENT/upload_files/ACADEMIC_RESPONSIBLITY/" + idno.ToString() + "/ACAD_" + ACDNO + "." + extension[1].ToString().Trim());
+        else
+            return "";
+    }
+    #endregion
 
     #region Family Particulars Approval
     protected void btnApproval_Click(object sender, EventArgs e)
@@ -2635,13 +2818,18 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
     }
     protected void imgbtnprevExpPGPreview_Click(object sender, ImageClickEventArgs e)
     {
-        DownloadBlob(sender,e);
+        DownloadBlob(sender, e);
     }
     protected void imgbtnLoanUndPreview_Click(object sender, ImageClickEventArgs e)
     {
         DownloadBlob(sender, e);
     }
     protected void imgbtnLoanAffidPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        DownloadBlob(sender, e);
+    }
+
+    protected void imgbtnAcademicPreview_Click(object sender, ImageClickEventArgs e)
     {
         DownloadBlob(sender, e);
     }
@@ -2683,7 +2871,390 @@ public partial class ESTABLISHMENT_SERVICEBOOK_EmployeeServiceBookDetails : Syst
             throw;
         }
     }
-   
+
     #endregion
-   
+
+    #region Academic Approval
+    protected void btnAcademicApproval_Click(object sender, EventArgs e)
+    {
+        Button btnAcademicApproval = sender as Button;
+        int ACDNO = int.Parse(btnAcademicApproval.CommandArgument);
+        int ACADIDNO = int.Parse(btnAcademicApproval.CommandName);
+
+        ViewState["ACADIDNO"] = ACADIDNO;
+        ViewState["ACDNO"] = ACDNO;
+        string type = "AcademicResp";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(ACDNO, ACADIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            AcademicClear();
+            ShowDetails();
+        }
+    }
+
+    protected void btnAcademicReject_Click(object sender, EventArgs e)
+    {
+        Button btnAcademicReject = sender as Button;
+        int ACDNO = int.Parse(btnAcademicReject.CommandArgument);
+        int ACADIDNO = int.Parse(btnAcademicReject.CommandName);
+
+        ViewState["ACDNO"] = ACDNO;
+        ViewState["ACADIDNO"] = ACADIDNO;
+        string type = "AcademicResp";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(ACDNO, ACADIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            AcademicClear();
+            ShowDetails();
+        }
+    }
+
+    private void AcademicClear()
+    {
+        ViewState["ACDNO"] = null;
+        ViewState["ACADIDNO"] = null;
+    }
+
+    #endregion
+
+    #region Miscellaneous
+    protected void btnMiscellaneousApproval_Click(object sender, EventArgs e)
+    {
+        Button btnMiscellaneousApproval = sender as Button;
+        int MOSNO = int.Parse(btnMiscellaneousApproval.CommandArgument);
+        int MOSIDNO = int.Parse(btnMiscellaneousApproval.CommandName);
+
+        ViewState["MOSIDNO"] = MOSIDNO;
+        ViewState["MOSNO"] = MOSNO;
+        string type = "MiscellaneousDetail";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(MOSNO, MOSIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            MiscellaneousClear();
+            ShowDetails();
+        }
+    }
+
+    protected void btnMiscellaneousReject_Click(object sender, EventArgs e)
+    {
+        Button btnMiscellaneousApproval = sender as Button;
+        int MOSNO = int.Parse(btnMiscellaneousApproval.CommandArgument);
+        int MOSIDNO = int.Parse(btnMiscellaneousApproval.CommandName);
+
+        ViewState["MOSNO"] = MOSNO;
+        ViewState["MOSIDNO"] = MOSIDNO;
+        string type = "MiscellaneousDetail";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(MOSNO, MOSIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            MiscellaneousClear();
+            ShowDetails();
+        }
+    }
+
+    private void MiscellaneousClear()
+    {
+        ViewState["MOSNO"] = null;
+        ViewState["MOSIDNO"] = null;
+    }
+
+    #endregion
+
+    #region Professional Approve
+
+    protected void btnProfessionalApproval_Click(object sender, EventArgs e)
+    {
+        Button btnProfessionalApproval = sender as Button;
+        int PNO = int.Parse(btnProfessionalApproval.CommandArgument);
+        int PNOIDNO = int.Parse(btnProfessionalApproval.CommandName);
+
+        ViewState["PNOIDNO"] = PNOIDNO;
+        ViewState["PNO"] = PNO;
+        string type = "ProfessionalCourse";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(PNO, PNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            ProfessionalClear();
+            ShowDetails();
+        }
+    }
+    protected void btnProfessionalReject_Click(object sender, EventArgs e)
+    {
+        Button btnProfessionalReject = sender as Button;
+        int PNO = int.Parse(btnProfessionalReject.CommandArgument);
+        int PNOIDNO = int.Parse(btnProfessionalReject.CommandName);
+
+        ViewState["PNO"] = PNO;
+        ViewState["PNOIDNO"] = PNOIDNO;
+        string type = "ProfessionalCourse";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(PNO, PNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            ProfessionalClear();
+            ShowDetails();
+        }
+    }
+
+    private void ProfessionalClear()
+    {
+        ViewState["PNO"] = null;
+        ViewState["PNOIDNO"] = null;
+    }
+
+    #endregion
+
+    #region Avishkar Approve
+    protected void btnAvishkarApproval_Click(object sender, EventArgs e)
+    {
+        Button btnAvishkarApproval = sender as Button;
+        int AVNO = int.Parse(btnAvishkarApproval.CommandArgument);
+        int AVNOIDNO = int.Parse(btnAvishkarApproval.CommandName);
+
+        ViewState["AVNOIDNO"] = AVNOIDNO;
+        ViewState["AVNO"] = AVNO;
+        string type = "Avishkar";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(AVNO, AVNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            AvishkarClear();
+            ShowDetails();
+        }
+    }
+    protected void btnAvishkarReject_Click(object sender, EventArgs e)
+    {
+        Button btnAvishkarReject = sender as Button;
+        int AVNO = int.Parse(btnAvishkarReject.CommandArgument);
+        int AVNOIDNO = int.Parse(btnAvishkarReject.CommandName);
+
+        ViewState["AVNO"] = AVNO;
+        ViewState["AVNOIDNO"] = AVNOIDNO;
+        string type = "Avishkar";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(AVNO, AVNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            AvishkarClear();
+            ShowDetails();
+        }
+    }
+
+    private void AvishkarClear()
+    {
+        ViewState["AVNO"] = null;
+        ViewState["AVNOIDNO"] = null;
+    }
+    #endregion
+
+    #region Award Approve
+    protected void btnAwardApproval_Click(object sender, EventArgs e)
+    {
+        Button btnAwardApproval = sender as Button;
+        int AWDNO = int.Parse(btnAwardApproval.CommandArgument);
+        int AWDNOIDNO = int.Parse(btnAwardApproval.CommandName);
+
+        ViewState["AWDNO"] = AWDNO;
+        ViewState["AWDNOIDNO"] = AWDNOIDNO;
+        string type = "Award";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(AWDNO, AWDNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            AwardClear();
+            ShowDetails();
+        }
+    }
+
+    protected void btnAwardReject_Click(object sender, EventArgs e)
+    {
+        Button btnAwardReject = sender as Button;
+        int AWDNO = int.Parse(btnAwardReject.CommandArgument);
+        int AWDNOIDNO = int.Parse(btnAwardReject.CommandName);
+
+        ViewState["AWDNO"] = AWDNO;
+        ViewState["AWDNOIDNO"] = AWDNOIDNO;
+        string type = "Award";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(AWDNO, AWDNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            AwardClear();
+            ShowDetails();
+        }
+    }
+
+    private void AwardClear()
+    {
+        ViewState["AWDNO"] = null;
+        ViewState["AWDNOIDNO"] = null;
+    }
+    #endregion
+
+    #region Current Approve
+    protected void btnCurrentApprove_Click(object sender, EventArgs e)
+    {
+        Button btnCurrentApprove = sender as Button;
+        int CANO = int.Parse(btnCurrentApprove.CommandArgument);
+        int CANOIDNO = int.Parse(btnCurrentApprove.CommandName);
+
+        ViewState["CANO"] = CANO;
+        ViewState["CANOIDNO"] = CANOIDNO;
+        string type = "CurrentAppointment";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(CANO, CANOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            CurrentAppointmentClear();
+            ShowDetails();
+        }
+    }
+    protected void btnCurrentReject_Click(object sender, EventArgs e)
+    {
+        Button btnCurrentReject = sender as Button;
+        int CANO = int.Parse(btnCurrentReject.CommandArgument);
+        int CANOIDNO = int.Parse(btnCurrentReject.CommandName);
+
+        ViewState["CANO"] = CANO;
+        ViewState["CANOIDNO"] = CANOIDNO;
+        string type = "CurrentAppointment";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(CANO, CANOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            CurrentAppointmentClear();
+            ShowDetails();
+        }
+    }
+
+    private void CurrentAppointmentClear()
+    {
+        ViewState["CANO"] = null;
+        ViewState["CANOIDNO"] = null;
+    }
+    #endregion
+
+    #region Research Approve
+    protected void btnResearchApproval_Click(object sender, EventArgs e)
+    {
+        Button btnResearchApproval = sender as Button;
+        int RESEARNO = int.Parse(btnResearchApproval.CommandArgument);
+        int RESEARNOIDNO = int.Parse(btnResearchApproval.CommandName);
+
+        ViewState["RESEARNO"] = RESEARNO;
+        ViewState["RESEARNOIDNO"] = RESEARNOIDNO;
+        string type = "Research";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(RESEARNO, RESEARNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            CurrentAppointmentClear();
+            ShowDetails();
+        }
+    }
+    protected void btnResearchReject_Click(object sender, EventArgs e)
+    {
+        Button btnResearchReject = sender as Button;
+        int RESEARNO = int.Parse(btnResearchReject.CommandArgument);
+        int RESEARNOIDNO = int.Parse(btnResearchReject.CommandName);
+
+        ViewState["RESEARNO"] = RESEARNO;
+        ViewState["RESEARNOIDNO"] = RESEARNOIDNO;
+        string type = "Research";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(RESEARNO, RESEARNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            CurrentAppointmentClear();
+            ShowDetails();
+        }
+    }
+
+    private void ResearchClear()
+    {
+        ViewState["RESEARNO"] = null;
+        ViewState["RESEARNOIDNO"] = null;
+    }
+    #endregion
+
+    #region Revenue Approve
+    protected void btnRevenueApproval_Click(object sender, EventArgs e)
+    {
+        Button btnRevenueApproval = sender as Button;
+        int RGNO = int.Parse(btnRevenueApproval.CommandArgument);
+        int RGNOIDNO = int.Parse(btnRevenueApproval.CommandName);
+
+        ViewState["RGNO"] = RGNO;
+        ViewState["RGNOIDNO"] = RGNOIDNO;
+        string type = "RevenueGenerated";
+        string STATUS = "A";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(RGNO, RGNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Approved Successfully");
+            RevenueClear();
+            ShowDetails();
+        }
+    }
+
+    protected void btnRevenueReject_Click(object sender, EventArgs e)
+    {
+        Button btnRevenueReject = sender as Button;
+        int RGNO = int.Parse(btnRevenueReject.CommandArgument);
+        int RGNOIDNO = int.Parse(btnRevenueReject.CommandName);
+
+        ViewState["RGNO"] = RGNO;
+        ViewState["RGNOIDNO"] = RGNOIDNO;
+        string type = "RevenueGenerated";
+        string STATUS = "R";
+
+        CustomStatus cs = (CustomStatus)objServiceBook.ServiceBookstatusUpdate(RGNO, RGNOIDNO, type, STATUS);
+        if (cs.Equals(CustomStatus.RecordSaved))
+        {
+            MessageBox("Record Rejected Successfully");
+            RevenueClear();
+            ShowDetails();
+        }
+    }
+
+    private void RevenueClear()
+    {
+        ViewState["RGNO"] = null;
+        ViewState["RGNOIDNO"] = null;
+    }
+    #endregion
 }

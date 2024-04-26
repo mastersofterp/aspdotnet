@@ -115,6 +115,7 @@
                                                 <asp:CheckBox ID="chkRevenue" runat="server" Text="Revenue Generated" TabIndex="28" CssClass="select-all-checkbox" Visible="false"/>
                                                 <asp:CheckBox ID="chkCurrent" runat="server" Text="Current Appointment Status" TabIndex="29" CssClass="select-all-checkbox" Visible="false"/>
                                                 <asp:CheckBox ID="chkAward" runat="server" Text="Award" TabIndex="30" CssClass="select-all-checkbox" Visible="false"/>
+                                                <asp:CheckBox ID="chkAcademicResponsibilities" runat="server" Text="Academic Responsibilities" TabIndex="31" CssClass="select-all-checkbox" Visible="false"/>
                                             </div>
                                         </div>
                                     </div>

@@ -102,7 +102,14 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                     //btnExcelConsolidated.Visible = true;
                  }
 
-                 if (Session["OrgId"].ToString() != "1" && Session["OrgId"].ToString() != "6" && Session["OrgId"].ToString() != "5")// For ALL common code
+                 if (Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20")// For PCEN AND PJLCOE
+                 {
+                     objCommon.FillDropDownList(ddlReport, "ACD_FEESREPORTS_MASTER", "RID", "REPORT_NAME", " Org_ID=19 OR COMMAN_FLAG=1", "RID");
+                     //btnExcelConsolidated.Visible = true;
+                 }
+
+
+                 if (Session["OrgId"].ToString() != "1" && Session["OrgId"].ToString() != "6" && Session["OrgId"].ToString() != "5" && Session["OrgId"].ToString() != "19" && Session["OrgId"].ToString() != "20")// For ALL common code
                  {
 
                      objCommon.FillDropDownList(ddlReport, "ACD_FEESREPORTS_MASTER", "RID", "REPORT_NAME", "COMMAN_FLAG=1 ", "RID");
@@ -123,6 +130,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         btnFutureOSReport.Visible = false;
         pnlDemand.Visible = true;
         pnlSem.Visible = false;
+
     }
 
     private void CheckPageAuthorization()
@@ -141,6 +149,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             Response.Redirect("~/notauthorized.aspx?page=CourseWise_Registration.aspx");
         }
     }
+
     //private string GetDegreeNew()
     //{
     //    string DegreeNos = "";
@@ -160,6 +169,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     //    }
     //    return DegreeNos;
     //}
+
     private void PopulateDropDown()
     {
         try
@@ -192,8 +202,6 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             throw;
         }
     }
-
-
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
@@ -311,6 +319,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             {
                 string paymode = ddlPaymentMode.SelectedValue == "0" ? "" : ddlPaymentMode.SelectedValue;
                 DataSet dssem = feeCntrl.GetFeeDetails_Fees_Report(Convert.ToInt32(ddlSemester.SelectedValue), rectype, paymode,Convert.ToInt32(ddlAcdYear.SelectedValue),Convert.ToInt32(ddlDegree.SelectedValue),Convert.ToInt32(ddlBranch.SelectedValue),Convert.ToInt32(ddlYear.SelectedValue));
+               
                 if (dssem.Tables.Count > 0)
                 {
                     if (dssem.Tables[0].Rows.Count > 0)
@@ -381,16 +390,16 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
             return;
         }
-        if (TextBox1.Text == String.Empty)
-        {
-            objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-            return;
-        }
-        if (TextBox2.Text == String.Empty)
-        {
-            objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-            return;
-        }
+        //if (TextBox1.Text == String.Empty)
+        //{
+        //    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+        //    return;
+        //}
+        //if (TextBox2.Text == String.Empty)
+        //{
+        //    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+        //    return;
+        //}
         rectype = rectype.Substring(0, rectype.Length - 1);
 
 
@@ -1376,6 +1385,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Convert.ToDateTime(TextBox1.Text).ToString("yyyy-MM-dd") + ",@P_TODATE=" + Convert.ToDateTime(TextBox2.Text).ToString("yyyy-MM-dd") + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_RECIEPT_TYPE=" + recTyp + ",@P_ADM_STATUS=" + Convert.ToInt32(ddlAdmStatus.SelectedValue) + ",@P_ACADEMIC_YEAR_ID=" + Convert.ToInt32(ddlAcdYear.SelectedValue);
+
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";
@@ -2152,6 +2162,8 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         }
     }
 
+
+
     protected void btnTallyIntegration_Click(object sender, EventArgs e)
     {
         this.EXCEL_REPORT_TALLY_INTEGRATION();
@@ -2328,596 +2340,918 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     private void Student_Arrears_Headwise()
     {
-     
-        string rectype = this.GetRecType();
 
-        if (string.IsNullOrEmpty(rectype))//GetDegreeNew()
+        try
         {
-            objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
-            return;
-        }
-        rectype = rectype.Substring(0, rectype.Length - 1);
-        DateTime FromDate = DateTime.Now;
-        FromDate = Convert.ToDateTime(TextBox1.Text);
-        DateTime ToDate = DateTime.Now;
-        ToDate = Convert.ToDateTime(TextBox1.Text);
-        int year = ddlYear.SelectedIndex > 0 ? Convert.ToInt32(ddlYear.SelectedValue) : 0;
-        int Branchno = ddlBranch.SelectedIndex > 0 ? Convert.ToInt32(ddlBranch.SelectedValue) : 0;
-        int Degreeno = ddlDegree.SelectedIndex > 0 ? Convert.ToInt32(ddlDegree.SelectedValue) : 0;
-        int AdmStatus = ddlAdmStatus.SelectedIndex > 0 ? Convert.ToInt32(ddlAdmStatus.SelectedValue) : 0;
-        DataSet dsArrears = feeCntrl.GetStudentArrears_Headwise_Report(FromDate, ToDate, Degreeno, Branchno, year, rectype, AdmStatus, Convert.ToInt32(ddlAcdYear.SelectedValue));
-        DataGrid dg = new DataGrid();
+            string rectype = this.GetRecType();
 
-        if (dsArrears.Tables.Count > 0)
-        {
-            string attachment = "attachment; filename=" + "StudentArrearsHeadwiseReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-            Response.ClearContent();
-            Response.AddHeader("content-disposition", attachment);
-            Response.ContentType = "application/" + "ms-excel";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            dg.DataSource = dsArrears.Tables[0];
-            dg.DataBind();
+            if (string.IsNullOrEmpty(rectype))//GetDegreeNew()
+            {
+                objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+                return;
+            }
+            rectype = rectype.Substring(0, rectype.Length - 1);
+            DateTime FromDate = DateTime.Now;
+            FromDate = Convert.ToDateTime(TextBox1.Text);
+            DateTime ToDate = DateTime.Now;
+            ToDate = Convert.ToDateTime(TextBox1.Text);
+            int year = ddlYear.SelectedIndex > 0 ? Convert.ToInt32(ddlYear.SelectedValue) : 0;
+            int Branchno = ddlBranch.SelectedIndex > 0 ? Convert.ToInt32(ddlBranch.SelectedValue) : 0;
+            int Degreeno = ddlDegree.SelectedIndex > 0 ? Convert.ToInt32(ddlDegree.SelectedValue) : 0;
+            int AdmStatus = ddlAdmStatus.SelectedIndex > 0 ? Convert.ToInt32(ddlAdmStatus.SelectedValue) : 0;
+            DataSet dsArrears = feeCntrl.GetStudentArrears_Headwise_Report(FromDate, ToDate, Degreeno, Branchno, year, rectype, AdmStatus, Convert.ToInt32(ddlAcdYear.SelectedValue));
+            DataGrid dg = new DataGrid();
 
-            dg.HeaderStyle.Font.Bold = true;
-            dg.RenderControl(htw);
-            Response.Write(sw.ToString());
-            Response.End();
+            if (dsArrears.Tables.Count > 0)
+            {
+                string attachment = "attachment; filename=" + "StudentArrearsHeadwiseReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                dg.DataSource = dsArrears.Tables[0];
+                dg.DataBind();
+
+                dg.HeaderStyle.Font.Bold = true;
+                dg.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No data found.", this.Page);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            objCommon.DisplayMessage(this.Page, "No data found.", this.Page);
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.btnReport_Click1-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
         }
+
+        
     }
+
+
+    private void ExportInexcelforStudent_Master_Fees_Report()
+    {
+        try
+        {
+              //int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+        //int branchno = Convert.ToInt32(ddlBranch.SelectedValue);
+
+        //int year = Convert.ToInt32(ddlYear.SelectedValue);
+            string rectype = this.GetRecType();
+
+            if (string.IsNullOrEmpty(rectype))
+            {
+                objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+                return;
+            }
+            rectype = rectype.Substring(0, rectype.Length - 1);
+
+            int AcademicYear = Convert.ToInt32(ddlAcdYear.SelectedValue);
+
+            DataSet dsfeestud = feeCntrl.Get_Fee_Details_Student_Master_Fees_Report(rectype, AcademicYear);
+
+            DataGrid dg = new DataGrid();
+
+            if (dsfeestud.Tables.Count > 0)
+            {
+                string attachment = "attachment; filename=" + "Student_Master_Fees_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                dg.DataSource = dsfeestud.Tables[0];
+                dg.DataBind();
+
+                dg.HeaderStyle.Font.Bold = true;
+                dg.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No data found.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.btnReport_Click1-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+      
+
+    }
+
+    private void ExportinexcelforFees_Cross_Check_Report()
+    {
+        try
+        {
+            string rectype = this.GetRecType();
+
+            if (string.IsNullOrEmpty(rectype))
+            {
+                objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+                return;
+            }
+            rectype = rectype.Substring(0, rectype.Length - 1);
+
+            DateTime FromDate = (TextBox1.Text.Trim() != string.Empty) ? Convert.ToDateTime(TextBox1.Text) : DateTime.MinValue;
+            DateTime ToDate = (TextBox2.Text.Trim() != string.Empty) ? Convert.ToDateTime(TextBox2.Text) : DateTime.MinValue;
+
+            DataSet dsfeestud = feeCntrl.Get_Fee_Details_Fees_Cross_Check_Report(rectype, FromDate, ToDate);
+
+            DataGrid dg = new DataGrid();
+
+            if (dsfeestud.Tables.Count > 0)
+            {
+                string attachment = "attachment; filename=" + "Fees_Cross_Check_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                dg.DataSource = dsfeestud.Tables[0];
+                dg.DataBind();
+
+                dg.HeaderStyle.Font.Bold = true;
+                dg.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No data found.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.btnReport_Click1-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+
+       
+
+    }
+
+    private void ExportinExcelforStudent_Outstanding_Fees_Report()
+    {
+        try
+        { 
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.btnReport_Click1-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+        
+    }
+
+    private void ExportInexcelforStudent_AcademicYearWiseBalanceReport()
+    {
+        try
+        {
+            //int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+            //int branchno = Convert.ToInt32(ddlBranch.SelectedValue);
+            //int year = Convert.ToInt32(ddlYear.SelectedValue);
+
+            //string rectype = this.GetRecType();
+
+            //if (string.IsNullOrEmpty(rectype))
+            //{
+            //    objCommon.DisplayUserMessage(updFeeTable, "Please Select At least One Receipt Type !", this.Page);
+            //    return;
+            //}
+            //rectype = rectype.Substring(0, rectype.Length - 1);
+
+            //int AcademicYear = Convert.ToInt32(ddlAcdYear.SelectedValue);
+
+            DataSet dsfeestud = feeCntrl.Get_Fee_Details_Academic_Yearwise_Balance_Report_RCPIT();
+
+            DataGrid dg = new DataGrid();
+
+            if (dsfeestud.Tables.Count > 0)
+            {
+                string attachment = "attachment; filename=" + "Student_Academic_Yearwise_Balance_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                dg.DataSource = dsfeestud.Tables[0];
+                dg.DataBind();
+
+                dg.HeaderStyle.Font.Bold = true;
+                dg.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No data found.", this.Page);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.ExportInexcelforStudent_AcademicYearWiseBalanceReport-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+
+      
+    }
+
+    private void Show_OutstandingFees_Report_PCEN(string reportTitle, string rptFileName)
+    {
+        try {
+            string recTyp = string.Empty;
+
+            foreach (ListViewDataItem items in lvAdTeacher.Items)
+            {
+                CheckBox chkBox = (items.FindControl("chkIDNo")) as CheckBox;
+                if (chkBox.Checked)
+                {
+                    if (recTyp == "")
+                    {
+                        recTyp = chkBox.ToolTip;
+                    }
+                    else
+                    {
+                        recTyp = recTyp + "$" + chkBox.ToolTip;
+                    }
+                }
+            }
+
+            int AcademicYear = Convert.ToInt32(ddlAcdYear.SelectedValue);
+            //DateTime fromDate = Convert.ToDateTime(TextBox1.Text).ToString("yyyy-MM-dd"); 
+            //DateTime toDate = Convert.ToDateTime(TextBox2.Text).ToString("yyyy-MM-dd"); 
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=0" + ",@P_RECEIPT_TYPE=" + recTyp + ",@P_ACADEMIC_YEAR_ID=" + AcademicYear;
+
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";,
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterClientScriptBlock(this.updFeeTable, this.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.Show_OutstandingFees_Report_PCEN-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+        
+    }
+
+
 
     //Added by Sakshi M. 29112023
     protected void btnReport_Click1(object sender, EventArgs e)
     {
-        if (ddlReport.SelectedValue == "1")
+        try
         {
-            this.ExportinExcelforDemandFeesWithHeads(1);
+            if (ddlReport.SelectedValue == "1")
+            {
+                this.ExportinExcelforDemandFeesWithHeads(1);
+            }
+            else if (ddlReport.SelectedValue == "2")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")// For RCPIT and RCPIPER
+                {
+                    this.ExportinExcelforCurrentStudentDetailsFeeLeger();
+                }
+                else
+                {
+                    this.ExportinExcelforFee_Leger();
+                }
+            }
+            else if (ddlReport.SelectedValue == "3")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.OnlineDRCReports();
+            }
+            else if (ddlReport.SelectedValue == "4")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.ExportinExcelforFee();
+            }
+            else if (ddlReport.SelectedValue == "5")
+            {
+                this.Payment_Modification_Excel();
+            }
+            else if (ddlReport.SelectedValue == "6")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                if (Session["OrgId"].ToString() == "6")
+                {
+                    ShowReportLedger("Student_Ledger_Report", "NewDailyFeecollectionReportRCPIPER.rpt");
+                }
+                else
+                {
+                    ShowReportLedger("Student_Ledger_Report", "NewDailyFeecollectionReport.rpt");
+                }
+            }
+            else if (ddlReport.SelectedValue == "7")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                ShowReport();
+            }
+            else if (ddlReport.SelectedValue == "8")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.ShowReportFormatII();
+            }
+            else if (ddlReport.SelectedValue == "9")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.Student_Arrears_Report();
+            }
+            else if (ddlReport.SelectedValue == "10")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                ShowArrearReport("Arrears Report PDF", "Student_Arrear_Report_PDF.rpt");
+            }
+            else if (ddlReport.SelectedValue == "11")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.Student_Arrears_Headwise();
+            }
+            else if (ddlReport.SelectedValue == "12")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.ExportinExcelforBalanceReport();
+            }
+            else if (ddlReport.SelectedValue == "13")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                Show_Summary_Report("Fee_Collection_Summary_Report", "FeeCollectionSummeryReport.rpt");
+            }
+            else if (ddlReport.SelectedValue == "14")
+            {
+
+                this.ExportinExcelforDCRExcelReportFormatII();
+            }
+            else if (ddlReport.SelectedValue == "15")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.ExportinCosolidatedReport();
+            }
+            else if (ddlReport.SelectedValue == "16")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.ExportinCosolidatedReportCPU();
+            }
+            else if (ddlReport.SelectedValue == "17")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.EXCEL_REPORT_TALLY_INTEGRATION();
+            }
+            else if (ddlReport.SelectedValue == "18")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                Show_Summary_Report("Cancelled_Receipt_Summary_Report", "Canceled_receipt_summary_report.rpt");
+            }
+            else if (ddlReport.SelectedValue == "20")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                Show_Summary_Report_Balance_fees("Fees_Payment_Summery_Report", "rptFeespaymentsummeryreport.rpt");
+            }
+            else if (ddlReport.SelectedValue == "21")
+            {
+                this.ExportinExcelforBalanceReportFormatNew();
+            }
+            else if (ddlReport.SelectedValue == "22")
+            {
+                this.ExportInexcelforStudent_Master_Fees_Report();
+            }
+            else if (ddlReport.SelectedValue == "23")
+            {
+                if (TextBox1.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
+                    return;
+                }
+                if (TextBox2.Text == String.Empty)
+                {
+                    objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
+                    return;
+                }
+                this.ExportinexcelforFees_Cross_Check_Report();
+            }
+            else if (ddlReport.SelectedValue == "24")
+            {
+                //this.ExportinExcelforStudent_Outstanding_Fees_Report();
+                this.Show_OutstandingFees_Report_PCEN("Outstanding Fees Report", "rptStudentOutstandingReportPcen.rpt");
+            }
+            else if (ddlReport.SelectedValue == "25")
+            {
+                this.ExportInexcelforStudent_AcademicYearWiseBalanceReport();
+            }
         }
-        else if (ddlReport.SelectedValue == "2")
+        catch (Exception ex)
         {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")// For RCPIT and RCPIPER
-            {
-                this.ExportinExcelforCurrentStudentDetailsFeeLeger();
-            }
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.btnReport_Click1-> " + ex.Message + " " + ex.StackTrace);
             else
-            {
-                this.ExportinExcelforFee_Leger();
-            }
+                objCommon.ShowError(Page, "Server UnAvailable");
         }
-        else if (ddlReport.SelectedValue == "3")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-           this.OnlineDRCReports();
-        }
-        else if (ddlReport.SelectedValue == "4")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.ExportinExcelforFee();
-        }
-        else if (ddlReport.SelectedValue == "5")
-        {
-            this.Payment_Modification_Excel();
-        }
-        else if (ddlReport.SelectedValue == "6")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            if (Session["OrgId"].ToString() == "6")
-            {
-                ShowReportLedger("Student_Ledger_Report", "NewDailyFeecollectionReportRCPIPER.rpt");
-            }
-            else
-            {
-                ShowReportLedger("Student_Ledger_Report", "NewDailyFeecollectionReport.rpt");
-            }
-        }
-        else if (ddlReport.SelectedValue == "7")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            ShowReport();
-        }
-        else if (ddlReport.SelectedValue == "8")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.ShowReportFormatII();
-        }
-        else if (ddlReport.SelectedValue == "9")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.Student_Arrears_Report();
-        }
-        else if (ddlReport.SelectedValue == "10")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            ShowArrearReport("Arrears Report PDF", "Student_Arrear_Report_PDF.rpt");
-        }
-        else if (ddlReport.SelectedValue == "11")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.Student_Arrears_Headwise();
-        }
-        else if (ddlReport.SelectedValue == "12")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.ExportinExcelforBalanceReport();
-        }
-        else if (ddlReport.SelectedValue == "13")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            Show_Summary_Report("Fee_Collection_Summary_Report", "FeeCollectionSummeryReport.rpt");
-        }
-        else if (ddlReport.SelectedValue == "14")
-        {
-           
-            this.ExportinExcelforDCRExcelReportFormatII();
-        }
-        else if (ddlReport.SelectedValue == "15")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.ExportinCosolidatedReport();
-        }
-        else if (ddlReport.SelectedValue == "16")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.ExportinCosolidatedReportCPU();
-        }
-        else if (ddlReport.SelectedValue == "17")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            this.EXCEL_REPORT_TALLY_INTEGRATION();
-        }
-        else if (ddlReport.SelectedValue == "18")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            Show_Summary_Report("Cancelled_Receipt_Summary_Report", "Canceled_receipt_summary_report.rpt");
-        }
-        else if (ddlReport.SelectedValue == "20")
-        {
-            if (TextBox1.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select From Date !", this.Page);
-                return;
-            }
-            if (TextBox2.Text == String.Empty)
-            {
-                objCommon.DisplayUserMessage(updFeeTable, "Please Select To Date !", this.Page);
-                return;
-            }
-            Show_Summary_Report_Balance_fees("Fees_Payment_Summery_Report", "rptFeespaymentsummeryreport.rpt");
-        }
-        else if (ddlReport.SelectedValue == "21")
-        {
-            this.ExportinExcelforDCRExcelReportFormatII();
-        }
+
+       
     }
 
 
     //Added by Sakshi M. 29112023
     protected void ddlReport_SelectedIndexChanged(object sender, EventArgs e)
     {
-        string IsPdf = objCommon.LookUp("ACD_FEESREPORTS_MASTER", "IS_PDF", "RID =" + Convert.ToInt32(ddlReport.SelectedValue) + "");
+        try 
+        {
+            string IsPdf = objCommon.LookUp("ACD_FEESREPORTS_MASTER", "IS_PDF", "RID =" + Convert.ToInt32(ddlReport.SelectedValue) + "");
 
-        if (IsPdf == "1")
-        {
-            btnReport.Text = "Report (PDF)";
-        }
-        else
-        {
-            btnReport.Text = "Report (Excel)";
-        }
+            if (IsPdf == "1")
+            {
+                btnReport.Text = "Report (PDF)";
+            }
+            else
+            {
+                btnReport.Text = "Report (Excel)";
+            }
 
-        ddlAcdYear.SelectedValue = "0";
-        txtFromDate.Text = string.Empty;
-        txtToDate.Text = string.Empty;
-        ddlBranch.SelectedValue = "0";
-        ddlDegree.SelectedValue = "0";
-        ddlPaymentMode.SelectedValue = "0";
-        ddlSemester.SelectedValue = "0";
-        ddlYear.SelectedValue = "0";
-        ddlAdmStatus.SelectedValue = "0";
-        divlvSemester.Visible = false;
-        acdyear.Visible = false;
-        fromDSpan.Visible = false;
-        toDSpan.Visible = false;
-        degreed.Visible = false;
-        branchd.Visible = false;
-        reciptd.Visible = false;
-        divPaymentMode.Visible = false;
-        yeard.Visible = false;
-        Statusd.Visible = false;
-        semesterd.Visible = false;
-        TextBox1.Text = string.Empty;
-        TextBox2.Text = string.Empty;
-        btnCancel.Visible = true;
-        btnReport.Visible = true;
-        btnShow.Visible = true;
-
-        if (ddlReport.SelectedValue == "1")
-        {
-            //acdyear.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            divPaymentMode.Visible = true;
-            semesterd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "2")
-        {
-            acdyear.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            yeard.Visible = true;
-            Statusd.Visible = true;
-            semesterd.Visible = true;
-            btnShow.Visible = false;
-
-        }
-        else if (ddlReport.SelectedValue == "3")
-        {
-            //acdyear.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-           // divPaymentMode.Visible = true;
-            semesterd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "4")
-        {
-            acdyear.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            semesterd.Visible = true;
-            yeard.Visible = true;
-            btnShow.Visible = false;
-
-        }
-        else if (ddlReport.SelectedValue == "5")
-        {
-            acdyear.Visible = true;
-            btnShow.Visible = false;
-          
-        }
-        else if (ddlReport.SelectedValue == "6")
-        {
-            acdyear.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            yeard.Visible = true;
-            Statusd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "7")
-        {
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            yeard.Visible = true;
-            Statusd.Visible = true;
-            acdyear.Visible = true;
-            btnShow.Visible = false;
-
-        }
-        else if (ddlReport.SelectedValue == "8")
-        {
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            yeard.Visible = true;
-            Statusd.Visible = true;
-            acdyear.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "9")
-        {
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            acdyear.Visible = true;
-            semesterd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "10")
-        {
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            acdyear.Visible = true;
-            semesterd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "11")
-        {
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            acdyear.Visible = true;
-            yeard.Visible = true;
-            Statusd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "12")
-        {
-            acdyear.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            yeard.Visible = true;
-            Statusd.Visible = true;
-            semesterd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "13")
-        {
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            semesterd.Visible = true;
-            reciptd.Visible = true;
-            divPaymentMode.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "14")
-        {
-            degreed.Visible = true;
-            branchd.Visible = true;
-            yeard.Visible = true;
-            acdyear.Visible = true;
-            btnShow.Visible = false;
-
-        }
-        else if (ddlReport.SelectedValue == "15")
-        {
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            semesterd.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "16")
-        {
-
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            semesterd.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "17")
-        {
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            semesterd.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            yeard.Visible = true;
-            acdyear.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "18")
-        {
-        
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            divPaymentMode.Visible = true;
-            semesterd.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "19")
-        {
-            acdyear.Visible = true;
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            divPaymentMode.Visible = true;
-            yeard.Visible = true;
-            semesterd.Visible = true;
-            btnReport.Visible = false;
+            ddlAcdYear.SelectedValue = "0";
+            txtFromDate.Text = string.Empty;
+            txtToDate.Text = string.Empty;
+            ddlBranch.SelectedValue = "0";
+            ddlDegree.SelectedValue = "0";
+            ddlPaymentMode.SelectedValue = "0";
+            ddlSemester.SelectedValue = "0";
+            ddlYear.SelectedValue = "0";
+            ddlAdmStatus.SelectedValue = "0";
+            divlvSemester.Visible = false;
+            acdyear.Visible = false;
+            fromDSpan.Visible = false;
+            toDSpan.Visible = false;
+            degreed.Visible = false;
+            branchd.Visible = false;
+            reciptd.Visible = false;
+            divPaymentMode.Visible = false;
+            yeard.Visible = false;
+            Statusd.Visible = false;
+            semesterd.Visible = false;
+            TextBox1.Text = string.Empty;
+            TextBox2.Text = string.Empty;
+            btnCancel.Visible = true;
+            btnReport.Visible = true;
             btnShow.Visible = true;
-           
+
+            if (ddlReport.SelectedValue == "1")
+            {
+                //acdyear.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                divPaymentMode.Visible = true;
+                semesterd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "2")
+            {
+                acdyear.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                yeard.Visible = true;
+                Statusd.Visible = true;
+                semesterd.Visible = true;
+                btnShow.Visible = false;
+
+            }
+            else if (ddlReport.SelectedValue == "3")
+            {
+                //acdyear.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                // divPaymentMode.Visible = true;
+                semesterd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "4")
+            {
+                acdyear.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                semesterd.Visible = true;
+                yeard.Visible = true;
+                btnShow.Visible = false;
+
+            }
+            else if (ddlReport.SelectedValue == "5")
+            {
+                acdyear.Visible = true;
+                btnShow.Visible = false;
+
+            }
+            else if (ddlReport.SelectedValue == "6")
+            {
+                acdyear.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                yeard.Visible = true;
+                Statusd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "7")
+            {
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                yeard.Visible = true;
+                Statusd.Visible = true;
+                acdyear.Visible = true;
+                btnShow.Visible = false;
+
+            }
+            else if (ddlReport.SelectedValue == "8")
+            {
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                yeard.Visible = true;
+                Statusd.Visible = true;
+                acdyear.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "9")
+            {
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                acdyear.Visible = true;
+                semesterd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "10")
+            {
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                acdyear.Visible = true;
+                semesterd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "11")
+            {
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                acdyear.Visible = true;
+                yeard.Visible = true;
+                Statusd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "12")
+            {
+                acdyear.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                yeard.Visible = true;
+                Statusd.Visible = true;
+                semesterd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "13")
+            {
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                semesterd.Visible = true;
+                reciptd.Visible = true;
+                divPaymentMode.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "14")
+            {
+                degreed.Visible = true;
+                branchd.Visible = true;
+                yeard.Visible = true;
+                acdyear.Visible = true;
+                btnShow.Visible = false;
+
+            }
+            else if (ddlReport.SelectedValue == "15")
+            {
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                semesterd.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "16")
+            {
+
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                semesterd.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "17")
+            {
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                semesterd.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                yeard.Visible = true;
+                acdyear.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "18")
+            {
+
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                divPaymentMode.Visible = true;
+                semesterd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "19")
+            {
+                acdyear.Visible = true;
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                divPaymentMode.Visible = true;
+                yeard.Visible = true;
+                semesterd.Visible = true;
+                btnReport.Visible = false;
+                btnShow.Visible = true;
+
+            }
+            else if (ddlReport.SelectedValue == "20")
+            {
+
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                reciptd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "21")
+            {
+                acdyear.Visible = true;
+                degreed.Visible = true;
+                branchd.Visible = true;
+                reciptd.Visible = true;
+                semesterd.Visible = true;
+                yeard.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "22")
+            {
+                acdyear.Visible = true;
+                reciptd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "23")
+            {
+                fromDSpan.Visible = true;
+                toDSpan.Visible = true;
+                reciptd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "24")
+            {
+                acdyear.Visible = true;
+                reciptd.Visible = true;
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "25")
+            {
+                btnShow.Visible = false;
+            }
+            else if (ddlReport.SelectedValue == "0")
+            {
+                btnReport.Visible = false;
+                btnShow.Visible = false;
+                btnCancel.Visible = false;
+            }
+            ClearCheckbox();
         }
-        else if (ddlReport.SelectedValue == "20")
+        catch (Exception ex)
         {
-            
-            fromDSpan.Visible = true;
-            toDSpan.Visible = true;     
-            reciptd.Visible = true;
-            btnShow.Visible = false;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "CourseWise_Registration.ddlReport_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
         }
-        else if (ddlReport.SelectedValue == "21")
-        {
-            acdyear.Visible = true;
-            degreed.Visible = true;
-            branchd.Visible = true;
-            reciptd.Visible = true;
-            semesterd.Visible = true;
-            yeard.Visible = true;
-            btnShow.Visible = false;
-        }
-        else if (ddlReport.SelectedValue == "0")
-        {
-            btnReport.Visible = false;
-            btnShow.Visible = false;
-            btnCancel.Visible = false;
-        }
-        ClearCheckbox();
+
+     
     }
+
+
 }
 
 

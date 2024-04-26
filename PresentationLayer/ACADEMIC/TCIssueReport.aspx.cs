@@ -63,6 +63,20 @@ public partial class ACADEMIC_TcIssueReport : System.Web.UI.Page
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                 }
                 this.FillDropdown();
+
+                if (Session["OrgId"].ToString() == "19")
+                {
+                    divAdmBatch.Visible = true;
+                    btnExcelreport.Visible = true;
+                    divFromDate.Visible = false;
+                    DivToDate.Visible = false;
+                    divBranch.Visible = false;
+                    btnReport.Visible = false;
+                    btnShow.Visible = false;
+                
+                
+                }
+
             }
         }
         catch (Exception ex)
@@ -78,6 +92,8 @@ public partial class ACADEMIC_TcIssueReport : System.Web.UI.Page
 
 
             objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH ", "BRANCHNO", "LONGNAME", "BRANCHNO>0 ", "BRANCHNO");
+            // added by vipul t on date 11-04-2023 as per Tno:-57607
+            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "ACTIVESTATUS=1 ", "BATCHNO");
 
             
 
@@ -171,4 +187,36 @@ public partial class ACADEMIC_TcIssueReport : System.Web.UI.Page
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+    // Added by vipul on date 11-04-2024 as per Tno:- 57607
+    protected void btnExcelreport_Click(object sender, EventArgs e)
+    {
+        DataSet ds = null;
+        string proc_name = "PKG_ACD_LEAVING_CERTIFICATE_REGISTER_REPORT_PCEN";
+        string para_name = "@P_ADMBATCHNO";
+        string call_values = ""+ddlAdmBatch.SelectedValue+"";
+        ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+
+
+        GridView GvStudent = new GridView();
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            GvStudent.DataSource = ds;
+            GvStudent.DataBind();
+            string attachment = "attachment; filename=Leaving_Certificate_Register_Report" + "_" + DateTime.Now.ToString("yyyyMMdd_HH") + ".xls";
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/vnd.MS-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            GvStudent.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage(UpdTc, "Data Not Found", this.Page);
+        }
+    }
+    //end
 }

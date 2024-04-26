@@ -68,6 +68,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentResponse_
                 DataSet Orgds = null;
                 var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
                 Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
+                Session["OrgId"] = OrgId;
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -661,12 +662,9 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentResponse_
     {
         try
         {
-            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "ORDER_ID='" + Convert.ToString(ViewState["order_id"]) + "'");
-            int IDNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "IDNO", "ORDER_ID='" + Convert.ToString(ViewState["order_id"]) + "'"));
-
-            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));
-            //int IDNO = Convert.ToInt32(ViewState["IDNO"]);
-            //string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+            int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+            string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(IDNO)));        
             Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));

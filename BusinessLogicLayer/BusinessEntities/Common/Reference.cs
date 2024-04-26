@@ -55,6 +55,7 @@ namespace IITMS
                 private byte[] _collegeBanner = null; //added by tanu on dated 08-12-2022
 
                 private string _errorlogemail = string.Empty; //Added by Anurag Baghele on 15-02-2024 
+                private string _gov = string.Empty;  // Added by Ashutosh Dhobe 12/04/2024
 
                 #endregion
 
@@ -260,6 +261,12 @@ namespace IITMS
                     set { _errorlogemail = value; }
                 }
 
+                public string Gov   // Added by Ashutosh Dhobe 12/04/2024
+                {
+                    get { return _gov; }
+                    set { _gov = value; }
+                }
+
                 #endregion
 
 
@@ -292,6 +299,7 @@ namespace IITMS
                     get { return _collegeBanner; }
                     set { _collegeBanner = value; }
                 }
+                 
             }
 
         }//END: BusinessLayer.BusinessEntities

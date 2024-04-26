@@ -113,8 +113,17 @@ public partial class GrievanceRedressal_Report_GRDailyWorkout : System.Web.UI.Pa
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,GrievanceRedressal," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString();
-
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=0";
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString();
+            }
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -163,8 +172,17 @@ public partial class GrievanceRedressal_Report_GRDailyWorkout : System.Web.UI.Pa
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,GrievanceRedressal," + rptFileName;
-            url += "&param=@P_STATUS=" + STATUS + ",@P_SDATE=" + txtSDate.Text + ",@P_EDATE=" + txtEndDate.Text + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
-
+            //url += "&param=@P_STATUS=" + STATUS + ",@P_SDATE=" + txtSDate.Text + ",@P_EDATE=" + txtEndDate.Text + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_STATUS=" + STATUS + ",@P_SDATE=" + txtSDate.Text + ",@P_EDATE=" + txtEndDate.Text + ",@P_COLLEGE_CODE=0";
+            }
+            else
+            {
+                url += "&param=@P_STATUS=" + STATUS + ",@P_SDATE=" + txtSDate.Text + ",@P_EDATE=" + txtEndDate.Text + ",@P_COLLEGE_CODE=" + Session["college_nos"].ToString();
+            }
 
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";

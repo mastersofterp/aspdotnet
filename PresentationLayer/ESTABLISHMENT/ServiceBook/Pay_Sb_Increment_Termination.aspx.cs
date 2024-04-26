@@ -66,8 +66,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
         }
         BlobDetails();
         BindListViewServiceBook();
-
-
+        GetConfigForEditAndApprove();
     }
 
     private void BindListViewServiceBook()
@@ -124,15 +123,15 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
     {
         try
         {
-           // Panel updpersonaldetails = (Panel)this.Parent.FindControl("upWebUserControl");
+            // Panel updpersonaldetails = (Panel)this.Parent.FindControl("upWebUserControl");
             //Trno,ETrno,Idno,TypeTranNo,SubDesigno,SubDeptno,Scaleno,OrderNo,GrNo,Remark,PayAllow,OrderDt,GrDt,TermiDt,OrdEffDt,Seqno
 
-          //DataSet  dsPURPOSE = objCommon.FillDropDown("PAYROLL_SB_SERVICEBK", "*", "", "ORDERNO='" + txtOredrNo.Text + "' AND IDNO=" + _idnoEmp , "");
-          //  if (dsPURPOSE.Tables[0].Rows.Count > 0)
-          //  {
-          //      MessageBox("Record Already Exist ");
+            //DataSet  dsPURPOSE = objCommon.FillDropDown("PAYROLL_SB_SERVICEBK", "*", "", "ORDERNO='" + txtOredrNo.Text + "' AND IDNO=" + _idnoEmp , "");
+            //  if (dsPURPOSE.Tables[0].Rows.Count > 0)
+            //  {
+            //      MessageBox("Record Already Exist ");
 
-          //  }
+            //  }
             ServiceBook objSevBook = new ServiceBook();
             objSevBook.IDNO = _idnoEmp;
             objSevBook.TYPETRANNO = Convert.ToInt32(ddlTransactionType.SelectedValue);
@@ -219,7 +218,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                   // string name = txtSqNo.Text.Replace(" ", "");
+                    // string name = txtSqNo.Text.Replace(" ", "");
                     string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
                     filename = IdNo + "_increment_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
@@ -311,14 +310,14 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                     {
                         MessageBox("Record Already Exist ");
                         this.Clear();
-                    } 
+                    }
                 }
                 else
                 {
                     //Edit
                     if (ViewState["Trno"] != null)
                     {
-                        
+
                         objSevBook.TRNO = Convert.ToInt32(ViewState["Trno"].ToString());
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateServiceBk(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
@@ -330,7 +329,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                             ViewState["action"] = "add";
                             this.Clear();
                             this.BindListViewServiceBook();
-                           // this.objCommon.DisplayMessage(updpersonaldetails, "Record Updated Successfully", this.Page);
+                            // this.objCommon.DisplayMessage(updpersonaldetails, "Record Updated Successfully", this.Page);
                             MessageBox("Record Updated Successfully");
 
                         }
@@ -338,8 +337,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                         {
                             MessageBox("Record Already Exist ");
                             this.Clear();
-                           
-                        } 
+
+                        }
                     }
                 }
             }
@@ -399,14 +398,25 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                 txtSqNo.Text = ds.Tables[0].Rows[0]["Seqno"].ToString();
                 ViewState["attachment"] = ds.Tables[0].Rows[0]["ATTACHMENT"].ToString();
 
-                string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
-                if (STATUS == "A")
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
                 {
-                    MessageBox("Your Details are Approved you cannot edit.");
-                    return;
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
                 }
                 else
                 {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
                 }
             }
         }
@@ -432,11 +442,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
             ImageButton btnDel = sender as ImageButton;
             int Trno = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_SERVICEBK", "*", "", "IDNO=" + Trno, "");
+            ds = objCommon.FillDropDown("PAYROLL_SB_SERVICEBK", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "IDNO=" + Trno, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
-                MessageBox("Your Details are Approved you cannot delete.");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
                 return;
             }
             else
@@ -463,6 +478,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        GetConfigForEditAndApprove();
     }
 
     private void Clear()
@@ -481,6 +497,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
         txtOrderEffectiveDate.Text = string.Empty;
         txtSqNo.Text = string.Empty;
         ViewState["action"] = "add";
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     private void FillDropDown()
@@ -601,5 +620,55 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
             throw;
         }
     }
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Increment / Termination";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
     #endregion
 }

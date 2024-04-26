@@ -5,7 +5,8 @@
 // PAGE NAME     : MAINTAIN LOG SEND BULK EMAIL SMS                                          
 // CREATION DATE : 22-01-2024                                                         
 // CREATED BY    : SAKSHI MAKWANA                                 
-// MODIFIED DATE :                                        
+// MODIFIED DATE : 
+                                       
 // MODIFIED DESC :                                         
 //======================================================================================
 

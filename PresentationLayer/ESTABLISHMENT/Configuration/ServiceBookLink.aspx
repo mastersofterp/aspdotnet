@@ -31,7 +31,7 @@
                         </div>
                     </asp:Panel>
 
-                    <asp:Panel ID="pnlStatus" runat="server" Visible="false">
+                    <asp:Panel ID="pnlStatus" runat="server" Visible="false" ScrollBars="Auto">
                         <div class="col-12">
                             <div class="sub-heading">
                                 <h5>Service Book Links</h5>
@@ -43,16 +43,20 @@
                                     </p>
                                 </EmptyDataTemplate>
                                 <LayoutTemplate>
-                                    <div id="lgv1">
-                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
+                                    <div style="width: 100%; height: 370px; overflow: auto">
+                                        <table class="table table-striped table-bordered nowrap">
                                             <thead class="bg-light-blue">
                                                 <tr>
                                                     <th>Link Name
                                                     </th>
                                                     <th>Access
-                                                     </th>
-                                                    <th> Is Calculate for Percentage
-                                                    </th>                  
+                                                    </th>
+                                                    <th>Is Calculate for Percentage
+                                                    </th>
+                                                    <th>Is Edit Restricted
+                                                    </th>
+                                                    <th>Is Approval Require
+                                                    </th>
                                                 </tr>
                                                 <tbody>
                                                     <tr id="itemPlaceholder" runat="server" />
@@ -71,8 +75,14 @@
                                         <td>
                                             <asp:CheckBox runat="server" ID="chkActive" />
                                         </td>
-                                         <td>
+                                        <td>
                                             <asp:CheckBox runat="server" ID="chkPer" />
+                                        </td>
+                                        <td>
+                                            <asp:CheckBox runat="server" ID="chkEdit" />
+                                        </td>
+                                         <td>
+                                            <asp:CheckBox runat="server" ID="chkApprove" />
                                         </td>
                                     </tr>
                                 </ItemTemplate>

@@ -72,6 +72,8 @@ public partial class ESTABLISHMENT_Configuration_ServiceBookLink : System.Web.UI
         {
             CheckBox chkActive = (CheckBox)e.Item.FindControl("chkActive");
             CheckBox chkPer = (CheckBox)e.Item.FindControl("chkPer");
+            CheckBox chkEdit = (CheckBox)e.Item.FindControl("chkEdit");
+            CheckBox chkApprove = (CheckBox)e.Item.FindControl("chkApprove");
 
             System.Data.DataRowView rowView = e.Item.DataItem as System.Data.DataRowView;
 
@@ -88,14 +90,28 @@ public partial class ESTABLISHMENT_Configuration_ServiceBookLink : System.Web.UI
             if (rowView["CALFORPER"].ToString() == "Y")
             {
                 chkPer.Checked = true;
-
             }
             else
             {
                 chkPer.Checked = false;
-
             }
-           
+
+            if (rowView["EDITABLE"].ToString() == "Y")
+            {
+                chkEdit.Checked = true;
+            }
+            else
+            {
+                chkEdit.Checked = false;
+            }
+            if (rowView["APPROVE"].ToString() == "Y")
+            {
+                chkApprove.Checked = true;
+            }
+            else
+            {
+                chkApprove.Checked = false;
+            }
         }
     }
     protected void ddlUserType_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -131,12 +147,16 @@ public partial class ESTABLISHMENT_Configuration_ServiceBookLink : System.Web.UI
                 dt.Columns.Add("MenuId");
                 dt.Columns.Add("isActive");
                 dt.Columns.Add("IsCalforPer");
+                dt.Columns.Add("IsEditable");
+                dt.Columns.Add("IsApproval");
 
                 foreach (ListViewDataItem lvitem in lvStatus.Items)
                 {
                     Label lblMenuid = lvitem.FindControl("lblMenuid") as Label;
                     CheckBox chkActive = lvitem.FindControl("chkActive") as CheckBox;
                     CheckBox chkPer = lvitem.FindControl("chkPer") as CheckBox;
+                    CheckBox chkEdit = lvitem.FindControl("chkEdit") as CheckBox;
+                    CheckBox chkApprove = lvitem.FindControl("chkApprove") as CheckBox;
 
                     DataRow dr = dt.NewRow();
 
@@ -157,7 +177,23 @@ public partial class ESTABLISHMENT_Configuration_ServiceBookLink : System.Web.UI
                     {
                         dr["IsCalforPer"] = false;
                     }
-                   
+
+                    if (chkEdit.Checked == true)
+                    {
+                        dr["IsEditable"] = true;
+                    }
+                    else
+                    {
+                        dr["IsEditable"] = false;
+                    }
+                    if (chkApprove.Checked == true)
+                    {
+                        dr["IsApproval"] = true;
+                    }
+                    else
+                    {
+                        dr["IsApproval"] = false;
+                    }
 
                     dt.Rows.Add(dr);
                 }

@@ -61,7 +61,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
         BlobDetails();
         BindListViewRevenue();
         btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
+        GetConfigForEditAndApprove();
     }
+
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -413,6 +415,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        GetConfigForEditAndApprove();
     }
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
@@ -439,14 +442,15 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
         txtRGTSponsor.Text = string.Empty;
         txtWebLink.Text = string.Empty;
         ViewState["action"] = "add";
-        
-        btnSubmit.Enabled = true;
 
         lvCompAttach.DataSource = null;
         lvCompAttach.DataBind();
         //pnlfiles.Visible = false;
         pnlAttachmentList.Visible = false;
         ViewState["FILE1"] = null;
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
     }
 
     protected void btnDelete_Click(object sender, ImageClickEventArgs e)
@@ -456,15 +460,29 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
             ImageButton btnDel = sender as ImageButton;
             int RGNO = int.Parse(btnDel.CommandArgument);
             DataSet ds = new DataSet();
-            ds = objCommon.FillDropDown("PAYROLL_SB_REVENUE_GENERATED", "*", "", "RGNO=" + RGNO, "");
-            CustomStatus cs = (CustomStatus)objServiceBook.DeleteRevenueGenerated(RGNO);
-            if (cs.Equals(CustomStatus.RecordDeleted))
+            ds = objCommon.FillDropDown("PAYROLL_SB_REVENUE_GENERATED", "LTRIM(RTRIM(ISNULL(APPROVE_STATUS,''))) AS APPROVE_STATUS", "", "RGNO=" + RGNO, "");
+            string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+            if (STATUS == "A")
             {
-                Clear();
-                BindListViewRevenue();
-                ViewState["action"] = "add";
-                MessageBox("Record Deleted Successfully");
+                MessageBox("Your Details are Approved You Cannot Delete.");
+                return;
+            }
+            else if (STATUS == "R")
+            {
+                MessageBox("Your Details are Rejected You Cannot Delete.");
+                return;
+            }
+            else
+            {
+                CustomStatus cs = (CustomStatus)objServiceBook.DeleteRevenueGenerated(RGNO);
+                if (cs.Equals(CustomStatus.RecordDeleted))
+                {
+                    Clear();
+                    BindListViewRevenue();
+                    ViewState["action"] = "add";
+                    MessageBox("Record Deleted Successfully");
 
+                }
             }
         }
         catch (Exception ex)
@@ -873,6 +891,26 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
                     lvCompAttach.DataSource = null;
                     lvCompAttach.DataBind();
                 }
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
+                {
+                    string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    if (STATUS == "A")
+                    {
+                        MessageBox("Your Details Are Approved You Cannot Edit.");
+                        btnSubmit.Enabled = false;
+                        return;
+                    }
+                    else
+                    {
+                        btnSubmit.Enabled = true;
+                    }
+                    GetConfigForEditAndApprove();
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
+                }
             }
         }
         catch (Exception ex)
@@ -939,6 +977,56 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_RevenueGenerated : System.
         catch (Exception ex)
         {
             throw;
+        }
+    }
+
+    #endregion
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Revenue Generated";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
         }
     }
 

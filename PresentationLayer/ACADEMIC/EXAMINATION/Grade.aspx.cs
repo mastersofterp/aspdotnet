@@ -50,7 +50,7 @@ public partial class ACADEMIC_MASTERS_Grade : System.Web.UI.Page
             else
             {
                 //Page Authorization
-                //this.CheckPageAuthorization();
+                this.CheckPageAuthorization();
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 //Load Page Help
@@ -64,7 +64,7 @@ public partial class ACADEMIC_MASTERS_Grade : System.Web.UI.Page
 
             objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND COLLEGE_ID IN (" + Session["college_nos"].ToString() + ") AND OrganizationId=" + Convert.ToInt32(Session["OrgId"].ToString()) + "", "COLLEGE_ID");
 
-            objCommon.FillDropDownList(ddlGradeType, "ACD_GRADE_TYPE", "GRADE_TYPE", "GRADE_TYPE_NAME", "GRADE_TYPE>0 AND ACTIVESTATUS=1 ", "GRADE_TYPE");
+            objCommon.FillDropDownList(ddlGradeType, "ACD_GRADE_TYPE", "GRADE_TYPE", "GRADE_TYPE_NAME", "GRADE_TYPE>0 AND ISNULL(ACTIVESTATUS,0)=1", "GRADE_TYPE");
             // objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENO");
             objCommon.FillDropDownList(ddlSection, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0 AND UA_SECTION IN(1,2)", "UA_SECTION");
             objCommon.FillDropDownList(ddlSubType, "ACD_SUBJECTTYPE ", "SUBID", "SUBNAME", "SUBID > 0 AND ISNULL(ACTIVESTATUS,0)=1  ", "SUBID ");
@@ -316,7 +316,7 @@ public partial class ACADEMIC_MASTERS_Grade : System.Web.UI.Page
         //txtMaxMark.Text = string.Empty;
         //txtMinMark.Text = string.Empty;
         //txtGradeDesc.Text = string.Empty;
-        Label1.Text = string.Empty;
+        //Label1.Text = string.Empty;
         ddlSection.SelectedIndex = 0;
         ddlGradeType.SelectedIndex = 0;
         lvGrade.Visible = false;

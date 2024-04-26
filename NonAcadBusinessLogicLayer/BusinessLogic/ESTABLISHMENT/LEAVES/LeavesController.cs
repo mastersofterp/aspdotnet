@@ -10699,6 +10699,34 @@ namespace IITMS
                 }
 
                 #endregion
+
+                #region LeaveDocument
+                public DataSet GetAllLeaveDocument(DateTime FDATE, DateTime TDATE)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_FROMDATE", FDATE);
+                        objParams[1] = new SqlParameter("@P_TODATE", TDATE);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_LEAVE_PAY_APP_GET_ALLLEAVEAPPLICATION_DOCUMENT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetPendListforLVApprovalStatusALL->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                #endregion
+
             }
         }
     }

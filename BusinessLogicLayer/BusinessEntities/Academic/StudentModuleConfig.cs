@@ -3,6 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+/*
+---------------------------------------------------------------------------------------------------------------------------                                                                      
+Created By :                                                                   
+Created On :                                                 
+Purpose    :                                          
+Version    : 1.0.0                                                                 
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+Version   Modified On   Modified By        Purpose                                                                        
+---------------------------------------------------------------------------------------------------------------------------                                                                        
+ 1.0.1    14-03-2024    Ashutosh Dhobe     Changes for added iseditable ,isdiplaysectionname                      
+------------------------------------------- -------------------------------------------------------------------------------                                                                                                                     
+*/
+
 namespace IITMS
 {
     namespace UAIMS
@@ -20,8 +33,14 @@ namespace IITMS
                 private bool _isactive = false;
                 private string _control_to_mandatory = string.Empty;
                 private bool _ismandatory = false;
+                //<1.0.1>
+                private bool _iseditable = false;
+                //</1.0.1>
                 private int _organization_id = 0;
                 private string _page_no = string.Empty;
+                //<1.0.1>
+                private bool _display_section = false;
+                //</1.0.1>
                 #endregion
 
                 #region Public Property Fields
@@ -65,6 +84,19 @@ namespace IITMS
                     get { return _page_no; }
                     set { _page_no = value; }
                 }
+
+
+                public bool ISEDITABLE
+                {
+                    get { return _iseditable; }
+                    set { _iseditable = value; }
+                }
+                public bool DISPLAYSECTION
+                {
+                    get { return _display_section; }
+                    set { _display_section = value; }
+                }
+
                 #endregion
             }
         }

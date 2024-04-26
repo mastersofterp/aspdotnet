@@ -75,7 +75,9 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_CAPACITY", room.Capacity),
                     new SqlParameter("@P_COLLEGE_CODE", room.CollegeCode),
                     new SqlParameter("@P_TYPE_NO", room.Roomtype),
+                    new SqlParameter("@P_HOSTEL_NO",room.HostelNo),  //Added By Himanshu Tamrakar 10-04-2024
                     new SqlParameter("@P_ROOM_NO", room.RoomNo)
+                   
                 };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
 

@@ -85,11 +85,12 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                     {
                         int cid = 0;
                         int idno = 0;
-                        int semesterno = 0; int schemeno = 0;
+                        int semesterno = 0; int schemeno = 0; int sessionno;
                         idno = Convert.ToInt32(Session["idno"]);
                         cid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno));
                         semesterno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + idno));
                         schemeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + idno));
+                        sessionno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "MAX(SESSIONNO)", "IDNO=" + idno));
                         if (CheckActivityCollege(cid))
                         {
                             if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)//ADDED BY GAURAV 29_02_2024
@@ -118,20 +119,76 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                 #endregion
 
                                 #region
+                                decimal BalAmount = 00;
+                                if (Convert.ToInt32(Session["OrgId"]) == 19)//FOR PCEN ADDED BY ROHIT 26-3-2024
+                                {
+                                    string para_name, call_values;
+                                    DataSet dsFeeDetails;
+                                    string proc_name = "PKG_GET_ACADEMIC_BAL_FEES";
+                                    para_name = "@P_IDNO";
+                                    call_values = "" + Convert.ToInt32(Session["idno"]);
+                                    dsFeeDetails = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+
+                                    if (dsFeeDetails.Tables[0].Rows.Count > 0)
+                                    {
+                                        BalAmount = Convert.ToDecimal(dsFeeDetails.Tables[0].Rows[0]["TOT_BALANCE"]);
+                                    }
+                                    else 
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, GetType(), "SweetAlert", "Swal.fire({title: '<span style=\"color: black;\">NOTE :</span>', html: '<span style=\"color: red;\"> Fees Not Found <br>Please Contact A/C section.</span>', icon: 'error'});", true);
+                                        divbtn.Visible = false;
+                                        return;
+
+                                    }
+                                   
+                                }
+
                                 int CheckExamRegApprovalAdmin1 = Convert.ToInt32(objCommon.LookUp("ACD_ADMIN_DISCIPLINE_LOG", "ISNULL(STATUS,0) STATUS ", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]) + " AND SEMESTERNO=" + semesterno + " UNION ALL SELECT 0 AS STATUS"));
 
 
                                 if (CheckExamRegApprovalAdmin1 == 0)
                                 {
 
-                                    objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page);
-                                    this.ShowDetails();
-                                    bindcourses();
-                                    divbtn.Visible = false;
-                                    return;
+                                    if (Convert.ToInt32(Session["OrgId"]) == 19)//FOR PCEN ADDED BY ROHIT 26-3-2024
+                                    {
+
+                                        //objCommon.DisplayMessage("Examination form not available. \\nImmediately pay balance outstanding fees (Current year balance RS : " + BalAmount + ") \\nContact A/C section.", this.Page);
+                             
+                                        ScriptManager.RegisterStartupScript(this, GetType(), "SweetAlert", "Swal.fire({title: '<span style=\"color: black;\">NOTE :</span>', html: '<span style=\"color: red;\">Examination form not available.<br>Immediately pay balance outstanding fees (Current year balance RS : <span style=\"color: green;\">" + BalAmount + "</span>)<br>Contact A/C section.</span>', icon: 'info'});", true);
+
+                                        this.ShowDetails();
+                                        bindcourses();
+                                        divbtn.Visible = false;
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        
+
+                                        objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page);
+
+                                    }
+
+                                    //objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page);
+                                    //this.ShowDetails();
+                                    //bindcourses();
+                                    //divbtn.Visible = false;
+                                    //return;
 
 
 
+                                }
+                                else 
+                                {
+                                    if (Convert.ToInt32(Session["OrgId"]) == 19 && BalAmount>0)//FOR PCEN ADDED BY ROHIT 26-3-2024
+                                    {
+                                        string Year = Convert.ToString(objCommon.LookUp("ACD_SESSION_MASTER", "ACADEMIC_YEAR", "SESSIONNO=" + sessionno));
+
+                                        //objCommon.DisplayMessage("I undertake to pay my balance fees of Rs. " + BalAmount + " for the session " + Year + ", \\n before collecting end semester examination hall ticket.  \\nKindly allow me to submit my examination form  for " + semesterno + " Semester. \\nI agree to pay balance fees of Rs " + BalAmount + " , \\n before collecting end semester examination hall ticket. \\n Save & Proceed", this.Page);
+
+                                        ScriptManager.RegisterStartupScript(this, GetType(), "SweetAlert", "Swal.fire({title: '<span style=\"color: black;\">NOTE : </span>', html: '<span style=\"color: red;\">I undertake to pay my balance College fees of Rs. </span><span style=\"color: green;\">" + BalAmount + "</span><span style=\"color: red;\"> for the session " + Year + ",before collecting end semester examination hall ticket.Kindly allow me to submit my examination form for " + semesterno + " Semester.<br><br>I agree to pay balance fees of Rs <span style=\"color: green;\">" + BalAmount + "</span>, before collecting end semester examination hall ticket.<br>Save & Proceed</span>', icon: 'info'});", true);
+
+                                    }
                                 }
                                 #endregion
                             }
@@ -227,6 +284,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                 //   }
                                 #endregion
                             }
+
                                this.ShowDetails();
                             bindcourses();                               
 
@@ -456,10 +514,14 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
             url += "&path=~,Reports,Academic," + rptFileName;
             url += "&param=@P_COLLEGE_CODE=" + Collegeid + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + sessionno + ",@P_DEGREENO=" + Convert.ToInt32(degreeno) + ",@P_BRANCHNO=" + Convert.ToInt32(branchno) + ",@P_SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip);
           //  tring call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "";
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " </script>";
-           
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterStartupScript(this.updatepnl, this.updatepnl.GetType(), "controlJSScript", sb.ToString(), true);
         }
         catch (Exception ex)
         {
@@ -2359,7 +2421,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
        //    latefees = 0;
        //}
        #endregion    
-       #region  LATE FEE Checklate fee applicable
+       #region  LATE FEE New Patch
 
        DataSet dsStudent = null;
        string date = string.Empty;

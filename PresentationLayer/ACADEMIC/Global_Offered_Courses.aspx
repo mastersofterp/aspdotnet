@@ -144,7 +144,7 @@
                                 <a class="nav-link" data-toggle="tab" href="#tab_2" tabindex="3">Teacher Student Allotment</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tab_3" tabindex="4">Attendance Configuration</a>
+                                <a class="nav-link" data-toggle="tab" href="#tab_3" tabindex="4" style="display:none">Attendance Configuration</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tab_4" tabindex="5">Time Table</a>

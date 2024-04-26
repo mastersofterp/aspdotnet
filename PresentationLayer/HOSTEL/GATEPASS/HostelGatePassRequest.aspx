@@ -2,14 +2,13 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <style>
-         ul.ui-autocomplete
-         {
-             max-height: 180px !important;
-             overflow: auto !important;
-         }
+        ul.ui-autocomplete {
+            max-height: 180px !important;
+            overflow: auto !important;
+        }
     </style>
 
     <script type="text/javascript">
@@ -49,64 +48,164 @@
         }
     </script>
 
-    <meta charset="UTF-8">
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-               <%-- <div class="box-header with-border">
+                <%-- <div class="box-header with-border">
                     <h3 class="box-title">Hostel Gate Pass Request</h3>
                 </div>--%>
-                <div class="box-header with-border">  <%--lblDynamicPageTitle Added By Himanshu tamrakar 23-02-2024--%>
-                    <h3 class="box-title" style="text-transform:uppercase;" ><asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
+                <div class="box-header with-border">
+                    <%--lblDynamicPageTitle Added By Himanshu tamrakar 23-02-2024--%>
+                    <h3 class="box-title" style="text-transform: uppercase;">
+                        <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
-
-                <br /><br /><br />
                 <div class="box-body">
-
-                    <div class="row" id ="adminsearch" runat="server" Visible="False">
+                    <div class="col-12" id="divstudentSearch">
+                        <div class="row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
-                                                <asp:Label ID="lblSearch" runat="server" Font-Bold="true">Search Student By Name</asp:Label>
+                                    <sup>* </sup>
+                                    <label>From Date </label>
                                 </div>
-                                 <asp:DropDownList ID="ddlSearch" runat="server" TabIndex="1" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
-                                     ToolTip="Search Student Name Here" AutoPostBack="True" OnSelectedIndexChanged="ddlSearch_SelectedIndexChanged"/>
-                                 </div>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <asp:TextBox ID="txtFromDateSearch" runat="server" TabIndex="5" ToolTip="Enter Out Date" CssClass="form-control"/>
+                                    <%--<asp:Image ID="imgFromDate" runat="server" ImageUrl="~/images/calendar.png" Width="16px" />--%>
+                                    <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd/MM/yyyy"
+                                        TargetControlID="txtFromDateSearch" PopupButtonID="imgFromDate" Enabled="true" />
+                                    <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" TargetControlID="txtFromDateSearch"
+                                        Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
+                                        MaskType="Date" ErrorTooltipEnabled="false" />
+                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" EmptyValueMessage="Please Enter From date."
+                                        ControlExtender="MaskedEditExtender1" ControlToValidate="txtFromDateSearch" IsValidEmpty="false"
+                                        InvalidValueMessage="From Date  is invalid" Display="None" TooltipMessage="Input a date"
+                                        ErrorMessage="Please Select From Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
+                                        ValidationGroup="search" SetFocusOnError="true" />
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>To Date </label>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <asp:TextBox ID="txtToDateSearch" runat="server" TabIndex="5" ToolTip="Enter Out Date" CssClass="form-control"/>
+                                    <%--<asp:Image ID="imgFromDate" runat="server" ImageUrl="~/images/calendar.png" Width="16px" />--%>
+                                    <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"
+                                        TargetControlID="txtToDateSearch" PopupButtonID="imgFromDate" Enabled="true" />
+                                    <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender2" runat="server" TargetControlID="txtToDateSearch"
+                                        Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
+                                        MaskType="Date" ErrorTooltipEnabled="false" />
+                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" EmptyValueMessage="Please Enter To Date."
+                                        ControlExtender="MaskedEditExtender2" ControlToValidate="txtToDateSearch" IsValidEmpty="false"
+                                        InvalidValueMessage="To Date  is invalid" Display="None" TooltipMessage="Input a In Date"
+                                        ErrorMessage="Please Select To Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
+                                        ValidationGroup="search" SetFocusOnError="true" />
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <label>Apply Date </label>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <asp:TextBox ID="txtApplyDate" runat="server" TabIndex="1" ToolTip="Enter Date" CssClass="form-control" />
+                                    <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Format="dd/MM/yyyy"
+                                        TargetControlID="txtApplyDate" PopupButtonID="imgFromDate" Enabled="true" />
+                                    <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" TargetControlID="txtApplyDate"
+                                        Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
+                                        MaskType="Date" ErrorTooltipEnabled="false" />
+                                </div>
+                            </div>
+                           <%-- <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <label>Purpose </label>
+                                </div>
+                                <asp:DropDownList ID="ddlPurposeSearch" runat="server" TabIndex="3" AppendDataBoundItems="True" CssClass="form-control"/>
+                                <asp:RequiredFieldValidator ID="rfvpurposesearch" runat="server" ControlToValidate="ddlPurposeSearch"
+                                    Display="None" ErrorMessage="Please Select Purpose" SetFocusOnError="True"
+                                    InitialValue="0" />
+
+                            </div>--%>
+                           <%-- <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic ">
+                                    <label>Status </label>
+                                </div>
+                                <asp:DropDownList ID="ddlStatus" runat="server" TabIndex="3" AppendDataBoundItems="True" CssClass="form-control">
+                                    <asp:ListItem Value="0" Text="Please Select"></asp:ListItem>
+                                    <asp:ListItem Value="A" Text="Approve"></asp:ListItem>
+                                    <asp:ListItem Value="R" Text="Reject"></asp:ListItem>
+                                    <asp:ListItem Value="P" Text="Pending"></asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="RfvStatus" runat="server" ControlToValidate="ddlStatus"
+                                    Display="None"
+                                    InitialValue="0" />
+                            </div>--%>
                         </div>
+                        <div class="col-12 btn-footer" id="Div2" runat="server">
+                            
+                                        <%--<asp:Button ID="btnApplyGatePass" runat="server" Text="Apply Gate pass" OnClick="btnApplyGatePass_Click"
+                                            CssClass="btn btn-primary" />--%>
+                                        <asp:Button ID="btnSearch" runat="server" Text="Search"  CssClass="btn btn-primary" OnClick="btnSearch_Click" ValidationGroup="search" />
+                                        <asp:Button ID="btnBack" runat="server"  CssClass="btn btn-outline-danger" OnClick="btnBack_Click" Text="Back" />
+                                        <%--<asp:Button ID="btnBack" runat="server" Text="Back" Width="100%" CssClass="btn btn-danger" OnClick="btnBack_Click" />--%>
+                                        <asp:ValidationSummary ID="search" DisplayMode="List" runat="server" ValidationGroup="search" ShowMessageBox="true" ShowSummary="false" />
+                                </div>
+                    </div>
+
+                    <hr />
+                    <div class="row" id="adminsearch" runat="server" visible="False">
+                        <div class="form-group col-lg-3 col-md-6 col-12">
+                            <div class="label-dynamic">
+                                <asp:Label ID="lblSearch" runat="server" Font-Bold="true">Search Student By Name</asp:Label>
+                            </div>
+                            <asp:DropDownList ID="ddlSearch" runat="server" TabIndex="1" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                ToolTip="Search Student Name Here" AutoPostBack="True" OnSelectedIndexChanged="ddlSearch_SelectedIndexChanged" />
+                        </div>
+                    </div>
 
                     <div class="col-12" id="pnlStudentHGPRequestDetails" runat="server">
-                        
-                          <div class="row">
+
+                        <div class="row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                           <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <asp:Label ID="lblStuType" runat="server" Font-Bold="true">Student Type</asp:Label>
-                                           </div>
-                                            <asp:DropDownList ID="ddlStuType" runat="server" TabIndex="2" ToolTip="Please Select Student Type." AppendDataBoundItems="true" AutoPostBack="true"
-                                                CssClass="form-control" data-select2-enable="true">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rvfStuType" runat="server" ControlToValidate="ddlStuType"
-                                                Display="None" ErrorMessage="Please Select Student Type." SetFocusOnError="true"
-                                                ValidationGroup="submit" InitialValue="0">
-                                            </asp:RequiredFieldValidator>
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <asp:Label ID="lblStuType" runat="server" Font-Bold="true">Student Type</asp:Label>
                                 </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <asp:Label ID="lblHostel" runat="server" Font-Bold="true">Hostel</asp:Label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlHostel" runat="server" TabIndex="3" ToolTip="Please Select Hostel." AppendDataBoundItems="true" AutoPostBack="true"
-                                                CssClass="form-control" data-select2-enable="true">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvHostel" runat="server" ControlToValidate="ddlHostel"
-                                                Display="None" ErrorMessage="Please Select Hostel." SetFocusOnError="true"
-                                                ValidationGroup="submit" InitialValue="0">
-                                            </asp:RequiredFieldValidator>
+                                <asp:DropDownList ID="ddlStuType" runat="server" TabIndex="2" ToolTip="Please Select Student Type." AppendDataBoundItems="true" AutoPostBack="true"
+                                    CssClass="form-control" data-select2-enable="true">
+                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rvfStuType" runat="server" ControlToValidate="ddlStuType"
+                                    Display="None" ErrorMessage="Please Select Student Type." SetFocusOnError="true"
+                                    ValidationGroup="submit" InitialValue="0">
+                                </asp:RequiredFieldValidator>
                             </div>
-                            <div class="form-group col-lg-4 col-md-6 col-12" style="border:dashed; border-width:1px; height:50%" hidden="hidden">
-                                <p id="path" runat="server" style="text-align:center; padding:1%;">Please Select Student Type.</p>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <asp:Label ID="lblHostel" runat="server" Font-Bold="true">Hostel</asp:Label>
+                                </div>
+                                <asp:DropDownList ID="ddlHostel" runat="server" TabIndex="3" ToolTip="Please Select Hostel." AppendDataBoundItems="true" AutoPostBack="true"
+                                    CssClass="form-control" data-select2-enable="true">
+                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvHostel" runat="server" ControlToValidate="ddlHostel"
+                                    Display="None" ErrorMessage="Please Select Hostel." SetFocusOnError="true"
+                                    ValidationGroup="submit" InitialValue="0">
+                                </asp:RequiredFieldValidator>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-12" style="border: dashed; border-width: 1px; height: 50%" hidden="hidden">
+                                <p id="path" runat="server" style="text-align: center; padding: 1%;">Please Select Student Type.</p>
                             </div>
                         </div>
                         <div class="row">
@@ -119,8 +218,7 @@
                                     <div class="input-group-addon">
                                         <i id="imgoutDate" runat="server" class="fa fa-calendar"></i>
                                     </div>
-                                    <asp:TextBox ID="txtoutDate" runat="server" TabIndex="4" CssClass="form-control" AutoPostBack="true" ValidationGroup="submit" OnTextChanged="txtoutDate_TextChanged"
-                                        />
+                                    <asp:TextBox ID="txtoutDate" runat="server" TabIndex="4" CssClass="form-control" AutoPostBack="true" ValidationGroup="submit" OnTextChanged="txtoutDate_TextChanged" />
                                     <ajaxToolKit:CalendarExtender ID="ceoutDate" runat="server" Format="dd/MM/yyyy"
                                         TargetControlID="txtoutDate" PopupButtonID="txtoutDate" />
                                     <ajaxToolKit:MaskedEditExtender ID="meoutDate" runat="server" TargetControlID="txtoutDate"
@@ -158,7 +256,7 @@
                                 <%--<asp:TextBox ID="txtoutHourFrom" oninput="formatNumber(this)" CssClass="form-control" runat="server" TabIndex="5" TextMode="Number" Min="1" Max="12"/>--%>
                                 <asp:DropDownList ID="ddloutHourFrom" AppendDataBoundItems="true" runat="server" TabIndex="5" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddloutHourFrom_SelectedIndexChanged">
                                     <asp:ListItem Value="0" Selected="True">00</asp:ListItem>
-                                    <asp:ListItem Value="1" >01</asp:ListItem>
+                                    <asp:ListItem Value="1">01</asp:ListItem>
                                     <asp:ListItem Value="2">02</asp:ListItem>
                                     <asp:ListItem Value="3">03</asp:ListItem>
                                     <asp:ListItem Value="4">04</asp:ListItem>
@@ -243,7 +341,7 @@
                                 </asp:DropDownList>
                                 <asp:RequiredFieldValidator ID="rfvoutMinFrom" Display="None" runat="server" ErrorMessage="Please Select Out Minutes From" ControlToValidate="ddloutMinFrom" ValidationGroup="submit"></asp:RequiredFieldValidator>
                             </div>
-<%--                            <div class="form-group col-lg-2 col-md-4 col-12">
+                            <%--                            <div class="form-group col-lg-2 col-md-4 col-12">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>AM/PM</label>
@@ -266,8 +364,7 @@
                                     <div class="input-group-addon">
                                         <i id="imginDate" runat="server" class="fa fa-calendar"></i>
                                     </div>
-                                    <asp:TextBox ID="txtinDate" runat="server" TabIndex="8" CssClass="form-control" AutoPostBack="true" ValidationGroup="submit" OnTextChanged="txtinDate_TextChanged"
-                                        />
+                                    <asp:TextBox ID="txtinDate" runat="server" TabIndex="8" CssClass="form-control" AutoPostBack="true" ValidationGroup="submit" OnTextChanged="txtinDate_TextChanged" />
                                     <ajaxToolKit:CalendarExtender ID="ceinDate" runat="server" Format="dd/MM/yyyy"
                                         TargetControlID="txtinDate" PopupButtonID="txtinDate" />
                                     <ajaxToolKit:MaskedEditExtender ID="meinDate" runat="server" TargetControlID="txtinDate"
@@ -404,49 +501,50 @@
                         </div>
 
                         <div class="row">
-                         <div class="form-group col-lg-8 col-md-4 col-12">
-                             <div class="label-dynamic">
+                            <div class="form-group col-lg-8 col-md-4 col-12">
+                                <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>Purpose</label>
                                 </div>
                                 <asp:DropDownList ID="ddlPurpose" AppendDataBoundItems="true" runat="server" TabIndex="12" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlPurpose_SelectedIndexChanged">
-                                <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                    <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
                                 </asp:DropDownList>
                                 <asp:RequiredFieldValidator ID="rfvPurpose" Display="None" runat="server" ErrorMessage="Please Select Purpose" ControlToValidate="ddlPurpose" ValidationGroup="submit" InitialValue="0"></asp:RequiredFieldValidator>
-                         </div>
+                            </div>
                         </div>
                         <div class="row">
-                        <div class="form-group col-lg-8 col-md-4 col-12">
-                                <asp:TextBox ID="txtOther" runat="server" CssClass="form-control" TabIndex="13" Visible="False" PlaceHolder="Enter Your Purpose" ></asp:TextBox>
+                            <div class="form-group col-lg-8 col-md-4 col-12">
+                                <asp:TextBox ID="txtOther" runat="server" CssClass="form-control" TabIndex="13" Visible="False" PlaceHolder="Enter Your Purpose"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvOther" runat="server" ErrorMessage="Please Enter Other Purpose"
                                     Display="None" ControlToValidate="txtOther" SetFocusOnError="True" ValidationGroup="submit"></asp:RequiredFieldValidator>
-                         </div>
+                            </div>
                         </div>
 
                         <div class="row">
-                        <div class="form-group col-lg-8 col-md-4 col-12">
-                             <div class="label-dynamic">
+                            <div class="form-group col-lg-8 col-md-4 col-12">
+                                <div class="label-dynamic">
                                     <%--<sup>* </sup>--%>
                                     <label>Remark</label>
-                             </div>
+                                </div>
                                 <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" TextMode="MultiLine" TabIndex="14" Rows="1" Height="74px"></asp:TextBox>
                                 <%--<asp:RequiredFieldValidator ID="rfvtxtRemark" runat="server" ErrorMessage="Please Enter Remark"
                                     Display="None" ControlToValidate="txtRemark" SetFocusOnError="True" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
-                        </div>
+                            </div>
                         </div>
                     </div>
-                    <br /><br />
+                    <br />
+                    <br />
                     <div class="col-12 btn-footer" id="pnlbuttons" runat="server">
                         <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="submit" TabIndex="15"
                             CssClass="btn btn-primary" OnClick="btnSubmit_Click" />
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="16"
-                             CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+                            CssClass="btn btn-warning" OnClick="btnCancel_Click" />
                         <asp:ValidationSummary ID="valSummary" runat="server" DisplayMode="List" ShowMessageBox="true"
                             ShowSummary="false" ValidationGroup="submit" />
                     </div>
 
                     <div class="col-12">
-                        <p Style="color:red;font-weight:bold;">NOTE : Only the pending gate pass can be edited.</p>
+                        <p style="color: red; font-weight: bold;">NOTE : Only the pending gate pass can be edited.</p>
                         <asp:Repeater ID="lvGatePass" runat="server">
                             <HeaderTemplate>
                                 <div class="sub-heading">
@@ -469,11 +567,9 @@
                                             </th>
                                             <th>Gate Pass No
                                             </th>
-                                            <th>
-                                                Status
+                                            <th>Status
                                             </th>
-                                            <th>
-                                                Gatepass
+                                            <th>Gatepass
                                             </th>
                                         </tr>
                                     </thead>
@@ -486,7 +582,7 @@
                                             AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="17" Enabled='<%# Eval("STATUS").Equals("APPROVED")?false:Eval("STATUS").Equals("REJECTED")?false: true %>' />&nbsp;
                                     </td>
                                     <td>
-                                         <%# Eval("STUDNAME") %>
+                                        <%# Eval("STUDNAME") %>
                                         <%--<asp:HiddenField ID="hdnIdno" runat="server" Value='<%# Eval("IDNO") %>' />
                                         <asp:HiddenField ID="hdnHgpId" runat="server" Value='<%# Eval("HGP_ID") %>' />
                                         <asp:HiddenField ID="hdnDeegreeno" runat="server" Value='<%# Eval("DEGREENO") %>' />
@@ -509,10 +605,12 @@
                                         <asp:Label ID="lblGatepassnno" runat="server" Text='<%# (Eval("HOSTEL_GATE_PASS_NO").ToString())=="" ? "..." : Eval("HOSTEL_GATE_PASS_NO") %>'></asp:Label>
                                     </td>
                                     <td>
-                                        <asp:Label ID="lblstatus" runat="server" ForeColor='<%# Eval("STATUS").Equals("APPROVED")?System.Drawing.Color.Green:Eval("STATUS").Equals("REJECTED")?System.Drawing.Color.Red: System.Drawing.Color.Red %>' Text='<%# Eval("STATUS") %>'></asp:Label>   <%--Rejected cond Added By Himanshu Tamrakar 13/03/2024--%>
+                                        <asp:Label ID="lblstatus" runat="server" ForeColor='<%# Eval("STATUS").Equals("APPROVED")?System.Drawing.Color.Green:Eval("STATUS").Equals("REJECTED")?System.Drawing.Color.Red: System.Drawing.Color.Red %>' Text='<%# Eval("STATUS") %>'></asp:Label>
+                                        <%--Rejected cond Added By Himanshu Tamrakar 13/03/2024--%>
                                     </td>
                                     <td>
-                                        <asp:Button ID="printGatepass" runat="server" CssClass="btn btn-primary" Text="Print"  CommandArgument='<%# Eval("HOSTEL_GATE_PASS_NO") %>'  OnClick="printGatepass_Click" Enabled='<%# Eval("STATUS").Equals("APPROVED")?true:Eval("STATUS").Equals("REJECTED")?false: false %>' /> <%--Rejected cond Added By Himanshu Tamrakar 13/03/2024--%>
+                                        <asp:Button ID="printGatepass" runat="server" CssClass="btn btn-primary" Text="Print" CommandArgument='<%# Eval("HOSTEL_GATE_PASS_NO") %>' OnClick="printGatepass_Click" Enabled='<%# Eval("STATUS").Equals("APPROVED")?true:Eval("STATUS").Equals("REJECTED")?false: false %>' />
+                                        <%--Rejected cond Added By Himanshu Tamrakar 13/03/2024--%>
                                     </td>
                                 </tr>
                             </ItemTemplate>
@@ -531,9 +629,10 @@
 
 </asp:Content>
 
-<asp:Content ID="Content2" runat="server" contentplaceholderid="head">
+<asp:Content ID="Content2" runat="server" ContentPlaceHolderID="head">
     <style type="text/css">
-        .form-control {}
+        .form-control {
+        }
     </style>
 </asp:Content>
 

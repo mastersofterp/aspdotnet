@@ -703,6 +703,7 @@
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
+                                                            <sup>* </sup>
                                                             <label>Department</label>
                                                         </div>
                                                         <asp:UpdatePanel ID="UpdatePanelddldep" runat="server">
@@ -711,7 +712,13 @@
                                                                     TabIndex="42" AutoPostBack="true" OnSelectedIndexChanged="ddlDepartment_SelectedIndexChanged">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>
+                                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="ddlDepartment" ValidationGroup="emp"
+                                                                    ErrorMessage="Please Select Department" SetFocusOnError="true" InitialValue="0" Display="None"></asp:RequiredFieldValidator>
+                                      
                                                             </ContentTemplate>
+                                                            <Triggers>
+                                                                <asp:PostBackTrigger ControlID="ddlDepartment" />
+                                                            </Triggers>
                                                         </asp:UpdatePanel>
                                                     </div>
                                                     <%--add amol --%>

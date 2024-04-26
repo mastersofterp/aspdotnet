@@ -109,6 +109,7 @@ public partial class RazorPayOnlinePaymentRequest : System.Web.UI.Page
                     ViewState["hashsequence"] = hashsequence;
                     Session["RAZORPAYSECRET"] = saltkey;
                     Session["RAZORPAYKEY"] = accesscode;
+                    Session["ResponseURL"] = ResponseUrl;
                     //key.Value = merchentkey;
                     ////hash.Value = hashsequence;
                     //surl.Text = ResponseUrl;

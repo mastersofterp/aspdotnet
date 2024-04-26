@@ -303,49 +303,51 @@
 
                                         </div>
                                         <div class="col-lg-4 col-md-6 col-12">
-                                            <asp:ListView ID="lvfeehead" runat="server">
-                                                <LayoutTemplate>
-                                                    <div id="divlvFeeItems">
-                                                        <div class="sub-heading">
-                                                            <h5>Applicable Fees</h5>
+                                            <asp:Panel ID="pnlfeehead" runat="server" Visible="false">
+                                                <asp:ListView ID="lvfeehead" runat="server">
+                                                    <LayoutTemplate>
+                                                        <div id="divlvFeeItems">
+                                                            <div class="sub-heading">
+                                                                <h5>Applicable Fees</h5>
+                                                            </div>
+                                                            <%--Available Fee Items--%>
+                                                            <div class="table-responsive" style="max-height: 200px; overflow: auto; border-top: 1px solid #e5e5e5;">
+                                                                <table id="tblFeeItems" runat="server" class="table table-striped table-bordered nowrap " style="width: 100%">
+                                                                    <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; background: #fff !important;">
+                                                                        <tr>
+                                                                            <th>Sr. No. </th>
+                                                                            <th>Fee Heads </th>
+                                                                            <th>Applicable Amount </th>
+                                                                            <th>Paid Amount </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
-                                                        <%--Available Fee Items--%>
-                                                        <div class="table-responsive" style="max-height: 200px; overflow: auto; border-top: 1px solid #e5e5e5;">
-                                                            <table id="tblFeeItems" runat="server" class="table table-striped table-bordered nowrap " style="width: 100%">
-                                                                <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; background: #fff !important;">
-                                                                    <tr>
-                                                                        <th>Sr. No. </th>
-                                                                        <th>Fee Heads </th>
-                                                                        <th>Applicable Amount </th>
-                                                                        <th>Paid Amount </th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr id="itemPlaceholder" runat="server" />
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </LayoutTemplate>
-                                                <ItemTemplate>
-                                                    <tr>
-                                                        <td>
-                                                            <asp:Label ID="lblFeeHeadSrNo" runat="server" Text='<%# Eval("SRNO") %>' Visible="false" />
-                                                            <%# Container.DataItemIndex + 1%></td>
-                                                        <td><%# Eval("FEE_LONGNAME")%>
-                                                            <asp:HiddenField ID="hdnfld_FEE_LONGNAME" runat="server" Value='<%# Eval("FEE_LONGNAME")%>' />
-                                                            <asp:HiddenField ID="hfFee_hd" runat="server" Value='<%# Eval("FEE_HEAD")%>' />
-                                                        </td>
-                                                        <td>
-                                                            <asp:Label ID="lblTotaldemandamt" runat="server" Text='<%# Eval("total_demand") %>' />
-                                                            <%-- <%# Eval("total_demand")%>--%></td>
-                                                        <td>
-                                                            <asp:Label ID="lblTotaldcramt" runat="server" Text='<%# Eval("total_dcr") %>' />
-                                                            <%-- <%# Eval("total_dcr")%>--%></td>
+                                                    </LayoutTemplate>
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td>
+                                                                <asp:Label ID="lblFeeHeadSrNo" runat="server" Text='<%# Eval("SRNO") %>' Visible="false" />
+                                                                <%# Container.DataItemIndex + 1%></td>
+                                                            <td><%# Eval("FEE_LONGNAME")%>
+                                                                <asp:HiddenField ID="hdnfld_FEE_LONGNAME" runat="server" Value='<%# Eval("FEE_LONGNAME")%>' />
+                                                                <asp:HiddenField ID="hfFee_hd" runat="server" Value='<%# Eval("FEE_HEAD")%>' />
+                                                            </td>
+                                                            <td>
+                                                                <asp:Label ID="lblTotaldemandamt" runat="server" Text='<%# Eval("total_demand") %>' />
+                                                                <%-- <%# Eval("total_demand")%>--%></td>
+                                                            <td>
+                                                                <asp:Label ID="lblTotaldcramt" runat="server" Text='<%# Eval("total_dcr") %>' />
+                                                                <%-- <%# Eval("total_dcr")%>--%></td>
 
-                                                    </tr>
-                                                </ItemTemplate>
-                                            </asp:ListView>
+                                                        </tr>
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </asp:Panel>
                                         </div>
                                     </div>
 
@@ -417,11 +419,11 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-md-6 col-12">
                                             <ul class="list-group list-group-unbordered">
-                                                <li class="list-group-item" id="divparnote" style="color:red" runat="server" visible="false"><b>Note :</b>
+                                                <li class="list-group-item" id="divparnote" style="color: red" runat="server" visible="false"><b>Note :</b>
                                                     <a class="sub-label">
                                                         <asp:Label ID="lblnote" runat="server" Font-Bold="True" ForeColor="red"> Partial Payment option is Available</asp:Label></a>
                                                 </li>
-                                                 <li class="list-group-item" id="divval" runat="server" visible="false">
+                                                <li class="list-group-item" id="divval" runat="server" visible="false">
                                                     <a class="sub-label" style="color: red">
                                                         <asp:Label ID="lblval" runat="server" Font-Bold="True" ForeColor="Red"></asp:Label></a>
                                                 </li>
@@ -429,22 +431,23 @@
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12">
                                             <%--<ul class="list-group list-group-unbordered">--%>
-                                                <div class="list-group-item" style="color:blue" id="divpartpay" runat="server" visible="false"><b>Amount to be Paid :</b>
-                                                    <a class="sub-label">
-                                                        <%--<asp:Label ID="Label3" runat="server" Font-Bold="True" Style="color: green"></asp:Label>--%>
-                                                        <asp:TextBox ID="txtPartAmount" runat="server" CssClass="form-control" Font-Bold="true" MaxLength="9" OnTextChanged="lblAmount_TextChanged" AutoPostBack="true" Enabled="false" autocomplete="off"></asp:TextBox>
-                                                        <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtPartAmount" ValidChars="1234567890." />
-                                                        <asp:HiddenField ID="HiddenField1" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField2" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField3" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField4" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField5" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField6" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField7" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField8" runat="server" />
-                                                        <asp:HiddenField ID="HiddenField9" runat="server" />
-                                                    </a>
-                                                </div>
+                                            <div class="list-group-item" style="color: blue" id="divpartpay" runat="server" visible="false">
+                                                <b>Amount to be Paid :</b>
+                                                <a class="sub-label">
+                                                    <%--<asp:Label ID="Label3" runat="server" Font-Bold="True" Style="color: green"></asp:Label>--%>
+                                                    <asp:TextBox ID="txtPartAmount" runat="server" CssClass="form-control" Font-Bold="true" MaxLength="9" OnTextChanged="lblAmount_TextChanged" AutoPostBack="true" Enabled="false" autocomplete="off"></asp:TextBox>
+                                                    <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtPartAmount" ValidChars="1234567890." />
+                                                    <asp:HiddenField ID="HiddenField1" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField2" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField3" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField4" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField5" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField6" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField7" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField8" runat="server" />
+                                                    <asp:HiddenField ID="HiddenField9" runat="server" />
+                                                </a>
+                                            </div>
                                             <%--</ul>--%>
                                         </div>
 
@@ -1086,9 +1089,6 @@
         return true;
     }
 
-
-
-
     function Validate() {
 
         debugger
@@ -1203,11 +1203,6 @@
 
             }
         }
-
-
-
-
-
     </script>
 
 </asp:Content>

@@ -140,7 +140,8 @@
                                                     <div class="form-group col-lg-12 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
-                                                            <label>Exam Type</label>
+                                                            <%--<label>Exam Type</label>--%>
+                                                            <asp:Label ID="lblDYddlExamType" runat="server" Font-Bold="true"></asp:Label>
                                                         </div>
 
                                                         <asp:DropDownList ID="ddlReceiptType" AppendDataBoundItems="true" runat="server" OnSelectedIndexChanged="ddlReceiptType_SelectedIndexChanged"
@@ -164,7 +165,8 @@
                                                     <div class="form-group col-lg-12 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
-                                                            <label>Last Date For Fees</label>
+                                                            <%--<label>Last Date For Fees</label>--%>
+                                                            <asp:Label ID="lblDYDtLastDateForFees" runat="server" Font-Bold="true"></asp:Label>
                                                         </div>
                                                         <div class="input-group">
                                                             <div class="input-group-addon">
@@ -189,8 +191,8 @@
                                                     <div class="form-group col-lg-12 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
-                                                            <label>Degree</label>
-                                                            <%--<asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true"></asp:Label>--%>
+                                                            <%--<label>Degree</label>--%>
+                                                            <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true"></asp:Label>
                                                         </div>
                                                         <div class="well checkbox-list-box">
                                                             <%--style="max-height: 100px; overflow: auto;"--%>
@@ -227,8 +229,8 @@
                                                 <div class="label-dynamic">
 
                                                     <sup>*</sup>
-                                                    <label>Semester</label>
-                                                    <%--<asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>--%>
+                                                    <%--<label>Semester</label>--%>
+                                                    <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
 
                                                 </div>
 
