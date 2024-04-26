@@ -384,15 +384,7 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
             //ddlSlotType.Items.Add(new ListItem("Please Select", "0"));
             ddlSlotType.SelectedIndex = -1;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            DateTime StartDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.START_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
-=======
             DateTime StartDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(DATETIME,A.START_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
->>>>>>> c43ceca7 ([ENHANCEMENT][56047][TIMETABLEREPORTFACULTY])
-=======
-            DateTime StartDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(DATETIME,A.START_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
->>>>>>> c43ceca7 ([ENHANCEMENT][56047][TIMETABLEREPORTFACULTY])
             DateTime EndDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.END_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
             divDateDetails.Visible = true;
             lblTitleDate.Text = "Selected Session Start Date : " + StartDate.ToShortDateString() + " End Date : " + EndDate.ToShortDateString();
@@ -916,6 +908,11 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
         Response.End();
     }
 
+
+
+
+
+
     protected void btnRoomWiseReport_Click(object sender, EventArgs e)
     {
         ShowReportRoomWise("Timetable_Report", "rptAcadRoomWiseReport.rpt");
@@ -1029,6 +1026,8 @@ public partial class ACADEMIC_TIMETABLE_TimeTableReport_New : System.Web.UI.Page
             throw;
         }
     }
+
+
 
     protected void ddlFloor_SelectedIndexChanged(object sender, EventArgs e)
     {

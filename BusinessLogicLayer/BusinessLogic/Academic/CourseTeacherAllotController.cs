@@ -775,24 +775,16 @@ namespace IITMS
                     }
                     return ds;
                 }
-<<<<<<< HEAD
                 // Updated  By Jay T. On dated 27032024 (TkNo.55317)
                 public DataSet GetFacultyNotTagToCourse(int Sessionno)
-=======
-                public DataSet GetFacultyNotTagToCourse()
->>>>>>> eb55f393 ([ENHANCEMENT] [54221] [TEACHER NOT TAGGED])
                 {
 
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
-<<<<<<< HEAD
                         SqlParameter[] objParams = new SqlParameter[1];
                         objParams[0] = new SqlParameter("@P_SESSIONID", Sessionno);
-=======
-                        SqlParameter[] objParams = new SqlParameter[0];
->>>>>>> eb55f393 ([ENHANCEMENT] [54221] [TEACHER NOT TAGGED])
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_FACULTY_NOT_TAG_LIST", objParams);
                     }
                     catch (Exception ex)
@@ -801,7 +793,7 @@ namespace IITMS
                     }
                     return ds;
                 }
-<<<<<<< HEAD
+
                 // Added By Jay T. On dated 27032024 (TkNo.55317)
                 public DataSet GetBranchNotYetRegister(int Sessionno)
                 {
@@ -820,8 +812,7 @@ namespace IITMS
                     }
                     return ds;
                 }
-=======
->>>>>>> eb55f393 ([ENHANCEMENT] [54221] [TEACHER NOT TAGGED])
+
 
             }//end of Class
         }

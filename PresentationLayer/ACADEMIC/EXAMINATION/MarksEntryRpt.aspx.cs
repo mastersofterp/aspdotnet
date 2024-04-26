@@ -81,14 +81,14 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
     {
         try
         {
-            
+
             if (Session["usertype"].ToString().Equals("1"))
             {
 
                 objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
             }
             else
-            {                
+            {
                 // ADDED BY SHUBHAM FOR FACULTY LOGIN 
                 string deptno = objCommon.LookUp("USER_ACC", "UA_DEPTNO", "UA_NO=" + Convert.ToInt32(Session["userno"]));
                 objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_SCHEME_MAPPING  SC INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON CDB.DEGREENO=SC.DEGREENO AND CDB.BRANCHNO=SC.BRANCHNO AND CDB.COLLEGE_ID=SC.COLLEGE_ID", "COSCHNO", "COL_SCHEME_NAME", "SC.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SC.COLLEGE_ID > 0 AND SC.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND CDB.DEPTNO IN (" + deptno + ")", "SC.COLLEGE_ID DESC");
@@ -162,6 +162,11 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 ddlExam.Items.Clear();
                 ddlExam.Items.Add(new ListItem("Please Select", "0"));
             }
+            ddlSession.SelectedIndex = 0;
+            ddlsemester.SelectedIndex = 0;
+            ddlSubjectType.SelectedIndex = 0;
+            ddlCourse.SelectedIndex = 0;
+            ddlExam.SelectedIndex = 0;
         }
         catch (Exception ex)
         {
@@ -192,6 +197,11 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 ddlExam.Items.Clear();
                 ddlExam.Items.Add(new ListItem("Please Select", "0"));
             }
+
+            ddlsemester.SelectedIndex = 0;
+            ddlSubjectType.SelectedIndex = 0;
+            ddlCourse.SelectedIndex = 0;
+            ddlExam.SelectedIndex = 0;
         }
         catch (Exception ex)
         {
@@ -220,6 +230,10 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 ddlExam.Items.Clear();
                 ddlExam.Items.Add(new ListItem("Please Select", "0"));
             }
+
+            ddlSubjectType.SelectedIndex = 0;
+            ddlCourse.SelectedIndex = 0;
+            ddlExam.SelectedIndex = 0;
         }
         catch (Exception ex)
         {
@@ -256,6 +270,9 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 ddlExam.Items.Clear();
                 ddlExam.Items.Add(new ListItem("Please Select", "0"));
             }
+
+            ddlCourse.SelectedIndex = 0;
+            ddlExam.SelectedIndex = 0;
         }
         catch (Exception ex)
         {
@@ -282,7 +299,7 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
             }
             else
             {
-                UA_NO = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue)));
+                UA_NO = Convert.ToInt32(Session["userno"].ToString());
                 ShowReport("SubjectWiseMarksEntryReport", "rptMarksCoursewise.rpt", UA_NO);
             }
 
@@ -303,6 +320,7 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
         }
 
     }
+
     protected void btnWeightarpt_Click(object sender, EventArgs e)
     {
         int UA_NO;
@@ -317,7 +335,7 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
             }
             else
             {
-                UA_NO = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "DISTINCT ISNULL(UA_NO,0)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SCHEME_NO=" + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue)));
+                UA_NO = Convert.ToInt32(Session["userno"].ToString());
                 ShowReportWeightarpt("MarksListReport", "rpt_CIA_Report_Weightage_Wise.rpt", UA_NO);
             }
         }
@@ -336,11 +354,11 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
             }
         }
     }
+
     protected void btnCancel2_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
     }
-
 
     private void ShowReport(string reportTitle, string rptFileName, int UA_NO)
     {
@@ -388,11 +406,7 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
 
     protected void BtnExcelReport_Click(object sender, EventArgs e)
     {
-<<<<<<< HEAD
         try
-=======
-        try 
->>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
         {
             GridView dg = new GridView();
             string SP_Name = "PKG_GET_INTERNAL_MARK_DETAILS_NOT_DONE_DATA";
@@ -422,20 +436,12 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                     objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
                 }
             }
-<<<<<<< HEAD
             else
             {
                 objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
             }
         }
         catch (Exception ex)
-=======
-            else 
-            {
-                objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
-            }
-        }catch(Exception ex)
->>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUCommon.ShowError(Page, "BtnExcelReport_Click() --> " + ex.Message + " " + ex.StackTrace);
@@ -443,7 +449,6 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-<<<<<<< HEAD
 
 
     // added by shubham for excel data on 20-02-2024
@@ -671,6 +676,4 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-=======
->>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
 }

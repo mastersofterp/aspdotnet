@@ -43,10 +43,9 @@
                                                 <asp:ListItem Value="2">Teacher Student not Alloted</asp:ListItem>
                                                 <asp:ListItem Value="3">Course Teacher Alloted</asp:ListItem>
                                                 <asp:ListItem Value="4">Teacher Not Tagged</asp:ListItem>
-<<<<<<< HEAD
+
                                                 <asp:ListItem Value="5">Programs/Branches Not Yet Registered</asp:ListItem>
-=======
->>>>>>> eb55f393 ([ENHANCEMENT] [54221] [TEACHER NOT TAGGED])
+
                                             </asp:DropDownList>
                                         </div>
                                     </div>

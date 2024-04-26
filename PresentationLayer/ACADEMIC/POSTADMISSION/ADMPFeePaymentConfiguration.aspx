@@ -21,7 +21,7 @@
             //display the remaining characters
             var modid = control.getAttribute("id") + "_remain";
             if (document.getElementById(modid) != null) {
-            document.getElementById(modid).innerHTML = mLength - control.value.length;
+                document.getElementById(modid).innerHTML = mLength - control.value.length;
             }
         }
 
@@ -29,35 +29,24 @@
  
  
 
-<<<<<<< HEAD
-<<<<<<< HEAD
       <script>
-=======
+          function SetParticipation(val) {
 
+              $('#rdActive').prop('checked', val);
 
+          }
+          function validate() {
+              $('#hfdActive').val($('#rdActive').prop('checked'));
+          }
 
-    <script>
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-      <script>
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-        function SetParticipation(val) {
-          
-            $('#rdActive').prop('checked', val);
-
-        }
-        function validate() {
-            $('#hfdActive').val($('#rdActive').prop('checked'));
-        }
-
-        var prm = Sys.WebForms.PageRequestManager.getInstance();
-        prm.add_endRequest(function () {
-            $(function () {
-                $('#btnSubmit').click(function () {
-                    validate();
-                });
-            });
-        });
+          var prm = Sys.WebForms.PageRequestManager.getInstance();
+          prm.add_endRequest(function () {
+              $(function () {
+                  $('#btnSubmit').click(function () {
+                      validate();
+                  });
+              });
+          });
     </script>
    
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
@@ -154,15 +143,7 @@
                                             <sup>* </sup>
                                             <label>Office Report  Start Date </label>
                                         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
                                         <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"   ></asp:TextBox>
-=======
-                                        <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"></asp:TextBox>
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                                        <asp:TextBox ID="txtOfficeVisitStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitStartDate_TextChanged"   ></asp:TextBox>
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtOfficeVisitStartDate"
                                             Display="None" ErrorMessage="Please Select Office Report Start Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -173,20 +154,8 @@
                                             <sup>* </sup>
                                             <label>Office Report End Date</label>
                                         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
-=======
-                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged"></asp:TextBox>
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                                        <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
                                         <asp:TextBox ID="txtOfficeVisitEndDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" 
                                             OnTextChanged="txtOfficeVisitEndDate_TextChanged" ></asp:TextBox>
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtOfficeVisitEndDate"
                                             Display="None" ErrorMessage="Please Select Office Report End Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
@@ -202,15 +171,7 @@
                                         </div>
                                         <asp:TextBox ID="txtStartDate" runat="server" type="date" CssClass="form-control" AutoPostBack="true" OnTextChanged="txtStartDate_TextChanged"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rfvtxtStartDate" runat="server" ControlToValidate="txtStartDate"
-<<<<<<< HEAD
-<<<<<<< HEAD
                                             Display="None" ErrorMessage="Please Select Payment Start Date" SetFocusOnError="True"
-=======
-                                            Display="None" ErrorMessage="Please Select Payment  Start Date" SetFocusOnError="True"
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                                            Display="None" ErrorMessage="Please Select Payment Start Date" SetFocusOnError="True"
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
 
                                     </div>
@@ -242,15 +203,6 @@
                                             Display="None" ErrorMessage="Please Select Provisional Admission Offer Valid Date" SetFocusOnError="True"
                                             ValidationGroup="Academic" InitialValue=""></asp:RequiredFieldValidator>
                                     </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -288,17 +240,8 @@
                                             <label>Status </label>
                                         </div>
                                         <div class="switch form-inline">
-<<<<<<< HEAD
-<<<<<<< HEAD
                                             <input type="checkbox" id="rdActive" name="Started" checked /> 
 
-=======
-                                            <input type="checkbox" id="rdActive" name="Started" checked />
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                                            <input type="checkbox" id="rdActive" name="Started" checked /> 
-
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                             <label data-on="Started" data-off="Stopped" for="rdActive"></label>
                                         </div>
                                     </div>
@@ -333,18 +276,8 @@
                                                         <th>Program Type</th>
                                                         <th>Degree</th>
                                                         <th>Branch</th>
-<<<<<<< HEAD
-<<<<<<< HEAD
                                                         <th>Payment Start Date</th>
                                                         <th>Payment End Date</th>
-=======
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                                                        <th>Payment Start Date</th>
-                                                        <th>Payment End Date</th>
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
                                                         <th>Payment Category</th>
                                                         <th>Amount / Percentage</th>
                                                         <th>Status</th>
@@ -451,18 +384,18 @@
         function ValidateDate() {
             $('#<%= txtStartDate.ClientID %>').click(function () {
                 var endDate = $('#<%= txtOfficeVisitEndDate.ClientID %>').val();
-                 var startDate = $(this).val();
+                var startDate = $(this).val();
 
-                 if (endDate === '') {
-                     alert('Please Select Office Report End Date First');
-                     $('#<%= txtOfficeVisitEndDate.ClientID %>').focus();
-                    $(this).val(''); // Clear the value of Start Date textbox
-                }
-             });
+                if (endDate === '') {
+                    alert('Please Select Office Report End Date First');
+                    $('#<%= txtOfficeVisitEndDate.ClientID %>').focus();
+                     $(this).val(''); // Clear the value of Start Date textbox
+                 }
+            });
 
 
 
-            $('#<%= txtOfficeVisitEndDate.ClientID %>').click(function () {
+             $('#<%= txtOfficeVisitEndDate.ClientID %>').click(function () {
                 var startDate = $('#<%= txtOfficeVisitStartDate.ClientID %>').val();
 
                 if (startDate === '') {
@@ -479,15 +412,7 @@
                 if (startDate === '') {
                     alert('Please Select Payment Start Date first');
                     $('#<%= txtStartDate.ClientID %>').focus();
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    $(this).val(''); 
-=======
-                    $(this).val(''); // Clear the value of End Date textbox
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                    $(this).val(''); 
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
+                    $(this).val('');
                 }
             });
 
@@ -499,7 +424,7 @@
                 if (endDate === '') {
                     alert('Please Select Payment End Date first');
                     $('#<%= txtEndDate.ClientID %>').focus();
-                    $(this).val(''); 
+                    $(this).val('');
                 }
             });
         }

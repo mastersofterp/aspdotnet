@@ -4,8 +4,8 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <%--===== Data Table Script added by gaurav =====--%>
-    <link href="<%=Page.ResolveClientUrl('../plugins/multi-select/bootstrap-multiselect.css')%>" rel="stylesheet" />
-    <script src="<%=Page.ResolveClientUrl('../plugins/multi-select/bootstrap-multiselect.js')%>"></script>
+    <link href="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.js")%>"></script>
     <style>
         .dataTables_scrollHeadInner {
             width: max-content !important;
@@ -196,10 +196,6 @@
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
                                     <div class="form-group col-lg-12 col-md-12 col-12">
                                         <asp:RadioButtonList ID="rdbReports" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" 
                                             OnSelectedIndexChanged="rdbReports_SelectedIndexChanged" AutoPostBack="true" CssClass="col-12 radio-button-list-style">
@@ -209,19 +205,6 @@
                                             <asp:ListItem Value="4">&nbsp;Class Attendance Entry Report Of Faculty&nbsp;</asp:ListItem>
                                         <%--  Added By jay T on dated 09-04-2024 as per Tno:-  --%>
                                              <asp:ListItem Value="5">&nbsp;Attendance Report For Global Elective  &nbsp;&nbsp;&nbsp;</asp:ListItem>
-<<<<<<< HEAD
-=======
-                                    <div class="form-group col-lg-12 col-md-12 col-12" id="divAdmin" runat="server" visible="false">
-                                        <asp:RadioButtonList ID="rdbReports" runat="server" RepeatDirection="Horizontal" RepeatColumns="4" OnSelectedIndexChanged="rdbReports_SelectedIndexChanged" AutoPostBack="true">
-                                            <asp:ListItem Selected="True" Value="1">&nbsp;Attendance Tracker&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="2">&nbsp;Attendance Marked & Not-Marked &nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="3">&nbsp;Attendance register & Consolidated Attendance&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="4">&nbsp;Class Attendance Entry Report Of Faculty&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <%--  Added By jay T on dated 09-04-2024 as per Tno:-  --%>
-                                            <%-- <asp:ListItem Value="5">&nbsp;Attendance Report For Global Elective Of HOD &nbsp;&nbsp;&nbsp;</asp:ListItem>--%>
->>>>>>> e66642cc ([NEWREQUIRMENT] [57349] [Faculty Attendance Not Fielled])
-=======
->>>>>>> 62ad8706 ([ENHANCEMENT] [57349] [Global Elective Course Attendance])
                                         </asp:RadioButtonList>
                                         <%--Attendance register & Consolidated Attendance--%>
                                     </div>
@@ -229,7 +212,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="dvSession" visible="false">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
-                                            <asp:Label runat="server" Font-Bold="true" >Session</asp:Label>
+                                            <asp:Label ID="Label1" runat="server" Font-Bold="true" >Session</asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlSessionn" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="1" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -375,7 +358,7 @@
                                         </div>
                                         <div class="input-group">
                                             <div class="input-group-addon" id="txtStartDate1" runat="server">
-                                                <i class="fa fa-calendar" runat="server"></i>
+                                                <i id="I1" class="fa fa-calendar" runat="server"></i>
                                             </div>
                                             <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="submit" TabIndex="6" CssClass="form-control" placeholder="DD/MM/YYYY" />
                                             <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy"
@@ -402,7 +385,7 @@
                                         </div>
                                         <div class="input-group">
                                             <div class="input-group-addon" id="txtEndDate1" runat="server">
-                                                <i class="fa fa-calendar" runat="server"></i>
+                                                <i id="I2" class="fa fa-calendar" runat="server"></i>
                                             </div>
                                             <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" TabIndex="7" CssClass="form-control" placeholder="DD/MM/YYYY" />
                                             <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"

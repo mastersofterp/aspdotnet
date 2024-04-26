@@ -206,10 +206,9 @@ namespace IITMS
                 /// Added by SP
                 /// </summary>
                 /// <returns></returns>
-<<<<<<< HEAD
 
-                public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName, string section)
-=======
+
+
                 //public DataSet GetStudentConfigData()
                 //{
                 //    DataSet ds = null;
@@ -228,7 +227,7 @@ namespace IITMS
                 //    return ds;
                 //}
                 public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName)
->>>>>>> d663d3e5 ([BUGFIX][51653][Changes for revert section pathces])
+
                 {
                     DataSet ds = null;
                     try

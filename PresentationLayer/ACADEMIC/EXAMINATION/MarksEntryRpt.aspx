@@ -34,15 +34,11 @@
                                                 <sup>* </sup>
                                                 <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlcollege" TabIndex="2" runat="server" CssClass="form-control" AppendDataBoundItems="true" ToolTip="Please Select Institute" data-select2-enable="true"
+                                            <asp:DropDownList ID="ddlcollege" TabIndex="1" runat="server" CssClass="form-control" AppendDataBoundItems="true" ToolTip="Please Select Institute" data-select2-enable="true"
                                                 AutoPostBack="True" OnSelectedIndexChanged="ddlcollege_SelectedIndexChanged">
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvcollege" runat="server" ControlToValidate="ddlcollege"
-<<<<<<< HEAD
                                                 Display="None" ErrorMessage="Please Select College & Scheme." InitialValue="0" SetFocusOnError="True"
-=======
-                                                Display="None" ErrorMessage="Please Select College Scheme." InitialValue="0" SetFocusOnError="True"
->>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
                                                 ValidationGroup="show"></asp:RequiredFieldValidator>
                                         </div>
                                         <div class="col-lg-3 col-md-6 col-12 form-group">
@@ -67,7 +63,7 @@
                                                 <sup>* </sup>
                                                 <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlsemester" TabIndex="6" runat="server" CssClass="form-control" AppendDataBoundItems="true"
+                                            <asp:DropDownList ID="ddlsemester" TabIndex="1" runat="server" CssClass="form-control" AppendDataBoundItems="true"
                                                 AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlsemester_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
@@ -85,7 +81,7 @@
                                             </div>
                                             <asp:DropDownList ID="ddlSubjectType" runat="server" AppendDataBoundItems="True"
                                                 AutoPostBack="True" data-select2-enable="true"
-                                                TabIndex="7" CssClass="form-control" OnSelectedIndexChanged="ddlSubjectType_SelectedIndexChanged">
+                                                TabIndex="1" CssClass="form-control" OnSelectedIndexChanged="ddlSubjectType_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvSubjectType" runat="server" ControlToValidate="ddlSubjectType"
@@ -99,7 +95,7 @@
                                                 <asp:Label ID="lblDYddlCourse" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
                                             <asp:DropDownList ID="ddlCourse" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
-                                                CssClass="form-control" AutoPostBack="True" TabIndex="8">
+                                                CssClass="form-control" AutoPostBack="True" TabIndex="1">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvCourse" runat="server" ControlToValidate="ddlCourse"
@@ -112,7 +108,7 @@
                                                 <asp:Label ID="lblDYddlExam" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
                                             <asp:DropDownList ID="ddlExam" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
-                                                CssClass="form-control" TabIndex="9" AutoPostBack="True">
+                                                CssClass="form-control" TabIndex="1" AutoPostBack="True">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <%--<asp:RequiredFieldValidator ID="rfvExam" runat="server" ControlToValidate="ddlExam"
@@ -122,7 +118,6 @@
                                     </div>
                                 </div>
                                 <div class="col-12 btn-footer">
-<<<<<<< HEAD
                                     <div class="col-12 btn-footer mt-4">
                                         <asp:Button ID="btnInMrkPDF" TabIndex="1" runat="server" ValidationGroup="show"
                                             Text=" Internal Mark In PDF(Course Wise)" CssClass="btn btn-info" OnClick="btnInMrkPDF_Click" Visible="true" />
@@ -144,16 +139,6 @@
                                         <asp:Button ID="btnCancel2" runat="server" TabIndex="1" OnClick="btnCancel2_Click"
                                             Text="Cancel" CssClass="btn btn-warning" />
                                     </div>
-=======
-                                    <asp:Button ID="btnInMrkPDF" TabIndex="1" runat="server" ValidationGroup="show"
-                                        Text=" Internal Mark In PDF(Course Wise)" CssClass="btn btn-info" OnClick="btnInMrkPDF_Click" Visible="true" />
-                                    <asp:Button ID="btnWeightarpt" TabIndex="1" runat="server" ValidationGroup="show"
-                                        Text="Internal Weightagewise Report" CssClass="btn btn-info" OnClick="btnWeightarpt_Click" Visible="true" />
-                                    <asp:Button ID="BtnExcelReport" TabIndex="1" runat="server" Text="Internal Mark Details" 
-                                        CssClass="btn btn-info" OnClick="BtnExcelReport_Click" ValidationGroup="Excel"  />
-                                    <asp:Button ID="btnCancel2" runat="server" TabIndex="1" OnClick="btnCancel2_Click"
-                                        Text="Cancel" CssClass="btn btn-warning" />
->>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary1" ValidationGroup="show" DisplayMode="List"
                                         ShowSummary="false" ShowMessageBox="true" />
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary2" ValidationGroup="Excel" DisplayMode="List"
@@ -168,14 +153,10 @@
             </div>
         </ContentTemplate>
         <Triggers>
-<<<<<<< HEAD
             <asp:PostBackTrigger ControlID="btnIntExcel" />
             <asp:PostBackTrigger ControlID="BtnExcelReport" />
             <asp:PostBackTrigger ControlID="btnIntExcel" />
             <asp:PostBackTrigger ControlID="BtnExcelCW" />
-=======
-            <asp:PostBackTrigger ControlID="BtnExcelReport" />
->>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>

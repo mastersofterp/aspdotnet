@@ -1105,6 +1105,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
 
     protected void btnSndMessg_Click(object sender, EventArgs e)
     {
+        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
         string folderPath = Server.MapPath("~/TempDocument/");
         //Check whether Directory (Folder) exists.
         if (!Directory.Exists(folderPath))
@@ -1176,7 +1177,6 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
             int count = 0;
             foreach (ListViewDataItem dataitem in lvEmployee.Items)
             {
-
                 CheckBox cbRow = dataitem.FindControl("chkSelect") as CheckBox;
                 if (cbRow.Checked == true)
                 {
@@ -1204,7 +1204,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                     {
                         CheckBox chek = item.FindControl("chkSelect") as CheckBox;
                         Label lblEmail = item.FindControl("lblEmail") as Label;
-
+                        int ua_no = Convert.ToInt32(chek.ToolTip.ToString());
                         if (chek.Checked)
                         {
                             if (lblEmail.Text != string.Empty)
@@ -1251,6 +1251,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                         HiddenItemParents();
                                         HiddenItemEmp();
                                         cancel();
+                                        //Added By Sakshi M on 20012024 to maintain log 
+                                        CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Employee Section", "", Convert.ToInt32(Session["usertype"]), ua_no, 1, email, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+
                                     }
                                     else
                                     {
@@ -1331,6 +1334,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                         try
                         {
                             CheckBox chek3 = items.FindControl("chkSelect3") as CheckBox;
+                            int idno = Convert.ToInt32(chek3.ToolTip.ToString());
                             Label lblEmailid3 = items.FindControl("lblEmailid3") as Label;
                             Label lblPaid = items.FindControl("lblPaid") as Label;
                             Label lblNotpaid = items.FindControl("lblNotpaid") as Label;
@@ -1398,6 +1402,8 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemParents();
                                             HiddenItemEmp();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid3.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                             // return;
                                         }
                                         else
@@ -1462,6 +1468,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                         try
                         {
                             CheckBox chek2 = items.FindControl("chkSelect2") as CheckBox;
+                            int idno = Convert.ToInt32(chek2.ToolTip.ToString());
                             Label lblEmailid1 = items.FindControl("lblEmailid1") as Label;
                             Label lblduedate = items.FindControl("lblduedate") as Label;
                             Label lblInstallmentno = items.FindControl("lblInstallmentno") as Label;
@@ -1526,6 +1533,8 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemParents();
                                             HiddenItemEmp();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Installment Wise dues not paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid1.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                             // return;
                                         }
                                         else
@@ -1608,7 +1617,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                         {
                             CheckBox chek1 = items.FindControl("chkSelect1") as CheckBox;
                             Label lblEmailid = items.FindControl("lblEmailid") as Label;
-
+                            int idno = Convert.ToInt32(chek1.ToolTip.ToString());
                             if (chek1.Checked)
                             {
                                 if (lblEmailid.Text != string.Empty)
@@ -1651,7 +1660,8 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemParents();
                                             HiddenItemEmp();
                                             cancel();
-                                            // return;
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Student (Normal)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
@@ -1731,6 +1741,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                         try
                         {
                             CheckBox chek3 = items.FindControl("chkSelect3") as CheckBox;
+                            int idno = Convert.ToInt32(chek3.ToolTip.ToString());
                             Label lblEmailid3 = items.FindControl("lblEmailid3") as Label;
                             Label lblPaid = items.FindControl("lblPaid") as Label;
                             Label lblNotpaid = items.FindControl("lblNotpaid") as Label;
@@ -1799,7 +1810,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemParents();
                                             HiddenItemEmp();
                                             cancel();
-
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parent (Fees not Paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid3.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
+                                            // return;
                                             // return;
                                         }
                                         else
@@ -1864,6 +1877,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                         try
                         {
                             CheckBox chek2 = items.FindControl("chkSelect2") as CheckBox;
+                            int idno = Convert.ToInt32(chek2.ToolTip.ToString());
                             Label lblEmailid1 = items.FindControl("lblEmailid1") as Label;
                             Label lblduedate = items.FindControl("lblduedate") as Label;
                             Label lblInstallmentno = items.FindControl("lblInstallmentno") as Label;
@@ -1929,6 +1943,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemEmp();
                                             cancel();
                                             // return;
+                                            // return;
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parents (Installment Wise dues not paid)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid1.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
@@ -2007,7 +2024,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                         {
                             CheckBox chek1 = items.FindControl("chkSelect1") as CheckBox;
                             Label lblEmailid = items.FindControl("lblEmailid") as Label;
-
+                            int idno = Convert.ToInt32(chek1.ToolTip.ToString());
                             if (chek1.Checked)
                             {
                                 if (lblEmailid.Text != string.Empty)
@@ -2051,6 +2068,8 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemEmp();
                                             cancel();
                                             // return;
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parents (Normal)", "", Convert.ToInt32(Session["usertype"]), idno, 1, lblEmailid.Text, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
@@ -2094,7 +2113,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
     //Added By JAY TAKALKHEDE 27/07/2023  For SMS
     protected void btnSndSms_Click(object sender, EventArgs e)
     {
-
+        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
         int MSGTYPE = 0;
         #region SMS For RCPIPER
         if (Convert.ToInt32(Session["OrgId"]) == 6)
@@ -2137,7 +2156,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                             {
                                 CheckBox chek = item.FindControl("chkSelect1") as CheckBox;
                                 Label lblStudMobile = item.FindControl("lblStudmobile") as Label;
-
+                                int idno = Convert.ToInt32(chek.ToolTip.ToString());
                                 if (chek.Checked)
                                 {
                                     string ToMobileNo = objCommon.LookUp("ACD_STUDENT", "STUDENTMOBILE", "IDNO=" + chek.ToolTip);
@@ -2177,6 +2196,8 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemParents();
                                             HiddenItemEmp();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Sem Promotion Admission Form (Student)", lblStudMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
@@ -2253,7 +2274,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                             {
                                 CheckBox chek = item.FindControl("chkSelect1") as CheckBox;
                                 Label lblParentsMobile = item.FindControl("lblStudmobile") as Label;
-
+                                int idno = Convert.ToInt32(chek.ToolTip.ToString());
                                 if (chek.Checked)
                                 {
                                     string ToMobileNo = objCommon.LookUp("ACD_STUDENT", "FATHERMOBILE", "IDNO=" + chek.ToolTip);
@@ -2293,6 +2314,8 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemParents();
                                             HiddenItemEmp();
                                             cancel();
+                                            //Added By Sakshi M on 20012024 to maintain log 
+                                            CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Sem Promotion Admission Form (Parent)", lblParentsMobile.Text.Trim(), Convert.ToInt32(Session["usertype"]), idno, 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                         }
                                         else
                                         {
@@ -3428,7 +3451,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                 SmsURL = ds.Tables[0].Rows[0]["COMPANY_SMS_URL"].ToString();
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    WebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("http://" + SmsURL + "?username=" + user + "&msg_token=" + Password + "&sender_id=" + sender + "&message=" + Msg + "&mobile=" + MobileNumber));
+                    WebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("https://" + SmsURL + "?username=" + user + "&msg_token=" + Password + "&sender_id=" + sender + "&message=" + Msg + "&mobile=" + MobileNumber));
                     WebResponse response = request.GetResponse();
                     StreamReader reader = new StreamReader(response.GetResponseStream());
                     string urlText = reader.ReadToEnd();
@@ -3536,6 +3559,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                         HiddenItemForPm();
                         HiddenItem();
                         HiddenItemSMS();
+                        string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
+                        //Added By Sakshi M on 20012024 to maintain log 
+                        CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Send Attendance (Parent)", ToMobileNo, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 2, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                     }
                     else
                     {
@@ -3637,6 +3663,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                 //txtSubject.Text = string.Empty;
                                 //txtMessageAtdEmail.Text = string.Empty;
                                 //int status = SendMailBYSendgrid(nbody, useremail, subject); for email sending
+                                string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
+                                //Added By Sakshi M on 20012024 to maintain log 
+                                CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Send Attendance (Email)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 1, useremail, IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                                 MailSendStatus += chkBox.ToolTip + ',';
                             }
                             else
@@ -3802,6 +3831,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                             {
                                 WhatsappAtt(studname, mobile, SessionName, Sregno, TClass, TAttendance, TPercentage, message);
                                 MailSendStatus += chkBox.ToolTip + ',';
+                                string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
+                                //Added By Sakshi M on 20012024 to maintain log 
+                                CustomStatus cs = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Send Attendance (WhatsApp)", mobile, Convert.ToInt32(Session["usertype"]), Convert.ToInt32(idno), 3, "", IPADDRESS, Convert.ToInt32(Session["OrgId"]));
                             }
                             else
                             {
@@ -4116,7 +4148,7 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
             uid = objCommon.LookUp("REFF", "SMSSVCID", "");
             password = objCommon.LookUp("REFF", "SMSSVCPWD", "");
             HttpStatusCode result = default(HttpStatusCode);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("http://www.SMSnMMS.co.in/sms.aspx?"));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("https://www.SMSnMMS.co.in/sms.aspx?"));
             request.ContentType = "text/xml; charset=utf-8";
             request.Method = "POST";
             string postDate = "ID=" + uid;   //ghrce4116@gmail.com";
@@ -4247,9 +4279,6 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                     // this.SendSMS(lblParMobile.Text, template, "1707165545797594293");
 
                                     objCommon.DisplayUserMessage(this.updDetained, "SMS Successfully Send To Parent(s)", this.Page);
-<<<<<<< HEAD
-                                    MailSendStatus += lblParMobile.Text;
-=======
                                     HiddenItemForPm();
                                     HiddenItem();
                                     HiddenItemSMS();
@@ -4263,7 +4292,6 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                     ////CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
                                     CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent (Parent)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
 
->>>>>>> caf8f915 ([HOTFIX] [57904] [Send Bulk Email and SMS Fac])
                                 }
                                 else
                                 {
@@ -4438,9 +4466,6 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                 {
                                     this.SendSMS(lblParMobile.Text.Trim(), template, TemplateID);
                                     objCommon.DisplayUserMessage(this.updDetained, "SMS Successfully Send To Parent(s)", this.Page);
-<<<<<<< HEAD
-                                    MailSendStatus += lblParMobile.Text;
-=======
                                     HiddenItemForPm();
                                     HiddenItem();
                                     HiddenItemSMS();
@@ -4450,7 +4475,6 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                     //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Attendance Percentage (Subject Wise)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
                                     CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Attendance Percentage (Subject Wise)", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
 
->>>>>>> caf8f915 ([HOTFIX] [57904] [Send Bulk Email and SMS Fac])
                                 }
                                 else
                                 {
@@ -4500,64 +4524,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
             int count = 0;
             foreach (ListViewDataItem dataitem in lvmarks.Items)
             {
-<<<<<<< HEAD
-                try
-                {
-                    CheckBox chek = item.FindControl("cbRow") as CheckBox;
-                    Label lblParMobile = item.FindControl("lblParMobile") as Label;
-                    Label lblname = item.FindControl("lblname") as Label;
-                    HiddenField hdnidno = item.FindControl("hdnidno") as HiddenField;
-                    HiddenField hdnenroll = item.FindControl("hdnenroll") as HiddenField;
-                    HiddenField hdnsemesterno = item.FindControl("hdnsemesterno") as HiddenField;
-                    HiddenField hdnshortbname = item.FindControl("hdnshortbname") as HiddenField;
-
-                    Label lblIAMarks = item.FindControl("lblIAMarks") as Label;
-
-                    if (chek.Checked)
-                    {
-                        //string message = "Dear Parents, Kindly note the " + ciemark + " marks of your ward " + lblname.Text + ",(" + hdnenroll.Value.ToString() + ")" + "of Sem " + hdnsemesterno.Value.ToString() + "," + lblIAMarks.Text + " , From Registrar - JSS ST University(SJCE), Mysuru.";
-
-                        string message = "Dear Parent, Your Ward \n" + lblname.Text + "," + ddlexam.SelectedItem.Text + " " + "Exam Marks are :\n" + lblIAMarks.Text + "\n From: HOD/" + hdnshortbname.Value + " (SVCE)" + "(*Max Mark:50,Min Pass:25,Absent - A,Copycase - UFM)";
-                        // string message = "Dear Parent, Kindly be reminded that, maintaining 85% attendance in every subject is mandatory. Please advise your ward to maintain above 85% attendance in every subject to avoid losing a year. From: Registrar, SVCE, Sriperumbudur.";
-
-                        if (lblParMobile.Text != string.Empty && lblParMobile.Text.Length == 10)
-                        {
-                            CustomStatus cs = (CustomStatus)excol.INSERTPARENTSMSLOG(Convert.ToInt32(Session["userno"]), message, lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), MSGTYPE);
-                            if (cs.Equals(CustomStatus.RecordSaved))
-                            {
-                                //this.SendSMS(lblParMobile.Text, message);
-
-                                objCommon.DisplayUserMessage(this.updDetained, "SMS Successfully Send To Parent(s)", this.Page);
-                                MailSendStatus += lblParMobile.Text;
-
-                            }
-                            else
-                            {
-                                objCommon.DisplayMessage(this.updDetained, "Error Occured..!!", this.Page);
-                            }
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(this.updDetained, "Sorry..! Didn't found Mobile no. for some Parent(s)", this.Page);
-                            MailSendStatus += lblParMobile.Text;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (Convert.ToBoolean(Session["error"]) == true)
-                        objUCommon.ShowError(Page, "Academic_SendSmstoParents.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
-                    else
-                    {
-                        objCommon.DisplayMessage(this.updDetained, "Server UnAvailable", this.Page);
-
-                    }
-                }
-=======
                 CheckBox cbRow = dataitem.FindControl("cbRow") as CheckBox;
                 if (cbRow.Checked == true)
                     count++;
->>>>>>> caf8f915 ([HOTFIX] [57904] [Send Bulk Email and SMS Fac])
             }
             if (count <= 0)
             {
@@ -4775,12 +4744,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                     SendSMS_today(lblParMobile.Text.Trim(), template, TemplateID);
                                     //  CustomStatus cs = (CustomStatus)excol.INSERTPARENTSMSLOG(Convert.ToInt32(Session["userno"]), message, lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), MSGTYPE);
                                     MailSendStatus += hdnidno1.Value + ',';
-<<<<<<< HEAD
-=======
                                     //Added By Sakshi M on 20012024 to maintain log 
                                     string IPaddress = Session["ipAddress"].ToString();
                                     CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Todays Students Attendance list", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
->>>>>>> caf8f915 ([HOTFIX] [57904] [Send Bulk Email and SMS Fac])
 
                                 }
                                 else
@@ -4962,14 +4928,10 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                     SendSMS_today(lblParMobile.Text.Trim(), template, TemplateID);
                                     CustomStatus cs = (CustomStatus)excol.INSERTPARENTSMSLOG(Convert.ToInt32(Session["userno"]), message, lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), MSGTYPE);
                                     MailSendStatus += hdnidno1.Value + ',';
-<<<<<<< HEAD
-
-=======
                                     //Added By Sakshi M on 20012024 to maintain log 
                                     string IPaddress = Session["ipAddress"].ToString();
                                     //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parent Teacher Meeting", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
                                     CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Parent Teacher Meeting", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno1.Value), 2, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
->>>>>>> caf8f915 ([HOTFIX] [57904] [Send Bulk Email and SMS Fac])
                                 }
                                 else
                                 {
@@ -5137,15 +5099,10 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                         HiddenItemForPm();
                                         HiddenItemSMS();
                                         HiddenItem();
-<<<<<<< HEAD
-                                        HiddenItemEmp();
-
-=======
                                         //Added By Sakshi M on 20012024 to maintain log 
                                         string IPaddress1 = Session["ipAddress"].ToString();
                                         //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress1, Convert.ToInt32(Session["OrgId"]));
                                         CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "First Hour Absent", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress1, Convert.ToInt32(Session["OrgId"]));
->>>>>>> caf8f915 ([HOTFIX] [57904] [Send Bulk Email and SMS Fac])
                                         //  return;
 
                                     }
@@ -5264,13 +5221,10 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                             HiddenItemForPm();
                                             GetStudListAttPer();
                                             TODAYATT();
-<<<<<<< HEAD
-=======
                                             //Added By Sakshi M on 20012024 to maintain log 
                                             // string IPaddress1 = Session["ipAddress"].ToString();
                                             //CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Attendance Percentage (Subject Wise)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress, Convert.ToInt32(Session["OrgId"]));
                                             CustomStatus cs1 = (CustomStatus)INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), " Attendance Percentage (Subject Wise)", "", Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnidno.Value), 1, useremail, IPaddress, Convert.ToInt32(Session["OrgId"]));
->>>>>>> caf8f915 ([HOTFIX] [57904] [Send Bulk Email and SMS Fac])
                                             // return;
                                         }
                                         else
@@ -6840,6 +6794,9 @@ public partial class ACADEMIC_SendSmstoStudents_Faculty : System.Web.UI.Page
                                 {
                                     AisensyWhatsaapIntergrationForAttendance(lblParMobile.Text.ToString(), Att.ToString(), Dept.ToString(), course.ToString(), lblname.Text.ToString());
                                     MailSendStatus += hdnIDNO.Value + ',';
+                                    //Added By Sakshi M on 20012024 to maintain log 
+                                    string IPaddress = Session["ipAddress"].ToString();
+                                    CustomStatus cs1 = (CustomStatus)objAttC.INSERTBULKEMAILSMS_LOG(Convert.ToInt32(Session["userno"]), "Todays Students Attendance list", lblParMobile.Text.ToString(), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(hdnIDNO.Value), 3, "", IPaddress, Convert.ToInt32(Session["OrgId"]));
                                 }
                                 else
                                 {

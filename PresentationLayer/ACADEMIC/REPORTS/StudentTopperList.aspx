@@ -35,7 +35,8 @@
                                         <asp:RadioButtonList ID="rdoPurpose" runat="server" RepeatDirection="Horizontal" AutoPostBack="True" OnSelectedIndexChanged="rdoPurpose_SelectedIndexChanged">
                                             <asp:ListItem Selected="True" Value="1"> Topper List &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                             <asp:ListItem Value="2"> Merit List &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="3"> Programme/Branch wise Final Merit List </asp:ListItem>
+                                            <asp:ListItem Value="3"> Programme/Branch wise Final Merit List  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </asp:ListItem>
+                                            <asp:ListItem Value="4">Coursewise Topper List </asp:ListItem>
                                         </asp:RadioButtonList>
                                     </div>
 
@@ -134,7 +135,7 @@
                                             <sup>* </sup>
                                             <label>Semester</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" data-select2-enable="true">
+                                        <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSem_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSem"
@@ -158,7 +159,7 @@
 
 
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="div1" runat="server">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divMerit" runat="server">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Topper List/ Merit List on basis of </label>
@@ -176,8 +177,6 @@
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
                                     </div>
 
-<<<<<<< HEAD
-=======
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divCourse" runat="server">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -192,7 +191,6 @@
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
                                     </div>
 
->>>>>>> 23962d2b ( [BUGFIX] [56516] Solved Bugs)
                                     <div id="divRange" class="form-group col-lg-3 col-md-6 col-12 " runat="server">
                                         <div class="label-dynamic">
                                             <%--<sup>* </sup>--%>

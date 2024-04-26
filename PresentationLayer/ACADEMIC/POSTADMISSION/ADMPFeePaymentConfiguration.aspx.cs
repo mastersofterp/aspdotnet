@@ -29,39 +29,16 @@ Created On  :
 Purpose     :                                      
 Version     :                                                             
 ---------------------------------------------------------------------------------------------------------------------------                                                                        
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-Version     Modified On      Modified By             Purpose                                                                        
-=======
 Version    Modified On      Modified By             Purpose                                                                        
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
 ---------------------------------------------------------------------------------------------------------------------------                                                                        
 1.0.1     14-03-2024        Isha Kanojiya           Added Branch and Start/End Payment Date and Provision Admission Date  
 ---------------------------------------------------------------------------------------------------------------------------   
-<<<<<<< HEAD
- 1.0.2    28-03-2024        Isha Kanojiya            changes for validation for all dates.
----------------------------------------------------------------------------------------------------------------------------         
-=======
-Version   Modified On   Modified By        Purpose                                                                        
----------------------------------------------------------------------------------------------------------------------------                                                                        
-1.0.1     14-03-2024    Isha               Added Branch and Start/End Payment Date and Provision Admission Date                                                    
-------------------------------------------- -------------------------------------------------------------------------------                                                                                                                     
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-Version     Modified On      Modified By             Purpose                                                                        
----------------------------------------------------------------------------------------------------------------------------                                                                        
-1.0.1     14-03-2024        Isha Kanojiya            Added Branch and Start/End Payment Date and Provision Admission Date  
----------------------------------------------------------------------------------------------------------------------------   
- 1.0.2    28-03-2024        Isha Kanojiya            changes for validation for all dates.
----------------------------------------------------------------------------------------------------------------------------         
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
 1.0.2    28-03-2024         Isha Kanojiya           Changes For Validation For All Dates
 ---------------------------------------------------------------------------------------------------------------------------       
 1.0.3    29-03-2024         Isha Kanojiya           Genrating excel report  
 ---------------------------------------------------------------------------------------------------------------------------    
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
+1.0.4    15-04-2024          Isha Kanojiya           For handle isnull
+---------------------------------------------------------------------------------------------------------------------------
  */
 
 public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
@@ -290,7 +267,7 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             DataTable dt;
             DataSet ds = objAFPCEC.GetRetADMPFeePayConfigListData(objAFPCEE, FeePayConfig_ID);
             dt = objAFPCEC.GetRetADMPFeePayConfigListData(objAFPCEE, Convert.ToInt32(FeePayConfig_ID)).Tables[0];
-      
+
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (ds.Tables[0].Rows[0]["ACTIVITYFOR"].ToString().Equals("1"))
@@ -371,12 +348,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
     {
         try
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-           
-=======
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
             DateTime startDate, endDate, officeStartDate, officeEndDate, provisionalAdmissionDate;
 
             //<1.0.2>
@@ -452,161 +423,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             if (ddlPaymentCategory.SelectedValue.ToString().Equals("3"))
             {
                 objAFPCEE.Feepayment = 0.0;
-=======
-            DateTime enddate = Convert.ToDateTime(txtEndDate.Text.ToString().Trim());
-            DateTime prodate = Convert.ToDateTime(txtProvisionalAdmissionValidDate.Text.ToString().Trim());
-            DateTime OfficeStartDate = Convert.ToDateTime(txtOfficeVisitEndDate.Text);
-            DateTime OfficeEndDate = Convert.ToDateTime(txtStartDate.Text);
-            DateTime OfficeStart = Convert.ToDateTime(txtOfficeVisitStartDate.Text);
-=======
-           
-            DateTime startDate, endDate, officeStartDate, officeEndDate, provisionalAdmissionDate;
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-
-            if (!DateTime.TryParseExact(txtOfficeVisitStartDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out officeStartDate))
-            {
-<<<<<<< HEAD
-                ValidateOfficeVisitStartDate();
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-            }
-            else if (prodate < enddate)
-            {
-<<<<<<< HEAD
-                objAFPCEE.Feepayment = Convert.ToDouble(txtAmount.Text);
-            }
-
-            objAFPCEE.Activitystatus = hfdActive.Value == "true";
-
-        
-            string SubjectNo = string.Empty;
-            foreach (ListItem item in lstBranch.Items)
-            {
-                if (item.Selected == true)
-                {
-                    SubjectNo += item.Value + ",";
-                }
-            }
-            if (SubjectNo.Contains(','))
-            {
-                SubjectNo = SubjectNo.Remove(SubjectNo.Length - 1);
-            }
-            objAFPCEE.Branchno = SubjectNo;
-
-            int ret = 0;
-            string displaymsg = "Record added successfully.";
-            if (ViewState["action"].ToString().Equals("add"))
-            {
-                ret = Convert.ToInt32(objAFPCEC.InsertADMPFeePayConfig(objAFPCEE));
-            }
-            else if (ViewState["action"].ToString().Equals("edit"))
-            {
-                displaymsg = "Record updated successfully.";
-                ret = Convert.ToInt32(objAFPCEC.UpdateADMPFeePayConfig(objAFPCEE));
-            }
-            if (ret == 2)
-            {
-                displaymsg = "Record already exists.";
-                objCommon.DisplayMessage(displaymsg, this.Page);
-            }
-            else if (ret > 0)
-            {
-                objCommon.DisplayMessage(displaymsg, this.Page);
-                setDefaultValues();
-            }
-            else
-            {
-                objCommon.DisplayMessage("Please fill data again.", this.Page);
-=======
-                ProvisionalAdmissionValidDate();
-            }
-            else if (OfficeEndDate < OfficeStartDate)
-            {
-                StartDate();
-            }
-            else if (OfficeStartDate < OfficeStart)
-            {
-                ValidateOfficeVisitEndDate();
-
-            }
-            else if (enddate < OfficeEndDate)
-            {
-                EndDate();
-=======
-                objCommon.DisplayMessage(updSession, "Enter Valid Office Report Start Date.", this.Page);
-                return;
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-            }
-
-            if (!DateTime.TryParseExact(txtOfficeVisitEndDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out officeEndDate))
-            {
-                objCommon.DisplayMessage(updSession, "Enter Valid Office Report End Date.", this.Page);
-                return;
-            }
-
-            if (!DateTime.TryParseExact(txtStartDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
-            {
-                objCommon.DisplayMessage(updSession, "Enter Valid Payment Start Date.", this.Page);
-                return;
-            }
-
-            if (!DateTime.TryParseExact(txtEndDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
-            {
-                objCommon.DisplayMessage(updSession, "Enter Valid Payment End Date.", this.Page);
-                return;
-            }
-
-            if (!DateTime.TryParseExact(txtProvisionalAdmissionValidDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out provisionalAdmissionDate))
-            {
-                objCommon.DisplayMessage(updSession, "Enter valid Provisional Admission Valid Date ", this.Page);
-                return;
-            }
-
-            
-            if (DateTime.Today > officeStartDate)
-            {
-                objCommon.DisplayMessage(updSession, "Office Report Start Date should be today/future date", this.Page);
-                return;
-            }
-            if (endDate < startDate)
-            {
-                objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page); 
-                return;
-            }
-
-            if (provisionalAdmissionDate < endDate)
-            {
-                objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment End Date", this.Page);
-                return;
-            }
-
-            if (startDate < officeEndDate)
-            {
-                objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report End Date", this.Page);
-                return;
-            }
-
-            if (officeEndDate < officeStartDate)
-            {
-                objCommon.DisplayMessage(updSession, "Office Report End Date should be greater than or equal to Office Report Start Date", this.Page);
-                return;
-            }
-
-            // Data submission
-            objAFPCEE.ConfigID = Convert.ToInt32(ViewState["FeePayConfig_ID"]);
-            objAFPCEE.Activityfor = Convert.ToInt32(rdoActivityFor.SelectedValue.Equals("1") ? "1" : "2");
-            objAFPCEE.Admbatch = Convert.ToInt32(ddlAdmBatch.SelectedValue);
-            objAFPCEE.Programtype = Convert.ToInt32(ddlProgramType.SelectedValue);
-            objAFPCEE.Degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
-            objAFPCEE.Startdate = startDate;
-            objAFPCEE.Enddate = endDate;
-            objAFPCEE.OfficeVisitStartDate = officeStartDate;
-            objAFPCEE.OfficeVisitEndDate = officeEndDate;
-            objAFPCEE.ProvisionalAdmissionDate = provisionalAdmissionDate;
-            objAFPCEE.Paymentcategory = Convert.ToInt32(ddlPaymentCategory.SelectedValue);
-
-            if (ddlPaymentCategory.SelectedValue.ToString().Equals("3"))
-            {
-                objAFPCEE.Feepayment = 0.0;
             }
             else
             {
@@ -623,7 +439,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 {
                     SubjectNo += item.Value + ",";
                 }
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
             }
             if (SubjectNo.Contains(','))
             {
@@ -693,22 +508,8 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
             rdoActivityFor.SelectedValue = "1";
             ddlAdmBatch.ClearSelection();
             ddlProgramType.ClearSelection();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-          //  ddlDegree.ClearSelection(); 
-            ddlDegree.Items.Clear();
-=======
-            ddlDegree.ClearSelection();
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-          //  ddlDegree.ClearSelection(); 
-            ddlDegree.Items.Clear();
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
             ddlDegree.Items.Clear();
             ddlDegree.Items.Add(new ListItem("Please select", "0"));
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
             //<1.0.1>
             lstBranch.Items.Clear();
             //</1.0.1>
@@ -766,13 +567,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         EndDate();
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-  
-=======
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
     protected void EndDate()
     {
         try
@@ -785,49 +579,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 if (!DateTime.TryParseExact(txtStartDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
                 {
 
-<<<<<<< HEAD
-            if (!DateTime.TryParseExact(txtEndDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
-            {
-              
-            }
-          
-            if (endDate < startDate)
-            {
-                objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page);
-               
-=======
-=======
-
-  
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-    protected void EndDate()
-    {
-        if (!string.IsNullOrWhiteSpace(txtStartDate.Text) && !string.IsNullOrWhiteSpace(txtEndDate.Text))
-        {
-            DateTime startDate;
-            DateTime endDate;
-
-            if (!DateTime.TryParseExact(txtStartDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
-            {
-<<<<<<< HEAD
-                objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date.", this.Page);
-                txtEndDate.Text = string.Empty;
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                
-            }
-
-            if (!DateTime.TryParseExact(txtEndDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
-            {
-              
-            }
-          
-            if (endDate < startDate)
-            {
-                objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page);
-               
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
                 }
                 if (!DateTime.TryParseExact(txtEndDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate))
                 {
@@ -837,7 +588,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(updSession, "Payment End Date should be greater than or equal to Payment Start Date", this.Page);
                 }
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
             }
         }
         catch (Exception ex)
@@ -849,32 +599,27 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-   
-
-
-=======
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-   
-
-
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
     protected void txtAmount_TextChanged(object sender, EventArgs e)
     {
-        int Per = 0;
-        if (lblAmount.InnerText == "Percentage")
+        try
         {
-            Per = Convert.ToInt32(txtAmount.Text);
-            if (Per > 100)
+            int Per = 0;
+            if (lblAmount.InnerText == "Percentage" && txtAmount.Text != string.Empty) //</1.0.4>
             {
-                objCommon.DisplayMessage(updSession, "Percentage Should Not Be Greater Than 100", this.Page);
-                txtAmount.Text = "";
+                Per = Convert.ToInt32(txtAmount.Text);
+                if (Per > 100)
+                {
+                    objCommon.DisplayMessage(updSession, "Percentage Should Not Be Greater Than 100", this.Page);
+                    txtAmount.Text = "";
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ADMPFeePaymentConfiguration.txtAmount_TextChanged-> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
 
@@ -947,19 +692,7 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 if (OfficeEndDate < OfficeStartDate)
                 {
                     objCommon.DisplayMessage(updSession, "Office Report End Date should be greater than or equal to Office Report Start Date", this.Page);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-                   
-=======
-                    txtOfficeVisitEndDate.Text = string.Empty;
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                   
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
 
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }
@@ -988,30 +721,11 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 {
 
                     objCommon.DisplayMessage(updSession, "Office Report Start Date should be today/future date", this.Page);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    
-=======
 
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }
 
-=======
-                    txtOfficeVisitStartDate.Text = string.Empty;
-                }
-            }
-        }
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                    
-                }
-            }
-        }
-
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -1021,17 +735,6 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
     protected void txtStartDate_TextChanged(object sender, EventArgs e)
     {
         StartDate();
@@ -1047,21 +750,8 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
                 DateTime OfficeEndDate = Convert.ToDateTime(txtStartDate.Text);
                 if (OfficeEndDate < OfficeStartDate)
                 {
-<<<<<<< HEAD
-                    objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report End Date", this.Page);
-<<<<<<< HEAD
-<<<<<<< HEAD
-                  
-=======
-                    txtStartDate.Text = string.Empty;
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                  
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
                     objCommon.DisplayMessage(updSession, "Payment Start Date should be greater than or equal to Office Report Start Date", this.Page);
 
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }
@@ -1086,21 +776,8 @@ public partial class ADMPFeePaymentConfiguration : System.Web.UI.Page
 
                 if (prodate < enddate)
                 {
-<<<<<<< HEAD
-                    objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment End Date", this.Page);
-<<<<<<< HEAD
-<<<<<<< HEAD
-                   
-=======
-                    txtProvisionalAdmissionValidDate.Text = string.Empty;
->>>>>>> 47e1c9f2 ([ENHANCEMENT][56245][Changes for added branch and dates])
-=======
-                   
->>>>>>> a5564cd2 ([BUGFIX][56245][ADMISSION PAYMENT CONFIGRUATION])
-=======
                     objCommon.DisplayMessage(updSession, "Provisional Admission Offer Valid Date should be greater than or equal to Payment Start Date", this.Page);
 
->>>>>>> a7aa9022 ([ENHANCEMENT][56245][Changes for change date validation and branch])
                 }
             }
         }

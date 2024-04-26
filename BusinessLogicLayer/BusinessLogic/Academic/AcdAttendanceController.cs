@@ -3246,6 +3246,37 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+
+        public DataSet GetDayWiseData(int sessionNo, int schemeNo, int courseNo, int uaNo, int subId, int sectionno, DateTime fromdate, DateTime todate, int Coursetype, int batchno, string ccode, int sem)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+
+                SqlParameter[] objParams = new SqlParameter[12];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", sessionNo);
+                objParams[1] = new SqlParameter("@P_SCHEMENO", schemeNo);
+                objParams[2] = new SqlParameter("@P_COURSENO", courseNo);
+                objParams[3] = new SqlParameter("@P_UA_NO", uaNo);
+                objParams[4] = new SqlParameter("@P_SUBID", subId);
+                objParams[5] = new SqlParameter("@P_SECTIONNO", sectionno);
+                objParams[6] = new SqlParameter("@P_FROMDATE", fromdate);
+                objParams[7] = new SqlParameter("@P_TODATE", todate);
+                objParams[8] = new SqlParameter("@P_TH_PR", Coursetype);
+                objParams[9] = new SqlParameter("@P_BATCHNO", batchno); // added by Vipul T on date 05-04-2024 as per Tno:- 56526
+                objParams[10] = new SqlParameter("@P_CCODE", ccode);
+                objParams[11] = new SqlParameter("@P_SEMESTERNO", sem); // added by Vipul T on date 05-04-2024 as per Tno:- 55633
+
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_DAILY_STUDENT_ATTENDANCE_REPORT_DAIICT", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.GetStudentAttendence-> " + ex.ToString());
+            }
+
+            return ds;
+        }
         #endregion Alternate Att.
 
         #region Holiday Master
@@ -7873,6 +7904,48 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.SaveImprovementCourseTeacherAllot() --> " + ex.Message + " " + ex.StackTrace);
             }
             return status;
+        }
+
+        public int INSERTBULKEMAILSMS_LOG(int userno, string Activity, string mobileno, int usertype, int idno, int MSGTYPE, string emailid, string ipaddress, int Org_id)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+
+                objParams = new SqlParameter[10];
+
+
+
+                objParams[0] = new SqlParameter("@P_USERNO", userno);
+                objParams[1] = new SqlParameter("@P_ACTIVITY", Activity);
+                objParams[2] = new SqlParameter("@P_MOBILENO", mobileno);
+                objParams[3] = new SqlParameter("@P_USERTYPE", usertype);
+                objParams[4] = new SqlParameter("@P_IDNO", idno);
+                objParams[5] = new SqlParameter("@P_MSGTYPE", MSGTYPE);
+                objParams[6] = new SqlParameter("@P_EMAIL_ID", emailid);
+                objParams[7] = new SqlParameter("@P_IPADDRESS", ipaddress);
+                objParams[8] = new SqlParameter("@P_ORG", Org_id);
+                objParams[9] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                objParams[9].Direction = ParameterDirection.Output;
+
+                object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EMAILSMS_LOG", objParams, true);
+                if (obj != null)
+                {
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                }
+                else
+                {
+                    retStatus = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.INSERTBULKEMAILSMS_LOG() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return retStatus;
         }
     }
 }

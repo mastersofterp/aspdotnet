@@ -250,16 +250,14 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     {
                         Subexam = ddlSubExamName.SelectedValue;
                         SubExamComponentName = ddlSubExamName.SelectedItem.Text;
-<<<<<<< HEAD
                     } 
-=======
-                    }
+               
                     else 
                     {
                         Subexam = ddlSubExamName.SelectedValue;
                         SubExamComponentName = ddlSubExamName.SelectedItem.Text;
                     }
->>>>>>> f43d90c2 ([ENHANCEMENT] [55144] Changes for new subject type)
+
                 }
                 else
                 {
@@ -797,8 +795,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-<<<<<<< HEAD
-=======
+
         if (ddlSession.SelectedIndex > 0)
         {
             string DegreeNo = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) INNER JOIN ACD_DEGREE A ON (A.DEGREENO IN(SELECT VALUE FROM DBO.Split( SA.DEGREENO,','))) INNER JOIN ACD_COLLEGE_DEGREE B ON A.DEGREENO=B.DEGREENO INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON CDB.DEGREENO=A.DEGREENO", "DISTINCT SA.DEGREENO", "STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ISNULL(AM.ACTIVESTATUS,0)=1 AND SESSION_NO="+ddlSession.SelectedValue+""); // Added by Sagar Mankar on Date 26022024 with Ticket No 55171
@@ -812,7 +809,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             ddldegree.Items.Add(new ListItem("Please Select", "0"));
         }
 
->>>>>>> f43d90c2 ([ENHANCEMENT] [55144] Changes for new subject type)
         //ddlcollege.Items.Clear();
         //ddlcollege.Items.Add(new ListItem("Please Select", "0"));
         //ddldegree.Items.Clear();
@@ -1617,12 +1613,11 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     // added for absent student by prafull on dated 23072022
                     int z = 0;
                     int lockcount = 0;
-<<<<<<< HEAD
                    
-=======
+
                     int final_lock = 0;
 
->>>>>>> f43d90c2 ([ENHANCEMENT] [55144] Changes for new subject type)
+
                     for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
                     {
                         if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["LOCK"]) == true)
@@ -2273,10 +2268,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                 btnfinalmarkentry.Visible = false;
                                 btnmarkexcel.Visible = false;
                             }
-<<<<<<< HEAD
-                        
-=======
->>>>>>> f43d90c2 ([ENHANCEMENT] [55144] Changes for new subject type)
+
                         }
                     }
                     else

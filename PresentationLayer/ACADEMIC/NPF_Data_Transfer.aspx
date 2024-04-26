@@ -79,16 +79,13 @@
                                                         <thead class="bg-light-blue">
                                                             <tr>
                                                                 <th>SR.No</th>
-<<<<<<< HEAD
                                                                 <th>NPF_Discipline</th>
                                                                 <th>NPF_Programme</th>
                                                                 <th>NPF_Specialization</th>
-=======
                                                                 <th>Discipline</th>
                                                                 <th>Programme</th>
                                                                 <th>SpecializationID</th>
                                                                 <th>Specialization</th>
->>>>>>> 2224cdb3 ([ENHANCEMENT] [57395] RFC | HITS | JECRC | CPU | NPF Data Mapping Page Changes.)
                                                                 <th>School Name</th>
                                                                 <th>Degree</th>
                                                                 <th>Programme/Branch Name</th>

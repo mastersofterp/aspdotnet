@@ -87,10 +87,10 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
             }
             else
             {
-<<<<<<< HEAD
+
                 Session["idno"] = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "IDNO", "REGNO='" + txtRegistrationNo.Text + "'");
                 ds = objCommon.FillDropDown("ACD_TRRESULT TRRESULT WITH (NOLOCK) INNER JOIN ACD_STUDENT STUDENT WITH (NOLOCK) ON(STUDENT.IDNO=TRRESULT.IDNO)", "TRRESULT.REGNO,TRRESULT.STUDNAME,STUDENT.STUDENTMOBILE,STUDENT.EMAILID", "TRRESULT.DGPA,TRRESULT.SESSIONNO", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_TRRESULT WHERE IDNO=" + Convert.ToInt32(Session["idno"]) + ") AND ISNULL(DGPA,0)>0 AND TRRESULT.IDNO=" + Convert.ToInt32(Session["idno"]) + "", "");
-=======
+
                 ViewState["idno"] = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "IDNO", "REGNO='" + txtRegistrationNo.Text + "'");
                 String idno = ViewState["idno"].ToString();
                 if (idno == "")
@@ -104,7 +104,6 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
                 string SP_Parameters = "@P_IDNO";
                 string Call_Values = "" + Convert.ToInt32(idno) + "";
                 ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
->>>>>>> b7004b39 ( [ENHANCEMENT] [57150] Solved bugs and Added RPT)
             }
 
             if (ds.Tables[0].Rows.Count > 0 && ds != null)
@@ -223,20 +222,19 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
 
                 url += "&param=@P_IDNO=" + Convert.ToInt32(Session["idno"]) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
-<<<<<<< HEAD
+
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
-=======
+
                 //System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 //sb.Append(@"window.open('" + url + "','','" + features + "');");
 
                 //ScriptManager.RegisterClientScriptBlock(this.updUpdate, this.updUpdate.GetType(), "controlJSScript", sb.ToString(), true);
                 ShowReport("ProvisionalCertificate", "rptProvisionalCertificateNew.rpt");
->>>>>>> b7004b39 ( [ENHANCEMENT] [57150] Solved bugs and Added RPT)
 
-                ScriptManager.RegisterClientScriptBlock(this.updUpdate, this.updUpdate.GetType(), "controlJSScript", sb.ToString(), true);
+                ScriptManager.RegisterClientScriptBlock(this.updFacAllot, this.updFacAllot.GetType(), "controlJSScript", sb.ToString(), true);
             }
             else
             {
@@ -252,8 +250,7 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-<<<<<<< HEAD
-=======
+
 
     private void ShowReport(string reportTitle, string rptFileName)
     {
@@ -279,5 +276,5 @@ public partial class ACADEMIC_EXAMINATION_ProvisionalCertificate : System.Web.UI
         }
     }
 
->>>>>>> b7004b39 ( [ENHANCEMENT] [57150] Solved bugs and Added RPT)
+
 }

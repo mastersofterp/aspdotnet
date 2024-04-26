@@ -21580,8 +21580,8 @@ namespace IITMS
                     return dtr;
                 }
 
-<<<<<<< HEAD
-=======
+
+
 
                 // Added By Vaishnavi B. On Date 22-03-2024
 
@@ -21767,9 +21767,8 @@ namespace IITMS
                     }
                     return ds;
                 } // TILL 
-<<<<<<< HEAD
->>>>>>> d7a7ee57 ([ENHANCEMENT] [57603] ADD NEW PAGE FOR ACADEMIC REPORTS)
-=======
+
+
 
                 // ADDED BY VAISHNAVI B. ON DATE - 17/04/2024
                 public DataSet GetStudentCancelScholershipAllotment(int degreeno, int branchno, int year, int semesterno, int admbatch, int prev_status, int yearID, int colg, int ScholarshipId)
@@ -21917,7 +21916,7 @@ namespace IITMS
 
                     return retStatus;
                 }
->>>>>>> 46f47684 ([ENHANCEMENT] [56356] ENHANCEMENT OF PAYMENT TYPE)
+
             }
 
 

@@ -6,6 +6,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
+    <link href="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.css")%>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.js")%>"></script>
+
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -61,7 +65,7 @@
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup>* </sup>
+                                                            <sup></sup>
                                                             <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true">School/Institute Name </asp:Label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlInstitute" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
@@ -69,21 +73,24 @@
                                                             TabIndex="2">
                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvInstitute" runat="server" ControlToValidate="ddlInstitute" SetFocusOnError="true"
-                                                            Display="None" ErrorMessage="Please Select College & Scheme." InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
+
+
+                                                       <%-- <asp:ListBox runat="server" ID="ddlInstitute" AppendDataBoundItems="true"  TabIndex="2"
+                                                            SelectionMode="Multiple" CssClass="form-control multi-select-demo" OnSelectedIndexChanged="ddlInstitute_SelectedIndexChanged"></asp:ListBox>--%>
+                                                        <%--  <asp:RequiredFieldValidator ID="rfvInstitute" runat="server" ControlToValidate="ddlInstitute" SetFocusOnError="true"
+                                                            Display="None" ErrorMessage="Please Select College & Scheme." InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup>* </sup>
+                                                            <sup></sup>
                                                             <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" OnSelectedIndexChanged="ddlSem_SelectedIndexChanged" AutoPostBack="true"
                                                             CssClass="form-control" TabIndex="3" data-select2-enable="true">
                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSem" SetFocusOnError="true"
-                                                            Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
-
+                                                        <%-- <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSem" SetFocusOnError="true"
+                                                            Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
                                                     </div>
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -102,7 +109,7 @@
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup>*</sup>
+                                                        <%--    <sup>*</sup>--%>
                                                             <asp:Label ID="lblDYddlCourseType" runat="server" Font-Bold="true"></asp:Label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlSubjectType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlSubjectType_SelectedIndexChanged"
@@ -110,12 +117,12 @@
                                                             AppendDataBoundItems="True">
                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="rfvSubjectType" runat="server" ControlToValidate="ddlSubjectType" SetFocusOnError="true"
-                                                            ErrorMessage="Please Select Subject Type" InitialValue="0" Display="None" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                       <%-- <asp:RequiredFieldValidator ID="rfvSubjectType" runat="server" ControlToValidate="ddlSubjectType" SetFocusOnError="true"
+                                                            ErrorMessage="Please Select Subject Type" InitialValue="0" Display="None" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup>*</sup>
+                                                            <sup></sup>
                                                             <asp:Label ID="lblDYddlSection" runat="server" Font-Bold="true"> Section</asp:Label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged" AutoPostBack="True"
@@ -123,12 +130,28 @@
                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         </asp:DropDownList>
 
-                                                        <asp:RequiredFieldValidator ID="rfvSection" runat="server" ControlToValidate="ddlSection" SetFocusOnError="true"
-                                                            Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                        <%--   <asp:RequiredFieldValidator ID="rfvSection" runat="server" ControlToValidate="ddlSection" SetFocusOnError="true"
+                                                            Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
                                                     </div>
+
+                                                <%--    Added by Vipul Tichakule on date 26-03-2024 as per Tno:- 56526--%>
+                                                      <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup></sup>
+                                                            <asp:Label ID="lblBatch" runat="server" Font-Bold="true"> Batch</asp:Label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlBatch" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
+                                                            TabIndex="6" CssClass="form-control" data-select2-enable="true">
+                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        </asp:DropDownList>                                                   
+                                                    </div>
+                                                    <%-- end --%>
+
+
+
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup>*</sup>
+                                                           <%-- <sup>*</sup>--%>
                                                             <label>From Date</label>
                                                         </div>
                                                         <div class="input-group">
@@ -145,12 +168,12 @@
                                                             <ajaxToolKit:MaskedEditExtender ID="meFromDate" runat="server" Mask="99/99/9999"
                                                                 MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
                                                                 TargetControlID="txtFromDate" Enabled="True" />
-                                                            <ajaxToolKit:MaskedEditValidator ID="mvFromDate" runat="server" ControlExtender="meFromDate"
+                                                           <%-- <ajaxToolKit:MaskedEditValidator ID="mvFromDate" runat="server" ControlExtender="meFromDate"
                                                                 ControlToValidate="txtFromDate" Display="None" EmptyValueMessage="Please Enter From Date"
                                                                 ErrorMessage="Please Enter From Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
-                                                                IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="submit" />
+                                                                IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="submit" />--%>
 
-                                                          <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtFromDate"
+                                                            <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtFromDate"
                                                                 Display="None" ErrorMessage="Please Enter From Date" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
@@ -158,7 +181,7 @@
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup>*</sup>
+                                                            <%--<sup>*</sup>--%>
                                                             <label>To Date</label>
                                                         </div>
                                                         <div class="input-group">
@@ -178,11 +201,11 @@
                                                             <%--<ajaxToolKit:MaskedEditValidator ID="mvToDate" runat="server" ControlExtender="meToDate"
                                                                 ControlToValidate="txtTodate" Display="None" EmptyValueMessage="Please Enter To Date"
                                                                 ErrorMessage="Please Enter To Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
-                                                                IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="SubPercentage" />--%>
-                                                            <ajaxToolKit:MaskedEditValidator ID="rfvMonth" runat="server" ControlExtender="meToDate"
+                                                               IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="SubPercentage" />--%>
+                                                          <%--  <ajaxToolKit:MaskedEditValidator ID="rfvMonth" runat="server" ControlExtender="meToDate"
                                                                 ControlToValidate="txtTodate" Display="None" EmptyValueMessage="Please Enter To Date"
                                                                 ErrorMessage="Please Enter To Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
-                                                                IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="submit" />
+                                                                IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="submit" />--%>
 
                                                             <%--asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtTodate"
                                                                 Display="None" ErrorMessage="Please Enter To Date" ValidationGroup="submit"></%--asp:RequiredFieldValidator>--%>
@@ -255,6 +278,7 @@
                                                                 Display="None" InitialValue="0" ErrorMessage="Please Select Course" ValidationGroup="submit1">
                                                             </asp:RequiredFieldValidator>
                                                         </div>
+
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic">
                                                                 <sup>*</sup>
@@ -279,10 +303,10 @@
                                                                     ErrorMessage="Please Enter From Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
                                                                     IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="submit1" />
 
-                                                              <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtFdate"
+                                                                <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtFdate"
                                                                     Display="None" ErrorMessage="Please Enter From Date" ValidationGroup="submit1"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                  
+
 
                                                         </div>
 
@@ -304,13 +328,13 @@
                                                                 </ajaxToolKit:CalendarExtender>
 
                                                                 <ajaxToolKit:MaskedEditExtender ID="meTDate" runat="server" Mask="99/99/9999" MaskType="Date"
-                                                                    OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtTdate" />                                                         
+                                                                    OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtTdate" />
                                                                 <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator7" runat="server" ControlExtender="meTDate"
                                                                     ControlToValidate="txtTdate" Display="None" EmptyValueMessage="Please Enter To Date"
                                                                     ErrorMessage="Please Enter To Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
                                                                     IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="submit1" />
 
-                                                               <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtTdate"
+                                                                <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtTdate"
                                                                     Display="None" ErrorMessage="Please Enter To Date" ValidationGroup="submit1"></asp:RequiredFieldValidator>--%>
                                                             </div>
 
@@ -319,15 +343,15 @@
 
                                                 </div>
                                                 <div class="col-12 btn-footer">
-                                                <asp:Button ID="btnExcelReport" runat="server" Text="Global Elective Faculty Attendance Register Report" ValidationGroup="submit1"
-                                                    TabIndex="5" CssClass="btn btn-info" OnClick="btnExcelReport_Click" />
-                                                <asp:Button ID="BtnCancel2" runat="server" OnClick="BtnCancel2_Click" Text="Cancel"
-                                                    TabIndex="6" CssClass="btn btn-warning" />
-                                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True"
-                                                    ShowSummary="False" ValidationGroup="submit1" />
+                                                    <asp:Button ID="btnExcelReport" runat="server" Text="Global Elective Faculty Attendance Register Report" ValidationGroup="submit1"
+                                                        TabIndex="5" CssClass="btn btn-info" OnClick="btnExcelReport_Click" />
+                                                    <asp:Button ID="BtnCancel2" runat="server" OnClick="BtnCancel2_Click" Text="Cancel"
+                                                        TabIndex="6" CssClass="btn btn-warning" />
+                                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True"
+                                                        ShowSummary="False" ValidationGroup="submit1" />
+                                                </div>
                                             </div>
-                                            </div>
-                                            </div>
+                                        </div>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
@@ -338,7 +362,29 @@
         </div>
     </div>
 
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.multi-select-demo').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 200,
+                enableFiltering: true,
+                filterPlaceholder: 'Search',
+                enableCaseInsensitiveFiltering: true,
+            });
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
+            $(document).ready(function () {
+                $('.multi-select-demo').multiselect({
+                    includeSelectAllOption: true,
+                    maxHeight: 200,
+                    enableFiltering: true,
+                    filterPlaceholder: 'Search',
+                    enableCaseInsensitiveFiltering: true,
+                });
+            });
+        });
+    </script>
 
 </asp:Content>
 

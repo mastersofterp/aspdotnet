@@ -1119,7 +1119,12 @@ public partial class _default : System.Web.UI.Page
     }
 
 
-
+    private string DecryptData(string encryptedData)
+    {
+        // Simulated decryption (replace this with your actual decryption logic)
+        byte[] data = Convert.FromBase64String(encryptedData);
+        return System.Text.Encoding.UTF8.GetString(data);
+    }
 
 
     protected void btnLoginSSO_Click(object sender, EventArgs e)

@@ -110,7 +110,7 @@
                                           <%--<label for ="txtPTMarks">Enter Percentage of Total Maximum Marks</label>--%>
                                           <label for ="txtPTMarks"><asp:Label ID="lblDYtxtPerTMaxMarks" runat="server" Font-Bold="true"></asp:Label></label>
                                           <asp:TextBox runat="server" ID="txtPTMarks" TabIndex="9" CssClass="form-control number-only"
-                                               ToolTip="Please Enter Percentage of total Maximum Marks" MaxLength="6
+                                               ToolTip="Please Enter Percentage of total Maximum Marks" MaxLength="5
                                               " 
                                                placeholder="Enter Percentage of total Maximum Marks"></asp:TextBox>
                                       </div>

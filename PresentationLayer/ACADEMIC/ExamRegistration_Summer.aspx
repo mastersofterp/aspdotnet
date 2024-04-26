@@ -447,7 +447,7 @@
                 <div class="box-header with-border">
                     <%--<h3 class="box-title">SESSION CREATION</h3>--%>
                     <h3 class="box-title">
-                         <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label>
+                         <asp:Label ID="lblDynamicPageTitle" runat="server" style="text-transform: uppercase;"></asp:Label>
 
                     </h3>
                 </div>
