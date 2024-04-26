@@ -59,7 +59,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Empphotosign : System.Web.
             _idnoEmp = Convert.ToInt32(Session["serviceIdNo"].ToString().Trim());
         }
         this.BindListViewEmpPhotoSign();
-
+        GetConfigForEditAndApprove();
     }
 
     private void BindListViewEmpPhotoSign()
@@ -238,7 +238,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Empphotosign : System.Web.
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-
+        GetConfigForEditAndApprove();
     }
 
     public byte[] imageToByteArray(string MyString)
@@ -282,7 +282,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Empphotosign : System.Web.
         ViewState["IDNO"] = null;
         ViewState["PHOTO"] = null;
         ViewState["SIGNA"] = null;
-
+        ViewState["IsEditable"] = null;
+        ViewState["IsApprovalRequire"] = null;
+        btnSubmit.Enabled = true;
 
 
     }
@@ -315,6 +317,26 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Empphotosign : System.Web.
 
                 imgEmpPhoto.ImageUrl = "../../showimage.aspx?id=" + _idnoEmp + "&type=EMP";
                 Image1.ImageUrl = "../../showimage.aspx?id=" + _idnoEmp + "&type=EMPSIGN";
+                if (Convert.ToBoolean(ViewState["IsApprovalRequire"]) == true)
+                {
+                    //string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
+                    //if (STATUS == "A")
+                    //{
+                    //    MessageBox("Your Details Are Approved You Cannot Edit.");
+                    //    btnSubmit.Enabled = false;
+                    //    return;
+                    //}
+                    //else
+                    //{
+                    //    btnSubmit.Enabled = true;
+                    //}
+                    GetConfigForEditAndApprove();
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                    GetConfigForEditAndApprove();
+                }
             }
         }
         catch (Exception ex)
@@ -345,4 +367,54 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Empphotosign : System.Web.
         }
         return retVal;
     }
+
+    #region ServiceBook Config
+
+    private void GetConfigForEditAndApprove()
+    {
+        DataSet ds = null;
+        try
+        {
+            Boolean IsEditable = false;
+            Boolean IsApprovalRequire = false;
+            string Command = "Photo Signature Upload";
+            ds = objServiceBook.GetServiceBookConfigurationForRestrict(Convert.ToInt32(Session["usertype"]), Command);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsEditable = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsEditable"]);
+                IsApprovalRequire = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsApprovalRequire"]);
+                ViewState["IsEditable"] = IsEditable;
+                ViewState["IsApprovalRequire"] = IsApprovalRequire;
+
+                if (Convert.ToBoolean(ViewState["IsEditable"]) == true)
+                {
+                    btnSubmit.Enabled = false;
+                }
+                else
+                {
+                    btnSubmit.Enabled = true;
+                }
+            }
+            else
+            {
+                ViewState["IsEditable"] = false;
+                ViewState["IsApprovalRequire"] = false;
+                btnSubmit.Enabled = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "PayRoll_Pay_PreviousService.GetConfigForEditAndApprove-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        finally
+        {
+            ds.Clear();
+            ds.Dispose();
+        }
+    }
+
+    #endregion
 }

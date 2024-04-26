@@ -31,7 +31,7 @@
                         </div>
                     </asp:Panel>
 
-                    <asp:Panel ID="pnlStatus" runat="server" Visible="false">
+                    <asp:Panel ID="pnlStatus" runat="server" Visible="false" ScrollBars="Auto">
                         <div class="col-12">
                             <div class="sub-heading">
                                 <h5>Service Book Links</h5>
@@ -43,8 +43,8 @@
                                     </p>
                                 </EmptyDataTemplate>
                                 <LayoutTemplate>
-                                    <div id="lgv1">
-                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
+                                    <div style="width: 100%; height: 370px; overflow: auto">
+                                        <table class="table table-striped table-bordered nowrap">
                                             <thead class="bg-light-blue">
                                                 <tr>
                                                     <th>Link Name
