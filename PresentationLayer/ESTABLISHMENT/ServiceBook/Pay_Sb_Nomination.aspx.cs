@@ -54,7 +54,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             }
             //By default setting ViewState["action"] to add
             ViewState["action"] = "add";
-            DeleteDirecPath(Docpath + "TEMP_CONDUCTTRAINING_FILES\\" + _idnoEmp + "\\APP_0");
+            DeleteDirecPath(Docpath + "TEMP_NOMINATION_FILES\\" + _idnoEmp + "\\APP_0");
             FillDropDown();
 
 
@@ -414,7 +414,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                         {
                             if (ViewState["DESTINATION_PATH"] != null)
                             {
-                                string TNO = objCommon.LookUp("PAYROLL_SB_TRAINING_CONDUCTED", "MAX(TNO)", "");
+                                string TNO = objCommon.LookUp("PAYROLL_SB_NOMINIFOR", "MAX(NFNO)", "");
                                 AddDocuments(Convert.ToInt32(TNO));
                             }
                         }
@@ -450,7 +450,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                             {
                                 if (ViewState["DESTINATION_PATH"] != null)
                                 {
-                                    string TNO = objCommon.LookUp("PAYROLL_SB_TRAINING_CONDUCTED", "MAX(TNO)", "");
+                                    string TNO = objCommon.LookUp("PAYROLL_SB_NOMINIFOR", "MAX(NFNO)", "");
                                     AddDocuments(Convert.ToInt32(TNO));
                                 }
                             }
@@ -564,10 +564,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 //else
                 //{
                 //}
-<<<<<<< HEAD
-               
-=======
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
+
                 if (Convert.ToInt32(ds.Tables[1].Rows.Count) > 0)
                 {
                     int rowCount = ds.Tables[1].Rows.Count;
@@ -577,11 +574,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                     {
                         DataRow dr = dtM.NewRow();
                         dr["FUID"] = ds.Tables[1].Rows[i]["FUID"].ToString();
-                        dr["FILEPATH"] = Docpath + "TRAINING" + ViewState["idno"] + "\\APP_" + nfNo;
+                        dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_" + nfNo;
                         dr["GETFILE"] = ds.Tables[1].Rows[i]["GETFILE"].ToString();
                         dr["DisplayFileName"] = ds.Tables[1].Rows[i]["DisplayFileName"].ToString();
                         dr["IDNO"] = ds.Tables[1].Rows[i]["IDNO"].ToString();
-                        dr["FOLDER"] = "TRAINING_CONDUCTED";
+                        dr["FOLDER"] = "NOMINATION";
                         dr["APPID"] = nfNo.ToString();
                         dr["FILENAME"] = ds.Tables[1].Rows[i]["FILENAME"].ToString();
                         dtM.Rows.Add(dr);
@@ -593,14 +590,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                     //lvCompAttach.DataBind();
                     pnlAttachmentList.Visible = true;
                     this.BindListView_Attachments(dtM);
-<<<<<<< HEAD
                     //if (lblBlobConnectiontring.Text != "")
                     //{
                     //    //GetFileNamePath()
                     //        //GetFileNamePath(object filename, object TNO, object idno, object folder, object AppID)
                     //}
-=======
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
                 }
                 else
                 {
@@ -659,41 +653,27 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
                 Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
                 Control ctrhead2 = lvCompAttach.FindControl("divattach");
-<<<<<<< HEAD
                 Control ctrHead3 = lvCompAttach.FindControl("divDownload");
                 ctrHeader.Visible = true;
                 ctrHead1.Visible = true;
                 ctrhead2.Visible = false;
                 ctrHead3.Visible = false;
-=======
-                ctrHeader.Visible = true;
-                ctrHead1.Visible = true;
-                ctrhead2.Visible = false;
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
 
                 foreach (ListViewItem lvRow in lvCompAttach.Items)
                 {
                     Control ckBox = (Control)lvRow.FindControl("tdBlob");
                     Control ckattach = (Control)lvRow.FindControl("attachfile");
                     Control attachblob = (Control)lvRow.FindControl("attachblob");
-<<<<<<< HEAD
                     Control download = (Control)lvRow.FindControl("tdDownloadLink");
                     ckBox.Visible = true;
                     attachblob.Visible = true;
                     ckattach.Visible = false;
                     download.Visible = false;
-=======
-                    ckBox.Visible = true;
-                    attachblob.Visible = true;
-                    ckattach.Visible = false;
-
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
                 }
             }
             else
             {
 
-<<<<<<< HEAD
                 Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
                 Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
                 Control ctrhead2 = lvCompAttach.FindControl("divattach");
@@ -713,15 +693,6 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                     attachblob.Visible = false;
                     ckattach.Visible = true;
                     download.Visible = true;
-=======
-                Control ctrHeader = lvCompAttach.FindControl("divDownload");
-                ctrHeader.Visible = false;
-
-                foreach (ListViewItem lvRow in lvCompAttach.Items)
-                {
-                    Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
-                    ckBox.Visible = false;
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
 
                 }
             }
@@ -1046,9 +1017,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                         }
                     }
 
-                    string file = Docpath + "TEMP_CONDUCTTRAINING_FILES\\" + idno + "\\APP_0";
+                    string file = Docpath + "TEMP_NOMINATION_FILES\\" + idno + "\\APP_0";
                     ViewState["SOURCE_FILE_PATH"] = file;
-                    string PATH = Docpath + "TRAINING_CONDUCTED\\" + idno;
+                    string PATH = Docpath + "NOMINATION\\" + idno;
                     ViewState["DESTINATION_PATH"] = PATH;
                     if (lblBlobConnectiontring.Text == "")
                     {
@@ -1071,7 +1042,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                             //filename = objSevBook.IDNO + "_familyinfo" + ext;
                             //string name = DateTime.Now.ToString("ddMMyyyy_hhmmss");
                             string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
-                            filename = IdNo + "_trainingconducted_" + time + ext;
+                            filename = IdNo + "_nomination_" + time + ext;
                             objSevBook.ATTACHMENTS = filename;
                             objSevBook.FILEPATH = "Blob Storage";
 
@@ -1084,7 +1055,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                                 if (result == true)
                                 {
 
-                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_trainingconducted_" + time, flupld);
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_nomination_" + time, flupld);
                                     if (retval == 0)
                                     {
                                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
@@ -1147,11 +1118,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
         }
         return retVal;
     }
-<<<<<<< HEAD
     public string GetFileNamePathForMultiple(object filename, object TNO, object idno, object folder, object AppID)
-=======
-    public string GetFileNamePath(object filename, object TNO, object idno, object folder, object AppID)
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
     {
         string[] extension = filename.ToString().Split('.');
         if (filename != null && filename.ToString() != string.Empty)
@@ -1167,16 +1134,12 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             DataRow dr = dt.NewRow();
             int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
             dr["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
-<<<<<<< HEAD
             //dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_";
-            dr["FILEPATH"] = Docpath + "NOMINATION" + "\\" +_idnoEmp + "\\APP_";
-=======
-            dr["FILEPATH"] = Docpath + "TRAINING_CONDUCTED" + ViewState["idno"] + "\\APP_";
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
+            dr["FILEPATH"] = Docpath + "NOMINATION" + "\\" + _idnoEmp + "\\APP_";
             dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
             dr["DisplayFileName"] = flupld.FileName;
             dr["IDNO"] = _idnoEmp;
-            dr["FOLDER"] = "TEMP_CONDUCTTRAINING_FILES";
+            dr["FOLDER"] = "TEMP_NOMINATION_FILES";
             dr["APPID"] = 0;
             dr["FILENAME"] = filename;
             dt.Rows.Add(dr);
@@ -1193,16 +1156,12 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             DataRow dr = dt.NewRow();
             int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
             dr["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
-<<<<<<< HEAD
             //dr["FILEPATH"] = Docpath + "NOMINATION" + ViewState["idno"] + "\\APP_";
             dr["FILEPATH"] = Docpath + "NOMINATION" + "\\" + _idnoEmp + "\\APP_";
-=======
-            dr["FILEPATH"] = Docpath + "TRAINING_CONDUCTED" + ViewState["idno"] + "\\APP_";
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
             dr["GETFILE"] = "TC_" + FUID + System.IO.Path.GetExtension(flupld.PostedFile.FileName);
             dr["DisplayFileName"] = flupld.FileName;
             dr["IDNO"] = _idnoEmp;
-            dr["FOLDER"] = "TEMP_CONDUCTTRAINING_FILES";
+            dr["FOLDER"] = "TEMP_NOMINATION_FILES";
             dr["APPID"] = 0;
             dr["FILENAME"] = filename;
             ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
@@ -1308,11 +1267,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
             int appid = Convert.ToInt32(btnDelete.AlternateText);
             if (appid != 0)
             {
-                path = Docpath + "TRAINING_CONDUCTED" + "\\" + idno + "\\APP_" + Convert.ToInt32(ViewState["nfNo"].ToString());
+                path = Docpath + "NOMINATION" + "\\" + idno + "\\APP_" + Convert.ToInt32(ViewState["nfNo"].ToString());
             }
             else
             {
-                path = Docpath + "TEMP_CONDUCTTRAINING_FILES" + "\\" + idno + "\\APP_" + appid;
+                path = Docpath + "TEMP_NOMINATION_FILES" + "\\" + idno + "\\APP_" + appid;
             }
 
             if (ViewState["FILE1"] != null && ((DataTable)ViewState["FILE1"]) != null)
@@ -1320,10 +1279,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Nomination : System.Web.UI
                 DataTable dt = (DataTable)ViewState["FILE1"];
                 dt.Rows.Remove(this.GetEditableDatarowBill(dt, fname));
                 ViewState["FILE1"] = dt;
-<<<<<<< HEAD
                 BindListView_Attachments(dt);
-=======
->>>>>>> af919474 ([ENHANCEMENT] [54674] Changes in pages of service book)
                 //LVFiles.DataSource = dt;
                 //LVFiles.DataBind();
                 ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('File Deleted Successfully.');", true);

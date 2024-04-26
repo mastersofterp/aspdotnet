@@ -89,11 +89,11 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             if (Convert.ToInt32(Session["usertype"]) == 1)
             {
 
-                ds = Hgp.GetAllRequests(0,Applydate,Purpose,Todate,Fromdate,Status);
+                ds = Hgp.GetAllRequests(0, Applydate, Purpose, Todate, Fromdate, Status);
             }
             else
             {
-                ds = Hgp.GetAllRequests(Convert.ToInt32(Session["userno"]),Applydate,Purpose,Todate,Fromdate,Status);
+                ds = Hgp.GetAllRequests(Convert.ToInt32(Session["userno"]), Applydate, Purpose, Todate, Fromdate, Status);
             }
             lvReq.DataSource = ds;
             lvReq.DataBind();
@@ -320,15 +320,15 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
     {
         try
         {
-             string imageUrl = Imageurl.Value;
+            string imageUrl = Imageurl.Value;
 
-             if (!string.IsNullOrEmpty(imageUrl))
+            if (!string.IsNullOrEmpty(imageUrl))
             {
                 // Construct the file path on the server
                 string filePath = ResolveUrl(imageUrl);
-            
+
                 // Register a client-side script to open the file in a new window
-                string script = "window.open('"+filePath+"', '_blank');";
+                string script = "window.open('" + filePath + "', '_blank');";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "OpenFileScript", script, true);
             }
             else
@@ -370,7 +370,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
         string Todate = string.IsNullOrEmpty(txtToDateSearch.Text) ? null : DateTime.Parse(txtToDateSearch.Text).ToString("yyyy-MM-dd");
         string Fromdate = string.IsNullOrEmpty(txtFromDateSearch.Text) ? null : DateTime.Parse(txtFromDateSearch.Text).ToString("yyyy-MM-dd");
         //string Status = string.IsNullOrEmpty(ddlStatusSearch.SelectedValue) ? null : ddlStatusSearch.SelectedValue;
-        this.BindListView(Applydate,0, Todate, Fromdate,"0");
+        this.BindListView(Applydate, 0, Todate, Fromdate, "0");
     }
 
     //below code added by Himanshu tamrakar 05042024
@@ -382,6 +382,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
         txtFromDateSearch.Text = string.Empty;
         ddlStatus.SelectedValue = "0";
         BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
-          
+
     }
 }

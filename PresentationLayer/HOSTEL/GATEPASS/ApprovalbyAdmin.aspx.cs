@@ -68,7 +68,7 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                     //BindListView():
                     BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
 
-                    
+
                 }
             }
         }
@@ -128,7 +128,7 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
             {
                 //int Approve = 0;
                 string Approve = "";
-                string Remark="";
+                string Remark = "";
                 int recid = 0;
                 CustomStatus cs = new CustomStatus();
                 foreach (ListViewDataItem item in lvGatePass.Items)
@@ -151,7 +151,7 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                         recid = Convert.ToInt16(hidrecid.Value);
                         cs = (CustomStatus)objAAC.UpdateApproval(recid, Approve, Remark);
                     }
-                   
+
                 }
 
                 if (cs.Equals(CustomStatus.RecordSaved))
@@ -196,7 +196,7 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
     private void Clear()
     {
         changeApproval.Visible = false;
-        btnChangeApproval.Visible = false; 
+        btnChangeApproval.Visible = false;
         btnUpdatePath.Visible = false;
         finalAproval.Visible = true;
         txtRemark.Text = string.Empty;
@@ -219,245 +219,245 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
     }
     protected void btnChangeApproval_Click(object sender, EventArgs e)
     {
-         int Checked = 0;
-            foreach (ListViewDataItem item in lvGatePass.Items)
-            {
-                CheckBox chkApprove = item.FindControl("chkApprove") as CheckBox;
-                HiddenField hidrecid = item.FindControl("hidrecid") as HiddenField;
+        int Checked = 0;
+        foreach (ListViewDataItem item in lvGatePass.Items)
+        {
+            CheckBox chkApprove = item.FindControl("chkApprove") as CheckBox;
+            HiddenField hidrecid = item.FindControl("hidrecid") as HiddenField;
 
-                if (chkApprove.Checked)
-                {
-                    Checked++;
-                    recid = Convert.ToInt16(hidrecid.Value);
-                }
+            if (chkApprove.Checked)
+            {
+                Checked++;
+                recid = Convert.ToInt16(hidrecid.Value);
             }
-            if (Checked == 0)
+        }
+        if (Checked == 0)
+        {
+            objCommon.DisplayMessage(this, "Please Select a Record to Update Passing Path.", this);
+            return;
+        }
+        btnApprove.Visible = false;
+        finalAproval.Visible = false;
+        changeApproval.Visible = true;
+        btnChangeApproval.Visible = false;
+        btnUpdatePath.Visible = true;
+
+        if (Checked == 1)
+        {
+            //Added by Himanshu Tamrakar 24/11/2023
+            txtName.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_STUDENT S ON (HGD.IDNO = S.IDNO)", "S.STUDNAME", "HGP_ID=" + recid);
+            string p_path = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "APPROVAL_PASSING_PATH", "HGP_ID=" + recid);
+            string fst_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FIRST_APPROVAL_UANO", "HGP_ID=" + recid);
+            string scnd_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "SECOND_APPROVAL_UANO", "HGP_ID=" + recid);
+            string trd_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "THIRD_APPROVAL_UANO", "HGP_ID=" + recid);
+            string frth_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FOURTH_APPROVAL_UANO", "HGP_ID=" + recid);
+            txtName.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_STUDENT S ON (HGD.IDNO = S.IDNO)", "S.STUDNAME", "HGP_ID=" + recid);
+
+            if (fst_apr == "14")
             {
-                objCommon.DisplayMessage(this, "Please Select a Record to Update Passing Path.",this);
-                return;
+                objCommon.FillDropDownList(ddlAA1, "User_Rights", "USERTYPEID", "USERDESC", "USERTYPEID=14", "USERTYPEID");
+                objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
             }
-            btnApprove.Visible = false;
-            finalAproval.Visible = false;
-            changeApproval.Visible = true;
-            btnChangeApproval.Visible = false;
-            btnUpdatePath.Visible = true;
-            
-            if (Checked == 1)
+            else if (scnd_apr == "14")
             {
-                //Added by Himanshu Tamrakar 24/11/2023
-                txtName.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_STUDENT S ON (HGD.IDNO = S.IDNO)", "S.STUDNAME", "HGP_ID=" + recid);
-                string p_path = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "APPROVAL_PASSING_PATH", "HGP_ID=" + recid);
-                string fst_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FIRST_APPROVAL_UANO", "HGP_ID=" + recid);
-                string scnd_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "SECOND_APPROVAL_UANO", "HGP_ID=" + recid);
-                string trd_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "THIRD_APPROVAL_UANO", "HGP_ID=" + recid);
-                string frth_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FOURTH_APPROVAL_UANO", "HGP_ID=" + recid);
-                txtName.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_STUDENT S ON (HGD.IDNO = S.IDNO)", "S.STUDNAME", "HGP_ID=" + recid);
+                objCommon.FillDropDownList(ddlAA2, "User_Rights", "USERTYPEID", "USERDESC", "USERTYPEID=14", "USERTYPEID");
+                objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+            }
 
-                if (fst_apr == "14")
-                {
-                    objCommon.FillDropDownList(ddlAA1, "User_Rights", "USERTYPEID", "USERDESC", "USERTYPEID=14", "USERTYPEID");
-                    objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
-                }
-                else if (scnd_apr == "14")
-                {
-                    objCommon.FillDropDownList(ddlAA2, "User_Rights", "USERTYPEID", "USERDESC", "USERTYPEID=14", "USERTYPEID");
-                    objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
-                }
-                else
-                {
-                    objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
-                    objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
-                }
+            objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+            objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+            // Assign values to variables
+            ddlAA1.SelectedValue = fst_apr;
+            ddlAA2.SelectedValue = scnd_apr;
+            ddlAA3.SelectedValue = trd_apr;
+            ddlAA4.SelectedValue = frth_apr;
+            string[] pathParts = p_path.Split(new string[] { "->" }, StringSplitOptions.None);
 
-                objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
-                objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+            // Ensure there are at least 4 parts
+            if (pathParts.Length >= 4)
+            {
                 // Assign values to variables
-                ddlAA1.SelectedValue = fst_apr;
-                ddlAA2.SelectedValue = scnd_apr;
-                ddlAA3.SelectedValue = trd_apr;
-                ddlAA4.SelectedValue = frth_apr;
-                string[] pathParts = p_path.Split(new string[] { "->" }, StringSplitOptions.None);
-
-                // Ensure there are at least 4 parts
-                if (pathParts.Length >= 4)
-                {
-                    // Assign values to variables
-                    ddlAA1.SelectedItem.Text = Convert.ToString(pathParts[0]);
-                    ddlAA2.SelectedItem.Text = Convert.ToString(pathParts[1]);
-                    ddlAA3.SelectedItem.Text = Convert.ToString(pathParts[2]);
-                    ddlAA4.SelectedItem.Text = Convert.ToString(pathParts[3]);
-                }
-
-                //Commented By Himanshu Tamrakar 24/11/2023
-                //ddlAA1.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.FIRST_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG +'-  '+ UA.UA_NAME ", "HGD.HGP_ID=" + recid);
-                //ddlAA2.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.SECOND_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG+'  -'+ UA.UA_NAME", "HGD.HGP_ID=" + recid);
-                //ddlAA3.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.THIRD_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG +' - '+ UA.UA_NAME", "HGD.HGP_ID=" + recid);
-                //ddlAA4.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.FOURTH_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG+'  -'+  UA.UA_NAME", "HGD.HGP_ID=" + recid);
-                txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
-                if ((ddlAA1.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA1.SelectedItem.Text).ToUpper() == "PARENTS")
-                {
-                    ddlAA1.Enabled = false;
-                    ddlAA2.Enabled = true;
-
-                }
-                else if ((ddlAA2.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA2.SelectedItem.Text).ToUpper() == "PARENTS")
-                {
-                    ddlAA1.Enabled = true;
-                    ddlAA2.Enabled = false;
-                }
-                //End By Himanshu tamrakar
+                ddlAA1.SelectedItem.Text = Convert.ToString(pathParts[0]);
+                ddlAA2.SelectedItem.Text = Convert.ToString(pathParts[1]);
+                ddlAA3.SelectedItem.Text = Convert.ToString(pathParts[2]);
+                ddlAA4.SelectedItem.Text = Convert.ToString(pathParts[3]);
             }
-            if (Checked < 0 || Checked > 1)
+
+            //Commented By Himanshu Tamrakar 24/11/2023
+            //ddlAA1.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.FIRST_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG +'-  '+ UA.UA_NAME ", "HGD.HGP_ID=" + recid);
+            //ddlAA2.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.SECOND_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG+'  -'+ UA.UA_NAME", "HGD.HGP_ID=" + recid);
+            //ddlAA3.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.THIRD_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG +' - '+ UA.UA_NAME", "HGD.HGP_ID=" + recid);
+            //ddlAA4.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.FOURTH_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG+'  -'+  UA.UA_NAME", "HGD.HGP_ID=" + recid);
+            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
+            if ((ddlAA1.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA1.SelectedItem.Text).ToUpper() == "PARENTS")
             {
-                objCommon.DisplayMessage("Please select only one record to change approval", this.Page);
-                finalAproval.Visible = true;
-                changeApproval.Visible = false;
-                btnApprove.Visible = true;
+                ddlAA1.Enabled = false;
+                ddlAA2.Enabled = true;
+
             }
+            else if ((ddlAA2.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA2.SelectedItem.Text).ToUpper() == "PARENTS")
+            {
+                ddlAA1.Enabled = true;
+                ddlAA2.Enabled = false;
+            }
+            //End By Himanshu tamrakar
+        }
+        if (Checked < 0 || Checked > 1)
+        {
+            objCommon.DisplayMessage("Please select only one record to change approval", this.Page);
+            finalAproval.Visible = true;
+            changeApproval.Visible = false;
+            btnApprove.Visible = true;
+        }
 
     }
 
     //(ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS") condition Added by Himanshu Tamrakar 24/11/2023
-    private void EnableDisable(int index)  
+    private void EnableDisable(int index)
     {
-            switch (index)
-            {
-                case 1:
-                    if (ddlAA1.SelectedIndex == 0)
-                    {
+        switch (index)
+        {
+            case 1:
+                if (ddlAA1.SelectedIndex == 0)
+                {
 
-                        if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS") //Added by Himanshu Tamrakar 24/11/2023
-                        {
-                            ddlAA2.SelectedIndex = 0;
-                            ddlAA2.Enabled = true;
-                            ddlAA3.SelectedIndex = 0;
-                            ddlAA3.Enabled = false;
-                            string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString();
-                        }
-                        else
-                        {
-                            ddlAA2.SelectedIndex = 0;
-                            ddlAA2.Enabled = false;
-                            ddlAA3.SelectedIndex = 0;
-                            ddlAA3.Enabled = false;
-                            string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                        }
-
-                    }
-                    else
+                    if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS") //Added by Himanshu Tamrakar 24/11/2023
                     {
-                        if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
-                        {
-                            ddlAA3.Enabled = true;
-                            string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            ddlAA3.SelectedIndex = 0;
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
-                            ddlAA2.SelectedItem.Text = "Parent";
-                        }
-                        else
-                        {
-                            ddlAA2.Enabled = true;
-                            string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            ddlAA3.SelectedIndex = 0;
-                            ddlAA3.Enabled = false;
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString();
-                        }
-                    }
-                            
-                    break;
-
-                case 2:
-                    if (ddlAA2.SelectedIndex == 0)
-                    {
-                        if(ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS")
-                        {
-                            ddlAA3.Enabled = true;
-                            ddlAA3.SelectedIndex = 0;
-                            string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() ;
-                        }
-                        else
-                        {
-                            ddlAA2.SelectedIndex = 0;
-                            ddlAA2.Enabled = false;
-                            ddlAA3.SelectedIndex = 0;
-                            ddlAA3.Enabled = false;
-                            string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                        }
-                            
-                    }
-                    else
-                    {
-                        if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
-                        {
-                            ddlAA3.Enabled = true;
-                            string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
-                        }
-                        
-                        else
-                        {
-                            ddlAA3.Enabled = true;
-                            string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
-                        }
-                        
-                            
-                    }
-                    break;
-
-                case 3:
-                    if (ddlAA3.SelectedIndex == 0)
-                    {
-                        ddlAA4.SelectedIndex = 0;
-                        ddlAA4.Enabled = false;
-                        string swhere = "ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
-                        objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", swhere, "UA_NO");
+                        ddlAA2.SelectedIndex = 0;
+                        ddlAA2.Enabled = true;
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
                         txtAAPath.Text = ddlAA1.SelectedItem.ToString();
                     }
                     else
                     {
-                        if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
-                        {
-                            ddlAA4.Enabled = true;
-                            string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
-                        }
-                        else if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS")
-                        {
-                            ddlAA4.Enabled = true;
-                            string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
-                        }
-                        else
-                        {
-                            ddlAA4.Enabled = true;
-                            string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
-                            objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
-                            txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
-                        }
-                            
+                        ddlAA2.SelectedIndex = 0;
+                        ddlAA2.Enabled = false;
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
                     }
-                    break;
 
-                case 4:
-                    if (ddlAA4.SelectedIndex != 0)
+                }
+                else
+                {
+                    if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
                     {
-                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
+                        ddlAA3.Enabled = true;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        ddlAA3.SelectedIndex = 0;
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
+                        ddlAA2.SelectedItem.Text = "Parent";
                     }
-                    break;
-            }
+                    else
+                    {
+                        ddlAA2.Enabled = true;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString();
+                    }
+                }
+
+                break;
+
+            case 2:
+                if (ddlAA2.SelectedIndex == 0)
+                {
+                    if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA3.Enabled = true;
+                        ddlAA3.SelectedIndex = 0;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
+                    }
+                    else
+                    {
+                        ddlAA2.SelectedIndex = 0;
+                        ddlAA2.Enabled = false;
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                    }
+
+                }
+                else
+                {
+                    if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA3.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
+                    }
+
+                    else
+                    {
+                        ddlAA3.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
+                    }
+
+
+                }
+                break;
+
+            case 3:
+                if (ddlAA3.SelectedIndex == 0)
+                {
+                    ddlAA4.SelectedIndex = 0;
+                    ddlAA4.Enabled = false;
+                    string swhere = "ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                    objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", swhere, "UA_NO");
+                    txtAAPath.Text = ddlAA1.SelectedItem.ToString();
+                }
+                else
+                {
+                    if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA4.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
+                    }
+                    else if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA4.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
+                    }
+                    else
+                    {
+                        ddlAA4.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
+                    }
+
+                }
+                break;
+
+            case 4:
+                if (ddlAA4.SelectedIndex != 0)
+                {
+                    txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
+                }
+                break;
+        }
     }
 
     protected void ddlAA1_SelectedIndexChanged(object sender, EventArgs e)

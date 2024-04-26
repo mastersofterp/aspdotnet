@@ -195,13 +195,9 @@ public partial class Hostel_Masters_Room : System.Web.UI.Page
         {
             //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + " AND FLOOR_NO=" + ddlFloor.SelectedValue + " AND ROOM_NAME='" + txtRoomName.Text + "'");
             //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "'");
-<<<<<<< HEAD
-            string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---OrganizationId filter added by Saurabh L on 24/05/2022
-=======
             //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---OrganizationId filter added by Saurabh L on 24/05/2022
             //string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "BLOCK_NO=" + ddlBlock.SelectedValue + " AND FLOOR_NO=" + ddlFloor.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // ---Floor Cond  added by Himanshu Tamrakar on 28/02/2024
             string roomno = objCommon.LookUp("ACD_HOSTEL_ROOM", "ROOM_NO", "HBNO="+Convert.ToInt32(ddlHostel.SelectedValue)+" AND BLOCK_NO=" + ddlBlock.SelectedValue + " AND FLOOR_NO=" + ddlFloor.SelectedValue + "AND ROOM_NAME='" + txtRoomName.Text + "' AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); // --- Cond  added by Himanshu Tamrakar on 16/03/2024
->>>>>>> 256fde10 ([BUGFIX][56172] HOSTEL ROOM)
             if (roomno != null && roomno != string.Empty)
             {
                 flag = true;

@@ -165,7 +165,6 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
 
     private void ShowReport()
     {
-<<<<<<< HEAD
         try
         {
             //Added By Rishabh on 31/12/2021
@@ -183,69 +182,6 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
                 filename = "Course_Teacher_Not_Allot";
             }
             else if (ddlReport.SelectedValue == "2")
-=======
-        //Added By Rishabh on 31/12/2021
-        //if (rblAllotment.SelectedValue != "1" && rblAllotment.SelectedValue != "2" && rblAllotment.SelectedValue != "3")
-        //{
-        //    objCommon.DisplayMessage(this.Page, "Please select option.", this.Page);
-        //    return;
-        //}
-        DataSet ds = null;
-        string filename = string.Empty;
-        if (ddlReport.SelectedValue == "1")
-        {
-            ds = objAllot.GetCourseTeachernotAllot(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["colcode"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ddlSemester.SelectedValue));
-            ds.Tables[0].TableName = "Course_Teacher_Not_Allot";
-            filename = "Course_Teacher_Not_Allot";
-        }
-        else if (ddlReport.SelectedValue == "2")
-        {
-            ds = objAllot.GetTeachernotAllot(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["colcode"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ddlSemester.SelectedValue));
-           
-            ds.Tables[0].TableName = "Teacher Not Allot";
-            filename = "Teacher Not Allot";
-        }
-        else if (ddlReport.SelectedValue == "3")
-        {
-            ds = objAllot.GetCourseTeacherAllotmentDoneExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSemester.SelectedValue));
-            ds.Tables[0].TableName = "Course Teacher Allot";
-            ds.Tables[1].TableName = "Summery Course Teacher Report";
-            filename = "Course Teacher Allot";
-        }
-        else if (ddlReport.SelectedValue == "4")
-        {
-            ds = objAllot.GetFacultyNotTagToCourse();
-            ds.Tables[0].TableName = "Teacher Not Tag";
-            filename = "Teacher Not Alloted to any Course";
-        }
-        if (ds.Tables[0].Rows.Count < 1)
-        {
-            objCommon.DisplayMessage(this.updTeacher, "Record Not Found", this.Page);
-            return;
-        }
-        GridView gv = new GridView();
-        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-        {
-            //gv.DataSource = ds;
-            //gv.DataBind();
-            //string attachment = rblAllotment.SelectedValue != "3" ? "attachment ; filename=Teacher_Not_Allot_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls" : "attachment ; filename=Teacher_Alloted_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-            //Response.ClearContent();
-            //Response.AddHeader("content-disposition", attachment);
-            //Response.ContentType = "application/ms-excel";
-            //StringWriter sw = new StringWriter();
-            //HtmlTextWriter htw = new HtmlTextWriter(sw);
-            //gv.RenderControl(htw);
-            //Response.Write(sw.ToString());
-            //Response.Flush();
-            //Response.End();
-            string attachment = "attachment ; filename=" + filename + ".xls";
-
-            //if (rblAllotment.SelectedValue == "3")
-            //{
-            //    ds.Tables[1].TableName = "Summery Course Teacher Report";
-            //}
-            using (XLWorkbook wb = new XLWorkbook())
->>>>>>> eb55f393 ([ENHANCEMENT] [54221] [TEACHER NOT TAGGED])
             {
                 ds = objAllot.GetTeachernotAllot(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["colcode"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ddlSemester.SelectedValue));
 
@@ -255,8 +191,8 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             else if (ddlReport.SelectedValue == "3")
             {
                 ds = objAllot.GetCourseTeacherAllotmentDoneExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSemester.SelectedValue));
-                ds.Tables[0].TableName = "Course Teacher Allot";
-                ds.Tables[1].TableName = "Summery Course Teacher Report";
+                ds.Tables[0].TableName = "Course Teacher Allotment";
+                ds.Tables[1].TableName = "Summary Course Teacher Report";
                 filename = "Course Teacher Allot";
             }
             // Added By Jay T. On dated 27032024 (TkNo.55317)  Add Session Condition In Excel 
@@ -424,7 +360,6 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-<<<<<<< HEAD
     #endregion DDL
 
     #region ddlReport
@@ -472,30 +407,4 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
         }
     }
     #endregion ddlReport
-=======
-    protected void ddlReport_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        ddlSession.SelectedIndex = 0;
-        ddlClgScheme.SelectedIndex = 0;
-        ddlSemester.SelectedIndex = 0;
-
-        if (Convert.ToInt32(ddlReport.SelectedValue) > 0)
-        {
-            pnlfooter.Visible = true;
-            if (Convert.ToInt32(ddlReport.SelectedValue) == 1 || Convert.ToInt32(ddlReport.SelectedValue) == 2 || Convert.ToInt32(ddlReport.SelectedValue) == 3)
-            {
-                pnlHideShow.Visible = true;
-            }
-            else
-            {
-                pnlHideShow.Visible = false;
-            }
-        }
-        else
-        {
-            pnlfooter.Visible = false;
-            pnlHideShow.Visible = false;
-        }
-    }
->>>>>>> eb55f393 ([ENHANCEMENT] [54221] [TEACHER NOT TAGGED])
 }

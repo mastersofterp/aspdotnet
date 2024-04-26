@@ -66,8 +66,8 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-                <div class="box-header with-border">
-                    <h3 class="box-title">CREATE ROOMS</h3>
+                 <div class="box-header with-border">
+                    <h3 class="box-title" style="text-transform:uppercase;" ><asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
 
                 <div class="box-body">

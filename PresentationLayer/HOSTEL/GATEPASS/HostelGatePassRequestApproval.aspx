@@ -352,52 +352,6 @@
                                 </div>
                             </div>
                         </div>
-<<<<<<< HEAD
-                         <div class="col-12">
-                        <asp:Repeater ID="lvShowApprovalStatus" runat="server">
-                            <HeaderTemplate>
-                                <div class="sub-heading">
-                                    <h5>Approval Status</h5>
-                                </div>
-                                <table id="table2" class="table table-striped table-bordered nowrap " style="width: 100%">
-                                    <thead class="bg-light-blue">
-                                        <tr>
-                                            <th>First Approval
-                                            </th>
-                                            <th>Second Approval
-                                            </th>
-                                            <th>Third Approval
-                                            </th>
-                                            <th>Fourth Approval
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                            </HeaderTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td>
-                                         <asp:Label ID="lblFirstApproval" runat="server" ForeColor='<%# Eval("FIRST_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("FIRST_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FIRST_APPROVAL_STATUS") %>'></asp:Label>
-                                    </td>
-                                    <td>
-                                        <asp:Label ID="lblSecondApproval" runat="server" ForeColor='<%# Eval("SECOND_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("SECOND_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("SECOND_APPROVAL_STATUS") %>'></asp:Label>
-                                    </td>
-                                    <td>
-                                        <asp:Label ID="lblThirdApproval" runat="server" ForeColor='<%# Eval("THIRD_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("THIRD_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("THIRD_APPROVAL_STATUS") %>'></asp:Label>
-                                    </td>
-                                    <td>
-                                        <asp:Label ID="lblFourthApproval" runat="server" ForeColor='<%# Eval("FOURTH_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("FOURTH_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FOURTH_APPROVAL_STATUS") %>'></asp:Label>
-                                    </td>
-                                   
-                                    
-                                </tr>
-                            </ItemTemplate>
-                            <FooterTemplate>
-                                </tbody></table>
-                            </FooterTemplate>
-                        </asp:Repeater>
-                    </div>
-=======
                         <div class="col-12">
                             <asp:Repeater ID="lvShowApprovalStatus" runat="server">
                                 <HeaderTemplate>
@@ -443,7 +397,6 @@
                                 </FooterTemplate>
                             </asp:Repeater>
                         </div>
->>>>>>> 9ae1c2d5 ([ENHANCEMENT][56241] GATE PASS CHANGES)
                     </div>
                 </div>
                 <div class="box-footer">

@@ -29,7 +29,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     SendEmailCommon objSendEmail = new SendEmailCommon();
 
     //below code added by Himanshu Tamrakar 05042024
-    DateTime Fromdate = DateTime.Now.AddDays(-1);  
+    DateTime Fromdate = DateTime.Now.AddDays(-1);
     DateTime Todate = DateTime.Now.AddDays(7);
 
     string gatepass_no;
@@ -75,16 +75,10 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                     pnlStudentHGPRequestDetails.Visible = false;
                     pnlbuttons.Visible = false;
                 }
-<<<<<<< HEAD
-                objCommon.FillDropDownList(ddlSearch, "ACD_STUDENT", "IDNO", "STUDNAME", "HOSTELER=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "IDNO");
-                string HostelNo = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
-
-=======
                 //objCommon.FillDropDownList(ddlSearch, "ACD_STUDENT", "IDNO", "STUDNAME", "HOSTELER=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "STUDNAME");
                 objCommon.FillDropDownList(ddlSearch, " ACD_STUDENT S INNER JOIN ACD_HOSTEL_ROOM_ALLOTMENT R ON S.IDNO=R.RESIDENT_NO ", "DISTINCT S.IDNO", "S.STUDNAME", " S.HOSTELER=1 AND S.OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + " AND  R.HOSTEL_SESSION_NO IN (SELECT MAX(HOSTEL_SESSION_NO) FROM  ACD_HOSTEL_SESSION WHERE FLOCK=1) AND R.CAN=0", "STUDNAME"); //Added By Himanshu tamrakar on date 01/04/2024
-               string HostelNo = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
-              // objCommon.FillDropDownList(ddlPurposeSearch, "ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME", "ISACTIVE=1", "PURPOSE_NO");
->>>>>>> 9ae1c2d5 ([ENHANCEMENT][56241] GATE PASS CHANGES)
+                string HostelNo = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
+                // objCommon.FillDropDownList(ddlPurposeSearch, "ACD_HOSTEL_PURPOSE_MASTER", "PURPOSE_NO", "PURPOSE_NAME", "ISACTIVE=1", "PURPOSE_NO");
 
 
                 objCommon.FillDropDownList(ddlStuType, "ACD_HOSTEL_STUDENT_TYPE", "STUDENT_TYPE_ID", "STUDENT_TYPE", "STUDENT_TYPE_ID>0", "STUDENT_TYPE_ID");
@@ -157,20 +151,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (ddlinHourFrom.SelectedValue == "0")
             {
-<<<<<<< HEAD
                 objCommon.DisplayMessage("Please Select In Hour From", this.Page);
-=======
-                objCommon.DisplayMessage("Please Select In Hour From",this.Page);
->>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                 return;
             }
             if (ddloutHourFrom.SelectedValue == "0")
             {
-<<<<<<< HEAD
                 objCommon.DisplayMessage("Please Select Out Hour From", this.Page);
-=======
-                objCommon.DisplayMessage("Please Select Out Hour From",this.Page);
->>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                 return;
             }
             if (Convert.ToInt32(Session["usertype"]) == 1)
@@ -247,42 +233,10 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 }
             }
 
-<<<<<<< HEAD
-            BindListView();
-=======
-                        if (CheckDuplicateEntry() == true)
-                        {
-                            objCommon.DisplayMessage("Entry for this Selection Already Done.", this.Page);
-                            return;
-                        }
+            //commented and added by Himanshu Tamrakar 05042024
+            //BindListView();
+            BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
 
-                        int cs = objGPR.Insert_Update_GatePassRequest(objGatePass, Convert.ToInt32(ddlHostel.SelectedValue));
-                        if (cs == 2)
-                        {
-                            objCommon.DisplayMessage("Record Updated Successfully.", this.Page);
-                            ViewState["action"] = "add";
-                            Clear();
-                        }
-                        else if (cs == 7)
-                        {
-                            objCommon.DisplayMessage("You Already Applied Gate Pass For Selected Date.", this.Page);  //Added By himanshu tamrakar 07-03-2024
-                            ViewState["action"] = "add";
-                            Clear();
-                        }
-                        else if (cs == -99)
-                        {
-                            objCommon.DisplayMessage("Passing path Not found.Contact to Administrator.", this.Page);
-                            ViewState["action"] = "add";
-                            Clear();
-                        }
-                    }
-                }
-
-                //commented and added by Himanshu Tamrakar 05042024
-                //BindListView();
-                BindListView(null, 0, Convert.ToString(DateTime.Parse(Convert.ToString(Todate)).ToString("yyyy-MM-dd")), Convert.ToString(DateTime.Parse(Convert.ToString(Fromdate)).ToString("yyyy-MM-dd")), "0");
-                 
->>>>>>> 9ae1c2d5 ([ENHANCEMENT][56241] GATE PASS CHANGES)
         }
         catch (Exception ex)
         {
@@ -736,15 +690,9 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                     {
                         if (Convert.ToInt32(ddlinHourFrom.SelectedValue) <= Convert.ToInt32(ddloutHourFrom.SelectedValue))
                         {
-<<<<<<< HEAD
                             objCommon.DisplayMessage("Hour To should be greater than Hour From", this.Page);
                             ddloutHourFrom.SelectedValue = "11";
                             ddloutMinFrom.SelectedValue = "59";
-=======
-                            objCommon.DisplayMessage("Hour To should be greater than Hour From",this.Page);
-                            ddloutHourFrom.SelectedValue="11";
-                            ddloutMinFrom.SelectedValue="59";
->>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                             ddlAM_PM2.Focus();
                         }
                     }
@@ -1034,18 +982,13 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             else
             {
                 ddloutHourFrom.SelectedValue = "12";
-<<<<<<< HEAD
                 ddloutMinFrom.SelectedValue = "0";
-=======
-                ddloutMinFrom.SelectedValue  = "0";
->>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
             }
         }
         if (ddlAM_PM1.SelectedValue == "AM")
         {
 
             if (hour < 12)
-<<<<<<< HEAD
             {
                 if (DateTime.Now.Hour > 12)
                 {
@@ -1063,25 +1006,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             {
                 if (ddloutHourFrom.SelectedValue != "0")
                 {
-=======
-            {
-                if (DateTime.Now.Hour > 12)
-                {
-                    //ddloutHourFrom.SelectedValue = Convert.ToString(DateTime.Now.Hour);
-                    ddloutHourFrom.SelectedValue = Convert.ToString(hour);
-                    ddloutMinFrom.SelectedValue = Convert.ToString(minute);
-                }
-                else
-                {
-                    ddloutHourFrom.SelectedValue = "12";
-                    ddloutMinFrom.SelectedValue = "0";
-                }
-            }
-            if(ddlAM_PM2.SelectedValue == "AM")
-            {
-                if (ddloutHourFrom.SelectedValue != "0")
-                {
->>>>>>> 81a226ca ([ENHANCEMENT][56241] GATE PASS PAGES)
                     if (Convert.ToInt32(ddloutHourFrom.SelectedValue) > Convert.ToInt32(ddlinHourFrom.SelectedValue))
                     {
                         objCommon.DisplayMessage("In hour from should be greater than Out hour from.", this.Page);
@@ -1102,7 +1026,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     ////below code added by Himanshu tamrakar 05042024
     protected void btnSearch_Click(object sender, EventArgs e)
     {
-        if (Convert.ToDateTime(txtFromDateSearch.Text)>Convert.ToDateTime(txtToDateSearch.Text))
+        if (Convert.ToDateTime(txtFromDateSearch.Text) > Convert.ToDateTime(txtToDateSearch.Text))
         {
             objCommon.DisplayMessage("To Date is Greater Than From date.", this);
             txtToDateSearch.Text = string.Empty;
@@ -1114,8 +1038,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         //int Purpose = string.IsNullOrEmpty(ddlPurposeSearch.SelectedValue)?0:Convert.ToInt32(ddlPurposeSearch.SelectedValue);
         string Todate = string.IsNullOrEmpty(txtToDateSearch.Text) ? null : DateTime.Parse(txtToDateSearch.Text).ToString("yyyy-MM-dd");
         string Fromdate = string.IsNullOrEmpty(txtFromDateSearch.Text) ? null : DateTime.Parse(txtFromDateSearch.Text).ToString("yyyy-MM-dd");
-       // string Status = string.IsNullOrEmpty(ddlStatus.SelectedValue) ? null : ddlStatus.SelectedValue;
-        this.BindListView(Applydate,0, Todate, Fromdate,"0");
+        // string Status = string.IsNullOrEmpty(ddlStatus.SelectedValue) ? null : ddlStatus.SelectedValue;
+        this.BindListView(Applydate, 0, Todate, Fromdate, "0");
     }
 
     //protected void btnApplyGatePass_Click(object sender, EventArgs e)
