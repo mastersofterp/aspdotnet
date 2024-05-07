@@ -510,21 +510,19 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Exam Registration'"));
                     Session["payactivityno"] = activityno;
                 }
-                else 
+                else
                 {
                     int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                     Session["payactivityno"] = activityno;
                 }
             }
-
+            else if (Session["OrgId"].ToString() == "8" || Session["OrgId"].ToString() == "23")
+            {
+                college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+            }
             else
             {
                 Session["payactivityno"] = 1;
-            }
-
-            if (Session["OrgId"].ToString() == "8")
-            {
-                college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
             }
             //**********************************End by Nikhil L.********************************************//
 
