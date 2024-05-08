@@ -243,7 +243,13 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
             }
             else
             {
-                objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT S WITH (NOLOCK) INNER JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(S.SEMESTERNO=SM.SEMESTERNO)", "DISTINCT SM.SEMESTERNO", "SM.SEMESTERNAME ", "S.COLLEGE_ID=" + ViewState["college_id"].ToString() + " AND SM.SEMESTERNO<=" + semCount + "", "SM.SEMESTERNAME asc");
+                objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT S WITH (NOLOCK) INNER JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(S.SEMESTERNO=SM.SEMESTERNO)",
+                    "DISTINCT SM.SEMESTERNO", "SM.SEMESTERNAME ",
+                    "S.COLLEGE_ID=" + ViewState["college_id"].ToString() + 
+                    " AND SM.SEMESTERNO<=" + semCount + 
+                    " AND ACTIVESTATUS=1 UNION SELECT DISTINCT SEMESTERNO,SEMESTERNAME FROM ACD_SEMESTER WHERE SEMESTERNAME like '%SUMMER%' AND ACTIVESTATUS=1", // added by Shailendra K. on dated 08.05.2024 as per Dr. Manoj sir Suggestion for summer semester.
+                    "");
+
             }
             ddlSemester.Focus();
             this.clearATListView();
@@ -1763,7 +1769,11 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
         }
         else
         {
-            objCommon.FillDropDownList(ddlSemesterAT, "ACD_STUDENT S WITH (NOLOCK) INNER JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(S.SEMESTERNO=SM.SEMESTERNO)", "DISTINCT SM.SEMESTERNO", "SM.SEMESTERNAME ", "S.COLLEGE_ID=" + ViewState["college_id"].ToString() + " AND SM.SEMESTERNO<=" + semCount + "", "SM.SEMESTERNAME asc");
+            objCommon.FillDropDownList(ddlSemesterAT, "ACD_STUDENT S WITH (NOLOCK) INNER JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(S.SEMESTERNO=SM.SEMESTERNO)",
+                "DISTINCT SM.SEMESTERNO", "SM.SEMESTERNAME ",
+                "S.COLLEGE_ID=" + ViewState["college_id"].ToString() + " AND SM.SEMESTERNO<=" + semCount +
+                 " AND ACTIVESTATUS=1 UNION SELECT DISTINCT SEMESTERNO,SEMESTERNAME FROM ACD_SEMESTER WHERE SEMESTERNAME like '%SUMMER%' AND ACTIVESTATUS=1", // added by Shailendra K. on dated 08.05.2024 as per Dr. Manoj sir Suggestion for summer semester.
+                "");
         }
 
         ddlSemesterAT.Focus();
@@ -2704,7 +2714,11 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
         }
         else
         {
-            objCommon.FillDropDownList(ddlsemesterCT, "ACD_STUDENT S WITH (NOLOCK) INNER JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(S.SEMESTERNO=SM.SEMESTERNO)", "DISTINCT SM.SEMESTERNO", "SM.SEMESTERNAME ", "S.COLLEGE_ID=" + ViewState["college_id"].ToString() + " AND SM.SEMESTERNO<=" + semCount + "", "SM.SEMESTERNAME asc");
+            objCommon.FillDropDownList(ddlsemesterCT, "ACD_STUDENT S WITH (NOLOCK) INNER JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(S.SEMESTERNO=SM.SEMESTERNO)",
+                "DISTINCT SM.SEMESTERNO", "SM.SEMESTERNAME ",
+                "S.COLLEGE_ID=" + ViewState["college_id"].ToString() + " AND SM.SEMESTERNO<=" + semCount +
+                " AND ACTIVESTATUS=1 UNION SELECT DISTINCT SEMESTERNO,SEMESTERNAME FROM ACD_SEMESTER WHERE SEMESTERNAME like '%SUMMER%' AND ACTIVESTATUS=1", // added by Shailendra K. on dated 08.05.2024 as per Dr. Manoj sir Suggestion for summer semester.
+                "");
         }
         ddlsemesterCT.Focus();
     }
