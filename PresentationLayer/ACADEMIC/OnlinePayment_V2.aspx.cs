@@ -464,7 +464,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 {
                     Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                    //Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
+                    Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
                 }
             }
@@ -1465,7 +1465,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 {
                     Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                    //Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
+                    Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
                 }
             }

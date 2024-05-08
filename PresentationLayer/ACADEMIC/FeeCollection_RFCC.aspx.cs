@@ -110,6 +110,7 @@ public partial class Academic_FeeCollection : System.Web.UI.Page
 
                 }
                 txtEnrollNo.Focus();
+                Session["DD_Info"] = null;
                 //ceDateOfReporting.EndDate = DateTime.Now.Date;   //to dissable future  Date
             }
             else
@@ -1534,13 +1535,13 @@ public partial class Academic_FeeCollection : System.Web.UI.Page
             ////if (examType == 1)
             ////{
 
-            if (ViewState["ReceiptType"].ToString() == "EF")
-            {
-                dcr.SessionNo = Convert.ToInt32(ViewState["SESSION_NO"]);
+            if (ViewState["ReceiptType"].ToString() == "TF")
+            { 
+                dcr.SessionNo = Convert.ToInt32(Session["currentsession"].ToString());
             }
             else
             {
-                dcr.SessionNo = Convert.ToInt32(Session["currentsession"].ToString());
+                dcr.SessionNo = Convert.ToInt32(ViewState["SESSION_NO"]);
             }
 
             ////}
@@ -2855,7 +2856,7 @@ public partial class Academic_FeeCollection : System.Web.UI.Page
             ViewState["semesterno"] = lblSem.ToolTip;
             lblseletedsem.Text = lblSem.Text;
             ViewState["ReceiptType"] = lblreceipttype.ToolTip;
-            if (ViewState["ReceiptType"].ToString() == "EF")
+            if (ViewState["ReceiptType"].ToString() != "TF")
             {
                 ViewState["SESSION_NO"] = Convert.ToInt32(lblSessionno.ToolTip);
             }
@@ -3006,14 +3007,14 @@ public partial class Academic_FeeCollection : System.Web.UI.Page
                     int sessionno = 0;
                     int sessionmax = 0;
                     string feedback = string.Empty;
-                    if (ViewState["ReceiptType"].ToString() == "EF")
+                    if (ViewState["ReceiptType"].ToString() == "TF")
                     {
-                        sessionno = Convert.ToInt16(ViewState["SESSION_NO"].ToString());
-                        Session["currentsession"] = Convert.ToInt16(ViewState["SESSION_NO"].ToString());
+                        sessionno = Convert.ToInt16(Session["currentsession"].ToString());
                     }
                     else
                     {
-                        sessionno = Convert.ToInt16(Session["currentsession"].ToString());
+                        sessionno = Convert.ToInt16(ViewState["SESSION_NO"].ToString());
+                        Session["currentsession"] = Convert.ToInt16(ViewState["SESSION_NO"].ToString());
                     }
 
                     sessionmax = Convert.ToInt16(objCommon.LookUp("ACD_SESSION_MASTER", "ISNULL(MAX(SESSIONNO),0)  ", "EXAMTYPE=1 AND SESSIONNO < " + sessionno));
