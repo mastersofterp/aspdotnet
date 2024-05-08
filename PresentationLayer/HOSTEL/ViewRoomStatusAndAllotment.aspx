@@ -176,7 +176,7 @@
         PopupControlID="pnlPopup" TargetControlID="HiddenRoomno" BackgroundCssClass="modalBackground" CancelControlID="imbClose" OnCancelScript="cancelCloseClick();">
         <%--CancelControlID="imbClose" OnCancelScript="cancelCloseClick();"--%>
     </ajaxToolKit:ModalPopupExtender>
-    <asp:Panel ID="pnlPopup" runat="server" CssClass="modalPopup" Style="display: block">
+    <asp:Panel ID="pnlPopup" runat="server" CssClass="modalPopup" Style="display:block;height:600px;" >
         <div class="header">
             <asp:Label ID="lblPopHeader" runat="server"></asp:Label>
             <asp:ImageButton ID="imbClose" runat="server" OnClientClick="ClosePopUp(this.id);" class="close" ImageUrl="~/Images/cancel.gif" />
@@ -184,7 +184,7 @@
 
         <asp:UpdatePanel ID="udpInnerUpdatePanel" runat="Server" UpdateMode="Conditional" ChildrenAsTriggers="true">
             <ContentTemplate>
-                <div class="col-md-12" style="height:500px; overflow-x:scroll;">
+                <div class="col-md-12" style="height:400px; overflow-x:scroll;">
                     <div class="row">
 
                         <div class="col-md-12" style="font-weight: bold; margin-bottom: 10px;">

@@ -35,7 +35,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
     RoomAllotmentController raController = new RoomAllotmentController();
     RoomAllotment roomAllotment = new RoomAllotment();
 
-     HostelFeeCollectionController objFee = new HostelFeeCollectionController();
+    HostelFeeCollectionController objFee = new HostelFeeCollectionController();
     //The number of Columns to be generated
     const int colsCount = 3;    //You can changed the value of 8 based on you requirements
 
@@ -102,70 +102,70 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                         else
                         {
 
-                         //Below code Added by Saurabh L on 27/02/2023 Purpose: check for Allow Hostel Disciplinary Action 
-                        string Allow_HostelDisciplinary = this.objCommon.LookUp("ACD_HOSTEL_MODULE_CONFIG", "Allow_HostelDisciplinaryAction", "OrganizationId=" + Session["OrgId"] + "");
+                            //Below code Added by Saurabh L on 27/02/2023 Purpose: check for Allow Hostel Disciplinary Action 
+                            string Allow_HostelDisciplinary = this.objCommon.LookUp("ACD_HOSTEL_MODULE_CONFIG", "Allow_HostelDisciplinaryAction", "OrganizationId=" + Session["OrgId"] + "");
 
-                       if (Allow_HostelDisciplinary == "1")
-                       {
-                           string DisciplinaryRecordEndDate = this.objCommon.LookUp("ACD_HOSTEL_DESCIPLINARY_ACTIONS_ENTRY", "Convert(varchar, TODATE, 103)", "IDNO=" + StudIDNO + " AND  DATEADD(DAY, 1, Convert (DATE, TODATE )) > GETDATE() AND DSTATUS=0 AND OrganizationId=" + Session["OrgId"] + "");
+                            if (Allow_HostelDisciplinary == "1")
+                            {
+                                string DisciplinaryRecordEndDate = this.objCommon.LookUp("ACD_HOSTEL_DESCIPLINARY_ACTIONS_ENTRY", "Convert(varchar, TODATE, 103)", "IDNO=" + StudIDNO + " AND  DATEADD(DAY, 1, Convert (DATE, TODATE )) > GETDATE() AND DSTATUS=0 AND OrganizationId=" + Session["OrgId"] + "");
 
-                           if (DisciplinaryRecordEndDate != "")
-                           {
-                               btnShow.Visible = false;
-                               btnCancel.Visible = false;
-                               objCommon.DisplayMessage("You have Disciplinary Action upto Date : " + DisciplinaryRecordEndDate + " .", this.Page); 
-                           }
-                       }
-                        //------------ End by Saurabh L on 27/02/2023 ------------------------------
+                                if (DisciplinaryRecordEndDate != "")
+                                {
+                                    btnShow.Visible = false;
+                                    btnCancel.Visible = false;
+                                    objCommon.DisplayMessage("You have Disciplinary Action upto Date : " + DisciplinaryRecordEndDate + " .", this.Page);
+                                }
+                            }
+                            //------------ End by Saurabh L on 27/02/2023 ------------------------------
 
-                        //DataSet ds = null;
-                        divAdmin.Visible = false;
-                        btnBlock.Visible = false;
-                        plnAdmin.Visible = false;
-                        plnAdmin1.Visible = false;
-                        divStudent.Visible = true;
+                            //DataSet ds = null;
+                            divAdmin.Visible = false;
+                            btnBlock.Visible = false;
+                            plnAdmin.Visible = false;
+                            plnAdmin1.Visible = false;
+                            divStudent.Visible = true;
 
-                        string Gender = objCommon.LookUp("ACD_STUDENT", "SEX", "IDNO =" + StudIDNO);
+                            string Gender = objCommon.LookUp("ACD_STUDENT", "SEX", "IDNO =" + StudIDNO);
 
-                        int studCurrentSemeterNo = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO =" + StudIDNO));
+                            int studCurrentSemeterNo = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO =" + StudIDNO));
 
-                       if (Gender == "M")
-                       {
-                           Session["payactivityno"] = "8";
-                           this.objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "hostel_no", "HOSTEL_NAME", "hostel_no > 0 and HOSTEL_TYPE =1", "HOSTEL_NAME");
-                       }
-                       else
-                       {
-                           Session["payactivityno"] = "9";
-                           this.objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "hostel_no", "HOSTEL_NAME", "hostel_no > 0 and HOSTEL_TYPE =2", "HOSTEL_NAME");
-                       }
+                            if (Gender == "M")
+                            {
+                                Session["payactivityno"] = "8";
+                                this.objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "hostel_no", "HOSTEL_NAME", "hostel_no > 0 and HOSTEL_TYPE =1", "HOSTEL_NAME");
+                            }
+                            else
+                            {
+                                Session["payactivityno"] = "9";
+                                this.objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "hostel_no", "HOSTEL_NAME", "hostel_no > 0 and HOSTEL_TYPE =2", "HOSTEL_NAME");
+                            }
 
-                       txtStudREGNO.Text = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO =" + StudIDNO);
-                       this.DisplayStudentInfo(StudIDNO);
-                       lvStudent.Visible = false;
+                            txtStudREGNO.Text = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO =" + StudIDNO);
+                            this.DisplayStudentInfo(StudIDNO);
+                            lvStudent.Visible = false;
 
-                       this.objCommon.FillDropDownList(ddlDemandSem, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "ODD_EVEN=1 AND SEMESTERNO >=" + studCurrentSemeterNo, "SEMESTERNO");
+                            this.objCommon.FillDropDownList(ddlDemandSem, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "ODD_EVEN=1 AND SEMESTERNO >=" + studCurrentSemeterNo, "SEMESTERNO");
 
-                       string SessionNo = objCommon.LookUp("ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "HOSTEL_SESSION_NO > 0 AND FLOCK=1");
+                            string SessionNo = objCommon.LookUp("ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "HOSTEL_SESSION_NO > 0 AND FLOCK=1");
 
-                       // AND CAN=0 is added in below line by Saurabh L on 19/01/2023
-                        String RoomName = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT RA INNER JOIN ACD_HOSTEL_ROOM HR ON (RA.ROOM_NO = HR.ROOM_NO)", "ROOM_NAME", "RESIDENT_NO =" + StudIDNO + " AND CAN=0 AND HOSTEL_SESSION_NO =" + Convert.ToInt32(SessionNo)); 
-                       //String RoomName = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT RA INNER JOIN ACD_HOSTEL_ROOM HR ON (RA.ROOM_NO = HR.ROOM_NO)", "ROOM_NAME", "RESIDENT_NO =" + StudIDNO + " AND HOSTEL_SESSION_NO =" + Convert.ToInt32(Session["hostel_session"]));
-                          if (RoomName != "")
-                          {
-                              lblRoomAllot.Text = "Note :  " + RoomName + " Room Already Allotted to You For Above Hostel Session.";                
-                              //objCommon.DisplayMessage(udpInnerUpdatePanel, "" + RoomName + " Room Already Alloted.", this.Page);               
-                              ddlHostel.Enabled = false;
-                              ddlBlock.Enabled = false;
-                              ddlDemandSem.Enabled = false;
-                              btnShow.Visible = false;
-                              btnCancel.Visible = false;
-                          }
+                            // AND CAN=0 is added in below line by Saurabh L on 19/01/2023
+                            String RoomName = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT RA INNER JOIN ACD_HOSTEL_ROOM HR ON (RA.ROOM_NO = HR.ROOM_NO)", "ROOM_NAME", "RESIDENT_NO =" + StudIDNO + " AND CAN=0 AND HOSTEL_SESSION_NO =" + Convert.ToInt32(SessionNo));
+                            //String RoomName = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT RA INNER JOIN ACD_HOSTEL_ROOM HR ON (RA.ROOM_NO = HR.ROOM_NO)", "ROOM_NAME", "RESIDENT_NO =" + StudIDNO + " AND HOSTEL_SESSION_NO =" + Convert.ToInt32(Session["hostel_session"]));
+                            if (RoomName != "")
+                            {
+                                lblRoomAllot.Text = "Note :  " + RoomName + " Room Already Allotted to You For Above Hostel Session.";
+                                //objCommon.DisplayMessage(udpInnerUpdatePanel, "" + RoomName + " Room Already Alloted.", this.Page);               
+                                ddlHostel.Enabled = false;
+                                ddlBlock.Enabled = false;
+                                ddlDemandSem.Enabled = false;
+                                btnShow.Visible = false;
+                                btnCancel.Visible = false;
+                            }
 
-                       }
+                        }
                     }
                     else
-                    {                       
+                    {
                         this.objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "hostel_no", "HOSTEL_NAME", "hostel_no > 0", "HOSTEL_NAME");
                         this.objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
                         this.objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR > 0 AND ACTIVESTATUS=1", "YEAR");
@@ -179,13 +179,13 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
 
                     this.objCommon.FillDropDownList(ddlSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "HOSTEL_SESSION_NO > 0 AND FLOCK=1", "HOSTEL_SESSION_NO DESC");
 
-                  //  this.objCommon.FillDropDownList(ddlBlock, "ACD_HOSTEL_BLOCK_MASTER", "BL_NO", "BLOCK_NAME", "BL_NO > 0", "BL_NO");
+                    //  this.objCommon.FillDropDownList(ddlBlock, "ACD_HOSTEL_BLOCK_MASTER", "BL_NO", "BLOCK_NAME", "BL_NO > 0", "BL_NO");
 
                     this.objCommon.FillDropDownList(ddlDeg, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
 
                     this.objCommon.FillDropDownList(ddlSemester, "ACD_Semester", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
                     //this.objCommon.FillDropDownList(ddlSem, "acd_semester", "SEMESTERNO", "semestername", "Yearno > 0" ,"SEMESTERNO");
-                    
+
 
                     if (ddlSession.Items.Count > 1)
                     {
@@ -194,7 +194,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                     }
                     //else
                     //    btnShow.Enabled = false;
-                    
+
                 }
             }
             else
@@ -205,7 +205,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                 /// 
                 if (Session["usertype"].ToString().Equals("2"))
                 {
-                    
+
                 }
                 else
                 {
@@ -250,7 +250,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                         }
                     }
 
-                } 
+                }
             }
             //if (ViewState["TableRoomStatus"] != null && Convert.ToInt32(ViewState["RowsCount"]) > 0)
             //{
@@ -305,7 +305,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
         string vehicle_type = string.Empty;
         string vehicle_name = string.Empty;
         string vehicle_no = string.Empty;
-        int OrganizationId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]); 
+        int OrganizationId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
 
 
         int count = 0, cnt = 0;
@@ -335,7 +335,10 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                     {
                         HiddenField hdnIdno = (HiddenField)datarow.FindControl("hdnIdno");
                         roomAllotment.ResidentNo = Convert.ToInt32(hdnIdno.Value);
-
+                        if (!string.IsNullOrEmpty(txtJoinDate.Text))
+                        {
+                            roomAllotment.Joindate = Convert.ToDateTime(txtJoinDate.Text);
+                        }
                         CustomStatus cs = (CustomStatus)raController.AllotRoom(roomAllotment, hostel_no, mess_no, vehicle_type, vehicle_name, vehicle_no, OrganizationId);
                         if (cs.Equals(CustomStatus.RecordSaved))
                             cnt++;
@@ -418,7 +421,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
     #region Modal Popup Functionality
     private void ClearModalSearch()
     {
-       // txtsearchstr.Text = string.Empty;
+        // txtsearchstr.Text = string.Empty;
         txtSearchStud.Text = string.Empty;
         ddlDegree.SelectedIndex = 0;
         ddlBranch.SelectedIndex = 0;
@@ -527,46 +530,46 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                 lvStudent.DataBind();
 
                 //Below code Added by Saurabh L on 28/02/2023 Purpose: check for Allow Hostel Disciplinary Action 
-                        string Allow_HostelDisciplinary = this.objCommon.LookUp("ACD_HOSTEL_MODULE_CONFIG", "Allow_HostelDisciplinaryAction", "OrganizationId=" + Session["OrgId"] + "");
+                string Allow_HostelDisciplinary = this.objCommon.LookUp("ACD_HOSTEL_MODULE_CONFIG", "Allow_HostelDisciplinaryAction", "OrganizationId=" + Session["OrgId"] + "");
 
-                        if (Allow_HostelDisciplinary == "1")
+                if (Allow_HostelDisciplinary == "1")
+                {
+                    int i = 0;
+                    int StudIdno = 0;
+                    string REGNO = string.Empty;
+                    string DisciplinaryRecordEndDate = string.Empty;
+                    foreach (ListViewDataItem item in lvStudent.Items)
+                    {
+                        CheckBox chkSelect = item.FindControl("chkSelect") as CheckBox;
+                        StudIdno = Convert.ToInt32(dsStud.Tables[0].Rows[i]["IDNO"]);
+
+                        DisciplinaryRecordEndDate = this.objCommon.LookUp("ACD_HOSTEL_DESCIPLINARY_ACTIONS_ENTRY", "Convert(varchar, TODATE, 103)", "IDNO=" + StudIdno + " AND  DATEADD(DAY, 1, Convert (DATE, TODATE )) > GETDATE() AND DSTATUS=0 AND OrganizationId=" + Session["OrgId"] + "");
+
+                        if (DisciplinaryRecordEndDate != "")
                         {
-                            int i = 0;
-                            int StudIdno = 0;
-                            string REGNO = string.Empty;
-                            string DisciplinaryRecordEndDate = string.Empty;
-                            foreach (ListViewDataItem item in lvStudent.Items)
-                            {
-                                CheckBox chkSelect = item.FindControl("chkSelect") as CheckBox;
-                                 StudIdno = Convert.ToInt32(dsStud.Tables[0].Rows[i]["IDNO"]);
-
-                                 DisciplinaryRecordEndDate = this.objCommon.LookUp("ACD_HOSTEL_DESCIPLINARY_ACTIONS_ENTRY", "Convert(varchar, TODATE, 103)", "IDNO=" + StudIdno + " AND  DATEADD(DAY, 1, Convert (DATE, TODATE )) > GETDATE() AND DSTATUS=0 AND OrganizationId=" + Session["OrgId"] + "");
-
-                                if (DisciplinaryRecordEndDate != "")
-                                {
-                                    chkSelect.Enabled = false;
-                                }
-
-                                i++;
-                            }
-
-                            if (DisciplinaryRecordEndDate != "")
-                            {
-                                lblDisciplinary.Visible = true;
-                                lblDisciplinary.Text ="Note: Disciplinary Students has found in search and their checkbox selection disabled in below Table.";
-                            }
-
+                            chkSelect.Enabled = false;
                         }
+
+                        i++;
+                    }
+
+                    if (DisciplinaryRecordEndDate != "")
+                    {
+                        lblDisciplinary.Visible = true;
+                        lblDisciplinary.Text = "Note: Disciplinary Students has found in search and their checkbox selection disabled in below Table.";
+                    }
+
+                }
                 //----------- End by Saurabh L on 28/02/2023 ------------------------
             }
             else
             {
-               // lblStudSearchStatus.Text = "Note: Room Already Allotted to Selected Student.";
+                // lblStudSearchStatus.Text = "Note: Room Already Allotted to Selected Student.";
                 lblStudSearchStatus.Text = "Note: No Hosteller Student Found For Selected Criteria. ";
 
             }
         }
-        
+
 
         dsStud.Dispose();
     }
@@ -680,7 +683,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-      ClearControls();
+        ClearControls();
         //Response.Redirect(Request.Url.ToString());
         //ViewState["RowsCount"] = 0;
         //ViewState["TableRoomStatus"] = null;
@@ -691,7 +694,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
     public void ClearControls()
     {
         ddlHostel.SelectedIndex = 0;
-       // ddlBlock.Items.Clear();
+        // ddlBlock.Items.Clear();
         ddlBlock.SelectedIndex = 0;
         ddlDeg.SelectedIndex = 0;
         ddlSemester.SelectedIndex = 0;
@@ -749,7 +752,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
             else
                 ShowRooms();
         }
-        
+
     }
 
     public void ShowRooms()
@@ -778,7 +781,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                 dsRooms = raController.GetRoomAvailabilityStatus(Convert.ToInt32(ddlHostel.SelectedValue), Hostel_session, DegreeNo, SemesterNo, Convert.ToInt32(ddlBlock.SelectedValue));
 
                 ///  OrganizationId=" + Convert.ToInt32(Session["OrgId"])
-               
+
             }
             else
             {
@@ -786,7 +789,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                 // Purpose: To get all orgId have RoomType to show Admin side rooms
                 //if (Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 2 || Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 3 || Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 4)
                 //{
-                    dsRooms = raController.GetRoomAvailabilityStatusAdminCpuK(Convert.ToInt32(ddlHostel.SelectedValue), Hostel_session, Convert.ToInt32(ddlDeg.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlBlock.SelectedValue));
+                dsRooms = raController.GetRoomAvailabilityStatusAdminCpuK(Convert.ToInt32(ddlHostel.SelectedValue), Hostel_session, Convert.ToInt32(ddlDeg.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlBlock.SelectedValue));
 
                 //}
                 //else
@@ -803,6 +806,8 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                     //const int colsCount = 8;    //You can changed the value of 3 based on you requirements
                     double rows = Convert.ToDouble(dsRooms.Tables[0].Rows.Count) / Convert.ToDouble(colsCount);
 
+                    //Below floorcount code Added By Shivam kale 07-05-2024
+                    int floorcount = Convert.ToInt32(objCommon.LookUp("ACD_HOSTEL_BLOCK b inner join ACD_HOSTEL_BLOCK_MASTER bm  on b.BLK_NO=bm.BL_NO inner join ACD_HOSTEL_FLOOR f on b.NO_OF_FLOORS=f.FLOOR_NO", " count(FLOOR_NO)", " BM.HOSTEL_NO="+Convert.ToInt32(ddlHostel.SelectedValue)));
                     //Store the Total Rows Count in ViewState
                     //Dataset rows divide by no. of columns in dymanic table is Total No of rows in Dynamic table
                     if (ddlBlock.SelectedIndex > 0)
@@ -811,7 +816,9 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                     }
                     else
                     {
-                        ViewState["RowsCount"] = Math.Ceiling(rows) + Convert.ToInt32(ddlBlock.Items.Count - 1);
+                        //Below floorcount code Added and Commented By Shivam kale 07-05-2024
+                        //ViewState["RowsCount"] = Math.Ceiling(rows) + Convert.ToInt32(ddlBlock.Items.Count - 1);
+                        ViewState["RowsCount"] = Math.Ceiling(rows) + Convert.ToInt32(ddlBlock.Items.Count - 1 + floorcount);
                     }
 
                     ViewState["TableRoomStatus"] = dsRooms.Tables[0];
@@ -823,7 +830,17 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                     ListAllotedStudent.DataBind();
                     lblAllotStudInfo.Text = string.Empty;
                     //-------------End by  Saurabh L on 24 Feb 2023 ------------------
-
+                    //Added By Himanshu Tamrakar 19-04-2024
+                    if (Convert.ToInt32(Session["usertype"]) != 2)
+                    {
+                        divAdmin.Visible = true;
+                        btnBlock.Visible = true;
+                    }
+                    else
+                    {
+                        divStudent.Visible = true;
+                    }
+                    //End
                     pnlRoomsTable.Visible = true;
                 }
                 dsRooms.Dispose();
@@ -857,7 +874,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
             lblStudDegree.Text = ds.Tables[0].Rows[0]["DEGREENAME"].ToString();
             lblStudBranch.Text = ds.Tables[0].Rows[0]["BRANCH_NAME"].ToString();
             ViewState["SEMESTERNO"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
-        }    
+        }
     }
 
     // Below method Added by Saurabh L on 24 Feb 2023 Purpose: To show student info present in room
@@ -865,28 +882,57 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
     {
         try
         {
-        lblCapacity.Text = hidCapacity.Value;
-        lblVacancy.Text = hidVacancy.Value;
+            dvstudetails.Visible = true;
+            lblCapacity.Text = hidCapacity.Value;
+            lblVacancy.Text = hidVacancy.Value;
+            DataSet dsStudInfo = null;
 
-        DataSet dsStudInfo = null;
+            dsStudInfo = this.objCommon.FillDropDown("ACD_STUDENT S INNER JOIN  ACD_HOSTEL_ROOM_ALLOTMENT A ON (S.IDNO=A.RESIDENT_NO) INNER JOIN ACD_DEGREE D ON (S.DEGREENO = D.DEGREENO) INNER JOIN ACD_BRANCH B ON (S.BRANCHNO = B.BRANCHNO)", "S.REGNO, S.STUDNAME, D.DEGREENAME", "B.LONGNAME AS BRANCH", "A.HOSTEL_SESSION_NO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.ROOM_NO =" + Convert.ToInt32(hdnroomno.Value) + " AND A.CAN=0 AND A.OrganizationId =" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "S.REGNO");
 
-        dsStudInfo = this.objCommon.FillDropDown("ACD_STUDENT S INNER JOIN  ACD_HOSTEL_ROOM_ALLOTMENT A ON (S.IDNO=A.RESIDENT_NO) INNER JOIN ACD_DEGREE D ON (S.DEGREENO = D.DEGREENO) INNER JOIN ACD_BRANCH B ON (S.BRANCHNO = B.BRANCHNO)", "S.REGNO, S.STUDNAME, D.DEGREENAME", "B.LONGNAME AS BRANCH", "A.HOSTEL_SESSION_NO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.ROOM_NO =" + Convert.ToInt32(HiddenRoomno.Value) + " AND A.OrganizationId =" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) , "S.REGNO");
-
-          if (dsStudInfo != null)
-          {
-            if (dsStudInfo.Tables.Count > 0 && dsStudInfo.Tables[0].Rows.Count > 0)
+            if (dsStudInfo != null)
             {
-                ListAllotedStudent.DataSource = dsStudInfo;
-                ListAllotedStudent.DataBind();
+                if (dsStudInfo.Tables.Count > 0 && dsStudInfo.Tables[0].Rows.Count > 0)
+                {
+                    ListAllotedStudent.DataSource = dsStudInfo;
+                    ListAllotedStudent.DataBind();
+                    //below cond added By Himanshu tamrakar 04/04/2024
+                    divStudent.Visible = false;
+                    divAdmin.Visible = false;
+                    btnBlock.Visible = false;
+                    btninfoback.Visible = true;
+                    dvstudetails.Visible = true;
+                    ListAllotedStudent.Visible = true;
+                    if (Convert.ToInt32(lblVacancy.Text) > 0)
+                    {
+                        btninfoback.Visible = true;
+                    }
+                    else
+                    {
+                        btninfoback.Visible = false;
+                    }
+                    //End
+                }
+                else
+                {
+                    ListAllotedStudent.Visible = false;
+                    //lblAllotStudInfo.Text = "Note: No Hosteller Student Found in this Room. ";
+                    if (Convert.ToInt32(Session["usertype"]) != 2)
+                    {
+                        divAdmin.Visible = true;
+                        btnBlock.Visible = true;
+                    }
+                    else
+                    {
+                        divStudent.Visible = true;
+                    }
+                    dvstudetails.Visible = false;
+                    string errorMessage = "Note: No Hosteller Student Found in this Room. ";
+                    string script = "displayError('" + errorMessage + "');";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "DisplayErrorScript", script, true);
+                }
             }
-            else
-            {
-                ListAllotedStudent.Visible = false;
-                lblAllotStudInfo.Text = "Note: No Hosteller Student Found in this Room. ";
-            }
-          }
 
-          dsStudInfo.Dispose();
+            //dsStudInfo.Dispose();
 
         }
         catch (Exception ex)
@@ -897,7 +943,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
 
             objCommon.DisplayMessage(ex.ToString(), this.Page);
-        }        
+        }
     }
     //---------------End by Saurabh L on 24 Feb 2023-------------------------------------
 
@@ -955,7 +1001,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
 
                         hdnRoomNo.ID = "hdnRoomNoRow_" + i + "_Col_" + j;
                         hdnRoomNo.Value = dt.Rows[dataPosition]["ROOM_NO"].ToString();
-                        
+
                         hdnVacant.ID = "hdnVacRow_" + i + "_Col_" + j;
                         hdnVacant.Value = dt.Rows[dataPosition]["VACANT"].ToString();
 
@@ -964,7 +1010,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
 
                         hdnCapacity.ID = "hdnCapRow_" + i + "_Col_" + j;
                         hdnCapacity.Value = dt.Rows[dataPosition]["CAPACITY"].ToString();
-                        
+
 
                         hdnBlockName.ID = "hdnBlockNameRow_" + i + "_Col_" + j;
                         hdnBlockName.Value = dt.Rows[dataPosition]["BLOCK_NAME"].ToString();
@@ -983,19 +1029,19 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                         if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) == Convert.ToInt32(dt.Rows[dataPosition]["CAPACITY"]))
                         {
                             //cell.Attributes.Add("style", "background-color:Green;");
-                           // btn.Attributes.Add("style", "background-color:#cafdca;");
+                            // btn.Attributes.Add("style", "background-color:#cafdca;");
                             btn.Attributes.Add("style", "background-color:#67C68F;");
                         }
                         else if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) == 0)
                         {
                             //cell.Attributes.Add("style", "background-color:Red;");
-                           // btn.Attributes.Add("style", "background-color:Red;");
+                            // btn.Attributes.Add("style", "background-color:Red;");
                             btn.Attributes.Add("style", "background-color:#fd625e;");
                         }
                         else if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) < Convert.ToInt32(dt.Rows[dataPosition]["CAPACITY"]))
                         {
                             //cell.Attributes.Add("style", "background-color:Orange;");
-                           // btn.Attributes.Add("style", "background-color:Orange;");
+                            // btn.Attributes.Add("style", "background-color:Orange;");
                             btn.Attributes.Add("style", "background-color:#ffe253;");
                         }
 
@@ -1085,7 +1131,8 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
 
         table.ID = "TableRooms";
         table.Width = "100%";
-    
+        //table.Attributes.Add("class", "table table-striped table-bordered nowrap display");
+        //table.Attributes.Add("CssClass", "table nowrap display");
         //table.Width = Unit.Percentage(100);
         pnlRoomsTable.Controls.Add(table);
         //Page.Form.Controls.Add(table);
@@ -1094,6 +1141,10 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
         int OldBlockNo = 0;
         int currentBlockNo = 0;
         int flag = 1;
+
+        //Floor Added By Himanshu Tamrakar 30042024
+        int currentFloorNo = 0;
+        int oldFloorNo = 0;
         // Now iterate through the table and add your controls
         for (int i = 0; i < rowsCount; i++)
         {
@@ -1171,9 +1222,111 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
 
                         if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) == Convert.ToInt32(dt.Rows[dataPosition]["CAPACITY"]))
                         {
-                            //cell.Attributes.Add("style", "background-color:Green;");
-                            //btn.Attributes.Add("style", "background-color:#cafdca;");
-                            btn.Attributes.Add("style", "background-color:#67C68F;");
+
+                            //TableCell cell = new TableCell();
+                            Button btn = new Button();
+                            HiddenField hdnCapacity = new HiddenField();
+                            HiddenField hdnVacant = new HiddenField();
+                            HiddenField hdnRoomName = new HiddenField();
+                            HiddenField hdnRoomNo = new HiddenField();
+                            HiddenField hdnBlockName = new HiddenField();
+                            HiddenField hdnBlockNo = new HiddenField();
+
+
+                            //change
+                            HiddenField hdnRoomType = new HiddenField();
+                            HiddenField hdnRoomTypeno = new HiddenField();
+                            HiddenField hdnuatype = new HiddenField();      //Added By Himanshu tamrakar 04/04/2024
+
+                            cell.Attributes.Add("align", "center");
+                            cell.Attributes.Add("padding", "10px");
+                            cell.Attributes.Add("width", "12%");
+                            //cell.Width = Unit.Percentage(15);
+
+                            // Set a unique ID for each TextBox added
+                            btn.ID = "btnRow_" + i + "_Col_" + j;
+                            btn.Text = dt.Rows[dataPosition]["ROOM_NAME"] + " Cap(" + dt.Rows[dataPosition]["CAPACITY"] + ") Vac(" + dt.Rows[dataPosition]["VACANT"] + ") \n Type(" + dt.Rows[dataPosition]["ROOMTYPE_NAME"] + ")";
+                            btn.OnClientClick = "showRoomAllotPopup(this); return false;";
+                            btn.Style.Add("white-space", "normal");
+                            btn.Style.Add("width", "auto");
+
+                            ViewState["ROOMTYPE"] = dt.Rows[dataPosition]["TYPE_NO"].ToString(); // ADDED BY SONALI ON 01/09/2022
+
+                            hdnRoomNo.ID = "hdnRoomNoRow_" + i + "_Col_" + j;
+                            hdnRoomNo.Value = dt.Rows[dataPosition]["ROOM_NO"].ToString();
+
+                            hdnVacant.ID = "hdnVacRow_" + i + "_Col_" + j;
+                            hdnVacant.Value = dt.Rows[dataPosition]["VACANT"].ToString();
+
+                            hdnRoomName.ID = "hdnRoomNameRow_" + i + "_Col_" + j;
+                            hdnRoomName.Value = dt.Rows[dataPosition]["ROOM_NAME"].ToString();
+                            
+                            hdnCapacity.ID = "hdnCapRow_" + i + "_Col_" + j;
+                            hdnCapacity.Value = dt.Rows[dataPosition]["CAPACITY"].ToString();
+
+                            hdnBlockName.ID = "hdnBlockNameRow_" + i + "_Col_" + j;
+                            hdnBlockName.Value = dt.Rows[dataPosition]["BLOCK_NAME"].ToString();
+
+                            hdnBlockNo.ID = "hdnBlockNoRow_" + i + "_Col_" + j;
+                            hdnBlockNo.Value = dt.Rows[dataPosition]["BLOCK_NO"].ToString();
+
+
+                            hdnRoomType.ID = "hdnRoomTypeRow_" + i + "_Col_" + j;
+                            hdnRoomType.Value = dt.Rows[dataPosition]["ROOMTYPE_NAME"].ToString();
+
+                            hdnRoomTypeno.ID = "hdnRoomTypenoRow_" + i + "_Col_" + j;
+                            hdnRoomTypeno.Value = dt.Rows[dataPosition]["TYPE_NO"].ToString();
+
+                            hdnuatype.ID = "hdnUaTypenoRow_" + i + "_Col_" + j;   //Added By Himanshu tamrakar 04/04/2024
+                            hdnuatype.Value = Session["usertype"].ToString();
+                            //btn.Attributes.Add("width", "100px");
+                            //btn.Attributes.Add("height", "100px");
+                            btn.Width = Unit.Percentage(100);
+
+                            btn.Height = Unit.Pixel(70);
+
+                            if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) == Convert.ToInt32(dt.Rows[dataPosition]["CAPACITY"]))
+                            {
+                                //cell.Attributes.Add("style", "background-color:Green;");
+                                //btn.Attributes.Add("style", "background-color:#cafdca;");
+                                btn.Attributes.Add("style", "background-color:#67C68F;");
+                            }
+                            else if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) == 0)
+                            {
+                                //cell.Attributes.Add("style", "background-color:Red;");
+                                //btn.Attributes.Add("style", "background-color:Red;");
+                                btn.Attributes.Add("style", "background-color:#fd625e;");
+                            }
+                            else if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) < Convert.ToInt32(dt.Rows[dataPosition]["CAPACITY"]))
+                            {
+                                //cell.Attributes.Add("style", "background-color:Orange;");
+                                //btn.Attributes.Add("style", "background-color:Orange;");
+                                btn.Attributes.Add("style", "background-color:#ffe253;");
+                            }
+
+                            // Add the control to the TableCell
+                            cell.Controls.Add(btn);
+                            cell.Controls.Add(hdnCapacity);
+                            cell.Controls.Add(hdnVacant);
+
+                            cell.Controls.Add(hdnRoomName);
+                            cell.Controls.Add(hdnRoomNo);
+                            cell.Controls.Add(hdnBlockName);
+                            cell.Controls.Add(hdnBlockNo);
+
+
+                            // change
+                            cell.Controls.Add(hdnRoomType);
+                            cell.Controls.Add(hdnRoomTypeno);
+                            cell.Controls.Add(hdnuatype);
+
+                            // Add the TableCell to the TableRow
+                            row.Cells.Add(cell);
+
+                            oldFloorNo = Convert.ToInt32(dt.Rows[dataPosition]["FLOOR_NO"]);
+                            OldBlockNo = Convert.ToInt32(dt.Rows[dataPosition]["BLOCK_NO"]);
+                            dataPosition++;
+                            flag = 1;
                         }
                         else if (Convert.ToInt32(dt.Rows[dataPosition]["VACANT"]) == 0)
                         {
@@ -1363,7 +1516,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
 
         Response.Redirect("~/HOSTEL/ONLINEFEECOLLECTION/HostelFeeOnlinePayment.aspx?pageno=2886"); //live link for crescent
 
-      //  Response.Redirect("~/HOSTEL/ONLINEFEECOLLECTION/HostelFeeOnlinePayment.aspx?pageno=3016"); //Test link for crescent
+        //  Response.Redirect("~/HOSTEL/ONLINEFEECOLLECTION/HostelFeeOnlinePayment.aspx?pageno=3016"); //Test link for crescent
 
     }
 
